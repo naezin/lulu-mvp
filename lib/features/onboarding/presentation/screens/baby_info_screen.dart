@@ -118,12 +118,20 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
             controller: _nameController,
             focusNode: _nameFocusNode,
             onChanged: provider.updateBabyName,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            enableSuggestions: false,
+            autocorrect: false,
+            enableIMEPersonalizedLearning: false,
             style: const TextStyle(
               color: AppTheme.textPrimary,
               fontSize: 17,
             ),
             decoration: InputDecoration(
               hintText: '아기 이름을 입력하세요',
+              hintStyle: const TextStyle(
+                color: AppTheme.textTertiary,
+              ),
               filled: true,
               fillColor: AppTheme.surfaceElevated,
               border: OutlineInputBorder(

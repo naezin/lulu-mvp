@@ -179,6 +179,9 @@ class LuluStatusColors {
   /// 경고, 주의
   static const Color warning = Color(0xFFE8B87E);
 
+  /// 주의 (경고보다 심각)
+  static const Color caution = Color(0xFFE87878);
+
   /// 오류, 긴급
   static const Color error = Color(0xFFE87878);
 

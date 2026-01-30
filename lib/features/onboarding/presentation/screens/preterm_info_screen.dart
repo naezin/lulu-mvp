@@ -95,6 +95,7 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
           TextField(
             controller: _weightController,
             keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.done,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             onChanged: (value) {
               if (value.isNotEmpty) {
@@ -107,6 +108,9 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
             ),
             decoration: InputDecoration(
               hintText: '예: 2500',
+              hintStyle: const TextStyle(
+                color: AppTheme.textTertiary,
+              ),
               suffixText: 'g',
               suffixStyle: const TextStyle(
                 color: AppTheme.textSecondary,

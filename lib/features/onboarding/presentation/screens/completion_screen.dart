@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/services/onboarding_data_service.dart';
 import '../providers/onboarding_provider.dart';
+import 'onboarding_screen.dart' show OnboardingCompleteCallback;
 
 /// Step 6: 온보딩 완료
 /// 환영 메시지 + 홈으로 이동
 class CompletionScreen extends StatefulWidget {
   final VoidCallback? onComplete;
+  final OnboardingCompleteCallback? onCompleteWithData;
 
   const CompletionScreen({
     super.key,
     this.onComplete,
+    this.onCompleteWithData,
   });
 
   @override
@@ -188,13 +192,23 @@ class _CompletionScreenState extends State<CompletionScreen>
       final result = await provider.completeOnboarding();
 
       // 디버그 로그
-      debugPrint('Family created: ${result.family}');
+      debugPrint('✅ [Onboarding] Family created: ${result.family.id}');
       for (final baby in result.babies) {
-        debugPrint('Baby created: $baby');
+        debugPrint('✅ [Onboarding] Baby created: ${baby.name}');
       }
 
-      // 콜백 호출 또는 홈으로 이동
-      widget.onComplete?.call();
+      // SharedPreferences에 데이터 저장 (BUG-001 fix)
+      await OnboardingDataService.instance.saveOnboardingData(
+        family: result.family,
+        babies: result.babies,
+      );
+
+      // 콜백 호출 (데이터 포함)
+      if (widget.onCompleteWithData != null) {
+        widget.onCompleteWithData!(result.family, result.babies);
+      } else {
+        widget.onComplete?.call();
+      }
     } catch (e) {
       if (!context.mounted) return;
 

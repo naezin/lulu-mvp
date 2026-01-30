@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../data/models/family_model.dart';
+import '../../../../data/models/baby_model.dart';
 import '../providers/onboarding_provider.dart';
 import 'welcome_screen.dart';
 import 'baby_count_screen.dart';
@@ -10,13 +12,24 @@ import 'preterm_info_screen.dart';
 import 'multiple_birth_tip_screen.dart';
 import 'completion_screen.dart';
 
+/// 온보딩 완료 콜백 타입
+typedef OnboardingCompleteCallback = void Function(
+  FamilyModel family,
+  List<BabyModel> babies,
+);
+
 /// 온보딩 메인 화면
 /// 모든 온보딩 단계를 관리하고 네비게이션 처리
 class OnboardingScreen extends StatelessWidget {
+  /// 온보딩 완료 콜백 (family와 babies 데이터 포함)
+  final OnboardingCompleteCallback? onCompleteWithData;
+
+  /// 단순 완료 콜백 (하위 호환용)
   final VoidCallback? onComplete;
 
   const OnboardingScreen({
     super.key,
+    this.onCompleteWithData,
     this.onComplete,
   });
 
@@ -24,15 +37,22 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => OnboardingProvider(),
-      child: _OnboardingContent(onComplete: onComplete),
+      child: _OnboardingContent(
+        onComplete: onComplete,
+        onCompleteWithData: onCompleteWithData,
+      ),
     );
   }
 }
 
 class _OnboardingContent extends StatelessWidget {
   final VoidCallback? onComplete;
+  final OnboardingCompleteCallback? onCompleteWithData;
 
-  const _OnboardingContent({this.onComplete});
+  const _OnboardingContent({
+    this.onComplete,
+    this.onCompleteWithData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +105,7 @@ class _OnboardingContent extends StatelessWidget {
       OnboardingStep.completion => CompletionScreen(
           key: const ValueKey('completion'),
           onComplete: onComplete,
+          onCompleteWithData: onCompleteWithData,
         ),
     };
   }
