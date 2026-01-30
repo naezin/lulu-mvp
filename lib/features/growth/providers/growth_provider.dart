@@ -156,10 +156,10 @@ class GrowthProvider extends ChangeNotifier {
 
     try {
       // TODO: 실제 데이터 로드 구현 (SharedPreferences + Firebase)
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 300));
 
-      // 임시 테스트 데이터
-      _measurements = _generateTestData();
+      // 저장된 데이터가 없으면 empty 상태 (하드코딩 테스트 데이터 제거)
+      // _measurements는 addMeasurement()로만 추가됨
 
       if (_measurements.isEmpty) {
         _state = GrowthScreenState.empty;
@@ -218,37 +218,6 @@ class GrowthProvider extends ChangeNotifier {
     return '데이터를 불러오지 못했어요';
   }
 
-  /// 테스트 데이터 생성
-  List<GrowthMeasurementModel> _generateTestData() {
-    final baby = selectedBaby;
-    if (baby == null) return [];
-
-    final now = DateTime.now();
-    return [
-      GrowthMeasurementModel.create(
-        babyId: baby.id,
-        measuredAt: now.subtract(const Duration(days: 1)),
-        weightKg: 4.85,
-        lengthCm: 58.0,
-        headCircumferenceCm: 40.0,
-        note: '정기검진',
-      ),
-      GrowthMeasurementModel.create(
-        babyId: baby.id,
-        measuredAt: now.subtract(const Duration(days: 14)),
-        weightKg: 4.5,
-        lengthCm: 56.0,
-        headCircumferenceCm: 39.0,
-      ),
-      GrowthMeasurementModel.create(
-        babyId: baby.id,
-        measuredAt: now.subtract(const Duration(days: 28)),
-        weightKg: 4.1,
-        lengthCm: 54.0,
-        headCircumferenceCm: 38.0,
-      ),
-    ];
-  }
 }
 
 /// 화면 상태

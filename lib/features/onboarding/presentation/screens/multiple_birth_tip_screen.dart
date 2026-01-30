@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
 
-/// Step 5 (다태아 전용): 동시 기록 팁 안내
-/// "둘 다" 버튼 설명
+/// Step 5 (다태아 전용): 다둥이 기록 팁 안내
+/// v5.0: "둘 다" 버튼 제거, 개별 기록 + 빠른 전환 강조
 class MultipleBirthTipScreen extends StatelessWidget {
   const MultipleBirthTipScreen({super.key});
 
@@ -39,32 +39,42 @@ class MultipleBirthTipScreen extends StatelessWidget {
 
           const SizedBox(height: 48),
 
-          // 팁 1: 둘 다 버튼
+          // 팁 1: 탭으로 빠른 전환
           _TipCard(
-            icon: Icons.groups_rounded,
-            title: '"둘 다" 버튼',
-            description: '여러 아기가 같은 활동을 했다면\n한 번에 기록할 수 있어요',
+            icon: Icons.swap_horiz_rounded,
+            title: '탭으로 빠른 전환',
+            description: '상단 탭을 눌러 아기별 기록을\n빠르게 확인하고 전환해요 (1초 이내!)',
             color: AppTheme.lavenderMist,
           ),
 
           const SizedBox(height: 16),
 
-          // 팁 2: 탭으로 전환
+          // 팁 2: 개별 통계
           _TipCard(
-            icon: Icons.swap_horiz_rounded,
-            title: '탭으로 빠른 전환',
-            description: '상단 탭을 눌러 아기별 기록을\n빠르게 확인하고 전환해요',
+            icon: Icons.bar_chart_rounded,
+            title: '개별 통계',
+            description: '각 아기의 수유, 수면, 기저귀 패턴을\n개별로 분석해드려요',
             color: AppTheme.babyAvatarColors[0],
           ),
 
           const SizedBox(height: 16),
 
-          // 팁 3: 색상으로 구분
+          // 팁 3: 개별 알림
+          _TipCard(
+            icon: Icons.notifications_active_rounded,
+            title: '개별 알림',
+            description: '각 아기 맞춤 수유/수면 시간을\n따로 알려드려요',
+            color: AppTheme.babyAvatarColors[1],
+          ),
+
+          const SizedBox(height: 16),
+
+          // 팁 4: 색상으로 구분
           _TipCard(
             icon: Icons.palette_rounded,
             title: '색상으로 구분',
             description: '각 아기만의 색상으로\n한눈에 구분할 수 있어요',
-            color: AppTheme.babyAvatarColors[1],
+            color: AppTheme.babyAvatarColors[2],
             showBabyColors: true,
             babyCount: provider.babyCount,
           ),

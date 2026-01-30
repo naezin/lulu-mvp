@@ -163,19 +163,19 @@ class _MainNavigationState extends State<MainNavigation> {
         );
         break;
       case 'play':
-      case 'health':
-        // TODO: 놀이, 건강 기록 화면 구현
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('$type 기록은 곧 추가될 예정입니다'),
-            backgroundColor: LuluColors.surfaceElevated,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+        screen = PlayRecordScreen(
+          familyId: familyId,
+          babies: babies,
+          preselectedBabyId: selectedBabyId,
         );
-        return;
+        break;
+      case 'health':
+        screen = HealthRecordScreen(
+          familyId: familyId,
+          babies: babies,
+          preselectedBabyId: selectedBabyId,
+        );
+        break;
     }
 
     if (screen != null) {

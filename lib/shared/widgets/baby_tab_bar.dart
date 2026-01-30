@@ -118,25 +118,59 @@ class BabyTabBar extends StatelessWidget {
     );
   }
 
-  /// 3명 이상: 수평 스크롤
+  /// 3명 이상: 수평 스크롤 + 스크롤 힌트
   Widget _buildScrollableTabs() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      child: Row(
-        children: babies.map((baby) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: _BabyTab(
-              baby: baby,
-              isSelected: selectedBabyId == baby.id,
-              color: _getBabyColor(baby.birthOrder ?? 1),
-              onTap: () => onBabyChanged(baby.id),
-              minWidth: 100,
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          child: Row(
+            children: babies.map((baby) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 4),
+                child: _BabyTab(
+                  baby: baby,
+                  isSelected: selectedBabyId == baby.id,
+                  color: _getBabyColor(baby.birthOrder ?? 1),
+                  onTap: () => onBabyChanged(baby.id),
+                  minWidth: 100,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        // 우측 스크롤 힌트 (페이드 + 화살표)
+        Positioned(
+          right: 0,
+          top: 0,
+          bottom: 0,
+          child: IgnorePointer(
+            child: Container(
+              width: 32,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    LuluColors.deepBlue.withValues(alpha: 0),
+                    LuluColors.deepBlue.withValues(alpha: 0.8),
+                    LuluColors.deepBlue,
+                  ],
+                  stops: const [0.0, 0.5, 1.0],
+                ),
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: LuluTextColors.tertiary,
+                  size: 20,
+                ),
+              ),
             ),
-          );
-        }).toList(),
-      ),
+          ),
+        ),
+      ],
     );
   }
 

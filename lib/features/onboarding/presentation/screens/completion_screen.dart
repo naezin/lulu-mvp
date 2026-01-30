@@ -230,21 +230,25 @@ class _BabySummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      constraints: const BoxConstraints(maxHeight: 280),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Column(
-        children: [
-          for (int i = 0; i < babies.length; i++) ...[
-            if (i > 0) const Divider(height: 24),
-            _BabyRow(
-              index: i,
-              baby: babies[i],
-            ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (int i = 0; i < babies.length; i++) ...[
+              if (i > 0) const Divider(height: 24),
+              _BabyRow(
+                index: i,
+                baby: babies[i],
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
