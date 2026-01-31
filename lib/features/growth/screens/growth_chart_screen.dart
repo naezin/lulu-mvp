@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../data/fenton_data.dart';
@@ -127,10 +128,37 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
           fontWeight: FontWeight.w600,
         ),
         dividerColor: Colors.transparent,
-        tabs: const [
-          Tab(text: '⚖️ 체중'),
-          Tab(text: '📏 신장'),
-          Tab(text: '🧠 두위'),
+        tabs: [
+          Tab(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(LuluIcons.weight, size: 14),
+                const SizedBox(width: 4),
+                const Text('체중'),
+              ],
+            ),
+          ),
+          Tab(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(LuluIcons.ruler, size: 14),
+                const SizedBox(width: 4),
+                const Text('신장'),
+              ],
+            ),
+          ),
+          Tab(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(LuluIcons.head, size: 14),
+                const SizedBox(width: 4),
+                const Text('두위'),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -151,7 +179,9 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
         children: [
           // 차트 유형
           _InfoChip(
-            icon: provider.chartType == GrowthChartType.fenton ? '📅' : '📈',
+            icon: provider.chartType == GrowthChartType.fenton
+                ? LuluIcons.calendar
+                : LuluIcons.growth,
             label: provider.chartType.label,
           ),
 
@@ -159,7 +189,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
 
           // 교정연령
           _InfoChip(
-            icon: '👶',
+            icon: LuluIcons.baby,
             label: provider.chartType == GrowthChartType.fenton
                 ? '${provider.correctedWeeks ?? 0}주'
                 : '${provider.correctedMonths}개월',
@@ -304,7 +334,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
 }
 
 class _InfoChip extends StatelessWidget {
-  final String icon;
+  final IconData icon;
   final String label;
 
   const _InfoChip({
@@ -326,7 +356,7 @@ class _InfoChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(icon, style: const TextStyle(fontSize: 14)),
+          Icon(icon, size: 14, color: LuluColors.lavenderMist),
           const SizedBox(width: LuluSpacing.xs),
           Text(
             label,

@@ -23,7 +23,7 @@ class SupabaseService {
   /// main.dart에서 앱 시작 시 호출
   static Future<void> initialize() async {
     if (_client != null) {
-      debugPrint('⚠️ Supabase already initialized');
+      debugPrint('[WARN] Supabase already initialized');
       return;
     }
 
@@ -45,7 +45,7 @@ class SupabaseService {
     );
 
     _client = Supabase.instance.client;
-    debugPrint('✅ Supabase initialized successfully');
+    debugPrint('[OK] Supabase initialized successfully');
   }
 
   /// 현재 인증된 사용자

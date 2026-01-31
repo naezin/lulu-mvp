@@ -45,10 +45,11 @@ class CryAnalysisPlaceholder extends StatelessWidget {
                 color: LuluColors.lavenderMist.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Center(
-                child: Text(
-                  '🔊',
-                  style: TextStyle(fontSize: 24),
+              child: Center(
+                child: Icon(
+                  Icons.graphic_eq_rounded,
+                  size: 24,
+                  color: LuluColors.lavenderMist,
                 ),
               ),
             ),
@@ -111,7 +112,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
         ),
         title: Row(
           children: [
-            const Text('🔊', style: TextStyle(fontSize: 28)),
+            Icon(Icons.graphic_eq_rounded, size: 28, color: LuluColors.lavenderMist),
             const SizedBox(width: LuluSpacing.sm),
             Text(
               '울음 분석',

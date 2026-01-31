@@ -60,7 +60,7 @@ class OngoingSleepProvider extends ChangeNotifier {
         final json = jsonDecode(jsonString) as Map<String, dynamic>;
         _ongoingSleep = OngoingSleepRecord.fromJson(json);
         _startTimer();
-        debugPrint('✅ [OngoingSleepProvider] Restored ongoing sleep: ${_ongoingSleep?.babyId}');
+        debugPrint('[OK] [OngoingSleepProvider] Restored ongoing sleep: ${_ongoingSleep?.babyId}');
       }
     } catch (e) {
       debugPrint('❌ [OngoingSleepProvider] Init error: $e');
@@ -79,7 +79,7 @@ class OngoingSleepProvider extends ChangeNotifier {
   }) async {
     // 이미 진행 중인 수면이 있으면 무시
     if (_ongoingSleep != null) {
-      debugPrint('⚠️ [OngoingSleepProvider] Sleep already in progress');
+      debugPrint('[WARN] [OngoingSleepProvider] Sleep already in progress');
       return;
     }
 
@@ -96,13 +96,13 @@ class OngoingSleepProvider extends ChangeNotifier {
     _startTimer();
     notifyListeners();
 
-    debugPrint('✅ [OngoingSleepProvider] Sleep started for baby: $babyId');
+    debugPrint('[OK] [OngoingSleepProvider] Sleep started for baby: $babyId');
   }
 
   /// 수면 종료 및 저장
   Future<ActivityModel?> endSleep() async {
     if (_ongoingSleep == null) {
-      debugPrint('⚠️ [OngoingSleepProvider] No ongoing sleep to end');
+      debugPrint('[WARN] [OngoingSleepProvider] No ongoing sleep to end');
       return null;
     }
 
@@ -129,7 +129,7 @@ class OngoingSleepProvider extends ChangeNotifier {
       await _clearLocal();
       notifyListeners();
 
-      debugPrint('✅ [OngoingSleepProvider] Sleep ended and saved: ${savedActivity.id}');
+      debugPrint('[OK] [OngoingSleepProvider] Sleep ended and saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       debugPrint('❌ [OngoingSleepProvider] Error ending sleep: $e');
@@ -146,7 +146,7 @@ class OngoingSleepProvider extends ChangeNotifier {
     await _clearLocal();
     notifyListeners();
 
-    debugPrint('✅ [OngoingSleepProvider] Sleep cancelled');
+    debugPrint('[OK] [OngoingSleepProvider] Sleep cancelled');
   }
 
   /// 타이머 시작 (매 분 UI 갱신)

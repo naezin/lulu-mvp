@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/models.dart';
@@ -55,11 +56,11 @@ class _GrowthScreenState extends State<GrowthScreen> {
     final babies = homeProvider.babies;
 
     if (babies.isEmpty) {
-      debugPrint('⚠️ [GrowthScreen] No babies data available');
+      debugPrint('[WARN] [GrowthScreen] No babies data available');
       return;
     }
 
-    debugPrint('✅ [GrowthScreen] Initializing with babies: ${babies.map((b) => b.name).join(", ")}');
+    debugPrint('[OK] [GrowthScreen] Initializing with babies: ${babies.map((b) => b.name).join(", ")}');
     await _provider.initialize(babies);
     if (mounted) setState(() {});
   }
@@ -153,8 +154,8 @@ class _GrowthScreenState extends State<GrowthScreen> {
                   color: LuluColors.lavenderMist.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: const Center(
-                  child: Text('👶', style: TextStyle(fontSize: 40)),
+                child: Center(
+                  child: Icon(LuluIcons.baby, size: 40, color: LuluColors.lavenderMist),
                 ),
               ),
 
@@ -268,7 +269,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('📝', style: TextStyle(fontSize: 18)),
+            Icon(LuluIcons.memo, size: 18, color: LuluColors.lavenderMist),
             const SizedBox(width: LuluSpacing.sm),
             Text(
               '측정 기록 추가',

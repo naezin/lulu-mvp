@@ -56,9 +56,9 @@ class _TimelineScreenState extends State<TimelineScreen> {
             return _buildEmptyBabiesState();
           }
 
-          // 선택된 날짜의 활동 필터링
+          // 선택된 날짜의 활동 필터링 (BUG-005 FIX: 선택된 아기만)
           final activities = _getActivitiesForDate(
-            homeProvider.todayActivities,
+            homeProvider.filteredTodayActivities,
             _selectedDate,
           );
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -229,7 +230,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
               child: _DiaperTypeButton(
                 type: 'wet',
                 label: '소변',
-                emoji: '💧',
+                icon: LuluIcons.diaperWet,
                 isSelected: provider.diaperType == 'wet',
                 onTap: () => provider.setDiaperType('wet'),
               ),
@@ -239,7 +240,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
               child: _DiaperTypeButton(
                 type: 'dirty',
                 label: '대변',
-                emoji: '💩',
+                icon: LuluIcons.diaperDirty,
                 isSelected: provider.diaperType == 'dirty',
                 onTap: () => provider.setDiaperType('dirty'),
               ),
@@ -253,7 +254,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
               child: _DiaperTypeButton(
                 type: 'both',
                 label: '혼합',
-                emoji: '💧💩',
+                icon: LuluIcons.diaperBoth,
                 isSelected: provider.diaperType == 'both',
                 onTap: () => provider.setDiaperType('both'),
               ),
@@ -263,7 +264,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
               child: _DiaperTypeButton(
                 type: 'dry',
                 label: '건조',
-                emoji: '✨',
+                icon: LuluIcons.diaperDry,
                 isSelected: provider.diaperType == 'dry',
                 onTap: () => provider.setDiaperType('dry'),
               ),
@@ -510,14 +511,14 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
 class _DiaperTypeButton extends StatelessWidget {
   final String type;
   final String label;
-  final String emoji;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _DiaperTypeButton({
     required this.type,
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.isSelected,
     required this.onTap,
   });
@@ -545,9 +546,12 @@ class _DiaperTypeButton extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(
-              emoji,
-              style: const TextStyle(fontSize: 32),
+            Icon(
+              icon,
+              size: 32,
+              color: isSelected
+                  ? LuluActivityColors.diaper
+                  : LuluTextColors.secondary,
             ),
             const SizedBox(height: LuluSpacing.sm),
             Text(

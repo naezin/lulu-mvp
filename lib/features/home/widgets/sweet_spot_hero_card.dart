@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 
@@ -43,7 +44,7 @@ class SweetSpotHeroCard extends StatelessWidget {
           // 헤더
           Row(
             children: [
-              const Text('🌙', style: TextStyle(fontSize: 24)),
+              Icon(LuluIcons.moon, size: 24, color: LuluColors.lavenderMist),
               const SizedBox(width: LuluSpacing.sm),
               Text(
                 babyName != null ? '$babyName의 Sweet Spot' : 'Sweet Spot',
@@ -178,7 +179,7 @@ class SweetSpotHeroCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Text('📅', style: TextStyle(fontSize: 14)),
+              Icon(LuluIcons.calendar, size: 14, color: LuluTextColors.secondary),
               const SizedBox(width: LuluSpacing.xs),
               Text(
                 '교정연령: $correctedAgeMonths개월',

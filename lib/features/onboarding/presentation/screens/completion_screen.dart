@@ -220,9 +220,9 @@ class _CompletionScreenState extends State<CompletionScreen>
       final result = await provider.completeOnboarding();
 
       // 디버그 로그
-      debugPrint('✅ [Onboarding] Family created: ${result.family.id}');
+      debugPrint('[OK] [Onboarding] Family created: ${result.family.id}');
       for (final baby in result.babies) {
-        debugPrint('✅ [Onboarding] Baby created: ${baby.name}');
+        debugPrint('[OK] [Onboarding] Baby created: ${baby.name}');
       }
 
       // SharedPreferences에 데이터 저장 (BUG-001 fix)

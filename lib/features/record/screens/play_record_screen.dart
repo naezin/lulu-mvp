@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -237,12 +238,12 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
   Widget _buildPlayTypeSelector(RecordProvider provider) {
     // UX-01: 활동 유형 2x3 그리드 레이아웃
     final playTypes = [
-      ('tummy_time', '터미타임', '🏊'),
-      ('bath', '목욕', '🛁'),
-      ('outdoor', '외출', '🚶'),
-      ('play', '실내놀이', '🎨'),
-      ('reading', '독서', '📖'),
-      ('other', '기타', '📝'),
+      ('tummy_time', '터미타임', LuluIcons.tummyTime),
+      ('bath', '목욕', LuluIcons.bath),
+      ('outdoor', '외출', LuluIcons.outdoor),
+      ('play', '실내놀이', LuluIcons.indoorPlay),
+      ('reading', '독서', LuluIcons.reading),
+      ('other', '기타', LuluIcons.other),
     ];
 
     return Column(
@@ -272,7 +273,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
             return _PlayTypeGridButton(
               type: type.$1,
               label: type.$2,
-              emoji: type.$3,
+              icon: type.$3,
               isSelected: provider.playType == type.$1,
               onTap: () => provider.setPlayType(type.$1),
             );
@@ -525,14 +526,14 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
 class _PlayTypeGridButton extends StatelessWidget {
   final String type;
   final String label;
-  final String emoji;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _PlayTypeGridButton({
     required this.type,
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.isSelected,
     required this.onTap,
   });
@@ -556,9 +557,12 @@ class _PlayTypeGridButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              emoji,
-              style: const TextStyle(fontSize: 28),
+            Icon(
+              icon,
+              size: 28,
+              color: isSelected
+                  ? LuluActivityColors.play
+                  : LuluTextColors.secondary,
             ),
             const SizedBox(height: LuluSpacing.xs),
             Text(

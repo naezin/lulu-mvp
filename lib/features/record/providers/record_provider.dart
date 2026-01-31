@@ -445,7 +445,7 @@ class RecordProvider extends ChangeNotifier {
 
       final savedActivity = await _localActivityService.saveActivity(activity);
 
-      debugPrint('✅ [RecordProvider] Feeding saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Feeding saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';
@@ -529,7 +529,7 @@ class RecordProvider extends ChangeNotifier {
 
       final savedActivity = await _localActivityService.saveActivity(activity);
 
-      debugPrint('✅ [RecordProvider] Sleep saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Sleep saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';
@@ -620,7 +620,7 @@ class RecordProvider extends ChangeNotifier {
 
       final savedActivity = await _localActivityService.saveActivity(activity);
 
-      debugPrint('✅ [RecordProvider] Play saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Play saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';
@@ -731,7 +731,7 @@ class RecordProvider extends ChangeNotifier {
 
       final savedActivity = await _localActivityService.saveActivity(activity);
 
-      debugPrint('✅ [RecordProvider] Health saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Health saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';
@@ -785,7 +785,7 @@ class RecordProvider extends ChangeNotifier {
 
       final savedActivity = await _localActivityService.saveActivity(activity);
 
-      debugPrint('✅ [RecordProvider] Diaper saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Diaper saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';

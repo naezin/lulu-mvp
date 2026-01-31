@@ -1147,35 +1147,77 @@ abstract class S {
   /// **'AI 기반 울음 분석 기능이 Phase 2에서 출시됩니다.'**
   String get cryAnalysisDescription;
 
+  /// Sweet Spot 카드 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'다음 낮잠'**
+  String get sweetSpotTitle;
+
   /// Sweet Spot - 확인 중
   ///
   /// In ko, this message translates to:
   /// **'확인 중'**
   String get sweetSpotUnknown;
 
-  /// Sweet Spot - 아직 일찍
+  /// Sweet Spot - 아직 여유 있음 (Huckleberry 스타일)
   ///
   /// In ko, this message translates to:
-  /// **'아직 일찍'**
+  /// **'아직 여유 있어요'**
   String get sweetSpotTooEarly;
 
-  /// Sweet Spot - 곧 수면 시간
+  /// Sweet Spot - 곧 졸릴 수 있음 (확률적 표현)
   ///
   /// In ko, this message translates to:
-  /// **'곧 수면 시간'**
+  /// **'슬슬 졸려할 수 있어요'**
   String get sweetSpotApproaching;
 
-  /// Sweet Spot - 최적
+  /// Sweet Spot - 지금 재우면 좋을 것 같음 (부드러운 권유)
   ///
   /// In ko, this message translates to:
-  /// **'지금이 최적!'**
+  /// **'지금 재우면 좋을 것 같아요'**
   String get sweetSpotOptimal;
 
-  /// Sweet Spot - 과로
+  /// Sweet Spot - 졸린 시간 지남 (확률적 표현)
   ///
   /// In ko, this message translates to:
-  /// **'과로 상태'**
+  /// **'졸린 시간이 지났을 수 있어요'**
   String get sweetSpotOvertired;
+
+  /// Sweet Spot Empty State 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 기록이 필요해요'**
+  String get sweetSpotEmptyTitle;
+
+  /// Sweet Spot Empty State 부제목
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 수면을 기록하면\n예상 시간을 알려드릴게요'**
+  String get sweetSpotEmptySubtitle;
+
+  /// Sweet Spot 면책 문구
+  ///
+  /// In ko, this message translates to:
+  /// **'이 예측은 참고용이며, 아기마다 다를 수 있어요'**
+  String get sweetSpotDisclaimer;
+
+  /// 섹션 - 언어
+  ///
+  /// In ko, this message translates to:
+  /// **'언어'**
+  String get sectionLanguage;
+
+  /// 언어 변경 확인 다이얼로그 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'언어를 변경하시겠습니까?'**
+  String get languageChangeConfirm;
+
+  /// 언어 변경 안내 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'앱이 선택한 언어로 표시됩니다.'**
+  String get languageChangeMessage;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

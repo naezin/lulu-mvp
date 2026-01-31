@@ -442,7 +442,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
             Expanded(
               child: _SleepTypeButton(
                 label: '낮잠',
-                emoji: '☀️',
+                icon: LuluIcons.sun,
                 isSelected: provider.sleepType == 'nap',
                 onTap: () => provider.setSleepType('nap'),
               ),
@@ -451,7 +451,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
             Expanded(
               child: _SleepTypeButton(
                 label: '밤잠',
-                emoji: '🌙',
+                icon: LuluIcons.moon,
                 isSelected: provider.sleepType == 'night',
                 onTap: () => provider.setSleepType('night'),
               ),
@@ -723,7 +723,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (_isSleepNow) ...[
-                    const Text('🌙', style: TextStyle(fontSize: 18)),
+                    const Icon(LuluIcons.moon, size: 18, color: Colors.white),
                     const SizedBox(width: 8),
                   ],
                   Text(
@@ -1088,13 +1088,13 @@ class _QuickButton extends StatelessWidget {
 
 class _SleepTypeButton extends StatelessWidget {
   final String label;
-  final String emoji;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _SleepTypeButton({
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.isSelected,
     required this.onTap,
   });
@@ -1120,9 +1120,12 @@ class _SleepTypeButton extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              emoji,
-              style: const TextStyle(fontSize: 24),
+            Icon(
+              icon,
+              size: 24,
+              color: isSelected
+                  ? LuluActivityColors.sleep
+                  : LuluTextColors.secondary,
             ),
             const SizedBox(height: 4),
             Text(

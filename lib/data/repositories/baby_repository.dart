@@ -48,7 +48,7 @@ class BabyRepository {
           .select()
           .single();
 
-      debugPrint('✅ [BabyRepository] Baby created: ${response['id']}');
+      debugPrint('[OK] [BabyRepository] Baby created: ${response['id']}');
       return _mapToBabyModel(response);
     } catch (e) {
       debugPrint('❌ [BabyRepository] Error creating baby: $e');
@@ -65,7 +65,7 @@ class BabyRepository {
           .insert(dataList)
           .select();
 
-      debugPrint('✅ [BabyRepository] ${babies.length} babies created');
+      debugPrint('[OK] [BabyRepository] ${babies.length} babies created');
       return (response as List).map((data) => _mapToBabyModel(data)).toList();
     } catch (e) {
       debugPrint('❌ [BabyRepository] Error creating babies: $e');
@@ -86,7 +86,7 @@ class BabyRepository {
           .select()
           .single();
 
-      debugPrint('✅ [BabyRepository] Baby updated: ${baby.id}');
+      debugPrint('[OK] [BabyRepository] Baby updated: ${baby.id}');
       return _mapToBabyModel(response);
     } catch (e) {
       debugPrint('❌ [BabyRepository] Error updating baby: $e');
@@ -101,7 +101,7 @@ class BabyRepository {
           .delete()
           .eq('id', babyId);
 
-      debugPrint('✅ [BabyRepository] Baby deleted: $babyId');
+      debugPrint('[OK] [BabyRepository] Baby deleted: $babyId');
     } catch (e) {
       debugPrint('❌ [BabyRepository] Error deleting baby: $e');
       rethrow;

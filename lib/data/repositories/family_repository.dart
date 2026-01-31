@@ -62,7 +62,7 @@ class FamilyRepository {
           .select()
           .single();
 
-      debugPrint('✅ [FamilyRepository] Family created: ${response['id']}');
+      debugPrint('[OK] [FamilyRepository] Family created: ${response['id']}');
 
       return FamilyModel(
         id: response['id'],
@@ -83,7 +83,7 @@ class FamilyRepository {
           .delete()
           .eq('id', familyId);
 
-      debugPrint('✅ [FamilyRepository] Family deleted: $familyId');
+      debugPrint('[OK] [FamilyRepository] Family deleted: $familyId');
     } catch (e) {
       debugPrint('❌ [FamilyRepository] Error deleting family: $e');
       rethrow;

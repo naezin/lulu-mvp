@@ -579,17 +579,41 @@ class SEn extends S {
       'AI-powered cry analysis will be available in Phase 2.';
 
   @override
+  String get sweetSpotTitle => 'Next Nap';
+
+  @override
   String get sweetSpotUnknown => 'Checking';
 
   @override
-  String get sweetSpotTooEarly => 'Too Early';
+  String get sweetSpotTooEarly => 'Still has time';
 
   @override
-  String get sweetSpotApproaching => 'Approaching';
+  String get sweetSpotApproaching => 'May get sleepy soon';
 
   @override
-  String get sweetSpotOptimal => 'Optimal Time!';
+  String get sweetSpotOptimal => 'Good time to put down';
 
   @override
-  String get sweetSpotOvertired => 'Overtired';
+  String get sweetSpotOvertired => 'May have passed sleepy window';
+
+  @override
+  String get sweetSpotEmptyTitle => 'Need sleep records';
+
+  @override
+  String get sweetSpotEmptySubtitle =>
+      'Record first sleep to\nget predicted times';
+
+  @override
+  String get sweetSpotDisclaimer =>
+      'This prediction is for reference only and may vary for each baby';
+
+  @override
+  String get sectionLanguage => 'Language';
+
+  @override
+  String get languageChangeConfirm => 'Change language?';
+
+  @override
+  String get languageChangeMessage =>
+      'The app will be displayed in the selected language.';
 }

@@ -266,11 +266,13 @@ enum PercentileStatus {
   unknown,
 }
 
+/// 작업 지시서 v1.2: Huckleberry 스타일 문구
+/// "정상/비정상", "양호/관찰/주의" → 부드러운 확률적 표현
 extension PercentileStatusExtension on PercentileStatus {
   String get label => switch (this) {
-        PercentileStatus.normal => '양호',
-        PercentileStatus.watch => '관찰',
-        PercentileStatus.caution => '주의',
-        PercentileStatus.unknown => '측정 필요',
+        PercentileStatus.normal => '잘 자라고 있어요',
+        PercentileStatus.watch => '지켜봐 주세요',
+        PercentileStatus.caution => '소아과 상담을 고려해주세요',
+        PercentileStatus.unknown => '측정이 필요해요',
       };
 }

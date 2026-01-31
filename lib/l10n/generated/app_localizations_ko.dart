@@ -576,17 +576,38 @@ class SKo extends S {
   String get cryAnalysisDescription => 'AI 기반 울음 분석 기능이 Phase 2에서 출시됩니다.';
 
   @override
+  String get sweetSpotTitle => '다음 낮잠';
+
+  @override
   String get sweetSpotUnknown => '확인 중';
 
   @override
-  String get sweetSpotTooEarly => '아직 일찍';
+  String get sweetSpotTooEarly => '아직 여유 있어요';
 
   @override
-  String get sweetSpotApproaching => '곧 수면 시간';
+  String get sweetSpotApproaching => '슬슬 졸려할 수 있어요';
 
   @override
-  String get sweetSpotOptimal => '지금이 최적!';
+  String get sweetSpotOptimal => '지금 재우면 좋을 것 같아요';
 
   @override
-  String get sweetSpotOvertired => '과로 상태';
+  String get sweetSpotOvertired => '졸린 시간이 지났을 수 있어요';
+
+  @override
+  String get sweetSpotEmptyTitle => '수면 기록이 필요해요';
+
+  @override
+  String get sweetSpotEmptySubtitle => '첫 수면을 기록하면\n예상 시간을 알려드릴게요';
+
+  @override
+  String get sweetSpotDisclaimer => '이 예측은 참고용이며, 아기마다 다를 수 있어요';
+
+  @override
+  String get sectionLanguage => '언어';
+
+  @override
+  String get languageChangeConfirm => '언어를 변경하시겠습니까?';
+
+  @override
+  String get languageChangeMessage => '앱이 선택한 언어로 표시됩니다.';
 }

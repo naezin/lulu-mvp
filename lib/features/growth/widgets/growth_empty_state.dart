@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 
@@ -32,8 +33,8 @@ class GrowthEmptyState extends StatelessWidget {
                 color: LuluColors.lavenderMist.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
-              child: const Center(
-                child: Text('📏', style: TextStyle(fontSize: 40)),
+              child: Center(
+                child: Icon(LuluIcons.ruler, size: 40, color: LuluColors.lavenderMist),
               ),
             ),
 
@@ -81,7 +82,7 @@ class GrowthEmptyState extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('📝', style: TextStyle(fontSize: 18)),
+                    Icon(LuluIcons.memo, size: 18, color: LuluColors.midnightNavy),
                     const SizedBox(width: LuluSpacing.sm),
                     Text(
                       '첫 기록 남기기',

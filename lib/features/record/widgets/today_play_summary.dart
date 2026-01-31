@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -50,7 +51,7 @@ class TodayPlaySummary extends StatelessWidget {
           // 헤더
           Row(
             children: [
-              const Text('🎮', style: TextStyle(fontSize: 16)),
+              Icon(LuluIcons.play, size: 16, color: LuluActivityColors.play),
               const SizedBox(width: LuluSpacing.xs),
               Text(
                 babyName != null ? '$babyName 오늘의 놀이' : '오늘의 놀이',

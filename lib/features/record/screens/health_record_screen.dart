@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -256,7 +257,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
               child: _HealthTypeButton(
                 type: 'temperature',
                 label: '체온',
-                emoji: '🌡️',
+                icon: LuluIcons.temperature,
                 isSelected: provider.healthType == 'temperature',
                 onTap: () => provider.setHealthType('temperature'),
               ),
@@ -266,7 +267,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
               child: _HealthTypeButton(
                 type: 'symptom',
                 label: '증상',
-                emoji: '🤒',
+                icon: LuluIcons.symptom,
                 isSelected: provider.healthType == 'symptom',
                 onTap: () => provider.setHealthType('symptom'),
               ),
@@ -280,7 +281,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
               child: _HealthTypeButton(
                 type: 'medication',
                 label: '투약',
-                emoji: '💊',
+                icon: LuluIcons.medication,
                 isSelected: provider.healthType == 'medication',
                 onTap: () => provider.setHealthType('medication'),
               ),
@@ -290,7 +291,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
               child: _HealthTypeButton(
                 type: 'hospital',
                 label: '병원방문',
-                emoji: '🏥',
+                icon: LuluIcons.hospital,
                 isSelected: provider.healthType == 'hospital',
                 onTap: () => provider.setHealthType('hospital'),
               ),
@@ -463,13 +464,13 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
 
   Widget _buildSymptomSelector(RecordProvider provider) {
     final symptoms = [
-      ('cough', '기침', '🤧'),
-      ('runny_nose', '콧물', '🤧'),
-      ('fever', '발열', '🤒'),
-      ('vomiting', '구토', '🤮'),
-      ('diarrhea', '설사', '💩'),
-      ('rash', '발진', '🔴'),
-      ('other', '기타', '📝'),
+      ('cough', '기침', LuluIcons.cough),
+      ('runny_nose', '콧물', LuluIcons.runnyNose),
+      ('fever', '발열', LuluIcons.fever),
+      ('vomiting', '구토', LuluIcons.vomiting),
+      ('diarrhea', '설사', LuluIcons.diarrhea),
+      ('rash', '발진', LuluIcons.rash),
+      ('other', '기타', LuluIcons.other),
     ];
 
     return Column(
@@ -511,7 +512,13 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(s.$3, style: const TextStyle(fontSize: 16)),
+                    Icon(
+                      s.$3,
+                      size: 16,
+                      color: isSelected
+                          ? LuluActivityColors.health
+                          : LuluTextColors.secondary,
+                    ),
                     const SizedBox(width: LuluSpacing.xs),
                     Text(
                       s.$2,
@@ -768,29 +775,31 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
       );
     }
 
+    // 작업 지시서 v1.2: 단일 색상 + Huckleberry 스타일 문구
+    // "정상/비정상" 표현 제거 → 부드러운 확률적 표현
     if (temp < 36.0) {
       return _TemperatureStatus(
-        color: LuluStatusColors.info,
-        label: '저체온',
-        message: '체온이 낮아요. 보온에 신경써주세요.',
+        color: LuluSweetSpotColors.neutral,
+        label: '낮은 편이에요',
+        message: '체온이 낮은 편이에요. 보온에 신경써주세요.',
       );
     } else if (temp <= 37.5) {
       return _TemperatureStatus(
-        color: LuluStatusColors.success,
-        label: '정상',
-        message: '정상 체온이에요.',
+        color: LuluSweetSpotColors.neutral,
+        label: '괜찮아요',
+        message: '체온이 괜찮아 보여요.',
       );
     } else if (temp <= 38.0) {
       return _TemperatureStatus(
-        color: LuluStatusColors.warning,
-        label: '미열',
-        message: '미열이 있어요. 지켜봐주세요.',
+        color: LuluSweetSpotColors.neutral,
+        label: '조금 높아요',
+        message: '체온이 조금 높아요. 지켜봐주세요.',
       );
     } else {
       return _TemperatureStatus(
-        color: LuluStatusColors.error,
-        label: '발열',
-        message: '열이 있어요. 병원 방문을 권장해요.',
+        color: LuluSweetSpotColors.neutral,
+        label: '높은 편이에요',
+        message: '체온이 높아 보여요. 병원 방문을 고려해주세요.',
       );
     }
   }
@@ -881,14 +890,14 @@ class _QuickTempButton extends StatelessWidget {
 class _HealthTypeButton extends StatelessWidget {
   final String type;
   final String label;
-  final String emoji;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _HealthTypeButton({
     required this.type,
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.isSelected,
     required this.onTap,
   });
@@ -916,9 +925,12 @@ class _HealthTypeButton extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(
-              emoji,
-              style: const TextStyle(fontSize: 28),
+            Icon(
+              icon,
+              size: 28,
+              color: isSelected
+                  ? LuluActivityColors.health
+                  : LuluTextColors.secondary,
             ),
             const SizedBox(height: LuluSpacing.sm),
             Text(

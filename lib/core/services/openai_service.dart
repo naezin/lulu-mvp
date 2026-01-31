@@ -34,20 +34,20 @@ class OpenAIService {
   /// OpenAI 초기화
   static Future<void> initialize() async {
     if (_initialized) {
-      debugPrint('⚠️ OpenAI already initialized');
+      debugPrint('[WARN] OpenAI already initialized');
       return;
     }
 
     final apiKey = dotenv.env['OPENAI_API_KEY'];
 
     if (apiKey == null || apiKey.isEmpty || apiKey == 'your-openai-api-key') {
-      debugPrint('⚠️ OpenAI API key not configured - AI features disabled');
+      debugPrint('[WARN] OpenAI API key not configured - AI features disabled');
       return;
     }
 
     OpenAI.apiKey = apiKey;
     _initialized = true;
-    debugPrint('✅ OpenAI initialized successfully');
+    debugPrint('[OK] OpenAI initialized successfully');
   }
 
   /// 초기화 여부 확인
@@ -94,7 +94,7 @@ class OpenAIService {
       final content = response.choices.first.message.content?.first.text ?? '';
       final tokens = response.usage.totalTokens;
 
-      debugPrint('✅ [OpenAI] Advice generated (tokens: $tokens)');
+      debugPrint('[OK] [OpenAI] Advice generated (tokens: $tokens)');
 
       return OpenAIResponse.success(
         content: content,

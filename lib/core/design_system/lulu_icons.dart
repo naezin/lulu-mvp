@@ -104,6 +104,73 @@ class LuluIcons {
   static const IconData celebration = Icons.celebration_rounded;
 
   // ========================================
+  // 성장 관련 (Growth)
+  // ========================================
+
+  static const IconData growth = Icons.trending_up_rounded;
+  static const IconData chart = Icons.show_chart_rounded;
+  static const IconData ruler = Icons.straighten_rounded;
+  static const IconData weight = Icons.monitor_weight_rounded;
+  static const IconData head = Icons.face_rounded;
+  static const IconData memo = Icons.edit_note_rounded;
+  static const IconData checkCircle = Icons.check_circle_rounded;
+
+  // ========================================
+  // 놀이 상세 (Play Details)
+  // ========================================
+
+  static const IconData tummyTime = Icons.pool_rounded;
+  static const IconData bath = Icons.bathtub_rounded;
+  static const IconData outdoor = Icons.directions_walk_rounded;
+  static const IconData indoorPlay = Icons.palette_rounded;
+  static const IconData reading = Icons.menu_book_rounded;
+  static const IconData other = Icons.more_horiz_rounded;
+
+  // ========================================
+  // 건강 상세 (Health Details)
+  // ========================================
+
+  static const IconData temperature = Icons.thermostat_rounded;
+  static const IconData symptom = Icons.sick_rounded;
+  static const IconData medication = Icons.medication_rounded;
+  static const IconData hospital = Icons.local_hospital_rounded;
+
+  // ========================================
+  // 증상 (Symptoms)
+  // ========================================
+
+  static const IconData cough = Icons.air_rounded;
+  static const IconData runnyNose = Icons.water_drop_rounded;
+  static const IconData fever = Icons.whatshot_rounded;
+  static const IconData vomiting = Icons.sick_rounded;
+  static const IconData diarrhea = Icons.warning_amber_rounded;
+  static const IconData rash = Icons.radio_button_checked_rounded;
+
+  // ========================================
+  // 기저귀 상세 확장 (Diaper Details Extended)
+  // ========================================
+
+  static const IconData diaperDry = Icons.auto_awesome_rounded;
+
+  // ========================================
+  // 수유 상세 확장 (Feeding Details Extended)
+  // ========================================
+
+  static const IconData breastfeeding = Icons.pregnant_woman_rounded;
+
+  // ========================================
+  // 상태 표시 (Status Indicators)
+  // ========================================
+
+  static const IconData statusOk = Icons.check_circle_rounded;
+  static const IconData statusWarn = Icons.warning_amber_rounded;
+  static const IconData statusSync = Icons.sync_rounded;
+  static const IconData statusStat = Icons.analytics_rounded;
+  static const IconData statusDelete = Icons.delete_outline_rounded;
+  static const IconData statusError = Icons.error_outline_rounded;
+  static const IconData statusInfo = Icons.info_outline_rounded;
+
+  // ========================================
   // 아이콘 크기 (Icon Sizes)
   // ========================================
 

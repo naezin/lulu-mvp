@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
-import '../../../data/models/models.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
-import '../../../shared/widgets/quick_action_grid.dart';
-import '../../../shared/widgets/cry_analysis_placeholder.dart';
-import '../../../shared/widgets/mini_timeline.dart';
+import '../../../shared/widgets/last_activity_row.dart';
+import '../../../shared/widgets/sweet_spot_card.dart';
 import '../providers/home_provider.dart';
-import '../widgets/sweet_spot_hero_card.dart';
-import '../widgets/last_activity_card.dart';
-import '../widgets/today_summary_card.dart';
-import '../widgets/ongoing_sleep_card.dart';
 import '../../record/providers/ongoing_sleep_provider.dart';
 
 /// 홈 화면 (시안 B-4 기반)
 ///
+/// Sprint 7 Day 2: OngoingSleepCard → SweetSpotCard 통합
 /// UT 검증 완료:
 /// - SAT: 4.58/5
 /// - TTC: 3.2초
 /// - 핵심 타겟(P2) 만족도: 5.0/5
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,37 +73,25 @@ class HomeScreen extends StatelessWidget {
                     delegate: SliverChildListDelegate([
                       const SizedBox(height: LuluSpacing.md),
 
-                      // 아기 탭바 (Sprint 6 리디자인)
-                      BabyTabBar(
-                        babies: homeProvider.babies,
-                        selectedBabyId: homeProvider.selectedBabyId,
-                        onBabyChanged: homeProvider.selectBaby,
-                      ),
-
-                      const SizedBox(height: LuluSpacing.lg),
-
-                      // QA-03: 진행 중인 수면 카드 (아기가 있을 때 모든 상태에서 표시)
-                      if (homeProvider.babies.isNotEmpty)
-                        Consumer<OngoingSleepProvider>(
-                          builder: (context, sleepProvider, _) {
-                            // 현재 선택된 아기의 수면만 표시
-                            if (sleepProvider.hasSleepInProgress &&
-                                sleepProvider.currentBabyId == homeProvider.selectedBabyId) {
-                              return const Padding(
-                                padding: EdgeInsets.only(bottom: LuluSpacing.lg),
-                                child: OngoingSleepCard(),
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          },
+                      // BUG-004: 아기 2명 이상일 때만 탭바 표시
+                      if (homeProvider.babies.length > 1) ...[
+                        BabyTabBar(
+                          babies: homeProvider.babies,
+                          selectedBabyId: homeProvider.selectedBabyId,
+                          onBabyChanged: homeProvider.selectBaby,
                         ),
+                        const SizedBox(height: LuluSpacing.lg),
+                      ] else
+                        const SizedBox(height: LuluSpacing.sm),
+
+                      // Sprint 7 Day 2: OngoingSleepCard → SweetSpotCard로 통합됨
 
                       // 아기가 없으면 빈 상태
                       if (homeProvider.babies.isEmpty)
                         _buildEmptyBabiesState()
                       // 아기는 있지만 활동이 없으면 빈 활동 상태 (BUG-002 FIX: 필터링된 활동 사용)
                       else if (homeProvider.filteredTodayActivities.isEmpty)
-                        _buildEmptyActivitiesState(homeProvider)
+                        _buildEmptyActivitiesState(context, homeProvider)
                       // 정상 상태: 모든 카드 표시
                       else
                         _buildNormalContent(context, homeProvider),
@@ -154,168 +142,105 @@ class HomeScreen extends StatelessWidget {
   }
 
   /// 활동 없음 상태 (아기 정보는 있음)
-  Widget _buildEmptyActivitiesState(HomeProvider homeProvider) {
+  ///
+  /// Sprint 7 Day 2: 수면 중이면 SweetSpotCard에 수면 상태 표시
+  Widget _buildEmptyActivitiesState(BuildContext context, HomeProvider homeProvider) {
     final selectedBaby = homeProvider.selectedBaby;
     final babyName = selectedBaby?.name ?? '아기';
 
-    return Column(
-      children: [
-        // Sweet Spot 카드 (빈 상태용)
-        _buildEmptySweetSpotCard(selectedBaby),
+    return Consumer<OngoingSleepProvider>(
+      builder: (context, sleepProvider, _) {
+        // 수면 중인지 확인 (선택된 아기의 수면)
+        final isSleeping = sleepProvider.hasSleepInProgress &&
+            sleepProvider.currentBabyId == homeProvider.selectedBabyId;
 
-        const SizedBox(height: LuluSpacing.lg),
-
-        // 첫 기록 유도 카드
-        Container(
-          padding: const EdgeInsets.all(LuluSpacing.xl),
-          decoration: BoxDecoration(
-            color: LuluColors.deepBlue,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.3),
-              width: 1,
-            ),
-          ),
-          child: Column(
-            children: [
-              Icon(
-                LuluIcons.celebration,
-                size: 48,
-                color: LuluColors.champagneGold,
-              ),
-              const SizedBox(height: LuluSpacing.md),
-              Text(
-                '$babyName의 첫 기록을 시작해보세요',
-                style: LuluTextStyles.titleMedium.copyWith(
-                  color: LuluTextColors.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: LuluSpacing.sm),
-              Text(
-                '아래 + 버튼을 눌러\n수유, 수면, 기저귀 기록을 시작하세요',
-                style: LuluTextStyles.bodyMedium.copyWith(
-                  color: LuluTextColors.secondary,
-                ),
-                textAlign: TextAlign.center,
+        return Column(
+          children: [
+            // 수면 중이면 SweetSpotCard에 수면 상태 표시
+            if (isSleeping) ...[
+              SweetSpotCard(
+                state: SweetSpotState.unknown,
+                isEmpty: false,
+                isSleeping: true,
+                sleepStartTime: sleepProvider.sleepStartTime,
+                sleepType: sleepProvider.ongoingSleep?.sleepType,
+                babyName: sleepProvider.ongoingSleep?.babyName ?? babyName,
+                onEndSleep: () => _showEndSleepDialog(context, sleepProvider),
               ),
               const SizedBox(height: LuluSpacing.lg),
-              // 기록 유형 힌트
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildRecordHintWithIcon(LuluIcons.feeding, '수유', LuluActivityColors.feeding),
-                  _buildRecordHintWithIcon(LuluIcons.sleep, '수면', LuluActivityColors.sleep),
-                  _buildRecordHintWithIcon(LuluIcons.diaper, '기저귀', LuluActivityColors.diaper),
-                ],
-              ),
             ],
-          ),
-        ),
 
-        const SizedBox(height: LuluSpacing.lg),
-
-        // 오늘 요약 (0으로 표시)
-        TodaySummaryCard(
-          feedingCount: 0,
-          sleepDuration: '0m',
-          diaperCount: 0,
-        ),
-      ],
-    );
-  }
-
-  /// 빈 상태용 Sweet Spot 카드
-  Widget _buildEmptySweetSpotCard(BabyModel? baby) {
-    return Container(
-      padding: const EdgeInsets.all(LuluSpacing.lg),
-      decoration: BoxDecoration(
-        color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.2),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 헤더
-          Row(
-            children: [
-              const Text('🌙', style: TextStyle(fontSize: 24)),
-              const SizedBox(width: LuluSpacing.sm),
-              Text(
-                baby != null ? '${baby.name}의 Sweet Spot' : 'Sweet Spot',
-                style: LuluTextStyles.titleMedium.copyWith(
-                  color: LuluTextColors.primary,
-                ),
+            // 수면 중이 아닐 때만 Empty State 표시
+            if (!isSleeping) ...[
+              SweetSpotCard(
+                state: SweetSpotState.unknown,
+                isEmpty: true,
+                onRecordSleep: () => _navigateToRecord(context, 'sleep'),
               ),
+              const SizedBox(height: LuluSpacing.lg),
             ],
-          ),
-          const SizedBox(height: LuluSpacing.lg),
-          // 안내 메시지
-          Center(
-            child: Column(
-              children: [
-                Text(
-                  '수면 기록이 필요해요',
-                  style: LuluTextStyles.bodyMedium.copyWith(
-                    color: LuluTextColors.secondary,
+
+            // 첫 기록 유도 카드 - 수면 중이 아닐 때만
+            if (!isSleeping) ...[
+              Container(
+                padding: const EdgeInsets.all(LuluSpacing.xl),
+                decoration: BoxDecoration(
+                  color: LuluColors.deepBlue,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: LuluColors.lavenderMist.withValues(alpha: 0.3),
+                    width: 1,
                   ),
                 ),
-                const SizedBox(height: LuluSpacing.sm),
-                Text(
-                  '수면 기록을 추가하면\n최적의 수면 시간을 알려드려요',
-                  style: LuluTextStyles.bodySmall.copyWith(
-                    color: LuluTextColors.tertiary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: LuluSpacing.md),
-          // 교정연령 정보 (조산아인 경우)
-          if (baby != null && baby.isPreterm)
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: LuluSpacing.md,
-                vertical: LuluSpacing.sm,
-              ),
-              decoration: BoxDecoration(
-                color: LuluColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Text('📅', style: TextStyle(fontSize: 14)),
-                      const SizedBox(width: LuluSpacing.xs),
-                      Text(
-                        '교정연령: ${baby.effectiveAgeInMonths}개월',
-                        style: LuluTextStyles.bodySmall.copyWith(
-                          color: LuluTextColors.secondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    baby.recommendedGrowthChart == GrowthChartType.fenton
-                        ? 'Fenton 차트 적용'
-                        : 'WHO 차트 적용',
-                    style: LuluTextStyles.caption.copyWith(
-                      color: LuluColors.lavenderMist,
+                child: Column(
+                  children: [
+                    Icon(
+                      LuluIcons.celebration,
+                      size: 48,
+                      color: LuluColors.champagneGold,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: LuluSpacing.md),
+                    Text(
+                      '$babyName의 첫 기록을 시작해보세요',
+                      style: LuluTextStyles.titleMedium.copyWith(
+                        color: LuluTextColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: LuluSpacing.sm),
+                    Text(
+                      '아래 + 버튼을 눌러\n수유, 수면, 기저귀 기록을 시작하세요',
+                      style: LuluTextStyles.bodyMedium.copyWith(
+                        color: LuluTextColors.secondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: LuluSpacing.lg),
+                    // 기록 유형 힌트
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildRecordHintWithIcon(LuluIcons.feeding, '수유', LuluActivityColors.feeding),
+                        _buildRecordHintWithIcon(LuluIcons.sleep, '수면', LuluActivityColors.sleep),
+                        _buildRecordHintWithIcon(LuluIcons.diaper, '기저귀', LuluActivityColors.diaper),
+                      ],
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(height: LuluSpacing.lg),
+            ],
+
+            // 마지막 활동 Row (0 상태)
+            const LastActivityRow(
+              lastSleep: null,
+              lastFeeding: null,
+              lastDiaper: null,
             ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 
@@ -336,90 +261,69 @@ class HomeScreen extends StatelessWidget {
   }
 
   /// 정상 상태 콘텐츠 (활동 기록 있음)
+  ///
+  /// Sprint 7 Day 2: OngoingSleepCard → SweetSpotCard 통합
+  /// 1. LastActivityRow (수면/수유/기저귀 시간)
+  /// 2. SweetSpotCard (수면 중 상태 + Sweet Spot 예측)
   Widget _buildNormalContent(BuildContext context, HomeProvider homeProvider) {
-    final selectedBaby = homeProvider.selectedBaby;
-    final lastFeeding = homeProvider.lastFeeding;
-    final lastSleep = homeProvider.lastSleep;
+    // Sweet Spot Empty State 판단: 수면 기록 없음
+    final hasSleepRecord = homeProvider.lastSleep != null;
 
-    return Column(
-      children: [
-        // Sweet Spot Hero Card
-        SweetSpotHeroCard(
-          babyName: selectedBaby?.name,
-          correctedAgeMonths: selectedBaby?.effectiveAgeInMonths,
-          isPreterm: selectedBaby?.isPreterm ?? false,
-          recommendedTime: _formatTime(homeProvider.recommendedSleepTime),
-          minutesUntil: homeProvider.minutesUntilSweetSpot,
-          progress: homeProvider.sweetSpotProgress,
-        ),
+    return Consumer<OngoingSleepProvider>(
+      builder: (context, sleepProvider, _) {
+        // 현재 선택된 아기가 수면 중인지 확인
+        final isSleeping = sleepProvider.hasSleepInProgress &&
+            sleepProvider.currentBabyId == homeProvider.selectedBabyId;
 
-        const SizedBox(height: LuluSpacing.lg),
-
-        // 마지막 활동 카드들
-        Row(
+        return Column(
           children: [
-            Expanded(
-              child: LastActivityCard(
-                type: 'feeding',
-                title: '마지막 수유',
-                time: lastFeeding != null
-                    ? DateFormat('HH:mm').format(lastFeeding.startTime)
-                    : '--:--',
-                detail: lastFeeding != null
-                    ? _getFeedingDetail(lastFeeding)
-                    : '기록 없음',
-              ),
+            // 1. 마지막 활동 Row (수면/수유/기저귀)
+            LastActivityRow(
+              lastSleep: homeProvider.lastSleepTime,
+              lastFeeding: homeProvider.lastFeedingTime,
+              lastDiaper: homeProvider.lastDiaperTime,
             ),
-            const SizedBox(width: LuluSpacing.md),
-            Expanded(
-              child: LastActivityCard(
-                type: 'sleep',
-                title: '마지막 수면',
-                time: lastSleep != null
-                    ? _getSleepTimeRange(lastSleep)
-                    : '--:--',
-                detail: lastSleep != null
-                    ? _getSleepDuration(lastSleep)
-                    : '기록 없음',
-              ),
+
+            const SizedBox(height: LuluSpacing.lg),
+
+            // 2. Sweet Spot 카드 (수면 중 상태 통합)
+            SweetSpotCard(
+              // 기존 props
+              state: homeProvider.sweetSpotState,
+              isEmpty: !hasSleepRecord && !isSleeping,
+              estimatedTime: _getEstimatedTimeText(homeProvider),
+              onRecordSleep: () => _navigateToRecord(context, 'sleep'),
+              // 🆕 수면 중 props (Sprint 7 Day 2)
+              isSleeping: isSleeping,
+              sleepStartTime: sleepProvider.sleepStartTime,
+              sleepType: sleepProvider.ongoingSleep?.sleepType,
+              babyName: sleepProvider.ongoingSleep?.babyName ??
+                  homeProvider.selectedBaby?.name,
+              onEndSleep: () => _showEndSleepDialog(context, sleepProvider),
             ),
+
+            // QuickActionGrid 제거됨 (FAB로 대체) - Sprint 7 Day 2
           ],
-        ),
-
-        const SizedBox(height: LuluSpacing.lg),
-
-        // 오늘 요약 (한 줄)
-        TodaySummaryCard(
-          feedingCount: homeProvider.todayFeedingCount,
-          sleepDuration: homeProvider.todaySleepDuration,
-          diaperCount: homeProvider.todayDiaperCount,
-        ),
-
-        const SizedBox(height: LuluSpacing.lg),
-
-        // Phase 2 울음 분석 예약 영역
-        const CryAnalysisPlaceholder(),
-
-        const SizedBox(height: LuluSpacing.lg),
-
-        // Quick Action 버튼 (64dp)
-        QuickActionGrid(
-          onFeedingTap: () => _navigateToRecord(context, 'feeding'),
-          onSleepTap: () => _navigateToRecord(context, 'sleep'),
-          onDiaperTap: () => _navigateToRecord(context, 'diaper'),
-          onPlayTap: () => _navigateToRecord(context, 'play'),
-          onHealthTap: () => _navigateToRecord(context, 'health'),
-        ),
-
-        const SizedBox(height: LuluSpacing.lg),
-
-        // 최근 기록 미니 타임라인
-        MiniTimeline(
-          activities: homeProvider.todayActivities,
-          onViewAllTap: () => _navigateToTimeline(context),
-        ),
-      ],
+        );
+      },
     );
+  }
+
+  /// Sweet Spot 예상 시간 텍스트
+  String? _getEstimatedTimeText(HomeProvider homeProvider) {
+    final minutes = homeProvider.minutesUntilSweetSpot;
+    if (minutes <= 0) return null;
+
+    if (minutes < 60) {
+      return '약 $minutes분 후';
+    } else {
+      final hours = minutes ~/ 60;
+      final mins = minutes % 60;
+      if (mins == 0) {
+        return '약 $hours시간 후';
+      }
+      return '약 $hours시간 $mins분 후';
+    }
   }
 
   void _navigateToRecord(BuildContext context, String type) {
@@ -427,64 +331,151 @@ class HomeScreen extends StatelessWidget {
     debugPrint('Navigate to $type record');
   }
 
-  void _navigateToTimeline(BuildContext context) {
-    // TODO: 타임라인 화면으로 네비게이션
-    debugPrint('Navigate to timeline');
+  /// 수면 종료 다이얼로그 (OngoingSleepCard에서 이전)
+  ///
+  /// Sprint 7 Day 2: SweetSpotCard 통합
+  void _showEndSleepDialog(
+    BuildContext context,
+    OngoingSleepProvider sleepProvider,
+  ) {
+    final babyName = sleepProvider.ongoingSleep?.babyName ?? '아기';
+    final startTime = sleepProvider.sleepStartTime;
+
+    if (startTime == null) return;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: LuluColors.surfaceCard,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Text(
+          '수면을 종료할까요?',
+          style: LuluTextStyles.titleMedium.copyWith(
+            color: LuluTextColors.primary,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildDialogInfoRow('아기', babyName),
+            const SizedBox(height: 8),
+            _buildDialogInfoRow(
+              '시작',
+              DateFormat('a h:mm', 'ko').format(startTime),
+            ),
+            const SizedBox(height: 8),
+            _buildDialogInfoRow(
+              '종료',
+              DateFormat('a h:mm', 'ko').format(DateTime.now()),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: LuluActivityColors.sleepBg,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.timer_outlined,
+                    color: LuluActivityColors.sleep,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '총 수면: ${sleepProvider.formattedElapsedTime}',
+                    style: LuluTextStyles.titleMedium.copyWith(
+                      color: LuluActivityColors.sleep,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(
+              '취소',
+              style: LuluTextStyles.labelLarge.copyWith(
+                color: LuluTextColors.secondary,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              final homeProvider = context.read<HomeProvider>();
+              final messenger = ScaffoldMessenger.of(context);
+
+              final savedActivity = await sleepProvider.endSleep();
+
+              // HomeProvider에 활동 추가하여 UI 갱신
+              if (savedActivity != null) {
+                homeProvider.addActivity(savedActivity);
+              }
+
+              messenger.showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      const Icon(LuluIcons.sleep, size: 18, color: Colors.white),
+                      const SizedBox(width: 8),
+                      Text(
+                        '수면 기록이 저장되었어요',
+                        style: LuluTextStyles.bodyMedium.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: LuluActivityColors.sleep,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: LuluActivityColors.sleep,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text('종료'),
+          ),
+        ],
+      ),
+    );
   }
 
-  /// 시간 포맷
-  String _formatTime(DateTime? time) {
-    if (time == null) return '--:--';
-    return DateFormat('HH:mm').format(time);
+  /// 다이얼로그 정보 Row
+  Widget _buildDialogInfoRow(String label, String value) {
+    return Row(
+      children: [
+        Text(
+          '$label: ',
+          style: LuluTextStyles.bodyMedium.copyWith(
+            color: LuluTextColors.secondary,
+          ),
+        ),
+        Text(
+          value,
+          style: LuluTextStyles.bodyMedium.copyWith(
+            color: LuluTextColors.primary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
   }
-
-  /// 수유 상세 정보
-  String _getFeedingDetail(ActivityModel activity) {
-    final data = activity.data;
-    if (data == null) return '';
-
-    final feedingType = data['feeding_type'] as String? ?? '';
-    final typeStr = switch (feedingType) {
-      'breast' => '모유',
-      'bottle' => '젖병',
-      'formula' => '분유',
-      'solid' => '이유식',
-      _ => '수유',
-    };
-
-    final amount = data['amount_ml'] as num?;
-    if (amount != null && amount > 0) {
-      return '$typeStr ${amount.toInt()}ml';
-    }
-
-    final duration = data['duration_minutes'] as int?;
-    if (duration != null && duration > 0) {
-      return '$typeStr $duration분';
-    }
-
-    return typeStr;
-  }
-
-  /// 수면 시간 범위
-  String _getSleepTimeRange(ActivityModel activity) {
-    final start = DateFormat('HH:mm').format(activity.startTime);
-    if (activity.endTime == null) return '$start - 진행 중';
-    final end = DateFormat('HH:mm').format(activity.endTime!);
-    return '$start - $end';
-  }
-
-  /// 수면 시간 (자정 넘김 처리 포함 - QA-01)
-  String _getSleepDuration(ActivityModel activity) {
-    if (activity.endTime == null) return '진행 중';
-
-    // durationMinutes getter 사용 (자정 넘김 처리 포함)
-    final totalMins = activity.durationMinutes ?? 0;
-    final hours = totalMins ~/ 60;
-    final mins = totalMins % 60;
-
-    if (hours > 0 && mins > 0) return '$hours시간 $mins분';
-    if (hours > 0) return '$hours시간';
-    return '$mins분';
-  }
-
 }

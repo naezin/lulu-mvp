@@ -56,7 +56,7 @@ class AIUsageManager {
     if (!_isToday()) {
       await _prefs.setString(_dailyDateKey, _todayString);
       await _prefs.setInt(_dailyCountKey, 0);
-      debugPrint('🔄 [AIUsage] Daily count reset for new day');
+      debugPrint('[SYNC] [AIUsage] Daily count reset for new day');
     }
   }
 
@@ -83,7 +83,7 @@ class AIUsageManager {
     await _resetIfNewDay();
     final current = _prefs.getInt(_dailyCountKey) ?? 0;
     await _prefs.setInt(_dailyCountKey, current + 1);
-    debugPrint('📊 [AIUsage] Request count: ${current + 1}/$dailyLimit');
+    debugPrint('[STAT] [AIUsage] Request count: ${current + 1}/$dailyLimit');
   }
 
   // ========================================
@@ -99,7 +99,7 @@ class AIUsageManager {
   Future<void> addTokensUsed(int tokens) async {
     final current = _prefs.getInt(_totalTokensKey) ?? 0;
     await _prefs.setInt(_totalTokensKey, current + tokens);
-    debugPrint('📊 [AIUsage] Total tokens: ${current + tokens}');
+    debugPrint('[STAT] [AIUsage] Total tokens: ${current + tokens}');
   }
 
   // ========================================
@@ -126,7 +126,7 @@ class AIUsageManager {
     await _prefs.remove(_dailyCountKey);
     await _prefs.remove(_dailyDateKey);
     await _prefs.remove(_totalTokensKey);
-    debugPrint('🗑️ [AIUsage] Usage data reset');
+    debugPrint('[DEL] [AIUsage] Usage data reset');
   }
 }
 

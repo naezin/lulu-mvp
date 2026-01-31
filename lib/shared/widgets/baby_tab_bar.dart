@@ -31,14 +31,9 @@ class BabyTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 아기가 없거나 1명만 있으면 표시하지 않음
-    if (babies.isEmpty) {
+    // BUG-004: 아기가 없거나 1명만 있으면 완전히 숨김
+    if (babies.length <= 1) {
       return const SizedBox.shrink();
-    }
-
-    // 단태아: 교정연령 정보만 표시 (탭 전환 불필요)
-    if (babies.length == 1) {
-      return _buildSingleBabyHeader(babies.first);
     }
 
     // 다태아: 탭 형태로 표시
@@ -57,61 +52,7 @@ class BabyTabBar extends StatelessWidget {
           : _buildScrollableTabs(),
     );
   }
-
-  /// 단태아용 헤더 (교정연령 또는 SGA 표시)
-  Widget _buildSingleBabyHeader(BabyModel baby) {
-    final statusText = _getStatusText(baby);
-
-    if (statusText == null) {
-      return const SizedBox.shrink();
-    }
-
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: LuluSpacing.lg,
-        vertical: LuluSpacing.sm,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: LuluSpacing.md,
-        vertical: LuluSpacing.xs,
-      ),
-      decoration: BoxDecoration(
-        color: LuluColors.deepBlue.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(
-              color: LuluColors.baby1Color,
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: LuluSpacing.sm),
-          // SGA-01: SGA인 경우 아이콘 추가
-          if (baby.isSGA) ...[
-            Icon(
-              Icons.trending_up_rounded,
-              size: 12,
-              color: baby.statusBadgeColor ?? LuluTextColors.secondary,
-            ),
-            const SizedBox(width: 4),
-          ],
-          Text(
-            statusText,
-            style: LuluTextStyles.caption.copyWith(
-              color: baby.statusBadgeColor ?? LuluTextColors.secondary,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// 2명 이하: 고정 탭 (Row)
+  /// 2명: 고정 탭 (Row)
   Widget _buildFixedTabs() {
     return Row(
       children: babies.map((baby) {
@@ -181,12 +122,6 @@ class BabyTabBar extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  /// 상태 텍스트 생성 (SGA-01: 교정연령 또는 SGA)
-  String? _getStatusText(BabyModel baby) {
-    // SGA-01: statusBadgeText 사용 (조산아: 교정연령, SGA: 성장 추적 모드)
-    return baby.statusBadgeText;
   }
 
   /// 아기별 색상 (성별 고정관념 없는 중립 색상)

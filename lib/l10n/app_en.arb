@@ -214,9 +214,17 @@
   "cryAnalysisComingSoon": "Coming in Phase 2!",
   "cryAnalysisDescription": "AI-powered cry analysis will be available in Phase 2.",
 
+  "sweetSpotTitle": "Next Nap",
   "sweetSpotUnknown": "Checking",
-  "sweetSpotTooEarly": "Too Early",
-  "sweetSpotApproaching": "Approaching",
-  "sweetSpotOptimal": "Optimal Time!",
-  "sweetSpotOvertired": "Overtired"
+  "sweetSpotTooEarly": "Still has time",
+  "sweetSpotApproaching": "May get sleepy soon",
+  "sweetSpotOptimal": "Good time to put down",
+  "sweetSpotOvertired": "May have passed sleepy window",
+  "sweetSpotEmptyTitle": "Need sleep records",
+  "sweetSpotEmptySubtitle": "Record first sleep to\nget predicted times",
+  "sweetSpotDisclaimer": "This prediction is for reference only and may vary for each baby",
+
+  "sectionLanguage": "Language",
+  "languageChangeConfirm": "Change language?",
+  "languageChangeMessage": "The app will be displayed in the selected language."
 }

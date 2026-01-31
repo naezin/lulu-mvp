@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../shared/widgets/expandable_fab.dart';
 import '../../features/home/screens/home_screen.dart';
@@ -40,7 +41,7 @@ class _MainNavigationState extends State<MainNavigation> {
     // 온보딩에서 설정된 데이터 확인 로그
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeProvider = context.read<HomeProvider>();
-      debugPrint('✅ [MainNavigation] Loaded babies: ${homeProvider.babies.map((b) => b.name).join(", ")}');
+      debugPrint('[OK] [MainNavigation] Loaded babies: ${homeProvider.babies.map((b) => b.name).join(", ")}');
     });
   }
 
@@ -78,26 +79,26 @@ class _MainNavigationState extends State<MainNavigation> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _NavItem(
-            emoji: '🏠',
+            icon: LuluIcons.home,
             label: '홈',
             isSelected: _currentIndex == 0,
             onTap: () => _onTabTapped(0),
           ),
           _NavItem(
-            emoji: '📅',
+            icon: LuluIcons.records,
             label: '기록',
             isSelected: _currentIndex == 1,
             onTap: () => _onTabTapped(1),
           ),
           const SizedBox(width: 80), // FAB 공간
           _NavItem(
-            emoji: '📈',
+            icon: LuluIcons.growth,
             label: '성장',
             isSelected: _currentIndex == 2,
             onTap: () => _onTabTapped(2),
           ),
           _NavItem(
-            emoji: '⚙️',
+            icon: LuluIcons.settings,
             label: '설정',
             isSelected: _currentIndex == 3,
             onTap: () => _onTabTapped(3),
@@ -205,13 +206,13 @@ class _MainNavigationState extends State<MainNavigation> {
 }
 
 class _NavItem extends StatelessWidget {
-  final String emoji;
+  final IconData icon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _NavItem({
-    required this.emoji,
+    required this.icon,
     required this.label,
     required this.isSelected,
     required this.onTap,
@@ -226,9 +227,12 @@ class _NavItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              emoji,
-              style: TextStyle(fontSize: isSelected ? 22 : 18),
+            Icon(
+              icon,
+              size: isSelected ? 24 : 20,
+              color: isSelected
+                  ? LuluColors.lavenderMist
+                  : LuluTextColors.secondary,
             ),
             const SizedBox(height: 2),
             Text(

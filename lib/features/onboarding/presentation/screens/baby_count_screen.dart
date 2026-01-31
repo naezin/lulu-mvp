@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/design_system/lulu_icons.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
 
@@ -53,28 +54,28 @@ class BabyCountScreen extends StatelessWidget {
                 _BabyCountCard(
                   count: 1,
                   label: '1명',
-                  emoji: '👶',
+                  iconCount: 1,
                   isSelected: provider.babyCount == 1,
                   onTap: () => provider.setBabyCount(1),
                 ),
                 _BabyCountCard(
                   count: 2,
                   label: '쌍둥이',
-                  emoji: '👶👶',
+                  iconCount: 2,
                   isSelected: provider.babyCount == 2,
                   onTap: () => provider.setBabyCount(2),
                 ),
                 _BabyCountCard(
                   count: 3,
                   label: '세쌍둥이',
-                  emoji: '👶👶👶',
+                  iconCount: 3,
                   isSelected: provider.babyCount == 3,
                   onTap: () => provider.setBabyCount(3),
                 ),
                 _BabyCountCard(
                   count: 4,
                   label: '네쌍둥이',
-                  emoji: '👶👶👶👶',
+                  iconCount: 4,
                   isSelected: provider.babyCount == 4,
                   onTap: () => provider.setBabyCount(4),
                 ),
@@ -117,20 +118,23 @@ class BabyCountScreen extends StatelessWidget {
 class _BabyCountCard extends StatelessWidget {
   final int count;
   final String label;
-  final String emoji;
+  final int iconCount;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _BabyCountCard({
     required this.count,
     required this.label,
-    required this.emoji,
+    required this.iconCount,
     required this.isSelected,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = isSelected ? AppTheme.lavenderGlow : AppTheme.textSecondary;
+    final iconSize = iconCount > 2 ? 20.0 : 28.0;
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -146,10 +150,19 @@ class _BabyCountCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              emoji,
-              style: TextStyle(
-                fontSize: count > 2 ? 24 : 32,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(
+                iconCount,
+                (index) => Padding(
+                  padding: EdgeInsets.symmetric(horizontal: iconCount > 2 ? 1 : 2),
+                  child: Icon(
+                    LuluIcons.baby,
+                    size: iconSize,
+                    color: iconColor,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 12),

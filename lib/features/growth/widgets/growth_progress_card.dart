@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/constants/animation_constants.dart';
@@ -35,7 +36,7 @@ class GrowthProgressCard extends StatelessWidget {
           // 헤더
           Row(
             children: [
-              const Text('📈', style: TextStyle(fontSize: 20)),
+              Icon(LuluIcons.growth, size: 20, color: LuluColors.lavenderMist),
               const SizedBox(width: LuluSpacing.sm),
               Text(
                 '성장 백분위',
@@ -51,7 +52,7 @@ class GrowthProgressCard extends StatelessWidget {
           // 체중 진행률
           _PercentileBar(
             label: '체중',
-            emoji: '⚖️',
+            icon: LuluIcons.weight,
             percentile: percentiles?.weight,
           ),
 
@@ -60,7 +61,7 @@ class GrowthProgressCard extends StatelessWidget {
           // 신장 진행률
           _PercentileBar(
             label: '신장',
-            emoji: '📏',
+            icon: LuluIcons.ruler,
             percentile: percentiles?.length,
           ),
 
@@ -69,7 +70,7 @@ class GrowthProgressCard extends StatelessWidget {
           // 두위 진행률
           _PercentileBar(
             label: '두위',
-            emoji: '🧠',
+            icon: LuluIcons.head,
             percentile: percentiles?.headCircumference,
           ),
 
@@ -102,12 +103,12 @@ class GrowthProgressCard extends StatelessWidget {
 
 class _PercentileBar extends StatefulWidget {
   final String label;
-  final String emoji;
+  final IconData icon;
   final double? percentile;
 
   const _PercentileBar({
     required this.label,
-    required this.emoji,
+    required this.icon,
     this.percentile,
   });
 
@@ -167,7 +168,7 @@ class _PercentileBarState extends State<_PercentileBar>
       children: [
         Row(
           children: [
-            Text(widget.emoji, style: const TextStyle(fontSize: 14)),
+            Icon(widget.icon, size: 14, color: LuluTextColors.secondary),
             const SizedBox(width: LuluSpacing.xs),
             Text(
               widget.label,

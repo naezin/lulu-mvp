@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/models.dart';
@@ -115,7 +116,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
             // 체중 (필수)
             GrowthNumberInput(
               label: '체중',
-              emoji: '⚖️',
+              icon: LuluIcons.weight,
               unit: 'kg',
               value: _weight,
               previousValue: widget.previousMeasurement?.weightKg,
@@ -135,7 +136,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
             // 신장 (선택)
             GrowthNumberInput(
               label: '신장',
-              emoji: '📏',
+              icon: LuluIcons.ruler,
               unit: 'cm',
               value: _length,
               previousValue: widget.previousMeasurement?.lengthCm,
@@ -155,7 +156,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
             // 두위 (선택)
             GrowthNumberInput(
               label: '두위',
-              emoji: '🧠',
+              icon: LuluIcons.head,
               unit: 'cm',
               value: _headCircumference,
               previousValue: widget.previousMeasurement?.headCircumferenceCm,
@@ -203,7 +204,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       ),
       child: Row(
         children: [
-          const Text('📅', style: TextStyle(fontSize: 18)),
+          Icon(LuluIcons.calendar, size: 18, color: LuluColors.lavenderMist),
           const SizedBox(width: LuluSpacing.sm),
           Expanded(
             child: Column(
@@ -251,7 +252,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
         children: [
           Row(
             children: [
-              const Text('📝', style: TextStyle(fontSize: 18)),
+              Icon(LuluIcons.memo, size: 18, color: LuluColors.lavenderMist),
               const SizedBox(width: LuluSpacing.sm),
               Text(
                 '메모',
@@ -330,7 +331,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       ),
       child: Row(
         children: [
-          const Text('💡', style: TextStyle(fontSize: 16)),
+          Icon(LuluIcons.tips, size: 16, color: LuluColors.champagneGold),
           const SizedBox(width: LuluSpacing.sm),
           Expanded(
             child: Text(
@@ -417,7 +418,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
           SnackBar(
             content: Row(
               children: [
-                const Text('✅', style: TextStyle(fontSize: 16)),
+                const Icon(LuluIcons.checkCircle, size: 16, color: Colors.white),
                 const SizedBox(width: 8),
                 Text(
                   '성장 기록이 저장되었어요',

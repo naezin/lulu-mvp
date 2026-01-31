@@ -127,7 +127,7 @@ class ActivityRepository {
           .select()
           .single();
 
-      debugPrint('✅ [ActivityRepository] Activity created: ${response['id']}');
+      debugPrint('[OK] [ActivityRepository] Activity created: ${response['id']}');
       return _mapToActivityModel(response);
     } catch (e) {
       debugPrint('❌ [ActivityRepository] Error creating activity: $e');
@@ -148,7 +148,7 @@ class ActivityRepository {
           .select()
           .single();
 
-      debugPrint('✅ [ActivityRepository] Activity updated: ${activity.id}');
+      debugPrint('[OK] [ActivityRepository] Activity updated: ${activity.id}');
       return _mapToActivityModel(response);
     } catch (e) {
       debugPrint('❌ [ActivityRepository] Error updating activity: $e');
@@ -165,7 +165,7 @@ class ActivityRepository {
           .select()
           .single();
 
-      debugPrint('✅ [ActivityRepository] Activity finished: $activityId');
+      debugPrint('[OK] [ActivityRepository] Activity finished: $activityId');
       return _mapToActivityModel(response);
     } catch (e) {
       debugPrint('❌ [ActivityRepository] Error finishing activity: $e');
@@ -180,7 +180,7 @@ class ActivityRepository {
           .delete()
           .eq('id', activityId);
 
-      debugPrint('✅ [ActivityRepository] Activity deleted: $activityId');
+      debugPrint('[OK] [ActivityRepository] Activity deleted: $activityId');
     } catch (e) {
       debugPrint('❌ [ActivityRepository] Error deleting activity: $e');
       rethrow;

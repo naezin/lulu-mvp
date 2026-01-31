@@ -38,7 +38,7 @@ class OnboardingDataService {
       // 완료 플래그 저장
       await prefs.setBool(_keyCompleted, true);
 
-      debugPrint('✅ [OnboardingDataService] Data saved: family=${family.id}, babies=${babies.length}');
+      debugPrint('[OK] [OnboardingDataService] Data saved: family=${family.id}, babies=${babies.length}');
     } catch (e) {
       debugPrint('❌ [OnboardingDataService] Save error: $e');
       rethrow;
@@ -98,7 +98,7 @@ class OnboardingDataService {
       await prefs.remove(_keyBabies);
       await prefs.remove(_keyCompleted);
 
-      debugPrint('✅ [OnboardingDataService] Data cleared');
+      debugPrint('[OK] [OnboardingDataService] Data cleared');
     } catch (e) {
       debugPrint('❌ [OnboardingDataService] Clear error: $e');
       rethrow;

@@ -8,7 +8,9 @@ import '../../../core/services/export_service.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/repositories/baby_repository.dart';
 import '../../../data/repositories/activity_repository.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
+import '../providers/settings_provider.dart';
 import '../widgets/add_baby_dialog.dart';
 import '../widgets/delete_baby_dialog.dart';
 
@@ -31,13 +33,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Scaffold(
       backgroundColor: LuluColors.midnightNavy,
       appBar: AppBar(
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         title: Text(
-          '설정',
+          l10n.screenTitleSettings,
           style: LuluTextStyles.titleLarge.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -52,24 +56,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 아기 관리 섹션
-                _buildSectionHeader('아기 관리'),
+                _buildSectionHeader(l10n.sectionBabyManagement),
                 const SizedBox(height: LuluSpacing.md),
                 _buildBabyManagementSection(homeProvider),
 
                 const SizedBox(height: LuluSpacing.xxxl),
 
                 // 데이터 섹션
-                _buildSectionHeader('데이터'),
+                _buildSectionHeader(l10n.sectionData),
                 const SizedBox(height: LuluSpacing.md),
                 _buildExportSection(),
 
                 const SizedBox(height: LuluSpacing.xxxl),
 
-                // 앱 정보 섹션
-                _buildSectionHeader('앱 정보'),
+                // 언어 섹션
+                _buildSectionHeader(l10n.sectionLanguage),
                 const SizedBox(height: LuluSpacing.md),
-                _buildInfoTile('버전', '2.0.0'),
-                _buildInfoTile('개발', 'LULU Team'),
+                _buildLanguageSection(),
+
+                const SizedBox(height: LuluSpacing.xxxl),
+
+                // 앱 정보 섹션
+                _buildSectionHeader(l10n.sectionAppInfo),
+                const SizedBox(height: LuluSpacing.md),
+                _buildInfoTile(l10n.infoVersion, '2.0.0'),
+                _buildInfoTile(l10n.infoDeveloper, l10n.infoTeamName),
               ],
             ),
           );
@@ -267,6 +278,105 @@ class _SettingsScreenState extends State<SettingsScreen> {
       4 => LuluActivityColors.health,
       _ => LuluColors.lavenderMist,
     };
+  }
+
+  // ========================================
+  // 언어 섹션
+  // ========================================
+
+  Widget _buildLanguageSection() {
+    return Consumer<SettingsProvider>(
+      builder: (context, settingsProvider, _) {
+        final currentOption = SettingsProvider.supportedLanguages
+            .firstWhere((opt) => opt.code == settingsProvider.languageCode);
+
+        return Container(
+          decoration: BoxDecoration(
+            color: LuluColors.surfaceCard,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.language_rounded,
+                color: LuluColors.lavenderMist,
+                size: 22,
+              ),
+            ),
+            title: Text(
+              currentOption.label,
+              style: LuluTextStyles.bodyLarge.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+            trailing: const Icon(
+              Icons.chevron_right_rounded,
+              color: LuluTextColors.secondary,
+            ),
+            onTap: () => _showLanguageDialog(settingsProvider),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showLanguageDialog(SettingsProvider settingsProvider) {
+    final l10n = S.of(context)!;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: LuluColors.surfaceCard,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          l10n.languageChangeConfirm,
+          style: LuluTextStyles.titleMedium.copyWith(
+            color: LuluTextColors.primary,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: SettingsProvider.supportedLanguages.map((option) {
+            return RadioListTile<String>(
+              value: option.code,
+              groupValue: settingsProvider.languageCode,
+              title: Text(
+                option.label,
+                style: LuluTextStyles.bodyLarge.copyWith(
+                  color: LuluTextColors.primary,
+                ),
+              ),
+              activeColor: LuluColors.lavenderMist,
+              onChanged: (value) async {
+                if (value != null) {
+                  Navigator.pop(dialogContext);
+                  await settingsProvider.setLocale(value);
+                }
+              },
+            );
+          }).toList(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(
+              l10n.buttonCancel,
+              style: LuluTextStyles.labelLarge.copyWith(
+                color: LuluTextColors.secondary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // ========================================

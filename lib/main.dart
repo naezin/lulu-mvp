@@ -14,9 +14,13 @@ import 'features/growth/data/growth_data_cache.dart';
 import 'features/home/providers/home_provider.dart';
 import 'features/record/providers/record_provider.dart';
 import 'features/record/providers/ongoing_sleep_provider.dart';
+import 'features/settings/providers/settings_provider.dart';
 import 'app/navigation/main_navigation.dart';
 import 'data/models/models.dart';
 import 'l10n/generated/app_localizations.dart';
+
+/// Global SettingsProvider instance for async init
+late SettingsProvider _settingsProvider;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +46,10 @@ void main() async {
   // Initialize growth data cache (오프라인 지원)
   await GrowthDataCache.instance.initialize();
 
+  // Initialize SettingsProvider (async)
+  _settingsProvider = SettingsProvider();
+  await _settingsProvider.init();
+
   runApp(const LuluApp());
 }
 
@@ -59,21 +67,26 @@ class LuluApp extends StatelessWidget {
           provider.init(); // 앱 시작 시 진행 중 수면 복원
           return provider;
         }),
+        ChangeNotifierProvider.value(value: _settingsProvider),
       ],
-      child: MaterialApp(
-        title: 'Lulu',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.darkTheme,
-        // Localization
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: S.supportedLocales,
-        locale: const Locale('ko'), // 기본 한국어
-        home: const _OnboardingWrapper(),
+      child: Consumer<SettingsProvider>(
+        builder: (context, settings, child) {
+          return MaterialApp(
+            title: 'Lulu',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.darkTheme,
+            // Localization
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.supportedLocales,
+            locale: settings.locale,
+            home: const _OnboardingWrapper(),
+          );
+        },
       ),
     );
   }
@@ -112,7 +125,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
       final babies = await service.loadBabies();
 
       if (family != null && babies.isNotEmpty) {
-        debugPrint('✅ [OnboardingWrapper] Restored: family=${family.id}, babies=${babies.map((b) => b.name).join(", ")}');
+        debugPrint('[OK] [OnboardingWrapper] Restored: family=${family.id}, babies=${babies.map((b) => b.name).join(", ")}');
 
         // Provider에 즉시 데이터 설정 (mounted 체크 후)
         if (mounted) {
@@ -140,7 +153,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
       _hasCompletedOnboarding = true;
     });
 
-    debugPrint('✅ [OnboardingWrapper] Onboarding complete - switching to MainNavigation');
+    debugPrint('[OK] [OnboardingWrapper] Onboarding complete - switching to MainNavigation');
   }
 
   @override

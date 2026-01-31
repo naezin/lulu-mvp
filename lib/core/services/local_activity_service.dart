@@ -30,7 +30,7 @@ class LocalActivityService {
       final jsonList = updatedActivities.map((a) => a.toJson()).toList();
       await prefs.setString(_keyActivities, jsonEncode(jsonList));
 
-      debugPrint('✅ [LocalActivityService] Activity saved: ${activity.id}');
+      debugPrint('[OK] [LocalActivityService] Activity saved: ${activity.id}');
       return activity;
     } catch (e) {
       debugPrint('❌ [LocalActivityService] Save error: $e');
@@ -103,7 +103,7 @@ class LocalActivityService {
       final jsonList = updatedActivities.map((a) => a.toJson()).toList();
       await prefs.setString(_keyActivities, jsonEncode(jsonList));
 
-      debugPrint('✅ [LocalActivityService] Activity deleted: $activityId');
+      debugPrint('[OK] [LocalActivityService] Activity deleted: $activityId');
     } catch (e) {
       debugPrint('❌ [LocalActivityService] Delete error: $e');
       rethrow;
@@ -127,7 +127,7 @@ class LocalActivityService {
       final jsonList = updatedActivities.map((a) => a.toJson()).toList();
       await prefs.setString(_keyActivities, jsonEncode(jsonList));
 
-      debugPrint('✅ [LocalActivityService] Activity updated: ${activity.id}');
+      debugPrint('[OK] [LocalActivityService] Activity updated: ${activity.id}');
       return activity;
     } catch (e) {
       debugPrint('❌ [LocalActivityService] Update error: $e');
@@ -140,7 +140,7 @@ class LocalActivityService {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_keyActivities);
-      debugPrint('✅ [LocalActivityService] All activities cleared');
+      debugPrint('[OK] [LocalActivityService] All activities cleared');
     } catch (e) {
       debugPrint('❌ [LocalActivityService] Clear error: $e');
       rethrow;

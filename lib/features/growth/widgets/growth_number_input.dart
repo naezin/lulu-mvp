@@ -14,7 +14,7 @@ import '../../../data/models/growth_measurement_model.dart';
 /// - 이전 값 대비 변화량 표시
 class GrowthNumberInput extends StatefulWidget {
   final String label;
-  final String emoji;
+  final IconData icon;
   final String unit;
   final double? value;
   final double? previousValue;
@@ -28,7 +28,7 @@ class GrowthNumberInput extends StatefulWidget {
   const GrowthNumberInput({
     super.key,
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.unit,
     this.value,
     this.previousValue,
@@ -81,7 +81,7 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
           // 라벨
           Row(
             children: [
-              Text(widget.emoji, style: const TextStyle(fontSize: 18)),
+              Icon(widget.icon, size: 18, color: LuluColors.lavenderMist),
               const SizedBox(width: LuluSpacing.sm),
               Text(
                 widget.label,

@@ -124,7 +124,7 @@ class _GrowthChartState extends State<GrowthChart>
   Widget _buildHeader() {
     return Row(
       children: [
-        Text(widget.metric.emoji, style: const TextStyle(fontSize: 20)),
+        Icon(widget.metric.icon, size: 20, color: LuluTextColors.primary),
         const SizedBox(width: LuluSpacing.sm),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

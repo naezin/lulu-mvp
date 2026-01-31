@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/models.dart';
 
 /// 홈 화면 상태 관리 Provider
@@ -182,6 +183,19 @@ class HomeProvider extends ChangeNotifier {
   }
 
   // ========================================
+  // 마지막 활동 시간 (DateTime) - LastActivityRow용
+  // ========================================
+
+  /// 마지막 수면 시간 (DateTime)
+  DateTime? get lastSleepTime => lastSleep?.endTime ?? lastSleep?.startTime;
+
+  /// 마지막 수유 시간 (DateTime)
+  DateTime? get lastFeedingTime => lastFeeding?.startTime;
+
+  /// 마지막 기저귀 시간 (DateTime)
+  DateTime? get lastDiaperTime => lastDiaper?.startTime;
+
+  // ========================================
   // 메서드
   // ========================================
 
@@ -195,7 +209,7 @@ class HomeProvider extends ChangeNotifier {
     if (_babies.isNotEmpty && _selectedBabyId == null) {
       _selectedBabyId = _babies.first.id;
     }
-    debugPrint('✅ [HomeProvider] Family set: ${family.id}, babies: ${babies.map((b) => b.name).join(", ")}');
+    debugPrint('[OK] [HomeProvider] Family set: ${family.id}, babies: ${babies.map((b) => b.name).join(", ")}');
     notifyListeners();
   }
 
@@ -216,7 +230,7 @@ class HomeProvider extends ChangeNotifier {
     _selectedBabyId = babyId;
     _invalidateCache(); // 캐시 무효화
     _calculateSweetSpot();
-    debugPrint('✅ [HomeProvider] Baby selected: $babyId, filtered activities: ${filteredTodayActivities.length}');
+    debugPrint('[OK] [HomeProvider] Baby selected: $babyId, filtered activities: ${filteredTodayActivities.length}');
     notifyListeners();
   }
 
@@ -225,7 +239,7 @@ class HomeProvider extends ChangeNotifier {
     _todayActivities = activities;
     _invalidateCache(); // 캐시 무효화
     _calculateSweetSpot();
-    debugPrint('✅ [HomeProvider] Activities set: ${activities.length} total, ${filteredTodayActivities.length} for selected baby');
+    debugPrint('[OK] [HomeProvider] Activities set: ${activities.length} total, ${filteredTodayActivities.length} for selected baby');
     notifyListeners();
   }
 
@@ -234,7 +248,7 @@ class HomeProvider extends ChangeNotifier {
     _todayActivities = [..._todayActivities, activity];
     _invalidateCache(); // 캐시 무효화
     _calculateSweetSpot();
-    debugPrint('✅ [HomeProvider] Activity added: ${activity.type}, babyIds: ${activity.babyIds}');
+    debugPrint('[OK] [HomeProvider] Activity added: ${activity.type}, babyIds: ${activity.babyIds}');
     notifyListeners();
   }
 
@@ -414,13 +428,13 @@ extension SweetSpotStateExtension on SweetSpotState {
     };
   }
 
-  String get emoji {
+  IconData get icon {
     return switch (this) {
-      SweetSpotState.unknown => '❓',
-      SweetSpotState.tooEarly => '😊',
-      SweetSpotState.approaching => '😴',
-      SweetSpotState.optimal => '🌙',
-      SweetSpotState.overtired => '😫',
+      SweetSpotState.unknown => LuluIcons.info,
+      SweetSpotState.tooEarly => LuluIcons.sun,
+      SweetSpotState.approaching => LuluIcons.sleep,
+      SweetSpotState.optimal => LuluIcons.moon,
+      SweetSpotState.overtired => LuluIcons.warning,
     };
   }
 }

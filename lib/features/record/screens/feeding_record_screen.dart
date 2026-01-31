@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -248,7 +249,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
             Expanded(
               child: _BreastSideButton(
                 label: '왼쪽',
-                icon: '🤱',
+                icon: LuluIcons.breastfeeding,
                 isSelected: provider.breastSide == 'left',
                 onTap: () => provider.setBreastSide('left'),
               ),
@@ -257,7 +258,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
             Expanded(
               child: _BreastSideButton(
                 label: '오른쪽',
-                icon: '🤱',
+                icon: LuluIcons.breastfeeding,
                 isSelected: provider.breastSide == 'right',
                 onTap: () => provider.setBreastSide('right'),
                 isFlipped: true,
@@ -267,7 +268,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
             Expanded(
               child: _BreastSideButton(
                 label: '양쪽',
-                icon: '👶',
+                icon: LuluIcons.baby,
                 isSelected: provider.breastSide == 'both',
                 onTap: () => provider.setBreastSide('both'),
               ),
@@ -551,7 +552,7 @@ class _DurationButton extends StatelessWidget {
 
 class _BreastSideButton extends StatelessWidget {
   final String label;
-  final String icon;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
   final bool isFlipped;
@@ -587,9 +588,12 @@ class _BreastSideButton extends StatelessWidget {
           children: [
             Transform.flip(
               flipX: isFlipped,
-              child: Text(
+              child: Icon(
                 icon,
-                style: const TextStyle(fontSize: 24),
+                size: 24,
+                color: isSelected
+                    ? LuluActivityColors.feeding
+                    : LuluTextColors.secondary,
               ),
             ),
             const SizedBox(height: 4),

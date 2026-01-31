@@ -189,7 +189,7 @@ class LuluStatusColors {
   static const Color info = Color(0xFF7BB8E8);
 
   // ========================================
-  // Sweet Spot Gauge
+  // Sweet Spot Gauge (Legacy - 하위 호환용)
   // ========================================
 
   /// 최적 시간 (Green)
@@ -216,4 +216,25 @@ class LuluStatusColors {
   static Color get warningSoft => warning.withValues(alpha: 0.15);
   static Color get errorSoft => error.withValues(alpha: 0.15);
   static Color get infoSoft => info.withValues(alpha: 0.15);
+}
+
+/// Sweet Spot Colors (단일 색상 시스템)
+///
+/// 작업 지시서 v1.2: 모든 Sweet Spot 상태에서 동일한 색상 사용
+/// 판단/경고 색상 제거 → Lavender Mist 단일 색상
+class LuluSweetSpotColors {
+  /// 모든 상태에서 사용하는 단일 색상 (Lavender Mist)
+  static const Color neutral = LuluColors.lavenderMist;
+
+  /// 배경색 (10% opacity)
+  static Color get neutralBg => neutral.withValues(alpha: 0.1);
+
+  /// 아이콘 색상 (동일)
+  static const Color icon = LuluColors.lavenderMist;
+
+  /// 텍스트 색상 (primary text)
+  static const Color text = LuluTextColors.primary;
+
+  /// 서브텍스트 색상 (secondary text)
+  static const Color subtext = LuluTextColors.secondary;
 }

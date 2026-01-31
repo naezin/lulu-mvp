@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/constants/animation_constants.dart';
@@ -122,7 +123,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
 
     return Row(
       children: [
-        const Text('📊', style: TextStyle(fontSize: 24)),
+        Icon(LuluIcons.chart, size: 24, color: LuluColors.lavenderMist),
         const SizedBox(width: LuluSpacing.sm),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +158,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
         // 체중
         Expanded(
           child: _MeasurementItem(
-            emoji: '⚖️',
+            icon: LuluIcons.weight,
             label: '체중',
             value: '${widget.measurement.weightKg.toStringAsFixed(2)} kg',
             percentile: widget.percentiles?.weight,
@@ -172,7 +173,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
         // 신장
         Expanded(
           child: _MeasurementItem(
-            emoji: '📏',
+            icon: LuluIcons.ruler,
             label: '신장',
             value: widget.measurement.lengthCm != null
                 ? '${widget.measurement.lengthCm!.toStringAsFixed(1)} cm'
@@ -190,7 +191,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
         // 두위
         Expanded(
           child: _MeasurementItem(
-            emoji: '🧠',
+            icon: LuluIcons.head,
             label: '두위',
             value: widget.measurement.headCircumferenceCm != null
                 ? '${widget.measurement.headCircumferenceCm!.toStringAsFixed(1)} cm'
@@ -225,9 +226,12 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            widget.chartType == GrowthChartType.fenton ? '📅' : '📈',
-            style: const TextStyle(fontSize: 14),
+          Icon(
+            widget.chartType == GrowthChartType.fenton
+                ? LuluIcons.calendar
+                : LuluIcons.growth,
+            size: 14,
+            color: LuluColors.lavenderMist,
           ),
           const SizedBox(width: LuluSpacing.xs),
           Text(
@@ -266,7 +270,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
 }
 
 class _MeasurementItem extends StatelessWidget {
-  final String emoji;
+  final IconData icon;
   final String label;
   final String value;
   final double? percentile;
@@ -274,7 +278,7 @@ class _MeasurementItem extends StatelessWidget {
   final String changeUnit;
 
   const _MeasurementItem({
-    required this.emoji,
+    required this.icon,
     required this.label,
     required this.value,
     this.percentile,
@@ -295,7 +299,7 @@ class _MeasurementItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 14)),
+              Icon(icon, size: 14, color: LuluTextColors.secondary),
               const SizedBox(width: LuluSpacing.xs),
               Text(
                 label,

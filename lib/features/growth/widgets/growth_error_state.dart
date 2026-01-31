@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 
@@ -34,8 +35,8 @@ class GrowthErrorState extends StatelessWidget {
                 color: LuluStatusColors.error.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
-              child: const Center(
-                child: Text('😥', style: TextStyle(fontSize: 40)),
+              child: Center(
+                child: Icon(LuluIcons.error, size: 40, color: LuluStatusColors.error),
               ),
             ),
 
@@ -82,7 +83,7 @@ class GrowthErrorState extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('🔄', style: TextStyle(fontSize: 18)),
+                      Icon(Icons.refresh_rounded, size: 18, color: LuluTextColors.primary),
                       const SizedBox(width: LuluSpacing.sm),
                       Text(
                         '다시 시도',

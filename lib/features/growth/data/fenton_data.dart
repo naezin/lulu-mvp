@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import '../../../core/design_system/lulu_icons.dart';
+
 /// Fenton 성장 차트 데이터 모델
 ///
 /// 출처: Fenton TR, Kim JH. 2013
@@ -150,9 +153,9 @@ extension GrowthMetricExtension on GrowthMetric {
         GrowthMetric.headCircumference => 'cm',
       };
 
-  String get emoji => switch (this) {
-        GrowthMetric.weight => '⚖️',
-        GrowthMetric.length => '📏',
-        GrowthMetric.headCircumference => '🧠',
+  IconData get icon => switch (this) {
+        GrowthMetric.weight => LuluIcons.weight,
+        GrowthMetric.length => LuluIcons.ruler,
+        GrowthMetric.headCircumference => LuluIcons.head,
       };
 }
