@@ -1,11 +1,11 @@
-# LULU App ver2 (MVP-F) - CLAUDE.md v5.0
+# LULU App ver2 (MVP-F) - CLAUDE.md v5.1
 
 > **"24명의 Elite Agent가 다태아+조산아 부모를 위한 최고의 앱을 만든다"**
 >
-> **Version**: 5.0 (UX UT 결과 + "둘 다" 제거 + Code Update 완료)
-> **Last Updated**: 2026-01-30
+> **Version**: 5.1 (Sprint 7/8 완료 반영)
+> **Last Updated**: 2026-01-31
 > **Target Release**: 2026.02.17
-> **Status**: Code Update 완료
+> **Status**: Sprint 8 진행 중
 
 ---
 
@@ -30,7 +30,7 @@
 │                                                                         │
 │  🚫 금지: 하드코딩 API키 | print문 | 빈 catch | "정상/비정상" 표현      │
 │                                                                         │
-│  ⚠️ v5.0 핵심: "둘 다" 버튼 완전 제거 + QuickRecordButton 적용 완료    │
+│  ⚠️ v5.1 핵심: SweetSpotCard 통합 + FAB 대체 + Material Icons 적용     │
 │                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -285,23 +285,29 @@ Design:
 
 **목표**: SUS 80+, TTC < 3초
 
-### 메인 화면 구조
+### 메인 화면 구조 (v5.1 - Sprint 7 이후)
 
 ```
 ┌─────────────────────────────────────────┐
 │ [하늘이 교정42일] [바다 교정38일]       │ ← BabyTabBar (교정연령 통합)
 ├─────────────────────────────────────────┤
-│ 오늘: 🍼5 😴13h 👶7 🎮2 🏥36.5°        │ ← TodaySummaryCard (5종)
+│ 수면 2h전 | 수유 30m전 | 기저귀 1h전    │ ← LastActivityRow (신규)
 ├─────────────────────────────────────────┤
-│ [Phase 2: 울음 분석 영역 예약]          │ ← CryAnalysisPlaceholder
+│ ┌─────────────────────────────────────┐ │
+│ │  SweetSpotCard                      │ │ ← SweetSpotCard (통합됨)
+│ │  - Sweet Spot 예측                  │ │   OngoingSleepCard 기능 포함
+│ │  - 수면 중 상태 표시                │ │   실시간 경과 시간 Timer
+│ │  - Empty State                      │ │
+│ └─────────────────────────────────────┘ │
 ├─────────────────────────────────────────┤
-│ ╔══════╗ ╔══════╗ ╔══════╗ ╔══════╗   │
-│ ║  🍼  ║ ║  😴  ║ ║  👶  ║ ║ 더보기║   │ ← QuickActionGrid (5종)
-│ ╚══════╝ ╚══════╝ ╚══════╝ ╚══════╝   │   64x64dp
-├─────────────────────────────────────────┤
-│ 최근: 10:30 🍼 | 09:00 😴 | ...        │ ← MiniTimeline
+│              [+] FAB                    │ ← FAB (QuickActionGrid 대체)
 └─────────────────────────────────────────┘
 ```
+
+**v5.1 변경사항:**
+- `QuickActionGrid` → FAB로 대체 (삭제됨)
+- `OngoingSleepCard` → `SweetSpotCard`로 통합 (삭제됨)
+- `LastActivityRow` 신규 추가 (수면/수유/기저귀 경과 시간)
 
 ### 기록 화면 공통 구조 (v5.0)
 
@@ -438,11 +444,18 @@ lib/
 │   ├── onboarding/
 │   ├── home/
 │   │   ├── screens/
-│   │   │   └── home_screen.dart       ← 메인 화면
+│   │   │   └── home_screen.dart       ← 메인 화면 (StatefulWidget)
+│   │   ├── providers/
+│   │   │   └── home_provider.dart     ← 캐싱 최적화됨
 │   │   └── widgets/
 │   │       ├── today_summary_card.dart
-│   │       ├── sweet_spot_hero_card.dart
+│   │       ├── sweet_spot_hero_card.dart  ← deprecated (SweetSpotCard 사용)
 │   │       └── cry_analysis_placeholder.dart ← Phase 2 예약
+│   ├── settings/
+│   │   ├── screens/
+│   │   │   └── settings_screen.dart   ← Sprint 8 신규
+│   │   └── providers/
+│   │       └── settings_provider.dart ← Sprint 8 신규
 │   ├── record/
 │   │   └── screens/
 │   │       ├── feeding_record_screen.dart   ← v5.0 업데이트
@@ -462,9 +475,14 @@ lib/
 └── shared/
     └── widgets/
         ├── baby_tab_bar.dart           ← "둘 다" 제거됨
-        ├── quick_action_grid.dart      ← 5종 버튼
+        ├── sweet_spot_card.dart        ← v5.1 신규 (OngoingSleepCard 통합)
+        ├── last_activity_row.dart      ← v5.1 신규
         ├── quick_record_button.dart    ← v5.0 신규
         └── mini_timeline.dart
+
+### 삭제된 파일 (v5.1)
+- `lib/shared/widgets/quick_action_grid.dart` → FAB로 대체
+- `lib/features/home/widgets/ongoing_sleep_card.dart` → SweetSpotCard로 통합
 ```
 
 ---
@@ -520,8 +538,21 @@ lib/
 | Sprint 3 | 3일 | 다태아 UI | ✅ 완료 |
 | Sprint 4 | 2일 | 조산아 기능 | ✅ 완료 |
 | Sprint 5 | 2일 | UX 리디자인 | ✅ 완료 |
-| **Sprint 6** | **10일** | **새 UX 구현** | 🔄 진행 중 |
-| Sprint 7 | 1주 | QA + 출시 | 예정 |
+| Sprint 6 | 10일 | 새 UX 구현 | ✅ 완료 |
+| Sprint 7 | 5일 | 홈 화면 개선 | ✅ 완료 |
+| **Sprint 8** | **진행중** | **설정/내보내기** | 🔄 진행 중 |
+
+### Sprint 7 완료 내역
+- OngoingSleepCard → SweetSpotCard 통합
+- QuickActionGrid → FAB 대체 (삭제)
+- LastActivityRow 신규 추가
+- 이모지 → Material Icons 교체
+- HomeProvider 캐싱 최적화
+
+### Sprint 8 완료 내역
+- CSV 내보내기 기능
+- 설정 화면 + SettingsProvider
+- i18n 다국어 확장
 
 ---
 
@@ -606,8 +637,8 @@ Scopes:
 
 ---
 
-**Last Updated**: 2026-01-30
-**Version**: 5.0 (UX UT 결과 + "둘 다" 제거 + Code Update 완료)
+**Last Updated**: 2026-01-31
+**Version**: 5.1 (Sprint 7/8 완료 반영)
 **Agents**: 24명 (경영4 + 제품4 + 개발6 + 의료4 + 마케팅2 + AI4)
 
 ---
