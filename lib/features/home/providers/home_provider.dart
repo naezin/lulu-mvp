@@ -47,17 +47,38 @@ class HomeProvider extends ChangeNotifier {
   // BUG-002 FIX: 선택된 아기별 필터링된 활동
   // ========================================
 
+  /// 캐싱된 필터링 활동 (성능 최적화)
+  List<ActivityModel>? _cachedFilteredActivities;
+  String? _cachedFilterBabyId;
+
   /// 선택된 아기의 오늘 활동만 반환
   ///
   /// - selectedBabyId가 null이면 모든 활동 반환
   /// - selectedBabyId가 있으면 해당 아기의 활동만 필터링
+  /// - 동일한 조건이면 캐시된 결과 반환 (성능 최적화)
   List<ActivityModel> get filteredTodayActivities {
-    if (_selectedBabyId == null) {
-      return _todayActivities;
+    // 캐시 유효성 체크
+    if (_cachedFilteredActivities != null &&
+        _cachedFilterBabyId == _selectedBabyId) {
+      return _cachedFilteredActivities!;
     }
-    return _todayActivities
-        .where((a) => a.babyIds.contains(_selectedBabyId))
-        .toList();
+
+    // 새로 필터링
+    if (_selectedBabyId == null) {
+      _cachedFilteredActivities = List.unmodifiable(_todayActivities);
+    } else {
+      _cachedFilteredActivities = List.unmodifiable(
+        _todayActivities.where((a) => a.babyIds.contains(_selectedBabyId)).toList(),
+      );
+    }
+    _cachedFilterBabyId = _selectedBabyId;
+    return _cachedFilteredActivities!;
+  }
+
+  /// 캐시 무효화
+  void _invalidateCache() {
+    _cachedFilteredActivities = null;
+    _cachedFilterBabyId = null;
   }
 
   /// 로딩 상태
@@ -193,6 +214,7 @@ class HomeProvider extends ChangeNotifier {
   /// 새로운 selectedBabyId를 기준으로 필터링됨
   void selectBaby(String? babyId) {
     _selectedBabyId = babyId;
+    _invalidateCache(); // 캐시 무효화
     _calculateSweetSpot();
     debugPrint('✅ [HomeProvider] Baby selected: $babyId, filtered activities: ${filteredTodayActivities.length}');
     notifyListeners();
@@ -201,6 +223,7 @@ class HomeProvider extends ChangeNotifier {
   /// 오늘 활동 설정
   void setTodayActivities(List<ActivityModel> activities) {
     _todayActivities = activities;
+    _invalidateCache(); // 캐시 무효화
     _calculateSweetSpot();
     debugPrint('✅ [HomeProvider] Activities set: ${activities.length} total, ${filteredTodayActivities.length} for selected baby');
     notifyListeners();
@@ -209,6 +232,7 @@ class HomeProvider extends ChangeNotifier {
   /// 활동 추가
   void addActivity(ActivityModel activity) {
     _todayActivities = [..._todayActivities, activity];
+    _invalidateCache(); // 캐시 무효화
     _calculateSweetSpot();
     debugPrint('✅ [HomeProvider] Activity added: ${activity.type}, babyIds: ${activity.babyIds}');
     notifyListeners();
@@ -219,6 +243,7 @@ class HomeProvider extends ChangeNotifier {
     _todayActivities = _todayActivities
         .where((a) => a.id != activityId)
         .toList();
+    _invalidateCache(); // 캐시 무효화
     _calculateSweetSpot();
     notifyListeners();
   }
@@ -228,6 +253,7 @@ class HomeProvider extends ChangeNotifier {
     _todayActivities = _todayActivities.map((a) {
       return a.id == updatedActivity.id ? updatedActivity : a;
     }).toList();
+    _invalidateCache(); // 캐시 무효화
     _calculateSweetSpot();
     notifyListeners();
   }
