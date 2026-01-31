@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 
@@ -32,7 +33,11 @@ class TodaySummaryCard extends StatelessWidget {
           // 헤더
           Row(
             children: [
-              const Text('📊', style: TextStyle(fontSize: 20)),
+              Icon(
+                Icons.bar_chart_rounded,
+                size: 20,
+                color: LuluColors.lavenderMist,
+              ),
               const SizedBox(width: LuluSpacing.sm),
               Text(
                 '오늘 요약',
@@ -50,7 +55,7 @@ class TodaySummaryCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _SummaryItem(
-                  emoji: '🍼',
+                  icon: LuluIcons.feeding,
                   label: '수유',
                   value: '$feedingCount회',
                   color: LuluActivityColors.feeding,
@@ -58,7 +63,7 @@ class TodaySummaryCard extends StatelessWidget {
               ),
               Expanded(
                 child: _SummaryItem(
-                  emoji: '😴',
+                  icon: LuluIcons.sleep,
                   label: '수면',
                   value: sleepDuration,
                   color: LuluActivityColors.sleep,
@@ -66,7 +71,7 @@ class TodaySummaryCard extends StatelessWidget {
               ),
               Expanded(
                 child: _SummaryItem(
-                  emoji: '🚼',
+                  icon: LuluIcons.diaper,
                   label: '기저귀',
                   value: '$diaperCount회',
                   color: LuluActivityColors.diaper,
@@ -81,13 +86,13 @@ class TodaySummaryCard extends StatelessWidget {
 }
 
 class _SummaryItem extends StatelessWidget {
-  final String emoji;
+  final IconData icon;
   final String label;
   final String value;
   final Color color;
 
   const _SummaryItem({
-    required this.emoji,
+    required this.icon,
     required this.label,
     required this.value,
     required this.color,
@@ -97,7 +102,7 @@ class _SummaryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 24)),
+        Icon(icon, size: 24, color: color),
         const SizedBox(height: LuluSpacing.xs),
         Text(
           label,

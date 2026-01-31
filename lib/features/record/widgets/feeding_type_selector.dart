@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 
@@ -19,25 +20,25 @@ class FeedingTypeSelector extends StatelessWidget {
     _FeedingTypeData(
       type: 'breast',
       label: '모유',
-      emoji: '🤱',
+      icon: LuluIcons.feedingBreast,
       description: '직접 수유',
     ),
     _FeedingTypeData(
       type: 'bottle',
       label: '젖병',
-      emoji: '🍼',
+      icon: LuluIcons.feedingBottle,
       description: '모유/분유',
     ),
     _FeedingTypeData(
       type: 'formula',
       label: '분유',
-      emoji: '🥛',
+      icon: LuluIcons.feedingBottle,
       description: '분유만',
     ),
     _FeedingTypeData(
       type: 'solid',
       label: '이유식',
-      emoji: '🥣',
+      icon: LuluIcons.feedingSolid,
       description: '고형식',
     ),
   ];
@@ -77,13 +78,13 @@ class FeedingTypeSelector extends StatelessWidget {
 class _FeedingTypeData {
   final String type;
   final String label;
-  final String emoji;
+  final IconData icon;
   final String description;
 
   const _FeedingTypeData({
     required this.type,
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.description,
   });
 }
@@ -123,9 +124,12 @@ class _FeedingTypeButton extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(
-              data.emoji,
-              style: const TextStyle(fontSize: 24),
+            Icon(
+              data.icon,
+              size: 24,
+              color: isSelected
+                  ? LuluActivityColors.feeding
+                  : LuluTextColors.secondary,
             ),
             const SizedBox(height: LuluSpacing.xs),
             Text(

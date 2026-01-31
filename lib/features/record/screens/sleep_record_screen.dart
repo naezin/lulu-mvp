@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -263,7 +264,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
-                  child: Text('💤', style: TextStyle(fontSize: 24)),
+                  child: Icon(LuluIcons.sleep, size: 24, color: LuluActivityColors.sleep),
                 ),
               ),
               const SizedBox(width: LuluSpacing.lg),
@@ -336,7 +337,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         SnackBar(
           content: Row(
             children: [
-              const Text('😴', style: TextStyle(fontSize: 18)),
+              Icon(LuluIcons.sleep, size: 18, color: Colors.white),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -406,7 +407,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         Expanded(
           child: _ModeButton(
             label: '지금 재우기',
-            emoji: '🌙',
+            icon: LuluIcons.moon,
             isSelected: _isSleepNow,
             onTap: () => setState(() => _isSleepNow = true),
           ),
@@ -415,7 +416,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         Expanded(
           child: _ModeButton(
             label: '기록 추가',
-            emoji: '📝',
+            icon: LuluIcons.note,
             isSelected: !_isSleepNow,
             onTap: () => setState(() => _isSleepNow = false),
           ),
@@ -485,7 +486,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
-                  child: Text('😴', style: TextStyle(fontSize: 24)),
+                  child: Icon(LuluIcons.sleep, size: 24, color: LuluActivityColors.sleep),
                 ),
               ),
               const SizedBox(width: LuluSpacing.lg),
@@ -846,7 +847,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           SnackBar(
             content: Row(
               children: [
-                const Text('😴', style: TextStyle(fontSize: 18)),
+                Icon(LuluIcons.sleep, size: 18, color: Colors.white),
                 const SizedBox(width: 8),
                 Text(
                   '${selectedBaby.name} 수면 시작! 홈에서 종료할 수 있어요',
@@ -878,13 +879,13 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
 
 class _ModeButton extends StatelessWidget {
   final String label;
-  final String emoji;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _ModeButton({
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.isSelected,
     required this.onTap,
   });
@@ -911,7 +912,13 @@ class _ModeButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 18)),
+            Icon(
+              icon,
+              size: 18,
+              color: isSelected
+                  ? LuluActivityColors.sleep
+                  : LuluTextColors.secondary,
+            ),
             const SizedBox(width: 8),
             Text(
               label,

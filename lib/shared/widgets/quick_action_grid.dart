@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
 
@@ -51,31 +52,31 @@ class QuickActionGrid extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _QuickActionButton(
-                emoji: '🍼',
+                icon: LuluIcons.feeding,
                 label: '수유',
                 color: LuluActivityColors.feeding,
                 onTap: onFeedingTap,
               ),
               _QuickActionButton(
-                emoji: '😴',
+                icon: LuluIcons.sleep,
                 label: '수면',
                 color: LuluActivityColors.sleep,
                 onTap: onSleepTap,
               ),
               _QuickActionButton(
-                emoji: '🧷',
+                icon: LuluIcons.diaper,
                 label: '기저귀',
                 color: LuluActivityColors.diaper,
                 onTap: onDiaperTap,
               ),
               _QuickActionButton(
-                emoji: '🎮',
+                icon: LuluIcons.play,
                 label: '놀이',
                 color: LuluActivityColors.play,
                 onTap: onPlayTap,
               ),
               _QuickActionButton(
-                emoji: '🏥',
+                icon: LuluIcons.health,
                 label: '건강',
                 color: LuluActivityColors.health,
                 onTap: onHealthTap,
@@ -90,13 +91,13 @@ class QuickActionGrid extends StatelessWidget {
 
 /// Quick Action 개별 버튼 (터치 피드백 포함)
 class _QuickActionButton extends StatefulWidget {
-  final String emoji;
+  final IconData icon;
   final String label;
   final Color color;
   final VoidCallback? onTap;
 
   const _QuickActionButton({
-    required this.emoji,
+    required this.icon,
     required this.label,
     required this.color,
     this.onTap,
@@ -172,9 +173,10 @@ class _QuickActionButtonState extends State<_QuickActionButton>
                 ),
               ),
               child: Center(
-                child: Text(
-                  widget.emoji,
-                  style: const TextStyle(fontSize: 28),
+                child: Icon(
+                  widget.icon,
+                  size: 28,
+                  color: widget.color,
                 ),
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../data/models/activity_model.dart';
@@ -88,9 +89,10 @@ class MiniTimeline extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            Text(
-              '📝',
-              style: const TextStyle(fontSize: 32),
+            Icon(
+              LuluIcons.note,
+              size: 32,
+              color: LuluTextColors.tertiary,
             ),
             const SizedBox(height: LuluSpacing.sm),
             Text(
@@ -114,7 +116,7 @@ class _TimelineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emoji = _getEmoji();
+    final icon = _getIcon();
     final color = _getColor();
     final title = _getTitle();
     final detail = _getDetail();
@@ -152,9 +154,10 @@ class _TimelineItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(
-              child: Text(
-                emoji,
-                style: const TextStyle(fontSize: 16),
+              child: Icon(
+                icon,
+                size: 16,
+                color: color,
               ),
             ),
           ),
@@ -181,14 +184,26 @@ class _TimelineItem extends StatelessWidget {
                   ),
                 // BUG-003: 메모 표시 추가
                 if (activity.notes != null && activity.notes!.isNotEmpty)
-                  Text(
-                    '📝 ${activity.notes}',
-                    style: LuluTextStyles.caption.copyWith(
-                      color: LuluTextColors.tertiary,
-                      fontStyle: FontStyle.italic,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Icon(
+                        LuluIcons.note,
+                        size: 12,
+                        color: LuluTextColors.tertiary,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          activity.notes!,
+                          style: LuluTextStyles.caption.copyWith(
+                            color: LuluTextColors.tertiary,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
               ],
             ),
@@ -218,13 +233,13 @@ class _TimelineItem extends StatelessWidget {
     );
   }
 
-  String _getEmoji() {
+  IconData _getIcon() {
     return switch (activity.type) {
-      ActivityType.feeding => '🍼',
-      ActivityType.sleep => '😴',
-      ActivityType.diaper => '🧷',
-      ActivityType.play => '🎮',
-      ActivityType.health => '🏥',
+      ActivityType.feeding => LuluIcons.feeding,
+      ActivityType.sleep => LuluIcons.sleep,
+      ActivityType.diaper => LuluIcons.diaper,
+      ActivityType.play => LuluIcons.play,
+      ActivityType.health => LuluIcons.health,
     };
   }
 

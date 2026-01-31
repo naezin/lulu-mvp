@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../providers/home_provider.dart';
@@ -79,7 +80,11 @@ class _OngoingSleepCardContent extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: const Center(
-                        child: Text('💤', style: TextStyle(fontSize: 28)),
+                        child: Icon(
+                          LuluIcons.sleep,
+                          size: 28,
+                          color: LuluActivityColors.sleep,
+                        ),
                       ),
                     ),
                     const SizedBox(width: LuluSpacing.lg),
@@ -226,7 +231,7 @@ class _OngoingSleepCardContent extends StatelessWidget {
                   SnackBar(
                     content: Row(
                       children: [
-                        const Text('😴', style: TextStyle(fontSize: 18)),
+                        const Icon(LuluIcons.sleep, size: 18, color: Colors.white),
                         const SizedBox(width: 8),
                         Text(
                           '수면 기록이 저장되었어요',

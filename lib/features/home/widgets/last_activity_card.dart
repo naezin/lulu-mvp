@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 
@@ -8,7 +9,6 @@ import '../../../core/design_system/lulu_spacing.dart';
 /// 수유, 수면 등 마지막 활동 정보를 표시
 class LastActivityCard extends StatelessWidget {
   final String type; // 'feeding', 'sleep', 'diaper', 'play', 'health'
-  final String emoji;
   final String title;
   final String time;
   final String detail;
@@ -16,7 +16,6 @@ class LastActivityCard extends StatelessWidget {
   const LastActivityCard({
     super.key,
     required this.type,
-    required this.emoji,
     required this.title,
     required this.time,
     required this.detail,
@@ -36,7 +35,7 @@ class LastActivityCard extends StatelessWidget {
           // 헤더
           Row(
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 20)),
+              Icon(_getTypeIcon(), size: 20, color: _getTypeColor()),
               const SizedBox(width: LuluSpacing.xs),
               Expanded(
                 child: Text(
@@ -88,6 +87,23 @@ class LastActivityCard extends StatelessWidget {
         return LuluActivityColors.health;
       default:
         return LuluColors.lavenderMist;
+    }
+  }
+
+  IconData _getTypeIcon() {
+    switch (type) {
+      case 'feeding':
+        return LuluIcons.feeding;
+      case 'sleep':
+        return LuluIcons.sleep;
+      case 'diaper':
+        return LuluIcons.diaper;
+      case 'play':
+        return LuluIcons.play;
+      case 'health':
+        return LuluIcons.health;
+      default:
+        return Icons.circle_rounded;
     }
   }
 }

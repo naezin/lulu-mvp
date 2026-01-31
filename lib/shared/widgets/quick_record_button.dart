@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../data/models/activity_model.dart';
@@ -130,12 +131,25 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    '💡 탭하면 이전과 같은 내용으로\n바로 저장돼요!',
-                    style: LuluTextStyles.bodySmall.copyWith(
-                      color: LuluTextColors.primary,
-                    ),
-                    textAlign: TextAlign.center,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        LuluIcons.tips,
+                        size: 14,
+                        color: LuluColors.lavenderMist,
+                      ),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          '탭하면 이전과 같은 내용으로\n바로 저장돼요!',
+                          style: LuluTextStyles.bodySmall.copyWith(
+                            color: LuluTextColors.primary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   // 말풍선 꼬리 (아래쪽)
@@ -234,9 +248,10 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
                             color: color,
                           ),
                         )
-                      : Text(
-                          _getEmoji(),
-                          style: const TextStyle(fontSize: 24),
+                      : Icon(
+                          _getIcon(),
+                          size: 24,
+                          color: color,
                         ),
                 ),
               ),
@@ -295,13 +310,13 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
     };
   }
 
-  String _getEmoji() {
+  IconData _getIcon() {
     return switch (widget.activityType) {
-      ActivityType.feeding => '🍼',
-      ActivityType.sleep => '😴',
-      ActivityType.diaper => '🧷',
-      ActivityType.play => '🎮',
-      ActivityType.health => '🏥',
+      ActivityType.feeding => LuluIcons.feeding,
+      ActivityType.sleep => LuluIcons.sleep,
+      ActivityType.diaper => LuluIcons.diaper,
+      ActivityType.play => LuluIcons.play,
+      ActivityType.health => LuluIcons.health,
     };
   }
 

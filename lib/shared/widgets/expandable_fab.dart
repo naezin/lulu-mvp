@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_typography.dart';
 
 /// 라벨이 있는 확장 FAB (시안 B-4)
@@ -100,11 +101,11 @@ class _LabeledFabState extends State<LabeledFab>
 
   List<Widget> _buildExpandedActions() {
     final actions = [
-      _FabAction(emoji: '😴', label: '수면', onTap: () => _onRecord('sleep')),
-      _FabAction(emoji: '🍼', label: '수유', onTap: () => _onRecord('feeding')),
-      _FabAction(emoji: '🚼', label: '기저귀', onTap: () => _onRecord('diaper')),
-      _FabAction(emoji: '🎮', label: '놀이', onTap: () => _onRecord('play')),
-      _FabAction(emoji: '🏥', label: '건강', onTap: () => _onRecord('health')),
+      _FabAction(icon: LuluIcons.sleep, label: '수면', color: LuluColors.lavenderMist, onTap: () => _onRecord('sleep')),
+      _FabAction(icon: LuluIcons.feeding, label: '수유', color: LuluColors.lavenderMist, onTap: () => _onRecord('feeding')),
+      _FabAction(icon: LuluIcons.diaper, label: '기저귀', color: LuluColors.lavenderMist, onTap: () => _onRecord('diaper')),
+      _FabAction(icon: LuluIcons.play, label: '놀이', color: LuluColors.lavenderMist, onTap: () => _onRecord('play')),
+      _FabAction(icon: LuluIcons.health, label: '건강', color: LuluColors.lavenderMist, onTap: () => _onRecord('health')),
     ];
 
     return actions.reversed.map((action) {
@@ -126,13 +127,15 @@ class _LabeledFabState extends State<LabeledFab>
 }
 
 class _FabAction extends StatelessWidget {
-  final String emoji;
+  final IconData icon;
   final String label;
+  final Color color;
   final VoidCallback onTap;
 
   const _FabAction({
-    required this.emoji,
+    required this.icon,
     required this.label,
+    required this.color,
     required this.onTap,
   });
 
@@ -150,7 +153,7 @@ class _FabAction extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 18)),
+              Icon(icon, size: 18, color: color),
               const SizedBox(width: 8),
               Text(
                 label,

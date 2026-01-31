@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/models.dart';
@@ -127,7 +128,11 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 40),
-          const Text('👶', style: TextStyle(fontSize: 64)),
+          Icon(
+            LuluIcons.baby,
+            size: 64,
+            color: LuluTextColors.tertiary,
+          ),
           const SizedBox(height: LuluSpacing.lg),
           Text(
             '아기 정보가 없습니다',
@@ -173,7 +178,11 @@ class HomeScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const Text('✨', style: TextStyle(fontSize: 48)),
+              Icon(
+                LuluIcons.celebration,
+                size: 48,
+                color: LuluColors.champagneGold,
+              ),
               const SizedBox(height: LuluSpacing.md),
               Text(
                 '$babyName의 첫 기록을 시작해보세요',
@@ -196,9 +205,9 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildRecordHint('🍼', '수유'),
-                  _buildRecordHint('😴', '수면'),
-                  _buildRecordHint('🧷', '기저귀'),
+                  _buildRecordHintWithIcon(LuluIcons.feeding, '수유', LuluActivityColors.feeding),
+                  _buildRecordHintWithIcon(LuluIcons.sleep, '수면', LuluActivityColors.sleep),
+                  _buildRecordHintWithIcon(LuluIcons.diaper, '기저귀', LuluActivityColors.diaper),
                 ],
               ),
             ],
@@ -310,11 +319,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// 기록 유형 힌트 위젯
-  Widget _buildRecordHint(String emoji, String label) {
+  /// 기록 유형 힌트 위젯 (아이콘 버전)
+  Widget _buildRecordHintWithIcon(IconData icon, String label, Color color) {
     return Column(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 28)),
+        Icon(icon, size: 28, color: color),
         const SizedBox(height: LuluSpacing.xs),
         Text(
           label,
@@ -352,7 +361,6 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               child: LastActivityCard(
                 type: 'feeding',
-                emoji: '🍼',
                 title: '마지막 수유',
                 time: lastFeeding != null
                     ? DateFormat('HH:mm').format(lastFeeding.startTime)
@@ -366,7 +374,6 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               child: LastActivityCard(
                 type: 'sleep',
-                emoji: '😴',
                 title: '마지막 수면',
                 time: lastSleep != null
                     ? _getSleepTimeRange(lastSleep)

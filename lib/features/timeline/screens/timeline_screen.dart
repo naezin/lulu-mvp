@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/models.dart';
@@ -129,7 +130,11 @@ class _TimelineScreenState extends State<TimelineScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('👶', style: TextStyle(fontSize: 64)),
+          Icon(
+            LuluIcons.baby,
+            size: 64,
+            color: LuluTextColors.tertiary,
+          ),
           const SizedBox(height: LuluSpacing.lg),
           Text(
             '아기 정보가 없습니다',
@@ -159,7 +164,11 @@ class _TimelineScreenState extends State<TimelineScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('📝', style: TextStyle(fontSize: 64)),
+          Icon(
+            LuluIcons.note,
+            size: 64,
+            color: LuluTextColors.tertiary,
+          ),
           const SizedBox(height: LuluSpacing.lg),
           Text(
             isToday ? '오늘의 기록이 없습니다' : '$dateStr 기록이 없습니다',
@@ -263,9 +272,10 @@ class _TimelineScreenState extends State<TimelineScreen> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
-              child: Text(
-                _getActivityEmoji(activity.type),
-                style: const TextStyle(fontSize: 24),
+              child: Icon(
+                _getActivityIcon(activity.type),
+                size: 24,
+                color: color,
               ),
             ),
           ),
@@ -359,25 +369,25 @@ class _TimelineScreenState extends State<TimelineScreen> {
     );
   }
 
-  /// 활동 유형별 이모지
-  String _getActivityEmoji(ActivityType type) {
+  /// 활동 유형별 아이콘
+  IconData _getActivityIcon(ActivityType type) {
     return switch (type) {
-      ActivityType.feeding => '🍼',
-      ActivityType.sleep => '😴',
-      ActivityType.diaper => '🧷',
-      ActivityType.play => '🎮',
-      ActivityType.health => '💊',
+      ActivityType.feeding => LuluIcons.feeding,
+      ActivityType.sleep => LuluIcons.sleep,
+      ActivityType.diaper => LuluIcons.diaper,
+      ActivityType.play => LuluIcons.play,
+      ActivityType.health => LuluIcons.health,
     };
   }
 
   /// 활동 유형별 색상
   Color _getActivityColor(ActivityType type) {
     return switch (type) {
-      ActivityType.feeding => Colors.orange,
-      ActivityType.sleep => Colors.purple,
-      ActivityType.diaper => Colors.blue,
-      ActivityType.play => Colors.green,
-      ActivityType.health => Colors.red,
+      ActivityType.feeding => LuluActivityColors.feeding,
+      ActivityType.sleep => LuluActivityColors.sleep,
+      ActivityType.diaper => LuluActivityColors.diaper,
+      ActivityType.play => LuluActivityColors.play,
+      ActivityType.health => LuluActivityColors.health,
     };
   }
 
