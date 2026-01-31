@@ -1,0 +1,510 @@
+{
+  "@@locale": "ko",
+  "@@last_modified": "2026-01-31",
+
+  "appTitle": "LULU",
+  "@appTitle": {"description": "앱 이름"},
+
+  "navHome": "홈",
+  "@navHome": {"description": "하단 네비게이션 - 홈"},
+  "navRecord": "기록",
+  "@navRecord": {"description": "하단 네비게이션 - 기록"},
+  "navGrowth": "성장",
+  "@navGrowth": {"description": "하단 네비게이션 - 성장"},
+  "navSettings": "설정",
+  "@navSettings": {"description": "하단 네비게이션 - 설정"},
+
+  "screenTitleSettings": "설정",
+  "@screenTitleSettings": {"description": "설정 화면 제목"},
+  "screenTitleTimeline": "기록 히스토리",
+  "@screenTitleTimeline": {"description": "타임라인 화면 제목"},
+  "screenTitleGrowth": "성장",
+  "@screenTitleGrowth": {"description": "성장 화면 제목"},
+  "screenTitleGrowthChart": "성장 차트",
+  "@screenTitleGrowthChart": {"description": "성장 차트 화면 제목"},
+  "screenTitleGrowthInput": "성장 기록",
+  "@screenTitleGrowthInput": {"description": "성장 입력 화면 제목"},
+
+  "recordTitleFeeding": "수유 기록",
+  "@recordTitleFeeding": {"description": "수유 기록 화면 제목"},
+  "recordTitleSleep": "수면 기록",
+  "@recordTitleSleep": {"description": "수면 기록 화면 제목"},
+  "recordTitleDiaper": "기저귀 기록",
+  "@recordTitleDiaper": {"description": "기저귀 기록 화면 제목"},
+  "recordTitlePlay": "놀이 기록",
+  "@recordTitlePlay": {"description": "놀이 기록 화면 제목"},
+  "recordTitleHealth": "건강 기록",
+  "@recordTitleHealth": {"description": "건강 기록 화면 제목"},
+
+  "activityTypeFeeding": "수유",
+  "@activityTypeFeeding": {"description": "활동 유형 - 수유"},
+  "activityTypeSleep": "수면",
+  "@activityTypeSleep": {"description": "활동 유형 - 수면"},
+  "activityTypeDiaper": "기저귀",
+  "@activityTypeDiaper": {"description": "활동 유형 - 기저귀"},
+  "activityTypePlay": "놀이",
+  "@activityTypePlay": {"description": "활동 유형 - 놀이"},
+  "activityTypeHealth": "건강",
+  "@activityTypeHealth": {"description": "활동 유형 - 건강"},
+
+  "feedingTypeBreast": "모유",
+  "@feedingTypeBreast": {"description": "수유 타입 - 모유"},
+  "feedingTypeBottle": "젖병",
+  "@feedingTypeBottle": {"description": "수유 타입 - 젖병"},
+  "feedingTypeFormula": "분유",
+  "@feedingTypeFormula": {"description": "수유 타입 - 분유"},
+  "feedingTypeSolid": "이유식",
+  "@feedingTypeSolid": {"description": "수유 타입 - 이유식"},
+
+  "breastSideLeft": "왼쪽",
+  "@breastSideLeft": {"description": "모유 수유 - 왼쪽"},
+  "breastSideRight": "오른쪽",
+  "@breastSideRight": {"description": "모유 수유 - 오른쪽"},
+  "breastSideBoth": "양쪽",
+  "@breastSideBoth": {"description": "모유 수유 - 양쪽"},
+
+  "sleepTypeNap": "낮잠",
+  "@sleepTypeNap": {"description": "수면 타입 - 낮잠"},
+  "sleepTypeNight": "밤잠",
+  "@sleepTypeNight": {"description": "수면 타입 - 밤잠"},
+  "sleepStart": "수면 시작",
+  "@sleepStart": {"description": "수면 시작 표시"},
+  "sleepEnd": "수면 종료",
+  "@sleepEnd": {"description": "수면 종료 표시"},
+
+  "diaperTypeWet": "소변",
+  "@diaperTypeWet": {"description": "기저귀 타입 - 소변"},
+  "diaperTypeDirty": "대변",
+  "@diaperTypeDirty": {"description": "기저귀 타입 - 대변"},
+  "diaperTypeBoth": "혼합",
+  "@diaperTypeBoth": {"description": "기저귀 타입 - 혼합"},
+  "diaperTypeDry": "건조",
+  "@diaperTypeDry": {"description": "기저귀 타입 - 건조"},
+  "diaperTypeBothDetail": "소변+대변",
+  "@diaperTypeBothDetail": {"description": "기저귀 타입 상세 - 소변+대변"},
+  "diaperTypeClean": "깨끗함",
+  "@diaperTypeClean": {"description": "기저귀 타입 - 깨끗함"},
+
+  "stoolColorYellow": "노랑",
+  "@stoolColorYellow": {"description": "대변 색상 - 노랑"},
+  "stoolColorBrown": "갈색",
+  "@stoolColorBrown": {"description": "대변 색상 - 갈색"},
+  "stoolColorGreen": "녹색",
+  "@stoolColorGreen": {"description": "대변 색상 - 녹색"},
+  "stoolColorBlack": "검정",
+  "@stoolColorBlack": {"description": "대변 색상 - 검정"},
+  "stoolColorRed": "빨강",
+  "@stoolColorRed": {"description": "대변 색상 - 빨강"},
+  "stoolColorWhite": "흰색",
+  "@stoolColorWhite": {"description": "대변 색상 - 흰색"},
+
+  "playTypeTummyTime": "터미타임",
+  "@playTypeTummyTime": {"description": "놀이 타입 - 터미타임"},
+  "playTypeBath": "목욕",
+  "@playTypeBath": {"description": "놀이 타입 - 목욕"},
+  "playTypeOutdoor": "외출",
+  "@playTypeOutdoor": {"description": "놀이 타입 - 외출"},
+  "playTypeIndoor": "실내놀이",
+  "@playTypeIndoor": {"description": "놀이 타입 - 실내놀이"},
+  "playTypeReading": "독서",
+  "@playTypeReading": {"description": "놀이 타입 - 독서"},
+  "playTypeOther": "기타",
+  "@playTypeOther": {"description": "놀이 타입 - 기타"},
+
+  "healthTypeTemperature": "체온 측정",
+  "@healthTypeTemperature": {"description": "건강 타입 - 체온 측정"},
+  "healthTypeSymptom": "증상 기록",
+  "@healthTypeSymptom": {"description": "건강 타입 - 증상 기록"},
+  "healthTypeMedication": "투약 기록",
+  "@healthTypeMedication": {"description": "건강 타입 - 투약 기록"},
+  "healthTypeMedicationShort": "투약",
+  "@healthTypeMedicationShort": {"description": "건강 타입 - 투약 (짧은 버전)"},
+  "healthTypeHospital": "병원 방문",
+  "@healthTypeHospital": {"description": "건강 타입 - 병원 방문"},
+
+  "symptomCough": "기침",
+  "@symptomCough": {"description": "증상 - 기침"},
+  "symptomRunnyNose": "콧물",
+  "@symptomRunnyNose": {"description": "증상 - 콧물"},
+  "symptomFever": "발열",
+  "@symptomFever": {"description": "증상 - 발열"},
+  "symptomVomiting": "구토",
+  "@symptomVomiting": {"description": "증상 - 구토"},
+  "symptomDiarrhea": "설사",
+  "@symptomDiarrhea": {"description": "증상 - 설사"},
+  "symptomRash": "발진",
+  "@symptomRash": {"description": "증상 - 발진"},
+
+  "tempStatusLow": "저체온",
+  "@tempStatusLow": {"description": "체온 상태 - 저체온"},
+  "tempStatusNormal": "정상",
+  "@tempStatusNormal": {"description": "체온 상태 - 정상"},
+  "tempStatusMild": "미열",
+  "@tempStatusMild": {"description": "체온 상태 - 미열"},
+  "tempStatusHigh": "발열",
+  "@tempStatusHigh": {"description": "체온 상태 - 발열"},
+  "temperature": "체온",
+  "@temperature": {"description": "체온 라벨"},
+
+  "genderMale": "남아",
+  "@genderMale": {"description": "성별 - 남아"},
+  "genderFemale": "여아",
+  "@genderFemale": {"description": "성별 - 여아"},
+  "genderUnknown": "미정",
+  "@genderUnknown": {"description": "성별 - 미정"},
+
+  "babyTypeSingleton": "단태아",
+  "@babyTypeSingleton": {"description": "출산 유형 - 단태아"},
+  "babyTypeTwin": "쌍둥이",
+  "@babyTypeTwin": {"description": "출산 유형 - 쌍둥이"},
+  "babyTypeTriplet": "세쌍둥이",
+  "@babyTypeTriplet": {"description": "출산 유형 - 세쌍둥이"},
+  "babyTypeQuadruplet": "네쌍둥이",
+  "@babyTypeQuadruplet": {"description": "출산 유형 - 네쌍둥이"},
+
+  "birthOrderFirst": "첫째",
+  "@birthOrderFirst": {"description": "출생 순서 - 첫째"},
+  "birthOrderSecond": "둘째",
+  "@birthOrderSecond": {"description": "출생 순서 - 둘째"},
+  "birthOrderThird": "셋째",
+  "@birthOrderThird": {"description": "출생 순서 - 셋째"},
+  "birthOrderFourth": "넷째",
+  "@birthOrderFourth": {"description": "출생 순서 - 넷째"},
+
+  "preterm": "조산아",
+  "@preterm": {"description": "조산아"},
+  "fullTerm": "만삭",
+  "@fullTerm": {"description": "만삭아"},
+  "correctedAge": "교정",
+  "@correctedAge": {"description": "교정연령 접두어"},
+  "actualAge": "실제",
+  "@actualAge": {"description": "실제 연령"},
+
+  "buttonStart": "시작하기",
+  "@buttonStart": {"description": "버튼 - 시작하기"},
+  "buttonNext": "다음",
+  "@buttonNext": {"description": "버튼 - 다음"},
+  "buttonSave": "저장하기",
+  "@buttonSave": {"description": "버튼 - 저장하기"},
+  "buttonCancel": "취소",
+  "@buttonCancel": {"description": "버튼 - 취소"},
+  "buttonDelete": "삭제",
+  "@buttonDelete": {"description": "버튼 - 삭제"},
+  "buttonConfirm": "확인",
+  "@buttonConfirm": {"description": "버튼 - 확인"},
+  "buttonOk": "알겠어요",
+  "@buttonOk": {"description": "버튼 - 알겠어요"},
+  "buttonNo": "아니오",
+  "@buttonNo": {"description": "버튼 - 아니오"},
+  "buttonAdd": "추가",
+  "@buttonAdd": {"description": "버튼 - 추가"},
+  "buttonViewAll": "전체 보기",
+  "@buttonViewAll": {"description": "버튼 - 전체 보기"},
+  "buttonStartSleep": "수면 시작",
+  "@buttonStartSleep": {"description": "버튼 - 수면 시작"},
+  "buttonExportCsv": "CSV로 내보내기",
+  "@buttonExportCsv": {"description": "버튼 - CSV로 내보내기"},
+
+  "labelName": "이름",
+  "@labelName": {"description": "라벨 - 이름"},
+  "labelBirthDate": "생년월일",
+  "@labelBirthDate": {"description": "라벨 - 생년월일"},
+  "labelBirthDateShort": "출생일",
+  "@labelBirthDateShort": {"description": "라벨 - 출생일"},
+  "labelGender": "성별",
+  "@labelGender": {"description": "라벨 - 성별"},
+  "labelIsPreterm": "조산아 여부",
+  "@labelIsPreterm": {"description": "라벨 - 조산아 여부"},
+  "labelGestationalWeeks": "재태주수",
+  "@labelGestationalWeeks": {"description": "라벨 - 재태주수"},
+  "labelBirthWeight": "출생 체중",
+  "@labelBirthWeight": {"description": "라벨 - 출생 체중"},
+  "labelBirthWeightOptional": "출생 체중 (선택)",
+  "@labelBirthWeightOptional": {"description": "라벨 - 출생 체중 (선택)"},
+  "labelFeedingAmount": "수유량",
+  "@labelFeedingAmount": {"description": "라벨 - 수유량"},
+  "labelExportPeriod": "내보내기 기간",
+  "@labelExportPeriod": {"description": "라벨 - 내보내기 기간"},
+
+  "hintEnterBabyName": "아기 이름을 입력하세요",
+  "@hintEnterBabyName": {"description": "힌트 - 아기 이름 입력"},
+  "hintSelectWeeks": "주수를 선택하세요",
+  "@hintSelectWeeks": {"description": "힌트 - 주수 선택"},
+  "hintGrams": "그램 단위 (예: 2500)",
+  "@hintGrams": {"description": "힌트 - 그램 단위"},
+
+  "questionIsPreterm": "37주 이전에 태어났나요?",
+  "@questionIsPreterm": {"description": "질문 - 조산 여부"},
+
+  "sectionBabyManagement": "아기 관리",
+  "@sectionBabyManagement": {"description": "섹션 - 아기 관리"},
+  "sectionData": "데이터",
+  "@sectionData": {"description": "섹션 - 데이터"},
+  "sectionAppInfo": "앱 정보",
+  "@sectionAppInfo": {"description": "섹션 - 앱 정보"},
+  "sectionRecentRecords": "최근 기록",
+  "@sectionRecentRecords": {"description": "섹션 - 최근 기록"},
+
+  "infoVersion": "버전",
+  "@infoVersion": {"description": "정보 - 버전"},
+  "infoDeveloper": "개발",
+  "@infoDeveloper": {"description": "정보 - 개발"},
+  "infoTeamName": "LULU Team",
+  "@infoTeamName": {"description": "정보 - 팀 이름"},
+
+  "addBabyTitle": "아기 추가",
+  "@addBabyTitle": {"description": "다이얼로그 제목 - 아기 추가"},
+  "addBabySubtitle": "최대 4명까지 등록 가능",
+  "@addBabySubtitle": {"description": "아기 추가 안내"},
+  "deleteBabyTitle": "아기 삭제",
+  "@deleteBabyTitle": {"description": "다이얼로그 제목 - 아기 삭제"},
+  "deleteBabyWarning": "이 작업은 되돌릴 수 없습니다.",
+  "@deleteBabyWarning": {"description": "삭제 경고 메시지"},
+  "deleteBabyConfirmMessage": "{name}의 모든 기록이 삭제됩니다.",
+  "@deleteBabyConfirmMessage": {
+    "description": "삭제 확인 메시지",
+    "placeholders": {
+      "name": {"type": "String", "example": "서준이"}
+    }
+  },
+
+  "exportPeriodToday": "오늘",
+  "@exportPeriodToday": {"description": "내보내기 기간 - 오늘"},
+  "exportPeriodWeek": "최근 7일",
+  "@exportPeriodWeek": {"description": "내보내기 기간 - 최근 7일"},
+  "exportPeriodMonth": "최근 30일",
+  "@exportPeriodMonth": {"description": "내보내기 기간 - 최근 30일"},
+  "exportPeriodAll": "전체",
+  "@exportPeriodAll": {"description": "내보내기 기간 - 전체"},
+  "exportToFile": "{period} 기록을 파일로 저장",
+  "@exportToFile": {
+    "description": "내보내기 안내",
+    "placeholders": {
+      "period": {"type": "String", "example": "최근 7일"}
+    }
+  },
+  "exportEmailSubject": "LULU 육아 기록",
+  "@exportEmailSubject": {"description": "내보내기 이메일 제목"},
+  "exportEmailBody": "육아 기록 데이터입니다.",
+  "@exportEmailBody": {"description": "내보내기 이메일 본문"},
+
+  "successBabyAdded": "{name}이(가) 추가되었습니다",
+  "@successBabyAdded": {
+    "description": "성공 - 아기 추가됨",
+    "placeholders": {
+      "name": {"type": "String", "example": "서준이"}
+    }
+  },
+  "successBabyDeleted": "{name}이(가) 삭제되었습니다",
+  "@successBabyDeleted": {
+    "description": "성공 - 아기 삭제됨",
+    "placeholders": {
+      "name": {"type": "String", "example": "서준이"}
+    }
+  },
+  "successRecordSaved": "기록이 저장되었습니다",
+  "@successRecordSaved": {"description": "성공 - 기록 저장됨"},
+
+  "errorNoFamily": "가족 정보가 없습니다",
+  "@errorNoFamily": {"description": "에러 - 가족 정보 없음"},
+  "errorNoRecords": "내보낼 기록이 없습니다",
+  "@errorNoRecords": {"description": "에러 - 기록 없음"},
+  "errorExportFailed": "내보내기 실패: {error}",
+  "@errorExportFailed": {
+    "description": "에러 - 내보내기 실패",
+    "placeholders": {
+      "error": {"type": "String", "example": "Network error"}
+    }
+  },
+  "errorDeleteFailed": "삭제 실패: {error}",
+  "@errorDeleteFailed": {
+    "description": "에러 - 삭제 실패",
+    "placeholders": {
+      "error": {"type": "String", "example": "Database error"}
+    }
+  },
+  "errorAddFailed": "추가 실패: {error}",
+  "@errorAddFailed": {
+    "description": "에러 - 추가 실패",
+    "placeholders": {
+      "error": {"type": "String", "example": "Validation error"}
+    }
+  },
+  "errorEnterName": "이름을 입력해주세요",
+  "@errorEnterName": {"description": "에러 - 이름 필수"},
+  "errorSelectWeeks": "재태주수를 선택해주세요",
+  "@errorSelectWeeks": {"description": "에러 - 주수 선택 필수"},
+  "errorRegisterBaby": "아기 정보를 먼저 등록해주세요",
+  "@errorRegisterBaby": {"description": "에러 - 아기 등록 필요"},
+  "errorNoBabyInfo": "아기 정보가 없습니다",
+  "@errorNoBabyInfo": {"description": "에러 - 아기 정보 없음"},
+  "errorCompleteOnboarding": "온보딩을 완료해주세요",
+  "@errorCompleteOnboarding": {"description": "에러 - 온보딩 필요"},
+  "errorLoadData": "데이터를 불러오는데 실패했습니다: {error}",
+  "@errorLoadData": {
+    "description": "에러 - 데이터 로드 실패",
+    "placeholders": {
+      "error": {"type": "String", "example": "Network error"}
+    }
+  },
+
+  "emptyNoRecordsToday": "오늘 기록이 없어요",
+  "@emptyNoRecordsToday": {"description": "빈 상태 - 오늘 기록 없음"},
+  "emptyNoRecordsDate": "{date} 기록이 없습니다",
+  "@emptyNoRecordsDate": {
+    "description": "빈 상태 - 특정 날짜 기록 없음",
+    "placeholders": {
+      "date": {"type": "String", "example": "1월 15일 (수)"}
+    }
+  },
+  "emptyNoTodayRecords": "오늘의 기록이 없습니다",
+  "@emptyNoTodayRecords": {"description": "빈 상태 - 오늘 기록 없음 (상세)"},
+  "emptyStartRecording": "+ 버튼을 눌러 첫 기록을 시작하세요",
+  "@emptyStartRecording": {"description": "빈 상태 안내"},
+  "emptySelectOtherDate": "다른 날짜를 선택해보세요",
+  "@emptySelectOtherDate": {"description": "빈 상태 안내 - 날짜 선택"},
+
+  "statusOngoing": "진행 중",
+  "@statusOngoing": {"description": "상태 - 진행 중"},
+  "statusInProgress": "진행중",
+  "@statusInProgress": {"description": "상태 - 진행중 (공백 없음)"},
+
+  "timeMinute": "분",
+  "@timeMinute": {"description": "시간 단위 - 분"},
+  "timeHour": "시간",
+  "@timeHour": {"description": "시간 단위 - 시간"},
+  "timeDay": "일",
+  "@timeDay": {"description": "시간 단위 - 일"},
+  "timeWeek": "주",
+  "@timeWeek": {"description": "시간 단위 - 주"},
+  "timeMonth": "개월",
+  "@timeMonth": {"description": "시간 단위 - 개월"},
+  "timeJustNow": "방금",
+  "@timeJustNow": {"description": "시간 - 방금"},
+  "timeMinutesAgo": "{count}분 전",
+  "@timeMinutesAgo": {
+    "description": "시간 - N분 전",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "timeHoursAgo": "{count}시간 전",
+  "@timeHoursAgo": {
+    "description": "시간 - N시간 전",
+    "placeholders": {
+      "count": {"type": "int", "example": "2"}
+    }
+  },
+  "timeDaysAgo": "{count}일 전",
+  "@timeDaysAgo": {
+    "description": "시간 - N일 전",
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+  "timeNow": "지금",
+  "@timeNow": {"description": "시간 - 지금"},
+  "timeBirth": "출생",
+  "@timeBirth": {"description": "시간 - 출생"},
+
+  "durationMinutes": "{count}분",
+  "@durationMinutes": {
+    "description": "기간 - N분",
+    "placeholders": {
+      "count": {"type": "int", "example": "30"}
+    }
+  },
+  "durationHours": "{count}시간",
+  "@durationHours": {
+    "description": "기간 - N시간",
+    "placeholders": {
+      "count": {"type": "int", "example": "2"}
+    }
+  },
+  "durationHoursMinutes": "{hours}시간 {minutes}분",
+  "@durationHoursMinutes": {
+    "description": "기간 - N시간 N분",
+    "placeholders": {
+      "hours": {"type": "int", "example": "1"},
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+
+  "recordCount": "{count}개 기록",
+  "@recordCount": {
+    "description": "기록 수",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+
+  "ageDays": "출생 {count}일",
+  "@ageDays": {
+    "description": "연령 - 출생 N일",
+    "placeholders": {
+      "count": {"type": "int", "example": "7"}
+    }
+  },
+  "ageWeeks": "출생 {count}주",
+  "@ageWeeks": {
+    "description": "연령 - 출생 N주",
+    "placeholders": {
+      "count": {"type": "int", "example": "2"}
+    }
+  },
+  "ageMonths": "{count}개월",
+  "@ageMonths": {
+    "description": "연령 - N개월",
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+  "ageCorrectedMonths": "교정 {corrected}개월 (실제 {actual}개월)",
+  "@ageCorrectedMonths": {
+    "description": "교정연령 표시",
+    "placeholders": {
+      "corrected": {"type": "int", "example": "2"},
+      "actual": {"type": "int", "example": "3"}
+    }
+  },
+
+  "weekUnit": "{count}주",
+  "@weekUnit": {
+    "description": "주 단위",
+    "placeholders": {
+      "count": {"type": "int", "example": "34"}
+    }
+  },
+
+  "welcomeTitle": "Lulu에 오신 것을 환영해요!",
+  "@welcomeTitle": {"description": "환영 화면 제목"},
+  "welcomeSubtitle": "아기의 수면, 수유, 기저귀를 쉽고 빠르게 기록해 보세요",
+  "@welcomeSubtitle": {"description": "환영 화면 부제목"},
+
+  "quickRecordHint": "탭하면 이전과 같은 내용으로 바로 저장돼요!",
+  "@quickRecordHint": {"description": "빠른 기록 버튼 안내"},
+  "quickRecordTapToSave": "탭하여 저장",
+  "@quickRecordTapToSave": {"description": "빠른 기록 - 탭하여 저장"},
+  "quickRecordRepeat": "마지막 기록 반복",
+  "@quickRecordRepeat": {"description": "빠른 기록 - 마지막 기록 반복"},
+
+  "cryAnalysisTitle": "울음 분석",
+  "@cryAnalysisTitle": {"description": "울음 분석 기능 제목"},
+  "cryAnalysisPreparing": "울음 분석 기능 준비 중",
+  "@cryAnalysisPreparing": {"description": "울음 분석 준비 중"},
+  "cryAnalysisComingSoon": "Phase 2에서 만나요!",
+  "@cryAnalysisComingSoon": {"description": "울음 분석 - 출시 예정"},
+  "cryAnalysisDescription": "AI 기반 울음 분석 기능이 Phase 2에서 출시됩니다.",
+  "@cryAnalysisDescription": {"description": "울음 분석 설명"},
+
+  "sweetSpotUnknown": "확인 중",
+  "@sweetSpotUnknown": {"description": "Sweet Spot - 확인 중"},
+  "sweetSpotTooEarly": "아직 일찍",
+  "@sweetSpotTooEarly": {"description": "Sweet Spot - 아직 일찍"},
+  "sweetSpotApproaching": "곧 수면 시간",
+  "@sweetSpotApproaching": {"description": "Sweet Spot - 곧 수면 시간"},
+  "sweetSpotOptimal": "지금이 최적!",
+  "@sweetSpotOptimal": {"description": "Sweet Spot - 최적"},
+  "sweetSpotOvertired": "과로 상태",
+  "@sweetSpotOvertired": {"description": "Sweet Spot - 과로"}
+}

@@ -5,17 +5,115 @@ import 'package:share_plus/share_plus.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/models/models.dart';
+import '../../data/repositories/activity_repository.dart';
+
+/// 내보내기 기간 옵션
+enum ExportPeriod {
+  today('오늘'),
+  week('최근 7일'),
+  month('최근 30일'),
+  all('전체');
+
+  final String label;
+  const ExportPeriod(this.label);
+
+  /// 기간에 해당하는 DateTimeRange 반환
+  DateTimeRange? get dateRange {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    return switch (this) {
+      ExportPeriod.today => DateTimeRange(
+          start: today,
+          end: today.add(const Duration(days: 1)),
+        ),
+      ExportPeriod.week => DateTimeRange(
+          start: today.subtract(const Duration(days: 6)),
+          end: today.add(const Duration(days: 1)),
+        ),
+      ExportPeriod.month => DateTimeRange(
+          start: today.subtract(const Duration(days: 29)),
+          end: today.add(const Duration(days: 1)),
+        ),
+      ExportPeriod.all => null,
+    };
+  }
+}
 
 /// 활동 기록 내보내기 서비스
 ///
 /// 지원 형식:
 /// - CSV: 기본 형식, 모든 스프레드시트 앱에서 열 수 있음
+///
+/// 날짜 범위 선택 지원:
+/// - 오늘, 최근 7일, 최근 30일, 전체
 class ExportService {
   static final ExportService _instance = ExportService._internal();
   factory ExportService() => _instance;
   ExportService._internal();
 
   static ExportService get instance => _instance;
+
+  final ActivityRepository _activityRepository = ActivityRepository();
+
+  /// 날짜 범위로 활동 조회 후 CSV 내보내기
+  ///
+  /// [familyId] 가족 ID
+  /// [babies] 아기 정보 (이름 표시용)
+  /// [period] 내보내기 기간
+  /// [babyId] 특정 아기만 내보내기 (null이면 전체)
+  Future<int> exportByPeriod({
+    required String familyId,
+    required List<BabyModel> babies,
+    required ExportPeriod period,
+    String? babyId,
+  }) async {
+    try {
+      List<ActivityModel> activities;
+
+      if (period == ExportPeriod.all) {
+        // 전체 기간
+        activities = await _activityRepository.getActivitiesByFamilyId(
+          familyId,
+          limit: 10000,
+        );
+      } else {
+        // 특정 기간
+        final range = period.dateRange!;
+        activities = await _activityRepository.getActivitiesByDateRange(
+          familyId,
+          startDate: range.start,
+          endDate: range.end,
+          babyId: babyId,
+        );
+      }
+
+      // 특정 아기 필터링
+      if (babyId != null) {
+        activities = activities
+            .where((a) => a.babyIds.contains(babyId))
+            .toList();
+      }
+
+      if (activities.isEmpty) {
+        return 0;
+      }
+
+      // 날짜순 정렬
+      activities.sort((a, b) => b.startTime.compareTo(a.startTime));
+
+      await exportToCSV(
+        activities: activities,
+        babies: babies,
+        dateRange: period.dateRange,
+      );
+
+      return activities.length;
+    } catch (e) {
+      debugPrint('Export by period error: $e');
+      rethrow;
+    }
+  }
 
   /// 활동 기록을 CSV로 내보내기
   ///

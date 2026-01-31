@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ import 'features/record/providers/record_provider.dart';
 import 'features/record/providers/ongoing_sleep_provider.dart';
 import 'app/navigation/main_navigation.dart';
 import 'data/models/models.dart';
+import 'l10n/generated/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,6 +64,15 @@ class LuluApp extends StatelessWidget {
         title: 'Lulu',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.darkTheme,
+        // Localization
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.supportedLocales,
+        locale: const Locale('ko'), // 기본 한국어
         home: const _OnboardingWrapper(),
       ),
     );
