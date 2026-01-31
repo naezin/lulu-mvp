@@ -429,12 +429,14 @@ class _TimelineScreenState extends State<TimelineScreen> {
     return amount > 0 ? '${amount.toInt()}ml' : '';
   }
 
+  /// 수면 시간 표시 (자정 넘김 처리 포함 - QA-01)
   String _getSleepDetail(ActivityModel activity) {
     if (activity.endTime == null) return '진행 중';
 
-    final duration = activity.endTime!.difference(activity.startTime);
-    final hours = duration.inHours;
-    final mins = duration.inMinutes % 60;
+    // durationMinutes getter 사용 (자정 넘김 처리 포함)
+    final totalMins = activity.durationMinutes ?? 0;
+    final hours = totalMins ~/ 60;
+    final mins = totalMins % 60;
 
     if (hours > 0 && mins > 0) {
       return '$hours시간 $mins분';
@@ -458,11 +460,12 @@ class _TimelineScreenState extends State<TimelineScreen> {
     };
   }
 
+  /// 놀이 시간 표시 (자정 넘김 처리 포함 - QA-01)
   String _getPlayDetail(ActivityModel activity) {
     if (activity.endTime == null) return '진행 중';
 
-    final duration = activity.endTime!.difference(activity.startTime);
-    final mins = duration.inMinutes;
+    // durationMinutes getter 사용 (자정 넘김 처리 포함)
+    final mins = activity.durationMinutes ?? 0;
     return '$mins분';
   }
 }

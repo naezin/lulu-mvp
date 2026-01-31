@@ -58,11 +58,11 @@ class BabyTabBar extends StatelessWidget {
     );
   }
 
-  /// 단태아용 헤더 (교정연령만 표시)
+  /// 단태아용 헤더 (교정연령 또는 SGA 표시)
   Widget _buildSingleBabyHeader(BabyModel baby) {
-    final correctedAgeText = _getCorrectedAgeText(baby);
+    final statusText = _getStatusText(baby);
 
-    if (correctedAgeText == null) {
+    if (statusText == null) {
       return const SizedBox.shrink();
     }
 
@@ -91,10 +91,19 @@ class BabyTabBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: LuluSpacing.sm),
+          // SGA-01: SGA인 경우 아이콘 추가
+          if (baby.isSGA) ...[
+            Icon(
+              Icons.trending_up_rounded,
+              size: 12,
+              color: baby.statusBadgeColor ?? LuluTextColors.secondary,
+            ),
+            const SizedBox(width: 4),
+          ],
           Text(
-            correctedAgeText,
+            statusText,
             style: LuluTextStyles.caption.copyWith(
-              color: LuluTextColors.secondary,
+              color: baby.statusBadgeColor ?? LuluTextColors.secondary,
             ),
           ),
         ],
@@ -174,15 +183,10 @@ class BabyTabBar extends StatelessWidget {
     );
   }
 
-  /// 교정연령 텍스트 생성
-  String? _getCorrectedAgeText(BabyModel baby) {
-    if (!baby.isPreterm) return null;
-
-    final correctedWeeks = baby.correctedAgeInWeeks;
-    if (correctedWeeks == null) return null;
-
-    final days = correctedWeeks * 7;
-    return '교정 $days일';
+  /// 상태 텍스트 생성 (SGA-01: 교정연령 또는 SGA)
+  String? _getStatusText(BabyModel baby) {
+    // SGA-01: statusBadgeText 사용 (조산아: 교정연령, SGA: 성장 추적 모드)
+    return baby.statusBadgeText;
   }
 
   /// 아기별 색상 (성별 고정관념 없는 중립 색상)
@@ -209,7 +213,8 @@ class _BabyTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final correctedAgeText = _getCorrectedAgeText();
+    // SGA-01: 교정연령 또는 SGA 상태 텍스트
+    final statusText = baby.statusBadgeText;
 
     return GestureDetector(
       onTap: onTap,
@@ -219,7 +224,7 @@ class _BabyTab extends StatelessWidget {
         constraints: minWidth != null
             ? BoxConstraints(minWidth: minWidth!)
             : null,
-        height: correctedAgeText != null ? 56 : 44,
+        height: statusText != null ? 56 : 44,
         margin: const EdgeInsets.symmetric(horizontal: 2),
         padding: const EdgeInsets.symmetric(horizontal: LuluSpacing.md),
         decoration: BoxDecoration(
@@ -233,16 +238,16 @@ class _BabyTab extends StatelessWidget {
           ),
         ),
         child: Center(
-          child: correctedAgeText != null
-              ? _buildTwoLineContent(correctedAgeText)
+          child: statusText != null
+              ? _buildTwoLineContent(statusText)
               : _buildSingleLineContent(),
         ),
       ),
     );
   }
 
-  /// 교정연령이 있을 때: 2줄 레이아웃
-  Widget _buildTwoLineContent(String correctedAgeText) {
+  /// 상태 텍스트가 있을 때: 2줄 레이아웃 (SGA-01)
+  Widget _buildTwoLineContent(String statusText) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -255,20 +260,36 @@ class _BabyTab extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 2),
-        Text(
-          correctedAgeText,
-          style: LuluTextStyles.caption.copyWith(
-            color: isSelected
-                ? color.withValues(alpha: 0.8)
-                : LuluTextColors.tertiary,
-            fontSize: 10,
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // SGA-01: SGA인 경우 아이콘 추가
+            if (baby.isSGA) ...[
+              Icon(
+                Icons.trending_up_rounded,
+                size: 10,
+                color: isSelected
+                    ? (baby.statusBadgeColor ?? color).withValues(alpha: 0.8)
+                    : LuluTextColors.tertiary,
+              ),
+              const SizedBox(width: 2),
+            ],
+            Text(
+              statusText,
+              style: LuluTextStyles.caption.copyWith(
+                color: isSelected
+                    ? color.withValues(alpha: 0.8)
+                    : LuluTextColors.tertiary,
+                fontSize: 10,
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  /// 만삭아: 1줄 레이아웃 (이름만)
+  /// 만삭 정상: 1줄 레이아웃 (이름만)
   Widget _buildSingleLineContent() {
     return Text(
       baby.name,
@@ -278,16 +299,5 @@ class _BabyTab extends StatelessWidget {
       ),
       overflow: TextOverflow.ellipsis,
     );
-  }
-
-  /// 교정연령 텍스트 생성
-  String? _getCorrectedAgeText() {
-    if (!baby.isPreterm) return null;
-
-    final correctedWeeks = baby.correctedAgeInWeeks;
-    if (correctedWeeks == null) return null;
-
-    final days = correctedWeeks * 7;
-    return '교정 $days일';
   }
 }

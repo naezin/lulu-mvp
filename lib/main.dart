@@ -12,6 +12,7 @@ import 'features/onboarding/onboarding.dart';
 import 'features/growth/data/growth_data_cache.dart';
 import 'features/home/providers/home_provider.dart';
 import 'features/record/providers/record_provider.dart';
+import 'features/record/providers/ongoing_sleep_provider.dart';
 import 'app/navigation/main_navigation.dart';
 import 'data/models/models.dart';
 
@@ -51,6 +52,11 @@ class LuluApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => RecordProvider()),
+        ChangeNotifierProvider(create: (_) {
+          final provider = OngoingSleepProvider();
+          provider.init(); // 앱 시작 시 진행 중 수면 복원
+          return provider;
+        }),
       ],
       child: MaterialApp(
         title: 'Lulu',
@@ -113,15 +119,17 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
   }
 
   void _onOnboardingComplete(FamilyModel family, List<BabyModel> babies) {
-    // HomeProvider에 데이터 설정
+    // PA-01: HomeProvider에 데이터 즉시 설정
     context.read<HomeProvider>().setFamily(family, babies);
+    _providerInitialized = true;
 
-    // 메인 네비게이션으로 이동
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => const MainNavigation(),
-      ),
-    );
+    // 상태 기반 전환 (Navigator.pushReplacement 대신)
+    // 이렇게 하면 Provider 컨텍스트가 유지됨
+    setState(() {
+      _hasCompletedOnboarding = true;
+    });
+
+    debugPrint('✅ [OnboardingWrapper] Onboarding complete - switching to MainNavigation');
   }
 
   @override

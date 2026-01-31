@@ -100,12 +100,13 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 이전과 같이 빠른 기록 버튼
+                      // 마지막 기록 반복 버튼 (MB-03)
                       QuickRecordButton(
                         lastRecord: widget.lastDiaperRecord,
                         activityType: ActivityType.diaper,
                         isLoading: _isQuickSaving,
                         onTap: () => _handleQuickSave(provider),
+                        babyName: _getSelectedBabyName(provider),
                       ),
 
                       if (widget.lastDiaperRecord != null)
@@ -114,41 +115,55 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
                       // 기저귀 종류 선택
                       _buildDiaperTypeSelector(provider),
 
-                // 대변 색상 선택 (대변/혼합 선택 시에만 표시)
-                if (provider.diaperType == 'dirty' ||
-                    provider.diaperType == 'both') ...[
-                  const SizedBox(height: LuluSpacing.xxl),
-                  _buildStoolColorSelector(provider),
-                ],
+                      // 대변 색상 선택 (대변/혼합 선택 시에만 표시)
+                      if (provider.diaperType == 'dirty' ||
+                          provider.diaperType == 'both') ...[
+                        const SizedBox(height: LuluSpacing.xxl),
+                        _buildStoolColorSelector(provider),
+                      ],
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 시간 선택
-                RecordTimePicker(
-                  label: '기저귀 교체 시간',
-                  time: provider.recordTime,
-                  onTimeChanged: provider.setRecordTime,
-                ),
+                      // 시간 선택
+                      RecordTimePicker(
+                        label: '기저귀 교체 시간',
+                        time: provider.recordTime,
+                        onTimeChanged: provider.setRecordTime,
+                      ),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 메모
-                _buildNotesInput(),
+                      // 메모
+                      _buildNotesInput(),
 
-                const SizedBox(height: LuluSpacing.xxxl),
-
-                // 저장 버튼
-                _buildSaveButton(provider),
-
-                // 에러 메시지
-                if (provider.errorMessage != null) ...[
-                  const SizedBox(height: LuluSpacing.md),
-                  _buildErrorMessage(provider.errorMessage!),
-                ],
+                      // 에러 메시지
+                      if (provider.errorMessage != null) ...[
+                        const SizedBox(height: LuluSpacing.md),
+                        _buildErrorMessage(provider.errorMessage!),
+                      ],
 
                       const SizedBox(height: LuluSpacing.xxl),
                     ],
                   ),
+                ),
+              ),
+
+              // MO-01: 저장 버튼 하단 고정
+              SafeArea(
+                top: false,
+                child: Container(
+                  padding: const EdgeInsets.all(LuluSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: LuluColors.midnightNavy,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: _buildSaveButton(provider),
                 ),
               ),
             ],
@@ -156,6 +171,14 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
         },
       ),
     );
+  }
+
+  /// MB-03: 현재 선택된 아기 이름 반환
+  String? _getSelectedBabyName(RecordProvider provider) {
+    if (provider.selectedBabyIds.isEmpty) return null;
+    final selectedId = provider.selectedBabyIds.first;
+    final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
+    return baby?.name;
   }
 
   Future<void> _handleQuickSave(RecordProvider provider) async {

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/onboarding_data_service.dart';
+import '../../../../core/utils/sga_calculator.dart';
 import '../providers/onboarding_provider.dart';
 import 'onboarding_screen.dart' show OnboardingCompleteCallback;
 
@@ -177,10 +178,37 @@ class _CompletionScreenState extends State<CompletionScreen>
   }
 
   String _getCompletionMessage(OnboardingProvider provider) {
+    // SGA-01: 출생 유형별 맞춤 메시지
+    final babies = provider.babies;
+
+    // SGA/조산아 여부 확인
+    final hasSGA = babies.any((baby) {
+      final classification = SGACalculator.getBirthClassification(
+        gestationalWeeks: baby.isPreterm ? baby.gestationalWeeks : 40,
+        birthWeightGrams: baby.birthWeightGrams,
+      );
+      return classification == BirthClassification.fullTermSGA;
+    });
+
+    final hasPreterm = babies.any((baby) => baby.isPreterm);
+
     if (provider.babyCount == 1) {
-      return '${provider.babies.first.name}의 육아 기록을\n시작할 준비가 되었어요';
+      final babyName = babies.first.name;
+
+      if (hasPreterm) {
+        return '$babyName의 교정연령에 맞춰\n발달을 꼼꼼히 기록해드릴게요';
+      } else if (hasSGA) {
+        return '$babyName의 성장을 세심하게\n추적해드릴게요';
+      }
+      return '$babyName의 육아 기록을\n시작할 준비가 되었어요';
     } else {
-      final names = provider.babies.map((b) => b.name).join(', ');
+      final names = babies.map((b) => b.name).join(', ');
+
+      if (hasPreterm) {
+        return '$names의 교정연령에 맞춰\n발달을 꼼꼼히 기록해드릴게요';
+      } else if (hasSGA) {
+        return '$names의 성장을 세심하게\n추적해드릴게요';
+      }
       return '$names의 육아 기록을\n시작할 준비가 되었어요';
     }
   }
@@ -263,9 +291,18 @@ class _BabyRow extends StatelessWidget {
     required this.baby,
   });
 
+  /// SGA-01: 출생 유형 분류
+  BirthClassification get _birthClassification {
+    return SGACalculator.getBirthClassification(
+      gestationalWeeks: baby.isPreterm ? baby.gestationalWeeks : 40,
+      birthWeightGrams: baby.birthWeightGrams,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final color = AppTheme.babyAvatarColors[index % AppTheme.babyAvatarColors.length];
+    final classification = _birthClassification;
 
     return Row(
       children: [
@@ -310,24 +347,61 @@ class _BabyRow extends StatelessWidget {
             ],
           ),
         ),
-        // 조산아 배지
-        if (baby.isPreterm)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppTheme.warningSoft.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              '${baby.gestationalWeeks}주',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.warningSoft,
-                    fontWeight: FontWeight.w600,
-                  ),
-            ),
-          ),
+        // SGA-01: 상태 배지 (조산아 또는 SGA)
+        _buildStatusBadge(context, classification),
       ],
     );
+  }
+
+  /// SGA-01: 상태 배지 위젯
+  Widget _buildStatusBadge(BuildContext context, BirthClassification classification) {
+    switch (classification) {
+      case BirthClassification.preterm:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppTheme.warningSoft.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            '${baby.gestationalWeeks}주',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppTheme.warningSoft,
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+        );
+
+      case BirthClassification.fullTermSGA:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF00897B).withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.trending_up_rounded,
+                size: 12,
+                color: Color(0xFF00897B),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                '성장 추적',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: const Color(0xFF00897B),
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+            ],
+          ),
+        );
+
+      case BirthClassification.fullTermAGA:
+        return const SizedBox.shrink();
+    }
   }
 
   String _getBabyInfo() {

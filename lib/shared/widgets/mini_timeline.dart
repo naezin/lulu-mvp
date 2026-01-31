@@ -265,9 +265,10 @@ class _TimelineItem extends StatelessWidget {
 
       case ActivityType.sleep:
         if (activity.endTime != null) {
-          final duration = activity.endTime!.difference(activity.startTime);
-          final hours = duration.inHours;
-          final mins = duration.inMinutes % 60;
+          // durationMinutes getter 사용 (자정 넘김 처리 포함 - QA-01)
+          final totalMins = activity.durationMinutes ?? 0;
+          final hours = totalMins ~/ 60;
+          final mins = totalMins % 60;
           if (hours > 0 && mins > 0) return '$hours시간 $mins분';
           if (hours > 0) return '$hours시간';
           return '$mins분';

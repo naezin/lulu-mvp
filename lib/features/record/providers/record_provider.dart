@@ -144,6 +144,25 @@ class RecordProvider extends ChangeNotifier {
   String? get hospitalVisit => _hospitalVisit;
 
   // ========================================
+  // MB-02: 아기별 데이터 캐싱
+  // ========================================
+
+  /// 아기별 수유 데이터 캐시
+  final Map<String, _FeedingCache> _feedingCache = {};
+
+  /// 아기별 수면 데이터 캐시
+  final Map<String, _SleepCache> _sleepCache = {};
+
+  /// 아기별 기저귀 데이터 캐시
+  final Map<String, _DiaperCache> _diaperCache = {};
+
+  /// 아기별 놀이 데이터 캐시
+  final Map<String, _PlayCache> _playCache = {};
+
+  /// 아기별 건강 데이터 캐시
+  final Map<String, _HealthCache> _healthCache = {};
+
+  // ========================================
   // 초기화 메서드
   // ========================================
 
@@ -203,10 +222,106 @@ class RecordProvider extends ChangeNotifier {
   // 공통 메서드
   // ========================================
 
-  /// 아기 선택 변경
+  /// 아기 선택 변경 (MB-02: 데이터 캐싱 포함)
   void setSelectedBabyIds(List<String> babyIds) {
+    // 현재 아기 데이터 저장
+    final previousBabyId = selectedBabyId;
+    if (previousBabyId != null) {
+      _saveCacheForBaby(previousBabyId);
+    }
+
     _selectedBabyIds = List.from(babyIds);
+
+    // 새 아기 데이터 복원
+    final newBabyId = selectedBabyId;
+    if (newBabyId != null) {
+      _restoreCacheForBaby(newBabyId);
+    }
+
     notifyListeners();
+  }
+
+  /// MB-02: 현재 아기 데이터를 캐시에 저장
+  void _saveCacheForBaby(String babyId) {
+    // 수유 캐시
+    _feedingCache[babyId] = _FeedingCache(
+      type: _feedingType,
+      amount: _feedingAmount,
+      duration: _feedingDuration,
+      breastSide: _breastSide,
+    );
+
+    // 수면 캐시
+    _sleepCache[babyId] = _SleepCache(
+      startTime: _sleepStartTime,
+      endTime: _sleepEndTime,
+      sleepType: _sleepType,
+    );
+
+    // 기저귀 캐시
+    _diaperCache[babyId] = _DiaperCache(
+      type: _diaperType,
+      stoolColor: _stoolColor,
+    );
+
+    // 놀이 캐시
+    _playCache[babyId] = _PlayCache(
+      type: _playType,
+      duration: _playDuration,
+    );
+
+    // 건강 캐시
+    _healthCache[babyId] = _HealthCache(
+      type: _healthType,
+      temperature: _temperature,
+      symptoms: List.from(_symptoms),
+      medication: _medication,
+      hospitalVisit: _hospitalVisit,
+    );
+  }
+
+  /// MB-02: 캐시에서 아기 데이터 복원
+  void _restoreCacheForBaby(String babyId) {
+    // 수유 캐시 복원
+    final feedingCache = _feedingCache[babyId];
+    if (feedingCache != null) {
+      _feedingType = feedingCache.type;
+      _feedingAmount = feedingCache.amount;
+      _feedingDuration = feedingCache.duration;
+      _breastSide = feedingCache.breastSide;
+    }
+
+    // 수면 캐시 복원
+    final sleepCache = _sleepCache[babyId];
+    if (sleepCache != null) {
+      _sleepStartTime = sleepCache.startTime;
+      _sleepEndTime = sleepCache.endTime;
+      _sleepType = sleepCache.sleepType;
+    }
+
+    // 기저귀 캐시 복원
+    final diaperCache = _diaperCache[babyId];
+    if (diaperCache != null) {
+      _diaperType = diaperCache.type;
+      _stoolColor = diaperCache.stoolColor;
+    }
+
+    // 놀이 캐시 복원
+    final playCache = _playCache[babyId];
+    if (playCache != null) {
+      _playType = playCache.type;
+      _playDuration = playCache.duration;
+    }
+
+    // 건강 캐시 복원
+    final healthCache = _healthCache[babyId];
+    if (healthCache != null) {
+      _healthType = healthCache.type;
+      _temperature = healthCache.temperature;
+      _symptoms = List.from(healthCache.symptoms);
+      _medication = healthCache.medication;
+      _hospitalVisit = healthCache.hospitalVisit;
+    }
   }
 
   /// 기록 시간 변경
@@ -365,9 +480,20 @@ class RecordProvider extends ChangeNotifier {
   }
 
   /// 수면 시간 (분)
+  /// 자정을 넘기는 경우도 정확히 계산 (QA-01 수정)
   int get sleepDurationMinutes {
     final end = _sleepEndTime ?? DateTime.now();
-    return end.difference(_sleepStartTime).inMinutes;
+
+    // 종료 시간이 시작 시간보다 이전이면 다음 날로 처리
+    DateTime adjustedEnd = end;
+    if (end.isBefore(_sleepStartTime)) {
+      // 자정을 넘긴 경우: 다음 날로 조정
+      adjustedEnd = end.add(const Duration(days: 1));
+    }
+
+    final duration = adjustedEnd.difference(_sleepStartTime).inMinutes;
+    // 음수 방지 (비정상 케이스)
+    return duration < 0 ? 0 : duration;
   }
 
   /// 수면 기록 저장
@@ -708,6 +834,84 @@ class RecordProvider extends ChangeNotifier {
     _medication = null;
     _hospitalVisit = null;
 
+    // MB-02: 캐시 초기화
+    _feedingCache.clear();
+    _sleepCache.clear();
+    _diaperCache.clear();
+    _playCache.clear();
+    _healthCache.clear();
+
     notifyListeners();
   }
+}
+
+// ========================================
+// MB-02: 아기별 데이터 캐시 클래스들
+// ========================================
+
+/// 수유 데이터 캐시
+class _FeedingCache {
+  final String type;
+  final double amount;
+  final int duration;
+  final String breastSide;
+
+  _FeedingCache({
+    required this.type,
+    required this.amount,
+    required this.duration,
+    required this.breastSide,
+  });
+}
+
+/// 수면 데이터 캐시
+class _SleepCache {
+  final DateTime startTime;
+  final DateTime? endTime;
+  final String sleepType;
+
+  _SleepCache({
+    required this.startTime,
+    this.endTime,
+    required this.sleepType,
+  });
+}
+
+/// 기저귀 데이터 캐시
+class _DiaperCache {
+  final String type;
+  final String? stoolColor;
+
+  _DiaperCache({
+    required this.type,
+    this.stoolColor,
+  });
+}
+
+/// 놀이 데이터 캐시
+class _PlayCache {
+  final String type;
+  final int? duration;
+
+  _PlayCache({
+    required this.type,
+    this.duration,
+  });
+}
+
+/// 건강 데이터 캐시
+class _HealthCache {
+  final String type;
+  final double? temperature;
+  final List<String> symptoms;
+  final String? medication;
+  final String? hospitalVisit;
+
+  _HealthCache({
+    required this.type,
+    this.temperature,
+    required this.symptoms,
+    this.medication,
+    this.hospitalVisit,
+  });
 }

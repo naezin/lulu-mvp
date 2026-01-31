@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
+
 import 'baby_type.dart';
 import '../../core/utils/corrected_age_calculator.dart';
+import '../../core/utils/sga_calculator.dart';
 
 /// 아기 모델 - MVP-F 다태아 지원 확장
 ///
@@ -91,6 +94,37 @@ class BabyModel {
       correctedAgeInWeeks: correctedAgeInWeeks ?? 0,
     );
   }
+
+  // ========================================
+  // SGA-01: 만삭 저체중아 관련 Getters
+  // ========================================
+
+  /// SGA(만삭 저체중아) 여부
+  bool get isSGA => SGACalculator.isSGA(
+        gestationalWeeks: gestationalWeeksAtBirth,
+        birthWeightGrams: birthWeightGrams,
+      );
+
+  /// 출생 분류 (조산, SGA, 정상)
+  BirthClassification get birthClassification =>
+      SGACalculator.getBirthClassification(
+        gestationalWeeks: gestationalWeeksAtBirth,
+        birthWeightGrams: birthWeightGrams,
+      );
+
+  /// 교정연령 필요 여부
+  bool get needsCorrectedAge => isPreterm;
+
+  /// 홈 화면 상태 뱃지 텍스트
+  String? get statusBadgeText => SGACalculator.getStatusBadgeText(
+        classification: birthClassification,
+        birthDate: birthDate,
+        gestationalWeeks: gestationalWeeksAtBirth,
+      );
+
+  /// 상태 뱃지 색상
+  Color? get statusBadgeColor =>
+      SGACalculator.getStatusBadgeColor(birthClassification);
 
   // ========================================
   // 다태아 관련 Getters

@@ -11,6 +11,7 @@ import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/quick_record_button.dart';
 import '../providers/record_provider.dart';
 import '../widgets/record_time_picker.dart';
+import '../widgets/tummy_time_timer.dart';
 
 /// 놀이 기록 화면 (v5.0)
 ///
@@ -102,12 +103,13 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 이전과 같이 빠른 기록 버튼
+                      // 마지막 기록 반복 버튼 (MB-03)
                       QuickRecordButton(
                         lastRecord: widget.lastPlayRecord,
                         activityType: ActivityType.play,
                         isLoading: _isQuickSaving,
                         onTap: () => _handleQuickSave(provider),
+                        babyName: _getSelectedBabyName(provider),
                       ),
 
                       if (widget.lastPlayRecord != null) ...[
@@ -140,39 +142,53 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
                       // 놀이 유형 선택
                       _buildPlayTypeSelector(provider),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 놀이 시간 입력 (선택)
-                _buildDurationInput(provider),
+                      // 놀이 시간 입력 (선택)
+                      _buildDurationInput(provider),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 시간 선택
-                RecordTimePicker(
-                  label: '놀이 시간',
-                  time: provider.recordTime,
-                  onTimeChanged: provider.setRecordTime,
-                ),
+                      // 시간 선택
+                      RecordTimePicker(
+                        label: '놀이 시간',
+                        time: provider.recordTime,
+                        onTimeChanged: provider.setRecordTime,
+                      ),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 메모
-                _buildNotesInput(),
+                      // 메모
+                      _buildNotesInput(),
 
-                const SizedBox(height: LuluSpacing.xxxl),
-
-                // 저장 버튼
-                _buildSaveButton(provider),
-
-                // 에러 메시지
-                if (provider.errorMessage != null) ...[
-                  const SizedBox(height: LuluSpacing.md),
-                  _buildErrorMessage(provider.errorMessage!),
-                ],
+                      // 에러 메시지
+                      if (provider.errorMessage != null) ...[
+                        const SizedBox(height: LuluSpacing.md),
+                        _buildErrorMessage(provider.errorMessage!),
+                      ],
 
                       const SizedBox(height: LuluSpacing.xxl),
                     ],
                   ),
+                ),
+              ),
+
+              // MO-01: 저장 버튼 하단 고정
+              SafeArea(
+                top: false,
+                child: Container(
+                  padding: const EdgeInsets.all(LuluSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: LuluColors.midnightNavy,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: _buildSaveButton(provider),
                 ),
               ),
             ],
@@ -180,6 +196,14 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
         },
       ),
     );
+  }
+
+  /// MB-03: 현재 선택된 아기 이름 반환
+  String? _getSelectedBabyName(RecordProvider provider) {
+    if (provider.selectedBabyIds.isEmpty) return null;
+    final selectedId = provider.selectedBabyIds.first;
+    final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
+    return baby?.name;
   }
 
   Future<void> _handleQuickSave(RecordProvider provider) async {
@@ -211,6 +235,16 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
   }
 
   Widget _buildPlayTypeSelector(RecordProvider provider) {
+    // UX-01: 활동 유형 2x3 그리드 레이아웃
+    final playTypes = [
+      ('tummy_time', '터미타임', '🏊'),
+      ('bath', '목욕', '🛁'),
+      ('outdoor', '외출', '🚶'),
+      ('play', '실내놀이', '🎨'),
+      ('reading', '독서', '📖'),
+      ('other', '기타', '📝'),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -222,57 +256,32 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
           ),
         ),
         const SizedBox(height: LuluSpacing.md),
-        Wrap(
-          spacing: LuluSpacing.sm,
-          runSpacing: LuluSpacing.sm,
-          children: [
-            _PlayTypeButton(
-              type: 'tummy_time',
-              label: '터미타임',
-              emoji: '🏊',
-              isSelected: provider.playType == 'tummy_time',
-              onTap: () => provider.setPlayType('tummy_time'),
-            ),
-            _PlayTypeButton(
-              type: 'bath',
-              label: '목욕',
-              emoji: '🛁',
-              isSelected: provider.playType == 'bath',
-              onTap: () => provider.setPlayType('bath'),
-            ),
-            _PlayTypeButton(
-              type: 'outdoor',
-              label: '외출',
-              emoji: '🚶',
-              isSelected: provider.playType == 'outdoor',
-              onTap: () => provider.setPlayType('outdoor'),
-            ),
-            _PlayTypeButton(
-              type: 'play',
-              label: '실내놀이',
-              emoji: '🎨',
-              isSelected: provider.playType == 'play',
-              onTap: () => provider.setPlayType('play'),
-            ),
-            _PlayTypeButton(
-              type: 'reading',
-              label: '독서',
-              emoji: '📖',
-              isSelected: provider.playType == 'reading',
-              onTap: () => provider.setPlayType('reading'),
-            ),
-            _PlayTypeButton(
-              type: 'other',
-              label: '기타',
-              emoji: '📝',
-              isSelected: provider.playType == 'other',
-              onTap: () => provider.setPlayType('other'),
-            ),
-          ],
+        // UX-01: 2x3 그리드 배치
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: LuluSpacing.sm,
+            crossAxisSpacing: LuluSpacing.sm,
+            childAspectRatio: 1.1,
+          ),
+          itemCount: playTypes.length,
+          itemBuilder: (context, index) {
+            final type = playTypes[index];
+            return _PlayTypeGridButton(
+              type: type.$1,
+              label: type.$2,
+              emoji: type.$3,
+              isSelected: provider.playType == type.$1,
+              onTap: () => provider.setPlayType(type.$1),
+            );
+          },
         ),
-        // 터미타임 권장 시간 안내
+        // PL-01: 터미타임 선택 시 타이머 표시
         if (provider.playType == 'tummy_time') ...[
           const SizedBox(height: LuluSpacing.md),
+          // 권장 시간 안내
           Container(
             padding: const EdgeInsets.all(LuluSpacing.md),
             decoration: BoxDecoration(
@@ -298,12 +307,26 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
               ],
             ),
           ),
+          const SizedBox(height: LuluSpacing.md),
+          // PL-01: 터미타임 타이머
+          TummyTimeTimer(
+            recommendedMinutes: 5,
+            onComplete: (minutes) {
+              provider.setPlayDuration(minutes);
+              _durationController.text = minutes.toString();
+            },
+          ),
         ],
       ],
     );
   }
 
   Widget _buildDurationInput(RecordProvider provider) {
+    // UX-01: 시간 선택 강화 - 터미타임은 짧은 시간, 외출은 긴 시간
+    final isShortActivity =
+        provider.playType == 'tummy_time' || provider.playType == 'reading';
+    final durations = isShortActivity ? [3, 5, 10, 15] : [10, 15, 30, 60];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -315,33 +338,27 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
           ),
         ),
         const SizedBox(height: LuluSpacing.md),
+        // UX-01: 빠른 선택 버튼을 Expanded로 균등 배치
         Row(
-          children: [
-            // 빠른 선택 버튼들
-            _DurationButton(
-              minutes: 5,
-              isSelected: provider.playDuration == 5,
-              onTap: () => provider.setPlayDuration(5),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            _DurationButton(
-              minutes: 10,
-              isSelected: provider.playDuration == 10,
-              onTap: () => provider.setPlayDuration(10),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            _DurationButton(
-              minutes: 15,
-              isSelected: provider.playDuration == 15,
-              onTap: () => provider.setPlayDuration(15),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            _DurationButton(
-              minutes: 30,
-              isSelected: provider.playDuration == 30,
-              onTap: () => provider.setPlayDuration(30),
-            ),
-          ],
+          children: durations
+              .map(
+                (min) => Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: min != durations.last ? LuluSpacing.sm : 0,
+                    ),
+                    child: _DurationButton(
+                      minutes: min,
+                      isSelected: provider.playDuration == min,
+                      onTap: () {
+                        provider.setPlayDuration(min);
+                        _durationController.text = min.toString();
+                      },
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
         ),
         const SizedBox(height: LuluSpacing.md),
         // 직접 입력
@@ -504,15 +521,15 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
   }
 }
 
-/// 놀이 유형 선택 버튼
-class _PlayTypeButton extends StatelessWidget {
+/// UX-01: 놀이 유형 그리드 버튼 (2x3 배치용)
+class _PlayTypeGridButton extends StatelessWidget {
   final String type;
   final String label;
   final String emoji;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const _PlayTypeButton({
+  const _PlayTypeGridButton({
     required this.type,
     required this.label,
     required this.emoji,
@@ -526,30 +543,24 @@ class _PlayTypeButton extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(
-          horizontal: LuluSpacing.lg,
-          vertical: LuluSpacing.md,
-        ),
         decoration: BoxDecoration(
           color: isSelected
               ? LuluActivityColors.playBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? LuluActivityColors.play
-                : Colors.transparent,
+            color: isSelected ? LuluActivityColors.play : Colors.transparent,
             width: 2,
           ),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               emoji,
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 28),
             ),
-            const SizedBox(width: LuluSpacing.sm),
+            const SizedBox(height: LuluSpacing.xs),
             Text(
               label,
               style: LuluTextStyles.labelMedium.copyWith(

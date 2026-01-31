@@ -51,7 +51,8 @@ class BabyFormData {
     );
   }
 
-  bool get isValid => name.isNotEmpty && birthDate != null;
+  /// SGA-01: 출생체중 필수 조건 추가
+  bool get isValid => name.isNotEmpty && birthDate != null && birthWeightGrams != null;
 
   bool get needsPretermInfo => isPreterm;
 }
@@ -263,6 +264,19 @@ class OnboardingProvider extends ChangeNotifier {
 
   void updateBirthWeight(int grams) {
     _babies[_currentBabyIndex] = currentBaby.copyWith(birthWeightGrams: grams);
+    notifyListeners();
+  }
+
+  /// SGA-01: 출생체중 초기화
+  void clearBirthWeight() {
+    _babies[_currentBabyIndex] = BabyFormData(
+      name: currentBaby.name,
+      birthDate: currentBaby.birthDate,
+      gender: currentBaby.gender,
+      isPreterm: currentBaby.isPreterm,
+      gestationalWeeks: currentBaby.gestationalWeeks,
+      birthWeightGrams: null,
+    );
     notifyListeners();
   }
 

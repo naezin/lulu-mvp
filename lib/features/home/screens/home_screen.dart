@@ -13,6 +13,8 @@ import '../providers/home_provider.dart';
 import '../widgets/sweet_spot_hero_card.dart';
 import '../widgets/last_activity_card.dart';
 import '../widgets/today_summary_card.dart';
+import '../widgets/ongoing_sleep_card.dart';
+import '../../record/providers/ongoing_sleep_provider.dart';
 
 /// 홈 화면 (시안 B-4 기반)
 ///
@@ -79,11 +81,27 @@ class HomeScreen extends StatelessWidget {
 
                       const SizedBox(height: LuluSpacing.lg),
 
+                      // QA-03: 진행 중인 수면 카드 (아기가 있을 때 모든 상태에서 표시)
+                      if (homeProvider.babies.isNotEmpty)
+                        Consumer<OngoingSleepProvider>(
+                          builder: (context, sleepProvider, _) {
+                            // 현재 선택된 아기의 수면만 표시
+                            if (sleepProvider.hasSleepInProgress &&
+                                sleepProvider.currentBabyId == homeProvider.selectedBabyId) {
+                              return const Padding(
+                                padding: EdgeInsets.only(bottom: LuluSpacing.lg),
+                                child: OngoingSleepCard(),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
+
                       // 아기가 없으면 빈 상태
                       if (homeProvider.babies.isEmpty)
                         _buildEmptyBabiesState()
-                      // 아기는 있지만 활동이 없으면 빈 활동 상태
-                      else if (homeProvider.todayActivities.isEmpty)
+                      // 아기는 있지만 활동이 없으면 빈 활동 상태 (BUG-002 FIX: 필터링된 활동 사용)
+                      else if (homeProvider.filteredTodayActivities.isEmpty)
                         _buildEmptyActivitiesState(homeProvider)
                       // 정상 상태: 모든 카드 표시
                       else
@@ -448,13 +466,14 @@ class HomeScreen extends StatelessWidget {
     return '$start - $end';
   }
 
-  /// 수면 시간
+  /// 수면 시간 (자정 넘김 처리 포함 - QA-01)
   String _getSleepDuration(ActivityModel activity) {
     if (activity.endTime == null) return '진행 중';
 
-    final duration = activity.endTime!.difference(activity.startTime);
-    final hours = duration.inHours;
-    final mins = duration.inMinutes % 60;
+    // durationMinutes getter 사용 (자정 넘김 처리 포함)
+    final totalMins = activity.durationMinutes ?? 0;
+    final hours = totalMins ~/ 60;
+    final mins = totalMins % 60;
 
     if (hours > 0 && mins > 0) return '$hours시간 $mins분';
     if (hours > 0) return '$hours시간';

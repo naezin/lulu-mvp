@@ -11,6 +11,7 @@ import '../../../data/models/baby_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/quick_record_button.dart';
 import '../providers/record_provider.dart';
+import '../providers/ongoing_sleep_provider.dart';
 
 /// 수면 기록 화면 (v5.0)
 ///
@@ -77,8 +78,12 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         ),
         centerTitle: true,
       ),
-      body: Consumer<RecordProvider>(
-        builder: (context, provider, _) {
+      body: Consumer2<RecordProvider, OngoingSleepProvider>(
+        builder: (context, provider, ongoingSleepProvider, _) {
+          // 현재 선택된 아기의 진행 중 수면 확인
+          final hasOngoingSleep = ongoingSleepProvider.hasSleepInProgress &&
+              ongoingSleepProvider.currentBabyId == provider.selectedBabyId;
+
           return Column(
             children: [
               // 아기 탭바 (다태아 시 표시)
@@ -101,52 +106,83 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 이전과 같이 빠른 기록 버튼
-                      QuickRecordButton(
-                        lastRecord: widget.lastSleepRecord,
-                        activityType: ActivityType.sleep,
-                        isLoading: _isQuickSaving,
-                        onTap: () => _handleQuickSave(provider),
-                      ),
-
-                      if (widget.lastSleepRecord != null)
+                      // QA-03: 진행 중인 수면 종료 섹션
+                      if (hasOngoingSleep) ...[
+                        _buildOngoingSleepSection(ongoingSleepProvider),
                         const SizedBox(height: LuluSpacing.xl),
+                        const Divider(color: LuluColors.surfaceElevated),
+                        const SizedBox(height: LuluSpacing.lg),
+                        Text(
+                          '또는 새 기록 추가',
+                          style: LuluTextStyles.bodySmall.copyWith(
+                            color: LuluTextColors.tertiary,
+                          ),
+                        ),
+                        const SizedBox(height: LuluSpacing.md),
+                      ],
+
+                      // 마지막 기록 반복 버튼 (진행 중 수면 없을 때만, MB-03)
+                      if (!hasOngoingSleep) ...[
+                        QuickRecordButton(
+                          lastRecord: widget.lastSleepRecord,
+                          activityType: ActivityType.sleep,
+                          isLoading: _isQuickSaving,
+                          onTap: () => _handleQuickSave(provider),
+                          babyName: _getSelectedBabyName(provider),
+                        ),
+                        if (widget.lastSleepRecord != null)
+                          const SizedBox(height: LuluSpacing.xl),
+                      ],
 
                       // 기록 모드 선택 (지금 재우기 vs 기록 추가)
                       _buildModeSelector(),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 수면 타입 선택 (밤잠/낮잠)
-                _buildSleepTypeSelector(provider),
+                      // 수면 타입 선택 (밤잠/낮잠)
+                      _buildSleepTypeSelector(provider),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 모드에 따른 UI
-                if (_isSleepNow)
-                  _buildSleepNowSection(provider)
-                else
-                  _buildAddRecordSection(provider),
+                      // 모드에 따른 UI
+                      if (_isSleepNow)
+                        _buildSleepNowSection(provider)
+                      else
+                        _buildAddRecordSection(provider),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 메모
-                _buildNotesInput(),
+                      // 메모
+                      _buildNotesInput(),
 
-                const SizedBox(height: LuluSpacing.xxxl),
-
-                // 저장 버튼
-                _buildSaveButton(provider),
-
-                // 에러 메시지
-                if (provider.errorMessage != null) ...[
-                  const SizedBox(height: LuluSpacing.md),
-                  _buildErrorMessage(provider.errorMessage!),
-                ],
+                      // 에러 메시지
+                      if (provider.errorMessage != null) ...[
+                        const SizedBox(height: LuluSpacing.md),
+                        _buildErrorMessage(provider.errorMessage!),
+                      ],
 
                       const SizedBox(height: LuluSpacing.xxl),
                     ],
                   ),
+                ),
+              ),
+
+              // MO-01: 저장 버튼 하단 고정
+              SafeArea(
+                top: false,
+                child: Container(
+                  padding: const EdgeInsets.all(LuluSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: LuluColors.midnightNavy,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: _buildSaveButton(provider),
                 ),
               ),
             ],
@@ -154,6 +190,14 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         },
       ),
     );
+  }
+
+  /// MB-03: 현재 선택된 아기 이름 반환
+  String? _getSelectedBabyName(RecordProvider provider) {
+    if (provider.selectedBabyIds.isEmpty) return null;
+    final selectedId = provider.selectedBabyIds.first;
+    final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
+    return baby?.name;
   }
 
   Future<void> _handleQuickSave(RecordProvider provider) async {
@@ -180,6 +224,178 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     } finally {
       if (mounted) {
         setState(() => _isQuickSaving = false);
+      }
+    }
+  }
+
+  /// QA-03: 진행 중인 수면 종료 섹션
+  Widget _buildOngoingSleepSection(OngoingSleepProvider provider) {
+    final babyName = provider.ongoingSleep?.babyName ?? '아기';
+    final sleepType = provider.ongoingSleep?.sleepType == 'night' ? '밤잠' : '낮잠';
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            LuluActivityColors.sleep.withValues(alpha: 0.15),
+            LuluActivityColors.sleep.withValues(alpha: 0.08),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: LuluActivityColors.sleep.withValues(alpha: 0.5),
+          width: 2,
+        ),
+      ),
+      child: Column(
+        children: [
+          // 헤더
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: LuluActivityColors.sleep.withValues(alpha: 0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Text('💤', style: TextStyle(fontSize: 24)),
+                ),
+              ),
+              const SizedBox(width: LuluSpacing.lg),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$babyName $sleepType 중',
+                      style: LuluTextStyles.titleSmall.copyWith(
+                        color: LuluTextColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      provider.formattedElapsedTime,
+                      style: LuluTextStyles.displaySmall.copyWith(
+                        color: LuluActivityColors.sleep,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: LuluSpacing.lg),
+
+          // 버튼들
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: ElevatedButton.icon(
+                  onPressed: () => _endSleep(provider),
+                  icon: const Icon(Icons.bedtime_rounded),
+                  label: const Text('수면 종료'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: LuluActivityColors.sleep,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: LuluSpacing.md),
+              TextButton.icon(
+                onPressed: () => _cancelSleep(provider),
+                icon: const Icon(Icons.close, size: 18),
+                label: const Text('취소'),
+                style: TextButton.styleFrom(
+                  foregroundColor: LuluTextColors.secondary,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _endSleep(OngoingSleepProvider provider) async {
+    final activity = await provider.endSleep();
+    if (activity != null && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Text('😴', style: TextStyle(fontSize: 18)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '수면 기록이 저장되었어요',
+                  style: LuluTextStyles.bodyMedium.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: LuluActivityColors.sleep,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
+      Navigator.of(context).pop(activity);
+    }
+  }
+
+  Future<void> _cancelSleep(OngoingSleepProvider provider) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: LuluColors.surfaceCard,
+        title: Text(
+          '수면을 취소할까요?',
+          style: LuluTextStyles.titleMedium.copyWith(
+            color: LuluTextColors.primary,
+          ),
+        ),
+        content: Text(
+          '진행 중인 수면 기록이 삭제됩니다.',
+          style: LuluTextStyles.bodyMedium.copyWith(
+            color: LuluTextColors.secondary,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('아니오'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: LuluStatusColors.error,
+            ),
+            child: const Text('취소'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await provider.cancelSleep();
+      if (mounted) {
+        setState(() {});
       }
     }
   }
@@ -609,14 +825,53 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 
   Future<void> _handleSave(RecordProvider provider) async {
-    // "지금 재우기" 모드면 종료 시간 없이 저장
+    // "지금 재우기" 모드면 OngoingSleepProvider 사용
     if (_isSleepNow) {
-      provider.setSleepEndTime(null);
-    }
+      final ongoingSleepProvider = context.read<OngoingSleepProvider>();
+      final selectedBabyId = provider.selectedBabyId;
+      final selectedBaby = widget.babies.firstWhere(
+        (b) => b.id == selectedBabyId,
+        orElse: () => widget.babies.first,
+      );
 
-    final activity = await provider.saveSleep();
-    if (activity != null && mounted) {
-      Navigator.of(context).pop(activity);
+      await ongoingSleepProvider.startSleep(
+        babyId: selectedBaby.id,
+        familyId: widget.familyId,
+        sleepType: provider.sleepType,
+        babyName: selectedBaby.name,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Text('😴', style: TextStyle(fontSize: 18)),
+                const SizedBox(width: 8),
+                Text(
+                  '${selectedBaby.name} 수면 시작! 홈에서 종료할 수 있어요',
+                  style: LuluTextStyles.bodyMedium.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: LuluActivityColors.sleep,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+        Navigator.of(context).pop();
+      }
+    } else {
+      // "기록 추가" 모드: 시작/종료 시간 함께 저장
+      final activity = await provider.saveSleep();
+      if (activity != null && mounted) {
+        Navigator.of(context).pop(activity);
+      }
     }
   }
 }

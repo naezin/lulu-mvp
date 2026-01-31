@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/design_system/lulu_colors.dart';
 import '../../core/design_system/lulu_spacing.dart';
@@ -6,12 +7,16 @@ import '../../core/design_system/lulu_typography.dart';
 import '../../data/models/activity_model.dart';
 import '../../data/models/baby_type.dart';
 
-/// "이전과 같이" 빠른 기록 버튼 (v5.0)
+/// MB-03: 첫 사용 여부 키
+const String _kQuickRecordTooltipShownKey = 'quick_record_tooltip_shown';
+
+/// "마지막 기록 반복" 빠른 기록 버튼 (v5.0 + MB-03)
 ///
 /// "둘 다" 버튼 대체 UX:
 /// - 마지막 기록 기반 원탭 저장
 /// - 3초 Rule 준수를 위한 핵심 컴포넌트
 /// - 터치 피드백 애니메이션 포함
+/// - MB-03: 아기 이름 + 시간 표시 개선
 class QuickRecordButton extends StatefulWidget {
   /// 마지막 기록 (없으면 버튼 숨김)
   final ActivityModel? lastRecord;
@@ -25,12 +30,16 @@ class QuickRecordButton extends StatefulWidget {
   /// 로딩 상태
   final bool isLoading;
 
+  /// MB-03: 현재 선택된 아기 이름 (다태아 UX 개선)
+  final String? babyName;
+
   const QuickRecordButton({
     super.key,
     required this.lastRecord,
     required this.onTap,
     required this.activityType,
     this.isLoading = false,
+    this.babyName,
   });
 
   @override
@@ -42,6 +51,9 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
+  // MB-03: 툴팁 오버레이
+  OverlayEntry? _tooltipOverlay;
+
   @override
   void initState() {
     super.initState();
@@ -52,10 +64,104 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
     _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
+
+    // MB-03: 첫 사용 체크
+    _checkFirstUse();
+  }
+
+  /// MB-03: 첫 사용 시 툴팁 표시
+  Future<void> _checkFirstUse() async {
+    if (widget.lastRecord == null) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final hasShown = prefs.getBool(_kQuickRecordTooltipShownKey) ?? false;
+
+    if (!hasShown && mounted) {
+      // 화면 빌드 후 툴팁 표시
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _showTooltipOverlay();
+
+          // 3초 후 자동 닫기
+          Future.delayed(const Duration(seconds: 3), _hideTooltip);
+        }
+      });
+
+      // 표시 완료 저장
+      await prefs.setBool(_kQuickRecordTooltipShownKey, true);
+    }
+  }
+
+  void _showTooltipOverlay() {
+    if (_tooltipOverlay != null) return;
+
+    final overlayState = Overlay.of(context);
+    final renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final position = renderBox.localToGlobal(Offset.zero);
+    final size = renderBox.size;
+
+    _tooltipOverlay = OverlayEntry(
+      builder: (context) => Positioned(
+        top: position.dy - 40,
+        left: position.dx + size.width / 2 - 100,
+        child: Material(
+          color: Colors.transparent,
+          child: GestureDetector(
+            onTap: _hideTooltip,
+            child: Container(
+              width: 200,
+              padding: const EdgeInsets.symmetric(
+                horizontal: LuluSpacing.md,
+                vertical: LuluSpacing.sm,
+              ),
+              decoration: BoxDecoration(
+                color: LuluColors.surfaceCard,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '💡 탭하면 이전과 같은 내용으로\n바로 저장돼요!',
+                    style: LuluTextStyles.bodySmall.copyWith(
+                      color: LuluTextColors.primary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 4),
+                  // 말풍선 꼬리 (아래쪽)
+                  CustomPaint(
+                    size: const Size(16, 8),
+                    painter: _TooltipArrowPainter(color: LuluColors.surfaceCard),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlayState.insert(_tooltipOverlay!);
+  }
+
+  void _hideTooltip() {
+    _tooltipOverlay?.remove();
+    _tooltipOverlay = null;
   }
 
   @override
   void dispose() {
+    _hideTooltip();
     _controller.dispose();
     super.dispose();
   }
@@ -85,7 +191,6 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
     }
 
     final color = _getActivityColor();
-    final summary = _getRecordSummary();
 
     return GestureDetector(
       onTapDown: _onTapDown,
@@ -136,13 +241,13 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
                 ),
               ),
               const SizedBox(width: LuluSpacing.md),
-              // 텍스트
+              // 텍스트 (MB-03: 아기 이름 + 시간 추가)
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '이전과 같이',
+                      _getLabelText(),
                       style: LuluTextStyles.caption.copyWith(
                         color: color,
                         fontWeight: FontWeight.w600,
@@ -150,7 +255,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      summary,
+                      _getSummaryWithTime(),
                       style: LuluTextStyles.bodyMedium.copyWith(
                         color: LuluTextColors.primary,
                         fontWeight: FontWeight.w600,
@@ -160,7 +265,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '원탭으로 저장',
+                      '탭하여 저장',
                       style: LuluTextStyles.caption.copyWith(
                         color: LuluTextColors.tertiary,
                       ),
@@ -198,6 +303,43 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
       ActivityType.play => '🎮',
       ActivityType.health => '🏥',
     };
+  }
+
+  /// MB-03: 라벨 텍스트 (아기 이름 포함)
+  String _getLabelText() {
+    if (widget.babyName != null && widget.babyName!.isNotEmpty) {
+      return '${widget.babyName}의 마지막 기록 반복';
+    }
+    return '마지막 기록 반복';
+  }
+
+  /// MB-03: 요약 + 시간 (예: "모유 120ml (5분 전)")
+  String _getSummaryWithTime() {
+    final summary = _getRecordSummary();
+    final timeAgo = _getTimeAgo();
+    if (timeAgo.isNotEmpty) {
+      return '$summary ($timeAgo)';
+    }
+    return summary;
+  }
+
+  /// MB-03: 상대 시간 표시 (예: "5분 전", "1시간 전")
+  String _getTimeAgo() {
+    if (widget.lastRecord == null) return '';
+
+    final now = DateTime.now();
+    final recordTime = widget.lastRecord!.startTime;
+    final diff = now.difference(recordTime);
+
+    if (diff.inMinutes < 1) {
+      return '방금';
+    } else if (diff.inMinutes < 60) {
+      return '${diff.inMinutes}분 전';
+    } else if (diff.inHours < 24) {
+      return '${diff.inHours}시간 전';
+    } else {
+      return '${diff.inDays}일 전';
+    }
   }
 
   String _getRecordSummary() {
@@ -271,4 +413,29 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
         };
     }
   }
+}
+
+/// MB-03: 툴팁 화살표 페인터
+class _TooltipArrowPainter extends CustomPainter {
+  final Color color;
+
+  _TooltipArrowPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width / 2, size.height)
+      ..lineTo(size.width, 0)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

@@ -75,7 +75,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
           TextButton(
             onPressed: _isSaving ? null : _onSave,
             child: Text(
-              '저장',
+              '저장하기',
               style: LuluTextStyles.bodyMedium.copyWith(
                 color: _canSave()
                     ? LuluColors.lavenderMist

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -17,6 +18,7 @@ class BabyInfoScreen extends StatefulWidget {
 class _BabyInfoScreenState extends State<BabyInfoScreen> {
   final _nameController = TextEditingController();
   final _nameFocusNode = FocusNode();
+  final _weightController = TextEditingController();
 
   @override
   void initState() {
@@ -24,6 +26,9 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = context.read<OnboardingProvider>();
       _nameController.text = provider.currentBaby.name;
+      if (provider.currentBaby.birthWeightGrams != null) {
+        _weightController.text = provider.currentBaby.birthWeightGrams.toString();
+      }
     });
   }
 
@@ -40,6 +45,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
   void dispose() {
     _nameController.dispose();
     _nameFocusNode.dispose();
+    _weightController.dispose();
     super.dispose();
   }
 
@@ -173,7 +179,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                     child: Text(
                       provider.currentBaby.birthDate != null
                           ? _formatDate(provider.currentBaby.birthDate!)
-                          : '출생일을 선택하세요',
+                          : '출생일을 선택해주세요',
                       style: TextStyle(
                         color: provider.currentBaby.birthDate != null
                             ? AppTheme.textPrimary
@@ -222,6 +228,65 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                 ),
               ),
             ],
+          ),
+
+          const SizedBox(height: 24),
+
+          // SGA-01: 출생체중 입력 (필수)
+          Text(
+            '출생체중',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: AppTheme.textSecondary,
+                ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _weightController,
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.done,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                provider.updateBirthWeight(int.parse(value));
+              } else {
+                provider.clearBirthWeight();
+              }
+            },
+            style: const TextStyle(
+              color: AppTheme.textPrimary,
+              fontSize: 17,
+            ),
+            decoration: InputDecoration(
+              hintText: '예: 3200',
+              hintStyle: const TextStyle(
+                color: AppTheme.textTertiary,
+              ),
+              suffixText: 'g',
+              suffixStyle: const TextStyle(
+                color: AppTheme.textSecondary,
+                fontSize: 17,
+              ),
+              filled: true,
+              fillColor: AppTheme.surfaceElevated,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(
+                  color: AppTheme.lavenderMist,
+                  width: 2,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '성장 추적 기능에 활용돼요',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppTheme.textTertiary,
+                ),
           ),
 
           const SizedBox(height: 32),

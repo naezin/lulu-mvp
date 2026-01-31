@@ -188,12 +188,14 @@ class ExportService {
     return '';
   }
 
+  /// 수면 시간 (자정 넘김 처리 포함 - QA-01)
   String _getSleepDuration(ActivityModel activity) {
     if (activity.endTime == null) return '진행중';
 
-    final duration = activity.endTime!.difference(activity.startTime);
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes % 60;
+    // durationMinutes getter 사용 (자정 넘김 처리 포함)
+    final totalMins = activity.durationMinutes ?? 0;
+    final hours = totalMins ~/ 60;
+    final minutes = totalMins % 60;
 
     if (hours == 0) return '$minutes분';
     if (minutes == 0) return '$hours시간';

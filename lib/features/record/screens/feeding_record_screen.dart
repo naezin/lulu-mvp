@@ -102,65 +102,80 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 이전과 같이 빠른 기록 버튼
+                      // 마지막 기록 반복 버튼 (MB-03)
                       QuickRecordButton(
                         lastRecord: widget.lastFeedingRecord,
                         activityType: ActivityType.feeding,
                         isLoading: _isQuickSaving,
                         onTap: () => _handleQuickSave(provider),
+                        babyName: _getSelectedBabyName(provider),
                       ),
 
                       if (widget.lastFeedingRecord != null)
                         const SizedBox(height: LuluSpacing.xl),
 
-                // 수유 종류 선택
-                FeedingTypeSelector(
-                  selectedType: provider.feedingType,
-                  onTypeChanged: provider.setFeedingType,
-                ),
+                      // 수유 종류 선택
+                      FeedingTypeSelector(
+                        selectedType: provider.feedingType,
+                        onTypeChanged: provider.setFeedingType,
+                      ),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 시간 선택
-                RecordTimePicker(
-                  label: '수유 시간',
-                  time: provider.recordTime,
-                  onTimeChanged: provider.setRecordTime,
-                ),
+                      // 시간 선택
+                      RecordTimePicker(
+                        label: '수유 시간',
+                        time: provider.recordTime,
+                        onTimeChanged: provider.setRecordTime,
+                      ),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 모유 수유 시 좌/우 선택
-                if (provider.feedingType == 'breast') ...[
-                  _buildBreastSideSelector(provider),
-                  const SizedBox(height: LuluSpacing.xxl),
-                ],
+                      // 모유 수유 시 좌/우 선택
+                      if (provider.feedingType == 'breast') ...[
+                        _buildBreastSideSelector(provider),
+                        const SizedBox(height: LuluSpacing.xxl),
+                      ],
 
-                // 수유량 또는 수유 시간 (종류에 따라)
-                if (provider.feedingType == 'breast')
-                  _buildDurationInput(provider)
-                else
-                  _buildAmountInput(provider),
+                      // 수유량 또는 수유 시간 (종류에 따라)
+                      if (provider.feedingType == 'breast')
+                        _buildDurationInput(provider)
+                      else
+                        _buildAmountInput(provider),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 메모
-                _buildNotesInput(),
+                      // 메모
+                      _buildNotesInput(),
 
-                const SizedBox(height: LuluSpacing.xxxl),
-
-                // 저장 버튼
-                _buildSaveButton(provider),
-
-                // 에러 메시지
-                if (provider.errorMessage != null) ...[
-                  const SizedBox(height: LuluSpacing.md),
-                  _buildErrorMessage(provider.errorMessage!),
-                ],
+                      // 에러 메시지
+                      if (provider.errorMessage != null) ...[
+                        const SizedBox(height: LuluSpacing.md),
+                        _buildErrorMessage(provider.errorMessage!),
+                      ],
 
                       const SizedBox(height: LuluSpacing.xxl),
                     ],
                   ),
+                ),
+              ),
+
+              // MO-01: 저장 버튼 하단 고정
+              SafeArea(
+                top: false,
+                child: Container(
+                  padding: const EdgeInsets.all(LuluSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: LuluColors.midnightNavy,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: _buildSaveButton(provider),
                 ),
               ),
             ],
@@ -168,6 +183,14 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
         },
       ),
     );
+  }
+
+  /// MB-03: 현재 선택된 아기 이름 반환
+  String? _getSelectedBabyName(RecordProvider provider) {
+    if (provider.selectedBabyIds.isEmpty) return null;
+    final selectedId = provider.selectedBabyIds.first;
+    final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
+    return baby?.name;
   }
 
   Future<void> _handleQuickSave(RecordProvider provider) async {

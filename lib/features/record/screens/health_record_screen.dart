@@ -40,6 +40,8 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
   final _temperatureController = TextEditingController();
   final _medicationController = TextEditingController();
   final _hospitalController = TextEditingController();
+  // UX-02: 체온 입력 자동 포커스
+  final _temperatureFocusNode = FocusNode();
   bool _isQuickSaving = false;
 
   @override
@@ -51,6 +53,8 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
             babies: widget.babies,
             preselectedBabyId: widget.preselectedBabyId,
           );
+      // UX-02: 체온 기록이 기본이므로 자동 포커스
+      _temperatureFocusNode.requestFocus();
     });
   }
 
@@ -60,6 +64,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     _temperatureController.dispose();
     _medicationController.dispose();
     _hospitalController.dispose();
+    _temperatureFocusNode.dispose();
     super.dispose();
   }
 
@@ -106,12 +111,13 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 이전과 같이 빠른 기록 버튼
+                      // 마지막 기록 반복 버튼 (MB-03)
                       QuickRecordButton(
                         lastRecord: widget.lastHealthRecord,
                         activityType: ActivityType.health,
                         isLoading: _isQuickSaving,
                         onTap: () => _handleQuickSave(provider),
+                        babyName: _getSelectedBabyName(provider),
                       ),
 
                       if (widget.lastHealthRecord != null)
@@ -120,44 +126,58 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
                       // 기록 유형 선택
                       _buildHealthTypeSelector(provider),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 유형별 상세 입력
-                _buildHealthTypeContent(provider),
+                      // 유형별 상세 입력
+                      _buildHealthTypeContent(provider),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 시간 선택
-                RecordTimePicker(
-                  label: '기록 시간',
-                  time: provider.recordTime,
-                  onTimeChanged: provider.setRecordTime,
-                ),
+                      // 시간 선택
+                      RecordTimePicker(
+                        label: '기록 시간',
+                        time: provider.recordTime,
+                        onTimeChanged: provider.setRecordTime,
+                      ),
 
-                const SizedBox(height: LuluSpacing.xxl),
+                      const SizedBox(height: LuluSpacing.xxl),
 
-                // 메모
-                _buildNotesInput(),
+                      // 메모
+                      _buildNotesInput(),
 
-                const SizedBox(height: LuluSpacing.lg),
+                      const SizedBox(height: LuluSpacing.lg),
 
-                // 의료 면책 문구
-                _buildMedicalDisclaimer(),
+                      // 의료 면책 문구
+                      _buildMedicalDisclaimer(),
 
-                const SizedBox(height: LuluSpacing.xxl),
-
-                // 저장 버튼
-                _buildSaveButton(provider),
-
-                // 에러 메시지
-                if (provider.errorMessage != null) ...[
-                  const SizedBox(height: LuluSpacing.md),
-                  _buildErrorMessage(provider.errorMessage!),
-                ],
+                      // 에러 메시지
+                      if (provider.errorMessage != null) ...[
+                        const SizedBox(height: LuluSpacing.md),
+                        _buildErrorMessage(provider.errorMessage!),
+                      ],
 
                       const SizedBox(height: LuluSpacing.xxl),
                     ],
                   ),
+                ),
+              ),
+
+              // MO-01: 저장 버튼 하단 고정
+              SafeArea(
+                top: false,
+                child: Container(
+                  padding: const EdgeInsets.all(LuluSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: LuluColors.midnightNavy,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: _buildSaveButton(provider),
                 ),
               ),
             ],
@@ -165,6 +185,14 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
         },
       ),
     );
+  }
+
+  /// MB-03: 현재 선택된 아기 이름 반환
+  String? _getSelectedBabyName(RecordProvider provider) {
+    if (provider.selectedBabyIds.isEmpty) return null;
+    final selectedId = provider.selectedBabyIds.first;
+    final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
+    return baby?.name;
   }
 
   Future<void> _handleQuickSave(RecordProvider provider) async {
@@ -303,6 +331,41 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
           ),
         ),
         const SizedBox(height: LuluSpacing.md),
+
+        // UX-02: 빠른 체온 선택 버튼
+        Row(
+          children: [
+            _QuickTempButton(
+              temp: 36.5,
+              label: '36.5',
+              isSelected: temp == 36.5,
+              onTap: () => _setTemperature(36.5, provider),
+            ),
+            const SizedBox(width: LuluSpacing.sm),
+            _QuickTempButton(
+              temp: 37.0,
+              label: '37.0',
+              isSelected: temp == 37.0,
+              onTap: () => _setTemperature(37.0, provider),
+            ),
+            const SizedBox(width: LuluSpacing.sm),
+            _QuickTempButton(
+              temp: 37.5,
+              label: '37.5',
+              isSelected: temp == 37.5,
+              onTap: () => _setTemperature(37.5, provider),
+            ),
+            const SizedBox(width: LuluSpacing.sm),
+            _QuickTempButton(
+              temp: 38.0,
+              label: '38.0',
+              isSelected: temp == 38.0,
+              onTap: () => _setTemperature(38.0, provider),
+            ),
+          ],
+        ),
+        const SizedBox(height: LuluSpacing.md),
+
         Container(
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
@@ -314,6 +377,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
               Expanded(
                 child: TextField(
                   controller: _temperatureController,
+                  focusNode: _temperatureFocusNode,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   style: LuluTextStyles.displaySmall.copyWith(
                     color: LuluTextColors.primary,
@@ -389,6 +453,12 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
         ],
       ],
     );
+  }
+
+  // UX-02: 빠른 체온 설정 헬퍼
+  void _setTemperature(double temp, RecordProvider provider) {
+    _temperatureController.text = temp.toString();
+    provider.setTemperature(temp);
   }
 
   Widget _buildSymptomSelector(RecordProvider provider) {
@@ -593,10 +663,10 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
-        color: LuluColors.surfaceElevated,
+        color: LuluStatusColors.warningSoft,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: LuluTextColors.tertiary.withValues(alpha: 0.3),
+          color: LuluStatusColors.warning.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -604,16 +674,17 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            Icons.info_outline,
-            color: LuluTextColors.tertiary,
-            size: 16,
+            Icons.warning_amber_rounded,
+            color: LuluStatusColors.warning,
+            size: 18,
           ),
           const SizedBox(width: LuluSpacing.sm),
           Expanded(
             child: Text(
-              '이 정보는 참고용이며 의료 조언이 아닙니다.\n이상 증상이 있으면 소아과 전문의와 상담하세요.',
+              '이 기록은 참고용이며 의료 진단을 대체하지 않습니다.\n이상 증상이 있으면 소아과 전문의와 상담하세요.',
               style: LuluTextStyles.caption.copyWith(
-                color: LuluTextColors.tertiary,
+                color: LuluStatusColors.warning,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -743,6 +814,67 @@ class _TemperatureStatus {
     required this.label,
     required this.message,
   });
+}
+
+/// UX-02: 빠른 체온 선택 버튼
+class _QuickTempButton extends StatelessWidget {
+  final double temp;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _QuickTempButton({
+    required this.temp,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final status = _getTempStatusColor(temp);
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? status.withValues(alpha: 0.2)
+                : LuluColors.surfaceElevated,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected ? status : Colors.transparent,
+              width: 2,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              '$label°',
+              style: LuluTextStyles.labelLarge.copyWith(
+                color: isSelected ? status : LuluTextColors.secondary,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Color _getTempStatusColor(double temp) {
+    if (temp < 36.0) {
+      return LuluStatusColors.info;
+    } else if (temp <= 37.5) {
+      return LuluStatusColors.success;
+    } else if (temp <= 38.0) {
+      return LuluStatusColors.warning;
+    } else {
+      return LuluStatusColors.error;
+    }
+  }
 }
 
 /// 건강 기록 유형 선택 버튼

@@ -35,9 +35,19 @@ class ActivityModel {
   bool get isOngoing => endTime == null;
 
   /// 지속 시간 (분)
+  /// 자정을 넘기는 경우도 정확히 계산 (QA-01 수정)
   int? get durationMinutes {
     if (endTime == null) return null;
-    return endTime!.difference(startTime).inMinutes;
+
+    // 종료 시간이 시작 시간보다 이전이면 다음 날로 처리
+    DateTime adjustedEnd = endTime!;
+    if (endTime!.isBefore(startTime)) {
+      // 자정을 넘긴 경우: 다음 날로 조정
+      adjustedEnd = endTime!.add(const Duration(days: 1));
+    }
+
+    final duration = adjustedEnd.difference(startTime).inMinutes;
+    return duration < 0 ? 0 : duration;
   }
 
   /// 다중 아기 기록 여부

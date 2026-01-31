@@ -7,6 +7,8 @@ import '../../../data/models/models.dart';
 /// - 선택된 아기 관리 (null = 모두)
 /// - Sweet Spot 계산
 /// - 오늘 활동 요약
+///
+/// BUG-002 수정: 모든 활동 getter에서 selectedBabyId 필터링 적용
 class HomeProvider extends ChangeNotifier {
   // ========================================
   // 상태
@@ -35,9 +37,28 @@ class HomeProvider extends ChangeNotifier {
   /// 모든 아기 선택 여부
   bool get isAllSelected => _selectedBabyId == null;
 
-  /// 오늘 활동들
+  /// 오늘 활동들 (전체 - 내부용)
   List<ActivityModel> _todayActivities = [];
+
+  /// 오늘 활동들 (전체 - 외부 접근용, 하위 호환성)
   List<ActivityModel> get todayActivities => List.unmodifiable(_todayActivities);
+
+  // ========================================
+  // BUG-002 FIX: 선택된 아기별 필터링된 활동
+  // ========================================
+
+  /// 선택된 아기의 오늘 활동만 반환
+  ///
+  /// - selectedBabyId가 null이면 모든 활동 반환
+  /// - selectedBabyId가 있으면 해당 아기의 활동만 필터링
+  List<ActivityModel> get filteredTodayActivities {
+    if (_selectedBabyId == null) {
+      return _todayActivities;
+    }
+    return _todayActivities
+        .where((a) => a.babyIds.contains(_selectedBabyId))
+        .toList();
+  }
 
   /// 로딩 상태
   bool _isLoading = false;
@@ -71,23 +92,27 @@ class HomeProvider extends ChangeNotifier {
   }
 
   // ========================================
-  // 오늘 요약
+  // 오늘 요약 (BUG-002 FIX: 필터링 적용)
   // ========================================
 
-  /// 오늘 수유 횟수
+  /// 오늘 수유 횟수 (선택된 아기만)
   int get todayFeedingCount {
-    return _todayActivities.where((a) => a.type == ActivityType.feeding).length;
+    return filteredTodayActivities
+        .where((a) => a.type == ActivityType.feeding)
+        .length;
   }
 
-  /// 오늘 총 수면 시간 (분)
+  /// 오늘 총 수면 시간 (분) - 선택된 아기만
+  /// 자정을 넘기는 수면도 정확히 계산 (QA-01)
   int get todaySleepMinutes {
-    final sleepActivities = _todayActivities.where(
+    final sleepActivities = filteredTodayActivities.where(
       (a) => a.type == ActivityType.sleep && a.endTime != null,
     );
 
     int totalMinutes = 0;
     for (final activity in sleepActivities) {
-      totalMinutes += activity.endTime!.difference(activity.startTime).inMinutes;
+      // durationMinutes getter 사용 (자정 넘김 처리 포함)
+      totalMinutes += activity.durationMinutes ?? 0;
     }
     return totalMinutes;
   }
@@ -101,27 +126,38 @@ class HomeProvider extends ChangeNotifier {
     return '${hours}h ${minutes}m';
   }
 
-  /// 오늘 기저귀 횟수
+  /// 오늘 기저귀 횟수 (선택된 아기만)
   int get todayDiaperCount {
-    return _todayActivities.where((a) => a.type == ActivityType.diaper).length;
+    return filteredTodayActivities
+        .where((a) => a.type == ActivityType.diaper)
+        .length;
   }
 
-  /// 마지막 수유 활동
+  /// 마지막 수유 활동 (선택된 아기만)
   ActivityModel? get lastFeeding {
-    final feedings = _todayActivities
+    final feedings = filteredTodayActivities
         .where((a) => a.type == ActivityType.feeding)
         .toList()
       ..sort((a, b) => b.startTime.compareTo(a.startTime));
     return feedings.firstOrNull;
   }
 
-  /// 마지막 수면 활동
+  /// 마지막 수면 활동 (선택된 아기만)
   ActivityModel? get lastSleep {
-    final sleeps = _todayActivities
+    final sleeps = filteredTodayActivities
         .where((a) => a.type == ActivityType.sleep)
         .toList()
       ..sort((a, b) => b.startTime.compareTo(a.startTime));
     return sleeps.firstOrNull;
+  }
+
+  /// 마지막 기저귀 활동 (선택된 아기만)
+  ActivityModel? get lastDiaper {
+    final diapers = filteredTodayActivities
+        .where((a) => a.type == ActivityType.diaper)
+        .toList()
+      ..sort((a, b) => b.startTime.compareTo(a.startTime));
+    return diapers.firstOrNull;
   }
 
   // ========================================
@@ -152,9 +188,13 @@ class HomeProvider extends ChangeNotifier {
   }
 
   /// 아기 선택
+  ///
+  /// BUG-002 NOTE: 아기 전환 시 filteredTodayActivities가 자동으로
+  /// 새로운 selectedBabyId를 기준으로 필터링됨
   void selectBaby(String? babyId) {
     _selectedBabyId = babyId;
     _calculateSweetSpot();
+    debugPrint('✅ [HomeProvider] Baby selected: $babyId, filtered activities: ${filteredTodayActivities.length}');
     notifyListeners();
   }
 
@@ -162,12 +202,32 @@ class HomeProvider extends ChangeNotifier {
   void setTodayActivities(List<ActivityModel> activities) {
     _todayActivities = activities;
     _calculateSweetSpot();
+    debugPrint('✅ [HomeProvider] Activities set: ${activities.length} total, ${filteredTodayActivities.length} for selected baby');
     notifyListeners();
   }
 
   /// 활동 추가
   void addActivity(ActivityModel activity) {
     _todayActivities = [..._todayActivities, activity];
+    _calculateSweetSpot();
+    debugPrint('✅ [HomeProvider] Activity added: ${activity.type}, babyIds: ${activity.babyIds}');
+    notifyListeners();
+  }
+
+  /// 활동 삭제
+  void removeActivity(String activityId) {
+    _todayActivities = _todayActivities
+        .where((a) => a.id != activityId)
+        .toList();
+    _calculateSweetSpot();
+    notifyListeners();
+  }
+
+  /// 활동 업데이트
+  void updateActivity(ActivityModel updatedActivity) {
+    _todayActivities = _todayActivities.map((a) {
+      return a.id == updatedActivity.id ? updatedActivity : a;
+    }).toList();
     _calculateSweetSpot();
     notifyListeners();
   }
@@ -180,7 +240,7 @@ class HomeProvider extends ChangeNotifier {
       return;
     }
 
-    // 마지막 수면 시간 확인
+    // 마지막 수면 시간 확인 (BUG-002 FIX: 필터링된 활동 사용)
     final lastSleepActivity = lastSleep;
     if (lastSleepActivity == null) {
       _sweetSpotState = SweetSpotState.unknown;
