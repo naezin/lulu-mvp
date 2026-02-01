@@ -10,6 +10,13 @@ import '../../../shared/widgets/last_activity_row.dart';
 import '../../../shared/widgets/sweet_spot_card.dart';
 import '../providers/home_provider.dart';
 import '../../record/providers/ongoing_sleep_provider.dart';
+import '../../record/screens/feeding_record_screen.dart';
+import '../../record/screens/sleep_record_screen.dart';
+import '../../record/screens/diaper_record_screen.dart';
+import '../../record/screens/play_record_screen.dart';
+import '../../record/screens/health_record_screen.dart';
+import '../../../data/models/activity_model.dart';
+import '../../../data/models/baby_type.dart';
 
 /// 홈 화면 (시안 B-4 기반)
 ///
@@ -262,9 +269,69 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /// 기록 화면으로 네비게이션
+  ///
+  /// QA FIX: debugPrint → 실제 Navigator.push 구현
   void _navigateToRecord(BuildContext context, String type) {
-    // TODO: 각 기록 화면으로 네비게이션
-    debugPrint('Navigate to $type record');
+    final homeProvider = context.read<HomeProvider>();
+    final family = homeProvider.family;
+    final babies = homeProvider.babies;
+    final selectedBabyId = homeProvider.selectedBabyId;
+
+    if (family == null || babies.isEmpty) {
+      debugPrint('[WARN] Cannot navigate: family or babies not loaded');
+      return;
+    }
+
+    final Widget screen = switch (type) {
+      'feeding' => FeedingRecordScreen(
+          familyId: family.id,
+          babies: babies,
+          preselectedBabyId: selectedBabyId,
+          lastFeedingRecord: homeProvider.lastFeeding,
+        ),
+      'sleep' => SleepRecordScreen(
+          familyId: family.id,
+          babies: babies,
+          preselectedBabyId: selectedBabyId,
+          lastSleepRecord: homeProvider.lastSleep,
+        ),
+      'diaper' => DiaperRecordScreen(
+          familyId: family.id,
+          babies: babies,
+          preselectedBabyId: selectedBabyId,
+          lastDiaperRecord: homeProvider.lastDiaper,
+        ),
+      'play' => PlayRecordScreen(
+          familyId: family.id,
+          babies: babies,
+          preselectedBabyId: selectedBabyId,
+          lastPlayRecord: homeProvider.filteredTodayActivities
+              .where((a) => a.type == ActivityType.play)
+              .toList()
+              .firstOrNull,
+        ),
+      'health' => HealthRecordScreen(
+          familyId: family.id,
+          babies: babies,
+          preselectedBabyId: selectedBabyId,
+          lastHealthRecord: homeProvider.filteredTodayActivities
+              .where((a) => a.type == ActivityType.health)
+              .toList()
+              .firstOrNull,
+        ),
+      _ => throw ArgumentError('Unknown record type: $type'),
+    };
+
+    Navigator.push<ActivityModel>(
+      context,
+      MaterialPageRoute(builder: (_) => screen),
+    ).then((savedActivity) {
+      // 저장된 활동이 있으면 HomeProvider에 추가
+      if (savedActivity != null) {
+        homeProvider.addActivity(savedActivity);
+      }
+    });
   }
 
   /// 수면 종료 다이얼로그 (OngoingSleepCard에서 이전)

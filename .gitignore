@@ -47,3 +47,4 @@ app.*.map.json
 
 # PM Skills (external repo)
 .claude/pm-skills/
+scripts/donateacry-corpus/

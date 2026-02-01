@@ -191,35 +191,38 @@ class _DirectDetails extends StatelessWidget {
           ),
         ),
         const SizedBox(height: LuluSpacing.sm),
-        Row(
-          children: [
-            Expanded(
-              child: _SideButton(
-                label: 'L',
-                subLabel: '왼쪽',
-                isSelected: breastSide == BreastSide.left,
-                onTap: () => onSideChanged(BreastSide.left),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _SideButton(
+                  label: 'L',
+                  subLabel: '왼쪽',
+                  isSelected: breastSide == BreastSide.left,
+                  onTap: () => onSideChanged(BreastSide.left),
+                ),
               ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _SideButton(
-                label: 'R',
-                subLabel: '오른쪽',
-                isSelected: breastSide == BreastSide.right,
-                onTap: () => onSideChanged(BreastSide.right),
+              const SizedBox(width: LuluSpacing.sm),
+              Expanded(
+                child: _SideButton(
+                  label: 'R',
+                  subLabel: '오른쪽',
+                  isSelected: breastSide == BreastSide.right,
+                  onTap: () => onSideChanged(BreastSide.right),
+                ),
               ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _SideButton(
-                label: '양쪽',
-                subLabel: null,
-                isSelected: breastSide == BreastSide.both,
-                onTap: () => onSideChanged(BreastSide.both),
+              const SizedBox(width: LuluSpacing.sm),
+              Expanded(
+                child: _SideButton(
+                  label: '양쪽',
+                  subLabel: null,
+                  isSelected: breastSide == BreastSide.both,
+                  onTap: () => onSideChanged(BreastSide.both),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: LuluSpacing.xl),
 

@@ -631,16 +631,15 @@ class _StoolColorButton extends StatelessWidget {
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
             ),
-            if (isWarning) ...[
-              const SizedBox(height: 2),
-              Icon(
-                Icons.warning_amber_rounded,
-                size: 12,
-                color: isSelected
-                    ? LuluStatusColors.warning
-                    : LuluTextColors.tertiary,
-              ),
-            ],
+            // 높이 통일: 모든 버튼에 아이콘 공간 확보 (isWarning 아닐 때는 투명)
+            const SizedBox(height: 2),
+            Icon(
+              Icons.warning_amber_rounded,
+              size: 12,
+              color: isWarning
+                  ? (isSelected ? LuluStatusColors.warning : LuluTextColors.tertiary)
+                  : Colors.transparent,
+            ),
           ],
         ),
       ),

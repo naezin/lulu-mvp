@@ -38,38 +38,41 @@ class FeedingTypeSelector extends StatelessWidget {
           ),
         ),
         const SizedBox(height: LuluSpacing.md),
-        Row(
-          children: [
-            Expanded(
-              child: _ContentTypeButton(
-                icon: LuluIcons.feedingBreast,
-                label: '모유',
-                subLabel: '(직접/유축)',
-                isSelected: selectedType == FeedingContentType.breastMilk,
-                onTap: () => onTypeChanged(FeedingContentType.breastMilk),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _ContentTypeButton(
+                  icon: LuluIcons.feedingBreast,
+                  label: '모유',
+                  subLabel: '(직접/유축)',
+                  isSelected: selectedType == FeedingContentType.breastMilk,
+                  onTap: () => onTypeChanged(FeedingContentType.breastMilk),
+                ),
               ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _ContentTypeButton(
-                icon: LuluIcons.feedingBottle,
-                label: '분유',
-                subLabel: null,
-                isSelected: selectedType == FeedingContentType.formula,
-                onTap: () => onTypeChanged(FeedingContentType.formula),
+              const SizedBox(width: LuluSpacing.sm),
+              Expanded(
+                child: _ContentTypeButton(
+                  icon: LuluIcons.feedingBottle,
+                  label: '분유',
+                  subLabel: null,
+                  isSelected: selectedType == FeedingContentType.formula,
+                  onTap: () => onTypeChanged(FeedingContentType.formula),
+                ),
               ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _ContentTypeButton(
-                icon: LuluIcons.feedingSolid,
-                label: '이유식',
-                subLabel: null,
-                isSelected: selectedType == FeedingContentType.solid,
-                onTap: () => onTypeChanged(FeedingContentType.solid),
+              const SizedBox(width: LuluSpacing.sm),
+              Expanded(
+                child: _ContentTypeButton(
+                  icon: LuluIcons.feedingSolid,
+                  label: '이유식',
+                  subLabel: null,
+                  isSelected: selectedType == FeedingContentType.solid,
+                  onTap: () => onTypeChanged(FeedingContentType.solid),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

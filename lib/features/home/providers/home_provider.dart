@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/models.dart';
+import '../../../data/repositories/activity_repository.dart';
 
 /// 홈 화면 상태 관리 Provider
 ///
@@ -345,14 +346,27 @@ class HomeProvider extends ChangeNotifier {
   }
 
   /// 데이터 새로고침
+  ///
+  /// QA FIX: 실제 Supabase 데이터 로딩 구현
   Future<void> refresh() async {
+    if (_family == null) {
+      debugPrint('[WARN] [HomeProvider] Cannot refresh: family not set');
+      return;
+    }
+
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      // TODO: 실제 데이터 로딩 구현
-      await Future.delayed(const Duration(milliseconds: 500));
+      final activityRepo = ActivityRepository();
+
+      // 오늘 활동 조회
+      final activities = await activityRepo.getTodayActivities(_family!.id);
+      _todayActivities = activities;
+      _invalidateCache();
+
+      debugPrint('[OK] [HomeProvider] Refreshed: ${activities.length} activities loaded');
 
       _calculateSweetSpot();
     } catch (e) {
@@ -360,6 +374,31 @@ class HomeProvider extends ChangeNotifier {
       debugPrint('❌ [HomeProvider] Error: $e');
     } finally {
       _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// 초기 데이터 로드 (가족 설정 후 호출)
+  ///
+  /// 가족과 아기 정보가 설정된 후 오늘 활동을 로드합니다.
+  Future<void> loadTodayActivities() async {
+    if (_family == null) {
+      debugPrint('[WARN] [HomeProvider] Cannot load activities: family not set');
+      return;
+    }
+
+    try {
+      final activityRepo = ActivityRepository();
+      final activities = await activityRepo.getTodayActivities(_family!.id);
+      _todayActivities = activities;
+      _invalidateCache();
+      _calculateSweetSpot();
+
+      debugPrint('[OK] [HomeProvider] Today activities loaded: ${activities.length}');
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ [HomeProvider] Error loading activities: $e');
+      _errorMessage = '활동 데이터를 불러오는데 실패했습니다';
       notifyListeners();
     }
   }

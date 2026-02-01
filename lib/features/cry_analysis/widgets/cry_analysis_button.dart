@@ -1,0 +1,175 @@
+import 'package:flutter/material.dart';
+
+import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_spacing.dart';
+import '../../../core/design_system/lulu_typography.dart';
+import '../providers/cry_analysis_provider.dart';
+
+/// 울음 분석 버튼
+///
+/// Phase 2: AI 울음 분석 기능
+/// 상태에 따라 다른 UI 표시 (녹음/중지/분석중)
+class CryAnalysisButton extends StatelessWidget {
+  final CryAnalysisState state;
+  final AnimationController pulseAnimation;
+  final VoidCallback onPressed;
+  final VoidCallback onCancel;
+
+  const CryAnalysisButton({
+    super.key,
+    required this.state,
+    required this.pulseAnimation,
+    required this.onPressed,
+    required this.onCancel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // 메인 버튼
+        _buildMainButton(),
+
+        // 취소 버튼 (녹음 중에만)
+        if (state == CryAnalysisState.recording) ...[
+          const SizedBox(height: LuluSpacing.md),
+          _buildCancelButton(),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildMainButton() {
+    final isAnalyzing = state == CryAnalysisState.analyzing;
+    final isRecording = state == CryAnalysisState.recording;
+
+    return GestureDetector(
+      onTap: isAnalyzing ? null : onPressed,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+        width: isRecording ? 100 : 200,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: isAnalyzing
+              ? null
+              : LinearGradient(
+                  colors: isRecording
+                      ? [LuluStatusColors.error, LuluStatusColors.error.withValues(alpha: 0.8)]
+                      : [LuluColors.lavenderMist, LuluColors.lavenderGlow],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+          color: isAnalyzing ? LuluColors.softBlue : null,
+          borderRadius: BorderRadius.circular(isRecording ? 28 : 16),
+          boxShadow: isAnalyzing
+              ? null
+              : [
+                  BoxShadow(
+                    color: (isRecording
+                            ? LuluStatusColors.error
+                            : LuluColors.lavenderMist)
+                        .withValues(alpha: 0.3),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+        ),
+        child: Center(
+          child: _buildButtonContent(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtonContent() {
+    switch (state) {
+      case CryAnalysisState.idle:
+      case CryAnalysisState.completed:
+      case CryAnalysisState.error:
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.mic_rounded,
+              color: Colors.white,
+              size: 24,
+            ),
+            const SizedBox(width: LuluSpacing.sm),
+            Text(
+              state == CryAnalysisState.idle ? '분석 시작' : '다시 분석',
+              style: LuluTextStyles.labelLarge.copyWith(
+                color: Colors.white,
+              ),
+            ),
+          ],
+        );
+
+      case CryAnalysisState.recording:
+        return AnimatedBuilder(
+          animation: pulseAnimation,
+          builder: (context, child) {
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Transform.scale(
+                  scale: 1.0 + (pulseAnimation.value * 0.2),
+                  child: const Icon(
+                    Icons.stop_rounded,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+
+      case CryAnalysisState.analyzing:
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  LuluTextColors.secondary,
+                ),
+              ),
+            ),
+            const SizedBox(width: LuluSpacing.sm),
+            Text(
+              '분석 중...',
+              style: LuluTextStyles.labelMedium.copyWith(
+                color: LuluTextColors.secondary,
+              ),
+            ),
+          ],
+        );
+    }
+  }
+
+  Widget _buildCancelButton() {
+    return GestureDetector(
+      onTap: onCancel,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: LuluSpacing.lg,
+          vertical: LuluSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: LuluColors.deepBlue,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          '취소',
+          style: LuluTextStyles.labelSmall.copyWith(
+            color: LuluTextColors.secondary,
+          ),
+        ),
+      ),
+    );
+  }
+}
