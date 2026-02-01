@@ -2,9 +2,6 @@
 
 > **AI translates your baby's cries. Perfect for twins, preemies, and every baby.**
 
-[![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-lightgrey)](/)
-[![Version](https://img.shields.io/badge/Version-1.0-blue)](/)
-
 <p align="center">
   <img src="docs/images/hero-screenshot.png" alt="LULU App Screenshot" width="300">
 </p>
