@@ -8,3 +8,4 @@ export 'family_model.dart';
 export 'baby_model.dart';
 export 'activity_model.dart';
 export 'growth_measurement_model.dart';
+export 'feeding_type.dart';

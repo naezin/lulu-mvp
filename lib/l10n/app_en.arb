@@ -221,10 +221,69 @@
   "sweetSpotOptimal": "Good time to put down",
   "sweetSpotOvertired": "May have passed sleepy window",
   "sweetSpotEmptyTitle": "Need sleep records",
+  "sweetSpotEmptyTitleWithName": "Start {babyName}'s first record",
+  "sweetSpotEmptyTitleDefault": "Start your first record",
   "sweetSpotEmptySubtitle": "Record first sleep to\nget predicted times",
+  "sweetSpotEmptyActionHint": "Tap a button below to start\nrecording feeding, sleep, or diaper",
+  "sweetSpotEmptyHint": "We'll predict sleep times once you have some records",
   "sweetSpotDisclaimer": "This prediction is for reference only and may vary for each baby",
+  "sweetSpotTitleWithName": "{babyName}'s next {sleepType}",
+  "@sweetSpotTitleWithName": {
+    "description": "Sweet Spot card title with baby name and sleep type",
+    "placeholders": {
+      "babyName": {"type": "String", "example": "Emma"},
+      "sleepType": {"type": "String", "example": "Nap"}
+    }
+  },
+
+  "timelineEmptyTodayTitle": "Start {babyName}'s first record",
+  "timelineEmptyTodayHint": "Tap the + button below to\nstart recording feeding, sleep, and diaper",
+  "timelineEmptyPastTitle": "No records for {date}",
+  "timelineEmptyPastHint": "Try selecting a different date",
 
   "sectionLanguage": "Language",
   "languageChangeConfirm": "Change language?",
-  "languageChangeMessage": "The app will be displayed in the selected language."
+  "languageChangeMessage": "The app will be displayed in the selected language.",
+
+  "feedingContentBreastMilk": "Breast Milk",
+  "feedingContentFormula": "Formula",
+  "feedingContentSolid": "Solid Food",
+
+  "feedingMethodDirect": "Direct Nursing",
+  "feedingMethodExpressed": "Expressed Milk",
+
+  "feedingBreastMilkSubLabel": "(direct/expressed)",
+
+  "feedingQuestionContent": "What type of feeding?",
+  "feedingQuestionMethod": "How was the milk given?",
+  "feedingQuestionSide": "Which side?",
+  "feedingQuestionDuration": "How long was the feeding?",
+  "feedingQuestionAmount": "Enter the amount",
+
+  "feedingSideLeft": "Left",
+  "feedingSideRight": "Right",
+  "feedingSideBoth": "Both",
+  "feedingSideLeftShort": "L",
+  "feedingSideRightShort": "R",
+  "feedingSideBothShort": "Both",
+
+  "feedingDurationMinutes": "{count}min",
+  "feedingPresetDurationMinutes": "{minutes}min",
+  "feedingAmountMl": "{amount}ml",
+  "feedingDirectInputPlaceholder": "Enter manually",
+
+  "solidFoodTitle": "Solid Food",
+  "solidFoodNameLabel": "Food name",
+  "solidFoodNameHint": "e.g., Carrot puree, Rice porridge",
+  "solidFoodFirstTry": "First time trying this food",
+  "solidFoodAmountLabel": "Amount",
+  "solidFoodReactionLabel": "Baby's reaction",
+
+  "solidUnitGram": "g",
+  "solidUnitSpoon": "spoon",
+  "solidUnitBowl": "bowl",
+
+  "babyReactionLiked": "Liked",
+  "babyReactionNeutral": "Neutral",
+  "babyReactionRejected": "Rejected"
 }

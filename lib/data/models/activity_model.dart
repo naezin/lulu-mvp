@@ -1,4 +1,5 @@
 import 'baby_type.dart';
+import 'feeding_type.dart';
 
 /// 활동 기록 모델
 /// MVP-F: 다중 아기 동시 기록 지원
@@ -71,6 +72,49 @@ class ActivityModel {
 
   /// 체온 - health 타입용
   double? get temperatureCelsius => data?['temperature'] as double?;
+
+  // ========================================
+  // 수유 데이터 v2.0 접근자 (Sprint 8)
+  // ========================================
+
+  /// 신규 content_type 반환 (마이그레이션 지원)
+  FeedingContentType? get feedingContentType {
+    if (data == null) return null;
+
+    // 신규 필드 우선
+    if (data!.containsKey('content_type')) {
+      final contentType = data!['content_type'] as String?;
+      return contentType?.toFeedingContentType();
+    }
+
+    // 기존 필드 변환
+    final oldType = data!['feeding_type'] as String?;
+    return oldType?.toContentType();
+  }
+
+  /// 신규 method_type 반환 (마이그레이션 지원)
+  FeedingMethodType? get feedingMethodType {
+    if (data == null) return null;
+
+    // 신규 필드 우선
+    if (data!.containsKey('method_type')) {
+      final methodType = data!['method_type'] as String?;
+      return methodType?.toFeedingMethodType();
+    }
+
+    // 기존 필드 변환
+    final oldType = data!['feeding_type'] as String?;
+    return oldType?.toMethodType();
+  }
+
+  /// 수유 좌/우 - breast 타입용
+  BreastSide? get breastSide {
+    final side = data?['breast_side'] as String?;
+    return BreastSideExtension.fromValue(side);
+  }
+
+  /// 수유 시간 (분) - breast 타입용
+  int? get feedingDurationMinutes => data?['duration_minutes'] as int?;
 
   // ========================================
   // JSON 변환

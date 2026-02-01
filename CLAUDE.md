@@ -1,11 +1,11 @@
-# LULU App ver2 (MVP-F) - CLAUDE.md v5.1
+# LULU App ver2 (MVP-F) - CLAUDE.md v5.2
 
-> **"24명의 Elite Agent가 다태아+조산아 부모를 위한 최고의 앱을 만든다"**
+> **"31명의 Elite Agent가 다태아+조산아+SGA 부모를 위한 최고의 앱을 만든다"**
 >
-> **Version**: 5.1 (Sprint 7/8 완료 반영)
+> **Version**: 5.2 (Sprint 8 거의 완료)
 > **Last Updated**: 2026-01-31
 > **Target Release**: 2026.02.17
-> **Status**: Sprint 8 진행 중
+> **Status**: Sprint 8 거의 완료 - QA 준비
 
 ---
 
@@ -20,17 +20,17 @@
 │                                                                         │
 │  💡 전략: 울음 분석으로 Hook → 조산아/다둥이 특화로 Lock                │
 │                                                                         │
-│  👥 에이전트: 24명 (경영4 + 제품4 + 개발6 + 의료4 + 마케팅2 + AI4)      │
+│  👥 에이전트: 31명 (경영4 + 제품6 + 개발6 + 의료8 + 마케팅3 + AI5 + 글로벌1) │
 │                                                                         │
 │  🛠️ 기술: Flutter 3.0+ | Supabase | Provider | Midnight Blue 테마       │
 │                                                                         │
 │  📦 MVP-F: 5종 기록 (수유/수면/기저귀/놀이/건강)                        │
 │                                                                         │
-│  🎯 타겟: 다태아 조산아 부모 (연 9,500명, 전체 타겟 90%)                │
+│  🎯 타겟: 고위험 신생아 부모 (연 36,500명 - 다태아/조산아/SGA)          │
 │                                                                         │
 │  🚫 금지: 하드코딩 API키 | print문 | 빈 catch | "정상/비정상" 표현      │
 │                                                                         │
-│  ⚠️ v5.1 핵심: SweetSpotCard 통합 + FAB 대체 + Material Icons 적용     │
+│  ⚠️ v5.2 핵심: SweetSpotCard 빈 상태 통합 + SGA 뱃지 + CSV 내보내기   │
 │                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -96,17 +96,21 @@
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                                                             │
-│   MVP-F = 조산아 기능 + 다태아 기능 균형                    │
+│   MVP-F = 조산아 + 다태아 + SGA 통합 지원                   │
 │                                                             │
-│   타겟: 다태아 조산아 부모 (9,500명/년) = 핵심 타겟         │
-│         + 조산아 단태아 (7,500명)                           │
-│         + 다태아 만삭 (4,000명)                             │
-│         = 총 21,000명/년 (90% 커버)                         │
+│   타겟 세그먼트 (v2.1 - 36,500명/년):                       │
+│   ┌─────────────────────────────────────────────────────┐  │
+│   │ A. 다태아 조산아    9,100명  (25%) ⭐ 핵심           │  │
+│   │ B. 다태아 만삭      3,900명  (11%)                   │  │
+│   │ C. 단태아 조산아   18,000명  (49%)                   │  │
+│   │ D. 만삭 SGA         5,500명  (15%) 🆕               │  │
+│   └─────────────────────────────────────────────────────┘  │
 │                                                             │
 │   핵심 차별화:                                              │
 │   1. 빠른 탭 전환 + QuickRecordButton (v5.0)               │
 │   2. 개별 교정연령 (아기별)                                 │
 │   3. Fenton + WHO 차트 자동 전환                            │
+│   4. SGA 자동 감지 + 성장 추적 모드 (v5.2)                 │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -114,35 +118,55 @@
 ### 핵심 수치
 | 지표 | 값 |
 |------|-----|
-| 한국 다태아/년 | 13,500 (5.7%) |
+| 한국 출생/년 | 238,000 |
+| LULU 타겟/년 | 36,500 (15.3%) |
 | 다태아 중 조산율 | 70.8% |
-| 조산아+다태아 전용 앱 | 0개 (100% Gap) |
+| 조산아+다태아+SGA 전용 앱 | 0개 (100% Gap) |
 | 목표 NPS | +66.7 |
 | 목표 TSR | 92.5% |
 
 ---
 
-## 24 Elite Agents
+## 31 Elite Agents
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    LULU Elite Agent Team (24 Agents)                    │
+│                    LULU Elite Agent Team (31명)                         │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│                           🎯 Product Owner                              │
-│                                  │                                      │
-│     ┌────────────┬───────────────┼───────────────┬────────────┐        │
-│     │            │               │               │            │        │
-│  ┌──▼──┐     ┌──▼──┐        ┌──▼──┐        ┌──▼──┐     ┌──▼──┐      │
-│  │경영  │     │제품  │        │개발  │        │의료  │     │AI    │      │
-│  │전략  │     │디자인│        │      │        │전문  │     │Audio │      │
-│  │ 4명  │     │ 4명  │        │ 6명  │        │ 4명  │     │ 4명  │      │
-│  └─────┘     └─────┘        └─────┘        └─────┘     └─────┘      │
-│                                  │                                      │
-│                           ┌──────▼──────┐                              │
-│                           │ 마케팅/그로스 │                              │
-│                           │     2명      │                              │
-│                           └─────────────┘                              │
+│  경영/전략 (4명)                                                        │
+│  ├─ 🎯 Product Strategist   ├─ 📊 Market Analyst                       │
+│  ├─ 💰 Business Modeler     └─ 📋 Project Manager                      │
+│                                                                         │
+│  제품/디자인 (6명)                                                      │
+│  ├─ 🎨 UX Designer          ├─ 🖼️ UI Designer                          │
+│  ├─ 👶 Multiple Births ⭐   ├─ 📱 Mobile UX Expert                     │
+│  ├─ 🔍 User Researcher      └─ 🧐 Product Auditor                      │
+│                                                                         │
+│  개발 (6명)                                                             │
+│  ├─ 💻 Flutter Architect    ├─ 🔧 Flutter Developer                    │
+│  ├─ ☁️ Backend Developer    ├─ 🧪 QA Engineer                          │
+│  ├─ 🔒 Security Engineer    └─ 🧩 System Architect                     │
+│                                                                         │
+│  의료/전문 (8명)                                                        │
+│  ├─ 🏥 Neonatology ⭐       ├─ 👩‍⚕️ Pediatric Advisor                    │
+│  ├─ 😴 Sleep Specialist     ├─ 🍼 Nutrition Specialist                 │
+│  ├─ 🧒 Developmental Lead   ├─ 🏃 Physical Specialist                  │
+│  ├─ 📊 Clinical Data        └─ ⚖️ Medical Compliance                   │
+│                                                                         │
+│  마케팅/콘텐츠 (3명)                                                    │
+│  ├─ 📣 Growth Marketer      ├─ ✍️ Content Strategist                   │
+│  └─ 📢 Content Creator                                                 │
+│                                                                         │
+│  AI/ML (5명)                                                            │
+│  ├─ 🔊 Audio ML Engineer    ├─ 📱 On-Device ML                         │
+│  ├─ 👶 Infant Cry Research  ├─ 🎧 Audio Privacy                        │
+│  └─ 📈 Data Scientist                                                  │
+│                                                                         │
+│  글로벌 (1명)                                                           │
+│  └─ 🌐 Localization Lead                                               │
+│                                                                         │
+│  ⭐ LULU 핵심 (다태아/조산아/SGA)                                       │
 │                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -156,50 +180,64 @@
 | 3 | Business Modeler | 수익 모델 | Freemium 설계, Unit Economics |
 | 4 | Project Manager | 스프린트 관리 | 일정, 리소스, 리스크 관리 |
 
-### 제품/디자인 (4명)
+### 제품/디자인 (6명)
 
 | # | 에이전트 | 역할 | 핵심 책임 |
 |---|---------|------|----------|
 | 5 | UX Designer | 사용성 | 3초 Rule, 플로우, 와이어프레임 |
 | 6 | UI Designer | 비주얼 | Midnight Blue 테마, 컴포넌트 |
-| 7 | Multiple Births Specialist | 다태아 UX | 탭 전환, 비교 금지, "둘 다" 검증 |
+| 7 | Multiple Births Specialist ⭐ | 다태아 UX | 탭 전환, 비교 금지, "둘 다" 검증 |
 | 8 | Mobile UX Expert | 모바일 | 한 손 조작, 야간 사용성, 피로 대응 |
+| 9 | User Researcher | 사용자 연구 | 인터뷰, 페르소나, UT 설계 |
+| 10 | Product Auditor | 품질 검증 | 일관성 검사, 릴리즈 검증 |
 
 ### 개발 (6명)
 
 | # | 에이전트 | 역할 | 핵심 책임 |
 |---|---------|------|----------|
-| 9 | Flutter Architect | 아키텍처 | Provider 패턴, 코드 구조 |
-| 10 | Flutter Developer | 기능 개발 | 화면 구현, 위젯 개발 |
-| 11 | Backend Developer | Supabase | Auth, DB, Storage, RLS |
-| 12 | QA Engineer | 품질 | 테스트 케이스, 버그 추적 |
-| 13 | Security Engineer | 보안 | 암호화, GDPR, 데이터 보호 |
-| 14 | DevOps Engineer | CI/CD | 배포, 모니터링, 자동화 |
+| 11 | Flutter Architect | 아키텍처 | Provider 패턴, 코드 구조 |
+| 12 | Flutter Developer | 기능 개발 | 화면 구현, 위젯 개발 |
+| 13 | Backend Developer | Supabase | Auth, DB, Storage, RLS |
+| 14 | QA Engineer | 품질 | 테스트 케이스, 버그 추적 |
+| 15 | Security Engineer | 보안 | 암호화, GDPR, 데이터 보호 |
+| 16 | System Architect | 시스템 설계 | 확장성, 성능, 인프라 |
 
-### 의료/전문 (4명)
-
-| # | 에이전트 | 역할 | 핵심 책임 |
-|---|---------|------|----------|
-| 15 | Neonatology Specialist | 조산아 전문 | 교정연령, Fenton 차트, NICU |
-| 16 | Pediatric Nurse | 신생아 케어 | 수유/수면 가이드, 실무 지식 |
-| 17 | Clinical Data Analyst | 의료 데이터 | WHO 차트, 의료 통계 검증 |
-| 18 | Medical Compliance | 의료 규제 | 면책 조항, COPPA, 의료기기 규정 |
-
-### 마케팅/그로스 (2명)
+### 의료/전문 (8명)
 
 | # | 에이전트 | 역할 | 핵심 책임 |
 |---|---------|------|----------|
-| 19 | Growth Marketer | 사용자 획득 | ASO, 바이럴, NICU 파트너십 |
-| 20 | Content Creator | 콘텐츠 | SNS, 앱스토어 설명, PR |
+| 17 | Neonatology Specialist ⭐ | 조산아/SGA 전문 | 교정연령, Fenton, SGA 감지 |
+| 18 | Pediatric Advisor | 소아 자문 | 발달 검증, 건강 가이드 |
+| 19 | Sleep Specialist | 수면 전문 | Sweet Spot, 수면 패턴 |
+| 20 | Nutrition Specialist | 영양 전문 | 수유 가이드, 영양 정보 |
+| 21 | Developmental Lead | 발달 전문 | 발달 마일스톤, 놀이 가이드 |
+| 22 | Physical Specialist | 신체 발달 | 터미타임, 운동 발달 |
+| 23 | Clinical Data Analyst | 의료 데이터 | WHO 차트, 의료 통계 검증 |
+| 24 | Medical Compliance | 의료 규제 | 면책 조항, COPPA, 의료기기 규정 |
 
-### AI/Audio (4명) - Phase 2 전담
+### 마케팅/콘텐츠 (3명)
 
-| # | 에이전트 | 역할 | 핵심 책임 | 검증 기준 |
-|---|---------|------|----------|----------|
-| 21 | Audio ML Engineer | 울음 ML 모델 | CNN 설계, 학습, 최적화 | 정확도 75%+, <10MB |
-| 22 | On-Device ML Specialist | 모바일 ML | Core ML/TF Lite 변환 | 추론 <500ms, 배터리 <5%/hr |
-| 23 | Infant Cry Researcher | 울음 연구 | Dunstan 검증, 조산아 울음 | 5가지 분류 과학적 근거 |
-| 24 | Audio Privacy Specialist | 오디오 프라이버시 | 마이크 권한 UX, 정책 | 100% On-Device, 저장 X |
+| # | 에이전트 | 역할 | 핵심 책임 |
+|---|---------|------|----------|
+| 25 | Growth Marketer | 사용자 획득 | ASO, 바이럴, NICU 파트너십 |
+| 26 | Content Strategist | 콘텐츠 전략 | 콘텐츠 기획, SEO |
+| 27 | Content Creator | 콘텐츠 제작 | SNS, 앱스토어 설명, PR |
+
+### AI/ML (5명) - Phase 2 전담
+
+| # | 에이전트 | 역할 | 핵심 책임 |
+|---|---------|------|----------|
+| 28 | Audio ML Engineer | 울음 ML 모델 | CNN 설계, 학습, 최적화 |
+| 29 | On-Device ML Specialist | 모바일 ML | Core ML/TF Lite 변환 |
+| 30 | Infant Cry Researcher | 울음 연구 | Dunstan 검증, 조산아 울음 |
+| 31 | Audio Privacy Specialist | 오디오 프라이버시 | 마이크 권한 UX, 정책 |
+| 32 | Data Scientist | 데이터 분석 | 패턴 분석, 예측 모델 |
+
+### 글로벌 (1명)
+
+| # | 에이전트 | 역할 | 핵심 책임 |
+|---|---------|------|----------|
+| 33 | Localization Lead | 글로벌화 | 다국어, 문화 적응, i18n |
 
 ---
 
@@ -540,7 +578,7 @@ lib/
 | Sprint 5 | 2일 | UX 리디자인 | ✅ 완료 |
 | Sprint 6 | 10일 | 새 UX 구현 | ✅ 완료 |
 | Sprint 7 | 5일 | 홈 화면 개선 | ✅ 완료 |
-| **Sprint 8** | **진행중** | **설정/내보내기** | 🔄 진행 중 |
+| **Sprint 8** | **진행중** | **설정/내보내기** | ✅ 거의 완료 |
 
 ### Sprint 7 완료 내역
 - OngoingSleepCard → SweetSpotCard 통합
@@ -548,11 +586,14 @@ lib/
 - LastActivityRow 신규 추가
 - 이모지 → Material Icons 교체
 - HomeProvider 캐싱 최적화
+- 빈 상태 2종 카드 → SweetSpotCard 1종 통합 (CARD-01~04)
 
 ### Sprint 8 완료 내역
-- CSV 내보내기 기능
+- CSV 내보내기 기능 (export_service.dart)
 - 설정 화면 + SettingsProvider
 - i18n 다국어 확장
+- SGA 감지 + 뱃지 표시 (sga_calculator.dart, baby_status_badge.dart)
+- 아기 추가/삭제 기능 (add_baby_dialog.dart, delete_baby_dialog.dart)
 
 ---
 
@@ -638,11 +679,11 @@ Scopes:
 ---
 
 **Last Updated**: 2026-01-31
-**Version**: 5.1 (Sprint 7/8 완료 반영)
-**Agents**: 24명 (경영4 + 제품4 + 개발6 + 의료4 + 마케팅2 + AI4)
+**Version**: 5.3 (에이전트 확장 + SGA 타겟 반영)
+**Agents**: 31명 (경영4 + 제품6 + 개발6 + 의료8 + 마케팅3 + AI5 + 글로벌1)
 
 ---
 
 > *"3초 Rule, 원탭 전환, 개별 기록 - 피로한 부모를 위한 UX"*
 > *"둘 다 버튼 대신, 빠른 탭 전환 + 이전과 같이 버튼"*
-> *"다태아 + 조산아 = LULU 블루오션"*
+> *"다태아 + 조산아 + SGA = LULU 블루오션 (36,500명/년)"*

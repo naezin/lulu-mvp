@@ -7,3 +7,4 @@ export 'supabase_service.dart';
 export 'openai_service.dart';
 export 'ai_usage_manager.dart';
 export 'ai_service.dart';
+export 'migration_service.dart';

@@ -143,10 +143,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 활동 없음 상태 (아기 정보는 있음)
   ///
-  /// Sprint 7 Day 2: 수면 중이면 SweetSpotCard에 수면 상태 표시
+  /// Sprint 7 Day 2 v1.2: 통합 SweetSpotCard 사용
+  /// - 2개 카드 → 1개 통합 카드로 스크롤 없이 바로 기록 가능
   Widget _buildEmptyActivitiesState(BuildContext context, HomeProvider homeProvider) {
     final selectedBaby = homeProvider.selectedBaby;
-    final babyName = selectedBaby?.name ?? '아기';
+    final babyName = selectedBaby?.name;
 
     return Consumer<OngoingSleepProvider>(
       builder: (context, sleepProvider, _) {
@@ -156,81 +157,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Column(
           children: [
-            // 수면 중이면 SweetSpotCard에 수면 상태 표시
-            if (isSleeping) ...[
-              SweetSpotCard(
-                state: SweetSpotState.unknown,
-                isEmpty: false,
-                isSleeping: true,
-                sleepStartTime: sleepProvider.sleepStartTime,
-                sleepType: sleepProvider.ongoingSleep?.sleepType,
-                babyName: sleepProvider.ongoingSleep?.babyName ?? babyName,
-                onEndSleep: () => _showEndSleepDialog(context, sleepProvider),
-              ),
-              const SizedBox(height: LuluSpacing.lg),
-            ],
+            // 🆕 통합 SweetSpotCard (빈 상태 + 3종 버튼 / 수면 중 상태)
+            SweetSpotCard(
+              state: SweetSpotState.unknown,
+              isEmpty: !isSleeping,
+              babyName: isSleeping
+                  ? (sleepProvider.ongoingSleep?.babyName ?? babyName)
+                  : babyName,
+              // 수면 중 props
+              isSleeping: isSleeping,
+              sleepStartTime: sleepProvider.sleepStartTime,
+              sleepType: sleepProvider.ongoingSleep?.sleepType,
+              onEndSleep: isSleeping
+                  ? () => _showEndSleepDialog(context, sleepProvider)
+                  : null,
+              // 빈 상태 3종 기록 버튼 콜백
+              onRecordSleep: () => _navigateToRecord(context, 'sleep'),
+              onFeedingTap: () => _navigateToRecord(context, 'feeding'),
+              onSleepTap: () => _navigateToRecord(context, 'sleep'),
+              onDiaperTap: () => _navigateToRecord(context, 'diaper'),
+            ),
 
-            // 수면 중이 아닐 때만 Empty State 표시
-            if (!isSleeping) ...[
-              SweetSpotCard(
-                state: SweetSpotState.unknown,
-                isEmpty: true,
-                onRecordSleep: () => _navigateToRecord(context, 'sleep'),
-              ),
-              const SizedBox(height: LuluSpacing.lg),
-            ],
-
-            // 첫 기록 유도 카드 - 수면 중이 아닐 때만
-            if (!isSleeping) ...[
-              Container(
-                padding: const EdgeInsets.all(LuluSpacing.xl),
-                decoration: BoxDecoration(
-                  color: LuluColors.deepBlue,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: LuluColors.lavenderMist.withValues(alpha: 0.3),
-                    width: 1,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Icon(
-                      LuluIcons.celebration,
-                      size: 48,
-                      color: LuluColors.champagneGold,
-                    ),
-                    const SizedBox(height: LuluSpacing.md),
-                    Text(
-                      '$babyName의 첫 기록을 시작해보세요',
-                      style: LuluTextStyles.titleMedium.copyWith(
-                        color: LuluTextColors.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: LuluSpacing.sm),
-                    Text(
-                      '아래 + 버튼을 눌러\n수유, 수면, 기저귀 기록을 시작하세요',
-                      style: LuluTextStyles.bodyMedium.copyWith(
-                        color: LuluTextColors.secondary,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: LuluSpacing.lg),
-                    // 기록 유형 힌트
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildRecordHintWithIcon(LuluIcons.feeding, '수유', LuluActivityColors.feeding),
-                        _buildRecordHintWithIcon(LuluIcons.sleep, '수면', LuluActivityColors.sleep),
-                        _buildRecordHintWithIcon(LuluIcons.diaper, '기저귀', LuluActivityColors.diaper),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: LuluSpacing.lg),
-            ],
+            const SizedBox(height: LuluSpacing.lg),
 
             // 마지막 활동 Row (0 상태)
             const LastActivityRow(
@@ -241,22 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         );
       },
-    );
-  }
-
-  /// 기록 유형 힌트 위젯 (아이콘 버전)
-  Widget _buildRecordHintWithIcon(IconData icon, String label, Color color) {
-    return Column(
-      children: [
-        Icon(icon, size: 28, color: color),
-        const SizedBox(height: LuluSpacing.xs),
-        Text(
-          label,
-          style: LuluTextStyles.caption.copyWith(
-            color: LuluTextColors.tertiary,
-          ),
-        ),
-      ],
     );
   }
 
@@ -300,6 +232,10 @@ class _HomeScreenState extends State<HomeScreen> {
               babyName: sleepProvider.ongoingSleep?.babyName ??
                   homeProvider.selectedBaby?.name,
               onEndSleep: () => _showEndSleepDialog(context, sleepProvider),
+              // 🆕 Normal State 개선 props (v3)
+              progress: homeProvider.sweetSpotProgress,
+              recommendedTime: homeProvider.recommendedSleepTime,
+              isNightTime: homeProvider.isNightTime,
             ),
 
             // QuickActionGrid 제거됨 (FAB로 대체) - Sprint 7 Day 2

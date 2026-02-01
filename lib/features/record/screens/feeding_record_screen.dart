@@ -2,24 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
-import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
+import '../../../data/models/feeding_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/quick_record_button.dart';
 import '../providers/record_provider.dart';
 import '../widgets/record_time_picker.dart';
 import '../widgets/feeding_type_selector.dart';
+import '../widgets/breast_feeding_form.dart';
+import '../widgets/solid_food_form.dart';
 import '../widgets/amount_input.dart';
 
-/// 수유 기록 화면 (v5.0)
+/// 수유 기록 화면 (v6.0 - Phase A)
 ///
 /// MVP-F: BabyTabBar + QuickRecordButton UX
 /// - "둘 다" 버튼 제거됨
 /// - 이전과 같이 버튼으로 원탭 저장 지원
+///
+/// v6.0 변경사항:
+/// - FeedingContentType enum 기반 선택
+/// - 모유 선택 시 BreastFeedingForm 표시 (직접/유축 세부 선택)
+/// - AmountInput [-10][+10] 빠른 조절 버튼 추가
 class FeedingRecordScreen extends StatefulWidget {
   final String familyId;
   final List<BabyModel> babies;
@@ -41,6 +48,20 @@ class FeedingRecordScreen extends StatefulWidget {
 class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
   final _notesController = TextEditingController();
   bool _isQuickSaving = false;
+
+  // v6.0: enum 기반 상태
+  FeedingContentType _contentType = FeedingContentType.breastMilk;
+  FeedingMethodType _methodType = FeedingMethodType.direct;
+  BreastSide _breastSide = BreastSide.left;
+  int _durationMinutes = 10;
+  double _expressedAmount = 0;
+
+  // Sprint 8: 이유식 상태
+  String _solidFoodName = '';
+  bool _solidIsFirstTry = false;
+  SolidFoodUnit _solidUnit = SolidFoodUnit.gram;
+  double _solidAmount = 0;
+  BabyReaction? _solidReaction;
 
   @override
   void initState() {
@@ -115,10 +136,16 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                       if (widget.lastFeedingRecord != null)
                         const SizedBox(height: LuluSpacing.xl),
 
-                      // 수유 종류 선택
+                      // v6.0: 수유 종류 선택 (enum 기반)
                       FeedingTypeSelector(
-                        selectedType: provider.feedingType,
-                        onTypeChanged: provider.setFeedingType,
+                        selectedType: _contentType,
+                        onTypeChanged: (type) {
+                          setState(() {
+                            _contentType = type;
+                          });
+                          // RecordProvider와 동기화 (legacy)
+                          provider.setFeedingType(type.legacyValue);
+                        },
                       ),
 
                       const SizedBox(height: LuluSpacing.xxl),
@@ -132,17 +159,80 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
 
                       const SizedBox(height: LuluSpacing.xxl),
 
-                      // 모유 수유 시 좌/우 선택
-                      if (provider.feedingType == 'breast') ...[
-                        _buildBreastSideSelector(provider),
-                        const SizedBox(height: LuluSpacing.xxl),
-                      ],
-
-                      // 수유량 또는 수유 시간 (종류에 따라)
-                      if (provider.feedingType == 'breast')
-                        _buildDurationInput(provider)
-                      else
+                      // v6.0: 모유 선택 시 BreastFeedingForm 표시
+                      if (_contentType == FeedingContentType.breastMilk) ...[
+                        BreastFeedingForm(
+                          methodType: _methodType,
+                          breastSide: _breastSide,
+                          durationMinutes: _durationMinutes,
+                          amountMl: _expressedAmount,
+                          onMethodChanged: (method) {
+                            setState(() {
+                              _methodType = method;
+                            });
+                          },
+                          onSideChanged: (side) {
+                            setState(() {
+                              _breastSide = side;
+                            });
+                            provider.setBreastSide(side.name);
+                          },
+                          onDurationChanged: (duration) {
+                            setState(() {
+                              _durationMinutes = duration;
+                            });
+                            provider.setFeedingDuration(duration);
+                          },
+                          onAmountChanged: (amount) {
+                            setState(() {
+                              _expressedAmount = amount;
+                            });
+                            provider.setFeedingAmount(amount);
+                          },
+                        ),
+                      ] else if (_contentType == FeedingContentType.solid) ...[
+                        // Sprint 8: 이유식 폼
+                        SolidFoodForm(
+                          foodName: _solidFoodName,
+                          isFirstTry: _solidIsFirstTry,
+                          unit: _solidUnit,
+                          amount: _solidAmount,
+                          reaction: _solidReaction,
+                          onFoodNameChanged: (name) {
+                            setState(() {
+                              _solidFoodName = name;
+                            });
+                            provider.setSolidFoodName(name);
+                          },
+                          onFirstTryChanged: (isFirstTry) {
+                            setState(() {
+                              _solidIsFirstTry = isFirstTry;
+                            });
+                            provider.setSolidIsFirstTry(isFirstTry);
+                          },
+                          onUnitChanged: (unit) {
+                            setState(() {
+                              _solidUnit = unit;
+                            });
+                            provider.setSolidUnit(unit.value);
+                          },
+                          onAmountChanged: (amount) {
+                            setState(() {
+                              _solidAmount = amount;
+                            });
+                            provider.setSolidAmount(amount);
+                          },
+                          onReactionChanged: (reaction) {
+                            setState(() {
+                              _solidReaction = reaction;
+                            });
+                            provider.setSolidReaction(reaction.value);
+                          },
+                        ),
+                      ] else ...[
+                        // 분유: 수유량 입력
                         _buildAmountInput(provider),
+                      ],
 
                       const SizedBox(height: LuluSpacing.xxl),
 
@@ -232,141 +322,8 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
     }
   }
 
-  Widget _buildBreastSideSelector(RecordProvider provider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '수유 위치',
-          style: LuluTextStyles.bodyLarge.copyWith(
-            color: LuluTextColors.primary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: LuluSpacing.md),
-        Row(
-          children: [
-            Expanded(
-              child: _BreastSideButton(
-                label: '왼쪽',
-                icon: LuluIcons.breastfeeding,
-                isSelected: provider.breastSide == 'left',
-                onTap: () => provider.setBreastSide('left'),
-              ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _BreastSideButton(
-                label: '오른쪽',
-                icon: LuluIcons.breastfeeding,
-                isSelected: provider.breastSide == 'right',
-                onTap: () => provider.setBreastSide('right'),
-                isFlipped: true,
-              ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _BreastSideButton(
-                label: '양쪽',
-                icon: LuluIcons.baby,
-                isSelected: provider.breastSide == 'both',
-                onTap: () => provider.setBreastSide('both'),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDurationInput(RecordProvider provider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '수유 시간',
-          style: LuluTextStyles.bodyLarge.copyWith(
-            color: LuluTextColors.primary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: LuluSpacing.md),
-        Row(
-          children: [
-            Expanded(
-              child: _DurationButton(
-                label: '5분',
-                isSelected: provider.feedingDuration == 5,
-                onTap: () => provider.setFeedingDuration(5),
-              ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _DurationButton(
-                label: '10분',
-                isSelected: provider.feedingDuration == 10,
-                onTap: () => provider.setFeedingDuration(10),
-              ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _DurationButton(
-                label: '15분',
-                isSelected: provider.feedingDuration == 15,
-                onTap: () => provider.setFeedingDuration(15),
-              ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _DurationButton(
-                label: '20분',
-                isSelected: provider.feedingDuration == 20,
-                onTap: () => provider.setFeedingDuration(20),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: LuluSpacing.md),
-        // 직접 입력
-        Container(
-          padding: LuluSpacing.inputPadding,
-          decoration: BoxDecoration(
-            color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  style: LuluTextStyles.bodyLarge,
-                  decoration: InputDecoration(
-                    hintText: '직접 입력',
-                    hintStyle: LuluTextStyles.bodyMedium.copyWith(
-                      color: LuluTextColors.tertiary,
-                    ),
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                  onChanged: (value) {
-                    final minutes = int.tryParse(value) ?? 0;
-                    provider.setFeedingDuration(minutes);
-                  },
-                ),
-              ),
-              Text(
-                '분',
-                style: LuluTextStyles.bodyMedium.copyWith(
-                  color: LuluTextColors.secondary,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  // v6.0: _buildBreastSideSelector, _buildDurationInput 제거됨
+  // BreastFeedingForm으로 통합
 
   Widget _buildAmountInput(RecordProvider provider) {
     return Column(
@@ -506,108 +463,5 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
   }
 }
 
-class _DurationButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _DurationButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? LuluActivityColors.feedingBg
-              : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected
-                ? LuluActivityColors.feeding
-                : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: LuluTextStyles.labelMedium.copyWith(
-              color: isSelected
-                  ? LuluActivityColors.feeding
-                  : LuluTextColors.secondary,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _BreastSideButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final bool isFlipped;
-
-  const _BreastSideButton({
-    required this.label,
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-    this.isFlipped = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? LuluActivityColors.feedingBg
-              : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected
-                ? LuluActivityColors.feeding
-                : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Transform.flip(
-              flipX: isFlipped,
-              child: Icon(
-                icon,
-                size: 24,
-                color: isSelected
-                    ? LuluActivityColors.feeding
-                    : LuluTextColors.secondary,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: LuluTextStyles.labelMedium.copyWith(
-                color: isSelected
-                    ? LuluActivityColors.feeding
-                    : LuluTextColors.secondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// v6.0: _DurationButton, _BreastSideButton 제거됨
+// BreastFeedingForm으로 통합

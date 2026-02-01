@@ -77,6 +77,30 @@ class RecordProvider extends ChangeNotifier {
   String get breastSide => _breastSide;
 
   // ========================================
+  // 이유식 기록 상태 (Sprint 8)
+  // ========================================
+
+  /// 음식 이름
+  String _solidFoodName = '';
+  String get solidFoodName => _solidFoodName;
+
+  /// 처음 먹이는 음식 여부
+  bool _solidIsFirstTry = false;
+  bool get solidIsFirstTry => _solidIsFirstTry;
+
+  /// 양 단위 (gram/spoon/bowl)
+  String _solidUnit = 'gram';
+  String get solidUnit => _solidUnit;
+
+  /// 양
+  double _solidAmount = 0;
+  double get solidAmount => _solidAmount;
+
+  /// 아기 반응 (liked/neutral/rejected)
+  String? _solidReaction;
+  String? get solidReaction => _solidReaction;
+
+  // ========================================
   // 수면 기록 상태
   // ========================================
 
@@ -194,6 +218,13 @@ class RecordProvider extends ChangeNotifier {
     _isIndividualAmount = false;
     _feedingDuration = 0;
     _breastSide = 'left';
+
+    // 이유식 기록 초기화
+    _solidFoodName = '';
+    _solidIsFirstTry = false;
+    _solidUnit = 'gram';
+    _solidAmount = 0;
+    _solidReaction = null;
 
     // 수면 기록 초기화
     _sleepStartTime = DateTime.now();
@@ -385,6 +416,52 @@ class RecordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ========================================
+  // 이유식 기록 메서드 (Sprint 8)
+  // ========================================
+
+  /// 음식 이름 변경
+  void setSolidFoodName(String name) {
+    _solidFoodName = name;
+    notifyListeners();
+  }
+
+  /// 처음 먹이는 음식 체크 변경
+  void setSolidIsFirstTry(bool isFirstTry) {
+    _solidIsFirstTry = isFirstTry;
+    notifyListeners();
+  }
+
+  /// 양 단위 변경
+  void setSolidUnit(String unit) {
+    _solidUnit = unit;
+    notifyListeners();
+  }
+
+  /// 양 변경
+  void setSolidAmount(double amount) {
+    _solidAmount = amount;
+    notifyListeners();
+  }
+
+  /// 아기 반응 변경
+  void setSolidReaction(String? reaction) {
+    _solidReaction = reaction;
+    notifyListeners();
+  }
+
+  /// 이유식 데이터 구성 (saveFeeding에서 호출)
+  Map<String, dynamic> _buildSolidFoodData() {
+    return {
+      'content_type': 'solid',
+      'food_name': _solidFoodName,
+      'is_first_try': _solidIsFirstTry,
+      'amount_unit': _solidUnit,
+      'amount_value': _solidAmount,
+      if (_solidReaction != null) 'baby_reaction': _solidReaction,
+    };
+  }
+
   /// 수유 기록 저장
   Future<ActivityModel?> saveFeeding() async {
     if (!isSelectionValid) {
@@ -409,8 +486,11 @@ class RecordProvider extends ChangeNotifier {
         'feeding_type': _feedingType,
       };
 
-      // 양 데이터 (모유가 아닌 경우)
-      if (_feedingType != 'breast') {
+      // 이유식인 경우 별도 데이터 구조 사용
+      if (_feedingType == 'solid') {
+        data.addAll(_buildSolidFoodData());
+      } else if (_feedingType != 'breast') {
+        // 분유 등 양 데이터
         if (_isIndividualAmount && _selectedBabyIds.length > 1) {
           data['amount_by_baby'] = _feedingAmountByBaby;
           // 평균 양 계산
@@ -817,6 +897,12 @@ class RecordProvider extends ChangeNotifier {
     _isIndividualAmount = false;
     _feedingDuration = 0;
     _breastSide = 'left';
+
+    _solidFoodName = '';
+    _solidIsFirstTry = false;
+    _solidUnit = 'gram';
+    _solidAmount = 0;
+    _solidReaction = null;
 
     _sleepStartTime = DateTime.now();
     _sleepEndTime = null;

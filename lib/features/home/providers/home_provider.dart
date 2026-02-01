@@ -106,11 +106,27 @@ class HomeProvider extends ChangeNotifier {
   DateTime? _recommendedSleepTime;
   DateTime? get recommendedSleepTime => _recommendedSleepTime;
 
-  /// Sweet Spot 진행률 (0.0 ~ 1.0)
+  /// Sweet Spot 진행률 (0.0 ~ 1.2)
   double get sweetSpotProgress {
     if (_sweetSpotState == SweetSpotState.unknown) return 0.0;
-    // 간단한 계산: 마지막 수면 후 경과 시간 / 권장 활동 시간
-    return 0.6; // 임시값
+
+    final lastSleepActivity = lastSleep;
+    if (lastSleepActivity == null) return 0.0;
+
+    final baby = selectedBaby;
+    if (baby == null) return 0.0;
+
+    final lastWakeTime = lastSleepActivity.endTime ?? lastSleepActivity.startTime;
+    final recommendedAwakeTime = _getRecommendedAwakeTime(baby.effectiveAgeInMonths);
+    final elapsedMinutes = DateTime.now().difference(lastWakeTime).inMinutes;
+
+    return (elapsedMinutes / recommendedAwakeTime).clamp(0.0, 1.2);
+  }
+
+  /// 밤잠 여부 (18:00-05:59 → 밤잠)
+  bool get isNightTime {
+    final hour = DateTime.now().hour;
+    return hour >= 18 || hour < 6;
   }
 
   // ========================================

@@ -119,7 +119,7 @@ class LuluIcons {
   // 놀이 상세 (Play Details)
   // ========================================
 
-  static const IconData tummyTime = Icons.pool_rounded;
+  static const IconData tummyTime = Icons.child_care_rounded;
   static const IconData bath = Icons.bathtub_rounded;
   static const IconData outdoor = Icons.directions_walk_rounded;
   static const IconData indoorPlay = Icons.palette_rounded;

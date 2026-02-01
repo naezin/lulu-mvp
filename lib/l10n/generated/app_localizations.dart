@@ -1153,6 +1153,12 @@ abstract class S {
   /// **'다음 낮잠'**
   String get sweetSpotTitle;
 
+  /// Sweet Spot 카드 제목 (아기 이름 + 수면타입)
+  ///
+  /// In ko, this message translates to:
+  /// **'{babyName}의 다음 {sleepType}'**
+  String sweetSpotTitleWithName(String babyName, String sleepType);
+
   /// Sweet Spot - 확인 중
   ///
   /// In ko, this message translates to:
@@ -1189,17 +1195,65 @@ abstract class S {
   /// **'수면 기록이 필요해요'**
   String get sweetSpotEmptyTitle;
 
+  /// Sweet Spot Empty State 제목 (이름 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'{babyName}의 첫 기록을 시작해보세요'**
+  String sweetSpotEmptyTitleWithName(String babyName);
+
+  /// Sweet Spot Empty State 제목 (이름 없음)
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 기록을 시작해보세요'**
+  String get sweetSpotEmptyTitleDefault;
+
   /// Sweet Spot Empty State 부제목
   ///
   /// In ko, this message translates to:
   /// **'첫 수면을 기록하면\n예상 시간을 알려드릴게요'**
   String get sweetSpotEmptySubtitle;
 
+  /// Sweet Spot Empty State 액션 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'아래 버튼을 눌러\n수유, 수면, 기저귀 기록을 시작하세요'**
+  String get sweetSpotEmptyActionHint;
+
+  /// Sweet Spot Empty State 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'기록이 쌓이면 수면 예측을 알려드릴게요'**
+  String get sweetSpotEmptyHint;
+
   /// Sweet Spot 면책 문구
   ///
   /// In ko, this message translates to:
   /// **'이 예측은 참고용이며, 아기마다 다를 수 있어요'**
   String get sweetSpotDisclaimer;
+
+  /// 기록 탭 오늘 빈 상태 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'{babyName}의 첫 기록을 시작해보세요'**
+  String timelineEmptyTodayTitle(String babyName);
+
+  /// 기록 탭 오늘 빈 상태 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'아래 + 버튼을 눌러\n수유, 수면, 기저귀 기록을 시작하세요'**
+  String get timelineEmptyTodayHint;
+
+  /// 기록 탭 과거 날짜 빈 상태 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'{date} 기록이 없습니다'**
+  String timelineEmptyPastTitle(String date);
+
+  /// 기록 탭 과거 날짜 빈 상태 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'다른 날짜를 선택해보세요'**
+  String get timelineEmptyPastHint;
 
   /// 섹션 - 언어
   ///
@@ -1218,6 +1272,204 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'앱이 선택한 언어로 표시됩니다.'**
   String get languageChangeMessage;
+
+  /// 수유 컨텐츠 타입 - 모유
+  ///
+  /// In ko, this message translates to:
+  /// **'모유'**
+  String get feedingContentBreastMilk;
+
+  /// 수유 컨텐츠 타입 - 분유
+  ///
+  /// In ko, this message translates to:
+  /// **'분유'**
+  String get feedingContentFormula;
+
+  /// 수유 컨텐츠 타입 - 이유식
+  ///
+  /// In ko, this message translates to:
+  /// **'이유식'**
+  String get feedingContentSolid;
+
+  /// 수유 방법 - 직접 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'직접 수유'**
+  String get feedingMethodDirect;
+
+  /// 수유 방법 - 유축 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'유축 수유'**
+  String get feedingMethodExpressed;
+
+  /// 모유 버튼 하위 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'(직접/유축)'**
+  String get feedingBreastMilkSubLabel;
+
+  /// 수유 컨텐츠 유형 질문
+  ///
+  /// In ko, this message translates to:
+  /// **'어떤 수유인가요?'**
+  String get feedingQuestionContent;
+
+  /// 모유 수유 방식 질문
+  ///
+  /// In ko, this message translates to:
+  /// **'어떤 방식인가요?'**
+  String get feedingQuestionMethod;
+
+  /// 직접 수유 방향 질문
+  ///
+  /// In ko, this message translates to:
+  /// **'어느 쪽으로 수유했나요?'**
+  String get feedingQuestionSide;
+
+  /// 수유 시간 질문
+  ///
+  /// In ko, this message translates to:
+  /// **'얼마나 수유했나요?'**
+  String get feedingQuestionDuration;
+
+  /// 수유량 질문
+  ///
+  /// In ko, this message translates to:
+  /// **'수유량을 입력해주세요'**
+  String get feedingQuestionAmount;
+
+  /// 수유 방향 - 왼쪽
+  ///
+  /// In ko, this message translates to:
+  /// **'왼쪽'**
+  String get feedingSideLeft;
+
+  /// 수유 방향 - 오른쪽
+  ///
+  /// In ko, this message translates to:
+  /// **'오른쪽'**
+  String get feedingSideRight;
+
+  /// 수유 방향 - 양쪽
+  ///
+  /// In ko, this message translates to:
+  /// **'양쪽'**
+  String get feedingSideBoth;
+
+  /// 수유 방향 짧은 표기 - 왼쪽
+  ///
+  /// In ko, this message translates to:
+  /// **'L'**
+  String get feedingSideLeftShort;
+
+  /// 수유 방향 짧은 표기 - 오른쪽
+  ///
+  /// In ko, this message translates to:
+  /// **'R'**
+  String get feedingSideRightShort;
+
+  /// 수유 방향 짧은 표기 - 양쪽
+  ///
+  /// In ko, this message translates to:
+  /// **'양'**
+  String get feedingSideBothShort;
+
+  /// 수유 시간 - N분
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}분'**
+  String feedingDurationMinutes(int count);
+
+  /// 수유량 - Nml
+  ///
+  /// In ko, this message translates to:
+  /// **'{amount}ml'**
+  String feedingAmountMl(int amount);
+
+  /// 프리셋 수유 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'{minutes}분'**
+  String feedingPresetDurationMinutes(int minutes);
+
+  /// 직접 입력 필드 플레이스홀더
+  ///
+  /// In ko, this message translates to:
+  /// **'직접 입력'**
+  String get feedingDirectInputPlaceholder;
+
+  /// 이유식 폼 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'이유식'**
+  String get solidFoodTitle;
+
+  /// 음식 이름 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'음식 이름'**
+  String get solidFoodNameLabel;
+
+  /// 음식 이름 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'예: 당근 퓨레, 쌀미음'**
+  String get solidFoodNameHint;
+
+  /// 처음 먹이는 음식 체크박스 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'처음 먹이는 음식이에요'**
+  String get solidFoodFirstTry;
+
+  /// 양 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'양'**
+  String get solidFoodAmountLabel;
+
+  /// 아기 반응 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 반응'**
+  String get solidFoodReactionLabel;
+
+  /// 이유식 단위 - 그램
+  ///
+  /// In ko, this message translates to:
+  /// **'g'**
+  String get solidUnitGram;
+
+  /// 이유식 단위 - 숟가락
+  ///
+  /// In ko, this message translates to:
+  /// **'숟가락'**
+  String get solidUnitSpoon;
+
+  /// 이유식 단위 - 그릇
+  ///
+  /// In ko, this message translates to:
+  /// **'그릇'**
+  String get solidUnitBowl;
+
+  /// 아기 반응 - 잘 먹음
+  ///
+  /// In ko, this message translates to:
+  /// **'잘 먹음'**
+  String get babyReactionLiked;
+
+  /// 아기 반응 - 보통
+  ///
+  /// In ko, this message translates to:
+  /// **'보통'**
+  String get babyReactionNeutral;
+
+  /// 아기 반응 - 거부
+  ///
+  /// In ko, this message translates to:
+  /// **'거부'**
+  String get babyReactionRejected;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

@@ -5,12 +5,29 @@ import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 
 /// 수유량/수면 시간 등 수치 입력 위젯
+///
+/// v2.0 변경사항:
+/// - step 파라미터 추가 (기본값 10)
+/// - [-step][+step] 빠른 조절 버튼 추가
+/// - showAdjustButtons 옵션으로 조절 버튼 표시 제어
 class AmountInput extends StatefulWidget {
   final double amount;
   final ValueChanged<double> onAmountChanged;
   final String unit;
   final List<int> presets;
   final bool compact;
+
+  /// 빠른 조절 버튼의 증감 단위 (기본값: 10)
+  final int step;
+
+  /// 빠른 조절 버튼 표시 여부 (기본값: true)
+  final bool showAdjustButtons;
+
+  /// 최소값 (기본값: 0)
+  final double minValue;
+
+  /// 최대값 (기본값: 999)
+  final double maxValue;
 
   const AmountInput({
     super.key,
@@ -19,6 +36,10 @@ class AmountInput extends StatefulWidget {
     this.unit = 'ml',
     this.presets = const [60, 90, 120, 150],
     this.compact = false,
+    this.step = 10,
+    this.showAdjustButtons = true,
+    this.minValue = 0,
+    this.maxValue = 999,
   });
 
   @override
@@ -53,6 +74,16 @@ class _AmountInputState extends State<AmountInput> {
     super.dispose();
   }
 
+  /// 수량 조절 (delta만큼 증감)
+  void _adjustAmount(int delta) {
+    final newAmount = (widget.amount + delta).clamp(
+      widget.minValue,
+      widget.maxValue,
+    );
+    widget.onAmountChanged(newAmount);
+    _controller.text = newAmount.toInt().toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.compact) {
@@ -85,8 +116,31 @@ class _AmountInputState extends State<AmountInput> {
           ],
         ),
         const SizedBox(height: LuluSpacing.md),
-        // 직접 입력
-        _buildInputField(),
+        // 직접 입력 + 조절 버튼
+        Row(
+          children: [
+            // [-step] 버튼
+            if (widget.showAdjustButtons) ...[
+              _AdjustButton(
+                label: '-${widget.step}',
+                onTap: () => _adjustAmount(-widget.step),
+                enabled: widget.amount > widget.minValue,
+              ),
+              const SizedBox(width: LuluSpacing.sm),
+            ],
+            // 직접 입력 필드
+            Expanded(child: _buildInputField()),
+            // [+step] 버튼
+            if (widget.showAdjustButtons) ...[
+              const SizedBox(width: LuluSpacing.sm),
+              _AdjustButton(
+                label: '+${widget.step}',
+                onTap: () => _adjustAmount(widget.step),
+                enabled: widget.amount < widget.maxValue,
+              ),
+            ],
+          ],
+        ),
       ],
     );
   }
@@ -239,6 +293,52 @@ class _CompactPresetButton extends StatelessWidget {
                 ? LuluActivityColors.feeding
                 : LuluTextColors.secondary,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 빠른 조절 버튼 ([-10], [+10])
+class _AdjustButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+  final bool enabled;
+
+  const _AdjustButton({
+    required this.label,
+    required this.onTap,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: LuluSpacing.md,
+          vertical: LuluSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: enabled
+              ? LuluActivityColors.feedingBg
+              : LuluColors.surfaceCard,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: enabled
+                ? LuluActivityColors.feeding.withValues(alpha: 0.5)
+                : Colors.transparent,
+          ),
+        ),
+        child: Text(
+          label,
+          style: LuluTextStyles.labelMedium.copyWith(
+            color: enabled
+                ? LuluActivityColors.feeding
+                : LuluTextColors.tertiary,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

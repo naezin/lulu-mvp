@@ -579,6 +579,11 @@ class SKo extends S {
   String get sweetSpotTitle => '다음 낮잠';
 
   @override
+  String sweetSpotTitleWithName(String babyName, String sleepType) {
+    return '$babyName의 다음 $sleepType';
+  }
+
+  @override
   String get sweetSpotUnknown => '확인 중';
 
   @override
@@ -597,10 +602,40 @@ class SKo extends S {
   String get sweetSpotEmptyTitle => '수면 기록이 필요해요';
 
   @override
+  String sweetSpotEmptyTitleWithName(String babyName) {
+    return '$babyName의 첫 기록을 시작해보세요';
+  }
+
+  @override
+  String get sweetSpotEmptyTitleDefault => '첫 기록을 시작해보세요';
+
+  @override
   String get sweetSpotEmptySubtitle => '첫 수면을 기록하면\n예상 시간을 알려드릴게요';
 
   @override
+  String get sweetSpotEmptyActionHint => '아래 버튼을 눌러\n수유, 수면, 기저귀 기록을 시작하세요';
+
+  @override
+  String get sweetSpotEmptyHint => '기록이 쌓이면 수면 예측을 알려드릴게요';
+
+  @override
   String get sweetSpotDisclaimer => '이 예측은 참고용이며, 아기마다 다를 수 있어요';
+
+  @override
+  String timelineEmptyTodayTitle(String babyName) {
+    return '$babyName의 첫 기록을 시작해보세요';
+  }
+
+  @override
+  String get timelineEmptyTodayHint => '아래 + 버튼을 눌러\n수유, 수면, 기저귀 기록을 시작하세요';
+
+  @override
+  String timelineEmptyPastTitle(String date) {
+    return '$date 기록이 없습니다';
+  }
+
+  @override
+  String get timelineEmptyPastHint => '다른 날짜를 선택해보세요';
 
   @override
   String get sectionLanguage => '언어';
@@ -610,4 +645,109 @@ class SKo extends S {
 
   @override
   String get languageChangeMessage => '앱이 선택한 언어로 표시됩니다.';
+
+  @override
+  String get feedingContentBreastMilk => '모유';
+
+  @override
+  String get feedingContentFormula => '분유';
+
+  @override
+  String get feedingContentSolid => '이유식';
+
+  @override
+  String get feedingMethodDirect => '직접 수유';
+
+  @override
+  String get feedingMethodExpressed => '유축 수유';
+
+  @override
+  String get feedingBreastMilkSubLabel => '(직접/유축)';
+
+  @override
+  String get feedingQuestionContent => '어떤 수유인가요?';
+
+  @override
+  String get feedingQuestionMethod => '어떤 방식인가요?';
+
+  @override
+  String get feedingQuestionSide => '어느 쪽으로 수유했나요?';
+
+  @override
+  String get feedingQuestionDuration => '얼마나 수유했나요?';
+
+  @override
+  String get feedingQuestionAmount => '수유량을 입력해주세요';
+
+  @override
+  String get feedingSideLeft => '왼쪽';
+
+  @override
+  String get feedingSideRight => '오른쪽';
+
+  @override
+  String get feedingSideBoth => '양쪽';
+
+  @override
+  String get feedingSideLeftShort => 'L';
+
+  @override
+  String get feedingSideRightShort => 'R';
+
+  @override
+  String get feedingSideBothShort => '양';
+
+  @override
+  String feedingDurationMinutes(int count) {
+    return '$count분';
+  }
+
+  @override
+  String feedingAmountMl(int amount) {
+    return '${amount}ml';
+  }
+
+  @override
+  String feedingPresetDurationMinutes(int minutes) {
+    return '$minutes분';
+  }
+
+  @override
+  String get feedingDirectInputPlaceholder => '직접 입력';
+
+  @override
+  String get solidFoodTitle => '이유식';
+
+  @override
+  String get solidFoodNameLabel => '음식 이름';
+
+  @override
+  String get solidFoodNameHint => '예: 당근 퓨레, 쌀미음';
+
+  @override
+  String get solidFoodFirstTry => '처음 먹이는 음식이에요';
+
+  @override
+  String get solidFoodAmountLabel => '양';
+
+  @override
+  String get solidFoodReactionLabel => '아기 반응';
+
+  @override
+  String get solidUnitGram => 'g';
+
+  @override
+  String get solidUnitSpoon => '숟가락';
+
+  @override
+  String get solidUnitBowl => '그릇';
+
+  @override
+  String get babyReactionLiked => '잘 먹음';
+
+  @override
+  String get babyReactionNeutral => '보통';
+
+  @override
+  String get babyReactionRejected => '거부';
 }

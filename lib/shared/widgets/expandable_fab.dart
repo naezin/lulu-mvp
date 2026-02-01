@@ -101,11 +101,11 @@ class _LabeledFabState extends State<LabeledFab>
 
   List<Widget> _buildExpandedActions() {
     final actions = [
-      _FabAction(icon: LuluIcons.sleep, label: '수면', color: LuluColors.lavenderMist, onTap: () => _onRecord('sleep')),
-      _FabAction(icon: LuluIcons.feeding, label: '수유', color: LuluColors.lavenderMist, onTap: () => _onRecord('feeding')),
-      _FabAction(icon: LuluIcons.diaper, label: '기저귀', color: LuluColors.lavenderMist, onTap: () => _onRecord('diaper')),
-      _FabAction(icon: LuluIcons.play, label: '놀이', color: LuluColors.lavenderMist, onTap: () => _onRecord('play')),
-      _FabAction(icon: LuluIcons.health, label: '건강', color: LuluColors.lavenderMist, onTap: () => _onRecord('health')),
+      _FabAction(icon: LuluIcons.sleep, label: '수면', color: LuluActivityColors.sleep, onTap: () => _onRecord('sleep')),
+      _FabAction(icon: LuluIcons.feeding, label: '수유', color: LuluActivityColors.feeding, onTap: () => _onRecord('feeding')),
+      _FabAction(icon: LuluIcons.diaper, label: '기저귀', color: LuluActivityColors.diaper, onTap: () => _onRecord('diaper')),
+      _FabAction(icon: LuluIcons.play, label: '놀이', color: LuluActivityColors.play, onTap: () => _onRecord('play')),
+      _FabAction(icon: LuluIcons.health, label: '건강', color: LuluActivityColors.health, onTap: () => _onRecord('health')),
     ];
 
     return actions.reversed.map((action) {

@@ -582,6 +582,11 @@ class SEn extends S {
   String get sweetSpotTitle => 'Next Nap';
 
   @override
+  String sweetSpotTitleWithName(String babyName, String sleepType) {
+    return '$babyName\'s next $sleepType';
+  }
+
+  @override
   String get sweetSpotUnknown => 'Checking';
 
   @override
@@ -600,12 +605,45 @@ class SEn extends S {
   String get sweetSpotEmptyTitle => 'Need sleep records';
 
   @override
+  String sweetSpotEmptyTitleWithName(String babyName) {
+    return 'Start $babyName\'s first record';
+  }
+
+  @override
+  String get sweetSpotEmptyTitleDefault => 'Start your first record';
+
+  @override
   String get sweetSpotEmptySubtitle =>
       'Record first sleep to\nget predicted times';
 
   @override
+  String get sweetSpotEmptyActionHint =>
+      'Tap a button below to start\nrecording feeding, sleep, or diaper';
+
+  @override
+  String get sweetSpotEmptyHint =>
+      'We\'ll predict sleep times once you have some records';
+
+  @override
   String get sweetSpotDisclaimer =>
       'This prediction is for reference only and may vary for each baby';
+
+  @override
+  String timelineEmptyTodayTitle(String babyName) {
+    return 'Start $babyName\'s first record';
+  }
+
+  @override
+  String get timelineEmptyTodayHint =>
+      'Tap the + button below to\nstart recording feeding, sleep, and diaper';
+
+  @override
+  String timelineEmptyPastTitle(String date) {
+    return 'No records for $date';
+  }
+
+  @override
+  String get timelineEmptyPastHint => 'Try selecting a different date';
 
   @override
   String get sectionLanguage => 'Language';
@@ -616,4 +654,109 @@ class SEn extends S {
   @override
   String get languageChangeMessage =>
       'The app will be displayed in the selected language.';
+
+  @override
+  String get feedingContentBreastMilk => 'Breast Milk';
+
+  @override
+  String get feedingContentFormula => 'Formula';
+
+  @override
+  String get feedingContentSolid => 'Solid Food';
+
+  @override
+  String get feedingMethodDirect => 'Direct Nursing';
+
+  @override
+  String get feedingMethodExpressed => 'Expressed Milk';
+
+  @override
+  String get feedingBreastMilkSubLabel => '(direct/expressed)';
+
+  @override
+  String get feedingQuestionContent => 'What type of feeding?';
+
+  @override
+  String get feedingQuestionMethod => 'How was the milk given?';
+
+  @override
+  String get feedingQuestionSide => 'Which side?';
+
+  @override
+  String get feedingQuestionDuration => 'How long was the feeding?';
+
+  @override
+  String get feedingQuestionAmount => 'Enter the amount';
+
+  @override
+  String get feedingSideLeft => 'Left';
+
+  @override
+  String get feedingSideRight => 'Right';
+
+  @override
+  String get feedingSideBoth => 'Both';
+
+  @override
+  String get feedingSideLeftShort => 'L';
+
+  @override
+  String get feedingSideRightShort => 'R';
+
+  @override
+  String get feedingSideBothShort => 'Both';
+
+  @override
+  String feedingDurationMinutes(int count) {
+    return '${count}min';
+  }
+
+  @override
+  String feedingAmountMl(int amount) {
+    return '${amount}ml';
+  }
+
+  @override
+  String feedingPresetDurationMinutes(int minutes) {
+    return '${minutes}min';
+  }
+
+  @override
+  String get feedingDirectInputPlaceholder => 'Enter manually';
+
+  @override
+  String get solidFoodTitle => 'Solid Food';
+
+  @override
+  String get solidFoodNameLabel => 'Food name';
+
+  @override
+  String get solidFoodNameHint => 'e.g., Carrot puree, Rice porridge';
+
+  @override
+  String get solidFoodFirstTry => 'First time trying this food';
+
+  @override
+  String get solidFoodAmountLabel => 'Amount';
+
+  @override
+  String get solidFoodReactionLabel => 'Baby\'s reaction';
+
+  @override
+  String get solidUnitGram => 'g';
+
+  @override
+  String get solidUnitSpoon => 'spoon';
+
+  @override
+  String get solidUnitBowl => 'bowl';
+
+  @override
+  String get babyReactionLiked => 'Liked';
+
+  @override
+  String get babyReactionNeutral => 'Neutral';
+
+  @override
+  String get babyReactionRejected => 'Rejected';
 }

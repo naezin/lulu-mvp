@@ -499,6 +499,14 @@
 
   "sweetSpotTitle": "다음 낮잠",
   "@sweetSpotTitle": {"description": "Sweet Spot 카드 제목"},
+  "sweetSpotTitleWithName": "{babyName}의 다음 {sleepType}",
+  "@sweetSpotTitleWithName": {
+    "description": "Sweet Spot 카드 제목 (아기 이름 + 수면타입)",
+    "placeholders": {
+      "babyName": {"type": "String", "example": "민재"},
+      "sleepType": {"type": "String", "example": "낮잠"}
+    }
+  },
   "sweetSpotUnknown": "확인 중",
   "@sweetSpotUnknown": {"description": "Sweet Spot - 확인 중"},
   "sweetSpotTooEarly": "아직 여유 있어요",
@@ -511,15 +519,140 @@
   "@sweetSpotOvertired": {"description": "Sweet Spot - 졸린 시간 지남 (확률적 표현)"},
   "sweetSpotEmptyTitle": "수면 기록이 필요해요",
   "@sweetSpotEmptyTitle": {"description": "Sweet Spot Empty State 제목"},
+  "sweetSpotEmptyTitleWithName": "{babyName}의 첫 기록을 시작해보세요",
+  "@sweetSpotEmptyTitleWithName": {
+    "description": "Sweet Spot Empty State 제목 (이름 포함)",
+    "placeholders": {
+      "babyName": {"type": "String", "example": "민지"}
+    }
+  },
+  "sweetSpotEmptyTitleDefault": "첫 기록을 시작해보세요",
+  "@sweetSpotEmptyTitleDefault": {"description": "Sweet Spot Empty State 제목 (이름 없음)"},
   "sweetSpotEmptySubtitle": "첫 수면을 기록하면\n예상 시간을 알려드릴게요",
   "@sweetSpotEmptySubtitle": {"description": "Sweet Spot Empty State 부제목"},
+  "sweetSpotEmptyActionHint": "아래 버튼을 눌러\n수유, 수면, 기저귀 기록을 시작하세요",
+  "@sweetSpotEmptyActionHint": {"description": "Sweet Spot Empty State 액션 힌트"},
+  "sweetSpotEmptyHint": "기록이 쌓이면 수면 예측을 알려드릴게요",
+  "@sweetSpotEmptyHint": {"description": "Sweet Spot Empty State 힌트"},
   "sweetSpotDisclaimer": "이 예측은 참고용이며, 아기마다 다를 수 있어요",
   "@sweetSpotDisclaimer": {"description": "Sweet Spot 면책 문구"},
+
+  "timelineEmptyTodayTitle": "{babyName}의 첫 기록을 시작해보세요",
+  "@timelineEmptyTodayTitle": {
+    "description": "기록 탭 오늘 빈 상태 제목",
+    "placeholders": {
+      "babyName": {"type": "String"}
+    }
+  },
+  "timelineEmptyTodayHint": "아래 + 버튼을 눌러\n수유, 수면, 기저귀 기록을 시작하세요",
+  "@timelineEmptyTodayHint": {"description": "기록 탭 오늘 빈 상태 힌트"},
+  "timelineEmptyPastTitle": "{date} 기록이 없습니다",
+  "@timelineEmptyPastTitle": {
+    "description": "기록 탭 과거 날짜 빈 상태 제목",
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "timelineEmptyPastHint": "다른 날짜를 선택해보세요",
+  "@timelineEmptyPastHint": {"description": "기록 탭 과거 날짜 빈 상태 힌트"},
 
   "sectionLanguage": "언어",
   "@sectionLanguage": {"description": "섹션 - 언어"},
   "languageChangeConfirm": "언어를 변경하시겠습니까?",
   "@languageChangeConfirm": {"description": "언어 변경 확인 다이얼로그 제목"},
   "languageChangeMessage": "앱이 선택한 언어로 표시됩니다.",
-  "@languageChangeMessage": {"description": "언어 변경 안내 메시지"}
+  "@languageChangeMessage": {"description": "언어 변경 안내 메시지"},
+
+  "feedingContentBreastMilk": "모유",
+  "@feedingContentBreastMilk": {"description": "수유 컨텐츠 타입 - 모유"},
+  "feedingContentFormula": "분유",
+  "@feedingContentFormula": {"description": "수유 컨텐츠 타입 - 분유"},
+  "feedingContentSolid": "이유식",
+  "@feedingContentSolid": {"description": "수유 컨텐츠 타입 - 이유식"},
+
+  "feedingMethodDirect": "직접 수유",
+  "@feedingMethodDirect": {"description": "수유 방법 - 직접 수유"},
+  "feedingMethodExpressed": "유축 수유",
+  "@feedingMethodExpressed": {"description": "수유 방법 - 유축 수유"},
+
+  "feedingBreastMilkSubLabel": "(직접/유축)",
+  "@feedingBreastMilkSubLabel": {"description": "모유 버튼 하위 라벨"},
+
+  "feedingQuestionContent": "어떤 수유인가요?",
+  "@feedingQuestionContent": {"description": "수유 컨텐츠 유형 질문"},
+  "feedingQuestionMethod": "어떤 방식인가요?",
+  "@feedingQuestionMethod": {"description": "모유 수유 방식 질문"},
+  "feedingQuestionSide": "어느 쪽으로 수유했나요?",
+  "@feedingQuestionSide": {"description": "직접 수유 방향 질문"},
+  "feedingQuestionDuration": "얼마나 수유했나요?",
+  "@feedingQuestionDuration": {"description": "수유 시간 질문"},
+  "feedingQuestionAmount": "수유량을 입력해주세요",
+  "@feedingQuestionAmount": {"description": "수유량 질문"},
+
+  "feedingSideLeft": "왼쪽",
+  "@feedingSideLeft": {"description": "수유 방향 - 왼쪽"},
+  "feedingSideRight": "오른쪽",
+  "@feedingSideRight": {"description": "수유 방향 - 오른쪽"},
+  "feedingSideBoth": "양쪽",
+  "@feedingSideBoth": {"description": "수유 방향 - 양쪽"},
+  "feedingSideLeftShort": "L",
+  "@feedingSideLeftShort": {"description": "수유 방향 짧은 표기 - 왼쪽"},
+  "feedingSideRightShort": "R",
+  "@feedingSideRightShort": {"description": "수유 방향 짧은 표기 - 오른쪽"},
+  "feedingSideBothShort": "양",
+  "@feedingSideBothShort": {"description": "수유 방향 짧은 표기 - 양쪽"},
+
+  "feedingDurationMinutes": "{count}분",
+  "@feedingDurationMinutes": {
+    "description": "수유 시간 - N분",
+    "placeholders": {
+      "count": {"type": "int", "example": "15"}
+    }
+  },
+
+  "feedingAmountMl": "{amount}ml",
+  "@feedingAmountMl": {
+    "description": "수유량 - Nml",
+    "placeholders": {
+      "amount": {"type": "int", "example": "120"}
+    }
+  },
+
+  "feedingPresetDurationMinutes": "{minutes}분",
+  "@feedingPresetDurationMinutes": {
+    "description": "프리셋 수유 시간",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "10"}
+    }
+  },
+
+  "feedingDirectInputPlaceholder": "직접 입력",
+  "@feedingDirectInputPlaceholder": {"description": "직접 입력 필드 플레이스홀더"},
+
+  "solidFoodTitle": "이유식",
+  "@solidFoodTitle": {"description": "이유식 폼 제목"},
+  "solidFoodNameLabel": "음식 이름",
+  "@solidFoodNameLabel": {"description": "음식 이름 라벨"},
+  "solidFoodNameHint": "예: 당근 퓨레, 쌀미음",
+  "@solidFoodNameHint": {"description": "음식 이름 힌트"},
+  "solidFoodFirstTry": "처음 먹이는 음식이에요",
+  "@solidFoodFirstTry": {"description": "처음 먹이는 음식 체크박스 라벨"},
+  "solidFoodAmountLabel": "양",
+  "@solidFoodAmountLabel": {"description": "양 라벨"},
+  "solidFoodReactionLabel": "아기 반응",
+  "@solidFoodReactionLabel": {"description": "아기 반응 라벨"},
+
+  "solidUnitGram": "g",
+  "@solidUnitGram": {"description": "이유식 단위 - 그램"},
+  "solidUnitSpoon": "숟가락",
+  "@solidUnitSpoon": {"description": "이유식 단위 - 숟가락"},
+  "solidUnitBowl": "그릇",
+  "@solidUnitBowl": {"description": "이유식 단위 - 그릇"},
+
+  "babyReactionLiked": "잘 먹음",
+  "@babyReactionLiked": {"description": "아기 반응 - 잘 먹음"},
+  "babyReactionNeutral": "보통",
+  "@babyReactionNeutral": {"description": "아기 반응 - 보통"},
+  "babyReactionRejected": "거부",
+  "@babyReactionRejected": {"description": "아기 반응 - 거부"}
 }

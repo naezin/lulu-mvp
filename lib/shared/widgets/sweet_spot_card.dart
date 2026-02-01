@@ -45,6 +45,26 @@ class SweetSpotCard extends StatefulWidget {
   /// 수면 취소 콜백
   final VoidCallback? onCancelSleep;
 
+  // 🆕 Sprint 7 Day 2 v1.2: 빈 상태 3종 기록 버튼용 콜백
+  /// 수유 기록 탭 콜백
+  final VoidCallback? onFeedingTap;
+
+  /// 수면 기록 탭 콜백 (isEmpty 상태에서 수면 버튼)
+  final VoidCallback? onSleepTap;
+
+  /// 기저귀 기록 탭 콜백
+  final VoidCallback? onDiaperTap;
+
+  // 🆕 v3: Normal State 개선용 props
+  /// Sweet Spot 진행률 (0.0 ~ 1.0)
+  final double? progress;
+
+  /// 추천 수면 시간
+  final DateTime? recommendedTime;
+
+  /// 밤잠 여부
+  final bool isNightTime;
+
   const SweetSpotCard({
     super.key,
     required this.state,
@@ -57,6 +77,12 @@ class SweetSpotCard extends StatefulWidget {
     this.babyName,
     this.onEndSleep,
     this.onCancelSleep,
+    this.onFeedingTap,
+    this.onSleepTap,
+    this.onDiaperTap,
+    this.progress,
+    this.recommendedTime,
+    this.isNightTime = false,
   });
 
   @override
@@ -265,59 +291,145 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     );
   }
 
-  /// Empty State UI
+  /// Empty State UI - 통합 카드 (v1.2)
+  ///
+  /// 2개 카드 → 1개 통합 카드로 스크롤 없이 바로 기록 가능
   Widget _buildEmptyState(BuildContext context, S l10n) {
+    final babyName = widget.babyName;
+
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: LuluColors.glassBorder),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: LuluColors.glassBorder,
+          width: 1,
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // 헤더 아이콘
           Icon(
-            Icons.bedtime_outlined,
-            size: 40,
-            color: LuluTextColors.tertiary,
+            Icons.celebration_rounded,
+            size: 48,
+            color: LuluColors.champagneGold,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: LuluSpacing.md),
+
+          // 타이틀
           Text(
-            l10n.sweetSpotEmptyTitle,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+            babyName != null
+                ? l10n.sweetSpotEmptyTitleWithName(babyName)
+                : l10n.sweetSpotEmptyTitleDefault,
+            style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
+              fontWeight: FontWeight.bold,
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            l10n.sweetSpotEmptySubtitle,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: LuluTextColors.secondary,
-              height: 1.4,
-            ),
           ),
-          if (widget.onRecordSleep != null) ...[
-            const SizedBox(height: 16),
-            TextButton.icon(
-              onPressed: widget.onRecordSleep,
-              icon: const Icon(Icons.add, size: 18),
-              label: Text(l10n.buttonStartSleep),
-              style: TextButton.styleFrom(
-                foregroundColor: LuluSweetSpotColors.neutral,
-              ),
+          const SizedBox(height: LuluSpacing.sm),
+
+          // 액션 힌트
+          Text(
+            l10n.sweetSpotEmptyActionHint,
+            style: LuluTextStyles.bodyMedium.copyWith(
+              color: LuluTextColors.secondary,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: LuluSpacing.lg),
+
+          // 3종 기록 버튼 (탭 가능!)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildQuickRecordButton(
+                icon: Icons.local_drink_rounded,
+                label: l10n.activityTypeFeeding,
+                color: LuluActivityColors.feeding,
+                onTap: widget.onFeedingTap,
+              ),
+              _buildQuickRecordButton(
+                icon: Icons.bedtime_rounded,
+                label: l10n.activityTypeSleep,
+                color: LuluActivityColors.sleep,
+                onTap: widget.onSleepTap ?? widget.onRecordSleep,
+              ),
+              _buildQuickRecordButton(
+                icon: Icons.baby_changing_station_rounded,
+                label: l10n.activityTypeDiaper,
+                color: LuluActivityColors.diaper,
+                onTap: widget.onDiaperTap,
+              ),
+            ],
+          ),
+          const SizedBox(height: LuluSpacing.lg),
+
+          // 힌트 메시지
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.lightbulb_outline_rounded,
+                size: 16,
+                color: LuluColors.champagneGold,
+              ),
+              const SizedBox(width: 4),
+              Flexible(
+                child: Text(
+                  l10n.sweetSpotEmptyHint,
+                  style: LuluTextStyles.caption.copyWith(
+                    color: LuluTextColors.tertiary,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  /// Normal State UI
+  /// 빈 상태용 빠른 기록 버튼 (탭 가능)
+  Widget _buildQuickRecordButton({
+    required IconData icon,
+    required String label,
+    required Color color,
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 80,
+        padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: color.withValues(alpha: 0.3),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 32, color: color),
+            const SizedBox(height: LuluSpacing.xs),
+            Text(
+              label,
+              style: LuluTextStyles.labelSmall.copyWith(
+                color: LuluTextColors.primary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Normal State UI (v3 개선)
   Widget _buildNormalState(BuildContext context, S l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -330,7 +442,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 헤더: 제목 + 아이콘
+          // 헤더: 아기 이름 + 수면타입
           Row(
             children: [
               Icon(
@@ -340,7 +452,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
               ),
               const SizedBox(width: 8),
               Text(
-                l10n.sweetSpotTitle,
+                _getHeaderTitle(l10n),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -361,17 +473,18 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             ),
           ),
 
-          // 예상 시간 (있는 경우)
-          if (widget.estimatedTime != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              widget.estimatedTime!,
-              style: TextStyle(
-                fontSize: 14,
-                color: LuluTextColors.secondary,
-              ),
+          // 시간 표시 (12시간제 + 남은 시간)
+          const SizedBox(height: 4),
+          Text(
+            _getTimeText(l10n),
+            style: TextStyle(
+              fontSize: 14,
+              color: LuluTextColors.secondary,
             ),
-          ],
+          ),
+
+          // 프로그레스 바 (조건 충족 시)
+          if (_shouldShowProgressBar) _buildProgressBar(),
 
           const SizedBox(height: 12),
 
@@ -386,6 +499,94 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         ],
       ),
     );
+  }
+
+  /// 헤더 타이틀: "{아기이름}의 다음 {낮잠/밤잠}"
+  String _getHeaderTitle(S l10n) {
+    final sleepType = widget.isNightTime ? l10n.sleepTypeNight : l10n.sleepTypeNap;
+
+    if (widget.babyName != null) {
+      return '${widget.babyName}의 다음 $sleepType';
+    }
+    return '다음 $sleepType';
+  }
+
+  /// 시간 텍스트: "약 오후 2:30 (45분 후)"
+  String _getTimeText(S l10n) {
+    if (widget.recommendedTime != null) {
+      final formattedTime = DateFormat('a h:mm', 'ko').format(widget.recommendedTime!);
+      final minutesUntil = widget.recommendedTime!.difference(DateTime.now()).inMinutes.clamp(0, 999);
+      return '약 $formattedTime ($minutesUntil분 후)';
+    }
+    return widget.estimatedTime ?? '';
+  }
+
+  /// 프로그레스 바 표시 조건
+  bool get _shouldShowProgressBar {
+    return !widget.isEmpty &&
+        !widget.isSleeping &&
+        widget.progress != null &&
+        widget.state != SweetSpotState.unknown;
+  }
+
+  /// 프로그레스 바 위젯
+  Widget _buildProgressBar() {
+    final progressValue = widget.progress ?? 0.0;
+
+    return Container(
+      height: 8,
+      margin: const EdgeInsets.only(top: LuluSpacing.md),
+      decoration: BoxDecoration(
+        color: LuluColors.surfaceElevated,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              // 진행 바
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: constraints.maxWidth * progressValue.clamp(0.0, 1.0),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      _getProgressColor(progressValue).withValues(alpha: 0.5),
+                      _getProgressColor(progressValue),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              // Sweet Spot 마커 (80% 위치)
+              // TODO: Phase 2 - 교정연령별 Sweet Spot 위치 개인화
+              Positioned(
+                left: constraints.maxWidth * 0.8 - 1.5,
+                top: 0,
+                bottom: 0,
+                child: Container(
+                  width: 3,
+                  decoration: BoxDecoration(
+                    color: LuluColors.champagneGold,
+                    borderRadius: BorderRadius.circular(1.5),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  /// 진행률에 따른 색상
+  Color _getProgressColor(double progress) {
+    if (progress >= 1.0) {
+      return LuluStatusColors.caution; // 100%+ 과로
+    } else if (progress >= 0.8) {
+      return LuluColors.champagneGold; // 80-100% Sweet Spot
+    }
+    return LuluColors.lavenderMist; // 0-80%
   }
 
   /// 상태별 라벨 반환 (다국어 지원)

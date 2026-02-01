@@ -502,7 +502,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '저장하면 수면이 시작됩니다.\n나중에 깨면 종료 시간을 기록하세요.',
+                      '저장하면 수면이 시작됩니다.\n아기가 깨면 홈 화면에서 종료 버튼을 눌러주세요.',
                       style: LuluTextStyles.caption.copyWith(
                         color: LuluTextColors.secondary,
                       ),

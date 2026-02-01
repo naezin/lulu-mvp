@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/models.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
 
 /// 기록 히스토리 화면
@@ -64,7 +65,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
 
           // 활동이 없으면 빈 상태
           if (activities.isEmpty) {
-            return _buildEmptyActivitiesState();
+            return _buildEmptyActivitiesState(homeProvider);
           }
 
           // 활동 목록
@@ -156,33 +157,48 @@ class _TimelineScreenState extends State<TimelineScreen> {
   }
 
   /// 활동 없음 상태
-  Widget _buildEmptyActivitiesState() {
+  Widget _buildEmptyActivitiesState(HomeProvider homeProvider) {
+    final l10n = S.of(context)!;
     final dateStr = DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDate);
     final isToday = _isToday(_selectedDate);
+    final babyName = homeProvider.selectedBaby?.name ?? '아기';
 
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            LuluIcons.note,
-            size: 64,
-            color: LuluTextColors.tertiary,
+          // 원형 배경 + 메인 컬러 (홈 화면과 통일)
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.edit_calendar,
+              size: 40,
+              color: LuluColors.lavenderMist,
+            ),
           ),
-          const SizedBox(height: LuluSpacing.lg),
+          const SizedBox(height: LuluSpacing.xl),
           Text(
-            isToday ? '오늘의 기록이 없습니다' : '$dateStr 기록이 없습니다',
+            isToday
+                ? l10n.timelineEmptyTodayTitle(babyName)
+                : l10n.timelineEmptyPastTitle(dateStr),
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: LuluSpacing.sm),
           Text(
-            isToday ? '+ 버튼을 눌러 첫 기록을 시작하세요' : '다른 날짜를 선택해보세요',
+            isToday ? l10n.timelineEmptyTodayHint : l10n.timelineEmptyPastHint,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

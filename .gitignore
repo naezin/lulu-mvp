@@ -44,3 +44,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .env
+
+# PM Skills (external repo)
+.claude/pm-skills/
