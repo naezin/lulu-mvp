@@ -15,6 +15,7 @@ import 'features/home/providers/home_provider.dart';
 import 'features/record/providers/record_provider.dart';
 import 'features/record/providers/ongoing_sleep_provider.dart';
 import 'features/settings/providers/settings_provider.dart';
+import 'features/cry_analysis/providers/cry_analysis_provider.dart';
 import 'app/navigation/main_navigation.dart';
 import 'data/models/models.dart';
 import 'l10n/generated/app_localizations.dart';
@@ -68,6 +69,8 @@ class LuluApp extends StatelessWidget {
           return provider;
         }),
         ChangeNotifierProvider.value(value: _settingsProvider),
+        // Phase 2: 울음 분석 Provider
+        ChangeNotifierProvider(create: (_) => CryAnalysisProvider()),
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settings, child) {

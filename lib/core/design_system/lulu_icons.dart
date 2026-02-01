@@ -171,6 +171,17 @@ class LuluIcons {
   static const IconData statusInfo = Icons.info_outline_rounded;
 
   // ========================================
+  // 울음 분석 (Cry Analysis)
+  // ========================================
+
+  static const IconData microphone = Icons.mic_rounded;
+  static const IconData microphoneOff = Icons.mic_off_rounded;
+  static const IconData soundWave = Icons.graphic_eq_rounded;
+  static const IconData cryAnalysis = Icons.record_voice_over_rounded;
+  static const IconData audioAnalyzing = Icons.hearing_rounded;
+  static const IconData cryResult = Icons.psychology_rounded;
+
+  // ========================================
   // 아이콘 크기 (Icon Sizes)
   // ========================================
 

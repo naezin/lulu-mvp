@@ -1,98 +1,140 @@
 # LULU MVP-F Handoff
 
-**Version**: 5.2
-**Updated**: 2026-01-31
-**Sprint**: 8 (거의 완료)
+**Version**: 5.3
+**Updated**: 2026-02-01
+**Sprint**: 10 (완료)
 
 ## 현재 상태
-- **Phase**: MVP 개발 마무리 (Sprint 8 거의 완료)
+- **Phase**: Phase 2 울음 분석 홈 화면 통합 완료
 - **빌드**: iOS/Android 정상 (`flutter analyze` 에러 0개)
 - **온보딩**: 완료 (6단계)
-- **v5.1 Code Update**: 완료
-- **v5.2 Update**: 빈 상태 카드 통합, 문서 동기화
+- **Phase 2**: 울음 분석 홈 화면 통합 완료
 
-## Sprint 7 완료 내역
-
-| Day | 작업 | 상태 |
-|-----|------|------|
-| Day 1 | 버그 수정 (BUG-003, BUG-004) | ✅ |
-| Day 2 | OngoingSleepCard → SweetSpotCard 통합 | ✅ |
-| Day 2 | QuickActionGrid → FAB 대체 | ✅ |
-| Day 2 | LastActivityRow 신규 추가 | ✅ |
-| Day 2 | 빈 상태 2종 카드 → 1종 통합 (CARD-01~04) | ✅ |
-| Day 3+ | Play/Health UX 개선 | ✅ |
-
-## Sprint 8 완료 내역
+## Sprint 10 완료 내역
 
 | Part | 작업 | 상태 |
 |------|------|------|
+| Part A | TFLite 모델 생성 (442KB, 83.6%) | ✅ |
+| Part B | record 패키지 실제 녹음 | ✅ |
+| Part C | iOS/Android 권한 설정 | ✅ |
+| Part D | QA 코드 리뷰 통과 | ✅ |
+| Part E | 홈 화면 통합 설계 (SUS 85.5, TTC 1.9초) | ✅ |
+| **Part F** | **홈 화면 CryAnalysisCard 통합** | **✅** |
+
+## Sprint 7-8 완료 내역
+
+| Part | 작업 | 상태 |
+|------|------|------|
+| Day 1-2 | OngoingSleepCard → SweetSpotCard 통합 | ✅ |
+| Day 2 | QuickActionGrid → FAB 대체 | ✅ |
+| Day 2 | LastActivityRow 신규 추가 | ✅ |
 | Part A | CSV 내보내기 기능 | ✅ |
 | Part B | 설정 화면 구현 | ✅ |
 | Part C | i18n 다국어 확장 | ✅ |
 | Part E | HomeProvider 캐싱 최적화 | ✅ |
 | Part F | 이모지 → Material Icons 교체 | ✅ |
 
-## 미구현 항목 체크리스트 (종합)
-
-| 카테고리 | ID | 항목 | 상태 |
-|----------|-----|------|------|
-| Home v2.0 | UI-01 | LastActivityRow (수면/수유/기저귀) | ✅ |
-| Home v2.0 | UI-02 | FAB → ExpandableFab | ✅ |
-| Home v2.0 | UI-03 | OngoingSleepCard → SweetSpotCard | ✅ |
-| Home v2.0 | UI-04 | 빈 상태 카드 통합 | ✅ |
-| SGA 지원 | SGA-01 | SGA 감지 + 뱃지 표시 | ✅ |
-| 내보내기 | MA-01 | CSV 내보내기 | ✅ |
-| 아기관리 | BABY-01 | 아기 추가/삭제 | ✅ |
-| UI 통일 | EMOJI-01 | 이모지 → Material Icons | ✅ |
-
 ## 최근 작업
 
-### 2026-01-31: v5.2 업데이트
-- 빈 상태 2종 카드 → SweetSpotCard 1종으로 통합
-- SweetSpotCard에 onFeedingTap, onSleepTap, onDiaperTap 콜백 추가
-- home_screen.dart의 _buildEmptyActivitiesState() 단순화
-- i18n 키 추가: sweetSpotEmptyTitleWithName, sweetSpotEmptyTitleDefault, sweetSpotEmptyHint
-- 문서와 구현 상태 동기화
+### 2026-02-01: Phase 2 홈 화면 통합 완료
+- **CryAnalysisCard** 위젯 생성 (`lib/features/home/widgets/cry_analysis_card.dart`)
+- **HomeScreen** Normal State에 카드 추가 (`_buildNormalContent`)
+- **HomeScreen** Empty State에 카드 추가 (`_buildEmptyActivitiesState`)
+- **FeatureFlags.enableCryAnalysis** = true 설정
+- **CryAnalysisProvider** main.dart에 등록
+- 디자인 시스템에 울음 분석 토큰 추가:
+  - `LuluCryAnalysisColors` (primary, recording, analyzing, complete)
+  - `LuluBadgeColors` (newBadge, premiumBadge, betaBadge)
+  - `LuluIcons` (microphone, soundWave, cryAnalysis, cryResult)
 
-### 2026-01-31: Sprint 7 Day 2 커밋
+### 2026-02-01: Git 브랜치 전략 수립
+- `main` 브랜치: 안정 버전 (Feature Flag로 울음 기능 숨김 가능)
+- `feature/cry-analysis-ui` 브랜치: 울음 분석 UI 개발용
+- Feature Flag로 언제든 기능 ON/OFF 가능
+
+### 2026-01-31: Sprint 7-8 완료
+- 빈 상태 2종 카드 → SweetSpotCard 1종으로 통합
 - OngoingSleepCard → SweetSpotCard 통합
 - QuickActionGrid 삭제 (FAB로 대체)
-- LastActivityRow 신규 추가 (수면/수유/기저귀 경과 시간)
-- 실시간 경과 시간 Timer 구현
-- Growth 화면 UI 개선
-- Settings Provider 추가
-- Timeline 버그 수정 (filteredTodayActivities)
+- LastActivityRow 신규 추가
 
-### 2026-01-30: Sprint 7/8 작업
-- Sprint 7 완료
-- Sprint 8 Part A-C, E-F 완료
-- 이모지 → Material Icons 전환
-- HomeProvider 캐싱 최적화
+## Phase 2 울음 분석 구현 현황
 
-## v5.1 주요 변경사항
+### 완료된 파일 (12개 + 홈 통합)
 
-### 삭제된 파일
-- `lib/shared/widgets/quick_action_grid.dart` → FAB로 대체
-- `lib/features/home/widgets/ongoing_sleep_card.dart` → SweetSpotCard 통합
-- `test/shared/widgets/quick_action_grid_test.dart`
+```
+lib/features/cry_analysis/
+├── models/
+│   ├── cry_type.dart                 ✅ Dunstan 5타입 + Unknown
+│   ├── cry_analysis_result.dart      ✅ 확률 분포, 신뢰도
+│   └── cry_analysis_record.dart      ✅ 히스토리 + 통계
+├── services/
+│   ├── audio_input_service.dart      ✅ 실제 마이크 녹음
+│   ├── audio_preprocessor.dart       ✅ Mel Spectrogram
+│   ├── cry_classifier.dart           ✅ 실제 TFLite 추론
+│   └── preterm_adjustment.dart       ✅ 조산아 보정
+├── providers/
+│   └── cry_analysis_provider.dart    ✅ 상태 관리, Freemium
+├── screens/
+│   └── cry_analysis_screen.dart      ✅ 메인 UI
+└── widgets/
+    ├── cry_analysis_button.dart      ✅ 상태별 버튼
+    ├── cry_result_card.dart          ✅ 결과 카드
+    └── probability_bar.dart          ✅ 확률 바
 
-### 신규 파일
-- `lib/shared/widgets/sweet_spot_card.dart` - SweetSpotCard (통합 위젯)
-- `lib/shared/widgets/last_activity_row.dart` - 마지막 활동 Row
-- `lib/features/settings/providers/settings_provider.dart` - 설정 Provider
+lib/features/home/widgets/
+└── cry_analysis_card.dart            ✅ 홈 화면 진입점 카드
 
-### 수정된 파일
-- `lib/features/home/screens/home_screen.dart` - StatefulWidget으로 변경
-- `lib/features/home/providers/home_provider.dart` - 캐싱 최적화
+lib/core/config/
+└── feature_flags.dart                ✅ enableCryAnalysis = true
+
+lib/core/design_system/
+├── lulu_colors.dart                  ✅ LuluCryAnalysisColors, LuluBadgeColors
+└── lulu_icons.dart                   ✅ microphone, soundWave 등
+
+assets/models/
+└── cry_classifier.tflite             ✅ 442KB, 83.6% 정확도
+```
+
+### 홈 화면 구조
+
+```
+1. BabyTabBar              ← 최상단 고정
+2. LastActivityRow         ← 수면/수유/기저귀 경과시간
+3. SweetSpotCard           ← 수면 예측
+4. CryAnalysisCard         ← 🆕 울음 분석 진입점 (NEW 배지)
+5. FAB                     ← 하단 플로팅
+```
+
+## Feature Flag 사용법
+
+```dart
+// lib/core/config/feature_flags.dart
+class FeatureFlags {
+  static const bool enableCryAnalysis = true;  // false로 변경하면 숨김
+}
+
+// HomeScreen에서 사용
+if (FeatureFlags.enableCryAnalysis) ...[
+  CryAnalysisCard(onTap: () => _navigateToCryAnalysis(context)),
+],
+```
 
 ## 알려진 이슈
 없음
 
-## TODO (Sprint 8 남은 작업)
-- [ ] PA-01: 온보딩→홈 즉시 반영 검증
-- [ ] CS-01: 마이크로카피 "다음" 통일 검증
-- [ ] QA 테스트
-- [ ] 출시 준비
+## TODO
+
+### 즉시 (Sprint 11)
+- [ ] 히스토리 화면 구현 (CryHistoryScreen)
+- [ ] 설정 화면 연동 (울음 분석 설정)
+- [ ] 접근성 추가 (VoiceOver/TalkBack)
+- [ ] 실제 아기 울음 테스트
+
+### 출시 전 필수
+- [ ] QA 테스트 (TC-01 ~ TC-08)
+- [ ] TestFlight 배포
+- [ ] 베타 테스터 피드백 수집
 
 ## ⚠️ 릴리즈 전 필수 (Security)
 
@@ -110,48 +152,23 @@ DROP POLICY "Allow all for MVP" ON babies;
 DROP POLICY "Allow all for MVP" ON activities;
 
 -- 2. 001_initial_schema.sql의 원래 RLS 정책 다시 적용
--- (Users can view/insert/update/delete own families/babies/activities)
 ```
-
-참고 파일: `supabase/migrations/002_disable_rls_for_mvp.sql`
-
-## Phase 2 TODO (Sprint 8 이후)
-- [ ] Sweet Spot 알고리즘 고도화
-- [ ] Fenton/WHO 차트 전환
-- [ ] Apple Watch 위젯
-- [ ] AI 울음 분석
 
 ## 주요 파일 참조
 
-### v5.1 핵심 파일
-- `lib/shared/widgets/sweet_spot_card.dart` - 통합 카드 (수면 중 + Sweet Spot)
+### Phase 2 핵심 파일
+- `lib/features/cry_analysis/` - 울음 분석 전체 모듈
+- `lib/features/home/widgets/cry_analysis_card.dart` - 홈 화면 진입점
+- `lib/core/config/feature_flags.dart` - Feature Flag
+- `assets/models/cry_classifier.tflite` - TFLite 모델
+
+### v5.1-5.2 핵심 파일
+- `lib/shared/widgets/sweet_spot_card.dart` - 통합 카드
 - `lib/shared/widgets/last_activity_row.dart` - 경과 시간 표시
 - `lib/features/home/screens/home_screen.dart` - 홈 화면
 
-### 테스트 파일
-- `test/features/record/record_provider_test.dart` - RecordProvider 단위 테스트
-- `test/shared/widgets/baby_tab_bar_test.dart` - BabyTabBar 위젯 테스트
-- `test/shared/widgets/quick_record_button_test.dart` - QuickRecordButton 위젯 테스트
-
-## v5.2 변경 파일
-
-### 수정된 파일
-- `lib/shared/widgets/sweet_spot_card.dart` - 빈 상태 통합, 3종 quick action 추가
-- `lib/features/home/screens/home_screen.dart` - _buildEmptyActivitiesState 단순화
-- `lib/l10n/app_ko.arb` - i18n 키 추가
-- `lib/l10n/app_en.arb` - i18n 키 추가
-
-### 구현 완료 확인된 파일
-- `lib/core/utils/sga_calculator.dart` - SGA 감지 로직
-- `lib/features/home/widgets/baby_status_badge.dart` - SGA 뱃지 표시
-- `lib/core/services/export_service.dart` - CSV 내보내기
-- `lib/features/settings/widgets/add_baby_dialog.dart` - 아기 추가
-- `lib/features/settings/widgets/delete_baby_dialog.dart` - 아기 삭제
-- `lib/shared/widgets/expandable_fab.dart` - Material Icons 적용
-- `lib/features/growth/widgets/*.dart` - Material Icons 적용
-
 ---
 
-**Sprint 8 거의 완료** ✅
+**Sprint 10 완료** ✅
 
-**Next Session**: QA 테스트 + 출시 준비
+**Next Session**: 히스토리 화면 + 실제 울음 테스트 + TestFlight 배포

@@ -238,3 +238,58 @@ class LuluSweetSpotColors {
   /// 서브텍스트 색상 (secondary text)
   static const Color subtext = LuluTextColors.secondary;
 }
+
+/// Cry Analysis Colors (울음 분석 컬러)
+///
+/// Phase 2: AI 울음 분석 기능용 색상 시스템
+class LuluCryAnalysisColors {
+  /// Primary - Deep Purple (울음 분석 메인 색상)
+  static const Color primary = Color(0xFF7E57C2);
+
+  /// 배경색 (10% opacity)
+  static Color get primaryBg => primary.withValues(alpha: 0.1);
+
+  /// 녹음 중 - Coral Orange
+  static const Color recording = Color(0xFFFF7043);
+
+  /// 녹음 중 배경
+  static Color get recordingBg => recording.withValues(alpha: 0.15);
+
+  /// 분석 중 - Amber
+  static const Color analyzing = Color(0xFFFFB300);
+
+  /// 분석 완료 - Success Green
+  static const Color complete = LuluStatusColors.success;
+
+  /// 카드 배경 (surfaceCard와 동일)
+  static const Color cardBackground = LuluColors.surfaceCard;
+
+  /// CTA 버튼 배경 (Midnight Blue 계열)
+  static const Color ctaButton = LuluColors.deepBlue;
+
+  /// CTA 버튼 텍스트
+  static const Color ctaButtonText = LuluTextColors.primary;
+}
+
+/// Badge Colors (뱃지 컬러)
+///
+/// NEW, Premium 등 뱃지용 색상
+class LuluBadgeColors {
+  /// NEW 뱃지 - Orange
+  static const Color newBadge = Color(0xFFFF9800);
+
+  /// NEW 뱃지 텍스트
+  static const Color newBadgeText = Color(0xFFFFFFFF);
+
+  /// Premium 뱃지 - Gold
+  static const Color premiumBadge = Color(0xFFFFD700);
+
+  /// Premium 뱃지 텍스트
+  static const Color premiumBadgeText = Color(0xFF1B263B);
+
+  /// Beta 뱃지 - Teal
+  static const Color betaBadge = Color(0xFF26A69A);
+
+  /// Beta 뱃지 텍스트
+  static const Color betaBadgeText = Color(0xFFFFFFFF);
+}

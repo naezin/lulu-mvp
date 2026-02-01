@@ -14,7 +14,7 @@ class FeatureFlags {
   /// 울음 분석 기능 활성화 여부
   /// - true: 홈 화면에 울음 분석 버튼 표시
   /// - false: 울음 분석 기능 숨김 (출시 시 기본값)
-  static const bool enableCryAnalysis = false;
+  static const bool enableCryAnalysis = true;
 
   /// 울음 분석 결과 상세 보기
   /// enableCryAnalysis가 true일 때만 의미 있음

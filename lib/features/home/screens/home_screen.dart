@@ -18,6 +18,8 @@ import '../../record/screens/play_record_screen.dart';
 import '../../record/screens/health_record_screen.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
+import '../widgets/cry_analysis_card.dart';
+import '../../cry_analysis/screens/cry_analysis_screen.dart';
 
 /// 홈 화면 (시안 B-4 기반)
 ///
@@ -194,6 +196,15 @@ class _HomeScreenState extends State<HomeScreen> {
               lastFeeding: null,
               lastDiaper: null,
             ),
+
+            // 🆕 울음 분석 카드 (Feature Flag로 제어)
+            if (FeatureFlags.enableCryAnalysis) ...[
+              const SizedBox(height: LuluSpacing.md),
+              CryAnalysisCard(
+                onTap: () => _navigateToCryAnalysis(context),
+                showNewBadge: true,
+              ),
+            ],
           ],
         );
       },
@@ -245,6 +256,15 @@ class _HomeScreenState extends State<HomeScreen> {
               recommendedTime: homeProvider.recommendedSleepTime,
               isNightTime: homeProvider.isNightTime,
             ),
+
+            // 🆕 울음 분석 카드 (Feature Flag로 제어)
+            if (FeatureFlags.enableCryAnalysis) ...[
+              const SizedBox(height: LuluSpacing.md),
+              CryAnalysisCard(
+                onTap: () => _navigateToCryAnalysis(context),
+                showNewBadge: true,
+              ),
+            ],
 
             // QuickActionGrid 제거됨 (FAB로 대체) - Sprint 7 Day 2
           ],
@@ -333,6 +353,18 @@ class _HomeScreenState extends State<HomeScreen> {
         homeProvider.addActivity(savedActivity);
       }
     });
+  }
+
+  /// 울음 분석 화면으로 네비게이션
+  ///
+  /// Phase 2: AI 울음 분석 기능
+  void _navigateToCryAnalysis(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const CryAnalysisScreen(),
+      ),
+    );
   }
 
   /// 수면 종료 다이얼로그 (OngoingSleepCard에서 이전)
