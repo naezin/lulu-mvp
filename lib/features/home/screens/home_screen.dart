@@ -188,14 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onDiaperTap: () => _navigateToRecord(context, 'diaper'),
             ),
 
-            const SizedBox(height: LuluSpacing.lg),
-
-            // 마지막 활동 Row (0 상태)
-            const LastActivityRow(
-              lastSleep: null,
-              lastFeeding: null,
-              lastDiaper: null,
-            ),
+            // 🆕 HOTFIX: Empty State에서 LastActivityRow 제거 (불필요한 빈 정보)
 
             // 🆕 울음 분석 카드 (Feature Flag로 제어)
             if (FeatureFlags.enableCryAnalysis) ...[
@@ -219,6 +212,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildNormalContent(BuildContext context, HomeProvider homeProvider) {
     // Sweet Spot Empty State 판단: 수면 기록 없음
     final hasSleepRecord = homeProvider.lastSleep != null;
+    // 🆕 HOTFIX: 수유/기저귀만 있고 수면 없는 경우 안내 메시지 표시
+    final hasOtherActivitiesOnly = !hasSleepRecord &&
+        (homeProvider.lastFeeding != null || homeProvider.lastDiaper != null);
 
     return Consumer<OngoingSleepProvider>(
       builder: (context, sleepProvider, _) {
@@ -241,7 +237,8 @@ class _HomeScreenState extends State<HomeScreen> {
             SweetSpotCard(
               // 기존 props
               state: homeProvider.sweetSpotState,
-              isEmpty: !hasSleepRecord && !isSleeping,
+              // 🆕 HOTFIX: isEmpty는 수면 중이 아니고 수면 기록도 없고 다른 활동도 없을 때만 true
+              isEmpty: !isSleeping && !hasSleepRecord && !hasOtherActivitiesOnly,
               estimatedTime: _getEstimatedTimeText(homeProvider),
               onRecordSleep: () => _navigateToRecord(context, 'sleep'),
               // 🆕 수면 중 props (Sprint 7 Day 2)
@@ -255,6 +252,8 @@ class _HomeScreenState extends State<HomeScreen> {
               progress: homeProvider.sweetSpotProgress,
               recommendedTime: homeProvider.recommendedSleepTime,
               isNightTime: homeProvider.isNightTime,
+              // 🆕 HOTFIX: 수면 기록 없지만 다른 활동 있을 때 안내 메시지
+              hasOtherActivitiesOnly: hasOtherActivitiesOnly,
             ),
 
             // 🆕 울음 분석 카드 (Feature Flag로 제어)

@@ -293,3 +293,53 @@ class LuluBadgeColors {
   /// Beta 뱃지 텍스트
   static const Color betaBadgeText = Color(0xFFFFFFFF);
 }
+
+/// Statistics Colors (통계 화면 컬러)
+///
+/// 작업 지시서 v1.2.1: 통계 화면 전용 색상 시스템
+class LuluStatisticsColors {
+  /// 수면 - Soft Purple
+  static const Color sleep = LuluActivityColors.sleep;
+
+  /// 수유 - Soft Orange
+  static const Color feeding = LuluActivityColors.feeding;
+
+  /// 기저귀 - Soft Blue
+  static const Color diaper = LuluActivityColors.diaper;
+
+  /// 울음 - Coral
+  static const Color crying = Color(0xFFFF7043);
+
+  /// 증가 (긍정) - Green
+  static const Color increase = Color(0xFF5FB37B);
+
+  /// 감소 (부정 or 주의) - Red
+  static const Color decrease = Color(0xFFE87878);
+
+  /// 보합 - Gray
+  static const Color neutral = Color(0xFF6C757D);
+
+  /// 낮잠 비율 - Light Purple
+  static const Color napRatio = Color(0xFFB39DDB);
+
+  /// 밤잠 비율 - Dark Purple
+  static const Color nightRatio = Color(0xFF7E57C2);
+
+  /// 모유 비율 - Soft Orange
+  static const Color breastMilkRatio = Color(0xFFFFCC80);
+
+  /// 분유 비율 - Amber
+  static const Color formulaRatio = Color(0xFFFFD54F);
+
+  /// 이유식 비율 - Yellow Green
+  static const Color solidFoodRatio = Color(0xFFDCE775);
+
+  /// 소변 비율 - Light Blue
+  static const Color wetRatio = Color(0xFF81D4FA);
+
+  /// 대변 비율 - Brown
+  static const Color dirtyRatio = Color(0xFFBCAAA4);
+
+  /// 혼합 비율 - Teal
+  static const Color bothRatio = Color(0xFF80CBC4);
+}

@@ -4,13 +4,32 @@ import 'package:intl/intl.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../shared/widgets/datetime_picker/datetime_picker_sheet.dart';
 
 /// 기록 시간 선택 위젯
+///
+/// HOTFIX v1.1: 통합 날짜/시간 피커 적용
+/// - 원탭으로 바텀시트 피커 표시
+/// - 날짜 + 시간 한 화면에서 선택
+/// - TTC < 3초 목표
 class RecordTimePicker extends StatelessWidget {
+  /// 라벨 텍스트
   final String label;
+
+  /// 현재 선택된 시간
   final DateTime time;
+
+  /// 시간 변경 콜백
   final ValueChanged<DateTime> onTimeChanged;
+
+  /// 날짜 표시 여부
   final bool showDate;
+
+  /// 최소 선택 가능 날짜
+  final DateTime? minimumDate;
+
+  /// 최대 선택 가능 날짜
+  final DateTime? maximumDate;
 
   const RecordTimePicker({
     super.key,
@@ -18,6 +37,8 @@ class RecordTimePicker extends StatelessWidget {
     required this.time,
     required this.onTimeChanged,
     this.showDate = true,
+    this.minimumDate,
+    this.maximumDate,
   });
 
   @override
@@ -33,254 +54,113 @@ class RecordTimePicker extends StatelessWidget {
           ),
         ),
         const SizedBox(height: LuluSpacing.md),
-        Row(
-          children: [
-            // 날짜 선택
-            if (showDate) ...[
-              Expanded(
-                child: _TimeButton(
-                  icon: Icons.calendar_today_rounded,
-                  text: DateFormat('M월 d일 (E)', 'ko').format(time),
-                  onTap: () => _selectDate(context),
+
+        // 통합 시간 선택 버튼 (HOTFIX v1.1)
+        _IntegratedTimeButton(
+          time: time,
+          showDate: showDate,
+          onTap: () => _showDateTimePicker(context),
+        ),
+      ],
+    );
+  }
+
+  /// 통합 날짜/시간 피커 표시
+  Future<void> _showDateTimePicker(BuildContext context) async {
+    final result = await showLuluDateTimePicker(
+      context: context,
+      initialDateTime: time,
+      minimumDate: minimumDate ?? DateTime.now().subtract(const Duration(days: 7)),
+      maximumDate: maximumDate ?? DateTime.now(),
+      title: label,
+    );
+
+    if (result != null) {
+      onTimeChanged(result);
+    }
+  }
+}
+
+/// 통합 시간 선택 버튼 (HOTFIX v1.1)
+class _IntegratedTimeButton extends StatelessWidget {
+  final DateTime time;
+  final bool showDate;
+  final VoidCallback onTap;
+
+  const _IntegratedTimeButton({
+    required this.time,
+    required this.showDate,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // 날짜 + 시간 표시 형식
+    final dateText = DateFormat('M월 d일 (E)', 'ko').format(time);
+    final timeText = DateFormat('a h:mm', 'ko').format(time);
+    final displayText = showDate ? '$dateText  $timeText' : timeText;
+
+    return Semantics(
+      button: true,
+      label: '시간 선택: $displayText',
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(
+            horizontal: LuluSpacing.lg,
+            vertical: LuluSpacing.md + 4,
+          ),
+          decoration: BoxDecoration(
+            color: LuluColors.surfaceElevated,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: LuluColors.glassBorder,
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              // 날짜 아이콘 + 텍스트
+              if (showDate) ...[
+                Icon(
+                  Icons.calendar_today_rounded,
+                  size: 18,
+                  color: LuluColors.lavenderMist,
                 ),
+                const SizedBox(width: LuluSpacing.sm),
+                Text(
+                  dateText,
+                  style: LuluTextStyles.bodyMedium.copyWith(
+                    color: LuluTextColors.primary,
+                  ),
+                ),
+                const SizedBox(width: LuluSpacing.lg),
+              ],
+
+              // 시간 아이콘 + 텍스트
+              Icon(
+                Icons.access_time_rounded,
+                size: 18,
+                color: LuluColors.lavenderMist,
               ),
               const SizedBox(width: LuluSpacing.sm),
+              Text(
+                timeText,
+                style: LuluTextStyles.bodyMedium.copyWith(
+                  color: LuluTextColors.primary,
+                ),
+              ),
+
+              const Spacer(),
+
+              // 화살표 아이콘
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                size: 24,
+                color: LuluTextColors.secondary,
+              ),
             ],
-            // 시간 선택
-            Expanded(
-              child: _TimeButton(
-                icon: Icons.access_time_rounded,
-                text: DateFormat('a h:mm', 'ko').format(time),
-                onTap: () => _selectTime(context),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: LuluSpacing.md),
-        // 빠른 선택 버튼
-        _QuickTimeButtons(
-          currentTime: time,
-          onTimeChanged: onTimeChanged,
-        ),
-      ],
-    );
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final now = DateTime.now();
-    final selectedDate = await showDatePicker(
-      context: context,
-      initialDate: time,
-      firstDate: now.subtract(const Duration(days: 30)),
-      lastDate: now,
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: LuluColors.lavenderMist,
-              surface: LuluColors.deepBlue,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (selectedDate != null) {
-      onTimeChanged(DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
-        time.hour,
-        time.minute,
-      ));
-    }
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final selectedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(time),
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: LuluColors.lavenderMist,
-              surface: LuluColors.deepBlue,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (selectedTime != null) {
-      onTimeChanged(DateTime(
-        time.year,
-        time.month,
-        time.day,
-        selectedTime.hour,
-        selectedTime.minute,
-      ));
-    }
-  }
-}
-
-class _TimeButton extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final VoidCallback onTap;
-
-  const _TimeButton({
-    required this.icon,
-    required this.text,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: LuluSpacing.lg,
-          vertical: LuluSpacing.md,
-        ),
-        decoration: BoxDecoration(
-          color: LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 18,
-              color: LuluColors.lavenderMist,
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Text(
-              text,
-              style: LuluTextStyles.bodyMedium.copyWith(
-                color: LuluTextColors.primary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _QuickTimeButtons extends StatelessWidget {
-  final DateTime currentTime;
-  final ValueChanged<DateTime> onTimeChanged;
-
-  const _QuickTimeButtons({
-    required this.currentTime,
-    required this.onTimeChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-
-    return Wrap(
-      spacing: LuluSpacing.sm,
-      runSpacing: LuluSpacing.sm,
-      children: [
-        _QuickButton(
-          label: '지금',
-          isSelected: _isWithinMinutes(currentTime, now, 1),
-          onTap: () => onTimeChanged(now),
-        ),
-        _QuickButton(
-          label: '5분 전',
-          isSelected: _isWithinMinutes(
-            currentTime,
-            now.subtract(const Duration(minutes: 5)),
-            1,
-          ),
-          onTap: () => onTimeChanged(
-            now.subtract(const Duration(minutes: 5)),
-          ),
-        ),
-        _QuickButton(
-          label: '15분 전',
-          isSelected: _isWithinMinutes(
-            currentTime,
-            now.subtract(const Duration(minutes: 15)),
-            1,
-          ),
-          onTap: () => onTimeChanged(
-            now.subtract(const Duration(minutes: 15)),
-          ),
-        ),
-        _QuickButton(
-          label: '30분 전',
-          isSelected: _isWithinMinutes(
-            currentTime,
-            now.subtract(const Duration(minutes: 30)),
-            1,
-          ),
-          onTap: () => onTimeChanged(
-            now.subtract(const Duration(minutes: 30)),
-          ),
-        ),
-        _QuickButton(
-          label: '1시간 전',
-          isSelected: _isWithinMinutes(
-            currentTime,
-            now.subtract(const Duration(hours: 1)),
-            1,
-          ),
-          onTap: () => onTimeChanged(
-            now.subtract(const Duration(hours: 1)),
-          ),
-        ),
-      ],
-    );
-  }
-
-  bool _isWithinMinutes(DateTime time1, DateTime time2, int minutes) {
-    return time1.difference(time2).inMinutes.abs() <= minutes;
-  }
-}
-
-class _QuickButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _QuickButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: LuluSpacing.md,
-          vertical: LuluSpacing.sm,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? LuluColors.lavenderMist.withValues(alpha: 0.15)
-              : LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? LuluColors.lavenderMist : Colors.transparent,
-          ),
-        ),
-        child: Text(
-          label,
-          style: LuluTextStyles.caption.copyWith(
-            color: isSelected ? LuluColors.lavenderMist : LuluTextColors.secondary,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
       ),

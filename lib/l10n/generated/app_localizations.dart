@@ -1231,6 +1231,24 @@ abstract class S {
   /// **'이 예측은 참고용이며, 아기마다 다를 수 있어요'**
   String get sweetSpotDisclaimer;
 
+  /// Sweet Spot 수면 기록 없을 때 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'수면을 기록하면 예측이 시작돼요'**
+  String get sweetSpotNoSleepTitle;
+
+  /// Sweet Spot 수면 기록 없을 때 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 기록이 쌓이면 다음 수면 시간을 예측해 드릴게요'**
+  String get sweetSpotNoSleepHint;
+
+  /// Sweet Spot 수면 기록 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 기록하기'**
+  String get sweetSpotRecordSleepButton;
+
   /// 기록 탭 오늘 빈 상태 제목
   ///
   /// In ko, this message translates to:
@@ -1470,6 +1488,228 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'거부'**
   String get babyReactionRejected;
+
+  /// 통계 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'통계'**
+  String get statisticsTitle;
+
+  /// 주간 요약 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 요약'**
+  String get statisticsWeeklySummary;
+
+  /// 통계 - 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'수면'**
+  String get statisticsSleep;
+
+  /// 통계 - 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get statisticsFeeding;
+
+  /// 통계 - 기저귀
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀'**
+  String get statisticsDiaper;
+
+  /// 통계 - 울음
+  ///
+  /// In ko, this message translates to:
+  /// **'울음'**
+  String get statisticsCrying;
+
+  /// 통계 - 일 평균 단위
+  ///
+  /// In ko, this message translates to:
+  /// **'/일 평균'**
+  String get statisticsPerDayAverage;
+
+  /// 통계 - 평균
+  ///
+  /// In ko, this message translates to:
+  /// **'평균'**
+  String get statisticsAverage;
+
+  /// 함께 보기 탭 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'함께 보기'**
+  String get statisticsTogetherView;
+
+  /// 함께 보기 뷰 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 함께 보기'**
+  String get statisticsTogetherViewTitle;
+
+  /// 함께 보기 안내 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'각 아기는 고유한 패턴을 가지고 있어요 💜'**
+  String get statisticsTogetherViewGuide;
+
+  /// 교정연령 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'교정 {days}일'**
+  String statisticsCorrectedAge(int days);
+
+  /// 수면 리포트 카드 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 리포트'**
+  String get statisticsSleepReport;
+
+  /// 수유 리포트 카드 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'수유 리포트'**
+  String get statisticsFeedingReport;
+
+  /// 기저귀 리포트 카드 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀 리포트'**
+  String get statisticsDiaperReport;
+
+  /// 울음 리포트 카드 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'울음 리포트'**
+  String get statisticsCryingReport;
+
+  /// 통계 면책 문구
+  ///
+  /// In ko, this message translates to:
+  /// **'이 통계는 참고용이며 의료 판단이 아닙니다'**
+  String get statisticsDisclaimer;
+
+  /// 교정연령 기준 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 기준으로 분석되었습니다'**
+  String get statisticsCorrectedAgeNote;
+
+  /// 날짜/시간 피커 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'시간 선택'**
+  String get dateTimePickerTitle;
+
+  /// 현재 시간 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'지금'**
+  String get dateTimeNow;
+
+  /// 5분 전 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'-5분'**
+  String get dateTime5MinAgo;
+
+  /// 15분 전 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'-15분'**
+  String get dateTime15MinAgo;
+
+  /// 30분 전 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'-30분'**
+  String get dateTime30MinAgo;
+
+  /// 날짜/시간 피커 취소
+  ///
+  /// In ko, this message translates to:
+  /// **'취소'**
+  String get dateTimeCancel;
+
+  /// 날짜/시간 피커 확인
+  ///
+  /// In ko, this message translates to:
+  /// **'확인'**
+  String get dateTimeConfirm;
+
+  /// 수면 시작 시간 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 시작'**
+  String get sleepStartTime;
+
+  /// 수면 종료 시간 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 종료'**
+  String get sleepEndTime;
+
+  /// 수면 지금 종료 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'지금 종료'**
+  String get sleepEndNow;
+
+  /// 수면 종료 시간 선택 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'시간 선택'**
+  String get sleepSelectEndTime;
+
+  /// 빠른 수유 기록 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'빠른 기록'**
+  String get quickFeedingTitle;
+
+  /// 빠른 수유 버튼 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'탭: 저장 / 길게: 수정'**
+  String get quickFeedingHint;
+
+  /// 빠른 수유 빈 상태 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 기록이 없어요'**
+  String get quickFeedingEmpty;
+
+  /// 빠른 수유 빈 상태 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 수유를 기록하면 빠른 버튼이 나타나요!'**
+  String get quickFeedingEmptyDesc;
+
+  /// 빠른 수유 저장 완료
+  ///
+  /// In ko, this message translates to:
+  /// **'{summary} 저장됨'**
+  String quickFeedingSaved(String summary);
+
+  /// 빠른 수유 저장 취소 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'취소'**
+  String get quickFeedingUndo;
+
+  /// 빠른 수유 저장 취소 완료
+  ///
+  /// In ko, this message translates to:
+  /// **'취소됨'**
+  String get quickFeedingUndone;
+
+  /// 빠른 기록과 상세 입력 사이 구분선
+  ///
+  /// In ko, this message translates to:
+  /// **'또는 새로 입력'**
+  String get orNewEntry;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

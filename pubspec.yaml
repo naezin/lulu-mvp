@@ -38,6 +38,8 @@ dependencies:
 
   # UI Components
   shimmer: ^3.0.0
+  fl_chart: ^0.68.0
+  connectivity_plus: ^5.0.0
 
   # Localization
   flutter_localizations:

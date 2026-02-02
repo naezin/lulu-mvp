@@ -6,16 +6,15 @@ import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_model.dart';
-import '../../../data/models/baby_type.dart';
 import '../../../data/models/feeding_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
-import '../../../shared/widgets/quick_record_button.dart';
 import '../providers/record_provider.dart';
 import '../widgets/record_time_picker.dart';
 import '../widgets/feeding_type_selector.dart';
 import '../widgets/breast_feeding_form.dart';
 import '../widgets/solid_food_form.dart';
 import '../widgets/amount_input.dart';
+import '../widgets/recent_feeding_buttons.dart';
 
 /// 수유 기록 화면 (v6.0 - Phase A)
 ///
@@ -47,7 +46,6 @@ class FeedingRecordScreen extends StatefulWidget {
 
 class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
   final _notesController = TextEditingController();
-  bool _isQuickSaving = false;
 
   // v6.0: enum 기반 상태
   FeedingContentType _contentType = FeedingContentType.breastMilk;
@@ -67,11 +65,15 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<RecordProvider>().initialize(
-            familyId: widget.familyId,
-            babies: widget.babies,
-            preselectedBabyId: widget.preselectedBabyId,
-          );
+      final provider = context.read<RecordProvider>();
+      provider.initialize(
+        familyId: widget.familyId,
+        babies: widget.babies,
+        preselectedBabyId: widget.preselectedBabyId,
+      );
+      // HOTFIX v1.2: 최근 수유 기록 로드
+      final babyId = widget.preselectedBabyId ?? widget.babies.first.id;
+      provider.loadRecentFeedings(babyId);
     });
   }
 
@@ -114,6 +116,8 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                   onBabyChanged: (babyId) {
                     if (babyId != null) {
                       provider.setSelectedBabyIds([babyId]);
+                      // HOTFIX v1.2: 아기 전환 시 최근 기록 새로고침
+                      provider.loadRecentFeedings(babyId);
                     }
                   },
                 ),
@@ -124,17 +128,14 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 마지막 기록 반복 버튼 (MB-03)
-                      QuickRecordButton(
-                        lastRecord: widget.lastFeedingRecord,
-                        activityType: ActivityType.feeding,
-                        isLoading: _isQuickSaving,
-                        onTap: () => _handleQuickSave(provider),
-                        babyName: _getSelectedBabyName(provider),
+                      // HOTFIX v1.2: 최근 3개 빠른 수유 버튼
+                      RecentFeedingButtons(
+                        babyId: provider.selectedBabyId ?? widget.babies.first.id,
+                        onEditRequest: _handleEditRequest,
+                        onSaveSuccess: () {
+                          // 저장 성공 시 화면 닫기 (선택적)
+                        },
                       ),
-
-                      if (widget.lastFeedingRecord != null)
-                        const SizedBox(height: LuluSpacing.xl),
 
                       // v6.0: 수유 종류 선택 (enum 기반)
                       FeedingTypeSelector(
@@ -276,50 +277,50 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
     );
   }
 
-  /// MB-03: 현재 선택된 아기 이름 반환
-  String? _getSelectedBabyName(RecordProvider provider) {
-    if (provider.selectedBabyIds.isEmpty) return null;
-    final selectedId = provider.selectedBabyIds.first;
-    final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
-    return baby?.name;
-  }
+  /// HOTFIX v1.2: 롱프레스 시 수정 모드 진입
+  /// 템플릿 기록을 기반으로 폼을 채움
+  void _handleEditRequest(ActivityModel record) {
+    final provider = context.read<RecordProvider>();
+    final data = record.data;
+    if (data == null) return;
 
-  Future<void> _handleQuickSave(RecordProvider provider) async {
-    if (_isQuickSaving || widget.lastFeedingRecord == null) return;
+    // RecordProvider 상태를 템플릿으로 설정
+    final feedingType = data['feeding_type'] as String? ?? 'bottle';
+    provider.setFeedingType(feedingType);
 
-    setState(() => _isQuickSaving = true);
-
-    try {
-      // 마지막 기록의 데이터를 복사하여 새 기록 생성
-      final lastData = widget.lastFeedingRecord!.data;
-      if (lastData == null) return;
-
-      // RecordProvider 상태를 마지막 기록으로 설정
-      final feedingType = lastData['feeding_type'] as String? ?? 'bottle';
-      provider.setFeedingType(feedingType);
-
-      if (feedingType == 'breast') {
-        final breastSide = lastData['breast_side'] as String?;
-        if (breastSide != null) provider.setBreastSide(breastSide);
-        final duration = lastData['duration_minutes'] as int?;
-        if (duration != null) provider.setFeedingDuration(duration);
-      } else {
-        final amount = lastData['amount_ml'] as num?;
-        if (amount != null) provider.setFeedingAmount(amount.toDouble());
+    // 로컬 상태도 업데이트
+    setState(() {
+      switch (feedingType) {
+        case 'breast':
+          _contentType = FeedingContentType.breastMilk;
+          final side = data['breast_side'] as String?;
+          if (side != null) {
+            _breastSide = BreastSide.values.firstWhere(
+              (s) => s.name == side,
+              orElse: () => BreastSide.left,
+            );
+            provider.setBreastSide(side);
+          }
+          final duration = data['duration_minutes'] as int?;
+          if (duration != null) {
+            _durationMinutes = duration;
+            provider.setFeedingDuration(duration);
+          }
+          break;
+        case 'solid':
+          _contentType = FeedingContentType.solid;
+          break;
+        case 'formula':
+        case 'bottle':
+        default:
+          _contentType = FeedingContentType.formula;
+          final amount = data['amount_ml'] as num?;
+          if (amount != null) {
+            provider.setFeedingAmount(amount.toDouble());
+          }
+          break;
       }
-
-      // 현재 시간으로 저장
-      provider.setRecordTime(DateTime.now());
-
-      final activity = await provider.saveFeeding();
-      if (activity != null && mounted) {
-        Navigator.of(context).pop(activity);
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isQuickSaving = false);
-      }
-    }
+    });
   }
 
   // v6.0: _buildBreastSideSelector, _buildDurationInput 제거됨

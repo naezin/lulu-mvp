@@ -927,7 +927,140 @@ class RecordProvider extends ChangeNotifier {
     _playCache.clear();
     _healthCache.clear();
 
+    // HOTFIX v1.2: 빠른 수유 캐시 초기화
+    _recentFeedings.clear();
+    _lastSavedId = null;
+
     notifyListeners();
+  }
+
+  // ========================================
+  // HOTFIX v1.2: 빠른 수유 기록 (최근 3개 버튼)
+  // ========================================
+
+  /// 최근 수유 기록 (중복 제거된 3개)
+  List<ActivityModel> _recentFeedings = [];
+  List<ActivityModel> get recentFeedings => List.unmodifiable(_recentFeedings);
+
+  /// 마지막 저장 ID (취소용)
+  String? _lastSavedId;
+
+  /// 연타 방지 타임스탬프
+  DateTime? _lastQuickSaveTime;
+
+  /// 최근 수유 기록 로드
+  /// 아기별로 최근 수유 기록에서 중복 제거 후 3개 반환
+  Future<void> loadRecentFeedings(String babyId) async {
+    try {
+      // 아기 ID로 모든 활동 가져오기
+      final allActivities = await _localActivityService.getActivitiesByBabyId(babyId);
+
+      // 수유 기록만 필터링 + 최신순 정렬 (이미 정렬됨)
+      final feedingActivities = allActivities
+          .where((a) => a.type == ActivityType.feeding)
+          .toList();
+
+      // 중복 제거 (feeding_type + breast_side + amount_ml 조합)
+      final seen = <String>{};
+      final unique = <ActivityModel>[];
+
+      for (final activity in feedingActivities) {
+        final key = _buildFeedingKey(activity);
+        if (!seen.contains(key)) {
+          seen.add(key);
+          unique.add(activity);
+        }
+        if (unique.length >= 3) break;
+      }
+
+      _recentFeedings = unique;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ [RecordProvider] Error loading recent feedings: $e');
+      _recentFeedings = [];
+      notifyListeners();
+    }
+  }
+
+  /// 수유 기록 고유 키 생성 (중복 판별용)
+  String _buildFeedingKey(ActivityModel activity) {
+    final data = activity.data;
+    if (data == null) return activity.id;
+
+    final type = data['feeding_type'] as String? ?? 'bottle';
+    final side = data['breast_side'] as String? ?? '';
+    final amount = data['amount_ml']?.toString() ?? '';
+    final duration = data['duration_minutes']?.toString() ?? '';
+
+    return '$type|$side|$amount|$duration';
+  }
+
+  /// 빠른 수유 저장
+  /// 템플릿 기반으로 현재 시간에 저장
+  /// 연타 방지: 1초 이내 중복 저장 차단
+  Future<String?> quickSaveFeeding(ActivityModel template) async {
+    // 연타 방지 (1초 이내)
+    final now = DateTime.now();
+    if (_lastQuickSaveTime != null &&
+        now.difference(_lastQuickSaveTime!).inMilliseconds < 1000) {
+      debugPrint('⚠️ [RecordProvider] Quick save blocked (double tap)');
+      return null;
+    }
+    _lastQuickSaveTime = now;
+
+    if (_familyId == null || selectedBabyId == null) {
+      _errorMessage = '아기를 선택해주세요';
+      notifyListeners();
+      return null;
+    }
+
+    try {
+      // 새 ID와 현재 시간으로 복사
+      final newActivity = template.copyWith(
+        id: _uuid.v4(),
+        babyIds: [selectedBabyId!],
+        startTime: now,
+        endTime: now,
+        createdAt: now,
+      );
+
+      final saved = await _localActivityService.saveActivity(newActivity);
+      _lastSavedId = saved.id;
+
+      debugPrint('[OK] [RecordProvider] Quick feeding saved: ${saved.id}');
+
+      // 최근 기록 새로고침
+      await loadRecentFeedings(selectedBabyId!);
+
+      return saved.id;
+    } catch (e) {
+      _errorMessage = '저장에 실패했습니다: $e';
+      debugPrint('❌ [RecordProvider] Error quick save feeding: $e');
+      notifyListeners();
+      return null;
+    }
+  }
+
+  /// 마지막 저장 취소
+  Future<bool> undoLastSave() async {
+    if (_lastSavedId == null) return false;
+
+    try {
+      await _localActivityService.deleteActivity(_lastSavedId!);
+      debugPrint('[OK] [RecordProvider] Undo: $_lastSavedId');
+
+      _lastSavedId = null;
+
+      // 최근 기록 새로고침
+      if (selectedBabyId != null) {
+        await loadRecentFeedings(selectedBabyId!);
+      }
+
+      return true;
+    } catch (e) {
+      debugPrint('❌ [RecordProvider] Error undo: $e');
+      return false;
+    }
   }
 }
 

@@ -629,6 +629,16 @@ class SEn extends S {
       'This prediction is for reference only and may vary for each baby';
 
   @override
+  String get sweetSpotNoSleepTitle => 'Record sleep to start predictions';
+
+  @override
+  String get sweetSpotNoSleepHint =>
+      'Once you have sleep records, we\'ll predict the next sleep time';
+
+  @override
+  String get sweetSpotRecordSleepButton => 'Record Sleep';
+
+  @override
   String timelineEmptyTodayTitle(String babyName) {
     return 'Start $babyName\'s first record';
   }
@@ -759,4 +769,122 @@ class SEn extends S {
 
   @override
   String get babyReactionRejected => 'Rejected';
+
+  @override
+  String get statisticsTitle => 'Statistics';
+
+  @override
+  String get statisticsWeeklySummary => 'This Week\'s Summary';
+
+  @override
+  String get statisticsSleep => 'Sleep';
+
+  @override
+  String get statisticsFeeding => 'Feeding';
+
+  @override
+  String get statisticsDiaper => 'Diaper';
+
+  @override
+  String get statisticsCrying => 'Crying';
+
+  @override
+  String get statisticsPerDayAverage => '/day avg';
+
+  @override
+  String get statisticsAverage => 'Average';
+
+  @override
+  String get statisticsTogetherView => 'Together View';
+
+  @override
+  String get statisticsTogetherViewTitle => 'This Week Together';
+
+  @override
+  String get statisticsTogetherViewGuide =>
+      'Each baby has their own unique pattern 💜';
+
+  @override
+  String statisticsCorrectedAge(int days) {
+    return 'Corrected ${days}d';
+  }
+
+  @override
+  String get statisticsSleepReport => 'Sleep Report';
+
+  @override
+  String get statisticsFeedingReport => 'Feeding Report';
+
+  @override
+  String get statisticsDiaperReport => 'Diaper Report';
+
+  @override
+  String get statisticsCryingReport => 'Crying Report';
+
+  @override
+  String get statisticsDisclaimer =>
+      'These statistics are for reference only, not medical advice';
+
+  @override
+  String get statisticsCorrectedAgeNote => 'Analyzed based on corrected age';
+
+  @override
+  String get dateTimePickerTitle => 'Select Time';
+
+  @override
+  String get dateTimeNow => 'Now';
+
+  @override
+  String get dateTime5MinAgo => '-5 min';
+
+  @override
+  String get dateTime15MinAgo => '-15 min';
+
+  @override
+  String get dateTime30MinAgo => '-30 min';
+
+  @override
+  String get dateTimeCancel => 'Cancel';
+
+  @override
+  String get dateTimeConfirm => 'Confirm';
+
+  @override
+  String get sleepStartTime => 'Sleep Start';
+
+  @override
+  String get sleepEndTime => 'Sleep End';
+
+  @override
+  String get sleepEndNow => 'End Now';
+
+  @override
+  String get sleepSelectEndTime => 'Select';
+
+  @override
+  String get quickFeedingTitle => 'Quick Record';
+
+  @override
+  String get quickFeedingHint => 'Tap: Save / Hold: Edit';
+
+  @override
+  String get quickFeedingEmpty => 'No records yet';
+
+  @override
+  String get quickFeedingEmptyDesc =>
+      'Quick buttons appear after your first feeding record!';
+
+  @override
+  String quickFeedingSaved(String summary) {
+    return '$summary saved';
+  }
+
+  @override
+  String get quickFeedingUndo => 'Undo';
+
+  @override
+  String get quickFeedingUndone => 'Undone';
+
+  @override
+  String get orNewEntry => 'or enter new';
 }

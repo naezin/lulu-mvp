@@ -10,6 +10,7 @@ import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
+import '../../../shared/widgets/datetime_picker/datetime_picker_sheet.dart';
 import '../../../shared/widgets/quick_record_button.dart';
 import '../providers/record_provider.dart';
 import '../providers/ongoing_sleep_provider.dart';
@@ -555,6 +556,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
+  /// HOTFIX v1.1: 통합 DateTime Picker 사용
   Widget _buildTimeSection({
     required String label,
     required DateTime time,
@@ -571,35 +573,33 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           ),
         ),
         const SizedBox(height: LuluSpacing.md),
-        Row(
-          children: [
-            // 날짜 선택
-            Expanded(
-              child: _TimeButton(
-                icon: Icons.calendar_today_rounded,
-                text: DateFormat('M월 d일 (E)', 'ko').format(time),
-                onTap: () => _selectDate(time, onTimeChanged),
-              ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            // 시간 선택
-            Expanded(
-              child: _TimeButton(
-                icon: Icons.access_time_rounded,
-                text: DateFormat('a h:mm', 'ko').format(time),
-                onTap: () => _selectTime(time, onTimeChanged),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: LuluSpacing.md),
-        // 빠른 선택
-        _QuickTimeButtons(
-          currentTime: time,
-          onTimeChanged: onTimeChanged,
+        // 통합 날짜/시간 버튼 (원탭 → 피커 열기)
+        _IntegratedTimeButton(
+          time: time,
+          onTap: () => _selectDateTime(time, onTimeChanged, label),
         ),
       ],
     );
+  }
+
+  /// HOTFIX v1.1: 통합 DateTime 선택 (바텀시트)
+  Future<void> _selectDateTime(
+    DateTime current,
+    ValueChanged<DateTime> onChanged,
+    String title,
+  ) async {
+    final now = DateTime.now();
+    final result = await showLuluDateTimePicker(
+      context: context,
+      initialDateTime: current,
+      minimumDate: now.subtract(const Duration(days: 7)),
+      maximumDate: now,
+      title: title,
+    );
+
+    if (result != null) {
+      onChanged(result);
+    }
   }
 
   Widget _buildDurationDisplay(RecordProvider provider) {
@@ -766,65 +766,6 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Future<void> _selectDate(DateTime current, ValueChanged<DateTime> onChanged) async {
-    final now = DateTime.now();
-    final selectedDate = await showDatePicker(
-      context: context,
-      initialDate: current,
-      firstDate: now.subtract(const Duration(days: 30)),
-      lastDate: now,
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: LuluActivityColors.sleep,
-              surface: LuluColors.deepBlue,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (selectedDate != null) {
-      onChanged(DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
-        current.hour,
-        current.minute,
-      ));
-    }
-  }
-
-  Future<void> _selectTime(DateTime current, ValueChanged<DateTime> onChanged) async {
-    final selectedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(current),
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: LuluActivityColors.sleep,
-              surface: LuluColors.deepBlue,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (selectedTime != null) {
-      onChanged(DateTime(
-        current.year,
-        current.month,
-        current.day,
-        selectedTime.hour,
-        selectedTime.minute,
-      ));
-    }
-  }
-
   Future<void> _handleSave(RecordProvider provider) async {
     // "지금 재우기" 모드면 OngoingSleepProvider 사용
     if (_isSleepNow) {
@@ -935,150 +876,56 @@ class _ModeButton extends StatelessWidget {
   }
 }
 
-class _TimeButton extends StatelessWidget {
-  final IconData icon;
-  final String text;
+/// HOTFIX v1.1: 통합 날짜/시간 버튼
+class _IntegratedTimeButton extends StatelessWidget {
+  final DateTime time;
   final VoidCallback onTap;
 
-  const _TimeButton({
-    required this.icon,
-    required this.text,
+  const _IntegratedTimeButton({
+    required this.time,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: LuluSpacing.lg,
-          vertical: LuluSpacing.md,
-        ),
-        decoration: BoxDecoration(
-          color: LuluColors.surfaceElevated,
+    return Semantics(
+      button: true,
+      label: '시간 선택',
+      child: Material(
+        color: LuluColors.surfaceElevated,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 18,
-              color: LuluActivityColors.sleep,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: LuluSpacing.lg,
+              vertical: LuluSpacing.md,
             ),
-            const SizedBox(width: LuluSpacing.sm),
-            Text(
-              text,
-              style: LuluTextStyles.bodyMedium.copyWith(
-                color: LuluTextColors.primary,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.access_time_rounded,
+                  size: 20,
+                  color: LuluActivityColors.sleep,
+                ),
+                const SizedBox(width: LuluSpacing.sm),
+                Text(
+                  DateFormat('M월 d일 (E) a h:mm', 'ko').format(time),
+                  style: LuluTextStyles.bodyMedium.copyWith(
+                    color: LuluTextColors.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: LuluSpacing.sm),
+                Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 20,
+                  color: LuluTextColors.tertiary,
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _QuickTimeButtons extends StatelessWidget {
-  final DateTime currentTime;
-  final ValueChanged<DateTime> onTimeChanged;
-
-  const _QuickTimeButtons({
-    required this.currentTime,
-    required this.onTimeChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-
-    return Wrap(
-      spacing: LuluSpacing.sm,
-      runSpacing: LuluSpacing.sm,
-      children: [
-        _QuickButton(
-          label: '지금',
-          isSelected: _isWithinMinutes(currentTime, now, 1),
-          onTap: () => onTimeChanged(now),
-        ),
-        _QuickButton(
-          label: '5분 전',
-          isSelected: _isWithinMinutes(
-            currentTime,
-            now.subtract(const Duration(minutes: 5)),
-            1,
-          ),
-          onTap: () => onTimeChanged(
-            now.subtract(const Duration(minutes: 5)),
-          ),
-        ),
-        _QuickButton(
-          label: '15분 전',
-          isSelected: _isWithinMinutes(
-            currentTime,
-            now.subtract(const Duration(minutes: 15)),
-            1,
-          ),
-          onTap: () => onTimeChanged(
-            now.subtract(const Duration(minutes: 15)),
-          ),
-        ),
-        _QuickButton(
-          label: '30분 전',
-          isSelected: _isWithinMinutes(
-            currentTime,
-            now.subtract(const Duration(minutes: 30)),
-            1,
-          ),
-          onTap: () => onTimeChanged(
-            now.subtract(const Duration(minutes: 30)),
-          ),
-        ),
-      ],
-    );
-  }
-
-  bool _isWithinMinutes(DateTime time1, DateTime time2, int minutes) {
-    return time1.difference(time2).inMinutes.abs() <= minutes;
-  }
-}
-
-class _QuickButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _QuickButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: LuluSpacing.md,
-          vertical: LuluSpacing.sm,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? LuluActivityColors.sleepBg
-              : LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? LuluActivityColors.sleep : Colors.transparent,
-          ),
-        ),
-        child: Text(
-          label,
-          style: LuluTextStyles.caption.copyWith(
-            color: isSelected ? LuluActivityColors.sleep : LuluTextColors.secondary,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
       ),

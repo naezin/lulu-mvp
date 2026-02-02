@@ -622,6 +622,15 @@ class SKo extends S {
   String get sweetSpotDisclaimer => '이 예측은 참고용이며, 아기마다 다를 수 있어요';
 
   @override
+  String get sweetSpotNoSleepTitle => '수면을 기록하면 예측이 시작돼요';
+
+  @override
+  String get sweetSpotNoSleepHint => '수면 기록이 쌓이면 다음 수면 시간을 예측해 드릴게요';
+
+  @override
+  String get sweetSpotRecordSleepButton => '수면 기록하기';
+
+  @override
   String timelineEmptyTodayTitle(String babyName) {
     return '$babyName의 첫 기록을 시작해보세요';
   }
@@ -750,4 +759,119 @@ class SKo extends S {
 
   @override
   String get babyReactionRejected => '거부';
+
+  @override
+  String get statisticsTitle => '통계';
+
+  @override
+  String get statisticsWeeklySummary => '이번 주 요약';
+
+  @override
+  String get statisticsSleep => '수면';
+
+  @override
+  String get statisticsFeeding => '수유';
+
+  @override
+  String get statisticsDiaper => '기저귀';
+
+  @override
+  String get statisticsCrying => '울음';
+
+  @override
+  String get statisticsPerDayAverage => '/일 평균';
+
+  @override
+  String get statisticsAverage => '평균';
+
+  @override
+  String get statisticsTogetherView => '함께 보기';
+
+  @override
+  String get statisticsTogetherViewTitle => '이번 주 함께 보기';
+
+  @override
+  String get statisticsTogetherViewGuide => '각 아기는 고유한 패턴을 가지고 있어요 💜';
+
+  @override
+  String statisticsCorrectedAge(int days) {
+    return '교정 $days일';
+  }
+
+  @override
+  String get statisticsSleepReport => '수면 리포트';
+
+  @override
+  String get statisticsFeedingReport => '수유 리포트';
+
+  @override
+  String get statisticsDiaperReport => '기저귀 리포트';
+
+  @override
+  String get statisticsCryingReport => '울음 리포트';
+
+  @override
+  String get statisticsDisclaimer => '이 통계는 참고용이며 의료 판단이 아닙니다';
+
+  @override
+  String get statisticsCorrectedAgeNote => '교정연령 기준으로 분석되었습니다';
+
+  @override
+  String get dateTimePickerTitle => '시간 선택';
+
+  @override
+  String get dateTimeNow => '지금';
+
+  @override
+  String get dateTime5MinAgo => '-5분';
+
+  @override
+  String get dateTime15MinAgo => '-15분';
+
+  @override
+  String get dateTime30MinAgo => '-30분';
+
+  @override
+  String get dateTimeCancel => '취소';
+
+  @override
+  String get dateTimeConfirm => '확인';
+
+  @override
+  String get sleepStartTime => '수면 시작';
+
+  @override
+  String get sleepEndTime => '수면 종료';
+
+  @override
+  String get sleepEndNow => '지금 종료';
+
+  @override
+  String get sleepSelectEndTime => '시간 선택';
+
+  @override
+  String get quickFeedingTitle => '빠른 기록';
+
+  @override
+  String get quickFeedingHint => '탭: 저장 / 길게: 수정';
+
+  @override
+  String get quickFeedingEmpty => '아직 기록이 없어요';
+
+  @override
+  String get quickFeedingEmptyDesc => '첫 수유를 기록하면 빠른 버튼이 나타나요!';
+
+  @override
+  String quickFeedingSaved(String summary) {
+    return '$summary 저장됨';
+  }
+
+  @override
+  String get quickFeedingUndo => '취소';
+
+  @override
+  String get quickFeedingUndone => '취소됨';
+
+  @override
+  String get orNewEntry => '또는 새로 입력';
 }

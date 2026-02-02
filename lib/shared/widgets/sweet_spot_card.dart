@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../features/home/providers/home_provider.dart';
@@ -65,6 +66,10 @@ class SweetSpotCard extends StatefulWidget {
   /// 밤잠 여부
   final bool isNightTime;
 
+  // 🆕 HOTFIX: 수면 기록 없을 때 안내 메시지
+  /// 수면 기록 없지만 다른 활동(수유/기저귀)은 있음
+  final bool hasOtherActivitiesOnly;
+
   const SweetSpotCard({
     super.key,
     required this.state,
@@ -83,6 +88,7 @@ class SweetSpotCard extends StatefulWidget {
     this.progress,
     this.recommendedTime,
     this.isNightTime = false,
+    this.hasOtherActivitiesOnly = false,
   });
 
   @override
@@ -184,7 +190,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                 ),
                 child: const Center(
                   child: Icon(
-                    Icons.bedtime_rounded,
+                    LuluIcons.sleep,
                     size: 24,
                     color: LuluActivityColors.sleep,
                   ),
@@ -242,7 +248,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.bedtime_rounded, size: 20),
+                  const Icon(LuluIcons.sleep, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     '탭하여 수면 종료',
@@ -346,19 +352,19 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildQuickRecordButton(
-                icon: Icons.local_drink_rounded,
+                icon: LuluIcons.feeding,
                 label: l10n.activityTypeFeeding,
                 color: LuluActivityColors.feeding,
                 onTap: widget.onFeedingTap,
               ),
               _buildQuickRecordButton(
-                icon: Icons.bedtime_rounded,
+                icon: LuluIcons.sleep,
                 label: l10n.activityTypeSleep,
                 color: LuluActivityColors.sleep,
                 onTap: widget.onSleepTap ?? widget.onRecordSleep,
               ),
               _buildQuickRecordButton(
-                icon: Icons.baby_changing_station_rounded,
+                icon: LuluIcons.diaper,
                 label: l10n.activityTypeDiaper,
                 color: LuluActivityColors.diaper,
                 onTap: widget.onDiaperTap,
@@ -431,6 +437,11 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
   /// Normal State UI (v3 개선)
   Widget _buildNormalState(BuildContext context, S l10n) {
+    // 🆕 HOTFIX: 수면 기록 없지만 다른 활동은 있을 때 안내 메시지
+    if (widget.hasOtherActivitiesOnly) {
+      return _buildNoSleepGuideCard(context, l10n);
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -446,7 +457,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           Row(
             children: [
               Icon(
-                Icons.bedtime_outlined,
+                LuluIcons.sleep,
                 size: 20,
                 color: LuluSweetSpotColors.icon,
               ),
@@ -494,6 +505,71 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             style: TextStyle(
               fontSize: 11,
               color: LuluTextColors.tertiary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 🆕 HOTFIX: 수면 기록 없을 때 안내 카드
+  ///
+  /// 수유/기저귀 기록은 있지만 수면 기록이 없을 때 표시
+  Widget _buildNoSleepGuideCard(BuildContext context, S l10n) {
+    return Container(
+      padding: const EdgeInsets.all(LuluSpacing.lg),
+      decoration: BoxDecoration(
+        color: LuluColors.surfaceCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: LuluColors.glassBorder),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 아이콘
+          Icon(
+            LuluIcons.sleep,
+            size: 40,
+            color: LuluActivityColors.sleep.withValues(alpha: 0.6),
+          ),
+          const SizedBox(height: LuluSpacing.md),
+
+          // 안내 메시지
+          Text(
+            l10n.sweetSpotNoSleepTitle,
+            style: LuluTextStyles.titleSmall.copyWith(
+              color: LuluTextColors.primary,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: LuluSpacing.sm),
+          Text(
+            l10n.sweetSpotNoSleepHint,
+            style: LuluTextStyles.bodySmall.copyWith(
+              color: LuluTextColors.secondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: LuluSpacing.lg),
+
+          // 수면 기록 버튼
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: widget.onRecordSleep ?? widget.onSleepTap,
+              icon: const Icon(LuluIcons.sleep, size: 18),
+              label: Text(l10n.sweetSpotRecordSleepButton),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: LuluActivityColors.sleep,
+                side: BorderSide(
+                  color: LuluActivityColors.sleep.withValues(alpha: 0.5),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
             ),
           ),
         ],

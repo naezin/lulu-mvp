@@ -227,6 +227,9 @@
   "sweetSpotEmptyActionHint": "Tap a button below to start\nrecording feeding, sleep, or diaper",
   "sweetSpotEmptyHint": "We'll predict sleep times once you have some records",
   "sweetSpotDisclaimer": "This prediction is for reference only and may vary for each baby",
+  "sweetSpotNoSleepTitle": "Record sleep to start predictions",
+  "sweetSpotNoSleepHint": "Once you have sleep records, we'll predict the next sleep time",
+  "sweetSpotRecordSleepButton": "Record Sleep",
   "sweetSpotTitleWithName": "{babyName}'s next {sleepType}",
   "@sweetSpotTitleWithName": {
     "description": "Sweet Spot card title with baby name and sleep type",
@@ -285,5 +288,57 @@
 
   "babyReactionLiked": "Liked",
   "babyReactionNeutral": "Neutral",
-  "babyReactionRejected": "Rejected"
+  "babyReactionRejected": "Rejected",
+
+  "statisticsTitle": "Statistics",
+  "statisticsWeeklySummary": "This Week's Summary",
+  "statisticsSleep": "Sleep",
+  "statisticsFeeding": "Feeding",
+  "statisticsDiaper": "Diaper",
+  "statisticsCrying": "Crying",
+  "statisticsPerDayAverage": "/day avg",
+  "statisticsAverage": "Average",
+  "statisticsTogetherView": "Together View",
+  "statisticsTogetherViewTitle": "This Week Together",
+  "statisticsTogetherViewGuide": "Each baby has their own unique pattern 💜",
+  "statisticsCorrectedAge": "Corrected {days}d",
+  "@statisticsCorrectedAge": {
+    "description": "Corrected age display",
+    "placeholders": {
+      "days": {"type": "int", "example": "42"}
+    }
+  },
+  "statisticsSleepReport": "Sleep Report",
+  "statisticsFeedingReport": "Feeding Report",
+  "statisticsDiaperReport": "Diaper Report",
+  "statisticsCryingReport": "Crying Report",
+  "statisticsDisclaimer": "These statistics are for reference only, not medical advice",
+  "statisticsCorrectedAgeNote": "Analyzed based on corrected age",
+
+  "dateTimePickerTitle": "Select Time",
+  "dateTimeNow": "Now",
+  "dateTime5MinAgo": "-5 min",
+  "dateTime15MinAgo": "-15 min",
+  "dateTime30MinAgo": "-30 min",
+  "dateTimeCancel": "Cancel",
+  "dateTimeConfirm": "Confirm",
+  "sleepStartTime": "Sleep Start",
+  "sleepEndTime": "Sleep End",
+  "sleepEndNow": "End Now",
+  "sleepSelectEndTime": "Select",
+
+  "quickFeedingTitle": "Quick Record",
+  "quickFeedingHint": "Tap: Save / Hold: Edit",
+  "quickFeedingEmpty": "No records yet",
+  "quickFeedingEmptyDesc": "Quick buttons appear after your first feeding record!",
+  "quickFeedingSaved": "{summary} saved",
+  "@quickFeedingSaved": {
+    "description": "Quick feeding save confirmation",
+    "placeholders": {
+      "summary": {"type": "String", "example": "Formula 120ml"}
+    }
+  },
+  "quickFeedingUndo": "Undo",
+  "quickFeedingUndone": "Undone",
+  "orNewEntry": "or enter new"
 }

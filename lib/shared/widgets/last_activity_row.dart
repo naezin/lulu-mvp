@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
 
 /// 마지막 활동 Row 위젯
 ///
@@ -35,7 +36,7 @@ class LastActivityRow extends StatelessWidget {
         children: [
           Expanded(
             child: _ActivityItem(
-              icon: Icons.bedtime_outlined,
+              icon: LuluIcons.sleep,
               label: _formatTimeAgo(lastSleep),
               color: LuluActivityColors.sleep,
             ),
@@ -43,7 +44,7 @@ class LastActivityRow extends StatelessWidget {
           _VerticalDivider(),
           Expanded(
             child: _ActivityItem(
-              icon: Icons.local_cafe_outlined,
+              icon: LuluIcons.feeding,
               label: _formatTimeAgo(lastFeeding),
               color: LuluActivityColors.feeding,
             ),
@@ -51,7 +52,7 @@ class LastActivityRow extends StatelessWidget {
           _VerticalDivider(),
           Expanded(
             child: _ActivityItem(
-              icon: Icons.baby_changing_station_outlined,
+              icon: LuluIcons.diaper,
               label: _formatTimeAgo(lastDiaper),
               color: LuluActivityColors.diaper,
             ),
