@@ -333,14 +333,17 @@ class OnboardingProvider extends ChangeNotifier {
         final babyId = _uuid.v4();
         babyIds.add(babyId);
 
+        // BUGFIX: 만삭아도 재태주수/출생체중 저장 (SGA 감지용)
+        // 기존: 조산아만 gestationalWeeksAtBirth 저장
+        // 수정: 모든 아기에게 저장 (만삭아는 40주로 가정)
         final baby = BabyModel(
           id: babyId,
           familyId: familyId,
           name: babyData.name,
           birthDate: babyData.birthDate!,
           gender: babyData.gender,
-          gestationalWeeksAtBirth: babyData.isPreterm ? babyData.gestationalWeeks : null,
-          birthWeightGrams: babyData.birthWeightGrams,
+          gestationalWeeksAtBirth: babyData.gestationalWeeks ?? 40, // 만삭아도 저장
+          birthWeightGrams: babyData.birthWeightGrams, // 만삭아도 저장
           multipleBirthType: _babyCount > 1 ? BabyType.fromBabyCount(_babyCount) : BabyType.singleton,
           zygosity: _babyCount > 1 ? _zygosity : null,
           birthOrder: _babyCount > 1 ? i + 1 : null,

@@ -70,3 +70,4 @@ flutter:
     - assets/data/who_boys.json
     - assets/data/who_girls.json
     - assets/models/
+    - assets/icon/

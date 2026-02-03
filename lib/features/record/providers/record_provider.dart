@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../data/models/models.dart';
+import '../../../data/repositories/activity_repository.dart';
 import '../../../core/services/local_activity_service.dart';
 
 /// 기록 화면 상태 관리 Provider
@@ -10,6 +11,7 @@ import '../../../core/services/local_activity_service.dart';
 /// MVP-F: 로컬 저장 모드 (Supabase 인증 없이 동작)
 class RecordProvider extends ChangeNotifier {
   final LocalActivityService _localActivityService = LocalActivityService.instance;
+  final ActivityRepository _activityRepository = ActivityRepository();
   final Uuid _uuid = const Uuid();
 
   // ========================================
@@ -942,6 +944,9 @@ class RecordProvider extends ChangeNotifier {
   List<ActivityModel> _recentFeedings = [];
   List<ActivityModel> get recentFeedings => List.unmodifiable(_recentFeedings);
 
+  /// 현재 로딩 중인 babyId (race condition 방지)
+  String? _currentFeedingBabyId;
+
   /// 마지막 저장 ID (취소용)
   String? _lastSavedId;
 
@@ -950,17 +955,68 @@ class RecordProvider extends ChangeNotifier {
 
   /// 최근 수유 기록 로드
   /// 아기별로 최근 수유 기록에서 중복 제거 후 3개 반환
+  ///
+  /// BUGFIX v5.3: 아기 탭 전환 시 이전 데이터 노출 버그 수정
+  /// - 로딩 시작 시 즉시 클리어하여 이전 아기 데이터 노출 방지
+  /// - _currentFeedingBabyId로 race condition 방지
   Future<void> loadRecentFeedings(String babyId) async {
-    try {
-      // 아기 ID로 모든 활동 가져오기
-      final allActivities = await _localActivityService.getActivitiesByBabyId(babyId);
+    // 🔴 수정 1: 로딩 시작 전 즉시 클리어 + babyId 저장
+    _currentFeedingBabyId = babyId;
+    _recentFeedings = [];
+    notifyListeners(); // 빈 상태로 즉시 UI 업데이트
 
-      // 수유 기록만 필터링 + 최신순 정렬 (이미 정렬됨)
-      final feedingActivities = allActivities
+    debugPrint('🔄 loadRecentFeedings started for babyId: $babyId');
+
+    try {
+      // 1. 로컬 저장소에서 먼저 조회
+      final localActivities = await _localActivityService.getActivitiesByBabyId(babyId);
+      debugPrint('📦 Local activities for babyId $babyId: ${localActivities.length}');
+
+      // 2. Supabase에서도 조회 (fallback)
+      List<ActivityModel> supabaseActivities = [];
+      try {
+        supabaseActivities = await _activityRepository.getActivitiesByBabyId(
+          babyId,
+          limit: 20,
+        );
+        debugPrint('☁️ Supabase activities for babyId $babyId: ${supabaseActivities.length}');
+      } catch (e) {
+        debugPrint('⚠️ Supabase fetch failed, using local only: $e');
+      }
+
+      // 🔴 수정 2: babyId 변경 확인 (race condition 방지)
+      if (_currentFeedingBabyId != babyId) {
+        debugPrint('⚠️ babyId changed during loading, discarding results');
+        return; // 사용자가 다른 아기로 전환함 → 결과 무시
+      }
+
+      // 3. 병합 (로컬 우선, ID로 중복 제거)
+      final Map<String, ActivityModel> mergedMap = {};
+      for (final activity in supabaseActivities) {
+        mergedMap[activity.id] = activity;
+      }
+      for (final activity in localActivities) {
+        mergedMap[activity.id] = activity; // 로컬이 덮어씀
+      }
+      final allActivities = mergedMap.values.toList()
+        ..sort((a, b) => b.startTime.compareTo(a.startTime));
+
+      debugPrint('🔀 Merged activities for babyId $babyId: ${allActivities.length}');
+
+      // 4. 엄격한 필터링 (단일 아기만)
+      final strictFiltered = allActivities.where((a) {
+        final isSingleBabyMatch = a.babyIds.length == 1 && a.babyIds[0] == babyId;
+        return isSingleBabyMatch;
+      }).toList();
+      debugPrint('🔍 Strict filtered for $babyId: ${strictFiltered.length}');
+
+      // 5. 수유 기록만 필터링
+      final feedingActivities = strictFiltered
           .where((a) => a.type == ActivityType.feeding)
           .toList();
+      debugPrint('🍼 Feeding activities count: ${feedingActivities.length}');
 
-      // 중복 제거 (feeding_type + breast_side + amount_ml 조합)
+      // 6. 중복 제거 (feeding_type + breast_side + amount_ml 조합)
       final seen = <String>{};
       final unique = <ActivityModel>[];
 
@@ -973,13 +1029,23 @@ class RecordProvider extends ChangeNotifier {
         if (unique.length >= 3) break;
       }
 
-      _recentFeedings = unique;
-      notifyListeners();
+      // 🔴 수정 3: 최종 babyId 확인 후 상태 업데이트
+      if (_currentFeedingBabyId == babyId) {
+        _recentFeedings = unique;
+        debugPrint('✅ Updated _recentFeedings: ${_recentFeedings.length} items');
+        notifyListeners();
+      }
     } catch (e) {
-      debugPrint('❌ [RecordProvider] Error loading recent feedings: $e');
-      _recentFeedings = [];
-      notifyListeners();
+      debugPrint('❌ Error loading recent feedings: $e');
+      // 에러 시에도 빈 상태 유지 (이미 클리어됨)
     }
+  }
+
+  /// 최근 수유 기록 클리어 (아기 전환 시 명시적 호출용)
+  void clearRecentFeedings() {
+    _recentFeedings = [];
+    _currentFeedingBabyId = null;
+    notifyListeners();
   }
 
   /// 수유 기록 고유 키 생성 (중복 판별용)

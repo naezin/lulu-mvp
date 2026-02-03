@@ -69,6 +69,14 @@ class BabyModel {
     );
   }
 
+  /// 교정연령 (일 단위) - 통계 화면용
+  int? get correctedAgeInDays {
+    if (!isPreterm || gestationalWeeksAtBirth == null) return null;
+    final weeks = correctedAgeInWeeks;
+    if (weeks == null) return null;
+    return weeks * 7;
+  }
+
   /// 실제 연령 (주 단위)
   int get actualAgeInWeeks {
     return DateTime.now().difference(birthDate).inDays ~/ 7;

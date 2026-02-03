@@ -817,6 +817,39 @@ class SKo extends S {
   String get statisticsCorrectedAgeNote => '교정연령 기준으로 분석되었습니다';
 
   @override
+  String get recordHistoryTitle => '기록';
+
+  @override
+  String get tabTimeline => '타임라인';
+
+  @override
+  String get tabStatistics => '통계';
+
+  @override
+  String get statsSleep => '수면';
+
+  @override
+  String get statsFeeding => '수유';
+
+  @override
+  String get statsDiaper => '기저귀';
+
+  @override
+  String get unitHours => '시간';
+
+  @override
+  String get unitTimes => '회';
+
+  @override
+  String get weeklyTrendTitle => '주간 수면 추이';
+
+  @override
+  String get statisticsEmptyTitle => '아직 통계가 없어요';
+
+  @override
+  String get statisticsEmptyHint => '기록을 쌓으면 통계가 나타나요';
+
+  @override
   String get dateTimePickerTitle => '시간 선택';
 
   @override

@@ -18,26 +18,20 @@ class WelcomeScreen extends StatelessWidget {
         children: [
           const Spacer(flex: 2),
 
-          // 로고 영역
-          Container(
+          // 로고 영역 - 배경 없이 로고만
+          Image.asset(
+            'assets/icon/lulu_logo.png',
             width: 120,
             height: 120,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppTheme.lavenderMist,
-                  AppTheme.lavenderGlow,
-                ],
-              ),
-            ),
-            child: const Icon(
-              Icons.nightlight_round,
-              size: 60,
-              color: AppTheme.midnightNavy,
-            ),
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              // 이미지 로드 실패 시 fallback 아이콘
+              return const Icon(
+                Icons.nightlight_round,
+                size: 60,
+                color: AppTheme.lavenderMist,
+              );
+            },
           ),
 
           const SizedBox(height: 48),

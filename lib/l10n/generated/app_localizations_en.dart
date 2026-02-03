@@ -829,6 +829,39 @@ class SEn extends S {
   String get statisticsCorrectedAgeNote => 'Analyzed based on corrected age';
 
   @override
+  String get recordHistoryTitle => 'Records';
+
+  @override
+  String get tabTimeline => 'Timeline';
+
+  @override
+  String get tabStatistics => 'Statistics';
+
+  @override
+  String get statsSleep => 'Sleep';
+
+  @override
+  String get statsFeeding => 'Feeding';
+
+  @override
+  String get statsDiaper => 'Diaper';
+
+  @override
+  String get unitHours => 'hrs';
+
+  @override
+  String get unitTimes => 'times';
+
+  @override
+  String get weeklyTrendTitle => 'Weekly Sleep Trend';
+
+  @override
+  String get statisticsEmptyTitle => 'No statistics yet';
+
+  @override
+  String get statisticsEmptyHint => 'Statistics will appear as you add records';
+
+  @override
   String get dateTimePickerTitle => 'Select Time';
 
   @override

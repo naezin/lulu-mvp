@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
 
 /// Step 4: 조산아 정보 입력 (조건부)
-/// 출생주수, 출생체중
+/// 출생주수만 입력 (출생체중은 baby_info_screen에서 이미 필수로 입력받음)
 class PretermInfoScreen extends StatefulWidget {
   const PretermInfoScreen({super.key});
 
@@ -15,23 +14,18 @@ class PretermInfoScreen extends StatefulWidget {
 }
 
 class _PretermInfoScreenState extends State<PretermInfoScreen> {
-  final _weightController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = context.read<OnboardingProvider>();
-      if (provider.currentBaby.birthWeightGrams != null) {
-        _weightController.text = provider.currentBaby.birthWeightGrams.toString();
+
+      // BUGFIX: gestationalWeeks 초기값 설정 (슬라이더 기본값 32주)
+      // 슬라이더는 32주로 표시되지만, 실제 값이 null이면 버튼이 비활성화됨
+      if (provider.currentBaby.gestationalWeeks == null) {
+        provider.updateGestationalWeeks(32);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _weightController.dispose();
-    super.dispose();
   }
 
   @override
@@ -84,57 +78,8 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
 
           const SizedBox(height: 32),
 
-          // 출생 체중 입력
-          Text(
-            '출생 체중 (선택)',
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: AppTheme.textSecondary,
-                ),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _weightController,
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.done,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            onChanged: (value) {
-              if (value.isNotEmpty) {
-                provider.updateBirthWeight(int.parse(value));
-              }
-            },
-            style: const TextStyle(
-              color: AppTheme.textPrimary,
-              fontSize: 17,
-            ),
-            decoration: InputDecoration(
-              hintText: '예: 2500',
-              hintStyle: const TextStyle(
-                color: AppTheme.textTertiary,
-              ),
-              suffixText: 'g',
-              suffixStyle: const TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 17,
-              ),
-              filled: true,
-              fillColor: AppTheme.surfaceElevated,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
-                  color: AppTheme.lavenderMist,
-                  width: 2,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 32),
-
           // 교정연령 설명 카드
+          // NOTE: 출생 체중은 baby_info_screen에서 이미 필수로 입력받으므로 제거
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(

@@ -315,6 +315,18 @@
   "statisticsDisclaimer": "These statistics are for reference only, not medical advice",
   "statisticsCorrectedAgeNote": "Analyzed based on corrected age",
 
+  "recordHistoryTitle": "Records",
+  "tabTimeline": "Timeline",
+  "tabStatistics": "Statistics",
+  "statsSleep": "Sleep",
+  "statsFeeding": "Feeding",
+  "statsDiaper": "Diaper",
+  "unitHours": "hrs",
+  "unitTimes": "times",
+  "weeklyTrendTitle": "Weekly Sleep Trend",
+  "statisticsEmptyTitle": "No statistics yet",
+  "statisticsEmptyHint": "Statistics will appear as you add records",
+
   "dateTimePickerTitle": "Select Time",
   "dateTimeNow": "Now",
   "dateTime5MinAgo": "-5 min",

@@ -1597,6 +1597,72 @@ abstract class S {
   /// **'교정연령 기준으로 분석되었습니다'**
   String get statisticsCorrectedAgeNote;
 
+  /// 기록 히스토리 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기록'**
+  String get recordHistoryTitle;
+
+  /// 타임라인 탭 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'타임라인'**
+  String get tabTimeline;
+
+  /// 통계 탭 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'통계'**
+  String get tabStatistics;
+
+  /// 통계 카드 - 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'수면'**
+  String get statsSleep;
+
+  /// 통계 카드 - 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get statsFeeding;
+
+  /// 통계 카드 - 기저귀
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀'**
+  String get statsDiaper;
+
+  /// 단위 - 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'시간'**
+  String get unitHours;
+
+  /// 단위 - 회
+  ///
+  /// In ko, this message translates to:
+  /// **'회'**
+  String get unitTimes;
+
+  /// 주간 트렌드 차트 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'주간 수면 추이'**
+  String get weeklyTrendTitle;
+
+  /// 통계 빈 상태 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 통계가 없어요'**
+  String get statisticsEmptyTitle;
+
+  /// 통계 빈 상태 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'기록을 쌓으면 통계가 나타나요'**
+  String get statisticsEmptyHint;
+
   /// 날짜/시간 피커 제목
   ///
   /// In ko, this message translates to:

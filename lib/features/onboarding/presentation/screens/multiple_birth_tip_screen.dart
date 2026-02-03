@@ -13,7 +13,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<OnboardingProvider>();
 
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [
@@ -79,7 +79,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
             babyCount: provider.babyCount,
           ),
 
-          const Spacer(),
+          const SizedBox(height: 32),
 
           // 다음 버튼
           SizedBox(

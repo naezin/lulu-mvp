@@ -18,8 +18,11 @@ import 'recent_feeding_button.dart';
 /// - 탭 → 바로 저장 (TTC < 2초)
 /// - 롱프레스 → 수정 모드 (값 채워짐)
 /// - 아기 탭 전환 시 갱신
+///
+/// BUGFIX v5.3: babyId 검증 추가
+/// - 위젯 레벨에서 현재 babyId와 일치하는 기록만 표시
 class RecentFeedingButtons extends StatelessWidget {
-  /// 현재 선택된 아기 ID
+  /// 현재 선택된 아기 ID (필수!)
   final String babyId;
 
   /// 수정 모드 요청 콜백
@@ -41,12 +44,18 @@ class RecentFeedingButtons extends StatelessWidget {
 
     return Consumer<RecordProvider>(
       builder: (context, provider, _) {
-        final records = provider.recentFeedings;
+        // 🔴 BUGFIX v5.3: babyId 검증 - 현재 아기 기록만 표시
+        final validFeedings = provider.recentFeedings.where((feeding) {
+          // 단일 아기 기록이고, 현재 선택된 아기와 일치하는지 확인
+          return feeding.babyIds.length == 1 && feeding.babyIds[0] == babyId;
+        }).toList();
 
         // 빈 상태
-        if (records.isEmpty) {
+        if (validFeedings.isEmpty) {
           return _buildEmptyState(context, l10n);
         }
+
+        final records = validFeedings;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

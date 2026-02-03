@@ -6,7 +6,7 @@ import '../../core/design_system/lulu_typography.dart';
 import '../../shared/widgets/expandable_fab.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/home/providers/home_provider.dart';
-import '../../features/timeline/screens/timeline_screen.dart';
+import '../../features/timeline/screens/record_history_screen.dart';
 import '../../features/growth/screens/growth_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
 import '../../features/record/record.dart';
@@ -30,7 +30,7 @@ class _MainNavigationState extends State<MainNavigation> {
 
   final List<Widget> _screens = const [
     HomeScreen(),
-    TimelineScreen(),
+    RecordHistoryScreen(),
     GrowthScreen(),
     SettingsScreen(),
   ];

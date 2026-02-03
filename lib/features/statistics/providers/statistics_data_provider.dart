@@ -1,17 +1,35 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../data/models/activity_model.dart';
+import '../../../data/models/baby_type.dart';
+import '../../../data/models/feeding_type.dart';
+import '../../../data/repositories/activity_repository.dart';
 import '../models/weekly_statistics.dart';
 import '../models/together_data.dart';
 import '../models/insight_data.dart';
 import 'statistics_filter_provider.dart';
+
+/// 캐시 엔트리 (TTL 지원)
+class _CacheEntry {
+  final WeeklyStatistics data;
+  final DateTime timestamp;
+
+  _CacheEntry(this.data) : timestamp = DateTime.now();
+
+  /// 5분 후 만료
+  bool get isExpired =>
+      DateTime.now().difference(timestamp).inMinutes > 5;
+}
 
 /// 통계 데이터 Provider
 ///
 /// 작업 지시서 v1.2.1: 데이터 fetching + 캐싱
 /// Provider 분리: 데이터 변경 시 → 차트만 리빌드
 class StatisticsDataProvider extends ChangeNotifier {
-  /// 캐시된 통계 데이터
-  final Map<String, WeeklyStatistics> _cache = {};
+  final ActivityRepository _activityRepository = ActivityRepository();
+
+  /// 캐시된 통계 데이터 (TTL 5분)
+  final Map<String, _CacheEntry> _cache = {};
 
   /// 현재 표시 중인 통계
   WeeklyStatistics? _currentStatistics;
@@ -38,26 +56,33 @@ class StatisticsDataProvider extends ChangeNotifier {
 
   /// 통계 데이터 로드
   Future<void> loadStatistics({
+    required String familyId,
     required String? babyId,
     required DateRange dateRange,
     bool forceRefresh = false,
   }) async {
     final cacheKey = _buildCacheKey(babyId, dateRange);
 
-    // 캐시 확인
+    // 캐시 확인 (TTL 5분)
     if (!forceRefresh && _cache.containsKey(cacheKey)) {
-      _currentStatistics = _cache[cacheKey];
-      _generateInsight();
-      notifyListeners();
-      return;
+      final entry = _cache[cacheKey]!;
+      if (!entry.isExpired) {
+        _currentStatistics = entry.data;
+        _generateInsight();
+        notifyListeners();
+        return;
+      }
     }
 
     try {
-      // TODO: 실제 Supabase에서 데이터 로드
-      // 현재는 더미 데이터 사용
-      final statistics = await _fetchStatistics(babyId, dateRange);
+      // Supabase에서 데이터 로드
+      final statistics = await _fetchStatisticsFromSupabase(
+        familyId: familyId,
+        babyId: babyId,
+        dateRange: dateRange,
+      );
 
-      _cache[cacheKey] = statistics;
+      _cache[cacheKey] = _CacheEntry(statistics);
       _currentStatistics = statistics;
       _lastSyncTime = DateTime.now();
       _isOffline = false;
@@ -65,9 +90,10 @@ class StatisticsDataProvider extends ChangeNotifier {
       _generateInsight();
       notifyListeners();
     } catch (e) {
+      debugPrint('❌ [StatisticsDataProvider] Load error: $e');
       // 오프라인이거나 에러 발생 시 캐시 데이터 사용
       if (_cache.containsKey(cacheKey)) {
-        _currentStatistics = _cache[cacheKey];
+        _currentStatistics = _cache[cacheKey]!.data;
         _isOffline = true;
         notifyListeners();
       } else {
@@ -78,16 +104,38 @@ class StatisticsDataProvider extends ChangeNotifier {
 
   /// 함께 보기 데이터 로드
   Future<void> loadTogetherData({
-    required List<String> babyIds,
+    required String familyId,
+    required List<BabyInfo> babies,
     required DateRange dateRange,
   }) async {
     try {
-      // TODO: 실제 Supabase에서 데이터 로드
-      // 현재는 더미 데이터 사용
-      _togetherData = await _fetchTogetherData(babyIds, dateRange);
+      final babySummaries = <BabyStatisticsSummary>[];
+
+      for (final baby in babies) {
+        final statistics = await _fetchStatisticsFromSupabase(
+          familyId: familyId,
+          babyId: baby.id,
+          dateRange: dateRange,
+        );
+
+        babySummaries.add(BabyStatisticsSummary(
+          babyId: baby.id,
+          babyName: baby.name,
+          correctedAgeDays: baby.correctedAgeDays,
+          statistics: statistics,
+        ));
+      }
+
+      _togetherData = TogetherData(
+        babies: babySummaries,
+        startDate: dateRange.start,
+        endDate: dateRange.end,
+      );
+      _lastSyncTime = DateTime.now();
+      _isOffline = false;
       notifyListeners();
     } catch (e) {
-      debugPrint('Failed to load together data: $e');
+      debugPrint('❌ [StatisticsDataProvider] Together data error: $e');
       rethrow;
     }
   }
@@ -104,9 +152,9 @@ class StatisticsDataProvider extends ChangeNotifier {
   /// 특정 기간 캐시 무효화 (기록 수정/삭제 시)
   void invalidateCacheForDate(DateTime date) {
     // 해당 날짜가 포함된 모든 캐시 키 제거
-    _cache.removeWhere((key, value) {
-      return date.isAfter(value.startDate.subtract(const Duration(days: 1))) &&
-          date.isBefore(value.endDate.add(const Duration(days: 1)));
+    _cache.removeWhere((key, entry) {
+      return date.isAfter(entry.data.startDate.subtract(const Duration(days: 1))) &&
+          date.isBefore(entry.data.endDate.add(const Duration(days: 1)));
     });
     notifyListeners();
   }
@@ -174,123 +222,241 @@ class StatisticsDataProvider extends ChangeNotifier {
     );
   }
 
-  /// 더미 통계 데이터 생성 (개발용)
-  Future<WeeklyStatistics> _fetchStatistics(
-    String? babyId,
-    DateRange dateRange,
-  ) async {
-    // 실제 구현에서는 Supabase 쿼리로 대체
-    await Future.delayed(const Duration(milliseconds: 300));
+  /// Supabase에서 통계 데이터 가져오기
+  Future<WeeklyStatistics> _fetchStatisticsFromSupabase({
+    required String familyId,
+    required String? babyId,
+    required DateRange dateRange,
+  }) async {
+    // 이번 주 데이터
+    final activities = await _activityRepository.getActivitiesByDateRange(
+      familyId,
+      startDate: dateRange.start,
+      endDate: dateRange.end.add(const Duration(days: 1)), // 종료일 포함
+      babyId: babyId,
+    );
+
+    // 지난 주 데이터 (변화량 계산용)
+    final lastWeekStart = dateRange.start.subtract(const Duration(days: 7));
+    final lastWeekEnd = dateRange.start.subtract(const Duration(days: 1));
+    final lastWeekActivities = await _activityRepository.getActivitiesByDateRange(
+      familyId,
+      startDate: lastWeekStart,
+      endDate: lastWeekEnd.add(const Duration(days: 1)),
+      babyId: babyId,
+    );
+
+    // 통계 계산
+    final sleepStats = _calculateSleepStatistics(
+      activities,
+      lastWeekActivities,
+      dateRange,
+    );
+    final feedingStats = _calculateFeedingStatistics(
+      activities,
+      lastWeekActivities,
+      dateRange,
+    );
+    final diaperStats = _calculateDiaperStatistics(
+      activities,
+      lastWeekActivities,
+      dateRange,
+    );
 
     return WeeklyStatistics(
-      sleep: const SleepStatistics(
-        dailyAverageHours: 14.2,
-        changeMinutes: 30,
-        dailyHours: [12.5, 13.0, 14.0, 14.8, 13.5, 12.8, 14.2],
-        napRatio: 0.3,
-        nightRatio: 0.7,
-        nightWakeups: 2,
-      ),
-      feeding: const FeedingStatistics(
-        dailyAverageCount: 8.3,
-        changeCount: 0,
-        dailyCounts: [8, 9, 8, 7, 9, 8, 9],
-        breastMilkRatio: 0.6,
-        formulaRatio: 0.3,
-        solidFoodRatio: 0.1,
-      ),
-      diaper: const DiaperStatistics(
-        dailyAverageCount: 6.1,
-        changeCount: -1,
-        dailyCounts: [6, 7, 6, 5, 6, 7, 6],
-        wetRatio: 0.5,
-        dirtyRatio: 0.3,
-        bothRatio: 0.2,
-      ),
+      sleep: sleepStats,
+      feeding: feedingStats,
+      diaper: diaperStats,
       startDate: dateRange.start,
       endDate: dateRange.end,
     );
   }
 
-  /// 더미 함께 보기 데이터 생성 (개발용)
-  Future<TogetherData> _fetchTogetherData(
-    List<String> babyIds,
+  /// 수면 통계 계산
+  SleepStatistics _calculateSleepStatistics(
+    List<ActivityModel> activities,
+    List<ActivityModel> lastWeekActivities,
     DateRange dateRange,
-  ) async {
-    await Future.delayed(const Duration(milliseconds: 300));
+  ) {
+    final sleepActivities = activities
+        .where((a) => a.type == ActivityType.sleep && a.endTime != null)
+        .toList();
+    final lastWeekSleep = lastWeekActivities
+        .where((a) => a.type == ActivityType.sleep && a.endTime != null)
+        .toList();
 
-    // 실제 구현에서는 각 아기별 데이터 로드
-    return TogetherData(
-      babies: [
-        BabyStatisticsSummary(
-          babyId: 'baby1',
-          babyName: '민지',
-          correctedAgeDays: 42,
-          statistics: WeeklyStatistics(
-            sleep: const SleepStatistics(
-              dailyAverageHours: 14.5,
-              changeMinutes: 30,
-              dailyHours: [13.0, 14.0, 15.0, 14.5, 14.0, 13.5, 14.5],
-              napRatio: 0.35,
-              nightRatio: 0.65,
-              nightWakeups: 2,
-            ),
-            feeding: const FeedingStatistics(
-              dailyAverageCount: 8.5,
-              changeCount: 0,
-              dailyCounts: [8, 9, 8, 8, 9, 9, 8],
-              breastMilkRatio: 0.7,
-              formulaRatio: 0.2,
-              solidFoodRatio: 0.1,
-            ),
-            diaper: const DiaperStatistics(
-              dailyAverageCount: 6.3,
-              changeCount: 0,
-              dailyCounts: [6, 7, 6, 6, 7, 6, 6],
-              wetRatio: 0.5,
-              dirtyRatio: 0.3,
-              bothRatio: 0.2,
-            ),
-            startDate: dateRange.start,
-            endDate: dateRange.end,
-          ),
-        ),
-        BabyStatisticsSummary(
-          babyId: 'baby2',
-          babyName: '민정',
-          correctedAgeDays: 38,
-          statistics: WeeklyStatistics(
-            sleep: const SleepStatistics(
-              dailyAverageHours: 13.8,
-              changeMinutes: -15,
-              dailyHours: [12.5, 13.5, 14.0, 14.0, 13.5, 13.0, 14.0],
-              napRatio: 0.25,
-              nightRatio: 0.75,
-              nightWakeups: 1,
-            ),
-            feeding: const FeedingStatistics(
-              dailyAverageCount: 8.1,
-              changeCount: 1,
-              dailyCounts: [8, 8, 8, 7, 9, 8, 9],
-              breastMilkRatio: 0.5,
-              formulaRatio: 0.4,
-              solidFoodRatio: 0.1,
-            ),
-            diaper: const DiaperStatistics(
-              dailyAverageCount: 5.9,
-              changeCount: -1,
-              dailyCounts: [6, 6, 5, 6, 6, 6, 6],
-              wetRatio: 0.6,
-              dirtyRatio: 0.25,
-              bothRatio: 0.15,
-            ),
-            startDate: dateRange.start,
-            endDate: dateRange.end,
-          ),
-        ),
-      ],
-      startDate: dateRange.start,
-      endDate: dateRange.end,
+    // 요일별 수면 시간 (월~일)
+    final dailyHours = List.filled(7, 0.0);
+    int napMinutes = 0;
+    int nightMinutes = 0;
+    int nightWakeups = 0;
+
+    for (final activity in sleepActivities) {
+      final duration = activity.durationMinutes ?? 0;
+      final dayIndex = (activity.startTime.weekday - 1) % 7;
+      dailyHours[dayIndex] += duration / 60.0;
+
+      // 낮잠/밤잠 구분 (6시~20시: 낮잠)
+      final hour = activity.startTime.hour;
+      if (hour >= 6 && hour < 20) {
+        napMinutes += duration;
+      } else {
+        nightMinutes += duration;
+        // 야간 기상 카운트 (밤잠 시작 후 다시 잠든 경우)
+        if (hour >= 0 && hour < 6) {
+          nightWakeups++;
+        }
+      }
+    }
+
+    final totalMinutes = napMinutes + nightMinutes;
+    final dayCount = dateRange.dayCount > 0 ? dateRange.dayCount : 1;
+    final dailyAverage = totalMinutes / 60.0 / dayCount;
+
+    // 지난 주 평균
+    int lastWeekTotal = 0;
+    for (final activity in lastWeekSleep) {
+      lastWeekTotal += activity.durationMinutes ?? 0;
+    }
+    final lastWeekDailyAverage = lastWeekTotal / 60.0 / 7;
+    final changeMinutes = ((dailyAverage - lastWeekDailyAverage) * 60).round();
+
+    return SleepStatistics(
+      dailyAverageHours: dailyAverage,
+      changeMinutes: changeMinutes,
+      dailyHours: dailyHours,
+      napRatio: totalMinutes > 0 ? napMinutes / totalMinutes : 0,
+      nightRatio: totalMinutes > 0 ? nightMinutes / totalMinutes : 0,
+      nightWakeups: nightWakeups,
     );
   }
+
+  /// 수유 통계 계산
+  FeedingStatistics _calculateFeedingStatistics(
+    List<ActivityModel> activities,
+    List<ActivityModel> lastWeekActivities,
+    DateRange dateRange,
+  ) {
+    final feedingActivities = activities
+        .where((a) => a.type == ActivityType.feeding)
+        .toList();
+    final lastWeekFeeding = lastWeekActivities
+        .where((a) => a.type == ActivityType.feeding)
+        .toList();
+
+    // 요일별 수유 횟수 (월~일)
+    final dailyCounts = List.filled(7, 0);
+    int breastCount = 0;
+    int formulaCount = 0;
+    int solidCount = 0;
+
+    for (final activity in feedingActivities) {
+      final dayIndex = (activity.startTime.weekday - 1) % 7;
+      dailyCounts[dayIndex]++;
+
+      // 수유 타입별 카운트
+      final contentType = activity.feedingContentType;
+      if (contentType != null) {
+        switch (contentType) {
+          case FeedingContentType.breastMilk:
+            breastCount++;
+          case FeedingContentType.formula:
+            formulaCount++;
+          case FeedingContentType.solid:
+            solidCount++;
+        }
+      } else {
+        // 레거시 데이터 지원
+        final feedingType = activity.feedingType;
+        if (feedingType == 'breast' || feedingType == 'breast_milk') {
+          breastCount++;
+        } else if (feedingType == 'formula' || feedingType == 'bottle') {
+          formulaCount++;
+        } else if (feedingType == 'solid') {
+          solidCount++;
+        }
+      }
+    }
+
+    final totalCount = feedingActivities.length;
+    final dayCount = dateRange.dayCount > 0 ? dateRange.dayCount : 1;
+    final dailyAverage = totalCount / dayCount;
+
+    // 지난 주 대비 변화
+    final lastWeekDailyAverage = lastWeekFeeding.length / 7;
+    final changeCount = (dailyAverage - lastWeekDailyAverage).round();
+
+    return FeedingStatistics(
+      dailyAverageCount: dailyAverage,
+      changeCount: changeCount,
+      dailyCounts: dailyCounts,
+      breastMilkRatio: totalCount > 0 ? breastCount / totalCount : 0,
+      formulaRatio: totalCount > 0 ? formulaCount / totalCount : 0,
+      solidFoodRatio: totalCount > 0 ? solidCount / totalCount : 0,
+    );
+  }
+
+  /// 기저귀 통계 계산
+  DiaperStatistics _calculateDiaperStatistics(
+    List<ActivityModel> activities,
+    List<ActivityModel> lastWeekActivities,
+    DateRange dateRange,
+  ) {
+    final diaperActivities = activities
+        .where((a) => a.type == ActivityType.diaper)
+        .toList();
+    final lastWeekDiaper = lastWeekActivities
+        .where((a) => a.type == ActivityType.diaper)
+        .toList();
+
+    // 요일별 기저귀 교체 횟수 (월~일)
+    final dailyCounts = List.filled(7, 0);
+    int wetCount = 0;
+    int dirtyCount = 0;
+    int bothCount = 0;
+
+    for (final activity in diaperActivities) {
+      final dayIndex = (activity.startTime.weekday - 1) % 7;
+      dailyCounts[dayIndex]++;
+
+      final diaperType = activity.diaperType;
+      if (diaperType == 'wet') {
+        wetCount++;
+      } else if (diaperType == 'dirty') {
+        dirtyCount++;
+      } else if (diaperType == 'both') {
+        bothCount++;
+      }
+    }
+
+    final totalCount = diaperActivities.length;
+    final dayCount = dateRange.dayCount > 0 ? dateRange.dayCount : 1;
+    final dailyAverage = totalCount / dayCount;
+
+    // 지난 주 대비 변화
+    final lastWeekDailyAverage = lastWeekDiaper.length / 7;
+    final changeCount = (dailyAverage - lastWeekDailyAverage).round();
+
+    return DiaperStatistics(
+      dailyAverageCount: dailyAverage,
+      changeCount: changeCount,
+      dailyCounts: dailyCounts,
+      wetRatio: totalCount > 0 ? wetCount / totalCount : 0,
+      dirtyRatio: totalCount > 0 ? dirtyCount / totalCount : 0,
+      bothRatio: totalCount > 0 ? bothCount / totalCount : 0,
+    );
+  }
+}
+
+/// 아기 정보 (함께 보기용)
+class BabyInfo {
+  final String id;
+  final String name;
+  final int? correctedAgeDays;
+
+  const BabyInfo({
+    required this.id,
+    required this.name,
+    this.correctedAgeDays,
+  });
 }
