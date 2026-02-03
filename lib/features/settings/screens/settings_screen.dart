@@ -13,6 +13,7 @@ import '../../home/providers/home_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/add_baby_dialog.dart';
 import '../widgets/delete_baby_dialog.dart';
+import 'import_screen.dart';
 
 /// 설정 화면
 ///
@@ -396,8 +397,51 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Divider(height: 1, color: LuluColors.glassBorder),
           // CSV 내보내기 버튼
           _buildExportTile(),
+          Divider(height: 1, color: LuluColors.glassBorder),
+          // 가져오기 버튼
+          _buildImportTile(),
         ],
       ),
+    );
+  }
+
+  Widget _buildImportTile() {
+    return ListTile(
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Icon(
+          Icons.file_upload_outlined,
+          color: LuluColors.lavenderMist,
+          size: 22,
+        ),
+      ),
+      title: Text(
+        '기존 기록 가져오기',
+        style: LuluTextStyles.bodyLarge.copyWith(
+          color: LuluTextColors.primary,
+        ),
+      ),
+      subtitle: Text(
+        '다른 앱에서 기록 이전',
+        style: LuluTextStyles.caption.copyWith(
+          color: LuluTextColors.secondary,
+        ),
+      ),
+      trailing: const Icon(
+        Icons.chevron_right_rounded,
+        color: LuluTextColors.secondary,
+      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ImportScreen()),
+        );
+      },
     );
   }
 

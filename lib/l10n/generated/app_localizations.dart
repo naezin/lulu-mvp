@@ -1776,6 +1776,432 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'또는 새로 입력'**
   String get orNewEntry;
+
+  /// Import 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기존 기록 가져오기'**
+  String get importTitle;
+
+  /// 파일 선택 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'어떤 파일을 가져올까요?'**
+  String get importSelectFile;
+
+  /// TXT 파일 옵션
+  ///
+  /// In ko, this message translates to:
+  /// **'텍스트 파일 (.txt)'**
+  String get importTxtOption;
+
+  /// TXT 파일 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'베이비타임 등'**
+  String get importTxtDesc;
+
+  /// CSV 파일 옵션
+  ///
+  /// In ko, this message translates to:
+  /// **'CSV 파일 (.csv)'**
+  String get importCsvOption;
+
+  /// CSV 파일 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'Huckleberry 등'**
+  String get importCsvDesc;
+
+  /// Import 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'대부분의 육아 앱 설정에서 데이터 내보내기를 지원해요'**
+  String get importHint;
+
+  /// 분석 중 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'파일을 분석하고 있어요...'**
+  String get importAnalyzing;
+
+  /// 분석 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'파일 분석 완료'**
+  String get importAnalyzed;
+
+  /// 수유 기록 수
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get importFeedingCount;
+
+  /// 수면 기록 수
+  ///
+  /// In ko, this message translates to:
+  /// **'수면'**
+  String get importSleepCount;
+
+  /// 기저귀 기록 수
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀'**
+  String get importDiaperCount;
+
+  /// 놀이 기록 수
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이'**
+  String get importPlayCount;
+
+  /// 총 기록 수
+  ///
+  /// In ko, this message translates to:
+  /// **'총'**
+  String get importTotal;
+
+  /// 아기 연결 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 연결'**
+  String get importBabyConnect;
+
+  /// 아기 연결 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'이 기록을 어떤 아기에게 연결할까요?'**
+  String get importBabyConnectDesc;
+
+  /// 중복 경고 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'기존 기록과 중복되면 건너뜁니다'**
+  String get importDuplicateWarning;
+
+  /// 가져오기 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}개 기록 가져오기'**
+  String importButton(int count);
+
+  /// 가져오기 진행 중 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'기록을 가져오는 중...'**
+  String get importProgress;
+
+  /// 가져오기 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'기록을 가져왔어요!'**
+  String get importComplete;
+
+  /// 성공 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'성공'**
+  String get importSuccess;
+
+  /// 건너뜀 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'건너뜀 (중복)'**
+  String get importSkipped;
+
+  /// 홈으로 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'홈으로 돌아가기'**
+  String get importGoHome;
+
+  /// 가족 관리 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 관리'**
+  String get familyManagement;
+
+  /// 가족 멤버 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 멤버'**
+  String get familyMembers;
+
+  /// 대기 중인 초대 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'대기 중인 초대'**
+  String get pendingInvites;
+
+  /// 가족 설정 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 설정'**
+  String get familySettings;
+
+  /// 가족 초대 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 초대하기'**
+  String get inviteFamily;
+
+  /// 관리자 넘기기 메뉴
+  ///
+  /// In ko, this message translates to:
+  /// **'관리자 넘기기'**
+  String get transferOwnership;
+
+  /// 다른 가족 참여 메뉴
+  ///
+  /// In ko, this message translates to:
+  /// **'다른 가족 참여'**
+  String get joinOtherFamily;
+
+  /// 다른 가족 참여 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'현재 가족을 나가고 다른 가족에 참여해요.'**
+  String get joinOtherFamilyDesc;
+
+  /// 가족 나가기 메뉴
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 나가기'**
+  String get leaveFamily;
+
+  /// 가족 삭제 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 삭제'**
+  String get deleteFamily;
+
+  /// 가족 삭제 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'가족을 삭제하면 모든 기록이 사라져요.'**
+  String get deleteFamilyDesc;
+
+  /// 가족 나가기 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'더 이상 기록을 볼 수 없어요.'**
+  String get leaveFamilyDesc;
+
+  /// 관리자 나갈 수 없음 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'관리자는 나갈 수 없어요'**
+  String get cannotLeave;
+
+  /// 관리자 넘기기 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'먼저 다른 멤버에게 관리자를 넘겨주세요.'**
+  String get transferOwnershipFirst;
+
+  /// 나가기 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'나가기'**
+  String get leave;
+
+  /// 취소 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'취소'**
+  String get cancel;
+
+  /// 확인 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'확인'**
+  String get confirm;
+
+  /// 계속 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'계속'**
+  String get continueButton;
+
+  /// 가족 참여 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 참여'**
+  String get joinFamily;
+
+  /// 초대 코드 입력 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'초대 코드를 입력하세요'**
+  String get enterInviteCode;
+
+  /// 초대 코드 입력 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 관리자에게 받은 6자리 코드를 입력해주세요.'**
+  String get enterInviteCodeDesc;
+
+  /// 가족 참여 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 참여하기'**
+  String get joinFamilyButton;
+
+  /// 유효한 초대 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'유효한 초대'**
+  String get validInvite;
+
+  /// 가족 멤버 수
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}명의 가족'**
+  String memberCount(String count);
+
+  /// 아기 이름 목록
+  ///
+  /// In ko, this message translates to:
+  /// **'아기: {names}'**
+  String babyNames(String names);
+
+  /// 만료 일수
+  ///
+  /// In ko, this message translates to:
+  /// **'{days}일 후 만료'**
+  String expiresIn(String days);
+
+  /// 가족 참여 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'가족에 참여했어요!'**
+  String get joinedFamily;
+
+  /// 관리자 넘기기 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'누구에게 관리자를 넘길까요?'**
+  String get transferOwnershipTitle;
+
+  /// 관리자 넘기기 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'관리자는 가족 멤버를 초대하고 관리할 수 있어요.'**
+  String get transferOwnershipDesc;
+
+  /// 관리자 넘기기 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'관리자 넘기기'**
+  String get transferOwnershipButton;
+
+  /// 관리자 넘기기 확인 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'관리자를 넘기시겠어요?'**
+  String get confirmTransfer;
+
+  /// 관리자 넘기기 확인 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'이 작업은 되돌릴 수 없어요.'**
+  String get confirmTransferDesc;
+
+  /// 관리자 넘기기 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'관리자를 넘겼어요'**
+  String get ownershipTransferred;
+
+  /// 기록 가져오기 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 가져오기'**
+  String get importRecords;
+
+  /// 아기 매핑 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기존 기록을 가져올까요?'**
+  String get mapBabiesTitle;
+
+  /// 아기 매핑 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'내 아기와 새 가족 아기를 연결하면 기록을 가져올 수 있어요.'**
+  String get mapBabiesDesc;
+
+  /// 아기 선택 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'선택'**
+  String get selectBaby;
+
+  /// 연결 안 함 옵션
+  ///
+  /// In ko, this message translates to:
+  /// **'연결 안 함'**
+  String get doNotLink;
+
+  /// 가져오지 않기 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'가져오지 않기'**
+  String get skipImport;
+
+  /// 기록 가져오기 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 가져오기'**
+  String get importRecordsButton;
+
+  /// 기록 가져오기 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}개 기록을 가져왔어요!'**
+  String recordsImported(int count);
+
+  /// 이메일 초대 입력 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'이메일로 초대'**
+  String get inviteByEmail;
+
+  /// 초대 유효 기간
+  ///
+  /// In ko, this message translates to:
+  /// **'{days}일간 유효'**
+  String inviteValidDays(String days);
+
+  /// 카카오톡 공유 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'카카오톡'**
+  String get shareKakao;
+
+  /// 코드 복사 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'코드 복사'**
+  String get copyCode;
+
+  /// 이메일 발송 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'초대 이메일을 보냈어요!'**
+  String get inviteEmailSent;
+
+  /// 잘못된 이메일 에러
+  ///
+  /// In ko, this message translates to:
+  /// **'올바른 이메일을 입력해주세요'**
+  String get invalidEmail;
+
+  /// 코드 복사 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'초대 코드가 복사되었어요!'**
+  String get codeCopied;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

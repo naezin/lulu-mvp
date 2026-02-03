@@ -920,4 +920,234 @@ class SEn extends S {
 
   @override
   String get orNewEntry => 'or enter new';
+
+  @override
+  String get importTitle => 'Import Data';
+
+  @override
+  String get importSelectFile => 'Select File';
+
+  @override
+  String get importTxtOption => '텍스트 파일 (.txt)';
+
+  @override
+  String get importTxtDesc => '베이비타임 등';
+
+  @override
+  String get importCsvOption => 'CSV 파일 (.csv)';
+
+  @override
+  String get importCsvDesc => 'Huckleberry 등';
+
+  @override
+  String get importHint => '대부분의 육아 앱 설정에서 데이터 내보내기를 지원해요';
+
+  @override
+  String get importAnalyzing => 'Analyzing file...';
+
+  @override
+  String get importAnalyzed => '파일 분석 완료';
+
+  @override
+  String get importFeedingCount => '수유';
+
+  @override
+  String get importSleepCount => '수면';
+
+  @override
+  String get importDiaperCount => '기저귀';
+
+  @override
+  String get importPlayCount => '놀이';
+
+  @override
+  String get importTotal => '총';
+
+  @override
+  String get importBabyConnect => '아기 연결';
+
+  @override
+  String get importBabyConnectDesc => '이 기록을 어떤 아기에게 연결할까요?';
+
+  @override
+  String get importDuplicateWarning => '기존 기록과 중복되면 건너뜁니다';
+
+  @override
+  String importButton(int count) {
+    return '$count개 기록 가져오기';
+  }
+
+  @override
+  String get importProgress => 'null% complete';
+
+  @override
+  String get importComplete => '기록을 가져왔어요!';
+
+  @override
+  String get importSuccess => '성공';
+
+  @override
+  String get importSkipped => '건너뜀 (중복)';
+
+  @override
+  String get importGoHome => '홈으로 돌아가기';
+
+  @override
+  String get familyManagement => 'Family Management';
+
+  @override
+  String get familyMembers => 'Family Members';
+
+  @override
+  String get pendingInvites => 'Pending Invites';
+
+  @override
+  String get familySettings => 'Family Settings';
+
+  @override
+  String get inviteFamily => 'Invite Family Member';
+
+  @override
+  String get transferOwnership => 'Transfer Ownership';
+
+  @override
+  String get joinOtherFamily => 'Join Another Family';
+
+  @override
+  String get joinOtherFamilyDesc =>
+      'Leave current family and join another one.';
+
+  @override
+  String get leaveFamily => 'Leave Family';
+
+  @override
+  String get deleteFamily => 'Delete Family';
+
+  @override
+  String get deleteFamilyDesc => 'Deleting the family will remove all records.';
+
+  @override
+  String get leaveFamilyDesc => 'You won\'t be able to see records anymore.';
+
+  @override
+  String get cannotLeave => 'Owner cannot leave';
+
+  @override
+  String get transferOwnershipFirst =>
+      'Please transfer ownership to another member first.';
+
+  @override
+  String get leave => 'Leave';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get continueButton => 'Continue';
+
+  @override
+  String get joinFamily => 'Join Family';
+
+  @override
+  String get enterInviteCode => 'Enter invite code';
+
+  @override
+  String get enterInviteCodeDesc =>
+      'Enter the 6-digit code you received from the family owner.';
+
+  @override
+  String get joinFamilyButton => 'Join Family';
+
+  @override
+  String get validInvite => 'Valid invite';
+
+  @override
+  String memberCount(String count) {
+    return '$count family members';
+  }
+
+  @override
+  String babyNames(String names) {
+    return 'Babies: $names';
+  }
+
+  @override
+  String expiresIn(String days) {
+    return 'Expires in $days days';
+  }
+
+  @override
+  String get joinedFamily => 'Joined the family!';
+
+  @override
+  String get transferOwnershipTitle => 'Who should be the new owner?';
+
+  @override
+  String get transferOwnershipDesc =>
+      'The owner can invite and manage family members.';
+
+  @override
+  String get transferOwnershipButton => 'Transfer Ownership';
+
+  @override
+  String get confirmTransfer => 'Transfer ownership?';
+
+  @override
+  String get confirmTransferDesc => 'This action cannot be undone.';
+
+  @override
+  String get ownershipTransferred => 'Ownership transferred';
+
+  @override
+  String get importRecords => 'Import Records';
+
+  @override
+  String get mapBabiesTitle => 'Import existing records?';
+
+  @override
+  String get mapBabiesDesc =>
+      'Link your babies to the new family babies to import records.';
+
+  @override
+  String get selectBaby => 'Select';
+
+  @override
+  String get doNotLink => 'Don\'t link';
+
+  @override
+  String get skipImport => 'Skip';
+
+  @override
+  String get importRecordsButton => 'Import Records';
+
+  @override
+  String recordsImported(int count) {
+    return '$count records imported!';
+  }
+
+  @override
+  String get inviteByEmail => 'Invite by email';
+
+  @override
+  String inviteValidDays(String days) {
+    return 'Valid for $days days';
+  }
+
+  @override
+  String get shareKakao => 'KakaoTalk';
+
+  @override
+  String get copyCode => 'Copy Code';
+
+  @override
+  String get inviteEmailSent => 'Invite email sent!';
+
+  @override
+  String get invalidEmail => 'Please enter a valid email';
+
+  @override
+  String get codeCopied => 'Invite code copied!';
 }

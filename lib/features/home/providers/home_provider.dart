@@ -452,6 +452,37 @@ class HomeProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
   }
+
+  /// 가족 변경 시 호출 (Family Sharing)
+  ///
+  /// 새 가족에 참여하거나 가족이 변경되었을 때 호출됩니다.
+  /// 가족 정보와 활동 데이터를 새로 로드합니다.
+  Future<void> onFamilyChanged(String newFamilyId) async {
+    debugPrint('[INFO] [HomeProvider] Family changed to: $newFamilyId');
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      // TODO: Supabase에서 새 가족 정보 로드
+      // final familyRepo = FamilyRepository();
+      // final family = await familyRepo.getFamily(newFamilyId);
+      // final babies = await familyRepo.getBabies(newFamilyId);
+      // setFamily(family, babies);
+
+      // 활동 데이터 새로 로드
+      await refresh();
+
+      debugPrint('[OK] [HomeProvider] Family data reloaded');
+    } catch (e) {
+      _errorMessage = '가족 데이터를 불러오는데 실패했습니다: $e';
+      debugPrint('❌ [HomeProvider] Error: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }
 
 /// Sweet Spot 상태

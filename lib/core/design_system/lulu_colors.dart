@@ -45,6 +45,9 @@ class LuluColors {
   /// Elevated 요소 (TextField, Chip 등)
   static const Color surfaceElevated = Color(0xFF2A3F5F);
 
+  /// Deep Indigo (Family Screen 등에서 사용)
+  static const Color deepIndigo = Color(0xFF3D4F7F);
+
   // ========================================
   // Logo Colors
   // ========================================

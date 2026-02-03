@@ -907,4 +907,229 @@ class SKo extends S {
 
   @override
   String get orNewEntry => '또는 새로 입력';
+
+  @override
+  String get importTitle => '기존 기록 가져오기';
+
+  @override
+  String get importSelectFile => '어떤 파일을 가져올까요?';
+
+  @override
+  String get importTxtOption => '텍스트 파일 (.txt)';
+
+  @override
+  String get importTxtDesc => '베이비타임 등';
+
+  @override
+  String get importCsvOption => 'CSV 파일 (.csv)';
+
+  @override
+  String get importCsvDesc => 'Huckleberry 등';
+
+  @override
+  String get importHint => '대부분의 육아 앱 설정에서 데이터 내보내기를 지원해요';
+
+  @override
+  String get importAnalyzing => '파일을 분석하고 있어요...';
+
+  @override
+  String get importAnalyzed => '파일 분석 완료';
+
+  @override
+  String get importFeedingCount => '수유';
+
+  @override
+  String get importSleepCount => '수면';
+
+  @override
+  String get importDiaperCount => '기저귀';
+
+  @override
+  String get importPlayCount => '놀이';
+
+  @override
+  String get importTotal => '총';
+
+  @override
+  String get importBabyConnect => '아기 연결';
+
+  @override
+  String get importBabyConnectDesc => '이 기록을 어떤 아기에게 연결할까요?';
+
+  @override
+  String get importDuplicateWarning => '기존 기록과 중복되면 건너뜁니다';
+
+  @override
+  String importButton(int count) {
+    return '$count개 기록 가져오기';
+  }
+
+  @override
+  String get importProgress => '기록을 가져오는 중...';
+
+  @override
+  String get importComplete => '기록을 가져왔어요!';
+
+  @override
+  String get importSuccess => '성공';
+
+  @override
+  String get importSkipped => '건너뜀 (중복)';
+
+  @override
+  String get importGoHome => '홈으로 돌아가기';
+
+  @override
+  String get familyManagement => '가족 관리';
+
+  @override
+  String get familyMembers => '가족 멤버';
+
+  @override
+  String get pendingInvites => '대기 중인 초대';
+
+  @override
+  String get familySettings => '가족 설정';
+
+  @override
+  String get inviteFamily => '가족 초대하기';
+
+  @override
+  String get transferOwnership => '관리자 넘기기';
+
+  @override
+  String get joinOtherFamily => '다른 가족 참여';
+
+  @override
+  String get joinOtherFamilyDesc => '현재 가족을 나가고 다른 가족에 참여해요.';
+
+  @override
+  String get leaveFamily => '가족 나가기';
+
+  @override
+  String get deleteFamily => '가족 삭제';
+
+  @override
+  String get deleteFamilyDesc => '가족을 삭제하면 모든 기록이 사라져요.';
+
+  @override
+  String get leaveFamilyDesc => '더 이상 기록을 볼 수 없어요.';
+
+  @override
+  String get cannotLeave => '관리자는 나갈 수 없어요';
+
+  @override
+  String get transferOwnershipFirst => '먼저 다른 멤버에게 관리자를 넘겨주세요.';
+
+  @override
+  String get leave => '나가기';
+
+  @override
+  String get cancel => '취소';
+
+  @override
+  String get confirm => '확인';
+
+  @override
+  String get continueButton => '계속';
+
+  @override
+  String get joinFamily => '가족 참여';
+
+  @override
+  String get enterInviteCode => '초대 코드를 입력하세요';
+
+  @override
+  String get enterInviteCodeDesc => '가족 관리자에게 받은 6자리 코드를 입력해주세요.';
+
+  @override
+  String get joinFamilyButton => '가족 참여하기';
+
+  @override
+  String get validInvite => '유효한 초대';
+
+  @override
+  String memberCount(String count) {
+    return '$count명의 가족';
+  }
+
+  @override
+  String babyNames(String names) {
+    return '아기: $names';
+  }
+
+  @override
+  String expiresIn(String days) {
+    return '$days일 후 만료';
+  }
+
+  @override
+  String get joinedFamily => '가족에 참여했어요!';
+
+  @override
+  String get transferOwnershipTitle => '누구에게 관리자를 넘길까요?';
+
+  @override
+  String get transferOwnershipDesc => '관리자는 가족 멤버를 초대하고 관리할 수 있어요.';
+
+  @override
+  String get transferOwnershipButton => '관리자 넘기기';
+
+  @override
+  String get confirmTransfer => '관리자를 넘기시겠어요?';
+
+  @override
+  String get confirmTransferDesc => '이 작업은 되돌릴 수 없어요.';
+
+  @override
+  String get ownershipTransferred => '관리자를 넘겼어요';
+
+  @override
+  String get importRecords => '기록 가져오기';
+
+  @override
+  String get mapBabiesTitle => '기존 기록을 가져올까요?';
+
+  @override
+  String get mapBabiesDesc => '내 아기와 새 가족 아기를 연결하면 기록을 가져올 수 있어요.';
+
+  @override
+  String get selectBaby => '선택';
+
+  @override
+  String get doNotLink => '연결 안 함';
+
+  @override
+  String get skipImport => '가져오지 않기';
+
+  @override
+  String get importRecordsButton => '기록 가져오기';
+
+  @override
+  String recordsImported(int count) {
+    return '$count개 기록을 가져왔어요!';
+  }
+
+  @override
+  String get inviteByEmail => '이메일로 초대';
+
+  @override
+  String inviteValidDays(String days) {
+    return '$days일간 유효';
+  }
+
+  @override
+  String get shareKakao => '카카오톡';
+
+  @override
+  String get copyCode => '코드 복사';
+
+  @override
+  String get inviteEmailSent => '초대 이메일을 보냈어요!';
+
+  @override
+  String get invalidEmail => '올바른 이메일을 입력해주세요';
+
+  @override
+  String get codeCopied => '초대 코드가 복사되었어요!';
 }

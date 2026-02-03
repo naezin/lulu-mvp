@@ -35,6 +35,14 @@ dependencies:
   intl: ^0.20.2
   path_provider: ^2.1.2
   share_plus: ^10.1.4
+  collection: ^1.18.0
+
+  # Deep Linking
+  app_links: ^6.3.3
+
+  # Import
+  file_picker: ^6.1.1
+  csv: ^5.0.2
 
   # UI Components
   shimmer: ^3.0.0

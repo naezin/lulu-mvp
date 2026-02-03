@@ -352,5 +352,168 @@
   },
   "quickFeedingUndo": "Undo",
   "quickFeedingUndone": "Undone",
-  "orNewEntry": "or enter new"
+  "orNewEntry": "or enter new",
+
+  "importTitle": "Import Data",
+  "importSubtitle": "Bring records from other apps",
+  "importSelectFormat": "Select App Format",
+  "importBabytimeTitle": "Babytime",
+  "importBabytimeDesc": "TXT file (activity_*.txt)",
+  "importHuckleberryTitle": "Huckleberry",
+  "importHuckleberryDesc": "CSV file export",
+  "importSelectFile": "Select File",
+  "importAnalyzing": "Analyzing file...",
+  "importAnalyzingDesc": "Reading records from file",
+  "importPreviewTitle": "Preview",
+  "importPreviewDesc": "{count} records found",
+  "@importPreviewDesc": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importPreviewPeriod": "Period: {start} ~ {end}",
+  "@importPreviewPeriod": {
+    "placeholders": {
+      "start": {"type": "String"},
+      "end": {"type": "String"}
+    }
+  },
+  "importPreviewFeeding": "Feeding {count}",
+  "@importPreviewFeeding": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importPreviewSleep": "Sleep {count}",
+  "@importPreviewSleep": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importPreviewDiaper": "Diaper {count}",
+  "@importPreviewDiaper": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importPreviewPlay": "Play {count}",
+  "@importPreviewPlay": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importPreviewHealth": "Health {count}",
+  "@importPreviewHealth": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importSelectBaby": "Select Baby",
+  "importSelectBabyDesc": "Which baby are these records for?",
+  "importStartButton": "Start Import",
+  "importImporting": "Importing...",
+  "importImportingDesc": "Adding records to LULU",
+  "importProgress": "{percent}% complete",
+  "@importProgress": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "importCompleteTitle": "Import Complete!",
+  "importCompleteSuccess": "{count} records imported",
+  "@importCompleteSuccess": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importCompleteSkipped": "{count} duplicates skipped",
+  "@importCompleteSkipped": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importErrorTitle": "Import Failed",
+  "importErrorRetry": "Retry",
+  "importErrorBack": "Go Back",
+  "importDone": "Done",
+  "importNewImport": "Import Another File",
+  "importDuplicateNote": "Duplicate records (same type and time) are automatically skipped",
+
+  "familyManagement": "Family Management",
+  "familyMembers": "Family Members",
+  "pendingInvites": "Pending Invites",
+  "familySettings": "Family Settings",
+  "inviteFamily": "Invite Family Member",
+  "transferOwnership": "Transfer Ownership",
+  "joinOtherFamily": "Join Another Family",
+  "joinOtherFamilyDesc": "Leave current family and join another one.",
+  "leaveFamily": "Leave Family",
+  "deleteFamily": "Delete Family",
+  "deleteFamilyDesc": "Deleting the family will remove all records.",
+  "leaveFamilyDesc": "You won't be able to see records anymore.",
+  "cannotLeave": "Owner cannot leave",
+  "transferOwnershipFirst": "Please transfer ownership to another member first.",
+  "leave": "Leave",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "continueButton": "Continue",
+
+  "joinFamily": "Join Family",
+  "enterInviteCode": "Enter invite code",
+  "enterInviteCodeDesc": "Enter the 6-digit code you received from the family owner.",
+  "joinFamilyButton": "Join Family",
+  "validInvite": "Valid invite",
+  "memberCount": "{count} family members",
+  "@memberCount": {
+    "placeholders": {
+      "count": {"type": "String"}
+    }
+  },
+  "babyNames": "Babies: {names}",
+  "@babyNames": {
+    "placeholders": {
+      "names": {"type": "String"}
+    }
+  },
+  "expiresIn": "Expires in {days} days",
+  "@expiresIn": {
+    "placeholders": {
+      "days": {"type": "String"}
+    }
+  },
+  "joinedFamily": "Joined the family!",
+
+  "transferOwnershipTitle": "Who should be the new owner?",
+  "transferOwnershipDesc": "The owner can invite and manage family members.",
+  "transferOwnershipButton": "Transfer Ownership",
+  "confirmTransfer": "Transfer ownership?",
+  "confirmTransferDesc": "This action cannot be undone.",
+  "ownershipTransferred": "Ownership transferred",
+
+  "importRecords": "Import Records",
+  "mapBabiesTitle": "Import existing records?",
+  "mapBabiesDesc": "Link your babies to the new family babies to import records.",
+  "selectBaby": "Select",
+  "doNotLink": "Don't link",
+  "skipImport": "Skip",
+  "importRecordsButton": "Import Records",
+  "recordsImported": "{count} records imported!",
+  "@recordsImported": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "inviteByEmail": "Invite by email",
+  "inviteValidDays": "Valid for {days} days",
+  "@inviteValidDays": {
+    "placeholders": {
+      "days": {"type": "String"}
+    }
+  },
+  "shareKakao": "KakaoTalk",
+  "copyCode": "Copy Code",
+  "inviteEmailSent": "Invite email sent!",
+  "invalidEmail": "Please enter a valid email",
+  "codeCopied": "Invite code copied!"
 }
