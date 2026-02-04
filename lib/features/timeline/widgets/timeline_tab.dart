@@ -245,9 +245,11 @@ class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
               ),
 
               // MiniTimeBar (활동이 있을 때만)
+              // ⚠️ BUG-003 FIX: ValueKey 추가하여 날짜/아기 변경 시 강제 리빌드
               if (activities.isNotEmpty)
                 SliverToBoxAdapter(
                   child: MiniTimeBar(
+                    key: ValueKey('minibar_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
                     activities: activities,
                     date: _selectedDate,
                   ),

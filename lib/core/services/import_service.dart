@@ -100,8 +100,8 @@ class ImportService {
 
       for (final parsed in batch) {
         try {
-          // 중복 체크
-          final key = _buildActivityKey(parsed.type, parsed.startTime);
+          // ⚠️ BUG-001 FIX: babyId 포함하여 중복 체크
+          final key = _buildActivityKey(parsed.type, parsed.startTime, babyId: babyId);
           final isDuplicate = existingKeys.contains(key);
 
           // 첫 번째 항목에 대한 디버그 로그
@@ -113,11 +113,11 @@ class ImportService {
             }
           }
 
-          // 임시: 중복 체크 비활성화 (디버깅용)
-          // if (isDuplicate) {
-          //   skipCount++;
-          //   continue;
-          // }
+          // ⚠️ BUG-001 FIX: 중복 체크 다시 활성화
+          if (isDuplicate) {
+            skipCount++;
+            continue;
+          }
 
           // ActivityModel로 변환
           final activity = parsed.toActivityModel(
@@ -172,17 +172,23 @@ class ImportService {
   }
 
   /// 기존 활동 키 세트 생성
+  ///
+  /// ⚠️ BUG-001 FIX: babyId 포함하여 각 아기별로 키 생성
   Set<String> _buildExistingKeys(List<ActivityModel> activities) {
     final keys = <String>{};
     for (final activity in activities) {
-      keys.add(_buildActivityKey(activity.type.name, activity.startTime));
+      // babyIds의 첫 번째 아기 ID 사용 (단일 아기 기록 가정)
+      final babyId = activity.babyIds.isNotEmpty ? activity.babyIds.first : null;
+      keys.add(_buildActivityKey(activity.type.name, activity.startTime, babyId: babyId));
     }
     return keys;
   }
 
   /// 활동 키 생성 (중복 체크용)
-  /// 같은 타입 + 같은 시작시간(분 단위) = 중복
-  String _buildActivityKey(String type, DateTime startTime) {
+  /// 같은 babyId + 같은 타입 + 같은 시작시간(분 단위) = 중복
+  ///
+  /// ⚠️ BUG-001 FIX: babyId 포함하여 다태아 환경에서 중복 체크 정확도 향상
+  String _buildActivityKey(String type, DateTime startTime, {String? babyId}) {
     // 분 단위로 반올림 (±1분 오차 허용)
     final rounded = DateTime(
       startTime.year,
@@ -191,7 +197,9 @@ class ImportService {
       startTime.hour,
       startTime.minute,
     );
-    return '$type|${rounded.toIso8601String()}';
+    // babyId 포함: 다태아 환경에서 각 아기별로 별도 키 생성
+    final prefix = babyId != null ? '$babyId|' : '';
+    return '$prefix$type|${rounded.toIso8601String()}';
   }
 
   /// 파일 확장자 확인

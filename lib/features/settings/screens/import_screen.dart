@@ -560,9 +560,15 @@ class _ImportScreenState extends State<ImportScreen> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                // 홈 화면으로 돌아가기 (데이터는 자동 갱신됨)
-                Navigator.of(context).pop();
+              onPressed: () async {
+                // ⚠️ BUG-004 FIX: Import 후 HomeProvider 갱신하여 Sweet Spot 업데이트
+                final homeProvider = context.read<HomeProvider>();
+                await homeProvider.loadTodayActivities();
+
+                // 홈 화면으로 돌아가기
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: LuluColors.lavenderMist,

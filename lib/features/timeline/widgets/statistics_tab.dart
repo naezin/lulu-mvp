@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,6 +57,9 @@ class _StatisticsTabState extends State<StatisticsTab> {
     super.dispose();
   }
 
+  /// 데이터 로드 타임아웃 (초)
+  static const int _loadTimeoutSeconds = 15;
+
   Future<void> _loadData() async {
     if (!mounted) return;
 
@@ -82,28 +87,55 @@ class _StatisticsTabState extends State<StatisticsTab> {
       final dateRange = _filterProvider.getDateRange();
       debugPrint('[DEBUG] [StatisticsTab] dateRange: ${dateRange.start} ~ ${dateRange.end}');
 
-      await _dataProvider.loadStatistics(
-        familyId: family.id,
-        babyId: selectedBabyId,
-        dateRange: dateRange,
+      // ⚠️ BUG-002 FIX: 타임아웃 처리 추가
+      await Future.wait([
+        _dataProvider.loadStatistics(
+          familyId: family.id,
+          babyId: selectedBabyId,
+          dateRange: dateRange,
+        ),
+      ]).timeout(
+        Duration(seconds: _loadTimeoutSeconds),
+        onTimeout: () {
+          throw TimeoutException('통계 로딩 타임아웃');
+        },
       );
 
       debugPrint('[DEBUG] [StatisticsTab] currentStatistics: ${_dataProvider.currentStatistics}');
       debugPrint('[DEBUG] [StatisticsTab] hasData: ${_dataProvider.hasData}');
 
-      // 주간 패턴 로드
+      // 주간 패턴 로드 (별도 타임아웃 - 실패해도 통계는 표시)
       final selectedBaby = homeProvider.selectedBaby;
       if (selectedBaby != null) {
-        await _patternProvider.loadWeeklyPattern(
-          familyId: family.id,
-          babyId: selectedBaby.id,
-          babyName: selectedBaby.name,
-        );
+        try {
+          await _patternProvider.loadWeeklyPattern(
+            familyId: family.id,
+            babyId: selectedBaby.id,
+            babyName: selectedBaby.name,
+          ).timeout(
+            Duration(seconds: _loadTimeoutSeconds),
+            onTimeout: () {
+              debugPrint('⚠️ [StatisticsTab] Pattern load timeout - showing stats without pattern');
+              return;
+            },
+          );
+        } catch (patternError) {
+          debugPrint('⚠️ [StatisticsTab] Pattern load error: $patternError');
+          // 패턴 로드 실패해도 통계는 계속 표시
+        }
       }
 
       if (mounted) {
         setState(() {
           _isLoading = false;
+        });
+      }
+    } on TimeoutException catch (e) {
+      debugPrint('⏱️ [StatisticsTab] Timeout: $e');
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = '데이터 로딩이 너무 오래 걸려요. 다시 시도해주세요.';
         });
       }
     } catch (e) {
