@@ -118,6 +118,28 @@ SELECT is_family_member_or_legacy('<family_id>');
 
 - `docs/rls-prevention-claude-code-additions.md` - Claude Code 특화 재발 방지 가이드
 
+### 🗄️ Supabase Specialist 에이전트 (신규)
+
+RLS 42501 에러가 11회 반복된 교훈으로 전담 에이전트 추가:
+
+```
+🎯 미션: "RLS는 논리가 아닌 실행으로 검증한다"
+
+📋 핵심 책임:
+• RLS 정책 설계 및 검증
+• MCP 검증 쿼리 세트 실행 (MCP-V1~V4)
+• family_members 동기화 로직
+• Apple Sign-In 특이사항 대응
+• Edge Case 테스트 (다기기 로그인 등)
+
+✅ Quality Gate:
+□ MCP-V1~V4 모두 통과
+□ E2E 테스트 증거 첨부
+□ 스크린샷 없이 "완료" 선언 금지
+
+🔗 협업: Security Engineer, Flutter Developer, QA Engineer
+```
+
 ---
 
 ## 2026-02-04 RLS 보안 정리 완료 (Session 17 Final)
