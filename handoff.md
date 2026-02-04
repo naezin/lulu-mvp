@@ -1,234 +1,311 @@
 # LULU MVP-F Handoff
 
-**Version**: 5.4
-**Updated**: 2026-02-02
-**Sprint**: 10 (완료) + HOTFIX
+**Version**: 7.2
+**Updated**: 2026-02-04
+**Sprint**: 16 (Family Sharing 완전 완료 + RLS 42501 버그 수정)
 
 ## 현재 상태
-- **Phase**: Phase 2 울음 분석 홈 화면 통합 완료 + Empty State HOTFIX
-- **빌드**: iOS/Android 정상 (`flutter analyze` 에러 0개)
-- **온보딩**: 완료 (6단계)
-- **Phase 2**: 울음 분석 홈 화면 통합 완료
+- **Phase**: Phase 2 완료 + Family Sharing v3.2 완전 완료
+- **App Version**: 2.2.2+10
+- **빌드**: iOS 정상 (`flutter analyze` 에러 0개)
 - **Branch**: `feature/cry-analysis-ui`
+- **TestFlight**: 배포 준비 완료
+- **Supabase**: Family Sharing 완전 완료 + RLS 42501 버그 수정 완료
 
-## 최근 작업: HOTFIX - Empty State UX 개선
+## TestFlight 배포 현황
 
-### 2026-02-02: Empty State 전환 조건 수정
-
-**문제**:
-- 수유/기저귀 기록해도 "첫 기록을 시작해보세요" 메시지 계속 표시
-- Empty State에서 불필요한 LastActivityRow (- - -) 표시
-
-**해결**:
-| 항목 | 변경 전 | 변경 후 |
-|------|---------|---------|
-| 전환 조건 | 수면 기록 있을 때만 Normal State | 수유/수면/기저귀 중 하나라도 있으면 Normal State |
-| Empty State | LastActivityRow 포함 (- - -) | LastActivityRow 제거 |
-| SweetSpotCard | 수면 없으면 Empty State | 수면 없으면 "수면을 기록하면 예측이 시작돼요" 안내 |
-
-**수정 파일**:
-```
-lib/features/home/screens/home_screen.dart
-├── _buildEmptyActivitiesState(): LastActivityRow 제거
-├── _buildNormalContent(): hasOtherActivitiesOnly 조건 추가
-└── SweetSpotCard isEmpty 조건 수정
-
-lib/shared/widgets/sweet_spot_card.dart
-├── hasOtherActivitiesOnly prop 추가
-└── _buildNoSleepGuideCard() 메서드 추가
-
-lib/l10n/app_ko.arb, app_en.arb
-├── sweetSpotNoSleepTitle
-├── sweetSpotNoSleepHint
-└── sweetSpotRecordSleepButton
-```
-
-**UI 변화**:
-```
-Empty State (기록 없음):
-┌─────────────────────────────────────────┐
-│ 🎺 민정의 첫 기록을 시작해보세요        │
-│    [수유] [수면] [기저귀]               │
-├─────────────────────────────────────────┤
-│ 🎤 울음 분석                       NEW │
-└─────────────────────────────────────────┘
-• LastActivityRow (- - -) 제거됨 ✅
-
-Normal State (수유만 기록):
-┌─────────────────────────────────────────┐
-│ 🌙 -    🍼 2시간 전    👶 -            │
-├─────────────────────────────────────────┤
-│ 😴 수면을 기록하면 예측이 시작돼요     │
-│    [수면 기록하기]                      │
-├─────────────────────────────────────────┤
-│ 🎤 울음 분석                       NEW │
-└─────────────────────────────────────────┘
-• 수유 기록 → 바로 Normal State ✅
-• SweetSpot 안내 메시지 ✅
-
-Normal State (수면까지 기록):
-┌─────────────────────────────────────────┐
-│ 🌙 1시간 전  🍼 2시간 전  👶 30분 전   │
-├─────────────────────────────────────────┤
-│ 😴 다음 낮잠까지 약 30분               │
-│    지금 재우면 좋은 타이밍이에요        │
-├─────────────────────────────────────────┤
-│ 🎤 울음 분석                       NEW │
-└─────────────────────────────────────────┘
-• 기존대로 예측 표시 ✅
-```
-
-## Sprint 10 완료 내역
-
-| Part | 작업 | 상태 |
-|------|------|------|
-| Part A | TFLite 모델 생성 (442KB, 83.6%) | ✅ |
-| Part B | record 패키지 실제 녹음 | ✅ |
-| Part C | iOS/Android 권한 설정 | ✅ |
-| Part D | QA 코드 리뷰 통과 | ✅ |
-| Part E | 홈 화면 통합 설계 (SUS 85.5, TTC 1.9초) | ✅ |
-| **Part F** | **홈 화면 CryAnalysisCard 통합** | **✅** |
-
-## Sprint 7-8 완료 내역
-
-| Part | 작업 | 상태 |
-|------|------|------|
-| Day 1-2 | OngoingSleepCard → SweetSpotCard 통합 | ✅ |
-| Day 2 | QuickActionGrid → FAB 대체 | ✅ |
-| Day 2 | LastActivityRow 신규 추가 | ✅ |
-| Part A | CSV 내보내기 기능 | ✅ |
-| Part B | 설정 화면 구현 | ✅ |
-| Part C | i18n 다국어 확장 | ✅ |
-| Part E | HomeProvider 캐싱 최적화 | ✅ |
-| Part F | 이모지 → Material Icons 교체 | ✅ |
-
-## Phase 2 울음 분석 구현 현황
-
-### 완료된 파일 (12개 + 홈 통합)
-
-```
-lib/features/cry_analysis/
-├── models/
-│   ├── cry_type.dart                 ✅ Dunstan 5타입 + Unknown
-│   ├── cry_analysis_result.dart      ✅ 확률 분포, 신뢰도
-│   └── cry_analysis_record.dart      ✅ 히스토리 + 통계
-├── services/
-│   ├── audio_input_service.dart      ✅ 실제 마이크 녹음
-│   ├── audio_preprocessor.dart       ✅ Mel Spectrogram
-│   ├── cry_classifier.dart           ✅ 실제 TFLite 추론
-│   └── preterm_adjustment.dart       ✅ 조산아 보정
-├── providers/
-│   └── cry_analysis_provider.dart    ✅ 상태 관리, Freemium
-├── screens/
-│   └── cry_analysis_screen.dart      ✅ 메인 UI
-└── widgets/
-    ├── cry_analysis_button.dart      ✅ 상태별 버튼
-    ├── cry_result_card.dart          ✅ 결과 카드
-    └── probability_bar.dart          ✅ 확률 바
-
-lib/features/home/widgets/
-└── cry_analysis_card.dart            ✅ 홈 화면 진입점 카드
-
-lib/core/config/
-└── feature_flags.dart                ✅ enableCryAnalysis = true
-
-lib/core/design_system/
-├── lulu_colors.dart                  ✅ LuluCryAnalysisColors, LuluBadgeColors
-└── lulu_icons.dart                   ✅ microphone, soundWave 등
-
-assets/models/
-└── cry_classifier.tflite             ✅ 442KB, 83.6% 정확도
-```
-
-### 홈 화면 구조
-
-```
-1. BabyTabBar              ← 최상단 고정
-2. LastActivityRow         ← 수면/수유/기저귀 경과시간 (Normal State만)
-3. SweetSpotCard           ← 수면 예측 / 수면 안내
-4. CryAnalysisCard         ← 🆕 울음 분석 진입점 (NEW 배지)
-5. FAB                     ← 하단 플로팅
-```
-
-## Feature Flag 사용법
-
-```dart
-// lib/core/config/feature_flags.dart
-class FeatureFlags {
-  static const bool enableCryAnalysis = true;  // false로 변경하면 숨김
-}
-
-// HomeScreen에서 사용
-if (FeatureFlags.enableCryAnalysis) ...[
-  CryAnalysisCard(onTap: () => _navigateToCryAnalysis(context)),
-],
-```
-
-## Git 브랜치 전략
-
-```
-main ─────────────────────────────────────────────
-      \
-       feature/cry-analysis-ui ──────────────────  ← 현재 브랜치
-```
-
-- `main`: 안정 버전 (Feature Flag로 울음 기능 숨김 가능)
-- `feature/cry-analysis-ui`: 울음 분석 UI 개발용
-
-## 알려진 이슈
-없음
-
-## TODO
-
-### 즉시 (Sprint 11)
-- [ ] 히스토리 화면 구현 (CryHistoryScreen)
-- [ ] 설정 화면 연동 (울음 분석 설정)
-- [ ] 접근성 추가 (VoiceOver/TalkBack)
-- [ ] 실제 아기 울음 테스트
-
-### 출시 전 필수
-- [ ] QA 테스트 (TC-01 ~ TC-08)
-- [ ] TestFlight 배포
-- [ ] 베타 테스터 피드백 수집
-
-## ⚠️ 릴리즈 전 필수 (Security)
-
-| 항목 | 상태 | 조치 |
-|------|------|------|
-| 하드코딩 API 키 | ✅ 통과 | `.env` 사용, git 추적 안 됨 |
-| 민감한 데이터 로깅 | ✅ 통과 | 비밀번호/토큰/이메일 로깅 없음 |
-| **Supabase RLS** | ⚠️ **필수** | MVP용 "Allow all" 정책 → 원래 정책 복구 |
-
-### RLS 복구 방법
-```sql
--- 1. MVP 정책 삭제
-DROP POLICY "Allow all for MVP" ON families;
-DROP POLICY "Allow all for MVP" ON babies;
-DROP POLICY "Allow all for MVP" ON activities;
-
--- 2. 001_initial_schema.sql의 원래 RLS 정책 다시 적용
-```
-
-## 주요 파일 참조
-
-### HOTFIX 관련 파일
-- `lib/features/home/screens/home_screen.dart` - 전환 조건, Empty State 수정
-- `lib/shared/widgets/sweet_spot_card.dart` - 수면 안내 카드 추가
-- `lib/l10n/app_ko.arb`, `lib/l10n/app_en.arb` - 다국어 문자열
-
-### Phase 2 핵심 파일
-- `lib/features/cry_analysis/` - 울음 분석 전체 모듈
-- `lib/features/home/widgets/cry_analysis_card.dart` - 홈 화면 진입점
-- `lib/core/config/feature_flags.dart` - Feature Flag
-- `assets/models/cry_classifier.tflite` - TFLite 모델
-
-### v5.1-5.2 핵심 파일
-- `lib/shared/widgets/sweet_spot_card.dart` - 통합 카드
-- `lib/shared/widgets/last_activity_row.dart` - 경과 시간 표시
-- `lib/features/home/screens/home_screen.dart` - 홈 화면
+| 항목 | 상태 |
+|------|------|
+| App Version | 2.2.2+10 |
+| Bundle ID | com.lululabs.lulu |
+| 앱스토어 이름 | 루루 |
+| Family Sharing DB | **완전 완료** |
+| RLS 정책 | **12개 (보안 완료)** |
+| 코드 검증 | **완전 완료** |
 
 ---
 
-**Sprint 10 + HOTFIX 완료** ✅
+## 2026-02-04 RLS 42501 버그 수정 (Session 18 - 최종)
 
-**Next Session**: 히스토리 화면 + 실제 울음 테스트 + TestFlight 배포
+### 🔴 교훈: 11회 반복된 같은 실수
+
+**근본 원인**: "데이터 존재" ≠ "현재 사용자의 데이터 존재"
+- RLS는 "데이터"가 아닌 "권한"을 검증 (auth.uid() 기준)
+- Apple Sign-In 재설치 시 새 uid 생성 → family_members에 없음 → RLS 실패
+
+### 수정 내용 ✅
+
+1. **main.dart** (로컬 복원 시 family_members upsert 추가)
+   ```dart
+   // ✅ RLS FIX: 로컬 복원 시에도 family_members에 현재 사용자 추가
+   final currentUserId = Supabase.instance.client.auth.currentUser?.id;
+   if (currentUserId != null) {
+     await Supabase.instance.client.from('family_members').upsert({
+       'family_id': family.id,
+       'user_id': currentUserId,
+       'role': 'owner',
+     });
+   }
+   ```
+
+2. **SQL 직접 수정** (MCP 통해 실행)
+   ```sql
+   INSERT INTO family_members (family_id, user_id, role)
+   VALUES ('<family_id>', '<new_user_id>', 'owner');
+   ```
+
+### 재발 방지 필수 검증 쿼리
+
+```sql
+-- auth.users ↔ family_members 매칭 확인 (모든 user가 있어야 함)
+SELECT au.id, au.email, fm.family_id, fm.role,
+  CASE WHEN fm.user_id IS NULL THEN '❌ NOT IN family_members' ELSE '✅ OK' END
+FROM auth.users au
+LEFT JOIN family_members fm ON fm.user_id = au.id;
+
+-- is_family_member_or_legacy 테스트
+SELECT is_family_member_or_legacy('<family_id>');
+```
+
+### 상세 가이드 문서
+
+- `docs/rls-prevention-claude-code-additions.md` - Claude Code 특화 재발 방지 가이드
+
+---
+
+## 2026-02-04 RLS 보안 정리 완료 (Session 17 Final)
+
+### "Allow all for MVP" 정책 삭제 ✅
+
+**삭제된 정책** (보안 위험 제거):
+```sql
+DROP POLICY "Allow all for MVP" ON families;  -- 삭제됨
+DROP POLICY "Allow all for MVP" ON babies;    -- 삭제됨
+DROP POLICY "Allow all for MVP" ON activities; -- 삭제됨
+```
+
+### 최종 RLS 정책 (12개) ✅
+
+| 테이블 | 정책명 | 설명 |
+|--------|--------|------|
+| **activities** | activity_delete | 가족 멤버만 삭제 |
+| **activities** | activity_insert | 가족 멤버만 추가 |
+| **activities** | activity_select | 가족 멤버만 조회 |
+| **activities** | activity_update | 가족 멤버만 수정 |
+| **babies** | baby_delete | 가족 멤버만 삭제 |
+| **babies** | baby_insert | 가족 멤버만 추가 |
+| **babies** | baby_select | 가족 멤버만 조회 |
+| **babies** | baby_update | 가족 멤버만 수정 |
+| **families** | family_delete | 가족 멤버만 삭제 |
+| **families** | family_insert | 인증된 사용자만 |
+| **families** | family_select | 가족 멤버만 조회 |
+| **families** | family_update | 가족 멤버만 수정 |
+
+**RLS 검증 함수**: `is_family_member_or_legacy(family_id)` - 레거시 호환 지원
+
+---
+
+## DB 스키마 (최종)
+
+### 기존 테이블
+- **profiles** - 사용자 프로필
+- **families** - 가족 정보 (user_id, created_by)
+- **babies** - 아기 정보
+- **activities** - 활동 기록
+
+### 신규 테이블 (Family Sharing v3.2)
+- **family_members** - 가족 멤버 관계
+  ```sql
+  id UUID PRIMARY KEY
+  family_id UUID REFERENCES families(id)
+  user_id UUID REFERENCES auth.users(id)
+  role TEXT ('owner' | 'member')
+  joined_at TIMESTAMPTZ
+  UNIQUE (family_id, user_id)  -- upsert용
+  ```
+- **family_invites** - 초대 코드
+  ```sql
+  id UUID PRIMARY KEY
+  family_id UUID REFERENCES families(id)
+  invite_code TEXT UNIQUE
+  invited_email TEXT
+  created_by UUID REFERENCES auth.users(id)
+  expires_at TIMESTAMPTZ
+  used_at TIMESTAMPTZ
+  used_by UUID
+  ```
+
+### 함수 (7개)
+1. `is_family_member(p_family_id)` - 멤버 확인 헬퍼
+2. `is_family_owner(p_family_id)` - 소유자 확인 헬퍼
+3. `is_family_member_or_legacy(p_family_id)` - 레거시 호환 헬퍼
+4. `get_invite_info(p_invite_code)` - 초대 정보 조회
+5. `accept_invite(p_invite_code, p_baby_mappings)` - 초대 수락
+6. `transfer_ownership(p_family_id, p_new_owner_id)` - 소유권 이전
+7. `leave_family(p_family_id)` - 가족 나가기
+
+---
+
+## 코드 검증 결과 (6개 항목) ✅
+
+| # | 항목 | 파일 | 상태 |
+|---|------|------|------|
+| 1 | 온보딩 family_members INSERT | `family_repository.dart` | ✅ |
+| 2 | activities family_id 출처 | `record_provider.dart` | ✅ |
+| 3 | babies 추가 전 family 확인 | `home_provider.dart` | ✅ |
+| 4 | 초대 코드 created_by | `invite_service.dart` | ✅ |
+| 5 | 레거시 자동 마이그레이션 | `main.dart` | ✅ |
+| 6 | familyId null 체크 | `record_provider.dart` | ✅ |
+
+---
+
+## 데이터 흐름 (최종 v7.1)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      앱 시작 플로우 (v7.1)                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  1. 로그인 체크                                                 │
+│     ├── 미로그인 → LoginScreen                                  │
+│     └── 로그인됨 → OnboardingWrapper                            │
+│                                                                 │
+│  2. OnboardingWrapper                                           │
+│     ├── family_members에서 family_id 확인                       │
+│     │   ├── 있음 → familyId 획득                                │
+│     │   └── 없음 → families.user_id fallback (자동 마이그레이션)│
+│     │                                                           │
+│     ├── familyId 있음 → _loadExistingFamilyData()              │
+│     │   ├── families 테이블 조회 (RLS: family_select)          │
+│     │   ├── babies 테이블 조회 (RLS: baby_select)              │
+│     │   ├── HomeProvider.setFamily() 호출                       │
+│     │   └── HomeScreen 표시                                     │
+│     │                                                           │
+│     └── familyId 없음 → OnboardingScreen                       │
+│                                                                 │
+│  3. 온보딩 완료                                                 │
+│     FamilyRepository.createFamily()                             │
+│          ├── families INSERT (RLS: family_insert)              │
+│          └── family_members INSERT (owner)                      │
+│                                                                 │
+│  4. 기록 저장                                                   │
+│     RecordProvider.saveXxx()                                    │
+│          ├── familyId null 체크                                 │
+│          └── ActivityRepository.createActivity()                │
+│               └── activities INSERT (RLS: activity_insert)      │
+│                                                                 │
+│  5. RLS 검증 (Supabase)                                         │
+│     is_family_member_or_legacy(family_id) 호출                  │
+│          ├── family_members에 있음 → true                       │
+│          └── families.user_id 일치 → true (레거시)              │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 알려진 이슈
+
+### 해결됨
+- [x] FK 에러 (family_id 불일치) - 2026-02-03 해결
+- [x] RecordProvider 로컬 저장 버그 - 2026-02-03 해결
+- [x] 온보딩 중복 버그 - 2026-02-04 해결
+- [x] Timeline 데이터 안 보임 - 2026-02-04 해결
+- [x] 체온 입력 시 키보드 가림 - 2026-02-04 해결
+- [x] **BUG-008**: 로그인 후 Supabase 체크 안 함 - Hotfix 완료
+- [x] **BUG-009**: 아기 추가 시 FK 에러 - Hotfix 완료
+- [x] **BUG-010**: Timeline에 데이터 안 보임 - Hotfix 완료
+- [x] **family_members 테이블 미존재** - 마이그레이션 완료
+- [x] **RLS 정책 미적용** - 12개 정책 적용 완료
+- [x] **"Allow all for MVP" 보안 구멍** - 삭제 완료
+- [x] **RLS 42501 에러** (activities INSERT 실패) - 2026-02-04 수정
+  - 원인: Apple Sign-In 재설치 시 새 uid → family_members에 없음
+  - 수정: main.dart 로컬 복원 시 family_members upsert 추가
+
+### 미해결
+없음
+
+---
+
+## TODO
+
+### 완료됨 ✅
+- [x] Supabase 마이그레이션 SQL 실행
+- [x] family_members, family_invites RLS 정책 생성
+- [x] RPC 함수 생성 (4개)
+- [x] is_family_member_or_legacy 함수 생성
+- [x] families/babies/activities RLS 정책 업데이트 (12개)
+- [x] **"Allow all for MVP" 정책 삭제** (보안 정리)
+- [x] family_repository.dart - family_members INSERT 추가
+- [x] 코드 검증 6개 항목 완료
+- [x] flutter analyze 통과 확인 (에러 0개)
+
+### 다음 단계
+- [ ] **TestFlight 배포** (v2.2.2+10)
+- [ ] 베타 테스터 피드백 수집
+- [ ] Family Sharing 기능 테스트 (초대 코드 생성/수락)
+
+### 출시 전 필수
+- [ ] QA 테스트 완료
+- [ ] 앱스토어 심사 제출
+
+---
+
+## Supabase 최종 검증 쿼리
+
+```sql
+-- 1. RLS 정책 확인 (12개여야 함)
+SELECT tablename, policyname FROM pg_policies
+WHERE schemaname = 'public'
+AND tablename IN ('families', 'babies', 'activities')
+ORDER BY tablename, policyname;
+
+-- 2. 함수 확인 (7개)
+SELECT routine_name FROM information_schema.routines
+WHERE routine_schema = 'public'
+AND routine_name IN ('get_invite_info', 'accept_invite', 'transfer_ownership',
+                     'leave_family', 'is_family_member', 'is_family_owner',
+                     'is_family_member_or_legacy');
+```
+
+---
+
+---
+
+## ⚠️ RLS 작업 시 필수 확인 (재발 방지)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                  RLS 42501 재발 방지 체크리스트                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  1. family_members INSERT 누락 없는가?                          │
+│     └ families INSERT 후 반드시 family_members에도 INSERT       │
+│                                                                 │
+│  2. auth.uid()와 family_members 매칭 확인했는가?                │
+│     └ MCP 쿼리로 확인 (모든 user가 family_members에 있어야 함)  │
+│                                                                 │
+│  3. 실제 앱에서 기록 저장 테스트했는가?                         │
+│     └ 수유/수면/기저귀 중 최소 1개 저장 성공 확인               │
+│                                                                 │
+│  🔴 영향받는 파일 (수정 시 반드시 검증)                         │
+│     • main.dart (OnboardingWrapper)                             │
+│     • family_sync_service.dart                                  │
+│     • family_repository.dart                                    │
+│     • record_provider.dart                                      │
+│                                                                 │
+│  📋 상세: docs/rls-prevention-claude-code-additions.md          │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+**Family Sharing v3.2 + RLS 42501 버그 수정 완료**
+
+**Status**: 배포 준비 완료 - TestFlight 배포 가능
+
+---
+
+*"Family Sharing v3.2 - 레거시 호환 + 멀티 테넌트 RLS + 보안 완성"*
+*"RLS 검증: 데이터 존재 ≠ 권한 존재 - auth.uid() 기준!"*

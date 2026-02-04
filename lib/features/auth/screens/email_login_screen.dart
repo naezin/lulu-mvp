@@ -1,0 +1,356 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth_provider.dart';
+
+/// 이메일 로그인/회원가입 화면
+class EmailLoginScreen extends StatefulWidget {
+  final VoidCallback? onLoginSuccess;
+
+  const EmailLoginScreen({
+    super.key,
+    this.onLoginSuccess,
+  });
+
+  @override
+  State<EmailLoginScreen> createState() => _EmailLoginScreenState();
+}
+
+class _EmailLoginScreenState extends State<EmailLoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _nicknameController = TextEditingController();
+
+  bool _isSignUp = false;
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nicknameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0D1B2A),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          _isSignUp ? '회원가입' : '이메일 로그인',
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 32),
+
+                // Email Field
+                _buildEmailField(),
+
+                const SizedBox(height: 16),
+
+                // Password Field
+                _buildPasswordField(),
+
+                // Nickname Field (Sign Up only)
+                if (_isSignUp) ...[
+                  const SizedBox(height: 16),
+                  _buildNicknameField(),
+                ],
+
+                const SizedBox(height: 24),
+
+                // Submit Button
+                _buildSubmitButton(),
+
+                const SizedBox(height: 16),
+
+                // Toggle Sign Up / Sign In
+                _buildToggleButton(),
+
+                // Forgot Password (Sign In only)
+                if (!_isSignUp) ...[
+                  const SizedBox(height: 16),
+                  _buildForgotPasswordButton(),
+                ],
+
+                // Error Message
+                Consumer<AuthProvider>(
+                  builder: (context, authProvider, _) {
+                    if (authProvider.errorMessage != null) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.error_outline, color: Colors.red, size: 20),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  authProvider.errorMessage!,
+                                  style: const TextStyle(color: Colors.red, fontSize: 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmailField() {
+    return TextFormField(
+      controller: _emailController,
+      keyboardType: TextInputType.emailAddress,
+      autocorrect: false,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: '이메일',
+        labelStyle: TextStyle(color: Colors.grey[400]),
+        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey[400]),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[600]!),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF9D8CD6)),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return '이메일을 입력해주세요';
+        }
+        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+          return '유효한 이메일 주소를 입력해주세요';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: _obscurePassword,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: '비밀번호',
+        labelStyle: TextStyle(color: Colors.grey[400]),
+        prefixIcon: Icon(Icons.lock_outlined, color: Colors.grey[400]),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+            color: Colors.grey[400],
+          ),
+          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[600]!),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF9D8CD6)),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return '비밀번호를 입력해주세요';
+        }
+        if (_isSignUp && value.length < 6) {
+          return '비밀번호는 최소 6자 이상이어야 합니다';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildNicknameField() {
+    return TextFormField(
+      controller: _nicknameController,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: '닉네임 (선택)',
+        labelStyle: TextStyle(color: Colors.grey[400]),
+        prefixIcon: Icon(Icons.person_outlined, color: Colors.grey[400]),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[600]!),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF9D8CD6)),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return Consumer<AuthProvider>(
+      builder: (context, authProvider, _) {
+        return SizedBox(
+          height: 50,
+          child: ElevatedButton(
+            onPressed: authProvider.isLoading ? null : _handleSubmit,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF9D8CD6),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              disabledBackgroundColor: const Color(0xFF9D8CD6).withValues(alpha: 0.5),
+            ),
+            child: authProvider.isLoading
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                : Text(
+                    _isSignUp ? '회원가입' : '로그인',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildToggleButton() {
+    return TextButton(
+      onPressed: () {
+        setState(() => _isSignUp = !_isSignUp);
+        context.read<AuthProvider>().clearError();
+      },
+      child: Text(
+        _isSignUp ? '이미 계정이 있으신가요? 로그인' : '계정이 없으신가요? 회원가입',
+        style: TextStyle(
+          color: Colors.grey[400],
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildForgotPasswordButton() {
+    return TextButton(
+      onPressed: _handleForgotPassword,
+      child: Text(
+        '비밀번호를 잊으셨나요?',
+        style: TextStyle(
+          color: Colors.grey[500],
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleSubmit() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final authProvider = context.read<AuthProvider>();
+    bool success;
+
+    if (_isSignUp) {
+      success = await authProvider.signUpWithEmail(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        nickname: _nicknameController.text.trim().isNotEmpty
+            ? _nicknameController.text.trim()
+            : null,
+      );
+    } else {
+      success = await authProvider.signInWithEmail(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+    }
+
+    if (success && mounted) {
+      widget.onLoginSuccess?.call();
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> _handleForgotPassword() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('이메일을 입력해주세요'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    final authProvider = context.read<AuthProvider>();
+    final success = await authProvider.sendPasswordResetEmail(email);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            success
+                ? '비밀번호 재설정 이메일을 발송했습니다'
+                : '이메일 발송에 실패했습니다',
+          ),
+          backgroundColor: success ? Colors.green : Colors.red,
+        ),
+      );
+    }
+  }
+}

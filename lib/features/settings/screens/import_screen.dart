@@ -532,6 +532,24 @@ class _ImportScreenState extends State<ImportScreen> {
                     count: result.skipCount,
                   ),
                 ],
+                // 에러 메시지 표시 (디버깅용)
+                if (result.errors.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: LuluStatusColors.error.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '에러: ${result.errors.first}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: LuluStatusColors.error,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

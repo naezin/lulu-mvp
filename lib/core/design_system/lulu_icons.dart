@@ -49,7 +49,7 @@ class LuluIcons {
   // MVP-F: 다태아 관련 아이콘
   // ========================================
 
-  static const IconData baby = Icons.child_friendly_rounded;
+  static const IconData baby = Icons.child_care_rounded;
   static const IconData babies = Icons.group_rounded;
   static const IconData family = Icons.family_restroom_rounded;
   static const IconData switchBaby = Icons.swap_horiz_rounded;

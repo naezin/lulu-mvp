@@ -46,6 +46,13 @@ class SupabaseService {
 
     _client = Supabase.instance.client;
     debugPrint('[OK] Supabase initialized successfully');
+
+    // 기존 세션 확인
+    if (_client?.auth.currentUser != null) {
+      debugPrint('[INFO] 기존 세션 존재: ${_client!.auth.currentUser!.id}');
+    } else {
+      debugPrint('[INFO] 세션 없음 - 로그인 필요');
+    }
   }
 
   /// 현재 인증된 사용자

@@ -297,6 +297,38 @@ class LuluBadgeColors {
   static const Color betaBadgeText = Color(0xFFFFFFFF);
 }
 
+/// Pattern Colors (패턴 차트 컬러)
+///
+/// 작업 지시서 v1.1: 주간 패턴 차트 및 타임바 색상
+class LuluPatternColors {
+  /// 밤잠 (21:00 ~ 06:00)
+  static const Color nightSleep = Color(0xFF9D8CD6); // lavenderMist 100%
+
+  /// 낮잠 (06:00 ~ 21:00)
+  static Color get daySleep => nightSleep.withValues(alpha: 0.6); // 60%
+
+  /// 수유
+  static const Color feeding = Color(0xFF4A90D9); // skyBlue
+
+  /// 기저귀
+  static const Color diaper = Color(0xFF6FCF97); // mintGreen
+
+  /// 빈 시간 (깨어있음)
+  static const Color empty = Colors.transparent;
+
+  /// 빈 시간 테두리
+  static Color get emptyBorder => LuluTextColors.tertiary.withValues(alpha: 0.3);
+
+  /// 수정 버튼
+  static const Color editAction = Color(0xFF4A90D9); // skyBlue
+
+  /// 삭제 버튼
+  static const Color deleteAction = Color(0xFFE57373); // soft red
+
+  /// 현재 시간 마커
+  static const Color currentTimeMarker = Color(0xFFFF7043); // coral
+}
+
 /// Statistics Colors (통계 화면 컬러)
 ///
 /// 작업 지시서 v1.2.1: 통계 화면 전용 색상 시스템

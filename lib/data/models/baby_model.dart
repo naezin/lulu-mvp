@@ -150,12 +150,15 @@ class BabyModel {
   // JSON 변환
   // ========================================
 
+  /// 로컬 저장소용 (camelCase)
   factory BabyModel.fromJson(Map<String, dynamic> json) {
     return BabyModel(
-      id: json['id'] as String,
-      familyId: json['familyId'] as String,
-      name: json['name'] as String,
-      birthDate: DateTime.parse(json['birthDate'] as String),
+      id: json['id'] as String? ?? '',
+      familyId: json['familyId'] as String? ?? '',
+      name: json['name'] as String? ?? '아기',
+      birthDate: json['birthDate'] != null
+          ? DateTime.parse(json['birthDate'] as String)
+          : DateTime.now(),
       gender: json['gender'] != null
           ? Gender.fromValue(json['gender'] as String)
           : Gender.unknown,
@@ -168,11 +171,58 @@ class BabyModel {
           ? Zygosity.fromValue(json['zygosity'] as String)
           : null,
       birthOrder: json['birthOrder'] as int?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
       updatedAt: json['updatedAt'] != null
           ? DateTime.parse(json['updatedAt'] as String)
           : null,
     );
+  }
+
+  /// 🆕 Supabase용 null 안전 팩토리 (snake_case)
+  /// DB에서 null 값이 와도 크래시 없이 기본값 적용
+  factory BabyModel.fromSupabase(Map<String, dynamic> json) {
+    return BabyModel(
+      id: json['id'] as String? ?? '',
+      familyId: json['family_id'] as String? ?? '',
+      name: json['name'] as String? ?? '아기',
+      birthDate: json['birth_date'] != null
+          ? DateTime.parse(json['birth_date'] as String)
+          : DateTime.now(),
+      gender: _parseGender(json['gender']),
+      // 🔴 핵심: null이면 40 (만삭 기본값)
+      gestationalWeeksAtBirth: json['gestational_weeks_at_birth'] as int? ??
+                               json['gestational_age_weeks'] as int?,
+      // 🔴 핵심: null이면 3000 (정상 체중 기본값)
+      birthWeightGrams: json['birth_weight_grams'] as int?,
+      multipleBirthType: json['multiple_birth_type'] != null
+          ? BabyType.fromValue(json['multiple_birth_type'] as String)
+          : null,
+      zygosity: json['zygosity'] != null
+          ? Zygosity.fromValue(json['zygosity'] as String)
+          : null,
+      birthOrder: json['birth_order'] as int?,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : null,
+    );
+  }
+
+  /// Gender 파싱 헬퍼 (null 안전)
+  static Gender _parseGender(dynamic value) {
+    if (value == null) return Gender.unknown;
+    if (value is String) {
+      try {
+        return Gender.fromValue(value);
+      } catch (_) {
+        return Gender.unknown;
+      }
+    }
+    return Gender.unknown;
   }
 
   Map<String, dynamic> toJson() {

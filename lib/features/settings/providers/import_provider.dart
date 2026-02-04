@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../core/services/import_service.dart';
+import '../../../core/services/family_sync_service.dart';
 import '../../../core/services/parsers/parsed_activity.dart';
 
 /// Import 상태
@@ -130,10 +131,26 @@ class ImportProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      // ⚠️ 핵심: Import 전에 Family가 Supabase에 존재하는지 확인!
+      debugPrint('[INFO] [ImportProvider] Ensuring family exists before import...');
+      debugPrint('[INFO] [ImportProvider] Original familyId from screen: $familyId');
+
+      final syncedFamilyId = await FamilySyncService.instance.ensureFamilyExists();
+      debugPrint('[INFO] [ImportProvider] Synced familyId from FamilySyncService: $syncedFamilyId');
+
+      // 동기화된 familyId 사용 (없으면 전달받은 familyId 사용)
+      final actualFamilyId = syncedFamilyId ?? familyId;
+      debugPrint('[INFO] [ImportProvider] Final familyId to use: $actualFamilyId');
+
+      if (actualFamilyId.isEmpty) {
+        _setError('가족 정보가 없습니다. 온보딩을 완료해주세요.');
+        return false;
+      }
+
       _result = await _importService.importActivities(
         preview: _preview!,
         babyId: babyId,
-        familyId: familyId,
+        familyId: actualFamilyId,
         onProgress: (progress) {
           _progress = progress;
           notifyListeners();

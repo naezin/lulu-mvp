@@ -3,14 +3,12 @@ import 'package:uuid/uuid.dart';
 
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
-import '../../../core/services/local_activity_service.dart';
 
 /// 기록 화면 상태 관리 Provider
 ///
 /// MVP-F: 단일 아기 선택만 지원 (동시 기록 제거)
-/// MVP-F: 로컬 저장 모드 (Supabase 인증 없이 동작)
+/// BUG-DATA-01 FIX: Supabase(ActivityRepository)로 데이터 저장
 class RecordProvider extends ChangeNotifier {
-  final LocalActivityService _localActivityService = LocalActivityService.instance;
   final ActivityRepository _activityRepository = ActivityRepository();
   final Uuid _uuid = const Uuid();
 
@@ -525,9 +523,9 @@ class RecordProvider extends ChangeNotifier {
         createdAt: DateTime.now(),
       );
 
-      final savedActivity = await _localActivityService.saveActivity(activity);
+      final savedActivity = await _activityRepository.createActivity(activity);
 
-      debugPrint('[OK] [RecordProvider] Feeding saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Feeding saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';
@@ -609,9 +607,9 @@ class RecordProvider extends ChangeNotifier {
         createdAt: DateTime.now(),
       );
 
-      final savedActivity = await _localActivityService.saveActivity(activity);
+      final savedActivity = await _activityRepository.createActivity(activity);
 
-      debugPrint('[OK] [RecordProvider] Sleep saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Sleep saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';
@@ -700,9 +698,9 @@ class RecordProvider extends ChangeNotifier {
         createdAt: DateTime.now(),
       );
 
-      final savedActivity = await _localActivityService.saveActivity(activity);
+      final savedActivity = await _activityRepository.createActivity(activity);
 
-      debugPrint('[OK] [RecordProvider] Play saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Play saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';
@@ -811,9 +809,9 @@ class RecordProvider extends ChangeNotifier {
         createdAt: DateTime.now(),
       );
 
-      final savedActivity = await _localActivityService.saveActivity(activity);
+      final savedActivity = await _activityRepository.createActivity(activity);
 
-      debugPrint('[OK] [RecordProvider] Health saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Health saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';
@@ -865,9 +863,9 @@ class RecordProvider extends ChangeNotifier {
         createdAt: DateTime.now(),
       );
 
-      final savedActivity = await _localActivityService.saveActivity(activity);
+      final savedActivity = await _activityRepository.createActivity(activity);
 
-      debugPrint('[OK] [RecordProvider] Diaper saved: ${savedActivity.id}');
+      debugPrint('[OK] [RecordProvider] Diaper saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       _errorMessage = '저장에 실패했습니다: $e';
@@ -968,40 +966,28 @@ class RecordProvider extends ChangeNotifier {
     debugPrint('🔄 loadRecentFeedings started for babyId: $babyId');
 
     try {
-      // 1. 로컬 저장소에서 먼저 조회
-      final localActivities = await _localActivityService.getActivitiesByBabyId(babyId);
-      debugPrint('📦 Local activities for babyId $babyId: ${localActivities.length}');
-
-      // 2. Supabase에서도 조회 (fallback)
-      List<ActivityModel> supabaseActivities = [];
+      // BUG-DATA-01 FIX: Supabase에서만 조회 (로컬 저장소 제거)
+      List<ActivityModel> activities = [];
       try {
-        supabaseActivities = await _activityRepository.getActivitiesByBabyId(
+        activities = await _activityRepository.getActivitiesByBabyId(
           babyId,
           limit: 20,
         );
-        debugPrint('☁️ Supabase activities for babyId $babyId: ${supabaseActivities.length}');
+        debugPrint('☁️ Supabase activities for babyId $babyId: ${activities.length}');
       } catch (e) {
-        debugPrint('⚠️ Supabase fetch failed, using local only: $e');
+        debugPrint('⚠️ Supabase fetch failed: $e');
       }
 
-      // 🔴 수정 2: babyId 변경 확인 (race condition 방지)
+      // 🔴 babyId 변경 확인 (race condition 방지)
       if (_currentFeedingBabyId != babyId) {
         debugPrint('⚠️ babyId changed during loading, discarding results');
         return; // 사용자가 다른 아기로 전환함 → 결과 무시
       }
 
-      // 3. 병합 (로컬 우선, ID로 중복 제거)
-      final Map<String, ActivityModel> mergedMap = {};
-      for (final activity in supabaseActivities) {
-        mergedMap[activity.id] = activity;
-      }
-      for (final activity in localActivities) {
-        mergedMap[activity.id] = activity; // 로컬이 덮어씀
-      }
-      final allActivities = mergedMap.values.toList()
+      final allActivities = activities
         ..sort((a, b) => b.startTime.compareTo(a.startTime));
 
-      debugPrint('🔀 Merged activities for babyId $babyId: ${allActivities.length}');
+      debugPrint('📊 Activities for babyId $babyId: ${allActivities.length}');
 
       // 4. 엄격한 필터링 (단일 아기만)
       final strictFiltered = allActivities.where((a) {
@@ -1090,10 +1076,10 @@ class RecordProvider extends ChangeNotifier {
         createdAt: now,
       );
 
-      final saved = await _localActivityService.saveActivity(newActivity);
+      final saved = await _activityRepository.createActivity(newActivity);
       _lastSavedId = saved.id;
 
-      debugPrint('[OK] [RecordProvider] Quick feeding saved: ${saved.id}');
+      debugPrint('[OK] [RecordProvider] Quick feeding saved to Supabase: ${saved.id}');
 
       // 최근 기록 새로고침
       await loadRecentFeedings(selectedBabyId!);
@@ -1112,8 +1098,8 @@ class RecordProvider extends ChangeNotifier {
     if (_lastSavedId == null) return false;
 
     try {
-      await _localActivityService.deleteActivity(_lastSavedId!);
-      debugPrint('[OK] [RecordProvider] Undo: $_lastSavedId');
+      await _activityRepository.deleteActivity(_lastSavedId!);
+      debugPrint('[OK] [RecordProvider] Undo from Supabase: $_lastSavedId');
 
       _lastSavedId = null;
 

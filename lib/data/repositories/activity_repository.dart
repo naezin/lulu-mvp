@@ -235,6 +235,35 @@ class ActivityRepository {
     }
   }
 
+  /// 🔍 디버그: 모든 활동 조회 (family_id 검증용)
+  Future<void> debugCheckActivities(String familyId) async {
+    try {
+      // 1. 해당 family_id의 활동 개수
+      final byFamily = await SupabaseService.activities
+          .select()
+          .eq('family_id', familyId);
+      debugPrint('🔍 [ActivityRepo] Activities with family_id=$familyId: ${(byFamily as List).length}');
+
+      // 2. 전체 활동 개수 (family_id 필터 없이)
+      final allActivities = await SupabaseService.activities
+          .select()
+          .limit(10);
+      debugPrint('🔍 [ActivityRepo] Sample of all activities (limit 10):');
+      for (final a in (allActivities as List)) {
+        debugPrint('   - id: ${a['id']?.toString().substring(0, 8)}..., family_id: ${a['family_id']}, baby_ids: ${a['baby_ids']}');
+      }
+
+      // 3. 전체 고유 family_id 목록
+      final uniqueFamilies = await SupabaseService.activities
+          .select('family_id')
+          .limit(100);
+      final familyIds = (uniqueFamilies as List).map((e) => e['family_id']).toSet();
+      debugPrint('🔍 [ActivityRepo] Unique family_ids in activities: $familyIds');
+    } catch (e) {
+      debugPrint('❌ [ActivityRepo] Debug check error: $e');
+    }
+  }
+
   // ========================================
   // Private Helpers
   // ========================================

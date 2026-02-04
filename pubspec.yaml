@@ -1,7 +1,7 @@
 name: lulu_mvp_f
 description: "LULU App ver2 (MVP-F) - 다태아 중심 AI 육아 플랫폼"
 publish_to: 'none'
-version: 2.0.0+1
+version: 2.2.3+11
 
 environment:
   sdk: ^3.10.7
@@ -22,6 +22,10 @@ dependencies:
   # Backend
   supabase_flutter: ^2.3.0
   flutter_dotenv: ^5.1.0
+
+  # Auth
+  sign_in_with_apple: ^6.1.4
+  crypto: ^3.0.6
 
   # AI
   dart_openai: ^5.1.0
@@ -48,6 +52,7 @@ dependencies:
   shimmer: ^3.0.0
   fl_chart: ^0.68.0
   connectivity_plus: ^5.0.0
+  flutter_slidable: ^3.1.0  # 스와이프 수정/삭제 UI
 
   # Localization
   flutter_localizations:

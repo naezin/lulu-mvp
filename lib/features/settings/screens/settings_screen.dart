@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -10,6 +12,8 @@ import '../../../data/repositories/baby_repository.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
+import '../../family/providers/family_provider.dart';
+import '../../family/screens/family_screen.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/add_baby_dialog.dart';
 import '../widgets/delete_baby_dialog.dart';
@@ -63,6 +67,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                 const SizedBox(height: LuluSpacing.xxxl),
 
+                // 가족 관리 섹션
+                _buildSectionHeader(l10n.familyManagement),
+                const SizedBox(height: LuluSpacing.md),
+                _buildFamilyTile(context, homeProvider),
+
+                const SizedBox(height: LuluSpacing.xxxl),
+
                 // 데이터 섹션
                 _buildSectionHeader(l10n.sectionData),
                 const SizedBox(height: LuluSpacing.md),
@@ -80,8 +91,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // 앱 정보 섹션
                 _buildSectionHeader(l10n.sectionAppInfo),
                 const SizedBox(height: LuluSpacing.md),
-                _buildInfoTile(l10n.infoVersion, '2.0.0'),
+                _buildInfoTile(l10n.infoVersion, '2.2.2'),
                 _buildInfoTile(l10n.infoDeveloper, l10n.infoTeamName),
+
+                const SizedBox(height: LuluSpacing.xxxl),
+
+                // 위험 영역 섹션
+                _buildSectionHeader('위험 영역'),
+                const SizedBox(height: LuluSpacing.md),
+                _buildResetDataTile(),
               ],
             ),
           );
@@ -279,6 +297,73 @@ class _SettingsScreenState extends State<SettingsScreen> {
       4 => LuluActivityColors.health,
       _ => LuluColors.lavenderMist,
     };
+  }
+
+  // ========================================
+  // 가족 관리 섹션
+  // ========================================
+
+  Widget _buildFamilyTile(BuildContext context, HomeProvider homeProvider) {
+    final l10n = S.of(context)!;
+
+    return Consumer<FamilyProvider>(
+      builder: (context, familyProvider, _) {
+        // FamilyProvider 초기화 (가족 ID가 있는 경우)
+        if (homeProvider.family != null &&
+            familyProvider.familyId != homeProvider.family!.id) {
+          // 가족 데이터 로드
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            familyProvider.loadFamily(homeProvider.family!.id);
+          });
+        }
+
+        return Container(
+          decoration: BoxDecoration(
+            color: LuluColors.surfaceCard,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.family_restroom,
+                color: LuluColors.lavenderMist,
+                size: 22,
+              ),
+            ),
+            title: Text(
+              l10n.familyManagement,
+              style: LuluTextStyles.bodyLarge.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+            subtitle: Text(
+              familyProvider.memberCount > 0
+                  ? '${familyProvider.memberCount}명의 가족'
+                  : '가족 멤버 초대하기',
+              style: LuluTextStyles.caption.copyWith(
+                color: LuluTextColors.secondary,
+              ),
+            ),
+            trailing: const Icon(
+              Icons.chevron_right_rounded,
+              color: LuluTextColors.secondary,
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FamilyScreen()),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   // ========================================
@@ -671,5 +756,292 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
     );
+  }
+
+  // ========================================
+  // 데이터 초기화 섹션
+  // ========================================
+
+  Widget _buildResetDataTile() {
+    return Container(
+      decoration: BoxDecoration(
+        color: LuluColors.surfaceCard,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: LuluStatusColors.error.withValues(alpha: 0.3),
+        ),
+      ),
+      child: ListTile(
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: LuluStatusColors.error.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            Icons.delete_forever_rounded,
+            color: LuluStatusColors.error,
+            size: 22,
+          ),
+        ),
+        title: Text(
+          '데이터 초기화',
+          style: LuluTextStyles.bodyLarge.copyWith(
+            color: LuluStatusColors.error,
+          ),
+        ),
+        subtitle: Text(
+          '모든 데이터를 삭제하고 처음부터 시작',
+          style: LuluTextStyles.caption.copyWith(
+            color: LuluTextColors.secondary,
+          ),
+        ),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: LuluStatusColors.error.withValues(alpha: 0.7),
+        ),
+        onTap: () => _showResetConfirmDialog(),
+      ),
+    );
+  }
+
+  Future<void> _showResetConfirmDialog() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: LuluColors.surfaceCard,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: LuluStatusColors.error),
+            const SizedBox(width: 8),
+            Text(
+              '데이터 초기화',
+              style: LuluTextStyles.titleMedium.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '정말 모든 데이터를 삭제하시겠어요?',
+              style: LuluTextStyles.bodyLarge.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: LuluStatusColors.error.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildWarningItem('모든 기록이 삭제됩니다'),
+                  _buildWarningItem('아기 정보가 삭제됩니다'),
+                  _buildWarningItem('이 작업은 되돌릴 수 없습니다'),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(
+              '취소',
+              style: LuluTextStyles.labelLarge.copyWith(
+                color: LuluTextColors.secondary,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            style: TextButton.styleFrom(
+              foregroundColor: LuluStatusColors.error,
+            ),
+            child: Text(
+              '삭제',
+              style: LuluTextStyles.labelLarge.copyWith(
+                color: LuluStatusColors.error,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      await _resetAllData();
+    }
+  }
+
+  Widget _buildWarningItem(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Icon(
+            Icons.remove_circle_outline,
+            size: 16,
+            color: LuluStatusColors.error,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: LuluTextStyles.bodySmall.copyWith(
+              color: LuluTextColors.primary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _resetAllData() async {
+    // 로딩 표시
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(
+        child: CircularProgressIndicator(
+          color: LuluColors.lavenderMist,
+        ),
+      ),
+    );
+
+    try {
+      final supabase = Supabase.instance.client;
+      final userId = supabase.auth.currentUser?.id;
+
+      if (userId == null) {
+        throw Exception('Not authenticated');
+      }
+
+      // 1. 현재 사용자의 family_id 찾기 (family_members 우선, families fallback)
+      String? familyId;
+
+      // 1-1. family_members에서 찾기
+      try {
+        final memberData = await supabase
+            .from('family_members')
+            .select('family_id')
+            .eq('user_id', userId)
+            .maybeSingle();
+
+        if (memberData != null) {
+          familyId = memberData['family_id'] as String?;
+          debugPrint('[OK] Found family via family_members: $familyId');
+        }
+      } catch (e) {
+        debugPrint('[WARN] family_members query failed: $e');
+      }
+
+      // 1-2. fallback: families.user_id로 찾기
+      if (familyId == null) {
+        final familyData = await supabase
+            .from('families')
+            .select('id')
+            .eq('user_id', userId)
+            .maybeSingle();
+
+        if (familyData != null) {
+          familyId = familyData['id'] as String?;
+          debugPrint('[OK] Found family via families.user_id: $familyId');
+        }
+      }
+
+      if (familyId != null) {
+        debugPrint('[INFO] Deleting all data for family: $familyId');
+
+        // 2. activities 삭제
+        await supabase
+            .from('activities')
+            .delete()
+            .eq('family_id', familyId);
+        debugPrint('[OK] Activities deleted');
+
+        // 3. babies 삭제
+        await supabase
+            .from('babies')
+            .delete()
+            .eq('family_id', familyId);
+        debugPrint('[OK] Babies deleted');
+
+        // 4. family_invites 삭제 (Family Sharing v3.2)
+        try {
+          await supabase
+              .from('family_invites')
+              .delete()
+              .eq('family_id', familyId);
+          debugPrint('[OK] Family invites deleted');
+        } catch (e) {
+          debugPrint('[WARN] family_invites deletion failed: $e');
+        }
+
+        // 5. family_members 삭제 (Family Sharing v3.2)
+        try {
+          await supabase
+              .from('family_members')
+              .delete()
+              .eq('family_id', familyId);
+          debugPrint('[OK] Family members deleted');
+        } catch (e) {
+          debugPrint('[WARN] family_members deletion failed: $e');
+        }
+
+        // 6. families 삭제
+        await supabase
+            .from('families')
+            .delete()
+            .eq('id', familyId);
+        debugPrint('[OK] Family deleted');
+      }
+
+      // 7. 로컬 데이터 삭제
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      debugPrint('[OK] Local data cleared');
+
+      // 8. Provider 초기화
+      if (mounted) {
+        context.read<HomeProvider>().reset();
+      }
+
+      // 로딩 닫기
+      if (mounted) {
+        Navigator.pop(context);
+      }
+
+      debugPrint('[OK] All data reset complete');
+
+      // 9. 앱 재시작 (온보딩 다시 시작)
+      if (mounted) {
+        _showSnackBar('초기화 완료! 앱을 다시 시작해주세요.');
+        // 로그아웃 처리
+        await supabase.auth.signOut();
+      }
+    } catch (e) {
+      // 로딩 닫기
+      if (mounted) {
+        Navigator.pop(context);
+      }
+
+      debugPrint('[ERROR] _resetAllData: $e');
+
+      if (mounted) {
+        _showSnackBar('초기화 실패: $e');
+      }
+    }
   }
 }

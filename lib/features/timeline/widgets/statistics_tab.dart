@@ -9,8 +9,11 @@ import '../../home/providers/home_provider.dart';
 import '../../statistics/providers/statistics_data_provider.dart';
 import '../../statistics/providers/statistics_filter_provider.dart';
 import '../../statistics/models/insight_data.dart';
+import '../../statistics/models/weekly_statistics.dart';
+import '../providers/pattern_data_provider.dart';
 import 'stat_summary_card.dart';
 import 'weekly_trend_chart.dart';
+import 'weekly_pattern_chart.dart';
 
 /// 통계 탭
 ///
@@ -28,6 +31,7 @@ class StatisticsTab extends StatefulWidget {
 class _StatisticsTabState extends State<StatisticsTab> {
   late StatisticsDataProvider _dataProvider;
   late StatisticsFilterProvider _filterProvider;
+  late PatternDataProvider _patternProvider;
   bool _isLoading = true;
   String? _errorMessage;
 
@@ -36,6 +40,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
     super.initState();
     _dataProvider = StatisticsDataProvider();
     _filterProvider = StatisticsFilterProvider();
+    _patternProvider = PatternDataProvider();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
@@ -46,6 +51,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
   void dispose() {
     _dataProvider.dispose();
     _filterProvider.dispose();
+    _patternProvider.dispose();
     super.dispose();
   }
 
@@ -63,6 +69,8 @@ class _StatisticsTabState extends State<StatisticsTab> {
       final babies = homeProvider.babies;
       final selectedBabyId = homeProvider.selectedBabyId;
 
+      debugPrint('[DEBUG] [StatisticsTab] family: ${family?.id}, babies: ${babies.length}, selectedBabyId: $selectedBabyId');
+
       if (family == null || babies.isEmpty) {
         setState(() {
           _isLoading = false;
@@ -72,12 +80,26 @@ class _StatisticsTabState extends State<StatisticsTab> {
       }
 
       final dateRange = _filterProvider.getDateRange();
+      debugPrint('[DEBUG] [StatisticsTab] dateRange: ${dateRange.start} ~ ${dateRange.end}');
 
       await _dataProvider.loadStatistics(
         familyId: family.id,
         babyId: selectedBabyId,
         dateRange: dateRange,
       );
+
+      debugPrint('[DEBUG] [StatisticsTab] currentStatistics: ${_dataProvider.currentStatistics}');
+      debugPrint('[DEBUG] [StatisticsTab] hasData: ${_dataProvider.hasData}');
+
+      // 주간 패턴 로드
+      final selectedBaby = homeProvider.selectedBaby;
+      if (selectedBaby != null) {
+        await _patternProvider.loadWeeklyPattern(
+          familyId: family.id,
+          babyId: selectedBaby.id,
+          babyName: selectedBaby.name,
+        );
+      }
 
       if (mounted) {
         setState(() {
@@ -95,6 +117,70 @@ class _StatisticsTabState extends State<StatisticsTab> {
     }
   }
 
+  /// 통계가 실질적으로 비어있는지 확인
+  bool _isStatisticsEmpty(WeeklyStatistics? stats) {
+    if (stats == null) return true;
+    // 모든 활동이 0이면 빈 상태
+    return stats.sleep.dailyAverageHours == 0 &&
+        stats.feeding.dailyAverageCount == 0 &&
+        stats.diaper.dailyAverageCount == 0;
+  }
+
+  /// 주간 네비게이션
+  void _navigateWeek({required bool isPrevious}) {
+    final homeProvider = context.read<HomeProvider>();
+    final family = homeProvider.family;
+    final selectedBaby = homeProvider.selectedBaby;
+
+    if (family == null || selectedBaby == null) return;
+
+    if (isPrevious) {
+      _patternProvider.goToPreviousWeek(
+        familyId: family.id,
+        babyId: selectedBaby.id,
+        babyName: selectedBaby.name,
+      );
+    } else {
+      _patternProvider.goToNextWeek(
+        familyId: family.id,
+        babyId: selectedBaby.id,
+        babyName: selectedBaby.name,
+      );
+    }
+    setState(() {});
+  }
+
+  /// 현재 주인지 확인
+  bool _isCurrentWeek() {
+    final weekStart = _patternProvider.weekStartDate;
+    final now = DateTime.now();
+    final currentWeekStart = now.subtract(Duration(days: now.weekday - 1));
+    return weekStart.year == currentWeekStart.year &&
+        weekStart.month == currentWeekStart.month &&
+        weekStart.day == currentWeekStart.day;
+  }
+
+  /// 다태아 함께보기 토글
+  void _toggleTogetherView(HomeProvider homeProvider) {
+    final family = homeProvider.family;
+    final babies = homeProvider.babies;
+
+    if (family == null || babies.length <= 1) return;
+
+    _patternProvider.toggleTogetherView();
+
+    // 함께보기 활성화 시 모든 아기 패턴 로드
+    if (_patternProvider.togetherViewEnabled) {
+      _patternProvider.loadMultiplePatterns(
+        familyId: family.id,
+        babyIds: babies.map((b) => b.id).toList(),
+        babyNames: babies.map((b) => b.name).toList(),
+      );
+    }
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context);
@@ -108,9 +194,14 @@ class _StatisticsTabState extends State<StatisticsTab> {
     }
 
     final statistics = _dataProvider.currentStatistics;
-    if (statistics == null) {
+
+    // 데이터가 없거나 모든 값이 0이면 빈 상태
+    if (_isStatisticsEmpty(statistics)) {
       return _buildEmptyState();
     }
+
+    // null이 아님이 보장됨
+    final stats = statistics!;
 
     final homeProvider = context.watch<HomeProvider>();
     final selectedBaby = homeProvider.selectedBaby;
@@ -132,9 +223,9 @@ class _StatisticsTabState extends State<StatisticsTab> {
                 Expanded(
                   child: StatSummaryCard(
                     type: StatType.sleep,
-                    value: statistics.sleep.dailyAverageHours,
+                    value: stats.sleep.dailyAverageHours,
                     unit: l10n?.unitHours ?? '시간',
-                    change: statistics.sleep.changeMinutes.toDouble(),
+                    change: stats.sleep.changeMinutes.toDouble(),
                     correctedAgeDays: correctedAgeDays,
                   ),
                 ),
@@ -142,9 +233,9 @@ class _StatisticsTabState extends State<StatisticsTab> {
                 Expanded(
                   child: StatSummaryCard(
                     type: StatType.feeding,
-                    value: statistics.feeding.dailyAverageCount,
+                    value: stats.feeding.dailyAverageCount,
                     unit: l10n?.unitTimes ?? '회',
-                    change: statistics.feeding.changeCount.toDouble(),
+                    change: stats.feeding.changeCount.toDouble(),
                     correctedAgeDays: correctedAgeDays,
                   ),
                 ),
@@ -152,9 +243,9 @@ class _StatisticsTabState extends State<StatisticsTab> {
                 Expanded(
                   child: StatSummaryCard(
                     type: StatType.diaper,
-                    value: statistics.diaper.dailyAverageCount,
+                    value: stats.diaper.dailyAverageCount,
                     unit: l10n?.unitTimes ?? '회',
-                    change: statistics.diaper.changeCount.toDouble(),
+                    change: stats.diaper.changeCount.toDouble(),
                     correctedAgeDays: correctedAgeDays,
                   ),
                 ),
@@ -173,12 +264,79 @@ class _StatisticsTabState extends State<StatisticsTab> {
             ),
             const SizedBox(height: LuluSpacing.md),
             WeeklyTrendChart(
-              dailyHours: statistics.sleep.dailyHours,
+              dailyHours: stats.sleep.dailyHours,
               barColor: LuluActivityColors.sleep,
               highlightIndex: _dataProvider.insight?.highlightDayIndex,
             ),
 
             const SizedBox(height: LuluSpacing.xl),
+
+            // 주간 패턴 차트
+            if (_patternProvider.isLoading) ...[
+              const WeeklyPatternChartSkeleton(),
+              const SizedBox(height: LuluSpacing.xl),
+            ] else if (_patternProvider.weeklyPattern != null) ...[
+              // 다태아인 경우 함께보기 버튼 표시
+              if (homeProvider.babies.length > 1) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TogetherViewButton(
+                      isEnabled: _patternProvider.togetherViewEnabled,
+                      onTap: () => _toggleTogetherView(homeProvider),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: LuluSpacing.sm),
+              ],
+
+              // 함께보기 모드
+              if (_patternProvider.togetherViewEnabled &&
+                  _patternProvider.multiplePatterns.isNotEmpty) ...[
+                ..._patternProvider.multiplePatterns.map((pattern) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: LuluSpacing.md),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          pattern.babyName,
+                          style: LuluTextStyles.labelMedium.copyWith(
+                            color: LuluColors.lavenderMist,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: LuluSpacing.xs),
+                        WeeklyPatternChart(
+                          weeklyPattern: pattern,
+                          filter: _patternProvider.filter,
+                          onFilterChanged: (filter) {
+                            setState(() {
+                              _patternProvider.setFilter(filter);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ] else ...[
+                // 단일 아기 모드
+                WeeklyPatternChart(
+                  weeklyPattern: _patternProvider.weeklyPattern!,
+                  filter: _patternProvider.filter,
+                  onFilterChanged: (filter) {
+                    setState(() {
+                      _patternProvider.setFilter(filter);
+                    });
+                  },
+                  onPreviousWeek: () => _navigateWeek(isPrevious: true),
+                  onNextWeek: () => _navigateWeek(isPrevious: false),
+                  canGoNext: !_isCurrentWeek(),
+                ),
+              ],
+              const SizedBox(height: LuluSpacing.xl),
+            ],
 
             // AI 인사이트 (있으면)
             if (_dataProvider.insight != null) ...[

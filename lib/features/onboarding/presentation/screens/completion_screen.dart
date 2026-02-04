@@ -213,10 +213,13 @@ class _CompletionScreenState extends State<CompletionScreen>
     }
   }
 
+  /// 온보딩 완료 처리
+  /// 🆕 HOTFIX: 중복 체크 로직 제거 (main.dart에서 이미 처리)
   Future<void> _handleComplete(BuildContext context) async {
     final provider = context.read<OnboardingProvider>();
 
     try {
+      // 온보딩 완료 → Supabase에 저장
       final result = await provider.completeOnboarding();
 
       // 디버그 로그
@@ -225,7 +228,7 @@ class _CompletionScreenState extends State<CompletionScreen>
         debugPrint('[OK] [Onboarding] Baby created: ${baby.name}');
       }
 
-      // SharedPreferences에 데이터 저장 (BUG-001 fix)
+      // SharedPreferences에 데이터 저장
       await OnboardingDataService.instance.saveOnboardingData(
         family: result.family,
         babies: result.babies,

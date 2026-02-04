@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/models/models.dart';
+import '../../data/repositories/family_repository.dart';
+import '../../data/repositories/baby_repository.dart';
+import 'supabase_service.dart';
 
 /// 온보딩 데이터 영속성 서비스
 ///
@@ -20,16 +23,30 @@ class OnboardingDataService {
   static OnboardingDataService get instance => _instance;
 
   /// 온보딩 완료 데이터 저장
+  /// Supabase + SharedPreferences 동시 저장
   Future<void> saveOnboardingData({
     required FamilyModel family,
     required List<BabyModel> babies,
   }) async {
     try {
+      // 1. Supabase에 저장 (인증된 경우에만)
+      final userId = SupabaseService.currentUserId;
+      if (userId != null) {
+        await _saveToSupabase(family: family, babies: babies, userId: userId);
+      } else {
+        debugPrint('[WARN] [OnboardingDataService] No authenticated user, skipping Supabase save');
+      }
+
+      // 2. SharedPreferences에 로컬 저장 (백업)
       final prefs = await SharedPreferences.getInstance();
 
-      // FamilyModel 저장
+      // FamilyModel 저장 (JSON)
       final familyJson = jsonEncode(family.toJson());
       await prefs.setString(_keyFamily, familyJson);
+
+      // ⚠️ 중요: family_id도 별도 저장 (FamilySyncService와 호환성)
+      await prefs.setString('family_id', family.id);
+      debugPrint('[INFO] [OnboardingDataService] Saved family_id: ${family.id}');
 
       // BabyModel 리스트 저장
       final babiesJson = jsonEncode(babies.map((b) => b.toJson()).toList());
@@ -45,6 +62,57 @@ class OnboardingDataService {
     }
   }
 
+  /// Supabase에 family/babies 데이터 저장
+  Future<void> _saveToSupabase({
+    required FamilyModel family,
+    required List<BabyModel> babies,
+    required String userId,
+  }) async {
+    try {
+      final familyRepo = FamilyRepository();
+      final babyRepo = BabyRepository();
+
+      // 1. 기존 family 확인
+      final existingFamily = await familyRepo.getCurrentFamily();
+
+      String familyId;
+      if (existingFamily != null) {
+        // 이미 family가 있으면 그 ID 사용
+        familyId = existingFamily.id;
+        debugPrint('[INFO] [OnboardingDataService] Using existing family: $familyId');
+      } else {
+        // 새 family 생성
+        final createdFamily = await familyRepo.createFamily();
+        familyId = createdFamily.id;
+        debugPrint('[OK] [OnboardingDataService] Created family in Supabase: $familyId');
+      }
+
+      // 2. babies 저장 (familyId 업데이트)
+      final updatedBabies = babies.map((baby) => BabyModel(
+        id: baby.id,
+        familyId: familyId, // Supabase에서 생성된 familyId 사용
+        name: baby.name,
+        birthDate: baby.birthDate,
+        gender: baby.gender,
+        gestationalWeeksAtBirth: baby.gestationalWeeksAtBirth,
+        birthWeightGrams: baby.birthWeightGrams,
+        multipleBirthType: baby.multipleBirthType,
+        zygosity: baby.zygosity,
+        birthOrder: baby.birthOrder,
+        createdAt: baby.createdAt,
+        updatedAt: baby.updatedAt,
+      )).toList();
+
+      await babyRepo.createBabies(updatedBabies);
+      debugPrint('[OK] [OnboardingDataService] Created ${babies.length} babies in Supabase');
+
+    } catch (e) {
+      debugPrint('❌ [OnboardingDataService] Supabase save error: $e');
+      // Supabase 저장 실패해도 로컬 저장은 계속 진행
+      // rethrow 하지 않음
+    }
+  }
+
   /// 온보딩 완료 여부 확인
   Future<bool> isOnboardingCompleted() async {
     try {
@@ -57,14 +125,37 @@ class OnboardingDataService {
   }
 
   /// 저장된 Family 데이터 로드
+  /// BUG-DATA-01 FIX: Supabase 우선, 로컬 fallback
   Future<FamilyModel?> loadFamily() async {
     try {
+      // 1. Supabase에서 먼저 시도 (인증된 경우)
+      final userId = SupabaseService.currentUserId;
+      if (userId != null) {
+        try {
+          final familyRepo = FamilyRepository();
+          final supabaseFamily = await familyRepo.getCurrentFamily();
+          if (supabaseFamily != null) {
+            debugPrint('[OK] [OnboardingDataService] Loaded family from Supabase: ${supabaseFamily.id}');
+
+            // 로컬에도 동기화
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('family_id', supabaseFamily.id);
+
+            return supabaseFamily;
+          }
+        } catch (e) {
+          debugPrint('[WARN] [OnboardingDataService] Supabase family load failed: $e');
+        }
+      }
+
+      // 2. Supabase 실패 시 로컬에서 로드 (fallback)
       final prefs = await SharedPreferences.getInstance();
       final familyJson = prefs.getString(_keyFamily);
 
       if (familyJson == null) return null;
 
       final familyMap = jsonDecode(familyJson) as Map<String, dynamic>;
+      debugPrint('[INFO] [OnboardingDataService] Loaded family from local: ${familyMap['id']}');
       return FamilyModel.fromJson(familyMap);
     } catch (e) {
       debugPrint('❌ [OnboardingDataService] Load family error: $e');
@@ -73,14 +164,36 @@ class OnboardingDataService {
   }
 
   /// 저장된 Babies 데이터 로드
+  /// BUG-DATA-01 FIX: Supabase 우선, 로컬 fallback
   Future<List<BabyModel>> loadBabies() async {
     try {
+      // 1. Supabase에서 먼저 시도 (인증된 경우)
+      final userId = SupabaseService.currentUserId;
+      if (userId != null) {
+        try {
+          final familyRepo = FamilyRepository();
+          final supabaseFamily = await familyRepo.getCurrentFamily();
+          if (supabaseFamily != null) {
+            final babyRepo = BabyRepository();
+            final supabaseBabies = await babyRepo.getBabiesByFamilyId(supabaseFamily.id);
+            if (supabaseBabies.isNotEmpty) {
+              debugPrint('[OK] [OnboardingDataService] Loaded ${supabaseBabies.length} babies from Supabase');
+              return supabaseBabies;
+            }
+          }
+        } catch (e) {
+          debugPrint('[WARN] [OnboardingDataService] Supabase babies load failed: $e');
+        }
+      }
+
+      // 2. Supabase 실패 시 로컬에서 로드 (fallback)
       final prefs = await SharedPreferences.getInstance();
       final babiesJson = prefs.getString(_keyBabies);
 
       if (babiesJson == null) return [];
 
       final babiesList = jsonDecode(babiesJson) as List;
+      debugPrint('[INFO] [OnboardingDataService] Loaded ${babiesList.length} babies from local');
       return babiesList
           .map((json) => BabyModel.fromJson(json as Map<String, dynamic>))
           .toList();

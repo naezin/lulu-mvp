@@ -83,9 +83,14 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
     final provider = context.watch<OnboardingProvider>();
     final babyLabel = provider.currentBabyLabel;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
+    // UX-04: 스크롤 시 키보드 자동 내림 + 탭하면 키보드 내림
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      behavior: HitTestBehavior.opaque,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 48),
@@ -126,6 +131,8 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
             onChanged: provider.updateBabyName,
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
+            // UX-04: 완료 시 키보드 내림
+            onSubmitted: (_) => FocusScope.of(context).unfocus(),
             enableSuggestions: false,
             autocorrect: false,
             enableIMEPersonalizedLearning: false,
@@ -244,6 +251,8 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
             controller: _weightController,
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
+            // UX-04: 완료 시 키보드 내림
+            onSubmitted: (_) => FocusScope.of(context).unfocus(),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             onChanged: (value) {
               if (value.isNotEmpty) {
@@ -374,6 +383,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
 
           const SizedBox(height: 48),
         ],
+        ),
       ),
     );
   }

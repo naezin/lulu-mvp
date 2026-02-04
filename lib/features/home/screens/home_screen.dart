@@ -6,6 +6,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
+import '../../../core/services/supabase_service.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/last_activity_row.dart';
 import '../../../shared/widgets/sweet_spot_card.dart';
@@ -36,6 +37,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // TODO: 디버깅용 - 현재 사용자 ID 출력 (나중에 삭제)
+    final userId = SupabaseService.currentUserId;
+    debugPrint('========================================');
+    debugPrint('🔑 현재 사용자 ID: $userId');
+    debugPrint('========================================');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

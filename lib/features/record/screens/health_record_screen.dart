@@ -12,6 +12,7 @@ import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/quick_record_button.dart';
 import '../providers/record_provider.dart';
 import '../widgets/record_time_picker.dart';
+import '../widgets/temperature_slider.dart';
 
 /// 건강 기록 화면 (v5.0)
 ///
@@ -38,34 +39,30 @@ class HealthRecordScreen extends StatefulWidget {
 
 class _HealthRecordScreenState extends State<HealthRecordScreen> {
   final _notesController = TextEditingController();
-  final _temperatureController = TextEditingController();
   final _medicationController = TextEditingController();
   final _hospitalController = TextEditingController();
-  // UX-02: 체온 입력 자동 포커스
-  final _temperatureFocusNode = FocusNode();
   bool _isQuickSaving = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<RecordProvider>().initialize(
-            familyId: widget.familyId,
-            babies: widget.babies,
-            preselectedBabyId: widget.preselectedBabyId,
-          );
-      // UX-02: 체온 기록이 기본이므로 자동 포커스
-      _temperatureFocusNode.requestFocus();
+      final provider = context.read<RecordProvider>();
+      provider.initialize(
+        familyId: widget.familyId,
+        babies: widget.babies,
+        preselectedBabyId: widget.preselectedBabyId,
+      );
+      // UX-03: 기본 체온 36.5도 설정
+      provider.setTemperature(36.5);
     });
   }
 
   @override
   void dispose() {
     _notesController.dispose();
-    _temperatureController.dispose();
     _medicationController.dispose();
     _hospitalController.dispose();
-    _temperatureFocusNode.dispose();
     super.dispose();
   }
 
@@ -317,149 +314,14 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     }
   }
 
+  /// UX-03: 체온 슬라이더로 변경 (키보드 제거)
   Widget _buildTemperatureInput(RecordProvider provider) {
-    final temp = provider.temperature;
-    final status = _getTemperatureStatus(temp);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '체온 (°C)',
-          style: LuluTextStyles.bodyLarge.copyWith(
-            color: LuluTextColors.primary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: LuluSpacing.md),
-
-        // UX-02: 빠른 체온 선택 버튼
-        Row(
-          children: [
-            _QuickTempButton(
-              temp: 36.5,
-              label: '36.5',
-              isSelected: temp == 36.5,
-              onTap: () => _setTemperature(36.5, provider),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            _QuickTempButton(
-              temp: 37.0,
-              label: '37.0',
-              isSelected: temp == 37.0,
-              onTap: () => _setTemperature(37.0, provider),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            _QuickTempButton(
-              temp: 37.5,
-              label: '37.5',
-              isSelected: temp == 37.5,
-              onTap: () => _setTemperature(37.5, provider),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            _QuickTempButton(
-              temp: 38.0,
-              label: '38.0',
-              isSelected: temp == 38.0,
-              onTap: () => _setTemperature(38.0, provider),
-            ),
-          ],
-        ),
-        const SizedBox(height: LuluSpacing.md),
-
-        Container(
-          padding: LuluSpacing.inputPadding,
-          decoration: BoxDecoration(
-            color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _temperatureController,
-                  focusNode: _temperatureFocusNode,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  style: LuluTextStyles.displaySmall.copyWith(
-                    color: LuluTextColors.primary,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: '36.5',
-                    hintStyle: LuluTextStyles.displaySmall.copyWith(
-                      color: LuluTextColors.tertiary,
-                    ),
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                  onChanged: (value) {
-                    final temp = double.tryParse(value);
-                    provider.setTemperature(temp);
-                  },
-                ),
-              ),
-              Text(
-                '°C',
-                style: LuluTextStyles.titleLarge.copyWith(
-                  color: LuluTextColors.secondary,
-                ),
-              ),
-            ],
-          ),
-        ),
-        // 체온 상태 표시
-        if (temp != null) ...[
-          const SizedBox(height: LuluSpacing.md),
-          Container(
-            padding: const EdgeInsets.all(LuluSpacing.md),
-            decoration: BoxDecoration(
-              color: status.color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: status.color,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const SizedBox(width: LuluSpacing.sm),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        status.label,
-                        style: LuluTextStyles.labelMedium.copyWith(
-                          color: status.color,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        status.message,
-                        style: LuluTextStyles.caption.copyWith(
-                          color: status.color,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ],
+    return TemperatureSlider(
+      value: provider.temperature ?? 36.5,
+      onChanged: (temp) {
+        provider.setTemperature(temp);
+      },
     );
-  }
-
-  // UX-02: 빠른 체온 설정 헬퍼
-  void _setTemperature(double temp, RecordProvider provider) {
-    _temperatureController.text = temp.toString();
-    provider.setTemperature(temp);
   }
 
   Widget _buildSymptomSelector(RecordProvider provider) {
@@ -766,122 +628,10 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     );
   }
 
-  _TemperatureStatus _getTemperatureStatus(double? temp) {
-    if (temp == null) {
-      return _TemperatureStatus(
-        color: LuluTextColors.tertiary,
-        label: '',
-        message: '',
-      );
-    }
-
-    // 작업 지시서 v1.2: 단일 색상 + Huckleberry 스타일 문구
-    // "정상/비정상" 표현 제거 → 부드러운 확률적 표현
-    if (temp < 36.0) {
-      return _TemperatureStatus(
-        color: LuluSweetSpotColors.neutral,
-        label: '낮은 편이에요',
-        message: '체온이 낮은 편이에요. 보온에 신경써주세요.',
-      );
-    } else if (temp <= 37.5) {
-      return _TemperatureStatus(
-        color: LuluSweetSpotColors.neutral,
-        label: '괜찮아요',
-        message: '체온이 괜찮아 보여요.',
-      );
-    } else if (temp <= 38.0) {
-      return _TemperatureStatus(
-        color: LuluSweetSpotColors.neutral,
-        label: '조금 높아요',
-        message: '체온이 조금 높아요. 지켜봐주세요.',
-      );
-    } else {
-      return _TemperatureStatus(
-        color: LuluSweetSpotColors.neutral,
-        label: '높은 편이에요',
-        message: '체온이 높아 보여요. 병원 방문을 고려해주세요.',
-      );
-    }
-  }
-
   Future<void> _handleSave(RecordProvider provider) async {
     final activity = await provider.saveHealth();
     if (activity != null && mounted) {
       Navigator.of(context).pop(activity);
-    }
-  }
-}
-
-/// 체온 상태 정보
-class _TemperatureStatus {
-  final Color color;
-  final String label;
-  final String message;
-
-  _TemperatureStatus({
-    required this.color,
-    required this.label,
-    required this.message,
-  });
-}
-
-/// UX-02: 빠른 체온 선택 버튼
-class _QuickTempButton extends StatelessWidget {
-  final double temp;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _QuickTempButton({
-    required this.temp,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final status = _getTempStatusColor(temp);
-
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? status.withValues(alpha: 0.2)
-                : LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isSelected ? status : Colors.transparent,
-              width: 2,
-            ),
-          ),
-          child: Center(
-            child: Text(
-              '$label°',
-              style: LuluTextStyles.labelLarge.copyWith(
-                color: isSelected ? status : LuluTextColors.secondary,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  static Color _getTempStatusColor(double temp) {
-    if (temp < 36.0) {
-      return LuluStatusColors.info;
-    } else if (temp <= 37.5) {
-      return LuluStatusColors.success;
-    } else if (temp <= 38.0) {
-      return LuluStatusColors.warning;
-    } else {
-      return LuluStatusColors.error;
     }
   }
 }

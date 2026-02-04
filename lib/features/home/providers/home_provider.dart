@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
@@ -450,7 +451,150 @@ class HomeProvider extends ChangeNotifier {
     _recommendedSleepTime = null;
     _isLoading = false;
     _errorMessage = null;
+    _invalidateCache();
+    debugPrint('[OK] [HomeProvider] Reset complete');
     notifyListeners();
+  }
+
+  // ========================================
+  // BUG-009 FIX: 아기 추가 (Supabase + 로컬)
+  // ========================================
+
+  /// 아기 추가 (Supabase + 로컬)
+  ///
+  /// BUG-009 FIX: family 존재 확인 후 아기 추가
+  Future<void> addBaby(BabyModel baby) async {
+    try {
+      // ✅ 1. family 존재 확인
+      await _ensureFamilyExists(baby.familyId);
+
+      // 2. Supabase에 저장
+      await Supabase.instance.client
+          .from('babies')
+          .insert(baby.toJson());
+
+      // 3. 로컬 상태 업데이트
+      _babies = [..._babies, baby];
+      if (_selectedBabyId == null) {
+        _selectedBabyId = baby.id;
+      }
+
+      // family의 babyIds도 업데이트
+      if (_family != null) {
+        _family = _family!.copyWith(
+          babyIds: [..._family!.babyIds, baby.id],
+        );
+      }
+
+      _invalidateCache();
+      notifyListeners();
+      debugPrint('[OK] [HomeProvider] Baby added: ${baby.name}');
+    } catch (e) {
+      debugPrint('[ERROR] [HomeProvider] addBaby failed: $e');
+      rethrow;
+    }
+  }
+
+  /// 아기 삭제
+  Future<void> removeBaby(String babyId) async {
+    try {
+      // Supabase에서 삭제
+      await Supabase.instance.client
+          .from('babies')
+          .delete()
+          .eq('id', babyId);
+
+      // 로컬 상태 업데이트
+      _babies = _babies.where((b) => b.id != babyId).toList();
+
+      // 삭제한 아기가 선택되어 있었으면 다른 아기 선택
+      if (_selectedBabyId == babyId) {
+        _selectedBabyId = _babies.isNotEmpty ? _babies.first.id : null;
+      }
+
+      // family의 babyIds도 업데이트
+      if (_family != null) {
+        _family = _family!.copyWith(
+          babyIds: _family!.babyIds.where((id) => id != babyId).toList(),
+        );
+      }
+
+      _invalidateCache();
+      notifyListeners();
+      debugPrint('[OK] [HomeProvider] Baby removed: $babyId');
+    } catch (e) {
+      debugPrint('[ERROR] [HomeProvider] removeBaby failed: $e');
+      rethrow;
+    }
+  }
+
+  /// family가 없으면 생성 + family_members에 owner로 추가
+  /// Family Sharing v3.2: family_members 테이블 사용
+  Future<void> _ensureFamilyExists(String familyId) async {
+    final supabase = Supabase.instance.client;
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) throw Exception('Not authenticated');
+
+    // 1. families 테이블에 있는지 확인
+    final existing = await supabase
+        .from('families')
+        .select('id')
+        .eq('id', familyId)
+        .maybeSingle();
+
+    if (existing != null) {
+      debugPrint('[OK] [HomeProvider] Family exists: $familyId');
+
+      // family_members에도 있는지 확인하고 없으면 추가
+      await _ensureFamilyMember(familyId, userId);
+      return;
+    }
+
+    // 2. 없으면 생성
+    debugPrint('[INFO] [HomeProvider] Creating family: $familyId');
+
+    await supabase.from('families').upsert({
+      'id': familyId,
+      'user_id': userId,
+      'created_by': userId,
+      'created_at': DateTime.now().toIso8601String(),
+    });
+
+    // 3. family_members에 owner로 추가
+    await supabase.from('family_members').upsert({
+      'family_id': familyId,
+      'user_id': userId,
+      'role': 'owner',
+    });
+
+    debugPrint('[OK] [HomeProvider] Family created with owner: $familyId');
+  }
+
+  /// family_members에 사용자가 없으면 owner로 추가
+  Future<void> _ensureFamilyMember(String familyId, String userId) async {
+    final supabase = Supabase.instance.client;
+
+    try {
+      final memberData = await supabase
+          .from('family_members')
+          .select('id')
+          .eq('family_id', familyId)
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      if (memberData == null) {
+        // 멤버로 등록되어 있지 않으면 owner로 추가
+        await supabase.from('family_members').insert({
+          'family_id': familyId,
+          'user_id': userId,
+          'role': 'owner',
+        });
+        debugPrint('[OK] [HomeProvider] Added user to family_members as owner');
+      }
+    } catch (e) {
+      // family_members 테이블 접근 실패 시 무시 (레거시 호환)
+      debugPrint('[WARN] [HomeProvider] family_members check failed: $e');
+    }
   }
 
   /// 가족 변경 시 호출 (Family Sharing)

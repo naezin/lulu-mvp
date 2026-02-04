@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../core/services/local_activity_service.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
+import '../../../data/repositories/activity_repository.dart';
 
 /// 진행 중인 수면 기록 관리 Provider
 ///
@@ -15,9 +15,10 @@ import '../../../data/models/baby_type.dart';
 /// - 홈 화면에서 진행 중 수면 카드 표시
 /// - 수면 화면에서 진행 중 섹션 표시
 /// - 앱 재시작 후에도 상태 유지
+/// BUG-DATA-01 FIX: Supabase(ActivityRepository)로 데이터 저장
 class OngoingSleepProvider extends ChangeNotifier {
   static const String _storageKey = 'ongoing_sleep_v1';
-  final LocalActivityService _activityService = LocalActivityService.instance;
+  final ActivityRepository _activityRepository = ActivityRepository();
   final Uuid _uuid = const Uuid();
 
   Timer? _timer;
@@ -121,7 +122,7 @@ class OngoingSleepProvider extends ChangeNotifier {
         createdAt: _ongoingSleep!.startTime,
       );
 
-      final savedActivity = await _activityService.saveActivity(activity);
+      final savedActivity = await _activityRepository.createActivity(activity);
 
       // 로컬 상태 초기화
       _ongoingSleep = null;
@@ -129,7 +130,7 @@ class OngoingSleepProvider extends ChangeNotifier {
       await _clearLocal();
       notifyListeners();
 
-      debugPrint('[OK] [OngoingSleepProvider] Sleep ended and saved: ${savedActivity.id}');
+      debugPrint('[OK] [OngoingSleepProvider] Sleep ended and saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       debugPrint('❌ [OngoingSleepProvider] Error ending sleep: $e');

@@ -228,6 +228,9 @@ class StatisticsDataProvider extends ChangeNotifier {
     required String? babyId,
     required DateRange dateRange,
   }) async {
+    debugPrint('[DEBUG] [StatisticsDataProvider] Fetching: familyId=$familyId, babyId=$babyId');
+    debugPrint('[DEBUG] [StatisticsDataProvider] DateRange: ${dateRange.start} ~ ${dateRange.end}');
+
     // 이번 주 데이터
     final activities = await _activityRepository.getActivitiesByDateRange(
       familyId,
@@ -235,6 +238,8 @@ class StatisticsDataProvider extends ChangeNotifier {
       endDate: dateRange.end.add(const Duration(days: 1)), // 종료일 포함
       babyId: babyId,
     );
+
+    debugPrint('[DEBUG] [StatisticsDataProvider] Found ${activities.length} activities this week');
 
     // 지난 주 데이터 (변화량 계산용)
     final lastWeekStart = dateRange.start.subtract(const Duration(days: 7));
@@ -245,6 +250,8 @@ class StatisticsDataProvider extends ChangeNotifier {
       endDate: lastWeekEnd.add(const Duration(days: 1)),
       babyId: babyId,
     );
+
+    debugPrint('[DEBUG] [StatisticsDataProvider] Found ${lastWeekActivities.length} activities last week');
 
     // 통계 계산
     final sleepStats = _calculateSleepStatistics(

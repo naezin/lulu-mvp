@@ -84,9 +84,14 @@ class ImportService {
     final total = preview.activities.length;
     final batchSize = 100;
 
-    // 중복 체크용 기존 활동 조회
-    final existingActivities = await _getExistingActivities(familyId, babyId);
+    // 중복 체크용 기존 활동 조회 (가족 전체)
+    // babyId 기준 조회 시 Supabase contains 쿼리 문제가 있을 수 있어서 familyId로 조회
+    final existingActivities = await _getExistingActivitiesByFamily(familyId);
     final existingKeys = _buildExistingKeys(existingActivities);
+
+    debugPrint('[INFO] [ImportService] Importing to babyId: $babyId, familyId: $familyId');
+    debugPrint('[INFO] [ImportService] Existing activities in family: ${existingActivities.length}');
+    debugPrint('[INFO] [ImportService] Existing keys count: ${existingKeys.length}');
 
     // 배치 처리
     for (int i = 0; i < total; i += batchSize) {
@@ -97,10 +102,22 @@ class ImportService {
         try {
           // 중복 체크
           final key = _buildActivityKey(parsed.type, parsed.startTime);
-          if (existingKeys.contains(key)) {
-            skipCount++;
-            continue;
+          final isDuplicate = existingKeys.contains(key);
+
+          // 첫 번째 항목에 대한 디버그 로그
+          if (i == 0 && batch.indexOf(parsed) == 0) {
+            debugPrint('[DEBUG] [ImportService] First parsed key: $key');
+            debugPrint('[DEBUG] [ImportService] Is duplicate: $isDuplicate');
+            if (existingKeys.isNotEmpty) {
+              debugPrint('[DEBUG] [ImportService] First existing key: ${existingKeys.first}');
+            }
           }
+
+          // 임시: 중복 체크 비활성화 (디버깅용)
+          // if (isDuplicate) {
+          //   skipCount++;
+          //   continue;
+          // }
 
           // ActivityModel로 변환
           final activity = parsed.toActivityModel(
@@ -115,6 +132,7 @@ class ImportService {
           // 중복 방지를 위해 키 추가
           existingKeys.add(key);
         } catch (e) {
+          debugPrint('❌ [ImportService] Save error: $e');
           errors.add('기록 저장 실패: ${parsed.startTime} - $e');
           skipCount++;
         }
@@ -136,16 +154,17 @@ class ImportService {
     );
   }
 
-  /// 기존 활동 조회 (중복 체크용)
-  Future<List<ActivityModel>> _getExistingActivities(
+  /// 기존 활동 조회 (중복 체크용) - 가족 전체 기록 조회
+  Future<List<ActivityModel>> _getExistingActivitiesByFamily(
     String familyId,
-    String babyId,
   ) async {
     try {
-      return await _activityRepository.getActivitiesByBabyId(
-        babyId,
+      final activities = await _activityRepository.getActivitiesByFamilyId(
+        familyId,
         limit: 10000, // 충분히 큰 수
       );
+      debugPrint('[INFO] [ImportService] Fetched ${activities.length} existing activities from family');
+      return activities;
     } catch (e) {
       debugPrint('⚠️ [ImportService] Failed to get existing activities: $e');
       return [];

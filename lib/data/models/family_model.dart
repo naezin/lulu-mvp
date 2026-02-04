@@ -27,15 +27,37 @@ class FamilyModel {
   /// 출생 유형 반환
   BabyType get birthType => BabyType.fromBabyCount(babyCount);
 
-  /// JSON에서 생성
+  /// JSON에서 생성 (로컬 저장소용 - camelCase)
   factory FamilyModel.fromJson(Map<String, dynamic> json) {
     return FamilyModel(
-      id: json['id'] as String,
-      userId: json['userId'] as String,
-      babyIds: List<String>.from(json['babyIds'] as List),
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      id: json['id'] as String? ?? '',
+      userId: json['userId'] as String? ?? '',
+      babyIds: json['babyIds'] != null
+          ? List<String>.from(json['babyIds'] as List)
+          : [],
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
       updatedAt: json['updatedAt'] != null
           ? DateTime.parse(json['updatedAt'] as String)
+          : null,
+    );
+  }
+
+  /// 🆕 Supabase용 null 안전 팩토리 (snake_case)
+  factory FamilyModel.fromSupabase(Map<String, dynamic> json) {
+    return FamilyModel(
+      id: json['id'] as String? ?? '',
+      userId: json['user_id'] as String? ?? '',
+      // Supabase families 테이블에는 baby_ids가 없을 수 있음
+      babyIds: json['baby_ids'] != null
+          ? List<String>.from(json['baby_ids'] as List)
+          : [],
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
           : null,
     );
   }
