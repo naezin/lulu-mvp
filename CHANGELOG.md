@@ -1,5 +1,30 @@
 # CHANGELOG
 
+## [2.2.3+11] - 2026-02-04
+
+### Added
+- **기록 히스토리 + 주간 패턴 차트** (작업지시서 v1.1)
+  - `DateNavigator`: 날짜 좌우 탐색 위젯 (< 3초)
+  - `MiniTimeBar`: 24시간 타임라인 시각화
+  - `DailySummaryBanner`: 일일 요약 배너
+  - `ActivityListItem`: 스와이프 삭제/편집 (flutter_slidable)
+  - `EditActivitySheet`: 활동 편집 바텀시트
+  - `WeeklyPatternChart`: 7일×48슬롯 히트맵
+  - `PatternDataProvider`: 패턴 데이터 캐싱
+  - `UndoDeleteMixin`: 5초 실행취소 기능
+
+### Changed
+- **UX 개선**
+  - Haptic feedback 추가 (`selectionClick`, `mediumImpact`, `heavyImpact`)
+  - `WeeklyPatternChartSkeleton`: Shimmer 로딩 스켈레톤
+  - `TogetherViewButton`: 다태아 패턴 함께보기
+  - Week Navigation: 이전/다음 주 탐색
+
+### Deployed
+- **TestFlight**: v2.2.3+11 업로드 완료 (2026-02-04 22:45)
+
+---
+
 ## [2.2.2+11] - 2026-02-04
 
 ### Fixed

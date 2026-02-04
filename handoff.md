@@ -1,27 +1,74 @@
 # LULU MVP-F Handoff
 
-**Version**: 7.2
+**Version**: 8.0
 **Updated**: 2026-02-04
-**Sprint**: 16 (Family Sharing 완전 완료 + RLS 42501 버그 수정)
+**Sprint**: 17 (기록 히스토리 + 주간 패턴 차트)
 
 ## 현재 상태
-- **Phase**: Phase 2 완료 + Family Sharing v3.2 완전 완료
-- **App Version**: 2.2.2+10
+- **Phase**: Phase 2 완료 + 기록 히스토리 v1.1 완료
+- **App Version**: 2.2.3+11
 - **빌드**: iOS 정상 (`flutter analyze` 에러 0개)
-- **Branch**: `feature/cry-analysis-ui`
-- **TestFlight**: 배포 준비 완료
-- **Supabase**: Family Sharing 완전 완료 + RLS 42501 버그 수정 완료
+- **Branch**: `main`
+- **TestFlight**: ✅ **배포 완료** (2026-02-04 22:45)
+- **Supabase**: Family Sharing v3.2 + RLS 보안 완료
 
 ## TestFlight 배포 현황
 
 | 항목 | 상태 |
 |------|------|
-| App Version | 2.2.2+10 |
+| App Version | **2.2.3+11** |
 | Bundle ID | com.lululabs.lulu |
 | 앱스토어 이름 | 루루 |
+| TestFlight | **✅ 업로드 완료** |
 | Family Sharing DB | **완전 완료** |
 | RLS 정책 | **12개 (보안 완료)** |
 | 코드 검증 | **완전 완료** |
+
+---
+
+## 2026-02-04 기록 히스토리 + 주간 패턴 차트 (Sprint 17)
+
+### 구현 완료 (작업지시서 v1.1)
+
+| 위젯 | 파일 | 설명 |
+|------|------|------|
+| **DateNavigator** | `date_navigator.dart` | 날짜 좌우 탐색 (< 3초) |
+| **MiniTimeBar** | `mini_time_bar.dart` | 24시간 타임라인 시각화 |
+| **DailySummaryBanner** | `daily_summary_banner.dart` | 일일 요약 배너 |
+| **ActivityListItem** | `activity_list_item.dart` | 스와이프 삭제/편집 |
+| **EditActivitySheet** | `edit_activity_sheet.dart` | 활동 편집 바텀시트 |
+| **WeeklyPatternChart** | `weekly_pattern_chart.dart` | 7일×48슬롯 히트맵 |
+| **PatternDataProvider** | `pattern_data_provider.dart` | 패턴 데이터 캐싱 |
+| **UndoDeleteMixin** | `undo_delete_mixin.dart` | 5초 실행취소 |
+
+### UX 개선
+
+- **Haptic Feedback**: `selectionClick`, `mediumImpact`, `heavyImpact`
+- **WeeklyPatternChartSkeleton**: Shimmer 로딩 스켈레톤
+- **TogetherView**: 다태아 패턴 함께보기
+- **Week Navigation**: 이전/다음 주 탐색
+- **Empty State**: 데이터 3일 미만 시 안내
+
+### 새 파일 (9개)
+
+```
+lib/features/timeline/
+├── models/
+│   └── daily_pattern.dart
+├── providers/
+│   └── pattern_data_provider.dart
+└── widgets/
+    ├── activity_list_item.dart
+    ├── daily_summary_banner.dart
+    ├── date_navigator.dart
+    ├── edit_activity_sheet.dart
+    ├── mini_time_bar.dart
+    ├── weekly_pattern_chart.dart
+    └── widgets.dart (barrel)
+
+lib/shared/widgets/
+└── undo_delete_mixin.dart
+```
 
 ---
 
@@ -241,9 +288,10 @@ DROP POLICY "Allow all for MVP" ON activities; -- 삭제됨
 - [x] flutter analyze 통과 확인 (에러 0개)
 
 ### 다음 단계
-- [ ] **TestFlight 배포** (v2.2.2+10)
+- [x] **TestFlight 배포** (v2.2.3+11) ✅ 완료
 - [ ] 베타 테스터 피드백 수집
 - [ ] Family Sharing 기능 테스트 (초대 코드 생성/수락)
+- [ ] 기록 히스토리/패턴 차트 사용성 테스트
 
 ### 출시 전 필수
 - [ ] QA 테스트 완료
@@ -301,11 +349,12 @@ AND routine_name IN ('get_invite_info', 'accept_invite', 'transfer_ownership',
 
 ---
 
-**Family Sharing v3.2 + RLS 42501 버그 수정 완료**
+**Sprint 17 완료: 기록 히스토리 + 주간 패턴 차트**
 
-**Status**: 배포 준비 완료 - TestFlight 배포 가능
+**Status**: ✅ TestFlight 배포 완료 (v2.2.3+11)
 
 ---
 
+*"기록 히스토리 v1.1 - 24시간 타임라인 + 7일 패턴 히트맵"*
 *"Family Sharing v3.2 - 레거시 호환 + 멀티 테넌트 RLS + 보안 완성"*
 *"RLS 검증: 데이터 존재 ≠ 권한 존재 - auth.uid() 기준!"*
