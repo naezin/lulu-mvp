@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 
@@ -156,20 +157,26 @@ class ActivityListItem extends StatelessWidget {
   }
 
   Widget _buildIcon() {
-    String emoji;
+    IconData icon;
+    Color color;
     switch (activity.type) {
       case ActivityType.feeding:
-        emoji = '🍼';
+        icon = LuluIcons.feeding;
+        color = LuluActivityColors.feeding;
       case ActivityType.sleep:
-        emoji = '😴';
+        icon = LuluIcons.sleep;
+        color = LuluActivityColors.sleep;
       case ActivityType.diaper:
-        emoji = '👶';
+        icon = LuluIcons.diaper;
+        color = LuluActivityColors.diaper;
       case ActivityType.play:
-        emoji = '🎮';
+        icon = LuluIcons.play;
+        color = LuluActivityColors.play;
       case ActivityType.health:
-        emoji = '🏥';
+        icon = LuluIcons.health;
+        color = LuluActivityColors.health;
     }
-    return Text(emoji, style: const TextStyle(fontSize: 24));
+    return Icon(icon, size: 24, color: color);
   }
 
   Widget _buildContent() {

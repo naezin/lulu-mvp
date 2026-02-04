@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../models/daily_pattern.dart';
 
@@ -348,6 +349,12 @@ class _PatternFilterChips extends StatelessWidget {
         return '수면';
       case PatternFilter.feeding:
         return '수유';
+      case PatternFilter.diaper:
+        return '기저귀';
+      case PatternFilter.play:
+        return '놀이';
+      case PatternFilter.health:
+        return '건강';
       case PatternFilter.all:
         return '전체';
     }
@@ -383,10 +390,11 @@ class _PatternCell extends StatelessWidget {
           borderRadius: BorderRadius.circular(2),
         ),
         child: showFeedingMarker
-            ? const Center(
-                child: Text(
-                  '🍼',
-                  style: TextStyle(fontSize: 6),
+            ? Center(
+                child: Icon(
+                  LuluIcons.feeding,
+                  size: 6,
+                  color: LuluActivityColors.feeding,
                 ),
               )
             : null,
@@ -403,6 +411,12 @@ class _PatternCell extends StatelessWidget {
             slot.activity == PatternActivityType.daySleep;
       case PatternFilter.feeding:
         return slot.activity == PatternActivityType.feeding;
+      case PatternFilter.diaper:
+        return slot.activity == PatternActivityType.diaper;
+      case PatternFilter.play:
+        return slot.activity == PatternActivityType.play;
+      case PatternFilter.health:
+        return slot.activity == PatternActivityType.health;
       case PatternFilter.all:
         return true;
     }
@@ -417,7 +431,11 @@ class _PatternCell extends StatelessWidget {
       case PatternActivityType.feeding:
         return LuluPatternColors.feeding.withValues(alpha: 0.6);
       case PatternActivityType.diaper:
-        return LuluColors.lavenderMist.withValues(alpha: 0.3);
+        return LuluActivityColors.diaper.withValues(alpha: 0.6);
+      case PatternActivityType.play:
+        return LuluActivityColors.play.withValues(alpha: 0.6);
+      case PatternActivityType.health:
+        return LuluActivityColors.health.withValues(alpha: 0.6);
       case PatternActivityType.empty:
         return Colors.transparent;
     }
@@ -442,7 +460,11 @@ class _PatternLegend extends StatelessWidget {
         ],
         if (filter == PatternFilter.all) const SizedBox(width: 16),
         if (filter == PatternFilter.feeding || filter == PatternFilter.all) ...[
-          const Text('🍼', style: TextStyle(fontSize: 12)),
+          Icon(
+            LuluIcons.feeding,
+            size: 14,
+            color: LuluActivityColors.feeding,
+          ),
           const SizedBox(width: 4),
           Text(
             '수유',

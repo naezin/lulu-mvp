@@ -23,6 +23,14 @@ class PatternDataProvider extends ChangeNotifier {
   DateTime _weekStartDate = _getWeekStart(DateTime.now());
   bool _togetherViewEnabled = false;
 
+  // v4.1: 멀티 필터 상태 (Set 방식)
+  Set<PatternActivityType> _activeFilters = {
+    PatternActivityType.nightSleep,
+    PatternActivityType.daySleep,
+    PatternActivityType.feeding,
+    PatternActivityType.diaper,
+  };
+
   // 캐시
   final Map<String, WeeklyPattern> _cache = {};
 
@@ -30,6 +38,7 @@ class PatternDataProvider extends ChangeNotifier {
   WeeklyPattern? get weeklyPattern => _weeklyPattern;
   List<WeeklyPattern> get multiplePatterns => _multiplePatterns;
   PatternFilter get filter => _filter;
+  Set<PatternActivityType> get activeFilters => _activeFilters; // v4.1 추가
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   DateTime get weekStartDate => _weekStartDate;
@@ -130,10 +139,43 @@ class PatternDataProvider extends ChangeNotifier {
     );
   }
 
-  /// 필터 변경
+  /// 필터 변경 (기존 호환용)
   void setFilter(PatternFilter newFilter) {
     if (_filter == newFilter) return;
     _filter = newFilter;
+    notifyListeners();
+  }
+
+  /// v4.1: 멀티 필터 설정
+  void setActiveFilters(Set<PatternActivityType> filters) {
+    _activeFilters = filters;
+    notifyListeners();
+  }
+
+  /// v4.1: 필터 토글
+  void toggleFilter(PatternActivityType type) {
+    final newFilters = Set<PatternActivityType>.from(_activeFilters);
+
+    // sleep 토글 시 night + day 함께
+    if (type == PatternActivityType.nightSleep ||
+        type == PatternActivityType.daySleep) {
+      final hasSleep = newFilters.contains(PatternActivityType.nightSleep);
+      if (hasSleep) {
+        newFilters.remove(PatternActivityType.nightSleep);
+        newFilters.remove(PatternActivityType.daySleep);
+      } else {
+        newFilters.add(PatternActivityType.nightSleep);
+        newFilters.add(PatternActivityType.daySleep);
+      }
+    } else {
+      if (newFilters.contains(type)) {
+        newFilters.remove(type);
+      } else {
+        newFilters.add(type);
+      }
+    }
+
+    _activeFilters = newFilters;
     notifyListeners();
   }
 
@@ -247,6 +289,7 @@ class PatternDataProvider extends ChangeNotifier {
   }
 
   /// ActivityModel 리스트에서 DailyPattern 생성
+  /// v4.1: 오버레이 지원 - 수면은 메인 활동, 나머지는 오버레이
   DailyPattern _buildDailyPattern(DateTime date, List<ActivityModel> activities) {
     // 해당 날짜의 활동만 필터링
     final dayStart = DateTime(date.year, date.month, date.day);
@@ -268,25 +311,38 @@ class PatternDataProvider extends ChangeNotifier {
       );
       final slotEnd = slotStart.add(const Duration(minutes: 30));
 
-      // 슬롯에 해당하는 활동 찾기
+      // v4.1: 주요 활동 (수면 우선) + 오버레이 수집
+      PatternActivityType mainActivity = PatternActivityType.empty;
+      String? mainActivityId;
+      final overlays = <PatternActivityType>[];
+
       for (final activity in dayActivities) {
         final actEnd = activity.endTime ??
             activity.startTime.add(const Duration(hours: 1));
 
         if (activity.startTime.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
-          return TimeSlot(
-            hour: slotIndex ~/ 2,
-            halfHour: slotIndex % 2,
-            activity: _mapActivityType(activity.type, slotIndex ~/ 2),
-            activityId: activity.id,
-          );
+          final patternType = _mapActivityType(activity.type, slotIndex ~/ 2);
+
+          // 수면은 주요 활동으로
+          if (patternType == PatternActivityType.nightSleep ||
+              patternType == PatternActivityType.daySleep) {
+            mainActivity = patternType;
+            mainActivityId = activity.id;
+          } else {
+            // 나머지는 오버레이로
+            if (!overlays.contains(patternType)) {
+              overlays.add(patternType);
+            }
+          }
         }
       }
 
       return TimeSlot(
         hour: slotIndex ~/ 2,
         halfHour: slotIndex % 2,
-        activity: PatternActivityType.empty,
+        activity: mainActivity,
+        activityId: mainActivityId,
+        overlays: overlays,
       );
     });
 
@@ -297,8 +353,8 @@ class PatternDataProvider extends ChangeNotifier {
   PatternActivityType _mapActivityType(ActivityType type, int hour) {
     switch (type) {
       case ActivityType.sleep:
-        // 밤잠: 21:00-06:00, 낮잠: 06:00-21:00
-        return (hour >= 21 || hour < 6)
+        // 밤잠/낮잠 판별에 SleepTimeConfig 사용
+        return SleepTimeConfig.isNightTime(hour)
             ? PatternActivityType.nightSleep
             : PatternActivityType.daySleep;
       case ActivityType.feeding:
@@ -306,8 +362,9 @@ class PatternDataProvider extends ChangeNotifier {
       case ActivityType.diaper:
         return PatternActivityType.diaper;
       case ActivityType.play:
+        return PatternActivityType.play; // v4.1: play 매핑
       case ActivityType.health:
-        return PatternActivityType.empty;
+        return PatternActivityType.health; // v4.1: health 매핑
     }
   }
 

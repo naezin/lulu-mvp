@@ -1000,7 +1000,7 @@ class RecordProvider extends ChangeNotifier {
       final feedingActivities = strictFiltered
           .where((a) => a.type == ActivityType.feeding)
           .toList();
-      debugPrint('🍼 Feeding activities count: ${feedingActivities.length}');
+      debugPrint('[Feeding] activities count: ${feedingActivities.length}');
 
       // 6. 중복 제거 (feeding_type + breast_side + amount_ml 조합)
       final seen = <String>{};

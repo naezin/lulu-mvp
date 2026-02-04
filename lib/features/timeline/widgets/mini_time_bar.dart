@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 
@@ -7,7 +8,7 @@ import '../../../data/models/baby_type.dart';
 ///
 /// 작업 지시서 v1.1: 당일 패턴 시각화
 /// - 수면: 밤잠(진한 보라) / 낮잠(연한 보라)
-/// - 수유: 🍼 마커
+/// - 수유: LuluIcons.feeding 마커
 /// - 현재 시간 마커 (오늘인 경우)
 class MiniTimeBar extends StatelessWidget {
   final List<ActivityModel> activities;
@@ -77,10 +78,11 @@ class MiniTimeBar extends StatelessWidget {
                 final hasFeeding = _hasFeedingInSlot(slotIndex);
                 return Expanded(
                   child: hasFeeding
-                      ? const Center(
-                          child: Text(
-                            '🍼',
-                            style: TextStyle(fontSize: 8),
+                      ? Center(
+                          child: Icon(
+                            LuluIcons.feeding,
+                            size: 10,
+                            color: LuluActivityColors.feeding,
                           ),
                         )
                       : const SizedBox.shrink(),
@@ -174,7 +176,11 @@ class MiniTimeBar extends StatelessWidget {
         const SizedBox(width: 12),
         _legendItem(LuluPatternColors.daySleep, '낮잠'),
         const SizedBox(width: 12),
-        const Text('🍼', style: TextStyle(fontSize: 10)),
+        Icon(
+          LuluIcons.feeding,
+          size: 12,
+          color: LuluActivityColors.feeding,
+        ),
         const SizedBox(width: 4),
         Text(
           '수유',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 
@@ -34,22 +35,25 @@ class DailySummaryBanner extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildSummaryItem(
-            icon: '🍼',
+          _buildSummaryItemWithIcon(
+            icon: LuluIcons.feeding,
+            color: LuluActivityColors.feeding,
             value: feedingCount > 0 && totalFeedingMl > 0
                 ? '$feedingCount회 ${totalFeedingMl.toInt()}ml'
                 : '$feedingCount회',
             label: '수유',
           ),
           _buildDivider(),
-          _buildSummaryItem(
-            icon: '😴',
+          _buildSummaryItemWithIcon(
+            icon: LuluIcons.sleep,
+            color: LuluActivityColors.sleep,
             value: '${sleepHours.toStringAsFixed(1)}h',
             label: '수면',
           ),
           _buildDivider(),
-          _buildSummaryItem(
-            icon: '👶',
+          _buildSummaryItemWithIcon(
+            icon: LuluIcons.diaper,
+            color: LuluActivityColors.diaper,
             value: '$diaperCount회',
             label: '기저귀',
           ),
@@ -58,8 +62,9 @@ class DailySummaryBanner extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryItem({
-    required String icon,
+  Widget _buildSummaryItemWithIcon({
+    required IconData icon,
+    required Color color,
     required String value,
     required String label,
   }) {
@@ -69,7 +74,7 @@ class DailySummaryBanner extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(icon, style: const TextStyle(fontSize: 16)),
+            Icon(icon, size: 16, color: color),
             const SizedBox(width: 4),
             Text(
               value,

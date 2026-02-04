@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -148,7 +149,8 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
   }
 
   Widget _buildHeader() {
-    final emoji = _getActivityEmoji(widget.activity.type);
+    final icon = _getActivityIcon(widget.activity.type);
+    final color = _getActivityColor(widget.activity.type);
     final title = _getActivityTitle(widget.activity.type);
 
     return Padding(
@@ -158,7 +160,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       ),
       child: Row(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 24)),
+          Icon(icon, size: 24, color: color),
           const SizedBox(width: LuluSpacing.sm),
           Text(
             '$title 수정',
@@ -731,18 +733,33 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
     }
   }
 
-  String _getActivityEmoji(ActivityType type) {
+  IconData _getActivityIcon(ActivityType type) {
     switch (type) {
       case ActivityType.feeding:
-        return '🍼';
+        return LuluIcons.feeding;
       case ActivityType.sleep:
-        return '😴';
+        return LuluIcons.sleep;
       case ActivityType.diaper:
-        return '👶';
+        return LuluIcons.diaper;
       case ActivityType.play:
-        return '🎮';
+        return LuluIcons.play;
       case ActivityType.health:
-        return '🏥';
+        return LuluIcons.health;
+    }
+  }
+
+  Color _getActivityColor(ActivityType type) {
+    switch (type) {
+      case ActivityType.feeding:
+        return LuluActivityColors.feeding;
+      case ActivityType.sleep:
+        return LuluActivityColors.sleep;
+      case ActivityType.diaper:
+        return LuluActivityColors.diaper;
+      case ActivityType.play:
+        return LuluActivityColors.play;
+      case ActivityType.health:
+        return LuluActivityColors.health;
     }
   }
 
