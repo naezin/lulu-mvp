@@ -1615,6 +1615,12 @@ abstract class S {
   /// **'통계'**
   String get tabStatistics;
 
+  /// 통계 카드 - 일평균 접두어
+  ///
+  /// In ko, this message translates to:
+  /// **'일평균'**
+  String get statsDailyAvg;
+
   /// 통계 카드 - 수면
   ///
   /// In ko, this message translates to:

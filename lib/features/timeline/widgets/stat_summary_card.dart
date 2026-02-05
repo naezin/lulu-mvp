@@ -125,20 +125,34 @@ class StatSummaryCard extends StatelessWidget {
   }
 
   /// 변화량 표시
+  /// HF2-5: 단위 포함 + 수면은 분→시간 변환
   Widget _buildChangeIndicator() {
     if (change == 0) {
-      return Text(
-        '변동 없음',
-        style: LuluTextStyles.caption.copyWith(
-          color: LuluTextColors.tertiary,
-        ),
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.arrow_forward_rounded,
+            size: 12,
+            color: LuluTextColors.tertiary,
+          ),
+          const SizedBox(width: 2),
+          Text(
+            'vs prev',
+            style: LuluTextStyles.caption.copyWith(
+              color: LuluTextColors.tertiary,
+            ),
+          ),
+        ],
       );
     }
 
     final isPositive = change > 0;
     final icon = isPositive ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded;
     final color = isPositive ? LuluStatusColors.success : LuluStatusColors.warning;
-    final changeText = isPositive ? '+${change.abs().toStringAsFixed(0)}' : '-${change.abs().toStringAsFixed(0)}';
+
+    // HF2-5: 타입별 단위 포함한 변화량 텍스트
+    final changeText = _formatChangeText(change, isPositive);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -158,6 +172,29 @@ class StatSummaryCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  /// HF2-5: 변화량 텍스트 포맷 (단위 포함)
+  String _formatChangeText(double change, bool isPositive) {
+    final sign = isPositive ? '+' : '-';
+    final absChange = change.abs();
+
+    switch (type) {
+      case StatType.sleep:
+        // 분 단위로 들어오면 시간으로 변환
+        if (absChange > 60) {
+          // 분 단위로 간주 → 시간 변환
+          final hours = absChange / 60;
+          return '$sign${hours.toStringAsFixed(1)}h';
+        } else {
+          // 시간 단위로 간주
+          return '$sign${absChange.toStringAsFixed(1)}h';
+        }
+      case StatType.feeding:
+      case StatType.diaper:
+        // 회 단위
+        return '$sign${absChange.toStringAsFixed(0)}';
+    }
   }
 
   /// 권장 범위 뱃지
@@ -219,11 +256,13 @@ class StatSummaryCard extends StatelessWidget {
   }
 
   /// 유형별 타이틀
+  /// HF2-5: "일평균" 접두어 추가
   String _getTypeTitle(S? l10n) {
+    final prefix = l10n?.statsDailyAvg ?? 'Daily Avg';
     return switch (type) {
-      StatType.sleep => l10n?.statsSleep ?? '수면',
-      StatType.feeding => l10n?.statsFeeding ?? '수유',
-      StatType.diaper => l10n?.statsDiaper ?? '기저귀',
+      StatType.sleep => '$prefix ${l10n?.statsSleep ?? 'Sleep'}',
+      StatType.feeding => '$prefix ${l10n?.statsFeeding ?? 'Feeding'}',
+      StatType.diaper => '$prefix ${l10n?.statsDiaper ?? 'Diaper'}',
     };
   }
 

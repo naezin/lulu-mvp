@@ -49,27 +49,35 @@ class ActivityRepository {
   }
 
   /// 오늘의 활동 조회
+  /// HF2-6: UTC 변환하여 시간대 일관성 유지
   Future<List<ActivityModel>> getTodayActivities(String familyId) async {
     try {
       final now = DateTime.now();
       final startOfDay = DateTime(now.year, now.month, now.day);
       final endOfDay = startOfDay.add(const Duration(days: 1));
 
+      // HF2-6: 로컬 시간을 UTC로 변환하여 Supabase 쿼리
+      final startUtc = startOfDay.toUtc().toIso8601String();
+      final endUtc = endOfDay.toUtc().toIso8601String();
+
+      debugPrint('[DEBUG] [ActivityRepo] Today query: $startUtc ~ $endUtc');
+
       final response = await SupabaseService.activities
           .select()
           .eq('family_id', familyId)
-          .gte('start_time', startOfDay.toIso8601String())
-          .lt('start_time', endOfDay.toIso8601String())
+          .gte('start_time', startUtc)
+          .lt('start_time', endUtc)
           .order('start_time', ascending: false);
 
       return (response as List).map((data) => _mapToActivityModel(data)).toList();
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error getting today activities: $e');
+      debugPrint('[ERROR] [ActivityRepository] Error getting today activities: $e');
       rethrow;
     }
   }
 
   /// 날짜 범위로 활동 조회
+  /// HF2-6: UTC 변환하여 시간대 일관성 유지
   Future<List<ActivityModel>> getActivitiesByDateRange(
     String familyId, {
     required DateTime startDate,
@@ -78,11 +86,18 @@ class ActivityRepository {
     ActivityType? type,
   }) async {
     try {
+      // HF2-6: 로컬 시간을 UTC로 변환하여 Supabase 쿼리
+      // Supabase는 UTC로 저장하므로 쿼리도 UTC로 해야 함
+      final startUtc = startDate.toUtc().toIso8601String();
+      final endUtc = endDate.toUtc().toIso8601String();
+
+      debugPrint('[DEBUG] [ActivityRepo] Query: $startUtc ~ $endUtc');
+
       var query = SupabaseService.activities
           .select()
           .eq('family_id', familyId)
-          .gte('start_time', startDate.toIso8601String())
-          .lt('start_time', endDate.toIso8601String());
+          .gte('start_time', startUtc)
+          .lt('start_time', endUtc);
 
       if (babyId != null) {
         query = query.contains('baby_ids', [babyId]);

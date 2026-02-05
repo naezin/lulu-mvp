@@ -826,6 +826,9 @@ class SKo extends S {
   String get tabStatistics => '통계';
 
   @override
+  String get statsDailyAvg => '일평균';
+
+  @override
   String get statsSleep => '수면';
 
   @override

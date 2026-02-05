@@ -14,16 +14,15 @@ import 'date_navigator.dart';
 import 'timeline_filter_chips.dart';
 import 'mini_time_bar.dart';
 import 'context_ribbon.dart';
-import 'daily_summary_banner.dart';
 import 'activity_list_item.dart';
 import 'edit_activity_sheet.dart';
 
 /// 일간 뷰 (DailyView)
 ///
-/// Sprint 18-R Hotfix FIX-A: TimelineTab에서 분리
+/// HF2-3: DailySummaryBanner 제거 (ContextRibbon만 사용)
 /// - DateNavigator: 날짜 좌우 탐색
 /// - TimelineFilterChips: 활동 유형 필터
-/// - MiniTimeBar: 24h 패턴 시각화
+/// - MiniTimeBar: 24h 패턴 시각화 (5종 활동 모두)
 /// - ContextRibbon: 한 줄 요약
 /// - ActivityListItem: 스와이프 수정/삭제
 class DailyView extends StatefulWidget {
@@ -290,13 +289,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                   ),
                 ),
 
-              // DailySummaryBanner (활동이 있을 때만)
-              if (activities.isNotEmpty)
-                SliverToBoxAdapter(
-                  child: DailySummaryBanner(
-                    activities: activities,
-                  ),
-                ),
+              // HF2-3: DailySummaryBanner 제거 (ContextRibbon과 중복)
 
               // 활동 목록 또는 빈 상태
               if (activities.isEmpty)

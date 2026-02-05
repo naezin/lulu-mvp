@@ -838,6 +838,9 @@ class SEn extends S {
   String get tabStatistics => 'Statistics';
 
   @override
+  String get statsDailyAvg => 'Daily Avg';
+
+  @override
   String get statsSleep => 'Sleep';
 
   @override

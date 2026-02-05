@@ -710,6 +710,8 @@
   "@tabTimeline": {"description": "타임라인 탭 레이블"},
   "tabStatistics": "통계",
   "@tabStatistics": {"description": "통계 탭 레이블"},
+  "statsDailyAvg": "일평균",
+  "@statsDailyAvg": {"description": "통계 카드 - 일평균 접두어"},
   "statsSleep": "수면",
   "@statsSleep": {"description": "통계 카드 - 수면"},
   "statsFeeding": "수유",
