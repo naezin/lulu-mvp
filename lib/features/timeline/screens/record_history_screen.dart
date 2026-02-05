@@ -6,14 +6,16 @@ import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../home/providers/home_provider.dart';
-import '../widgets/timeline_tab.dart';
-import '../widgets/statistics_tab.dart';
+import '../widgets/scope_toggle.dart';
+import '../widgets/daily_view.dart';
+import '../widgets/weekly_view.dart';
 
 /// 기록 히스토리 화면 (통합)
 ///
-/// 작업 지시서 v1.0: TabBar로 [타임라인 | 통계] 통합
-/// - 타임라인 탭: 날짜별 기록 목록
-/// - 통계 탭: 주간 통계 요약
+/// Sprint 18-R Hotfix FIX-A: TabBar 완전 제거
+/// - ScopeToggle: body 최상단에서 일간/주간 전환
+/// - 일간: DailyView (날짜 탐색 + 필터 + 타임라인 + 기록 목록)
+/// - 주간: WeeklyView (WeeklyPatternChart + 통계)
 class RecordHistoryScreen extends StatefulWidget {
   const RecordHistoryScreen({super.key});
 
@@ -21,21 +23,9 @@ class RecordHistoryScreen extends StatefulWidget {
   State<RecordHistoryScreen> createState() => _RecordHistoryScreenState();
 }
 
-class _RecordHistoryScreenState extends State<RecordHistoryScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+class _RecordHistoryScreenState extends State<RecordHistoryScreen> {
+  /// 일간/주간 스코프 (false = 일간, true = 주간)
+  bool _isWeeklyScope = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,30 +43,7 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen>
           ),
         ),
         centerTitle: true,
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: LuluColors.lavenderMist,
-          indicatorWeight: 3,
-          labelColor: LuluColors.lavenderMist,
-          unselectedLabelColor: LuluTextColors.secondary,
-          labelStyle: LuluTextStyles.bodyMedium.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: LuluTextStyles.bodyMedium,
-          tabs: [
-            Tab(text: l10n?.tabTimeline ?? '타임라인'),
-            Tab(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.bar_chart_rounded, size: 18),
-                  const SizedBox(width: 4),
-                  Text(l10n?.tabStatistics ?? '통계'),
-                ],
-              ),
-            ),
-          ],
-        ),
+        // FIX-A: TabBar 완전 제거 - bottom 속성 삭제
       ),
       body: Consumer<HomeProvider>(
         builder: (context, homeProvider, child) {
@@ -102,15 +69,20 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen>
                     },
                   ),
                 ),
-              // TabBarView
+
+              // FIX-A: ScopeToggle (body 최상단)
+              ScopeToggle(
+                isWeeklyScope: _isWeeklyScope,
+                onScopeChanged: (isWeekly) {
+                  setState(() => _isWeeklyScope = isWeekly);
+                },
+              ),
+
+              // FIX-A: 스코프에 따라 뷰 전환 (TabBarView 대신)
               Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: const [
-                    TimelineTab(),
-                    StatisticsTab(),
-                  ],
-                ),
+                child: _isWeeklyScope
+                    ? const WeeklyView()
+                    : const DailyView(),
               ),
             ],
           );

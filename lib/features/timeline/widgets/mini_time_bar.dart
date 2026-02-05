@@ -120,9 +120,11 @@ class MiniTimeBar extends StatelessWidget {
     for (final activity in activities) {
       if (activity.type != ActivityType.sleep) continue;
 
-      final actEnd =
-          activity.endTime ?? activity.startTime.add(const Duration(hours: 1));
-      if (activity.startTime.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
+      // FIX-D: UTC -> Local 변환하여 정확한 시간 매칭
+      final actStart = activity.startTime.toLocal();
+      final actEnd = (activity.endTime ?? activity.startTime.add(const Duration(hours: 1))).toLocal();
+
+      if (actStart.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
         final hour = slotIndex ~/ 2;
         return (hour >= 21 || hour < 6)
             ? LuluPatternColors.nightSleep
@@ -137,11 +139,13 @@ class MiniTimeBar extends StatelessWidget {
         date.year, date.month, date.day, slotIndex ~/ 2, (slotIndex % 2) * 30);
     final slotEnd = slotStart.add(const Duration(minutes: 30));
 
-    return activities.any((a) =>
-        a.type == ActivityType.feeding &&
-        a.startTime
-            .isAfter(slotStart.subtract(const Duration(minutes: 1))) &&
-        a.startTime.isBefore(slotEnd));
+    // FIX-D: UTC -> Local 변환하여 정확한 시간 매칭
+    return activities.any((a) {
+        if (a.type != ActivityType.feeding) return false;
+        final actStart = a.startTime.toLocal();
+        return actStart.isAfter(slotStart.subtract(const Duration(minutes: 1))) &&
+               actStart.isBefore(slotEnd);
+    });
   }
 
   Widget _buildCurrentTimeMarker() {

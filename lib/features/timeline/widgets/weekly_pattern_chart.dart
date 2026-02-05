@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
-import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../models/daily_pattern.dart';
 
@@ -362,6 +361,7 @@ class _PatternFilterChips extends StatelessWidget {
 }
 
 /// 개별 패턴 셀
+/// FIX-F: 모든 활동을 색상 막대로 표시 (아이콘 제거)
 class _PatternCell extends StatelessWidget {
   final TimeSlot slot;
   final PatternFilter filter;
@@ -377,10 +377,8 @@ class _PatternCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final shouldShow = _shouldShowActivity();
     final color = shouldShow ? _getActivityColor() : Colors.transparent;
-    final showFeedingMarker =
-        slot.activity == PatternActivityType.feeding &&
-        (filter == PatternFilter.feeding || filter == PatternFilter.all);
 
+    // FIX-F: 아이콘 대신 색상 막대만 사용
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -389,15 +387,6 @@ class _PatternCell extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(2),
         ),
-        child: showFeedingMarker
-            ? Center(
-                child: Icon(
-                  LuluIcons.feeding,
-                  size: 6,
-                  color: LuluActivityColors.feeding,
-                ),
-              )
-            : null,
       ),
     );
   }
@@ -443,6 +432,7 @@ class _PatternCell extends StatelessWidget {
 }
 
 /// 패턴 범례
+/// FIX-G: 기저귀/놀이/건강 추가 + 색상 막대 통일
 class _PatternLegend extends StatelessWidget {
   final PatternFilter filter;
 
@@ -450,30 +440,29 @@ class _PatternLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    // FIX-G: filter == all일 때 모든 활동 범례 표시
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 12,
+      runSpacing: 8,
       children: [
+        // 수면
         if (filter == PatternFilter.sleep || filter == PatternFilter.all) ...[
           _legendItem(LuluPatternColors.nightSleep, '밤잠'),
-          const SizedBox(width: 16),
           _legendItem(LuluPatternColors.daySleep, '낮잠'),
         ],
-        if (filter == PatternFilter.all) const SizedBox(width: 16),
-        if (filter == PatternFilter.feeding || filter == PatternFilter.all) ...[
-          Icon(
-            LuluIcons.feeding,
-            size: 14,
-            color: LuluActivityColors.feeding,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            '수유',
-            style: TextStyle(
-              color: LuluTextColors.secondary,
-              fontSize: 11,
-            ),
-          ),
-        ],
+        // 수유
+        if (filter == PatternFilter.feeding || filter == PatternFilter.all)
+          _legendItem(LuluPatternColors.feeding, '수유'),
+        // FIX-G: 기저귀 추가
+        if (filter == PatternFilter.diaper || filter == PatternFilter.all)
+          _legendItem(LuluActivityColors.diaper, '기저귀'),
+        // FIX-G: 놀이 추가
+        if (filter == PatternFilter.play || filter == PatternFilter.all)
+          _legendItem(LuluActivityColors.play, '놀이'),
+        // FIX-G: 건강 추가
+        if (filter == PatternFilter.health || filter == PatternFilter.all)
+          _legendItem(LuluActivityColors.health, '건강'),
       ],
     );
   }

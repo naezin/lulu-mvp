@@ -277,7 +277,10 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
 
           // Provider에 즉시 데이터 설정 (mounted 체크 후)
           if (mounted) {
-            context.read<HomeProvider>().setFamily(family, babies);
+            final homeProvider = context.read<HomeProvider>();
+            homeProvider.setFamily(family, babies);
+            // FIX-C: 오늘 활동 로드 추가
+            await homeProvider.loadTodayActivities();
             _providerInitialized = true;
           }
 
@@ -341,7 +344,10 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
       debugPrint('  - Babies: ${babies.map((b) => b.name).join(", ")}');
 
       if (mounted) {
-        context.read<HomeProvider>().setFamily(family, babies);
+        final homeProvider = context.read<HomeProvider>();
+        homeProvider.setFamily(family, babies);
+        // FIX-C: 오늘 활동 로드 추가
+        await homeProvider.loadTodayActivities();
         _providerInitialized = true;
 
         // 로컬에도 저장 (다음 오프라인 시작용)
@@ -360,7 +366,10 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
 
   void _onOnboardingComplete(FamilyModel family, List<BabyModel> babies) {
     // PA-01: HomeProvider에 데이터 즉시 설정
-    context.read<HomeProvider>().setFamily(family, babies);
+    final homeProvider = context.read<HomeProvider>();
+    homeProvider.setFamily(family, babies);
+    // FIX-C: 오늘 활동 로드 추가
+    homeProvider.loadTodayActivities();
     _providerInitialized = true;
 
     // 상태 기반 전환 (Navigator.pushReplacement 대신)

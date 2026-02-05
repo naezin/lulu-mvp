@@ -290,14 +290,17 @@ class PatternDataProvider extends ChangeNotifier {
 
   /// ActivityModel 리스트에서 DailyPattern 생성
   /// v4.1: 오버레이 지원 - 수면은 메인 활동, 나머지는 오버레이
+  /// FIX-E: UTC -> Local 변환 추가
   DailyPattern _buildDailyPattern(DateTime date, List<ActivityModel> activities) {
-    // 해당 날짜의 활동만 필터링
+    // 해당 날짜의 활동만 필터링 (로컬 시간 기준)
     final dayStart = DateTime(date.year, date.month, date.day);
     final dayEnd = dayStart.add(const Duration(days: 1));
 
     final dayActivities = activities.where((a) {
-      return a.startTime.isAfter(dayStart.subtract(const Duration(seconds: 1))) &&
-          a.startTime.isBefore(dayEnd);
+      // FIX-E: UTC -> Local 변환
+      final localStart = a.startTime.toLocal();
+      return localStart.isAfter(dayStart.subtract(const Duration(seconds: 1))) &&
+          localStart.isBefore(dayEnd);
     }).toList();
 
     // 48개 슬롯 생성
@@ -317,10 +320,11 @@ class PatternDataProvider extends ChangeNotifier {
       final overlays = <PatternActivityType>[];
 
       for (final activity in dayActivities) {
-        final actEnd = activity.endTime ??
-            activity.startTime.add(const Duration(hours: 1));
+        // FIX-E: UTC -> Local 변환
+        final actStart = activity.startTime.toLocal();
+        final actEnd = (activity.endTime ?? activity.startTime.add(const Duration(hours: 1))).toLocal();
 
-        if (activity.startTime.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
+        if (actStart.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
           final patternType = _mapActivityType(activity.type, slotIndex ~/ 2);
 
           // 수면은 주요 활동으로
