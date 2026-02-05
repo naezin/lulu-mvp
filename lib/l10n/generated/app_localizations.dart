@@ -1552,7 +1552,7 @@ abstract class S {
   /// 함께 보기 안내 메시지
   ///
   /// In ko, this message translates to:
-  /// **'각 아기는 고유한 패턴을 가지고 있어요 💜'**
+  /// **'각 아기는 고유한 패턴을 가지고 있어요'**
   String get statisticsTogetherViewGuide;
 
   /// 교정연령 표시
@@ -2202,6 +2202,108 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'초대 코드가 복사되었어요!'**
   String get codeCopied;
+
+  /// 아기 정보 없음 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 정보가 없습니다'**
+  String get emptyBabiesTitle;
+
+  /// 아기 정보 없음 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'온보딩을 완료해주세요'**
+  String get emptyBabiesHint;
+
+  /// 일간 스코프
+  ///
+  /// In ko, this message translates to:
+  /// **'일간'**
+  String get scopeDaily;
+
+  /// 주간 스코프
+  ///
+  /// In ko, this message translates to:
+  /// **'주간'**
+  String get scopeWeekly;
+
+  /// 주간 뷰 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'주간 패턴은 통계 탭에서 확인하세요'**
+  String get weeklyPatternHint;
+
+  /// 필터 - 전체
+  ///
+  /// In ko, this message translates to:
+  /// **'전체'**
+  String get filterAll;
+
+  /// 활동 - 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get activityFeeding;
+
+  /// 활동 - 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'수면'**
+  String get activitySleep;
+
+  /// 활동 - 기저귀
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀'**
+  String get activityDiaper;
+
+  /// 활동 - 놀이
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이'**
+  String get activityPlay;
+
+  /// 액션 - 수정
+  ///
+  /// In ko, this message translates to:
+  /// **'수정'**
+  String get actionEdit;
+
+  /// 스와이프 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'밀어서 수정/삭제'**
+  String get swipeHint;
+
+  /// 경과 시간 - 방금
+  ///
+  /// In ko, this message translates to:
+  /// **'방금'**
+  String get elapsedJustNow;
+
+  /// 경과 시간 - N분 전
+  ///
+  /// In ko, this message translates to:
+  /// **'{minutes}분 전'**
+  String elapsedMinutesAgo(int minutes);
+
+  /// 경과 시간 - N시간 전
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}시간 전'**
+  String elapsedHoursAgo(int hours);
+
+  /// 경과 시간 - N시간 N분 전
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}시간 {minutes}분 전'**
+  String elapsedHoursMinutesAgo(int hours, int minutes);
+
+  /// 경과 시간 - N일 전
+  ///
+  /// In ko, this message translates to:
+  /// **'{days}일 전'**
+  String elapsedDaysAgo(int days);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

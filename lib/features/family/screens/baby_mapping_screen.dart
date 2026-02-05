@@ -169,8 +169,12 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
                     color: LuluColors.lavenderMist.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Center(
-                    child: Text('👶', style: TextStyle(fontSize: 18)),
+                  child: Center(
+                    child: Icon(
+                      Icons.child_care_rounded,
+                      size: 18,
+                      color: LuluColors.lavenderMist,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),

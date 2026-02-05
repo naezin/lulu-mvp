@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
+import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../home/providers/home_provider.dart';
 import '../widgets/timeline_tab.dart';
 import '../widgets/statistics_tab.dart';
@@ -84,11 +85,33 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen>
             return _buildEmptyBabiesState();
           }
 
-          return TabBarView(
-            controller: _tabController,
-            children: const [
-              TimelineTab(),
-              StatisticsTab(),
+          return Column(
+            children: [
+              // BabyTabBar (아기 2명 이상일 때만 표시)
+              if (homeProvider.babies.length > 1)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: BabyTabBar(
+                    babies: homeProvider.babies,
+                    selectedBabyId: homeProvider.selectedBabyId,
+                    onBabyChanged: (babyId) {
+                      homeProvider.selectBaby(babyId);
+                    },
+                  ),
+                ),
+              // TabBarView
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: const [
+                    TimelineTab(),
+                    StatisticsTab(),
+                  ],
+                ),
+              ),
             ],
           );
         },
@@ -98,6 +121,7 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen>
 
   /// 아기 정보 없음 상태
   Widget _buildEmptyBabiesState() {
+    final l10n = S.of(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -109,7 +133,7 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen>
           ),
           const SizedBox(height: 16),
           Text(
-            '아기 정보가 없습니다',
+            l10n?.emptyBabiesTitle ?? 'No baby info',
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.bold,
@@ -117,7 +141,7 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen>
           ),
           const SizedBox(height: 8),
           Text(
-            '온보딩을 완료해주세요',
+            l10n?.emptyBabiesHint ?? 'Please complete onboarding',
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),

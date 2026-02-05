@@ -761,6 +761,46 @@ RLS는 "데이터"가 아닌 "권한"을 검증한다. auth.uid() 기준!
 
 ---
 
+## TestFlight 빌드 가이드
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    TestFlight 빌드 체크리스트                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  1️⃣ Info.plist 수출규정 면제 설정 (필수!)                               │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│  ios/Runner/Info.plist에 반드시 포함:                                  │
+│                                                                         │
+│  <key>ITSAppUsesNonExemptEncryption</key>                              │
+│  <false/>                                                               │
+│                                                                         │
+│  → 이 설정이 없으면 TestFlight 업로드 후 수출규정 질문 팝업 발생       │
+│  → false = 면제 대상 암호화만 사용 (HTTPS 등 표준 암호화)              │
+│                                                                         │
+│  2️⃣ 빌드 명령어                                                         │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│  # 버전 업데이트 (pubspec.yaml)                                        │
+│  version: X.Y.Z+BUILD_NUMBER                                           │
+│                                                                         │
+│  # IPA 빌드                                                             │
+│  flutter build ipa                                                     │
+│                                                                         │
+│  # 또는 Xcode Archive                                                   │
+│  flutter build ios --release                                           │
+│  open ios/Runner.xcworkspace                                           │
+│  → Product → Archive → Distribute App                                  │
+│                                                                         │
+│  3️⃣ 업로드 방법                                                         │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│  • Xcode Organizer → Distribute App → App Store Connect               │
+│  • 또는 Transporter 앱으로 build/ios/ipa/*.ipa 업로드                  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 커밋 규칙
 
 ```yaml

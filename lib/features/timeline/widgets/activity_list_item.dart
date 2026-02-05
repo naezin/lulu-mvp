@@ -5,6 +5,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 스와이프 가능한 활동 리스트 아이템
 ///
@@ -29,6 +30,8 @@ class ActivityListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
@@ -53,12 +56,12 @@ class ActivityListItem extends StatelessWidget {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.edit_rounded, size: 20),
-                  SizedBox(height: 2),
+                children: [
+                  const Icon(Icons.edit_rounded, size: 20),
+                  const SizedBox(height: 2),
                   Text(
-                    '수정',
-                    style: TextStyle(
+                    l10n?.actionEdit ?? 'Edit',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 11,
                     ),
@@ -79,12 +82,12 @@ class ActivityListItem extends StatelessWidget {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.delete_rounded, size: 20),
-                  SizedBox(height: 2),
+                children: [
+                  const Icon(Icons.delete_rounded, size: 20),
+                  const SizedBox(height: 2),
                   Text(
-                    '삭제',
-                    style: TextStyle(
+                    l10n?.buttonDelete ?? 'Delete',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 11,
                     ),
@@ -108,7 +111,7 @@ class ActivityListItem extends StatelessWidget {
                   children: [
                     _buildIcon(),
                     const SizedBox(width: 16),
-                    Expanded(child: _buildContent()),
+                    Expanded(child: _buildContent(l10n)),
                     Icon(
                       Icons.chevron_left_rounded,
                       color: LuluTextColors.tertiary.withValues(alpha: 0.5),
@@ -133,13 +136,13 @@ class ActivityListItem extends StatelessWidget {
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Icon(Icons.swipe_left_rounded,
+                        children: [
+                          const Icon(Icons.swipe_left_rounded,
                               size: 14, color: Colors.white),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
-                            '밀어서 수정/삭제',
-                            style: TextStyle(
+                            l10n?.swipeHint ?? 'Swipe to edit/delete',
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 10,
                             ),
@@ -179,7 +182,7 @@ class ActivityListItem extends StatelessWidget {
     return Icon(icon, size: 24, color: color);
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(S? l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -205,7 +208,7 @@ class ActivityListItem extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                _buildSummary(),
+                _buildSummary(l10n),
                 style: const TextStyle(
                   color: LuluTextColors.primary,
                   fontSize: 14,
@@ -235,65 +238,89 @@ class ActivityListItem extends StatelessWidget {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
   }
 
-  String _buildSummary() {
+  String _buildSummary(S? l10n) {
     switch (activity.type) {
       case ActivityType.feeding:
         final amount = activity.data?['amount_ml'] as num?;
-        final feedType = activity.data?['feeding_type'] as String? ?? '수유';
-        final displayType = _getFeedingTypeDisplay(feedType);
+        final feedType = activity.data?['feeding_type'] as String? ?? 'feeding';
+        final displayType = _getFeedingTypeDisplay(feedType, l10n);
         return amount != null ? '$displayType ${amount.toInt()}ml' : displayType;
       case ActivityType.sleep:
         if (activity.endTime != null) {
           final duration = activity.endTime!.difference(activity.startTime);
           final hours = duration.inHours;
           final minutes = duration.inMinutes % 60;
-          return hours > 0 ? '수면 $hours시간 $minutes분' : '수면 $minutes분';
+          final sleepLabel = l10n?.activityTypeSleep ?? 'Sleep';
+          if (hours > 0) {
+            return l10n?.durationHoursMinutes(hours, minutes) ?? '$sleepLabel ${hours}h ${minutes}m';
+          }
+          return l10n?.durationMinutes(minutes) ?? '$sleepLabel ${minutes}m';
         }
-        return '수면 중';
+        return l10n?.statusOngoing ?? 'Sleeping';
       case ActivityType.diaper:
         final diaperType = activity.data?['diaper_type'] as String? ?? 'diaper';
-        final diaperDisplay = _getDiaperTypeDisplay(diaperType);
-        return '기저귀 ($diaperDisplay)';
+        final diaperDisplay = _getDiaperTypeDisplay(diaperType, l10n);
+        final diaperLabel = l10n?.activityTypeDiaper ?? 'Diaper';
+        return '$diaperLabel ($diaperDisplay)';
       case ActivityType.play:
-        final playType = activity.data?['play_type'] as String? ?? '놀이';
-        return playType;
+        final playType = activity.data?['play_type'] as String?;
+        return _getPlayTypeDisplay(playType, l10n);
       case ActivityType.health:
         final temp = activity.data?['temperature'] as num?;
         if (temp != null) {
-          return '체온 ${temp.toStringAsFixed(1)}°C';
+          final tempLabel = l10n?.temperature ?? 'Temp';
+          return '$tempLabel ${temp.toStringAsFixed(1)}C';
         }
-        return '건강 기록';
+        return l10n?.activityTypeHealth ?? 'Health';
     }
   }
 
-  String _getFeedingTypeDisplay(String type) {
+  String _getFeedingTypeDisplay(String type, S? l10n) {
     switch (type.toLowerCase()) {
       case 'breast':
       case 'breast_milk':
-        return '모유';
+        return l10n?.feedingTypeBreast ?? 'Breast';
       case 'formula':
-        return '분유';
+        return l10n?.feedingTypeFormula ?? 'Formula';
       case 'bottle':
-        return '젖병';
+        return l10n?.feedingTypeBottle ?? 'Bottle';
       case 'solid':
-        return '이유식';
+        return l10n?.feedingTypeSolid ?? 'Solid';
       default:
-        return '수유';
+        return l10n?.activityTypeFeeding ?? 'Feeding';
     }
   }
 
-  String _getDiaperTypeDisplay(String type) {
+  String _getDiaperTypeDisplay(String type, S? l10n) {
     switch (type.toLowerCase()) {
       case 'wet':
-        return '소변';
+        return l10n?.diaperTypeWet ?? 'Wet';
       case 'dirty':
-        return '대변';
+        return l10n?.diaperTypeDirty ?? 'Dirty';
       case 'both':
-        return '소변+대변';
+        return l10n?.diaperTypeBothDetail ?? 'Both';
       case 'dry':
-        return '건조';
+        return l10n?.diaperTypeDry ?? 'Dry';
       default:
         return type;
+    }
+  }
+
+  String _getPlayTypeDisplay(String? type, S? l10n) {
+    if (type == null) return l10n?.activityTypePlay ?? 'Play';
+    switch (type.toLowerCase()) {
+      case 'tummy_time':
+        return l10n?.playTypeTummyTime ?? 'Tummy Time';
+      case 'bath':
+        return l10n?.playTypeBath ?? 'Bath';
+      case 'outdoor':
+        return l10n?.playTypeOutdoor ?? 'Outdoor';
+      case 'indoor':
+        return l10n?.playTypeIndoor ?? 'Indoor';
+      case 'reading':
+        return l10n?.playTypeReading ?? 'Reading';
+      default:
+        return l10n?.playTypeOther ?? 'Other';
     }
   }
 }

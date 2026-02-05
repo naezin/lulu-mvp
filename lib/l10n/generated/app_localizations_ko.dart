@@ -791,7 +791,7 @@ class SKo extends S {
   String get statisticsTogetherViewTitle => '이번 주 함께 보기';
 
   @override
-  String get statisticsTogetherViewGuide => '각 아기는 고유한 패턴을 가지고 있어요 💜';
+  String get statisticsTogetherViewGuide => '각 아기는 고유한 패턴을 가지고 있어요';
 
   @override
   String statisticsCorrectedAge(int days) {
@@ -1132,4 +1132,63 @@ class SKo extends S {
 
   @override
   String get codeCopied => '초대 코드가 복사되었어요!';
+
+  @override
+  String get emptyBabiesTitle => '아기 정보가 없습니다';
+
+  @override
+  String get emptyBabiesHint => '온보딩을 완료해주세요';
+
+  @override
+  String get scopeDaily => '일간';
+
+  @override
+  String get scopeWeekly => '주간';
+
+  @override
+  String get weeklyPatternHint => '주간 패턴은 통계 탭에서 확인하세요';
+
+  @override
+  String get filterAll => '전체';
+
+  @override
+  String get activityFeeding => '수유';
+
+  @override
+  String get activitySleep => '수면';
+
+  @override
+  String get activityDiaper => '기저귀';
+
+  @override
+  String get activityPlay => '놀이';
+
+  @override
+  String get actionEdit => '수정';
+
+  @override
+  String get swipeHint => '밀어서 수정/삭제';
+
+  @override
+  String get elapsedJustNow => '방금';
+
+  @override
+  String elapsedMinutesAgo(int minutes) {
+    return '$minutes분 전';
+  }
+
+  @override
+  String elapsedHoursAgo(int hours) {
+    return '$hours시간 전';
+  }
+
+  @override
+  String elapsedHoursMinutesAgo(int hours, int minutes) {
+    return '$hours시간 $minutes분 전';
+  }
+
+  @override
+  String elapsedDaysAgo(int days) {
+    return '$days일 전';
+  }
 }

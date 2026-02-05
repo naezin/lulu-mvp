@@ -300,7 +300,7 @@
   "statisticsAverage": "Average",
   "statisticsTogetherView": "Together View",
   "statisticsTogetherViewTitle": "This Week Together",
-  "statisticsTogetherViewGuide": "Each baby has their own unique pattern 💜",
+  "statisticsTogetherViewGuide": "Each baby has their own unique pattern",
   "statisticsCorrectedAge": "Corrected {days}d",
   "@statisticsCorrectedAge": {
     "description": "Corrected age display",
@@ -515,5 +515,43 @@
   "copyCode": "Copy Code",
   "inviteEmailSent": "Invite email sent!",
   "invalidEmail": "Please enter a valid email",
-  "codeCopied": "Invite code copied!"
+  "codeCopied": "Invite code copied!",
+  "emptyBabiesTitle": "No baby info",
+  "emptyBabiesHint": "Please complete onboarding",
+  "scopeDaily": "Daily",
+  "scopeWeekly": "Weekly",
+  "weeklyPatternHint": "See Statistics tab for weekly pattern",
+  "filterAll": "All",
+  "activityFeeding": "Feeding",
+  "activitySleep": "Sleep",
+  "activityDiaper": "Diaper",
+  "activityPlay": "Play",
+  "actionEdit": "Edit",
+  "swipeHint": "Swipe to edit/delete",
+  "elapsedJustNow": "Just now",
+  "elapsedMinutesAgo": "{minutes}m ago",
+  "@elapsedMinutesAgo": {
+    "placeholders": {
+      "minutes": {"type": "int", "example": "5"}
+    }
+  },
+  "elapsedHoursAgo": "{hours}h ago",
+  "@elapsedHoursAgo": {
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"}
+    }
+  },
+  "elapsedHoursMinutesAgo": "{hours}h {minutes}m ago",
+  "@elapsedHoursMinutesAgo": {
+    "placeholders": {
+      "hours": {"type": "int", "example": "1"},
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "elapsedDaysAgo": "{days}d ago",
+  "@elapsedDaysAgo": {
+    "placeholders": {
+      "days": {"type": "int", "example": "3"}
+    }
+  }
 }

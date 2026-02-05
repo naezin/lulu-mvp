@@ -204,7 +204,7 @@ class RecentFeedingButtons extends StatelessWidget {
             Expanded(
               child: Text(
                 l10n?.quickFeedingSaved(_getSummary(record, l10n)) ??
-                    '✅ ${_getSummary(record, l10n)} 저장됨',
+                    '${_getSummary(record, l10n)} saved',
               ),
             ),
           ],

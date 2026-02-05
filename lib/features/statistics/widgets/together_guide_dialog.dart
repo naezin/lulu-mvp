@@ -31,10 +31,11 @@ class TogetherGuideDialog extends StatelessWidget {
               color: LuluColors.lavenderMist.withValues(alpha: 0.3),
               shape: BoxShape.circle,
             ),
-            child: const Center(
-              child: Text(
-                '💜',
-                style: TextStyle(fontSize: 32),
+            child: Center(
+              child: Icon(
+                Icons.favorite_rounded,
+                size: 32,
+                color: LuluColors.lavenderMist,
               ),
             ),
           ),
@@ -43,7 +44,7 @@ class TogetherGuideDialog extends StatelessWidget {
 
           // 메시지
           Text(
-            l10n?.statisticsTogetherViewGuide ?? 'Each baby has their own unique pattern 💜',
+            l10n?.statisticsTogetherViewGuide ?? 'Each baby has their own unique pattern',
             style: LuluTextStyles.titleSmall.copyWith(
               fontWeight: FontWeight.w600,
             ),

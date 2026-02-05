@@ -10,19 +10,24 @@ import '../../../data/repositories/activity_repository.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/undo_delete_mixin.dart';
 import '../../home/providers/home_provider.dart';
+import 'scope_toggle.dart';
 import 'date_navigator.dart';
+import 'timeline_filter_chips.dart';
 import 'mini_time_bar.dart';
+import 'context_ribbon.dart';
 import 'daily_summary_banner.dart';
 import 'activity_list_item.dart';
 import 'edit_activity_sheet.dart';
 
 /// 타임라인 탭 (기록 목록)
 ///
-/// 작업 지시서 v1.1: 개선된 타임라인 탭
+/// Sprint 18-R: ScopeToggle 추가 (일간/주간 전환)
+/// - ScopeToggle: 일간/주간 전환
 /// - DateNavigator: 날짜 좌우 탐색
 /// - MiniTimeBar: 24h 패턴 시각화
 /// - DailySummaryBanner: 일간 요약
 /// - ActivityListItem: 스와이프 수정/삭제
+/// - WeeklyPatternChart: 주간 패턴 히트맵
 class TimelineTab extends StatefulWidget {
   const TimelineTab({super.key});
 
@@ -32,6 +37,12 @@ class TimelineTab extends StatefulWidget {
 
 class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
   DateTime _selectedDate = DateTime.now();
+
+  /// 일간/주간 스코프 (false = 일간, true = 주간)
+  bool _isWeeklyScope = false;
+
+  /// 활동 유형 필터 (null = 전체)
+  String? _activeFilter;
 
   /// 선택된 날짜의 활동 (Supabase에서 로드)
   List<ActivityModel> _dateActivities = [];
@@ -225,9 +236,9 @@ class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
           );
         }
 
-        // 선택된 아기로 필터링
-        final activities = _filterActivitiesByBaby(
-            _dateActivities, homeProvider.selectedBabyId);
+        // 선택된 아기 + 활동 유형으로 필터링
+        final activities = _filterActivities(
+            _dateActivities, homeProvider.selectedBabyId, _activeFilter);
 
         return RefreshIndicator(
           onRefresh: _loadActivitiesForDate,
@@ -235,62 +246,127 @@ class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
           backgroundColor: LuluColors.deepBlue,
           child: CustomScrollView(
             slivers: [
-              // DateNavigator
+              // ScopeToggle (일간/주간 전환)
               SliverToBoxAdapter(
-                child: DateNavigator(
-                  selectedDate: _selectedDate,
-                  onDateChanged: _onDateChanged,
-                  onCalendarTap: _selectDate,
+                child: ScopeToggle(
+                  isWeeklyScope: _isWeeklyScope,
+                  onScopeChanged: (isWeekly) {
+                    setState(() => _isWeeklyScope = isWeekly);
+                  },
                 ),
               ),
 
-              // MiniTimeBar (활동이 있을 때만)
-              // ⚠️ BUG-003 FIX: ValueKey 추가하여 날짜/아기 변경 시 강제 리빌드
-              if (activities.isNotEmpty)
-                SliverToBoxAdapter(
-                  child: MiniTimeBar(
-                    key: ValueKey('minibar_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
-                    activities: activities,
-                    date: _selectedDate,
-                  ),
-                ),
-
-              // DailySummaryBanner (활동이 있을 때만)
-              if (activities.isNotEmpty)
-                SliverToBoxAdapter(
-                  child: DailySummaryBanner(
-                    activities: activities,
-                  ),
-                ),
-
-              // 활동 목록 또는 빈 상태
-              if (activities.isEmpty)
+              // 주간 뷰 (Phase 6에서 WeeklyPatternChart 연결)
+              if (_isWeeklyScope) ...[
                 SliverFillRemaining(
-                  child: _buildEmptyActivitiesState(homeProvider),
-                )
-              else
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final activity = activities[index];
-                      return ActivityListItem(
-                        activity: activity,
-                        onEdit: () => _onEditActivity(activity),
-                        onDelete: () => _onDeleteActivity(activity),
-                        showSwipeHint: _showSwipeHint && index == 0,
-                        onTap: () {
-                          // 스와이프 힌트 숨기기
-                          if (_showSwipeHint) {
-                            setState(() => _showSwipeHint = false);
-                          }
-                          // 탭 시 수정 시트 열기
-                          _onEditActivity(activity);
-                        },
-                      );
-                    },
-                    childCount: activities.length,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.bar_chart_rounded,
+                          size: 64,
+                          color: LuluColors.lavenderMist,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          S.of(context)?.tabStatistics ?? 'Statistics',
+                          style: LuluTextStyles.titleMedium.copyWith(
+                            color: LuluTextColors.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          S.of(context)?.weeklyPatternHint ?? 'See Statistics tab for weekly pattern',
+                          style: LuluTextStyles.bodyMedium.copyWith(
+                            color: LuluTextColors.secondary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+              ],
+
+              // 일간 뷰
+              if (!_isWeeklyScope) ...[
+                // DateNavigator
+                SliverToBoxAdapter(
+                  child: DateNavigator(
+                    selectedDate: _selectedDate,
+                    onDateChanged: _onDateChanged,
+                    onCalendarTap: _selectDate,
+                  ),
+                ),
+
+                // TimelineFilterChips (활동 필터)
+                SliverToBoxAdapter(
+                  child: TimelineFilterChips(
+                    activeFilter: _activeFilter,
+                    onFilterChanged: (filter) {
+                      setState(() => _activeFilter = filter);
+                    },
+                  ),
+                ),
+
+                // MiniTimeBar (활동이 있을 때만)
+                // ⚠️ BUG-003 FIX: ValueKey 추가하여 날짜/아기 변경 시 강제 리빌드
+                if (activities.isNotEmpty)
+                  SliverToBoxAdapter(
+                    child: MiniTimeBar(
+                      key: ValueKey('minibar_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
+                      activities: activities,
+                      date: _selectedDate,
+                    ),
+                  ),
+
+                // ContextRibbon (한 줄 요약)
+                if (activities.isNotEmpty)
+                  SliverToBoxAdapter(
+                    child: ContextRibbon(
+                      activities: _dateActivities, // 필터 전 전체 데이터 사용
+                    ),
+                  ),
+
+                // DailySummaryBanner (활동이 있을 때만) - Phase 4에서 ContextRibbon으로 대체 가능
+                // 현재는 둘 다 표시 (UX 판단에 따라 제거 가능)
+                if (activities.isNotEmpty)
+                  SliverToBoxAdapter(
+                    child: DailySummaryBanner(
+                      activities: activities,
+                    ),
+                  ),
+
+                // 활동 목록 또는 빈 상태
+                if (activities.isEmpty)
+                  SliverFillRemaining(
+                    child: _buildEmptyActivitiesState(homeProvider),
+                  )
+                else
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final activity = activities[index];
+                        return ActivityListItem(
+                          activity: activity,
+                          onEdit: () => _onEditActivity(activity),
+                          onDelete: () => _onDeleteActivity(activity),
+                          showSwipeHint: _showSwipeHint && index == 0,
+                          onTap: () {
+                            // 스와이프 힌트 숨기기
+                            if (_showSwipeHint) {
+                              setState(() => _showSwipeHint = false);
+                            }
+                            // 탭 시 수정 시트 열기
+                            _onEditActivity(activity);
+                          },
+                        );
+                      },
+                      childCount: activities.length,
+                    ),
+                  ),
+              ],
 
               // 하단 여백
               const SliverToBoxAdapter(
@@ -303,12 +379,25 @@ class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
     );
   }
 
-  /// 아기 ID로 활동 필터링
-  List<ActivityModel> _filterActivitiesByBaby(
-      List<ActivityModel> activities, String? babyId) {
-    if (babyId == null) return activities;
-    return activities.where((a) => a.babyIds.contains(babyId)).toList()
-      ..sort((a, b) => b.startTime.compareTo(a.startTime));
+  /// 아기 ID + 활동 유형으로 필터링
+  List<ActivityModel> _filterActivities(
+      List<ActivityModel> activities, String? babyId, String? typeFilter) {
+    var filtered = activities;
+
+    // 아기 필터
+    if (babyId != null) {
+      filtered = filtered.where((a) => a.babyIds.contains(babyId)).toList();
+    }
+
+    // 활동 유형 필터
+    if (typeFilter != null) {
+      filtered = filtered.where((a) => a.type.name == typeFilter).toList();
+    }
+
+    // 시간순 정렬 (최신 먼저)
+    filtered.sort((a, b) => b.startTime.compareTo(a.startTime));
+
+    return filtered;
   }
 
   /// 활동 없음 상태

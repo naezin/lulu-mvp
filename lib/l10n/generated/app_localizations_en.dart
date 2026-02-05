@@ -802,7 +802,7 @@ class SEn extends S {
 
   @override
   String get statisticsTogetherViewGuide =>
-      'Each baby has their own unique pattern 💜';
+      'Each baby has their own unique pattern';
 
   @override
   String statisticsCorrectedAge(int days) {
@@ -1150,4 +1150,63 @@ class SEn extends S {
 
   @override
   String get codeCopied => 'Invite code copied!';
+
+  @override
+  String get emptyBabiesTitle => 'No baby info';
+
+  @override
+  String get emptyBabiesHint => 'Please complete onboarding';
+
+  @override
+  String get scopeDaily => 'Daily';
+
+  @override
+  String get scopeWeekly => 'Weekly';
+
+  @override
+  String get weeklyPatternHint => 'See Statistics tab for weekly pattern';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get activityFeeding => 'Feeding';
+
+  @override
+  String get activitySleep => 'Sleep';
+
+  @override
+  String get activityDiaper => 'Diaper';
+
+  @override
+  String get activityPlay => 'Play';
+
+  @override
+  String get actionEdit => 'Edit';
+
+  @override
+  String get swipeHint => 'Swipe to edit/delete';
+
+  @override
+  String get elapsedJustNow => 'Just now';
+
+  @override
+  String elapsedMinutesAgo(int minutes) {
+    return '${minutes}m ago';
+  }
+
+  @override
+  String elapsedHoursAgo(int hours) {
+    return '${hours}h ago';
+  }
+
+  @override
+  String elapsedHoursMinutesAgo(int hours, int minutes) {
+    return '${hours}h ${minutes}m ago';
+  }
+
+  @override
+  String elapsedDaysAgo(int days) {
+    return '${days}d ago';
+  }
 }

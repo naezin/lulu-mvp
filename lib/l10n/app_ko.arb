@@ -682,7 +682,7 @@
   "@statisticsTogetherView": {"description": "함께 보기 탭 레이블"},
   "statisticsTogetherViewTitle": "이번 주 함께 보기",
   "@statisticsTogetherViewTitle": {"description": "함께 보기 뷰 제목"},
-  "statisticsTogetherViewGuide": "각 아기는 고유한 패턴을 가지고 있어요 💜",
+  "statisticsTogetherViewGuide": "각 아기는 고유한 패턴을 가지고 있어요",
   "@statisticsTogetherViewGuide": {"description": "함께 보기 안내 메시지"},
   "statisticsCorrectedAge": "교정 {days}일",
   "@statisticsCorrectedAge": {
@@ -948,5 +948,60 @@
   "invalidEmail": "올바른 이메일을 입력해주세요",
   "@invalidEmail": {"description": "잘못된 이메일 에러"},
   "codeCopied": "초대 코드가 복사되었어요!",
-  "@codeCopied": {"description": "코드 복사 완료 메시지"}
+  "@codeCopied": {"description": "코드 복사 완료 메시지"},
+  "emptyBabiesTitle": "아기 정보가 없습니다",
+  "@emptyBabiesTitle": {"description": "아기 정보 없음 제목"},
+  "emptyBabiesHint": "온보딩을 완료해주세요",
+  "@emptyBabiesHint": {"description": "아기 정보 없음 힌트"},
+  "scopeDaily": "일간",
+  "@scopeDaily": {"description": "일간 스코프"},
+  "scopeWeekly": "주간",
+  "@scopeWeekly": {"description": "주간 스코프"},
+  "weeklyPatternHint": "주간 패턴은 통계 탭에서 확인하세요",
+  "@weeklyPatternHint": {"description": "주간 뷰 안내"},
+  "filterAll": "전체",
+  "@filterAll": {"description": "필터 - 전체"},
+  "activityFeeding": "수유",
+  "@activityFeeding": {"description": "활동 - 수유"},
+  "activitySleep": "수면",
+  "@activitySleep": {"description": "활동 - 수면"},
+  "activityDiaper": "기저귀",
+  "@activityDiaper": {"description": "활동 - 기저귀"},
+  "activityPlay": "놀이",
+  "@activityPlay": {"description": "활동 - 놀이"},
+  "actionEdit": "수정",
+  "@actionEdit": {"description": "액션 - 수정"},
+  "swipeHint": "밀어서 수정/삭제",
+  "@swipeHint": {"description": "스와이프 힌트"},
+  "elapsedJustNow": "방금",
+  "@elapsedJustNow": {"description": "경과 시간 - 방금"},
+  "elapsedMinutesAgo": "{minutes}분 전",
+  "@elapsedMinutesAgo": {
+    "description": "경과 시간 - N분 전",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "5"}
+    }
+  },
+  "elapsedHoursAgo": "{hours}시간 전",
+  "@elapsedHoursAgo": {
+    "description": "경과 시간 - N시간 전",
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"}
+    }
+  },
+  "elapsedHoursMinutesAgo": "{hours}시간 {minutes}분 전",
+  "@elapsedHoursMinutesAgo": {
+    "description": "경과 시간 - N시간 N분 전",
+    "placeholders": {
+      "hours": {"type": "int", "example": "1"},
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "elapsedDaysAgo": "{days}일 전",
+  "@elapsedDaysAgo": {
+    "description": "경과 시간 - N일 전",
+    "placeholders": {
+      "days": {"type": "int", "example": "3"}
+    }
+  }
 }
