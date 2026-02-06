@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
@@ -414,27 +415,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(LuluIcons.checkCircle, size: 16, color: Colors.white),
-                const SizedBox(width: 8),
-                Text(
-                  '성장 기록이 저장되었어요',
-                  style: LuluTextStyles.bodyMedium.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            backgroundColor: LuluStatusColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        );
+        HapticFeedback.lightImpact();
         Navigator.pop(context);
       }
     } finally {

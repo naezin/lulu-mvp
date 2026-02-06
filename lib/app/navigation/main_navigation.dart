@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/design_system/lulu_colors.dart';
 import '../../core/design_system/lulu_icons.dart';
@@ -126,9 +127,11 @@ class _MainNavigationState extends State<MainNavigation> {
 
     if (babies.isEmpty) {
       // 아기 정보가 없으면 안내 메시지
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('아기 정보를 먼저 등록해주세요'),
+          duration: const Duration(seconds: 3),
           backgroundColor: LuluColors.surfaceElevated,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -189,16 +192,7 @@ class _MainNavigationState extends State<MainNavigation> {
         // 기록 저장 후 홈 화면 새로고침
         if (result != null && mounted) {
           homeProvider.addActivity(result);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('기록이 저장되었습니다'),
-              backgroundColor: LuluStatusColors.success,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          );
+          HapticFeedback.lightImpact();
         }
       });
     }

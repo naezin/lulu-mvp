@@ -243,9 +243,11 @@ class _CompletionScreenState extends State<CompletionScreen>
     } catch (e) {
       if (!context.mounted) return;
 
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('오류가 발생했습니다: $e'),
+          duration: const Duration(seconds: 3),
           backgroundColor: AppTheme.errorSoft,
         ),
       );

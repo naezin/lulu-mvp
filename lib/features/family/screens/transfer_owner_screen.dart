@@ -223,15 +223,23 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
       await context.read<FamilyProvider>().transferOwnership(_selectedId!);
 
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.ownershipTransferred)),
+          SnackBar(
+            content: Text(l10n.ownershipTransferred),
+            duration: const Duration(seconds: 3),
+          ),
         );
         Navigator.pop(context);
       }
     } catch (e) {
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            content: Text(e.toString()),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
     } finally {

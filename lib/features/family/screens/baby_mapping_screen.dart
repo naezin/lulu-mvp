@@ -263,8 +263,12 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
       }
     } catch (e) {
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            content: Text(e.toString()),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
     } finally {
@@ -298,16 +302,24 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
         await context.read<HomeProvider>().onFamilyChanged(result.familyId);
 
         final l10n = S.of(context)!;
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.recordsImported(result.migratedCount))),
+          SnackBar(
+            content: Text(l10n.recordsImported(result.migratedCount)),
+            duration: const Duration(seconds: 3),
+          ),
         );
 
         Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
       }
     } catch (e) {
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            content: Text(e.toString()),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
     } finally {

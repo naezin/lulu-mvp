@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -197,13 +198,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
       // HomeProvider 동기화
       context.read<HomeProvider>().updateActivity(result);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('기록이 수정되었어요'),
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      HapticFeedback.lightImpact();
     }
   }
 

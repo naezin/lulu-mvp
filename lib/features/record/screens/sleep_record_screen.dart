@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -334,29 +335,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   Future<void> _endSleep(OngoingSleepProvider provider) async {
     final activity = await provider.endSleep();
     if (activity != null && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(LuluIcons.sleep, size: 18, color: Colors.white),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  '수면 기록이 저장되었어요',
-                  style: LuluTextStyles.bodyMedium.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: LuluActivityColors.sleep,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      );
+      HapticFeedback.lightImpact();
       Navigator.of(context).pop(activity);
     }
   }
@@ -784,6 +763,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
       );
 
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(

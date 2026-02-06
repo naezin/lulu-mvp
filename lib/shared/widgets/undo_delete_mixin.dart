@@ -30,8 +30,12 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
     } catch (e) {
       _pendingDelete = null;
       if (context.mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('삭제 실패: $e')),
+          SnackBar(
+            content: Text('삭제 실패: $e'),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
       return;
@@ -92,8 +96,12 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
       }
     } catch (e) {
       if (context.mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('복구 실패: $e')),
+          SnackBar(
+            content: Text('복구 실패: $e'),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
     } finally {

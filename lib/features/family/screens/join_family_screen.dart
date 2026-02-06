@@ -319,8 +319,12 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
         await context.read<FamilyProvider>().onJoinedFamily(result.familyId);
         await context.read<HomeProvider>().onFamilyChanged(result.familyId);
 
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context)!.joinedFamily)),
+          SnackBar(
+            content: Text(S.of(context)!.joinedFamily),
+            duration: const Duration(seconds: 3),
+          ),
         );
 
         Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);

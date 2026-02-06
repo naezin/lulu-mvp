@@ -328,9 +328,11 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('이메일을 입력해주세요'),
+          duration: Duration(seconds: 3),
           backgroundColor: Colors.orange,
         ),
       );
@@ -341,6 +343,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final success = await authProvider.sendPasswordResetEmail(email);
 
     if (mounted) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -348,6 +351,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 ? '비밀번호 재설정 이메일을 발송했습니다'
                 : '이메일 발송에 실패했습니다',
           ),
+          duration: const Duration(seconds: 3),
           backgroundColor: success ? Colors.green : Colors.red,
         ),
       );

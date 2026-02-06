@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../core/config/feature_flags.dart';
@@ -459,7 +460,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () async {
               Navigator.pop(dialogContext);
               final homeProvider = context.read<HomeProvider>();
-              final messenger = ScaffoldMessenger.of(context);
 
               final savedActivity = await sleepProvider.endSleep();
 
@@ -468,27 +468,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 homeProvider.addActivity(savedActivity);
               }
 
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Row(
-                    children: [
-                      const Icon(LuluIcons.sleep, size: 18, color: Colors.white),
-                      const SizedBox(width: 8),
-                      Text(
-                        '수면 기록이 저장되었어요',
-                        style: LuluTextStyles.bodyMedium.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: LuluActivityColors.sleep,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              );
+              HapticFeedback.lightImpact();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: LuluActivityColors.sleep,

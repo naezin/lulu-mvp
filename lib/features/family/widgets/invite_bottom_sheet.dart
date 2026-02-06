@@ -49,8 +49,12 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            content: Text(e.toString()),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
     }
@@ -212,8 +216,12 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
 
     // 간단한 이메일 검증
     if (!email.contains('@')) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)!.invalidEmail)),
+        SnackBar(
+          content: Text(S.of(context)!.invalidEmail),
+          duration: const Duration(seconds: 3),
+        ),
       );
       return;
     }
@@ -225,14 +233,22 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
       _emailController.clear();
 
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context)!.inviteEmailSent)),
+          SnackBar(
+            content: Text(S.of(context)!.inviteEmailSent),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            content: Text(e.toString()),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
     } finally {
@@ -257,8 +273,12 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
     await Clipboard.setData(ClipboardData(text: _invite!.formattedCode));
 
     if (mounted) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)!.codeCopied)),
+        SnackBar(
+          content: Text(S.of(context)!.codeCopied),
+          duration: const Duration(seconds: 2),
+        ),
       );
     }
   }

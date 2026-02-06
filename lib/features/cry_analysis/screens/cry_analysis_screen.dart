@@ -132,8 +132,12 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           icon: const Icon(Icons.history_rounded),
           onPressed: () {
             // TODO: 히스토리 화면 이동
+            ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('히스토리 기능은 곧 추가됩니다.')),
+              const SnackBar(
+                content: Text('히스토리 기능은 곧 추가됩니다.'),
+                duration: Duration(seconds: 3),
+              ),
             );
           },
         ),
