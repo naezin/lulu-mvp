@@ -7,6 +7,11 @@ import '../models/baby_type.dart';
 /// Activity 데이터 저장소
 /// Supabase activities 테이블과 연동
 /// 다중 아기 동시 기록 지원
+///
+/// HF3-v3: 시간대 아키텍처 수정
+/// - 저장: toUtc().toIso8601String() (명시적 UTC)
+/// - 조회: toUtc().toIso8601String() (UTC로 쿼리)
+/// - 파싱: DateTime.parse().toLocal() (UTC → 로컬 변환)
 class ActivityRepository {
   /// 가족의 모든 활동 조회 (최신순)
   Future<List<ActivityModel>> getActivitiesByFamilyId(
@@ -49,27 +54,46 @@ class ActivityRepository {
   }
 
   /// 오늘의 활동 조회
-  /// HF2-6: UTC 변환하여 시간대 일관성 유지
+  /// HF7-FIX: 정확한 날짜 범위 필터링 (클라이언트 필터링)
   Future<List<ActivityModel>> getTodayActivities(String familyId) async {
     try {
       final now = DateTime.now();
       final startOfDay = DateTime(now.year, now.month, now.day);
       final endOfDay = startOfDay.add(const Duration(days: 1));
 
-      // HF2-6: 로컬 시간을 UTC로 변환하여 Supabase 쿼리
-      final startUtc = startOfDay.toUtc().toIso8601String();
+      // HF7: UTC 변환 - 어제부터 오늘 끝까지 (overnight sleep 포함)
+      final queryStartUtc = startOfDay.subtract(const Duration(days: 1)).toUtc().toIso8601String();
       final endUtc = endOfDay.toUtc().toIso8601String();
 
-      debugPrint('[DEBUG] [ActivityRepo] Today query: $startUtc ~ $endUtc');
+      debugPrint('[DEBUG] [ActivityRepo] Today query: $queryStartUtc ~ $endUtc (UTC)');
 
+      // HF7-FIX: 어제~오늘 범위로 조회 후 클라이언트에서 정확히 필터링
       final response = await SupabaseService.activities
           .select()
           .eq('family_id', familyId)
-          .gte('start_time', startUtc)
+          .gte('start_time', queryStartUtc)
           .lt('start_time', endUtc)
           .order('start_time', ascending: false);
 
-      return (response as List).map((data) => _mapToActivityModel(data)).toList();
+      debugPrint('[DEBUG] [ActivityRepo] Today raw: ${(response as List).length} activities');
+
+      // 클라이언트 필터링
+      final allActivities = response.map((data) => _mapToActivityModel(data)).toList();
+      final filtered = allActivities.where((a) {
+        final actStart = a.startTime;
+        final actEnd = a.endTime;
+
+        if (actEnd != null) {
+          // Duration 활동: 오늘과 겹치는지 확인
+          return actStart.isBefore(endOfDay) && actEnd.isAfter(startOfDay);
+        } else {
+          // Instant 활동: 시작 시간이 오늘인지 확인
+          return !actStart.isBefore(startOfDay) && actStart.isBefore(endOfDay);
+        }
+      }).toList();
+
+      debugPrint('[DEBUG] [ActivityRepo] Today filtered: ${filtered.length} activities');
+      return filtered;
     } catch (e) {
       debugPrint('[ERROR] [ActivityRepository] Error getting today activities: $e');
       rethrow;
@@ -77,7 +101,13 @@ class ActivityRepository {
   }
 
   /// 날짜 범위로 활동 조회
-  /// HF2-6: UTC 변환하여 시간대 일관성 유지
+  /// HF7-FIX: 정확한 날짜 범위 필터링
+  ///
+  /// 조건:
+  /// - Duration 활동 (수면/놀이): 시작 < endDate AND 종료 > startDate (겹치는 구간)
+  /// - 순간 이벤트 (수유/기저귀/건강): 시작 >= startDate AND 시작 < endDate
+  ///
+  /// PostgREST 제약으로 복잡한 OR 조건은 클라이언트에서 필터링
   Future<List<ActivityModel>> getActivitiesByDateRange(
     String familyId, {
     required DateTime startDate,
@@ -86,18 +116,22 @@ class ActivityRepository {
     ActivityType? type,
   }) async {
     try {
-      // HF2-6: 로컬 시간을 UTC로 변환하여 Supabase 쿼리
-      // Supabase는 UTC로 저장하므로 쿼리도 UTC로 해야 함
+      // HF7: UTC 변환
       final startUtc = startDate.toUtc().toIso8601String();
       final endUtc = endDate.toUtc().toIso8601String();
 
-      debugPrint('[DEBUG] [ActivityRepo] Query: $startUtc ~ $endUtc');
+      debugPrint('[DEBUG] [ActivityRepo] Date range query: $startUtc ~ $endUtc');
+
+      // HF7-FIX: 서버에서 최대한 필터링 후 클라이언트에서 정확히 필터링
+      // Duration 활동(수면/놀이)은 전날 시작해서 오늘 끝날 수 있으므로 startDate - 1일부터 조회
+      final queryStartUtc = startDate.subtract(const Duration(days: 1)).toUtc().toIso8601String();
+      debugPrint('[DEBUG] [ActivityRepo] Query range: $queryStartUtc ~ $endUtc (UTC)');
 
       var query = SupabaseService.activities
           .select()
           .eq('family_id', familyId)
-          .gte('start_time', startUtc)
-          .lt('start_time', endUtc);
+          .gte('start_time', queryStartUtc)  // startDate - 1일 이후 시작
+          .lt('start_time', endUtc);          // endDate 전에 시작
 
       if (babyId != null) {
         query = query.contains('baby_ids', [babyId]);
@@ -109,9 +143,33 @@ class ActivityRepository {
 
       final response = await query.order('start_time', ascending: false);
 
-      return (response as List).map((data) => _mapToActivityModel(data)).toList();
+      debugPrint('[DEBUG] [ActivityRepo] Raw loaded: ${(response as List).length} activities');
+      debugPrint('[DEBUG] [ActivityRepo] Filter range: $startDate ~ $endDate (local)');
+
+      // HF7-FIX: 클라이언트에서 정확한 날짜 범위 필터링
+      final allActivities = response.map((data) => _mapToActivityModel(data)).toList();
+      final filtered = allActivities.where((a) {
+        final actStart = a.startTime;
+        final actEnd = a.endTime;
+
+        bool include = false;
+        if (actEnd != null) {
+          // Duration 활동: 해당 날짜 범위와 겹치는지 확인
+          // 시작 < endDate AND 종료 > startDate
+          include = actStart.isBefore(endDate) && actEnd.isAfter(startDate);
+        } else {
+          // Instant 활동: 시작 시간이 날짜 범위 내에 있는지 확인
+          include = !actStart.isBefore(startDate) && actStart.isBefore(endDate);
+        }
+
+        debugPrint('[DEBUG] [Filter] ${a.type.name} start=$actStart end=$actEnd -> include=$include');
+        return include;
+      }).toList();
+
+      debugPrint('[DEBUG] [ActivityRepo] Filtered: ${filtered.length} activities');
+      return filtered;
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error getting activities by date: $e');
+      debugPrint('[ERROR] [ActivityRepository] Error getting activities by date: $e');
       rethrow;
     }
   }
@@ -172,10 +230,12 @@ class ActivityRepository {
   }
 
   /// 활동 종료 (endTime 설정)
+  /// HF3-v3: UTC로 저장
   Future<ActivityModel> finishActivity(String activityId, [DateTime? endTime]) async {
     try {
+      final endTimeUtc = (endTime ?? DateTime.now()).toUtc().toIso8601String();
       final response = await SupabaseService.activities
-          .update({'end_time': (endTime ?? DateTime.now()).toIso8601String()})
+          .update({'end_time': endTimeUtc})
           .eq('id', activityId)
           .select()
           .single();
@@ -284,34 +344,56 @@ class ActivityRepository {
   // ========================================
 
   /// Supabase 응답 -> ActivityModel 변환
+  /// HF3-v3: UTC -> 로컬 시간 변환
   ActivityModel _mapToActivityModel(Map<String, dynamic> data) {
+    final startTimeRaw = data['start_time'] as String;
+    final startTime = _parseTimestamp(startTimeRaw);
+
+    final endTimeRaw = data['end_time'] as String?;
+    final endTime = endTimeRaw != null ? _parseTimestamp(endTimeRaw) : null;
+
+    debugPrint('[DEBUG] [ActivityRepo] Loaded: raw=$startTimeRaw -> local=$startTime');
+
     return ActivityModel(
       id: data['id'],
       familyId: data['family_id'],
       babyIds: List<String>.from(data['baby_ids'] as List),
       type: ActivityType.fromValue(data['type']),
-      startTime: DateTime.parse(data['start_time']),
-      endTime: data['end_time'] != null
-          ? DateTime.parse(data['end_time'])
-          : null,
+      startTime: startTime,
+      endTime: endTime,
       data: data['data'] as Map<String, dynamic>?,
       notes: data['notes'] as String?,
-      createdAt: DateTime.parse(data['created_at']),
+      createdAt: _parseTimestamp(data['created_at'] as String),
       updatedAt: data['updated_at'] != null
-          ? DateTime.parse(data['updated_at'])
+          ? _parseTimestamp(data['updated_at'] as String)
           : null,
     );
   }
 
+  /// HF3-v3: timestamp 파싱 - UTC -> 로컬 변환
+  /// Supabase timestamptz는 UTC로 저장/반환
+  /// 앱에서는 로컬 시간으로 표시
+  DateTime _parseTimestamp(String raw) {
+    // Supabase에서 받은 UTC 시간을 로컬 시간으로 변환
+    return DateTime.parse(raw).toLocal();
+  }
+
   /// ActivityModel -> Supabase 데이터 변환
+  /// HF3-v3: UTC로 저장
   Map<String, dynamic> _mapToSupabaseData(ActivityModel activity) {
+    // 로컬 시간을 UTC로 변환하여 저장
+    final startTimeUtc = activity.startTime.toUtc().toIso8601String();
+    final endTimeUtc = activity.endTime?.toUtc().toIso8601String();
+
+    debugPrint('[DEBUG] [ActivityRepo] Saving: ${activity.startTime} -> $startTimeUtc');
+
     return {
       'id': activity.id,
       'family_id': activity.familyId,
       'baby_ids': activity.babyIds,
       'type': activity.type.value,
-      'start_time': activity.startTime.toIso8601String(),
-      if (activity.endTime != null) 'end_time': activity.endTime!.toIso8601String(),
+      'start_time': startTimeUtc,
+      if (endTimeUtc != null) 'end_time': endTimeUtc,
       if (activity.data != null) 'data': activity.data,
       if (activity.notes != null) 'notes': activity.notes,
     };

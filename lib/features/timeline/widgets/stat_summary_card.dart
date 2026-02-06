@@ -112,7 +112,7 @@ class StatSummaryCard extends StatelessWidget {
           const SizedBox(height: LuluSpacing.xs),
 
           // 변화량
-          _buildChangeIndicator(),
+          _buildChangeIndicator(l10n),
 
           // 권장 범위 뱃지 (있으면)
           if (recommendation != null) ...[
@@ -125,8 +125,8 @@ class StatSummaryCard extends StatelessWidget {
   }
 
   /// 변화량 표시
-  /// HF2-5: 단위 포함 + 수면은 분→시간 변환
-  Widget _buildChangeIndicator() {
+  /// HF3: "vs prev" → "변화 없음" i18n + 단위 포함
+  Widget _buildChangeIndicator(S? l10n) {
     if (change == 0) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -138,7 +138,7 @@ class StatSummaryCard extends StatelessWidget {
           ),
           const SizedBox(width: 2),
           Text(
-            'vs prev',
+            l10n?.summaryNoChange ?? '변화 없음',
             style: LuluTextStyles.caption.copyWith(
               color: LuluTextColors.tertiary,
             ),
@@ -151,7 +151,7 @@ class StatSummaryCard extends StatelessWidget {
     final icon = isPositive ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded;
     final color = isPositive ? LuluStatusColors.success : LuluStatusColors.warning;
 
-    // HF2-5: 타입별 단위 포함한 변화량 텍스트
+    // HF3: 타입별 단위 포함한 변화량 텍스트
     final changeText = _formatChangeText(change, isPositive);
 
     return Row(
@@ -174,7 +174,8 @@ class StatSummaryCard extends StatelessWidget {
     );
   }
 
-  /// HF2-5: 변화량 텍스트 포맷 (단위 포함)
+  /// HF3: 변화량 텍스트 포맷 (단위 포함)
+  /// 수면: h (시간), 수유/기저귀: 회
   String _formatChangeText(double change, bool isPositive) {
     final sign = isPositive ? '+' : '-';
     final absChange = change.abs();
@@ -192,8 +193,8 @@ class StatSummaryCard extends StatelessWidget {
         }
       case StatType.feeding:
       case StatType.diaper:
-        // 회 단위
-        return '$sign${absChange.toStringAsFixed(0)}';
+        // HF3: "회" 단위 추가
+        return '$sign${absChange.toStringAsFixed(1)}회';
     }
   }
 

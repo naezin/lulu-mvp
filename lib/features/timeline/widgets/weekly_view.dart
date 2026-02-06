@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
@@ -14,17 +15,17 @@ import '../../statistics/models/insight_data.dart';
 import '../../statistics/models/weekly_statistics.dart';
 import '../../statistics/widgets/together_guide_dialog.dart';
 import '../providers/pattern_data_provider.dart';
+import 'date_navigator.dart';
 import 'stat_summary_card.dart';
-import 'weekly_trend_chart.dart';
+// HF2-9: WeeklyTrendChart 제거 (중복 정보)
 import 'weekly_pattern_chart.dart';
 
 /// 주간 뷰 (WeeklyView)
 ///
-/// Sprint 18-R Hotfix FIX-A: StatisticsTab에서 분리
-/// - StatSummaryCard: 수면/수유/기저귀 요약
-/// - WeeklyTrendChart: 주간 수면 추이
-/// - WeeklyPatternChart: 7일x48슬롯 히트맵
-/// - AI 인사이트 (있으면)
+/// Sprint 18-R HF3: 구조 재정비
+/// - DateNavigator (최상단) → Cards → Chart 연동
+/// - 주 이동 시 전체 데이터 갱신
+/// - WeeklyPatternChart 자체 네비게이션 제거 (DateNavigator가 대체)
 class WeeklyView extends StatefulWidget {
   const WeeklyView({super.key});
 
@@ -39,12 +40,23 @@ class _WeeklyViewState extends State<WeeklyView> {
   bool _isLoading = true;
   String? _errorMessage;
 
+  /// HF3: 선택된 주의 시작일 (월요일)
+  late DateTime _selectedWeekStart;
+
   @override
   void initState() {
     super.initState();
     _dataProvider = StatisticsDataProvider();
     _filterProvider = StatisticsFilterProvider();
     _patternProvider = PatternDataProvider();
+
+    // 이번 주 월요일로 초기화
+    final now = DateTime.now();
+    _selectedWeekStart = DateTime(
+      now.year,
+      now.month,
+      now.day - (now.weekday - 1),
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
@@ -61,6 +73,12 @@ class _WeeklyViewState extends State<WeeklyView> {
 
   /// 데이터 로드 타임아웃 (초)
   static const int _loadTimeoutSeconds = 15;
+
+  /// 현재 선택된 주의 날짜 범위
+  DateRange get _currentDateRange {
+    final weekEnd = _selectedWeekStart.add(const Duration(days: 6));
+    return DateRange(start: _selectedWeekStart, end: weekEnd);
+  }
 
   Future<void> _loadData() async {
     if (!mounted) return;
@@ -87,7 +105,7 @@ class _WeeklyViewState extends State<WeeklyView> {
         return;
       }
 
-      final dateRange = _filterProvider.getDateRange();
+      final dateRange = _currentDateRange;
       debugPrint(
           '[DEBUG] [WeeklyView] dateRange: ${dateRange.start} ~ ${dateRange.end}');
 
@@ -113,11 +131,16 @@ class _WeeklyViewState extends State<WeeklyView> {
       final selectedBaby = homeProvider.selectedBaby;
       if (selectedBaby != null) {
         try {
+          // HF7-FIX: 주간 데이터 로드 전 캐시 무효화 (최신 데이터 보장)
+          final cacheKey = '${selectedBaby.id}-${_selectedWeekStart.toIso8601String()}';
+          _patternProvider.invalidateCacheKey(cacheKey);
+
           await _patternProvider
               .loadWeeklyPattern(
             familyId: family.id,
             babyId: selectedBaby.id,
             babyName: selectedBaby.name,
+            weekStart: _selectedWeekStart,
           )
               .timeout(
             Duration(seconds: _loadTimeoutSeconds),
@@ -166,38 +189,67 @@ class _WeeklyViewState extends State<WeeklyView> {
         stats.diaper.dailyAverageCount == 0;
   }
 
-  /// 주간 네비게이션
-  void _navigateWeek({required bool isPrevious}) {
-    final homeProvider = context.read<HomeProvider>();
-    final family = homeProvider.family;
-    final selectedBaby = homeProvider.selectedBaby;
-
-    if (family == null || selectedBaby == null) return;
-
-    if (isPrevious) {
-      _patternProvider.goToPreviousWeek(
-        familyId: family.id,
-        babyId: selectedBaby.id,
-        babyName: selectedBaby.name,
+  /// HF3: DateNavigator에서 호출 - 주 변경
+  void _onWeekChanged(DateTime newWeekStart) {
+    setState(() {
+      _selectedWeekStart = DateTime(
+        newWeekStart.year,
+        newWeekStart.month,
+        newWeekStart.day,
       );
-    } else {
-      _patternProvider.goToNextWeek(
-        familyId: family.id,
-        babyId: selectedBaby.id,
-        babyName: selectedBaby.name,
-      );
-    }
-    setState(() {});
+    });
+    _loadData();
   }
 
   /// 현재 주인지 확인
-  bool _isCurrentWeek() {
-    final weekStart = _patternProvider.weekStartDate;
+  bool get _isCurrentWeek {
     final now = DateTime.now();
-    final currentWeekStart = now.subtract(Duration(days: now.weekday - 1));
-    return weekStart.year == currentWeekStart.year &&
-        weekStart.month == currentWeekStart.month &&
-        weekStart.day == currentWeekStart.day;
+    final currentWeekStart = DateTime(
+      now.year,
+      now.month,
+      now.day - (now.weekday - 1),
+    );
+    return _selectedWeekStart.year == currentWeekStart.year &&
+        _selectedWeekStart.month == currentWeekStart.month &&
+        _selectedWeekStart.day == currentWeekStart.day;
+  }
+
+  /// HF6: 주간 선택 바텀시트 표시
+  Future<void> _showWeekPicker(BuildContext context) async {
+    final now = DateTime.now();
+    final currentWeekStart = DateTime(now.year, now.month, now.day - (now.weekday - 1));
+
+    // 아기 생년월일 가져오기 (최소 날짜)
+    final homeProvider = context.read<HomeProvider>();
+    final selectedBaby = homeProvider.selectedBaby;
+    final babyBirthDate = selectedBaby?.birthDate ?? DateTime(2024, 1, 1);
+
+    // 주 목록 생성 (최근 12주)
+    final weeks = <DateTime>[];
+    var weekStart = currentWeekStart;
+    for (int i = 0; i < 12; i++) {
+      if (weekStart.isAfter(babyBirthDate.subtract(const Duration(days: 7)))) {
+        weeks.add(weekStart);
+      }
+      weekStart = weekStart.subtract(const Duration(days: 7));
+    }
+
+    final selectedWeek = await showModalBottomSheet<DateTime>(
+      context: context,
+      backgroundColor: LuluColors.surfaceCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => _WeekPickerSheet(
+        weeks: weeks,
+        selectedWeek: _selectedWeekStart,
+        currentWeek: currentWeekStart,
+      ),
+    );
+
+    if (selectedWeek != null) {
+      _onWeekChanged(selectedWeek);
+    }
   }
 
   /// 다태아 함께보기 토글
@@ -265,148 +317,150 @@ class _WeeklyViewState extends State<WeeklyView> {
       backgroundColor: LuluColors.surfaceCard,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(LuluSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 요약 카드들
-            Row(
-              children: [
-                Expanded(
-                  child: StatSummaryCard(
-                    type: StatType.sleep,
-                    value: stats.sleep.dailyAverageHours,
-                    unit: l10n?.unitHours ?? '시간',
-                    change: stats.sleep.changeMinutes.toDouble(),
-                    correctedAgeDays: correctedAgeDays,
-                  ),
-                ),
-                const SizedBox(width: LuluSpacing.sm),
-                Expanded(
-                  child: StatSummaryCard(
-                    type: StatType.feeding,
-                    value: stats.feeding.dailyAverageCount,
-                    unit: l10n?.unitTimes ?? '회',
-                    change: stats.feeding.changeCount.toDouble(),
-                    correctedAgeDays: correctedAgeDays,
-                  ),
-                ),
-                const SizedBox(width: LuluSpacing.sm),
-                Expanded(
-                  child: StatSummaryCard(
-                    type: StatType.diaper,
-                    value: stats.diaper.dailyAverageCount,
-                    unit: l10n?.unitTimes ?? '회',
-                    change: stats.diaper.changeCount.toDouble(),
-                    correctedAgeDays: correctedAgeDays,
-                  ),
-                ),
-              ],
+            // HF3: DateNavigator (최상단, 주간 모드)
+            DateNavigator(
+              scope: DateScope.weekly,
+              selectedDate: _selectedWeekStart,
+              onDateChanged: _onWeekChanged,
+              canGoNext: !_isCurrentWeek,
+              onCalendarTap: () => _showWeekPicker(context),
             ),
 
-            const SizedBox(height: LuluSpacing.xl),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: LuluSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 요약 카드들
+                  Row(
+                    children: [
+                      Expanded(
+                        child: StatSummaryCard(
+                          type: StatType.sleep,
+                          value: stats.sleep.dailyAverageHours,
+                          unit: l10n?.unitHours ?? '시간',
+                          change: stats.sleep.changeMinutes.toDouble(),
+                          correctedAgeDays: correctedAgeDays,
+                        ),
+                      ),
+                      const SizedBox(width: LuluSpacing.sm),
+                      Expanded(
+                        child: StatSummaryCard(
+                          type: StatType.feeding,
+                          value: stats.feeding.dailyAverageCount,
+                          unit: l10n?.unitTimes ?? '회',
+                          change: stats.feeding.changeCount.toDouble(),
+                          correctedAgeDays: correctedAgeDays,
+                        ),
+                      ),
+                      const SizedBox(width: LuluSpacing.sm),
+                      Expanded(
+                        child: StatSummaryCard(
+                          type: StatType.diaper,
+                          value: stats.diaper.dailyAverageCount,
+                          unit: l10n?.unitTimes ?? '회',
+                          change: stats.diaper.changeCount.toDouble(),
+                          correctedAgeDays: correctedAgeDays,
+                        ),
+                      ),
+                    ],
+                  ),
 
-            // 주간 수면 트렌드 차트
-            Text(
-              l10n?.weeklyTrendTitle ?? '주간 수면 추이',
-              style: LuluTextStyles.titleSmall.copyWith(
-                color: LuluTextColors.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: LuluSpacing.md),
-            WeeklyTrendChart(
-              dailyHours: stats.sleep.dailyHours,
-              barColor: LuluActivityColors.sleep,
-              highlightIndex: _dataProvider.insight?.highlightDayIndex,
-            ),
+                  const SizedBox(height: LuluSpacing.xl),
 
-            const SizedBox(height: LuluSpacing.xl),
+                  // HF2-9: "주간 수면 추이" 차트 제거 (중복 정보)
 
-            // 주간 패턴 차트
-            if (_patternProvider.isLoading) ...[
-              const WeeklyPatternChartSkeleton(),
-              const SizedBox(height: LuluSpacing.xl),
-            ] else if (_patternProvider.weeklyPattern != null) ...[
-              // 다태아인 경우 함께보기 버튼 표시
-              if (homeProvider.babies.length > 1) ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TogetherViewButton(
-                      isEnabled: _patternProvider.togetherViewEnabled,
-                      onTap: () => _toggleTogetherView(homeProvider),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: LuluSpacing.sm),
-              ],
-
-              // 함께보기 모드
-              if (_patternProvider.togetherViewEnabled &&
-                  _patternProvider.multiplePatterns.isNotEmpty) ...[
-                ..._patternProvider.multiplePatterns.map((pattern) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: LuluSpacing.md),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          pattern.babyName,
-                          style: LuluTextStyles.labelMedium.copyWith(
-                            color: LuluColors.lavenderMist,
-                            fontWeight: FontWeight.w600,
+                  // 주간 패턴 차트
+                  if (_patternProvider.isLoading) ...[
+                    const WeeklyPatternChartSkeleton(),
+                    const SizedBox(height: LuluSpacing.xl),
+                  ] else if (_patternProvider.weeklyPattern != null) ...[
+                    // 다태아인 경우 함께보기 버튼 표시
+                    if (homeProvider.babies.length > 1) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TogetherViewButton(
+                            isEnabled: _patternProvider.togetherViewEnabled,
+                            onTap: () => _toggleTogetherView(homeProvider),
                           ),
-                        ),
-                        const SizedBox(height: LuluSpacing.xs),
-                        WeeklyPatternChart(
-                          weeklyPattern: pattern,
-                          filter: _patternProvider.filter,
-                          onFilterChanged: (filter) {
-                            setState(() {
-                              _patternProvider.setFilter(filter);
-                            });
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
+                      const SizedBox(height: LuluSpacing.sm),
+                    ],
+
+                    // 함께보기 모드
+                    if (_patternProvider.togetherViewEnabled &&
+                        _patternProvider.multiplePatterns.isNotEmpty) ...[
+                      ..._patternProvider.multiplePatterns.map((pattern) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: LuluSpacing.md),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                pattern.babyName,
+                                style: LuluTextStyles.labelMedium.copyWith(
+                                  color: LuluColors.lavenderMist,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: LuluSpacing.xs),
+                              WeeklyPatternChart(
+                                weeklyPattern: pattern,
+                                filter: _patternProvider.filter,
+                                onFilterChanged: (filter) {
+                                  setState(() {
+                                    _patternProvider.setFilter(filter);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ] else ...[
+                      // 단일 아기 모드 - HF3: 자체 네비게이션 제거
+                      WeeklyPatternChart(
+                        weeklyPattern: _patternProvider.weeklyPattern!,
+                        filter: _patternProvider.filter,
+                        onFilterChanged: (filter) {
+                          setState(() {
+                            _patternProvider.setFilter(filter);
+                          });
+                        },
+                        // HF3: 네비게이션 제거 (DateNavigator가 대체)
+                        onPreviousWeek: null,
+                        onNextWeek: null,
+                        canGoNext: false,
+                      ),
+                    ],
+                    const SizedBox(height: LuluSpacing.xl),
+                  ],
+
+                  // AI 인사이트 (있으면)
+                  if (_dataProvider.insight != null) ...[
+                    _buildInsightCard(),
+                    const SizedBox(height: LuluSpacing.lg),
+                  ],
+
+                  // 의료 면책 문구
+                  Center(
+                    child: Text(
+                      l10n?.statisticsDisclaimer ?? '통계는 참고용이며 의료 조언이 아닙니다',
+                      style: LuluTextStyles.caption.copyWith(
+                        color: LuluTextColors.tertiary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  );
-                }),
-              ] else ...[
-                // 단일 아기 모드
-                WeeklyPatternChart(
-                  weeklyPattern: _patternProvider.weeklyPattern!,
-                  filter: _patternProvider.filter,
-                  onFilterChanged: (filter) {
-                    setState(() {
-                      _patternProvider.setFilter(filter);
-                    });
-                  },
-                  onPreviousWeek: () => _navigateWeek(isPrevious: true),
-                  onNextWeek: () => _navigateWeek(isPrevious: false),
-                  canGoNext: !_isCurrentWeek(),
-                ),
-              ],
-              const SizedBox(height: LuluSpacing.xl),
-            ],
-
-            // AI 인사이트 (있으면)
-            if (_dataProvider.insight != null) ...[
-              _buildInsightCard(),
-              const SizedBox(height: LuluSpacing.lg),
-            ],
-
-            // 의료 면책 문구
-            Center(
-              child: Text(
-                l10n?.statisticsDisclaimer ?? '통계는 참고용이며 의료 조언이 아닙니다',
-                style: LuluTextStyles.caption.copyWith(
-                  color: LuluTextColors.tertiary,
-                ),
-                textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: LuluSpacing.lg),
+                ],
               ),
             ),
-            const SizedBox(height: LuluSpacing.lg),
           ],
         ),
       ),
@@ -511,36 +565,165 @@ class _WeeklyViewState extends State<WeeklyView> {
   Widget _buildEmptyState() {
     final l10n = S.of(context);
 
-    return Center(
+    return Column(
+      children: [
+        // HF3: DateNavigator는 빈 상태에서도 표시
+        DateNavigator(
+          scope: DateScope.weekly,
+          selectedDate: _selectedWeekStart,
+          onDateChanged: _onWeekChanged,
+          canGoNext: !_isCurrentWeek,
+          onCalendarTap: () => _showWeekPicker(context),
+        ),
+        Expanded(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.bar_chart_rounded,
+                    size: 40,
+                    color: LuluColors.lavenderMist,
+                  ),
+                ),
+                const SizedBox(height: LuluSpacing.xl),
+                Text(
+                  l10n?.statisticsEmptyTitle ?? '아직 통계가 없어요',
+                  style: LuluTextStyles.titleMedium.copyWith(
+                    color: LuluTextColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: LuluSpacing.sm),
+                Text(
+                  l10n?.statisticsEmptyHint ?? '기록을 쌓으면 통계가 나타나요',
+                  style: LuluTextStyles.bodyMedium.copyWith(
+                    color: LuluTextColors.secondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// HF6: 주간 선택 바텀시트
+class _WeekPickerSheet extends StatelessWidget {
+  final List<DateTime> weeks;
+  final DateTime selectedWeek;
+  final DateTime currentWeek;
+
+  const _WeekPickerSheet({
+    required this.weeks,
+    required this.selectedWeek,
+    required this.currentWeek,
+  });
+
+  String _formatWeekRange(DateTime weekStart) {
+    final weekEnd = weekStart.add(const Duration(days: 6));
+    final startStr = DateFormat('M/d', 'ko_KR').format(weekStart);
+    final endStr = DateFormat('M/d', 'ko_KR').format(weekEnd);
+    return '$startStr ~ $endStr';
+  }
+
+  bool _isSameWeek(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
+          // 핸들바
           Container(
-            width: 80,
-            height: 80,
+            width: 40,
+            height: 4,
+            margin: const EdgeInsets.only(bottom: LuluSpacing.md),
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.2),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.bar_chart_rounded,
-              size: 40,
-              color: LuluColors.lavenderMist,
+              color: LuluTextColors.tertiary,
+              borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const SizedBox(height: LuluSpacing.xl),
-          Text(
-            l10n?.statisticsEmptyTitle ?? '아직 통계가 없어요',
-            style: LuluTextStyles.titleMedium.copyWith(
-              color: LuluTextColors.primary,
-              fontWeight: FontWeight.bold,
+
+          // 타이틀
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: LuluSpacing.lg),
+            child: Text(
+              '주간 선택',
+              style: LuluTextStyles.titleMedium.copyWith(
+                color: LuluTextColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          const SizedBox(height: LuluSpacing.sm),
-          Text(
-            l10n?.statisticsEmptyHint ?? '기록을 쌓으면 통계가 나타나요',
-            style: LuluTextStyles.bodyMedium.copyWith(
-              color: LuluTextColors.secondary,
+
+          const SizedBox(height: LuluSpacing.md),
+
+          // 주 목록
+          SizedBox(
+            height: 300,
+            child: ListView.builder(
+              itemCount: weeks.length,
+              itemBuilder: (context, index) {
+                final week = weeks[index];
+                final isSelected = _isSameWeek(week, selectedWeek);
+                final isCurrent = _isSameWeek(week, currentWeek);
+
+                return ListTile(
+                  onTap: () => Navigator.of(context).pop(week),
+                  selected: isSelected,
+                  selectedTileColor: LuluColors.lavenderMist.withValues(alpha: 0.15),
+                  leading: Icon(
+                    isSelected ? Icons.check_circle_rounded : Icons.circle_outlined,
+                    color: isSelected ? LuluColors.lavenderMist : LuluTextColors.tertiary,
+                    size: 24,
+                  ),
+                  title: Row(
+                    children: [
+                      Text(
+                        _formatWeekRange(week),
+                        style: LuluTextStyles.bodyLarge.copyWith(
+                          color: isSelected ? LuluColors.lavenderMist : LuluTextColors.primary,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                      if (isCurrent) ...[
+                        const SizedBox(width: LuluSpacing.sm),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: LuluSpacing.sm,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '이번 주',
+                            style: LuluTextStyles.caption.copyWith(
+                              color: LuluColors.lavenderMist,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         ],

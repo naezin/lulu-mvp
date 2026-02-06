@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
-import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 타임라인 필터 칩
@@ -62,14 +61,16 @@ class TimelineFilterChips extends StatelessWidget {
       ),
     ];
 
+    // HF7: 주간 차트와 동일한 스크롤 스타일
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: filters.map((filter) {
           final isSelected = activeFilter == filter.key;
           return Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(right: 6),
             child: _FilterChip(
               label: filter.label,
               icon: filter.icon,
@@ -124,16 +125,16 @@ class _FilterChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final chipColor = color ?? LuluColors.lavenderMist;
 
+    // HF7: 주간 차트와 동일한 스타일 (스크롤 방식)
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected
               ? chipColor.withValues(alpha: 0.2)
               : LuluColors.deepBlue,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected ? chipColor : Colors.transparent,
             width: 1.5,
@@ -144,14 +145,15 @@ class _FilterChip extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 16,
+              size: 14,
               color: isSelected ? chipColor : LuluTextColors.secondary,
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 4),
             Text(
               label,
-              style: LuluTextStyles.bodySmall.copyWith(
+              style: TextStyle(
                 color: isSelected ? chipColor : LuluTextColors.secondary,
+                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
             ),

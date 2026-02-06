@@ -1005,5 +1005,20 @@
     "placeholders": {
       "days": {"type": "int", "example": "3"}
     }
-  }
+  },
+
+  "dateNavigatorToday": "오늘",
+  "@dateNavigatorToday": {"description": "날짜 네비게이터 - 오늘 버튼"},
+  "dateNavigatorThisWeek": "이번 주",
+  "@dateNavigatorThisWeek": {"description": "날짜 네비게이터 - 이번 주 버튼"},
+  "summaryNoChange": "변화 없음",
+  "@summaryNoChange": {"description": "통계 요약 - 변화 없음"},
+  "summaryNoData": "데이터 없음",
+  "@summaryNoData": {"description": "통계 요약 - 데이터 없음"},
+  "summaryDailyAvgSleep": "일평균 수면",
+  "@summaryDailyAvgSleep": {"description": "통계 요약 - 일평균 수면"},
+  "summaryDailyAvgFeeding": "일평균 수유",
+  "@summaryDailyAvgFeeding": {"description": "통계 요약 - 일평균 수유"},
+  "summaryDailyAvgDiaper": "일평균 기저귀",
+  "@summaryDailyAvgDiaper": {"description": "통계 요약 - 일평균 기저귀"}
 }

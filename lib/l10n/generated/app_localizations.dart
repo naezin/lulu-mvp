@@ -2310,6 +2310,48 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'{days}일 전'**
   String elapsedDaysAgo(int days);
+
+  /// 날짜 네비게이터 - 오늘 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘'**
+  String get dateNavigatorToday;
+
+  /// 날짜 네비게이터 - 이번 주 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주'**
+  String get dateNavigatorThisWeek;
+
+  /// 통계 요약 - 변화 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'변화 없음'**
+  String get summaryNoChange;
+
+  /// 통계 요약 - 데이터 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'데이터 없음'**
+  String get summaryNoData;
+
+  /// 통계 요약 - 일평균 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'일평균 수면'**
+  String get summaryDailyAvgSleep;
+
+  /// 통계 요약 - 일평균 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'일평균 수유'**
+  String get summaryDailyAvgFeeding;
+
+  /// 통계 요약 - 일평균 기저귀
+  ///
+  /// In ko, this message translates to:
+  /// **'일평균 기저귀'**
+  String get summaryDailyAvgDiaper;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

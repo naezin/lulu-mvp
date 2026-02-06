@@ -74,25 +74,24 @@ class WeeklyPatternChart extends StatelessWidget {
 
   Widget _buildHeader() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              '주간 패턴',
-              style: LuluTextStyles.titleSmall.copyWith(
-                color: LuluTextColors.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const Spacer(),
-            if (onFilterChanged != null) ...[
-              _PatternFilterChips(
-                selectedFilter: filter,
-                onFilterChanged: onFilterChanged!,
-              ),
-            ],
-          ],
+        // 타이틀
+        Text(
+          '주간 패턴',
+          style: LuluTextStyles.titleSmall.copyWith(
+            color: LuluTextColors.primary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
+        // HF3-FIX: 필터 칩을 별도 줄로 분리
+        if (onFilterChanged != null) ...[
+          const SizedBox(height: 10),
+          _PatternFilterChips(
+            selectedFilter: filter,
+            onFilterChanged: onFilterChanged!,
+          ),
+        ],
         // 주간 네비게이션
         if (onPreviousWeek != null || onNextWeek != null) ...[
           const SizedBox(height: 12),
@@ -290,6 +289,7 @@ class _WeekNavigator extends StatelessWidget {
 }
 
 /// 패턴 필터 칩
+/// HF3-FIX: 일간 필터 칩 스타일과 통일 (아이콘 + 전체 맨 앞)
 class _PatternFilterChips extends StatelessWidget {
   final PatternFilter selectedFilter;
   final ValueChanged<PatternFilter> onFilterChanged;
@@ -301,63 +301,78 @@ class _PatternFilterChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: PatternFilter.values.map((filter) {
-        final isSelected = selectedFilter == filter;
-        return Padding(
-          padding: const EdgeInsets.only(left: 4),
-          child: GestureDetector(
-            onTap: () => onFilterChanged(filter),
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 4,
-              ),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? LuluColors.lavenderMist.withValues(alpha: 0.2)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: isSelected
-                      ? LuluColors.lavenderMist
-                      : LuluColors.glassBorder,
+    // HF3-FIX: "전체"를 맨 앞으로, 순서: 전체 → 수유 → 수면 → 기저귀 → 놀이 (건강 제외)
+    final filters = [
+      _FilterData(PatternFilter.all, '전체', Icons.apps_rounded, null),
+      _FilterData(PatternFilter.feeding, '수유', Icons.local_cafe_rounded, LuluActivityColors.feeding),
+      _FilterData(PatternFilter.sleep, '수면', Icons.bedtime_rounded, LuluActivityColors.sleep),
+      _FilterData(PatternFilter.diaper, '기저귀', Icons.baby_changing_station_rounded, LuluActivityColors.diaper),
+      _FilterData(PatternFilter.play, '놀이', Icons.toys_rounded, LuluActivityColors.play),
+    ];
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: filters.map((data) {
+          final isSelected = selectedFilter == data.filter;
+          final chipColor = data.color ?? LuluColors.lavenderMist;
+
+          return Padding(
+            padding: const EdgeInsets.only(left: 6),
+            child: GestureDetector(
+              onTap: () => onFilterChanged(data.filter),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
                 ),
-              ),
-              child: Text(
-                _getFilterLabel(filter),
-                style: TextStyle(
+                decoration: BoxDecoration(
                   color: isSelected
-                      ? LuluColors.lavenderMist
-                      : LuluTextColors.secondary,
-                  fontSize: 11,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      ? chipColor.withValues(alpha: 0.2)
+                      : LuluColors.deepBlue,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isSelected ? chipColor : Colors.transparent,
+                    width: 1.5,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      data.icon,
+                      size: 14,
+                      color: isSelected ? chipColor : LuluTextColors.secondary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      data.label,
+                      style: TextStyle(
+                        color: isSelected ? chipColor : LuluTextColors.secondary,
+                        fontSize: 11,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
+      ),
     );
   }
+}
 
-  String _getFilterLabel(PatternFilter filter) {
-    switch (filter) {
-      case PatternFilter.sleep:
-        return '수면';
-      case PatternFilter.feeding:
-        return '수유';
-      case PatternFilter.diaper:
-        return '기저귀';
-      case PatternFilter.play:
-        return '놀이';
-      case PatternFilter.health:
-        return '건강';
-      case PatternFilter.all:
-        return '전체';
-    }
-  }
+/// 필터 데이터 클래스
+class _FilterData {
+  final PatternFilter filter;
+  final String label;
+  final IconData icon;
+  final Color? color;
+
+  const _FilterData(this.filter, this.label, this.icon, this.color);
 }
 
 /// 개별 패턴 셀
@@ -418,13 +433,13 @@ class _PatternCell extends StatelessWidget {
       case PatternActivityType.daySleep:
         return LuluPatternColors.daySleep;
       case PatternActivityType.feeding:
-        return LuluPatternColors.feeding.withValues(alpha: 0.6);
+        return LuluPatternColors.feeding.withValues(alpha: 0.8);
       case PatternActivityType.diaper:
-        return LuluActivityColors.diaper.withValues(alpha: 0.6);
+        return LuluPatternColors.diaper.withValues(alpha: 0.8);
       case PatternActivityType.play:
-        return LuluActivityColors.play.withValues(alpha: 0.6);
+        return LuluPatternColors.play.withValues(alpha: 0.8);
       case PatternActivityType.health:
-        return LuluActivityColors.health.withValues(alpha: 0.6);
+        return LuluPatternColors.health.withValues(alpha: 0.8);
       case PatternActivityType.empty:
         return Colors.transparent;
     }
@@ -451,18 +466,18 @@ class _PatternLegend extends StatelessWidget {
           _legendItem(LuluPatternColors.nightSleep, '밤잠'),
           _legendItem(LuluPatternColors.daySleep, '낮잠'),
         ],
-        // 수유
+        // 수유 - LuluPatternColors 사용 (= LuluActivityColors.feeding)
         if (filter == PatternFilter.feeding || filter == PatternFilter.all)
           _legendItem(LuluPatternColors.feeding, '수유'),
-        // FIX-G: 기저귀 추가
+        // 기저귀 - LuluPatternColors 사용 (= LuluActivityColors.diaper)
         if (filter == PatternFilter.diaper || filter == PatternFilter.all)
-          _legendItem(LuluActivityColors.diaper, '기저귀'),
-        // FIX-G: 놀이 추가
+          _legendItem(LuluPatternColors.diaper, '기저귀'),
+        // 놀이 - LuluPatternColors 사용 (= LuluActivityColors.play)
         if (filter == PatternFilter.play || filter == PatternFilter.all)
-          _legendItem(LuluActivityColors.play, '놀이'),
-        // FIX-G: 건강 추가
+          _legendItem(LuluPatternColors.play, '놀이'),
+        // 건강 - LuluPatternColors 사용 (= LuluActivityColors.health)
         if (filter == PatternFilter.health || filter == PatternFilter.all)
-          _legendItem(LuluActivityColors.health, '건강'),
+          _legendItem(LuluPatternColors.health, '건강'),
       ],
     );
   }

@@ -554,5 +554,13 @@
     "placeholders": {
       "days": {"type": "int", "example": "3"}
     }
-  }
+  },
+
+  "dateNavigatorToday": "Today",
+  "dateNavigatorThisWeek": "This Week",
+  "summaryNoChange": "No change",
+  "summaryNoData": "No data",
+  "summaryDailyAvgSleep": "Daily avg. sleep",
+  "summaryDailyAvgFeeding": "Daily avg. feeding",
+  "summaryDailyAvgDiaper": "Daily avg. diaper"
 }

@@ -6,6 +6,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
+import 'elapsed_time_indicator.dart';
 
 /// 스와이프 가능한 활동 리스트 아이템
 ///
@@ -218,6 +219,14 @@ class ActivityListItem extends StatelessWidget {
             ),
           ],
         ),
+        // HF2-12: 진행 중인 활동의 경과 시간 표시
+        if (activity.endTime == null) ...[
+          const SizedBox(height: 4),
+          ElapsedTimeIndicator(
+            startTime: activity.startTime,
+            compact: true,
+          ),
+        ],
         if (activity.notes != null && activity.notes!.isNotEmpty) ...[
           const SizedBox(height: 4),
           Text(
@@ -258,7 +267,11 @@ class ActivityListItem extends StatelessWidget {
         }
         return l10n?.statusOngoing ?? 'Sleeping';
       case ActivityType.diaper:
-        final diaperType = activity.data?['diaper_type'] as String? ?? 'diaper';
+        final diaperType = activity.data?['diaper_type'] as String?;
+        // HF2-14: diaper_type이 없으면 괄호 없이 "기저귀"만 표시
+        if (diaperType == null || diaperType.isEmpty) {
+          return l10n?.activityTypeDiaper ?? 'Diaper';
+        }
         final diaperDisplay = _getDiaperTypeDisplay(diaperType, l10n);
         final diaperLabel = l10n?.activityTypeDiaper ?? 'Diaper';
         return '$diaperLabel ($diaperDisplay)';

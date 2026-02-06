@@ -107,12 +107,21 @@ class PatternDataProvider extends ChangeNotifier {
   }
 
   /// 이전 주로 이동
+  /// HF3-FIX: 캐시 무효화 옵션 추가
   void goToPreviousWeek({
     required String familyId,
     required String babyId,
     required String babyName,
+    bool forceRefresh = false,
   }) {
     final newWeekStart = _weekStartDate.subtract(const Duration(days: 7));
+
+    // HF3-FIX: forceRefresh 시 캐시 제거
+    if (forceRefresh) {
+      final cacheKey = '$babyId-${newWeekStart.toIso8601String()}';
+      _cache.remove(cacheKey);
+    }
+
     loadWeeklyPattern(
       familyId: familyId,
       babyId: babyId,
@@ -122,14 +131,22 @@ class PatternDataProvider extends ChangeNotifier {
   }
 
   /// 다음 주로 이동
+  /// HF3-FIX: 캐시 무효화 옵션 추가
   void goToNextWeek({
     required String familyId,
     required String babyId,
     required String babyName,
+    bool forceRefresh = false,
   }) {
     final newWeekStart = _weekStartDate.add(const Duration(days: 7));
     // 미래 주는 로드하지 않음
     if (newWeekStart.isAfter(DateTime.now())) return;
+
+    // HF3-FIX: forceRefresh 시 캐시 제거
+    if (forceRefresh) {
+      final cacheKey = '$babyId-${newWeekStart.toIso8601String()}';
+      _cache.remove(cacheKey);
+    }
 
     loadWeeklyPattern(
       familyId: familyId,
@@ -182,6 +199,11 @@ class PatternDataProvider extends ChangeNotifier {
   /// 캐시 초기화
   void clearCache() {
     _cache.clear();
+  }
+
+  /// HF7-FIX: 특정 캐시 키 무효화
+  void invalidateCacheKey(String cacheKey) {
+    _cache.remove(cacheKey);
   }
 
   /// 다태아 함께보기 토글
@@ -291,6 +313,7 @@ class PatternDataProvider extends ChangeNotifier {
   /// ActivityModel 리스트에서 DailyPattern 생성
   /// v4.1: 오버레이 지원 - 수면은 메인 활동, 나머지는 오버레이
   /// FIX-E: UTC -> Local 변환 추가
+  /// HF6-FIX: Overnight sleep 지원 - endTime이 해당 날짜에 걸치면 포함
   DailyPattern _buildDailyPattern(DateTime date, List<ActivityModel> activities) {
     // 해당 날짜의 활동만 필터링 (로컬 시간 기준)
     final dayStart = DateTime(date.year, date.month, date.day);
@@ -299,9 +322,24 @@ class PatternDataProvider extends ChangeNotifier {
     final dayActivities = activities.where((a) {
       // FIX-E: UTC -> Local 변환
       final localStart = a.startTime.toLocal();
-      return localStart.isAfter(dayStart.subtract(const Duration(seconds: 1))) &&
-          localStart.isBefore(dayEnd);
+      final localEnd = a.endTime?.toLocal();
+
+      // HF7-FIX: Duration 활동(수면/놀이) vs Instant 활동(수유/기저귀/건강) 구분
+      if (localEnd != null) {
+        // Duration 활동: 해당 날짜와 겹치는지 확인
+        // 시작 < dayEnd AND 종료 > dayStart
+        return localStart.isBefore(dayEnd) && localEnd.isAfter(dayStart);
+      } else {
+        // Instant 활동: 시작 시간이 해당 날짜인지 확인
+        // dayStart <= localStart < dayEnd
+        return !localStart.isBefore(dayStart) && localStart.isBefore(dayEnd);
+      }
     }).toList();
+
+    debugPrint('[DEBUG] [PatternProvider] Date: $date, dayActivities: ${dayActivities.length}');
+    for (final a in dayActivities) {
+      debugPrint('[DEBUG] [PatternProvider] - ${a.type.name} start=${a.startTime.toLocal()} end=${a.endTime?.toLocal()}');
+    }
 
     // 48개 슬롯 생성
     final slots = List.generate(48, (slotIndex) {
@@ -322,18 +360,44 @@ class PatternDataProvider extends ChangeNotifier {
       for (final activity in dayActivities) {
         // FIX-E: UTC -> Local 변환
         final actStart = activity.startTime.toLocal();
-        final actEnd = (activity.endTime ?? activity.startTime.add(const Duration(hours: 1))).toLocal();
+        // HF6-FIX: Instant 활동(수유/기저귀/건강)은 1슬롯만, Duration 활동은 실제 endTime 사용
+        final actEnd = activity.endTime?.toLocal() ?? actStart.add(const Duration(minutes: 1));
 
         if (actStart.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
-          final patternType = _mapActivityType(activity.type, slotIndex ~/ 2);
+          // HF2-8: DB의 sleep_type 값을 우선 사용
+          final patternType = _mapActivityType(activity.type, slotIndex ~/ 2, activity.data);
 
-          // 수면은 주요 활동으로
+          // HF3-FIX: 우선순위 기반 mainActivity 설정
+          // 수면 > 수유 > 기저귀 > 놀이 > 건강
           if (patternType == PatternActivityType.nightSleep ||
               patternType == PatternActivityType.daySleep) {
+            // 수면은 항상 최우선
             mainActivity = patternType;
             mainActivityId = activity.id;
+          } else if (mainActivity == PatternActivityType.empty) {
+            // 수면이 없으면 다른 활동을 mainActivity로
+            mainActivity = patternType;
+            mainActivityId = activity.id;
+          } else if (mainActivity != PatternActivityType.nightSleep &&
+                     mainActivity != PatternActivityType.daySleep) {
+            // 수면이 아닌 경우에만 우선순위 비교
+            final currentPriority = _getActivityPriority(mainActivity);
+            final newPriority = _getActivityPriority(patternType);
+            if (newPriority < currentPriority) {
+              // 오버레이에 기존 활동 추가
+              if (!overlays.contains(mainActivity)) {
+                overlays.add(mainActivity);
+              }
+              mainActivity = patternType;
+              mainActivityId = activity.id;
+            } else {
+              // 오버레이에 새 활동 추가
+              if (!overlays.contains(patternType)) {
+                overlays.add(patternType);
+              }
+            }
           } else {
-            // 나머지는 오버레이로
+            // 수면이 mainActivity면 오버레이로 추가
             if (!overlays.contains(patternType)) {
               overlays.add(patternType);
             }
@@ -354,10 +418,18 @@ class PatternDataProvider extends ChangeNotifier {
   }
 
   /// ActivityType을 PatternActivityType으로 변환
-  PatternActivityType _mapActivityType(ActivityType type, int hour) {
+  /// HF2-8: DB의 sleep_type 값 우선 사용, 없으면 시간 기반 fallback
+  PatternActivityType _mapActivityType(ActivityType type, int hour, Map<String, dynamic>? data) {
     switch (type) {
       case ActivityType.sleep:
-        // 밤잠/낮잠 판별에 SleepTimeConfig 사용
+        // HF2-8: DB의 sleep_type 값 우선 확인
+        final sleepType = data?['sleep_type'] as String?;
+        if (sleepType == 'night') {
+          return PatternActivityType.nightSleep;
+        } else if (sleepType == 'nap') {
+          return PatternActivityType.daySleep;
+        }
+        // fallback: 시간 기반 판별 (DB값 없을 때만)
         return SleepTimeConfig.isNightTime(hour)
             ? PatternActivityType.nightSleep
             : PatternActivityType.daySleep;
@@ -366,9 +438,29 @@ class PatternDataProvider extends ChangeNotifier {
       case ActivityType.diaper:
         return PatternActivityType.diaper;
       case ActivityType.play:
-        return PatternActivityType.play; // v4.1: play 매핑
+        return PatternActivityType.play;
       case ActivityType.health:
-        return PatternActivityType.health; // v4.1: health 매핑
+        return PatternActivityType.health;
+    }
+  }
+
+  /// 활동 우선순위 반환 (낮을수록 높은 우선순위)
+  /// HF3-FIX: 수면 > 수유 > 기저귀 > 놀이 > 건강
+  int _getActivityPriority(PatternActivityType type) {
+    switch (type) {
+      case PatternActivityType.nightSleep:
+      case PatternActivityType.daySleep:
+        return 0; // 최고 우선순위
+      case PatternActivityType.feeding:
+        return 1;
+      case PatternActivityType.diaper:
+        return 2;
+      case PatternActivityType.play:
+        return 3;
+      case PatternActivityType.health:
+        return 4;
+      case PatternActivityType.empty:
+        return 99;
     }
   }
 

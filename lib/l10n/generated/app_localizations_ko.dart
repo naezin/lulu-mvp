@@ -1194,4 +1194,25 @@ class SKo extends S {
   String elapsedDaysAgo(int days) {
     return '$days일 전';
   }
+
+  @override
+  String get dateNavigatorToday => '오늘';
+
+  @override
+  String get dateNavigatorThisWeek => '이번 주';
+
+  @override
+  String get summaryNoChange => '변화 없음';
+
+  @override
+  String get summaryNoData => '데이터 없음';
+
+  @override
+  String get summaryDailyAvgSleep => '일평균 수면';
+
+  @override
+  String get summaryDailyAvgFeeding => '일평균 수유';
+
+  @override
+  String get summaryDailyAvgDiaper => '일평균 기저귀';
 }

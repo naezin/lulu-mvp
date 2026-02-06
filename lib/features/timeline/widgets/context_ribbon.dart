@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
@@ -36,9 +37,11 @@ class ContextRibbon extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // HF2-13: 색상 점 대신 Material Icons 사용
             // 수면 시간
             if (stats.sleepMinutes > 0) ...[
               _StatItem(
+                icon: LuluIcons.sleep,
                 color: LuluActivityColors.sleep,
                 value: _formatDuration(stats.sleepMinutes),
               ),
@@ -47,6 +50,7 @@ class ContextRibbon extends StatelessWidget {
             // 수유 횟수 + 총량
             if (stats.feedingCount > 0) ...[
               _StatItem(
+                icon: LuluIcons.feeding,
                 color: LuluActivityColors.feeding,
                 value: stats.feedingMl > 0
                     ? '${stats.feedingCount}${l10n?.unitTimes ?? 'x'} ${stats.feedingMl}ml'
@@ -57,6 +61,7 @@ class ContextRibbon extends StatelessWidget {
             // 기저귀 횟수
             if (stats.diaperCount > 0) ...[
               _StatItem(
+                icon: LuluIcons.diaper,
                 color: LuluActivityColors.diaper,
                 value: '${stats.diaperCount}${l10n?.unitTimes ?? 'x'}',
               ),
@@ -65,6 +70,7 @@ class ContextRibbon extends StatelessWidget {
             // 놀이 시간
             if (stats.playMinutes > 0) ...[
               _StatItem(
+                icon: LuluIcons.play,
                 color: LuluActivityColors.play,
                 value: _formatDuration(stats.playMinutes),
               ),
@@ -76,6 +82,7 @@ class ContextRibbon extends StatelessWidget {
   }
 
   /// 통계 계산
+  /// HF7-FIX: overnight sleep은 해당 날짜 부분만 계산
   _DayStats _calculateStats() {
     int sleepMinutes = 0;
     int feedingCount = 0;
@@ -83,12 +90,30 @@ class ContextRibbon extends StatelessWidget {
     int diaperCount = 0;
     int playMinutes = 0;
 
+    // 활동에서 날짜 추출 (첫 번째 활동 기준)
+    DateTime? dayStart;
+    DateTime? dayEnd;
+    if (activities.isNotEmpty) {
+      final firstActivity = activities.first;
+      final actDate = firstActivity.startTime;
+      dayStart = DateTime(actDate.year, actDate.month, actDate.day);
+      dayEnd = dayStart.add(const Duration(days: 1));
+    }
+
     for (final activity in activities) {
       switch (activity.type.name) {
         case 'sleep':
-          if (activity.endTime != null) {
-            sleepMinutes +=
-                activity.endTime!.difference(activity.startTime).inMinutes;
+          if (activity.endTime != null && dayStart != null && dayEnd != null) {
+            // HF7-FIX: 해당 날짜에 겹치는 부분만 계산
+            final clampedStart = activity.startTime.isBefore(dayStart)
+                ? dayStart
+                : activity.startTime;
+            final clampedEnd = activity.endTime!.isAfter(dayEnd)
+                ? dayEnd
+                : activity.endTime!;
+            if (clampedEnd.isAfter(clampedStart)) {
+              sleepMinutes += clampedEnd.difference(clampedStart).inMinutes;
+            }
           }
           break;
         case 'feeding':
@@ -105,9 +130,17 @@ class ContextRibbon extends StatelessWidget {
           diaperCount++;
           break;
         case 'play':
-          if (activity.endTime != null) {
-            playMinutes +=
-                activity.endTime!.difference(activity.startTime).inMinutes;
+          if (activity.endTime != null && dayStart != null && dayEnd != null) {
+            // HF7-FIX: 해당 날짜에 겹치는 부분만 계산
+            final clampedStart = activity.startTime.isBefore(dayStart)
+                ? dayStart
+                : activity.startTime;
+            final clampedEnd = activity.endTime!.isAfter(dayEnd)
+                ? dayEnd
+                : activity.endTime!;
+            if (clampedEnd.isAfter(clampedStart)) {
+              playMinutes += clampedEnd.difference(clampedStart).inMinutes;
+            }
           }
           break;
       }
@@ -154,12 +187,15 @@ class _DayStats {
 }
 
 /// 통계 아이템
+/// HF2-13: 색상 점 대신 Material Icons 사용
 class _StatItem extends StatelessWidget {
   const _StatItem({
+    required this.icon,
     required this.color,
     required this.value,
   });
 
+  final IconData icon;
   final Color color;
   final String value;
 
@@ -168,13 +204,11 @@ class _StatItem extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+        // HF2-13: 색상 점 → Material Icon
+        Icon(
+          icon,
+          size: 14,
+          color: color,
         ),
         const SizedBox(width: 6),
         Text(

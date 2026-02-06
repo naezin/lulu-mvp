@@ -16,6 +16,7 @@ import 'mini_time_bar.dart';
 import 'context_ribbon.dart';
 import 'activity_list_item.dart';
 import 'edit_activity_sheet.dart';
+import 'last_activity_badges.dart';
 
 /// 일간 뷰 (DailyView)
 ///
@@ -53,6 +54,9 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   /// 초기 로드 완료 여부
   bool _initialLoadDone = false;
 
+  /// HF5: 이전 todayActivities 개수 (변경 감지용)
+  int _previousActivityCount = -1;
+
   @override
   void initState() {
     super.initState();
@@ -73,8 +77,25 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
       if (!_initialLoadDone || currentFamilyId != _previousFamilyId) {
         _previousFamilyId = currentFamilyId;
         _initialLoadDone = true;
-        _loadActivitiesForDate();
+        // SchedulerBinding으로 빌드 후 실행
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _loadActivitiesForDate();
+        });
       }
+    }
+
+    // HF5: HomeProvider의 todayActivities 변경 감지 → 오늘 날짜면 리로드
+    final todayActivityCount = homeProvider.todayActivities.length;
+    if (_previousActivityCount >= 0 &&
+        todayActivityCount != _previousActivityCount &&
+        _isToday(_selectedDate) &&
+        !_isLoading) {
+      _previousActivityCount = todayActivityCount;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _loadActivitiesForDate();
+      });
+    } else {
+      _previousActivityCount = todayActivityCount;
     }
   }
 
@@ -104,9 +125,6 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
         startDate: startOfDay,
         endDate: endOfDay,
       );
-
-      debugPrint(
-          '[OK] [DailyView] Loaded ${allActivities.length} activities for ${_selectedDate.toIso8601String().substring(0, 10)}');
 
       if (mounted) {
         setState(() {
@@ -210,6 +228,16 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(
       builder: (context, homeProvider, child) {
+        // HF3-FIX: family가 로드되었는데 아직 데이터가 없으면 로드
+        final currentFamilyId = homeProvider.family?.id;
+        if (currentFamilyId != null && !_initialLoadDone && !_isLoading) {
+          _previousFamilyId = currentFamilyId;
+          _initialLoadDone = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) _loadActivitiesForDate();
+          });
+        }
+
         // 로딩 중
         if (_isLoading) {
           return const Center(
@@ -245,6 +273,8 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
         final activities = _filterActivities(
             _dateActivities, homeProvider.selectedBabyId, _activeFilter);
 
+        // 🔍 HF3 Debug
+
         return RefreshIndicator(
           onRefresh: _loadActivitiesForDate,
           color: LuluColors.lavenderMist,
@@ -270,22 +300,30 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 ),
               ),
 
-              // MiniTimeBar (활동이 있을 때만)
-              if (activities.isNotEmpty)
+              // HF5: MiniTimeBar - 아기 필터만 적용, 활동 유형 필터는 무시 (전체 타임라인 표시)
+              if (_babyFilteredActivities(homeProvider.selectedBabyId).isNotEmpty)
                 SliverToBoxAdapter(
                   child: MiniTimeBar(
                     key: ValueKey(
                         'minibar_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
-                    activities: activities,
+                    activities: _babyFilteredActivities(homeProvider.selectedBabyId),
                     date: _selectedDate,
                   ),
                 ),
 
-              // ContextRibbon (한 줄 요약)
-              if (activities.isNotEmpty)
+              // HF5: ContextRibbon - 아기 필터만 적용 (MiniTimeBar와 동일 데이터)
+              if (_babyFilteredActivities(homeProvider.selectedBabyId).isNotEmpty)
                 SliverToBoxAdapter(
                   child: ContextRibbon(
-                    activities: _dateActivities, // 필터 전 전체 데이터 사용
+                    activities: _babyFilteredActivities(homeProvider.selectedBabyId),
+                  ),
+                ),
+
+              // HF5: LastActivityBadges - 마지막 활동 경과 시간 배지
+              if (_babyFilteredActivities(homeProvider.selectedBabyId).isNotEmpty)
+                SliverToBoxAdapter(
+                  child: LastActivityBadges(
+                    activities: _babyFilteredActivities(homeProvider.selectedBabyId),
                   ),
                 ),
 
@@ -331,7 +369,13 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     );
   }
 
-  /// 아기 ID + 활동 유형으로 필터링
+  /// HF5: 아기 필터만 적용 (MiniTimeBar, ContextRibbon용)
+  List<ActivityModel> _babyFilteredActivities(String? babyId) {
+    if (babyId == null) return _dateActivities;
+    return _dateActivities.where((a) => a.babyIds.contains(babyId)).toList();
+  }
+
+  /// 아기 ID + 활동 유형으로 필터링 (ActivityList용)
   List<ActivityModel> _filterActivities(
       List<ActivityModel> activities, String? babyId, String? typeFilter) {
     var filtered = activities;

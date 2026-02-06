@@ -150,6 +150,29 @@ class OngoingSleepProvider extends ChangeNotifier {
     debugPrint('[OK] [OngoingSleepProvider] Sleep cancelled');
   }
 
+  /// HF2-23: 수면 시작 시간 수정
+  /// 기록 화면에서 시작 시간 수정 시 호출
+  Future<void> updateStartTime(DateTime newStartTime) async {
+    if (_ongoingSleep == null) {
+      debugPrint('[WARN] [OngoingSleepProvider] No ongoing sleep to update');
+      return;
+    }
+
+    _ongoingSleep = OngoingSleepRecord(
+      id: _ongoingSleep!.id,
+      babyId: _ongoingSleep!.babyId,
+      familyId: _ongoingSleep!.familyId,
+      babyName: _ongoingSleep!.babyName,
+      sleepType: _ongoingSleep!.sleepType,
+      startTime: newStartTime,
+    );
+
+    await _saveToLocal();
+    notifyListeners();
+
+    debugPrint('[OK] [OngoingSleepProvider] Start time updated to: $newStartTime');
+  }
+
   /// 타이머 시작 (매 분 UI 갱신)
   void _startTimer() {
     _stopTimer();
@@ -230,7 +253,7 @@ class OngoingSleepRecord {
       'family_id': familyId,
       if (babyName != null) 'baby_name': babyName,
       'sleep_type': sleepType,
-      'start_time': startTime.toIso8601String(),
+      'start_time': startTime.toUtc().toIso8601String(),
     };
   }
 }

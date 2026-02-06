@@ -1212,4 +1212,25 @@ class SEn extends S {
   String elapsedDaysAgo(int days) {
     return '${days}d ago';
   }
+
+  @override
+  String get dateNavigatorToday => 'Today';
+
+  @override
+  String get dateNavigatorThisWeek => 'This Week';
+
+  @override
+  String get summaryNoChange => 'No change';
+
+  @override
+  String get summaryNoData => 'No data';
+
+  @override
+  String get summaryDailyAvgSleep => 'Daily avg. sleep';
+
+  @override
+  String get summaryDailyAvgFeeding => 'Daily avg. feeding';
+
+  @override
+  String get summaryDailyAvgDiaper => 'Daily avg. diaper';
 }

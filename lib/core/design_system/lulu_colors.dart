@@ -299,19 +299,26 @@ class LuluBadgeColors {
 
 /// Pattern Colors (패턴 차트 컬러)
 ///
+/// HF4: LuluActivityColors 기준으로 통일
 /// 작업 지시서 v1.1: 주간 패턴 차트 및 타임바 색상
 class LuluPatternColors {
-  /// 밤잠 (21:00 ~ 06:00)
-  static const Color nightSleep = Color(0xFF9D8CD6); // lavenderMist 100%
+  /// 밤잠 - LuluActivityColors.sleep 사용
+  static const Color nightSleep = LuluActivityColors.sleep;
 
-  /// 낮잠 (06:00 ~ 21:00)
-  static Color get daySleep => nightSleep.withValues(alpha: 0.6); // 60%
+  /// 낮잠 - 밤잠보다 연한 색상 (60%)
+  static Color get daySleep => nightSleep.withValues(alpha: 0.6);
 
-  /// 수유
-  static const Color feeding = Color(0xFF4A90D9); // skyBlue
+  /// 수유 - LuluActivityColors.feeding 사용 (Orange)
+  static const Color feeding = LuluActivityColors.feeding;
 
-  /// 기저귀
-  static const Color diaper = Color(0xFF6FCF97); // mintGreen
+  /// 기저귀 - LuluActivityColors.diaper 사용 (Blue)
+  static const Color diaper = LuluActivityColors.diaper;
+
+  /// 놀이 - LuluActivityColors.play 사용 (Green)
+  static const Color play = LuluActivityColors.play;
+
+  /// 건강 - LuluActivityColors.health 사용 (Red)
+  static const Color health = LuluActivityColors.health;
 
   /// 빈 시간 (깨어있음)
   static const Color empty = Colors.transparent;

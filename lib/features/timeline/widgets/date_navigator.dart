@@ -2,123 +2,144 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_spacing.dart';
 
-/// 날짜 좌우 탐색 위젯
+/// 날짜/주간 범위 모드
+enum DateScope {
+  daily,  // 일간: "2월 5일 (목)"
+  weekly, // 주간: "1/27 ~ 2/2"
+}
+
+/// HF5: 날짜/주간 네비게이터 위젯 (심플 버전)
 ///
-/// 작업 지시서 v1.1: 과거 기록 접근용 (< 3초)
-/// ◀ 어제 │ 오늘 │ 내일 ▶
+/// 요구사항:
+/// - 사각형 박스 제거 → 심플 화살표
+/// - "오늘"/"이번 주" 버튼 제거
+/// - 달력 아이콘 + 날짜 탭 → DatePicker 열림
 class DateNavigator extends StatelessWidget {
+  final DateScope scope;
   final DateTime selectedDate;
   final ValueChanged<DateTime> onDateChanged;
   final VoidCallback? onCalendarTap;
+  final VoidCallback? onReset;
+  final bool canGoNext;
 
   const DateNavigator({
     super.key,
+    this.scope = DateScope.daily,
     required this.selectedDate,
     required this.onDateChanged,
     this.onCalendarTap,
+    this.onReset,
+    this.canGoNext = true,
   });
 
-  bool get _isToday {
+  bool get _canNavigateNext {
+    if (!canGoNext) return false;
     final now = DateTime.now();
-    return selectedDate.year == now.year &&
-        selectedDate.month == now.month &&
-        selectedDate.day == now.day;
-  }
-
-  bool get _isFuture {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final selected =
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    return selected.isAfter(today);
+    if (scope == DateScope.daily) {
+      final today = DateTime(now.year, now.month, now.day);
+      final selected = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+      return !selected.isAfter(today.subtract(const Duration(days: 1)));
+    } else {
+      final currentWeekStart = now.subtract(Duration(days: now.weekday - 1));
+      final normalizedCurrent = DateTime(currentWeekStart.year, currentWeekStart.month, currentWeekStart.day);
+      final normalizedSelected = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+      return normalizedCurrent != normalizedSelected;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
+        horizontal: LuluSpacing.md,
+        vertical: LuluSpacing.sm,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // 이전 날짜
-          _NavButton(
+          // HF5: 심플 화살표 (왼쪽)
+          _SimpleArrowButton(
             icon: Icons.chevron_left_rounded,
-            label: _formatShortDate(
-                selectedDate.subtract(const Duration(days: 1))),
-            onTap: () =>
-                onDateChanged(selectedDate.subtract(const Duration(days: 1))),
+            onTap: () {
+              HapticFeedback.selectionClick();
+              if (scope == DateScope.daily) {
+                onDateChanged(selectedDate.subtract(const Duration(days: 1)));
+              } else {
+                onDateChanged(selectedDate.subtract(const Duration(days: 7)));
+              }
+            },
           ),
 
-          // 현재 날짜
+          const SizedBox(width: LuluSpacing.md),
+
+          // HF5: 날짜 텍스트 + 달력 아이콘 (탭 가능)
           GestureDetector(
             onTap: onCalendarTap,
-            child: Column(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Icon(
+                  Icons.calendar_month_rounded,
+                  size: 20,
+                  color: LuluColors.lavenderMist,
+                ),
+                const SizedBox(width: 8),
                 Text(
-                  _formatDate(selectedDate),
+                  _formatDateDisplay(),
                   style: const TextStyle(
                     color: LuluTextColors.primary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (_isToday)
-                  const Text(
-                    '오늘',
-                    style: TextStyle(
-                      color: LuluColors.lavenderMist,
-                      fontSize: 12,
-                    ),
-                  ),
-                const SizedBox(height: 2),
-                Icon(
-                  Icons.calendar_today_rounded,
-                  size: 16,
-                  color: LuluTextColors.secondary,
-                ),
               ],
             ),
           ),
 
-          // 다음 날짜
-          _NavButton(
+          const SizedBox(width: LuluSpacing.md),
+
+          // HF5: 심플 화살표 (오른쪽)
+          _SimpleArrowButton(
             icon: Icons.chevron_right_rounded,
-            label: _isFuture
-                ? ''
-                : _formatShortDate(selectedDate.add(const Duration(days: 1))),
-            onTap: _isFuture
-                ? null
-                : () => onDateChanged(selectedDate.add(const Duration(days: 1))),
-            enabled: !_isFuture,
+            onTap: _canNavigateNext
+                ? () {
+                    HapticFeedback.selectionClick();
+                    if (scope == DateScope.daily) {
+                      onDateChanged(selectedDate.add(const Duration(days: 1)));
+                    } else {
+                      onDateChanged(selectedDate.add(const Duration(days: 7)));
+                    }
+                  }
+                : null,
+            enabled: _canNavigateNext,
           ),
         ],
       ),
     );
   }
 
-  String _formatDate(DateTime date) {
-    return DateFormat('M월 d일 (E)', 'ko_KR').format(date);
-  }
-
-  String _formatShortDate(DateTime date) {
-    return DateFormat('M/d', 'ko_KR').format(date);
+  String _formatDateDisplay() {
+    if (scope == DateScope.daily) {
+      return DateFormat('M월 d일 (E)', 'ko_KR').format(selectedDate);
+    } else {
+      final weekEnd = selectedDate.add(const Duration(days: 6));
+      final startStr = DateFormat('M/d', 'ko_KR').format(selectedDate);
+      final endStr = DateFormat('M/d', 'ko_KR').format(weekEnd);
+      return '$startStr ~ $endStr';
+    }
   }
 }
 
-class _NavButton extends StatelessWidget {
+/// HF5: 심플 화살표 버튼 (박스 없음)
+class _SimpleArrowButton extends StatelessWidget {
   final IconData icon;
-  final String label;
   final VoidCallback? onTap;
   final bool enabled;
 
-  const _NavButton({
+  const _SimpleArrowButton({
     required this.icon,
-    required this.label,
     this.onTap,
     this.enabled = true,
   });
@@ -126,27 +147,17 @@ class _NavButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: enabled
-          ? () {
-              HapticFeedback.selectionClick();
-              onTap?.call();
-            }
-          : null,
-      child: Opacity(
+      onTap: enabled ? onTap : null,
+      child: AnimatedOpacity(
         opacity: enabled ? 1.0 : 0.3,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: LuluTextColors.secondary, size: 24),
-            if (label.isNotEmpty)
-              Text(
-                label,
-                style: const TextStyle(
-                  color: LuluTextColors.secondary,
-                  fontSize: 12,
-                ),
-              ),
-          ],
+        duration: const Duration(milliseconds: 150),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Icon(
+            icon,
+            color: enabled ? LuluTextColors.primary : LuluTextColors.tertiary,
+            size: 28,
+          ),
         ),
       ),
     );

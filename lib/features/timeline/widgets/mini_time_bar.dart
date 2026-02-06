@@ -89,6 +89,7 @@ class MiniTimeBar extends StatelessWidget {
   }
 
   /// HF2-1,2,4: 5종 활동 모두 컬러바로 표시
+  /// HF2-8: DB의 sleep_type 값 우선 사용
   /// 우선순위: 수면 > 수유 > 기저귀 > 놀이 > 건강
   Color _getSlotColor(int slotIndex) {
     final slotStart = DateTime(
@@ -111,18 +112,27 @@ class MiniTimeBar extends StatelessWidget {
       if (actStart.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
         switch (activity.type) {
           case ActivityType.sleep:
-            final hour = slotIndex ~/ 2;
-            sleepColor = (hour >= 21 || hour < 6)
-                ? LuluPatternColors.nightSleep
-                : LuluPatternColors.daySleep;
+            // HF2-8: DB의 sleep_type 값 우선 사용
+            final sleepType = activity.data?['sleep_type'] as String?;
+            if (sleepType == 'night') {
+              sleepColor = LuluPatternColors.nightSleep;
+            } else if (sleepType == 'nap') {
+              sleepColor = LuluPatternColors.daySleep;
+            } else {
+              // fallback: 시간 기반
+              final hour = slotIndex ~/ 2;
+              sleepColor = (hour >= 21 || hour < 6)
+                  ? LuluPatternColors.nightSleep
+                  : LuluPatternColors.daySleep;
+            }
           case ActivityType.feeding:
             feedingColor = LuluPatternColors.feeding;
           case ActivityType.diaper:
-            diaperColor = LuluActivityColors.diaper;
+            diaperColor = LuluPatternColors.diaper;
           case ActivityType.play:
-            playColor = LuluActivityColors.play;
+            playColor = LuluPatternColors.play;
           case ActivityType.health:
-            healthColor = LuluActivityColors.health;
+            healthColor = LuluPatternColors.health;
         }
       }
     }
@@ -134,24 +144,29 @@ class MiniTimeBar extends StatelessWidget {
   Widget _buildCurrentTimeMarker() {
     final now = DateTime.now();
     final position = (now.hour * 2 + now.minute ~/ 30) / 48;
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Stack(
-          children: [
-            Positioned(
-              left: constraints.maxWidth * position - 4,
-              child: Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: LuluPatternColors.currentTimeMarker,
-                  shape: BoxShape.circle,
+    return SizedBox(
+      height: 8,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                left: constraints.maxWidth * position - 4,
+                top: 0,
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: LuluPatternColors.currentTimeMarker,
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 }

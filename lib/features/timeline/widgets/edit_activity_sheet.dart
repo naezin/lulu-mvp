@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
@@ -9,6 +10,7 @@ import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../../shared/widgets/datetime_picker/datetime_picker_sheet.dart';
+import '../../record/providers/ongoing_sleep_provider.dart';
 
 /// 활동 수정 바텀시트
 ///
@@ -721,6 +723,18 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       );
 
       await _activityRepository.updateActivity(updatedActivity);
+
+      // HF2-23: 수면 활동의 시작 시간 변경 시 OngoingSleepProvider도 업데이트
+      if (mounted && widget.activity.type == ActivityType.sleep) {
+        final sleepProvider = context.read<OngoingSleepProvider>();
+        // 진행 중인 수면이고 동일한 아기의 수면이면 시작 시간 업데이트
+        if (sleepProvider.hasSleepInProgress &&
+            sleepProvider.currentBabyId != null &&
+            widget.activity.babyIds.contains(sleepProvider.currentBabyId) &&
+            _startTime != widget.activity.startTime) {
+          await sleepProvider.updateStartTime(_startTime);
+        }
+      }
 
       if (mounted) {
         Navigator.of(context).pop(updatedActivity);
