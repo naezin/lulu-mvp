@@ -242,7 +242,7 @@ class OngoingSleepRecord {
       familyId: json['family_id'] as String,
       babyName: json['baby_name'] as String?,
       sleepType: json['sleep_type'] as String? ?? 'nap',
-      startTime: DateTime.parse(json['start_time'] as String),
+      startTime: DateTime.parse(json['start_time'] as String).toLocal(),
     );
   }
 
