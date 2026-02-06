@@ -80,6 +80,8 @@ class PatternDataProvider extends ChangeNotifier {
           .where((a) => a.babyIds.contains(babyId))
           .toList();
 
+      debugPrint('[DEBUG] [PatternProvider] Loaded ${babyActivities.length} activities for $babyName');
+
       // WeeklyPattern 생성
       final days = List.generate(7, (i) {
         final date = targetWeekStart.add(Duration(days: i));
@@ -311,35 +313,24 @@ class PatternDataProvider extends ChangeNotifier {
   }
 
   /// ActivityModel 리스트에서 DailyPattern 생성
-  /// v4.1: 오버레이 지원 - 수면은 메인 활동, 나머지는 오버레이
-  /// FIX-E: UTC -> Local 변환 추가
-  /// HF6-FIX: Overnight sleep 지원 - endTime이 해당 날짜에 걸치면 포함
+  /// HF8-FIX: Duration 활동 클램핑 + 디버그 로그
   DailyPattern _buildDailyPattern(DateTime date, List<ActivityModel> activities) {
     // 해당 날짜의 활동만 필터링 (로컬 시간 기준)
     final dayStart = DateTime(date.year, date.month, date.day);
     final dayEnd = dayStart.add(const Duration(days: 1));
 
     final dayActivities = activities.where((a) {
-      // FIX-E: UTC -> Local 변환
       final localStart = a.startTime.toLocal();
       final localEnd = a.endTime?.toLocal();
 
-      // HF7-FIX: Duration 활동(수면/놀이) vs Instant 활동(수유/기저귀/건강) 구분
       if (localEnd != null) {
         // Duration 활동: 해당 날짜와 겹치는지 확인
-        // 시작 < dayEnd AND 종료 > dayStart
         return localStart.isBefore(dayEnd) && localEnd.isAfter(dayStart);
       } else {
         // Instant 활동: 시작 시간이 해당 날짜인지 확인
-        // dayStart <= localStart < dayEnd
         return !localStart.isBefore(dayStart) && localStart.isBefore(dayEnd);
       }
     }).toList();
-
-    debugPrint('[DEBUG] [PatternProvider] Date: $date, dayActivities: ${dayActivities.length}');
-    for (final a in dayActivities) {
-      debugPrint('[DEBUG] [PatternProvider] - ${a.type.name} start=${a.startTime.toLocal()} end=${a.endTime?.toLocal()}');
-    }
 
     // 48개 슬롯 생성
     final slots = List.generate(48, (slotIndex) {
@@ -352,52 +343,56 @@ class PatternDataProvider extends ChangeNotifier {
       );
       final slotEnd = slotStart.add(const Duration(minutes: 30));
 
-      // v4.1: 주요 활동 (수면 우선) + 오버레이 수집
       PatternActivityType mainActivity = PatternActivityType.empty;
       String? mainActivityId;
       final overlays = <PatternActivityType>[];
 
       for (final activity in dayActivities) {
-        // FIX-E: UTC -> Local 변환
         final actStart = activity.startTime.toLocal();
-        // HF6-FIX: Instant 활동(수유/기저귀/건강)은 1슬롯만, Duration 활동은 실제 endTime 사용
-        final actEnd = activity.endTime?.toLocal() ?? actStart.add(const Duration(minutes: 1));
 
-        if (actStart.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
-          // HF2-8: DB의 sleep_type 값을 우선 사용
+        // HF8-FIX: Duration vs Instant 활동 분리 처리
+        bool overlapsSlot = false;
+
+        if (activity.endTime != null) {
+          // Duration 활동 (수면/놀이): 해당 날짜 범위로 클램핑 후 슬롯 비교
+          final actEnd = activity.endTime!.toLocal();
+          final clampedStart = actStart.isBefore(dayStart) ? dayStart : actStart;
+          final clampedEnd = actEnd.isAfter(dayEnd) ? dayEnd : actEnd;
+          overlapsSlot = clampedStart.isBefore(slotEnd) && clampedEnd.isAfter(slotStart);
+        } else {
+          // Instant 활동 (수유/기저귀/건강): 1분 폭으로 슬롯 비교
+          final actEnd = actStart.add(const Duration(minutes: 1));
+          overlapsSlot = actStart.isBefore(slotEnd) && actEnd.isAfter(slotStart);
+        }
+
+        if (overlapsSlot) {
           final patternType = _mapActivityType(activity.type, slotIndex ~/ 2, activity.data);
 
-          // HF3-FIX: 우선순위 기반 mainActivity 설정
-          // 수면 > 수유 > 기저귀 > 놀이 > 건강
+          // 우선순위 기반 mainActivity 설정 (수면 > 수유 > 기저귀 > 놀이 > 건강)
           if (patternType == PatternActivityType.nightSleep ||
               patternType == PatternActivityType.daySleep) {
-            // 수면은 항상 최우선
             mainActivity = patternType;
             mainActivityId = activity.id;
           } else if (mainActivity == PatternActivityType.empty) {
-            // 수면이 없으면 다른 활동을 mainActivity로
             mainActivity = patternType;
             mainActivityId = activity.id;
           } else if (mainActivity != PatternActivityType.nightSleep &&
                      mainActivity != PatternActivityType.daySleep) {
-            // 수면이 아닌 경우에만 우선순위 비교
             final currentPriority = _getActivityPriority(mainActivity);
             final newPriority = _getActivityPriority(patternType);
             if (newPriority < currentPriority) {
-              // 오버레이에 기존 활동 추가
               if (!overlays.contains(mainActivity)) {
                 overlays.add(mainActivity);
               }
               mainActivity = patternType;
               mainActivityId = activity.id;
             } else {
-              // 오버레이에 새 활동 추가
               if (!overlays.contains(patternType)) {
                 overlays.add(patternType);
               }
             }
           } else {
-            // 수면이 mainActivity면 오버레이로 추가
+            // 수면이 mainActivity면 다른 활동은 오버레이로
             if (!overlays.contains(patternType)) {
               overlays.add(patternType);
             }

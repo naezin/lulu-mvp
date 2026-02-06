@@ -74,8 +74,6 @@ class _StatisticsTabState extends State<StatisticsTab> {
       final babies = homeProvider.babies;
       final selectedBabyId = homeProvider.selectedBabyId;
 
-      debugPrint('[DEBUG] [StatisticsTab] family: ${family?.id}, babies: ${babies.length}, selectedBabyId: $selectedBabyId');
-
       if (family == null || babies.isEmpty) {
         setState(() {
           _isLoading = false;
@@ -85,7 +83,6 @@ class _StatisticsTabState extends State<StatisticsTab> {
       }
 
       final dateRange = _filterProvider.getDateRange();
-      debugPrint('[DEBUG] [StatisticsTab] dateRange: ${dateRange.start} ~ ${dateRange.end}');
 
       // ⚠️ BUG-002 FIX: 타임아웃 처리 추가
       await Future.wait([
@@ -100,9 +97,6 @@ class _StatisticsTabState extends State<StatisticsTab> {
           throw TimeoutException('통계 로딩 타임아웃');
         },
       );
-
-      debugPrint('[DEBUG] [StatisticsTab] currentStatistics: ${_dataProvider.currentStatistics}');
-      debugPrint('[DEBUG] [StatisticsTab] hasData: ${_dataProvider.hasData}');
 
       // 주간 패턴 로드 (별도 타임아웃 - 실패해도 통계는 표시)
       final selectedBaby = homeProvider.selectedBaby;

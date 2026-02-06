@@ -406,28 +406,85 @@ class _PatternCell extends StatelessWidget {
     );
   }
 
+  /// HF8-FIX: overlays에서도 해당 타입 확인
   bool _shouldShowActivity() {
-    if (slot.activity == PatternActivityType.empty) return false;
+    if (slot.activity == PatternActivityType.empty &&
+        slot.overlays.isEmpty) return false;
 
     switch (filter) {
       case PatternFilter.sleep:
         return slot.activity == PatternActivityType.nightSleep ||
-            slot.activity == PatternActivityType.daySleep;
+            slot.activity == PatternActivityType.daySleep ||
+            slot.overlays.contains(PatternActivityType.nightSleep) ||
+            slot.overlays.contains(PatternActivityType.daySleep);
       case PatternFilter.feeding:
-        return slot.activity == PatternActivityType.feeding;
+        return slot.activity == PatternActivityType.feeding ||
+            slot.overlays.contains(PatternActivityType.feeding);
       case PatternFilter.diaper:
-        return slot.activity == PatternActivityType.diaper;
+        return slot.activity == PatternActivityType.diaper ||
+            slot.overlays.contains(PatternActivityType.diaper);
       case PatternFilter.play:
-        return slot.activity == PatternActivityType.play;
+        return slot.activity == PatternActivityType.play ||
+            slot.overlays.contains(PatternActivityType.play);
       case PatternFilter.health:
-        return slot.activity == PatternActivityType.health;
+        return slot.activity == PatternActivityType.health ||
+            slot.overlays.contains(PatternActivityType.health);
       case PatternFilter.all:
-        return true;
+        return slot.activity != PatternActivityType.empty ||
+            slot.overlays.isNotEmpty;
     }
   }
 
+  /// HF8-FIX: 필터 활성화 시 해당 타입 색상으로 표시
   Color _getActivityColor() {
-    switch (slot.activity) {
+    // 필터가 활성화된 경우, 해당 타입이 overlays에만 있어도 해당 색상 사용
+    if (filter != PatternFilter.all) {
+      final targetType = _getFilterTargetType();
+      if (targetType != null) {
+        if (slot.activity == targetType ||
+            (targetType == PatternActivityType.nightSleep &&
+                slot.activity == PatternActivityType.daySleep) ||
+            (targetType == PatternActivityType.daySleep &&
+                slot.activity == PatternActivityType.nightSleep)) {
+          return _getColorForType(slot.activity);
+        }
+        if (slot.overlays.contains(targetType)) {
+          return _getColorForType(targetType);
+        }
+        // 수면 필터일 때 overlays에서 밤잠/낮잠 확인
+        if (filter == PatternFilter.sleep) {
+          if (slot.overlays.contains(PatternActivityType.nightSleep)) {
+            return _getColorForType(PatternActivityType.nightSleep);
+          }
+          if (slot.overlays.contains(PatternActivityType.daySleep)) {
+            return _getColorForType(PatternActivityType.daySleep);
+          }
+        }
+      }
+    }
+
+    return _getColorForType(slot.activity);
+  }
+
+  PatternActivityType? _getFilterTargetType() {
+    switch (filter) {
+      case PatternFilter.sleep:
+        return PatternActivityType.nightSleep; // 또는 daySleep
+      case PatternFilter.feeding:
+        return PatternActivityType.feeding;
+      case PatternFilter.diaper:
+        return PatternActivityType.diaper;
+      case PatternFilter.play:
+        return PatternActivityType.play;
+      case PatternFilter.health:
+        return PatternActivityType.health;
+      case PatternFilter.all:
+        return null;
+    }
+  }
+
+  Color _getColorForType(PatternActivityType type) {
+    switch (type) {
       case PatternActivityType.nightSleep:
         return LuluPatternColors.nightSleep;
       case PatternActivityType.daySleep:

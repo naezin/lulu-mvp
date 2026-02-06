@@ -88,15 +88,15 @@ class MiniTimeBar extends StatelessWidget {
         date.day == now.day;
   }
 
-  /// HF2-1,2,4: 5종 활동 모두 컬러바로 표시
-  /// HF2-8: DB의 sleep_type 값 우선 사용
+  /// HF8-FIX: Duration 활동 클램핑 + Instant 활동 1분 폭
   /// 우선순위: 수면 > 수유 > 기저귀 > 놀이 > 건강
   Color _getSlotColor(int slotIndex) {
+    final dayStart = DateTime(date.year, date.month, date.day);
+    final dayEnd = dayStart.add(const Duration(days: 1));
     final slotStart = DateTime(
         date.year, date.month, date.day, slotIndex ~/ 2, (slotIndex % 2) * 30);
     final slotEnd = slotStart.add(const Duration(minutes: 30));
 
-    // 우선순위별로 활동 확인
     Color? sleepColor;
     Color? feedingColor;
     Color? diaperColor;
@@ -104,22 +104,32 @@ class MiniTimeBar extends StatelessWidget {
     Color? healthColor;
 
     for (final activity in activities) {
-      // UTC -> Local 변환
       final actStart = activity.startTime.toLocal();
-      final actEnd = (activity.endTime ?? activity.startTime.add(const Duration(hours: 1))).toLocal();
 
-      // 슬롯과 겹치는지 확인
-      if (actStart.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
+      // HF8-FIX: Duration vs Instant 활동 분리 처리
+      bool overlapsSlot = false;
+
+      if (activity.endTime != null) {
+        // Duration 활동: 해당 날짜 범위로 클램핑 후 슬롯 비교
+        final actEnd = activity.endTime!.toLocal();
+        final clampedStart = actStart.isBefore(dayStart) ? dayStart : actStart;
+        final clampedEnd = actEnd.isAfter(dayEnd) ? dayEnd : actEnd;
+        overlapsSlot = clampedStart.isBefore(slotEnd) && clampedEnd.isAfter(slotStart);
+      } else {
+        // Instant 활동: 1분 폭으로 슬롯 비교
+        final actEnd = actStart.add(const Duration(minutes: 1));
+        overlapsSlot = actStart.isBefore(slotEnd) && actEnd.isAfter(slotStart);
+      }
+
+      if (overlapsSlot) {
         switch (activity.type) {
           case ActivityType.sleep:
-            // HF2-8: DB의 sleep_type 값 우선 사용
             final sleepType = activity.data?['sleep_type'] as String?;
             if (sleepType == 'night') {
               sleepColor = LuluPatternColors.nightSleep;
             } else if (sleepType == 'nap') {
               sleepColor = LuluPatternColors.daySleep;
             } else {
-              // fallback: 시간 기반
               final hour = slotIndex ~/ 2;
               sleepColor = (hour >= 21 || hour < 6)
                   ? LuluPatternColors.nightSleep
