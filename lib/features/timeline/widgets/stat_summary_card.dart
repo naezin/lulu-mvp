@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
@@ -112,12 +113,12 @@ class StatSummaryCard extends StatelessWidget {
           const SizedBox(height: LuluSpacing.xs),
 
           // 변화량
-          _buildChangeIndicator(),
+          _buildChangeIndicator(l10n),
 
           // 권장 범위 뱃지 (있으면)
           if (recommendation != null) ...[
             const SizedBox(height: LuluSpacing.xs),
-            _buildRecommendationBadge(recommendation),
+            _buildRecommendationBadge(recommendation, l10n),
           ],
         ],
       ),
@@ -126,19 +127,19 @@ class StatSummaryCard extends StatelessWidget {
 
   /// 변화량 표시
   /// HF2-5: 단위 포함 + 수면은 분→시간 변환
-  Widget _buildChangeIndicator() {
+  Widget _buildChangeIndicator(S? l10n) {
     if (change == 0) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            Icons.arrow_forward_rounded,
+            LuluIcons.forward,
             size: 12,
             color: LuluTextColors.tertiary,
           ),
           const SizedBox(width: 2),
           Text(
-            'vs prev',
+            l10n?.vsPrev ?? 'vs prev',
             style: LuluTextStyles.caption.copyWith(
               color: LuluTextColors.tertiary,
             ),
@@ -148,7 +149,7 @@ class StatSummaryCard extends StatelessWidget {
     }
 
     final isPositive = change > 0;
-    final icon = isPositive ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded;
+    final icon = isPositive ? LuluIcons.arrowUp : LuluIcons.arrowDown;
     final color = isPositive ? LuluStatusColors.success : LuluStatusColors.warning;
 
     // HF2-5: 타입별 단위 포함한 변화량 텍스트
@@ -198,7 +199,7 @@ class StatSummaryCard extends StatelessWidget {
   }
 
   /// 권장 범위 뱃지
-  Widget _buildRecommendationBadge(RecommendationResult result) {
+  Widget _buildRecommendationBadge(RecommendationResult result, S? l10n) {
     final color = switch (result.status) {
       RecommendationStatus.inRange => LuluStatusColors.success,
       RecommendationStatus.belowRange => LuluStatusColors.warning,
@@ -207,9 +208,9 @@ class StatSummaryCard extends StatelessWidget {
     };
 
     final text = switch (result.status) {
-      RecommendationStatus.inRange => '적정',
-      RecommendationStatus.belowRange => '적음',
-      RecommendationStatus.aboveRange => '많음',
+      RecommendationStatus.inRange => l10n?.recommendationInRange ?? 'Normal',
+      RecommendationStatus.belowRange => l10n?.recommendationBelow ?? 'Low',
+      RecommendationStatus.aboveRange => l10n?.recommendationAbove ?? 'High',
       RecommendationStatus.unknown => '-',
     };
 
@@ -249,9 +250,9 @@ class StatSummaryCard extends StatelessWidget {
   /// 유형별 아이콘
   IconData _getTypeIcon() {
     return switch (type) {
-      StatType.sleep => Icons.bedtime_rounded,
-      StatType.feeding => Icons.restaurant_rounded,
-      StatType.diaper => Icons.baby_changing_station_rounded,
+      StatType.sleep => LuluIcons.sleep,
+      StatType.feeding => LuluIcons.feedingSolid,
+      StatType.diaper => LuluIcons.diaper,
     };
   }
 

@@ -1005,5 +1005,39 @@
     "placeholders": {
       "days": {"type": "int", "example": "3"}
     }
-  }
+  },
+
+  "recordUpdated": "기록이 수정되었어요",
+  "@recordUpdated": {"description": "기록 수정 완료 메시지"},
+  "retry": "다시 시도",
+  "@retry": {"description": "다시 시도 버튼"},
+  "babyDefault": "아기",
+  "@babyDefault": {"description": "기본 아기 이름"},
+  "familyInfoMissing": "가족 정보가 없어요",
+  "@familyInfoMissing": {"description": "가족 정보 없음 메시지"},
+  "dataLoadTimeout": "데이터 로딩이 너무 오래 걸려요...",
+  "@dataLoadTimeout": {"description": "데이터 로딩 타임아웃 메시지"},
+  "dataLoadFailed": "데이터를 불러올 수 없어요",
+  "@dataLoadFailed": {"description": "데이터 로드 실패 메시지"},
+  "statisticsLoading": "통계를 불러오는 중...",
+  "@statisticsLoading": {"description": "통계 로딩 메시지"},
+  "errorOccurred": "오류가 발생했어요",
+  "@errorOccurred": {"description": "일반 오류 메시지"},
+  "recommendationInRange": "적정",
+  "@recommendationInRange": {"description": "권장 범위 내"},
+  "recommendationBelow": "적음",
+  "@recommendationBelow": {"description": "권장 범위 미달"},
+  "recommendationAbove": "많음",
+  "@recommendationAbove": {"description": "권장 범위 초과"},
+  "today": "오늘",
+  "@today": {"description": "오늘"},
+  "countTimes": "{count}회",
+  "@countTimes": {
+    "description": "횟수 표시",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "vsPrev": "vs 전주",
+  "@vsPrev": {"description": "전주 대비"}
 }

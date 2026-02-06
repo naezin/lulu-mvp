@@ -2310,6 +2310,90 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'{days}일 전'**
   String elapsedDaysAgo(int days);
+
+  /// 기록 수정 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'기록이 수정되었어요'**
+  String get recordUpdated;
+
+  /// 다시 시도 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 시도'**
+  String get retry;
+
+  /// 기본 아기 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'아기'**
+  String get babyDefault;
+
+  /// 가족 정보 없음 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 정보가 없어요'**
+  String get familyInfoMissing;
+
+  /// 데이터 로딩 타임아웃 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'데이터 로딩이 너무 오래 걸려요...'**
+  String get dataLoadTimeout;
+
+  /// 데이터 로드 실패 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'데이터를 불러올 수 없어요'**
+  String get dataLoadFailed;
+
+  /// 통계 로딩 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'통계를 불러오는 중...'**
+  String get statisticsLoading;
+
+  /// 일반 오류 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'오류가 발생했어요'**
+  String get errorOccurred;
+
+  /// 권장 범위 내
+  ///
+  /// In ko, this message translates to:
+  /// **'적정'**
+  String get recommendationInRange;
+
+  /// 권장 범위 미달
+  ///
+  /// In ko, this message translates to:
+  /// **'적음'**
+  String get recommendationBelow;
+
+  /// 권장 범위 초과
+  ///
+  /// In ko, this message translates to:
+  /// **'많음'**
+  String get recommendationAbove;
+
+  /// 오늘
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘'**
+  String get today;
+
+  /// 횟수 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}회'**
+  String countTimes(int count);
+
+  /// 전주 대비
+  ///
+  /// In ko, this message translates to:
+  /// **'vs 전주'**
+  String get vsPrev;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

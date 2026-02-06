@@ -182,6 +182,24 @@ class LuluIcons {
   static const IconData cryResult = Icons.psychology_rounded;
 
   // ========================================
+  // 방향 화살표 (Directional Arrows)
+  // ========================================
+
+  static const IconData arrowUp = Icons.arrow_upward_rounded;
+  static const IconData arrowDown = Icons.arrow_downward_rounded;
+  static const IconData chevronLeft = Icons.chevron_left_rounded;
+  static const IconData chevronRight = Icons.chevron_right_rounded;
+
+  // ========================================
+  // 추가 UI 요소 (Additional UI Elements)
+  // ========================================
+
+  static const IconData errorOutline = Icons.error_outline_rounded;
+  static const IconData editCalendar = Icons.edit_calendar_rounded;
+  static const IconData tip = Icons.lightbulb_outline_rounded;
+  static const IconData barChart = Icons.bar_chart_rounded;
+
+  // ========================================
   // 아이콘 크기 (Icon Sizes)
   // ========================================
 

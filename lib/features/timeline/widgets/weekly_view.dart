@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
@@ -82,7 +83,7 @@ class _WeeklyViewState extends State<WeeklyView> {
       if (family == null || babies.isEmpty) {
         setState(() {
           _isLoading = false;
-          _errorMessage = '가족 정보가 없어요';
+          _errorMessage = S.of(context)?.familyInfoMissing;
         });
         return;
       }
@@ -143,7 +144,7 @@ class _WeeklyViewState extends State<WeeklyView> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _errorMessage = '데이터 로딩이 너무 오래 걸려요. 다시 시도해주세요.';
+          _errorMessage = S.of(context)?.dataLoadTimeout;
         });
       }
     } catch (e) {
@@ -151,7 +152,7 @@ class _WeeklyViewState extends State<WeeklyView> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _errorMessage = '데이터를 불러올 수 없어요';
+          _errorMessage = S.of(context)?.dataLoadFailed;
         });
       }
     }
@@ -435,7 +436,7 @@ class _WeeklyViewState extends State<WeeklyView> {
       child: Row(
         children: [
           Icon(
-            Icons.lightbulb_outline_rounded,
+            LuluIcons.tip,
             color: color,
             size: 24,
           ),
@@ -455,6 +456,7 @@ class _WeeklyViewState extends State<WeeklyView> {
 
   /// 로딩 상태
   Widget _buildLoadingState() {
+    final l10n = S.of(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -464,7 +466,7 @@ class _WeeklyViewState extends State<WeeklyView> {
           ),
           const SizedBox(height: LuluSpacing.md),
           Text(
-            '통계를 불러오는 중...',
+            l10n?.statisticsLoading ?? 'Loading statistics...',
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -476,18 +478,19 @@ class _WeeklyViewState extends State<WeeklyView> {
 
   /// 에러 상태
   Widget _buildErrorState() {
+    final l10n = S.of(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.error_outline_rounded,
+            LuluIcons.errorOutline,
             size: 64,
             color: LuluStatusColors.error,
           ),
           const SizedBox(height: LuluSpacing.md),
           Text(
-            _errorMessage ?? '오류가 발생했어요',
+            _errorMessage ?? l10n?.errorOccurred ?? 'Something went wrong',
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.primary,
             ),
@@ -496,7 +499,7 @@ class _WeeklyViewState extends State<WeeklyView> {
           TextButton(
             onPressed: _loadData,
             child: Text(
-              '다시 시도',
+              l10n?.retry ?? 'Retry',
               style: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluColors.lavenderMist,
               ),
@@ -523,7 +526,7 @@ class _WeeklyViewState extends State<WeeklyView> {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.bar_chart_rounded,
+              LuluIcons.barChart,
               size: 40,
               color: LuluColors.lavenderMist,
             ),

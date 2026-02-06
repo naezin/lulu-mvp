@@ -1194,4 +1194,48 @@ class SKo extends S {
   String elapsedDaysAgo(int days) {
     return '$days일 전';
   }
+
+  @override
+  String get recordUpdated => '기록이 수정되었어요';
+
+  @override
+  String get retry => '다시 시도';
+
+  @override
+  String get babyDefault => '아기';
+
+  @override
+  String get familyInfoMissing => '가족 정보가 없어요';
+
+  @override
+  String get dataLoadTimeout => '데이터 로딩이 너무 오래 걸려요...';
+
+  @override
+  String get dataLoadFailed => '데이터를 불러올 수 없어요';
+
+  @override
+  String get statisticsLoading => '통계를 불러오는 중...';
+
+  @override
+  String get errorOccurred => '오류가 발생했어요';
+
+  @override
+  String get recommendationInRange => '적정';
+
+  @override
+  String get recommendationBelow => '적음';
+
+  @override
+  String get recommendationAbove => '많음';
+
+  @override
+  String get today => '오늘';
+
+  @override
+  String countTimes(int count) {
+    return '$count회';
+  }
+
+  @override
+  String get vsPrev => 'vs 전주';
 }

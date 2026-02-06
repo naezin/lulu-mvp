@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/models.dart';
@@ -180,9 +181,9 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
       context.read<HomeProvider>().updateActivity(result);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('기록이 수정되었어요'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(S.of(context)!.recordUpdated),
+          duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -225,7 +226,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.error_outline,
+                Icon(LuluIcons.errorOutline,
                     size: 48, color: Colors.red.withValues(alpha: 0.7)),
                 const SizedBox(height: 16),
                 Text(_errorMessage!,
@@ -234,7 +235,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _loadActivitiesForDate,
-                  child: const Text('다시 시도'),
+                  child: Text(S.of(context)!.retry),
                 ),
               ],
             ),
@@ -355,9 +356,10 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   /// 활동 없음 상태
   Widget _buildEmptyActivitiesState(HomeProvider homeProvider) {
     final l10n = S.of(context)!;
-    final dateStr = DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDate);
+    final locale = Localizations.localeOf(context).languageCode;
+    final dateStr = DateFormat.MMMEd(locale).format(_selectedDate);
     final isToday = _isToday(_selectedDate);
-    final babyName = homeProvider.selectedBaby?.name ?? '아기';
+    final babyName = homeProvider.selectedBaby?.name ?? l10n.babyDefault;
 
     return Center(
       child: Column(
@@ -372,7 +374,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.edit_calendar,
+              LuluIcons.editCalendar,
               size: 40,
               color: LuluColors.lavenderMist,
             ),

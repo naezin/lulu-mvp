@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 날짜 좌우 탐색 위젯
 ///
@@ -41,72 +43,78 @@ class DateNavigator extends StatelessWidget {
         horizontal: 16,
         vertical: 8,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // 이전 날짜
-          _NavButton(
-            icon: Icons.chevron_left_rounded,
-            label: _formatShortDate(
-                selectedDate.subtract(const Duration(days: 1))),
-            onTap: () =>
-                onDateChanged(selectedDate.subtract(const Duration(days: 1))),
-          ),
+      child: Builder(
+        builder: (context) {
+          final l10n = S.of(context);
+          final locale = Localizations.localeOf(context).languageCode;
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // 이전 날짜
+              _NavButton(
+                icon: LuluIcons.chevronLeft,
+                label: _formatShortDate(
+                    selectedDate.subtract(const Duration(days: 1)), locale),
+                onTap: () =>
+                    onDateChanged(selectedDate.subtract(const Duration(days: 1))),
+              ),
 
-          // 현재 날짜
-          GestureDetector(
-            onTap: onCalendarTap,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  _formatDate(selectedDate),
-                  style: const TextStyle(
-                    color: LuluTextColors.primary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                if (_isToday)
-                  const Text(
-                    '오늘',
-                    style: TextStyle(
-                      color: LuluColors.lavenderMist,
-                      fontSize: 12,
+              // 현재 날짜
+              GestureDetector(
+                onTap: onCalendarTap,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _formatDate(selectedDate, locale),
+                      style: const TextStyle(
+                        color: LuluTextColors.primary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                const SizedBox(height: 2),
-                Icon(
-                  Icons.calendar_today_rounded,
-                  size: 16,
-                  color: LuluTextColors.secondary,
+                    if (_isToday)
+                      Text(
+                        l10n?.today ?? 'Today',
+                        style: const TextStyle(
+                          color: LuluColors.lavenderMist,
+                          fontSize: 12,
+                        ),
+                      ),
+                    const SizedBox(height: 2),
+                    Icon(
+                      LuluIcons.calendar,
+                      size: 16,
+                      color: LuluTextColors.secondary,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
 
-          // 다음 날짜
-          _NavButton(
-            icon: Icons.chevron_right_rounded,
-            label: _isFuture
-                ? ''
-                : _formatShortDate(selectedDate.add(const Duration(days: 1))),
-            onTap: _isFuture
-                ? null
-                : () => onDateChanged(selectedDate.add(const Duration(days: 1))),
-            enabled: !_isFuture,
-          ),
-        ],
+              // 다음 날짜
+              _NavButton(
+                icon: LuluIcons.chevronRight,
+                label: _isFuture
+                    ? ''
+                    : _formatShortDate(selectedDate.add(const Duration(days: 1)), locale),
+                onTap: _isFuture
+                    ? null
+                    : () => onDateChanged(selectedDate.add(const Duration(days: 1))),
+                enabled: !_isFuture,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  String _formatDate(DateTime date) {
-    return DateFormat('M월 d일 (E)', 'ko_KR').format(date);
+  String _formatDate(DateTime date, String locale) {
+    return DateFormat.MMMEd(locale).format(date);
   }
 
-  String _formatShortDate(DateTime date) {
-    return DateFormat('M/d', 'ko_KR').format(date);
+  String _formatShortDate(DateTime date, String locale) {
+    return DateFormat.Md(locale).format(date);
   }
 }
 

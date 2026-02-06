@@ -1212,4 +1212,48 @@ class SEn extends S {
   String elapsedDaysAgo(int days) {
     return '${days}d ago';
   }
+
+  @override
+  String get recordUpdated => 'Record updated';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get babyDefault => 'Baby';
+
+  @override
+  String get familyInfoMissing => 'Family info not found';
+
+  @override
+  String get dataLoadTimeout => 'Data loading is taking too long...';
+
+  @override
+  String get dataLoadFailed => 'Unable to load data';
+
+  @override
+  String get statisticsLoading => 'Loading statistics...';
+
+  @override
+  String get errorOccurred => 'Something went wrong';
+
+  @override
+  String get recommendationInRange => 'Normal';
+
+  @override
+  String get recommendationBelow => 'Low';
+
+  @override
+  String get recommendationAbove => 'High';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String countTimes(int count) {
+    return '${count}x';
+  }
+
+  @override
+  String get vsPrev => 'vs prev';
 }

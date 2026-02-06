@@ -3,6 +3,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 일간 요약 배너 위젯
 ///
@@ -17,6 +18,7 @@ class DailySummaryBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
     final feedingCount = activities.where((a) => a.type == ActivityType.feeding).length;
     final diaperCount = activities.where((a) => a.type == ActivityType.diaper).length;
     final sleepHours = _calculateSleepHours();
@@ -39,23 +41,23 @@ class DailySummaryBanner extends StatelessWidget {
             icon: LuluIcons.feeding,
             color: LuluActivityColors.feeding,
             value: feedingCount > 0 && totalFeedingMl > 0
-                ? '$feedingCount회 ${totalFeedingMl.toInt()}ml'
-                : '$feedingCount회',
-            label: '수유',
+                ? '${l10n?.countTimes(feedingCount) ?? '${feedingCount}x'} ${totalFeedingMl.toInt()}ml'
+                : l10n?.countTimes(feedingCount) ?? '${feedingCount}x',
+            label: l10n?.activityTypeFeeding ?? 'Feeding',
           ),
           _buildDivider(),
           _buildSummaryItemWithIcon(
             icon: LuluIcons.sleep,
             color: LuluActivityColors.sleep,
             value: '${sleepHours.toStringAsFixed(1)}h',
-            label: '수면',
+            label: l10n?.activityTypeSleep ?? 'Sleep',
           ),
           _buildDivider(),
           _buildSummaryItemWithIcon(
             icon: LuluIcons.diaper,
             color: LuluActivityColors.diaper,
-            value: '$diaperCount회',
-            label: '기저귀',
+            value: l10n?.countTimes(diaperCount) ?? '${diaperCount}x',
+            label: l10n?.activityTypeDiaper ?? 'Diaper',
           ),
         ],
       ),

@@ -554,5 +554,25 @@
     "placeholders": {
       "days": {"type": "int", "example": "3"}
     }
-  }
+  },
+
+  "recordUpdated": "Record updated",
+  "retry": "Retry",
+  "babyDefault": "Baby",
+  "familyInfoMissing": "Family info not found",
+  "dataLoadTimeout": "Data loading is taking too long...",
+  "dataLoadFailed": "Unable to load data",
+  "statisticsLoading": "Loading statistics...",
+  "errorOccurred": "Something went wrong",
+  "recommendationInRange": "Normal",
+  "recommendationBelow": "Low",
+  "recommendationAbove": "High",
+  "today": "Today",
+  "countTimes": "{count}x",
+  "@countTimes": {
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "vsPrev": "vs prev"
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/models/activity_model.dart';
@@ -100,7 +101,8 @@ class PatternDataProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      _errorMessage = '패턴 데이터 로드 실패: $e';
+      debugPrint('[PatternDataProvider] loadWeeklyPattern error: $e');
+      _errorMessage = e.toString();
       _isLoading = false;
       notifyListeners();
     }
@@ -282,7 +284,8 @@ class PatternDataProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      _errorMessage = '패턴 데이터 로드 실패: $e';
+      debugPrint('[PatternDataProvider] loadMultiplePatterns error: $e');
+      _errorMessage = e.toString();
       _isLoading = false;
       notifyListeners();
     }
