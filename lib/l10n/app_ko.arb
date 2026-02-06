@@ -1020,5 +1020,79 @@
   "summaryDailyAvgFeeding": "일평균 수유",
   "@summaryDailyAvgFeeding": {"description": "통계 요약 - 일평균 수유"},
   "summaryDailyAvgDiaper": "일평균 기저귀",
-  "@summaryDailyAvgDiaper": {"description": "통계 요약 - 일평균 기저귀"}
+  "@summaryDailyAvgDiaper": {"description": "통계 요약 - 일평균 기저귀"},
+
+  "dailyGridSleep": "수면",
+  "@dailyGridSleep": {"description": "일간 그리드 - 수면"},
+  "dailyGridFeeding": "수유",
+  "@dailyGridFeeding": {"description": "일간 그리드 - 수유"},
+  "dailyGridDiaper": "기저귀",
+  "@dailyGridDiaper": {"description": "일간 그리드 - 기저귀"},
+  "dailyGridPlay": "놀이",
+  "@dailyGridPlay": {"description": "일간 그리드 - 놀이"},
+  "dailyGridNoData": "기록 없음",
+  "@dailyGridNoData": {"description": "일간 그리드 - 데이터 없음"},
+  "dailyGridGapInterval": "{gap}h 간격",
+  "@dailyGridGapInterval": {
+    "description": "일간 그리드 - 수유 간격",
+    "placeholders": {
+      "gap": {"type": "String", "example": "2.5"}
+    }
+  },
+  "dailyGridElapsedHours": "{hours}시간 전",
+  "@dailyGridElapsedHours": {
+    "description": "일간 그리드 - 경과 시간 (시간)",
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"}
+    }
+  },
+  "dailyGridElapsedMinutes": "{minutes}분 전",
+  "@dailyGridElapsedMinutes": {
+    "description": "일간 그리드 - 경과 시간 (분)",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "dailyGridCount": "{count}회",
+  "@dailyGridCount": {
+    "description": "일간 그리드 - 횟수",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "dailyGridMinutes": "{minutes}분",
+  "@dailyGridMinutes": {
+    "description": "일간 그리드 - 분",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "45"}
+    }
+  },
+  "dailyGridHours": "{hours}h",
+  "@dailyGridHours": {
+    "description": "일간 그리드 - 시간",
+    "placeholders": {
+      "hours": {"type": "String", "example": "14.2"}
+    }
+  },
+
+  "weeklyChartTitle": "주간 활동 차트",
+  "@weeklyChartTitle": {"description": "주간 차트 제목"},
+
+  "weeklyInsightSleepIncrease": "수면 시간이 늘고 있어요",
+  "@weeklyInsightSleepIncrease": {"description": "주간 인사이트 - 수면 증가"},
+  "weeklyInsightSleepDecrease": "수면 시간이 줄고 있어요. 컨디션을 살펴보세요",
+  "@weeklyInsightSleepDecrease": {"description": "주간 인사이트 - 수면 감소"},
+  "weeklyInsightFeedGapIncrease": "수유 간격이 늘고 있어요",
+  "@weeklyInsightFeedGapIncrease": {"description": "주간 인사이트 - 수유 간격 증가"},
+  "weeklyInsightFeedGapDecrease": "수유 간격이 줄고 있어요",
+  "@weeklyInsightFeedGapDecrease": {"description": "주간 인사이트 - 수유 간격 감소"},
+  "weeklyInsightNightSleepStart": "평균 밤잠 시작 시간: {time}",
+  "@weeklyInsightNightSleepStart": {
+    "description": "주간 인사이트 - 밤잠 시작 시간",
+    "placeholders": {
+      "time": {"type": "String", "example": "20:30"}
+    }
+  },
+  "weeklyInsightStable": "안정적인 패턴을 유지하고 있어요",
+  "@weeklyInsightStable": {"description": "주간 인사이트 - 안정"}
 }

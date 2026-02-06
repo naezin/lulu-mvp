@@ -562,5 +562,61 @@
   "summaryNoData": "No data",
   "summaryDailyAvgSleep": "Daily avg. sleep",
   "summaryDailyAvgFeeding": "Daily avg. feeding",
-  "summaryDailyAvgDiaper": "Daily avg. diaper"
+  "summaryDailyAvgDiaper": "Daily avg. diaper",
+
+  "dailyGridSleep": "Sleep",
+  "dailyGridFeeding": "Feeding",
+  "dailyGridDiaper": "Diaper",
+  "dailyGridPlay": "Play",
+  "dailyGridNoData": "No records",
+  "dailyGridGapInterval": "{gap}h gap",
+  "@dailyGridGapInterval": {
+    "placeholders": {
+      "gap": {"type": "String", "example": "2.5"}
+    }
+  },
+  "dailyGridElapsedHours": "{hours}h ago",
+  "@dailyGridElapsedHours": {
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"}
+    }
+  },
+  "dailyGridElapsedMinutes": "{minutes}m ago",
+  "@dailyGridElapsedMinutes": {
+    "placeholders": {
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "dailyGridCount": "{count}x",
+  "@dailyGridCount": {
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "dailyGridMinutes": "{minutes}min",
+  "@dailyGridMinutes": {
+    "placeholders": {
+      "minutes": {"type": "int", "example": "45"}
+    }
+  },
+  "dailyGridHours": "{hours}h",
+  "@dailyGridHours": {
+    "placeholders": {
+      "hours": {"type": "String", "example": "14.2"}
+    }
+  },
+
+  "weeklyInsightSleepIncrease": "Sleep time is increasing",
+  "weeklyChartTitle": "Weekly Activity Chart",
+
+  "weeklyInsightSleepDecrease": "Sleep time is decreasing. Check baby's condition",
+  "weeklyInsightFeedGapIncrease": "Feeding interval is increasing",
+  "weeklyInsightFeedGapDecrease": "Feeding interval is decreasing",
+  "weeklyInsightNightSleepStart": "Average night sleep start: {time}",
+  "@weeklyInsightNightSleepStart": {
+    "placeholders": {
+      "time": {"type": "String", "example": "20:30"}
+    }
+  },
+  "weeklyInsightStable": "Maintaining a stable pattern"
 }

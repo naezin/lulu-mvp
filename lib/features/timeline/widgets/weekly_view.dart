@@ -15,17 +15,25 @@ import '../../statistics/models/insight_data.dart';
 import '../../statistics/models/weekly_statistics.dart';
 import '../../statistics/widgets/together_guide_dialog.dart';
 import '../providers/pattern_data_provider.dart';
+import '../models/daily_pattern.dart' show PatternActivityType;
+import '../models/day_timeline.dart';
 import 'date_navigator.dart';
 import 'stat_summary_card.dart';
+import 'weekly_chart_full.dart';
+import 'weekly_grid.dart';
+import 'weekly_insight.dart';
 // HF2-9: WeeklyTrendChart 제거 (중복 정보)
 import 'weekly_pattern_chart.dart';
 
 /// 주간 뷰 (WeeklyView)
 ///
-/// Sprint 18-R HF3: 구조 재정비
-/// - DateNavigator (최상단) → Cards → Chart 연동
-/// - 주 이동 시 전체 데이터 갱신
-/// - WeeklyPatternChart 자체 네비게이션 제거 (DateNavigator가 대체)
+/// Sprint 19: 차트 재설계
+/// - DateNavigator: 주간 날짜 탐색
+/// - WeeklyChartFull: 실제 시간 기반 7일x24시간 차트 (신규)
+/// - WeeklyGrid: 1x4 요약 그리드 (수면/수유/기저귀/놀이)
+/// - WeeklyInsight: 트렌드 한줄 요약
+/// - WeeklyPatternChart: 7일x48슬롯 히트맵 (유지)
+/// - StatSummaryCard: 기존 요약 카드 (유지)
 class WeeklyView extends StatefulWidget {
   const WeeklyView({super.key});
 
@@ -281,6 +289,167 @@ class _WeeklyViewState extends State<WeeklyView> {
     );
   }
 
+  /// Sprint 19: WeeklyStatistics에서 WeeklySummary 생성
+  WeeklySummary _buildWeeklySummary(WeeklyStatistics stats) {
+    // 기존 통계에서 트렌드 계산
+    final sleepTrend = stats.sleep.changeMinutes / 60.0; // 분 → 시간
+    final feedGapTrend = 0.0; // TODO: 수유 간격 트렌드 (현재 데이터 없음)
+
+    return WeeklySummary(
+      avgSleepHours: stats.sleep.dailyAverageHours,
+      avgFeedGap: 0.0, // TODO: 수유 간격 평균 (현재 데이터 없음)
+      avgFeedCount: stats.feeding.dailyAverageCount.round(),
+      avgDiapers: stats.diaper.dailyAverageCount,
+      avgPlayMinutes: 0.0, // TODO: 놀이 시간 평균 (현재 데이터 없음)
+      sleepTrend: sleepTrend,
+      feedGapTrend: feedGapTrend,
+      avgNightSleepStartHour: null, // TODO: 밤잠 시작 시간 (현재 데이터 없음)
+    );
+  }
+
+  /// Sprint 19: WeeklyPattern에서 DayTimeline 리스트 생성
+  List<DayTimeline> _buildWeekTimelines() {
+    final pattern = _patternProvider.weeklyPattern;
+    if (pattern == null) return [];
+
+    final timelines = <DayTimeline>[];
+
+    // WeeklyPattern.days를 사용하여 7일간의 DayTimeline 생성
+    for (final dayPattern in pattern.days) {
+      // DailyPattern → DayTimeline 변환
+      final durationBlocks = <DurationBlock>[];
+      final instantMarkers = <InstantMarker>[];
+
+      // 연속된 수면 슬롯을 하나의 DurationBlock으로 합침
+      int? sleepStartHour;
+      int? sleepStartMinute;
+      String? currentSleepType;
+
+      for (final slot in dayPattern.slots) {
+        final slotHour = slot.hour;
+        final slotMinute = slot.halfHour * 30;
+
+        // 수면 활동 처리
+        if (slot.activity == PatternActivityType.nightSleep ||
+            slot.activity == PatternActivityType.daySleep) {
+          final sleepType = slot.activity == PatternActivityType.nightSleep
+              ? 'nightSleep'
+              : 'daySleep';
+
+          // 새로운 수면 시작 또는 타입 변경
+          if (sleepStartHour == null || currentSleepType != sleepType) {
+            // 이전 수면 블록 저장
+            if (sleepStartHour != null) {
+              durationBlocks.add(DurationBlock(
+                type: currentSleepType!,
+                startTime: DateTime(
+                  dayPattern.date.year,
+                  dayPattern.date.month,
+                  dayPattern.date.day,
+                  sleepStartHour,
+                  sleepStartMinute!,
+                ),
+                endTime: DateTime(
+                  dayPattern.date.year,
+                  dayPattern.date.month,
+                  dayPattern.date.day,
+                  slotHour,
+                  slotMinute,
+                ),
+              ));
+            }
+            sleepStartHour = slotHour;
+            sleepStartMinute = slotMinute;
+            currentSleepType = sleepType;
+          }
+        } else {
+          // 수면이 아닌 슬롯 - 이전 수면 블록 저장
+          if (sleepStartHour != null) {
+            durationBlocks.add(DurationBlock(
+              type: currentSleepType!,
+              startTime: DateTime(
+                dayPattern.date.year,
+                dayPattern.date.month,
+                dayPattern.date.day,
+                sleepStartHour,
+                sleepStartMinute!,
+              ),
+              endTime: DateTime(
+                dayPattern.date.year,
+                dayPattern.date.month,
+                dayPattern.date.day,
+                slotHour,
+                slotMinute,
+              ),
+            ));
+            sleepStartHour = null;
+            sleepStartMinute = null;
+            currentSleepType = null;
+          }
+        }
+
+        // 수유 활동 처리 (InstantMarker)
+        if (slot.activity == PatternActivityType.feeding ||
+            slot.overlays.contains(PatternActivityType.feeding)) {
+          instantMarkers.add(InstantMarker(
+            type: 'feeding',
+            time: DateTime(
+              dayPattern.date.year,
+              dayPattern.date.month,
+              dayPattern.date.day,
+              slotHour,
+              slotMinute,
+            ),
+          ));
+        }
+
+        // 기저귀 활동 처리 (InstantMarker)
+        if (slot.activity == PatternActivityType.diaper ||
+            slot.overlays.contains(PatternActivityType.diaper)) {
+          instantMarkers.add(InstantMarker(
+            type: 'diaper',
+            time: DateTime(
+              dayPattern.date.year,
+              dayPattern.date.month,
+              dayPattern.date.day,
+              slotHour,
+              slotMinute,
+            ),
+          ));
+        }
+      }
+
+      // 마지막 수면 블록 저장
+      if (sleepStartHour != null) {
+        durationBlocks.add(DurationBlock(
+          type: currentSleepType!,
+          startTime: DateTime(
+            dayPattern.date.year,
+            dayPattern.date.month,
+            dayPattern.date.day,
+            sleepStartHour,
+            sleepStartMinute!,
+          ),
+          endTime: DateTime(
+            dayPattern.date.year,
+            dayPattern.date.month,
+            dayPattern.date.day,
+            23,
+            59,
+          ),
+        ));
+      }
+
+      timelines.add(DayTimeline(
+        date: dayPattern.date,
+        durationBlocks: durationBlocks,
+        instantMarkers: instantMarkers,
+      ));
+    }
+
+    return timelines;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context);
@@ -307,6 +476,14 @@ class _WeeklyViewState extends State<WeeklyView> {
     final selectedBaby = homeProvider.selectedBaby;
     final correctedAgeDays = selectedBaby?.correctedAgeInDays;
 
+    // Sprint 19: WeeklySummary 생성 (WeeklyGrid, WeeklyInsight용)
+    final weeklySummary = _buildWeeklySummary(stats);
+
+    // Sprint 19: WeeklyChartFull용 weekTimelines 생성
+    final weekTimelines = _patternProvider.weeklyPattern != null
+        ? _buildWeekTimelines()
+        : <DayTimeline>[];
+
     return RefreshIndicator(
       onRefresh: _loadData,
       color: LuluColors.lavenderMist,
@@ -325,12 +502,25 @@ class _WeeklyViewState extends State<WeeklyView> {
               onCalendarTap: () => _showWeekPicker(context),
             ),
 
+            // Sprint 19: WeeklyGrid (1x4 요약 그리드)
+            WeeklyGrid(weeklySummary: weeklySummary),
+
+            // Sprint 19: WeeklyInsight (트렌드 한줄 요약)
+            WeeklyInsight(weeklySummary: weeklySummary),
+
+            // Sprint 19: WeeklyChartFull (실제 시간 기반 7일x24시간 차트)
+            if (weekTimelines.isNotEmpty)
+              WeeklyChartFull(
+                weekTimelines: weekTimelines,
+                weekStart: _selectedWeekStart,
+              ),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: LuluSpacing.md),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 요약 카드들
+                  // Sprint 19: StatSummaryCard 유지 (교정연령 기준 권장범위 표시)
                   Row(
                     children: [
                       Expanded(

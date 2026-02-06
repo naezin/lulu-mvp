@@ -1233,4 +1233,73 @@ class SEn extends S {
 
   @override
   String get summaryDailyAvgDiaper => 'Daily avg. diaper';
+
+  @override
+  String get dailyGridSleep => 'Sleep';
+
+  @override
+  String get dailyGridFeeding => 'Feeding';
+
+  @override
+  String get dailyGridDiaper => 'Diaper';
+
+  @override
+  String get dailyGridPlay => 'Play';
+
+  @override
+  String get dailyGridNoData => 'No records';
+
+  @override
+  String dailyGridGapInterval(String gap) {
+    return '${gap}h gap';
+  }
+
+  @override
+  String dailyGridElapsedHours(int hours) {
+    return '${hours}h ago';
+  }
+
+  @override
+  String dailyGridElapsedMinutes(int minutes) {
+    return '${minutes}m ago';
+  }
+
+  @override
+  String dailyGridCount(int count) {
+    return '${count}x';
+  }
+
+  @override
+  String dailyGridMinutes(int minutes) {
+    return '${minutes}min';
+  }
+
+  @override
+  String dailyGridHours(String hours) {
+    return '${hours}h';
+  }
+
+  @override
+  String get weeklyChartTitle => 'Weekly Activity Chart';
+
+  @override
+  String get weeklyInsightSleepIncrease => 'Sleep time is increasing';
+
+  @override
+  String get weeklyInsightSleepDecrease =>
+      'Sleep time is decreasing. Check baby\'s condition';
+
+  @override
+  String get weeklyInsightFeedGapIncrease => 'Feeding interval is increasing';
+
+  @override
+  String get weeklyInsightFeedGapDecrease => 'Feeding interval is decreasing';
+
+  @override
+  String weeklyInsightNightSleepStart(String time) {
+    return 'Average night sleep start: $time';
+  }
+
+  @override
+  String get weeklyInsightStable => 'Maintaining a stable pattern';
 }

@@ -4,6 +4,7 @@ import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../models/daily_pattern.dart';
+import '../models/day_timeline.dart';
 
 /// 주간 패턴 데이터 Provider
 ///
@@ -465,5 +466,197 @@ class PatternDataProvider extends ChangeNotifier {
     final daysFromMonday = date.weekday - 1;
     return DateTime(date.year, date.month, date.day)
         .subtract(Duration(days: daysFromMonday));
+  }
+
+  // ========================================
+  // Sprint 19: DayTimeline 기반 메서드 (실제 시간)
+  // DailyGrid, WeeklyChartFull용
+  // ========================================
+
+  /// ActivityModel 리스트에서 DayTimeline 생성 (실제 시간 기반)
+  /// overnight clamping 적용: 자정 넘기는 활동은 해당 날짜로 클램핑
+  DayTimeline buildDayTimeline(DateTime date, List<ActivityModel> activities) {
+    final dayStart = DateTime(date.year, date.month, date.day);
+    final dayEnd = dayStart.add(const Duration(days: 1));
+
+    final durationBlocks = <DurationBlock>[];
+    final instantMarkers = <InstantMarker>[];
+
+    for (final activity in activities) {
+      final localStart = activity.startTime.toLocal();
+      final localEnd = activity.endTime?.toLocal();
+
+      // Duration 활동 (수면, 놀이)
+      if (localEnd != null) {
+        // 해당 날짜와 겹치는지 확인
+        if (localStart.isBefore(dayEnd) && localEnd.isAfter(dayStart)) {
+          // overnight clamping: 해당 날짜 범위로 클램핑
+          final clampedStart = localStart.isBefore(dayStart) ? dayStart : localStart;
+          final clampedEnd = localEnd.isAfter(dayEnd) ? dayEnd : localEnd;
+
+          // 유효한 블록인지 확인 (최소 1분)
+          if (clampedEnd.isAfter(clampedStart)) {
+            final type = _mapToDurationBlockType(activity.type, activity.data);
+            durationBlocks.add(DurationBlock(
+              type: type,
+              startTime: clampedStart,
+              endTime: clampedEnd,
+              activityId: activity.id,
+            ));
+          }
+        }
+      }
+      // Instant 활동 (수유, 기저귀, 건강)
+      else {
+        // 해당 날짜에 속하는지 확인
+        if (!localStart.isBefore(dayStart) && localStart.isBefore(dayEnd)) {
+          final type = _mapToInstantMarkerType(activity.type);
+          instantMarkers.add(InstantMarker(
+            type: type,
+            time: localStart,
+            data: activity.data,
+            activityId: activity.id,
+          ));
+        }
+      }
+    }
+
+    return DayTimeline(
+      date: date,
+      durationBlocks: durationBlocks,
+      instantMarkers: instantMarkers,
+    );
+  }
+
+  /// 7일분 DayTimeline 생성
+  List<DayTimeline> buildWeekTimelines(
+    DateTime weekStart,
+    List<ActivityModel> activities,
+  ) {
+    return List.generate(7, (i) {
+      final date = weekStart.add(Duration(days: i));
+      return buildDayTimeline(date, activities);
+    });
+  }
+
+  /// 주간 요약 계산 (트렌드 포함)
+  WeeklySummary buildWeeklySummary(List<DayTimeline> timelines) {
+    if (timelines.isEmpty) return WeeklySummary.empty();
+
+    final daysWithData = timelines.where((t) => t.hasData).toList();
+    if (daysWithData.isEmpty) return WeeklySummary.empty();
+
+    final dayCount = daysWithData.length;
+
+    // 평균 계산
+    final totalSleep = daysWithData.fold(0.0, (sum, t) => sum + t.totalSleepHours);
+    final totalFeedGap = daysWithData.fold(0.0, (sum, t) => sum + t.avgFeedingGap);
+    final totalFeedCount = daysWithData.fold(0, (sum, t) => sum + t.feedingCount);
+    final totalDiapers = daysWithData.fold(0, (sum, t) => sum + t.diaperCount);
+    final totalPlay = daysWithData.fold(0, (sum, t) => sum + t.playMinutes);
+
+    // 수유 간격은 데이터 있는 날만 평균
+    final daysWithFeedings = daysWithData.where((t) => t.feedingCount >= 2).length;
+    final avgFeedGap = daysWithFeedings > 0
+        ? totalFeedGap / daysWithFeedings
+        : 0.0;
+
+    // 트렌드 계산 (주 초반 3일 vs 주 후반 3일)
+    double sleepTrend = 0;
+    double feedGapTrend = 0;
+
+    if (timelines.length >= 6) {
+      final firstHalf = timelines.sublist(0, 3);
+      final secondHalf = timelines.sublist(4, 7);
+
+      final firstHalfSleep = firstHalf
+          .where((t) => t.hasData)
+          .fold(0.0, (sum, t) => sum + t.totalSleepHours);
+      final secondHalfSleep = secondHalf
+          .where((t) => t.hasData)
+          .fold(0.0, (sum, t) => sum + t.totalSleepHours);
+
+      final firstCount = firstHalf.where((t) => t.hasData).length;
+      final secondCount = secondHalf.where((t) => t.hasData).length;
+
+      if (firstCount > 0 && secondCount > 0) {
+        sleepTrend = (secondHalfSleep / secondCount) - (firstHalfSleep / firstCount);
+      }
+
+      // 수유 간격 트렌드
+      final firstHalfGap = firstHalf
+          .where((t) => t.feedingCount >= 2)
+          .fold(0.0, (sum, t) => sum + t.avgFeedingGap);
+      final secondHalfGap = secondHalf
+          .where((t) => t.feedingCount >= 2)
+          .fold(0.0, (sum, t) => sum + t.avgFeedingGap);
+
+      final firstGapCount = firstHalf.where((t) => t.feedingCount >= 2).length;
+      final secondGapCount = secondHalf.where((t) => t.feedingCount >= 2).length;
+
+      if (firstGapCount > 0 && secondGapCount > 0) {
+        feedGapTrend = (secondHalfGap / secondGapCount) - (firstHalfGap / firstGapCount);
+      }
+    }
+
+    // 밤잠 시작 시간 평균
+    double? avgNightSleepStart;
+    final nightSleepStarts = <double>[];
+    for (final t in daysWithData) {
+      for (final block in t.durationBlocks) {
+        if (block.type == 'nightSleep') {
+          final hour = block.startHour;
+          // 밤 시간 (18시 이후)에 시작한 것만
+          if (hour >= 18 || hour < 6) {
+            nightSleepStarts.add(hour >= 18 ? hour : hour + 24);
+          }
+        }
+      }
+    }
+    if (nightSleepStarts.isNotEmpty) {
+      final avg = nightSleepStarts.reduce((a, b) => a + b) / nightSleepStarts.length;
+      avgNightSleepStart = avg > 24 ? avg - 24 : avg;
+    }
+
+    return WeeklySummary(
+      avgSleepHours: totalSleep / dayCount,
+      avgFeedGap: avgFeedGap,
+      avgFeedCount: (totalFeedCount / dayCount).round(),
+      avgDiapers: totalDiapers / dayCount,
+      avgPlayMinutes: totalPlay / dayCount,
+      sleepTrend: sleepTrend,
+      feedGapTrend: feedGapTrend,
+      avgNightSleepStartHour: avgNightSleepStart,
+    );
+  }
+
+  /// ActivityType -> DurationBlock type 변환
+  String _mapToDurationBlockType(ActivityType type, Map<String, dynamic>? data) {
+    switch (type) {
+      case ActivityType.sleep:
+        final sleepType = data?['sleep_type'] as String?;
+        if (sleepType == 'night') return 'nightSleep';
+        if (sleepType == 'nap') return 'daySleep';
+        // fallback: 시간 기반
+        return 'daySleep';
+      case ActivityType.play:
+        return 'play';
+      default:
+        return 'play'; // 기타 Duration은 play로 분류
+    }
+  }
+
+  /// ActivityType -> InstantMarker type 변환
+  String _mapToInstantMarkerType(ActivityType type) {
+    switch (type) {
+      case ActivityType.feeding:
+        return 'feeding';
+      case ActivityType.diaper:
+        return 'diaper';
+      case ActivityType.health:
+        return 'health';
+      default:
+        return 'health'; // 기타 Instant은 health로 분류
+    }
   }
 }

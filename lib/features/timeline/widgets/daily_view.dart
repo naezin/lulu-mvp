@@ -11,22 +11,26 @@ import '../../../data/repositories/activity_repository.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/undo_delete_mixin.dart';
 import '../../home/providers/home_provider.dart';
+import '../providers/pattern_data_provider.dart';
 import 'date_navigator.dart';
-import 'timeline_filter_chips.dart';
-import 'mini_time_bar.dart';
-import 'context_ribbon.dart';
+import 'daily_grid.dart';
 import 'activity_list_item.dart';
 import 'edit_activity_sheet.dart';
-import 'last_activity_badges.dart';
+// Sprint 19: 삭제된 imports (DailyGrid로 통합)
+// import 'timeline_filter_chips.dart';
+// import 'mini_time_bar.dart';
+// import 'context_ribbon.dart';
+// import 'last_activity_badges.dart';
 
 /// 일간 뷰 (DailyView)
 ///
-/// HF2-3: DailySummaryBanner 제거 (ContextRibbon만 사용)
+/// Sprint 19: 차트 재설계
 /// - DateNavigator: 날짜 좌우 탐색
-/// - TimelineFilterChips: 활동 유형 필터
-/// - MiniTimeBar: 24h 패턴 시각화 (5종 활동 모두)
-/// - ContextRibbon: 한 줄 요약
+/// - DailyGrid: 2x2 요약 그리드 (수면/수유/기저귀/놀이)
 /// - ActivityListItem: 스와이프 수정/삭제
+///
+/// 제거됨 (DailyGrid로 통합):
+/// - TimelineFilterChips, MiniTimeBar, ContextRibbon, LastActivityBadges
 class DailyView extends StatefulWidget {
   const DailyView({super.key});
 
@@ -38,8 +42,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   /// FIX-B: 오늘 날짜 (시간 정보 제거하여 정확한 날짜 비교)
   late DateTime _selectedDate;
 
-  /// 활동 유형 필터 (null = 전체)
-  String? _activeFilter;
+  // Sprint 19: _activeFilter 제거됨 (TimelineFilterChips 제거)
 
   /// 선택된 날짜의 활동 (Supabase에서 로드)
   List<ActivityModel> _dateActivities = [];
@@ -264,11 +267,20 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
           );
         }
 
-        // 선택된 아기 + 활동 유형으로 필터링
-        final activities = _filterActivities(
-            _dateActivities, homeProvider.selectedBabyId, _activeFilter);
+        // Sprint 19: 선택된 아기로만 필터링 (활동 유형 필터 제거)
+        final babyFilteredActivities =
+            _babyFilteredActivities(homeProvider.selectedBabyId);
 
-        // 🔍 HF3 Debug
+        // Sprint 19: DailyGrid용 DayTimeline 생성
+        final patternProvider = context.read<PatternDataProvider>();
+        final dayTimeline = patternProvider.buildDayTimeline(
+          _selectedDate,
+          babyFilteredActivities,
+        );
+
+        // 활동 목록 (시간순 정렬)
+        final sortedActivities = List<ActivityModel>.from(babyFilteredActivities)
+          ..sort((a, b) => b.startTime.compareTo(a.startTime));
 
         return RefreshIndicator(
           onRefresh: _loadActivitiesForDate,
@@ -285,47 +297,19 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 ),
               ),
 
-              // TimelineFilterChips (활동 필터)
+              // Sprint 19: DailyGrid (2x2 요약 그리드)
+              // MiniTimeBar, ContextRibbon, LastActivityBadges, TimelineFilterChips 대체
               SliverToBoxAdapter(
-                child: TimelineFilterChips(
-                  activeFilter: _activeFilter,
-                  onFilterChanged: (filter) {
-                    setState(() => _activeFilter = filter);
-                  },
+                child: DailyGrid(
+                  key: ValueKey(
+                      'dailygrid_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
+                  dayTimeline: dayTimeline,
+                  selectedDate: _selectedDate,
                 ),
               ),
 
-              // HF5: MiniTimeBar - 아기 필터만 적용, 활동 유형 필터는 무시 (전체 타임라인 표시)
-              if (_babyFilteredActivities(homeProvider.selectedBabyId).isNotEmpty)
-                SliverToBoxAdapter(
-                  child: MiniTimeBar(
-                    key: ValueKey(
-                        'minibar_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
-                    activities: _babyFilteredActivities(homeProvider.selectedBabyId),
-                    date: _selectedDate,
-                  ),
-                ),
-
-              // HF5: ContextRibbon - 아기 필터만 적용 (MiniTimeBar와 동일 데이터)
-              if (_babyFilteredActivities(homeProvider.selectedBabyId).isNotEmpty)
-                SliverToBoxAdapter(
-                  child: ContextRibbon(
-                    activities: _babyFilteredActivities(homeProvider.selectedBabyId),
-                  ),
-                ),
-
-              // HF5: LastActivityBadges - 마지막 활동 경과 시간 배지
-              if (_babyFilteredActivities(homeProvider.selectedBabyId).isNotEmpty)
-                SliverToBoxAdapter(
-                  child: LastActivityBadges(
-                    activities: _babyFilteredActivities(homeProvider.selectedBabyId),
-                  ),
-                ),
-
-              // HF2-3: DailySummaryBanner 제거 (ContextRibbon과 중복)
-
               // 활동 목록 또는 빈 상태
-              if (activities.isEmpty)
+              if (sortedActivities.isEmpty)
                 SliverFillRemaining(
                   child: _buildEmptyActivitiesState(homeProvider),
                 )
@@ -333,7 +317,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      final activity = activities[index];
+                      final activity = sortedActivities[index];
                       return ActivityListItem(
                         activity: activity,
                         onEdit: () => _onEditActivity(activity),
@@ -349,7 +333,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                         },
                       );
                     },
-                    childCount: activities.length,
+                    childCount: sortedActivities.length,
                   ),
                 ),
 
@@ -364,32 +348,13 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     );
   }
 
-  /// HF5: 아기 필터만 적용 (MiniTimeBar, ContextRibbon용)
+  /// 아기 필터만 적용 (DailyGrid, ActivityList용)
   List<ActivityModel> _babyFilteredActivities(String? babyId) {
     if (babyId == null) return _dateActivities;
     return _dateActivities.where((a) => a.babyIds.contains(babyId)).toList();
   }
 
-  /// 아기 ID + 활동 유형으로 필터링 (ActivityList용)
-  List<ActivityModel> _filterActivities(
-      List<ActivityModel> activities, String? babyId, String? typeFilter) {
-    var filtered = activities;
-
-    // 아기 필터
-    if (babyId != null) {
-      filtered = filtered.where((a) => a.babyIds.contains(babyId)).toList();
-    }
-
-    // 활동 유형 필터
-    if (typeFilter != null) {
-      filtered = filtered.where((a) => a.type.name == typeFilter).toList();
-    }
-
-    // 시간순 정렬 (최신 먼저)
-    filtered.sort((a, b) => b.startTime.compareTo(a.startTime));
-
-    return filtered;
-  }
+  // Sprint 19: _filterActivities 제거됨 (활동 유형 필터 제거)
 
   /// 활동 없음 상태
   Widget _buildEmptyActivitiesState(HomeProvider homeProvider) {

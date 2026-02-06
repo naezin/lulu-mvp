@@ -1215,4 +1215,72 @@ class SKo extends S {
 
   @override
   String get summaryDailyAvgDiaper => '일평균 기저귀';
+
+  @override
+  String get dailyGridSleep => '수면';
+
+  @override
+  String get dailyGridFeeding => '수유';
+
+  @override
+  String get dailyGridDiaper => '기저귀';
+
+  @override
+  String get dailyGridPlay => '놀이';
+
+  @override
+  String get dailyGridNoData => '기록 없음';
+
+  @override
+  String dailyGridGapInterval(String gap) {
+    return '${gap}h 간격';
+  }
+
+  @override
+  String dailyGridElapsedHours(int hours) {
+    return '$hours시간 전';
+  }
+
+  @override
+  String dailyGridElapsedMinutes(int minutes) {
+    return '$minutes분 전';
+  }
+
+  @override
+  String dailyGridCount(int count) {
+    return '$count회';
+  }
+
+  @override
+  String dailyGridMinutes(int minutes) {
+    return '$minutes분';
+  }
+
+  @override
+  String dailyGridHours(String hours) {
+    return '${hours}h';
+  }
+
+  @override
+  String get weeklyChartTitle => '주간 활동 차트';
+
+  @override
+  String get weeklyInsightSleepIncrease => '수면 시간이 늘고 있어요';
+
+  @override
+  String get weeklyInsightSleepDecrease => '수면 시간이 줄고 있어요. 컨디션을 살펴보세요';
+
+  @override
+  String get weeklyInsightFeedGapIncrease => '수유 간격이 늘고 있어요';
+
+  @override
+  String get weeklyInsightFeedGapDecrease => '수유 간격이 줄고 있어요';
+
+  @override
+  String weeklyInsightNightSleepStart(String time) {
+    return '평균 밤잠 시작 시간: $time';
+  }
+
+  @override
+  String get weeklyInsightStable => '안정적인 패턴을 유지하고 있어요';
 }

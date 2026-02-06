@@ -12,17 +12,22 @@ import '../../statistics/providers/statistics_data_provider.dart';
 import '../../statistics/providers/statistics_filter_provider.dart';
 import '../../statistics/models/insight_data.dart';
 import '../../statistics/models/weekly_statistics.dart';
+import '../models/day_timeline.dart';
 import '../providers/pattern_data_provider.dart';
 import 'stat_summary_card.dart';
+import 'weekly_grid.dart';
+import 'weekly_insight.dart';
 import 'weekly_trend_chart.dart';
 import 'weekly_pattern_chart.dart';
 
 /// 통계 탭
 ///
-/// RecordHistoryScreen의 두 번째 탭
-/// - 주간 통계 요약
-/// - 트렌드 차트
-/// - 권장 범위 뱃지
+/// Sprint 19: 차트 재설계
+/// - WeeklyGrid: 1x4 요약 그리드 (수면/수유/기저귀/놀이)
+/// - WeeklyInsight: 트렌드 한줄 요약
+/// - StatSummaryCard: 교정연령 기준 권장범위 표시
+/// - WeeklyTrendChart: 주간 수면 추이
+/// - WeeklyPatternChart: 7일x48슬롯 히트맵
 class StatisticsTab extends StatefulWidget {
   const StatisticsTab({super.key});
 
@@ -109,12 +114,12 @@ class _StatisticsTabState extends State<StatisticsTab> {
           ).timeout(
             Duration(seconds: _loadTimeoutSeconds),
             onTimeout: () {
-              debugPrint('⚠️ [StatisticsTab] Pattern load timeout - showing stats without pattern');
+              debugPrint('[WARN] [StatisticsTab] Pattern load timeout - showing stats without pattern');
               return;
             },
           );
         } catch (patternError) {
-          debugPrint('⚠️ [StatisticsTab] Pattern load error: $patternError');
+          debugPrint('[WARN] [StatisticsTab] Pattern load error: $patternError');
           // 패턴 로드 실패해도 통계는 계속 표시
         }
       }
@@ -125,7 +130,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
         });
       }
     } on TimeoutException catch (e) {
-      debugPrint('⏱️ [StatisticsTab] Timeout: $e');
+      debugPrint('[ERROR] [StatisticsTab] Timeout: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -133,7 +138,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
         });
       }
     } catch (e) {
-      debugPrint('❌ [StatisticsTab] Load error: $e');
+      debugPrint('[ERROR] [StatisticsTab] Load error: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -207,6 +212,24 @@ class _StatisticsTabState extends State<StatisticsTab> {
     setState(() {});
   }
 
+  /// Sprint 19: WeeklyStatistics에서 WeeklySummary 생성
+  WeeklySummary _buildWeeklySummary(WeeklyStatistics stats) {
+    // 기존 통계에서 트렌드 계산
+    final sleepTrend = stats.sleep.changeMinutes / 60.0; // 분 → 시간
+    final feedGapTrend = 0.0; // TODO: 수유 간격 트렌드 (현재 데이터 없음)
+
+    return WeeklySummary(
+      avgSleepHours: stats.sleep.dailyAverageHours,
+      avgFeedGap: 0.0, // TODO: 수유 간격 평균 (현재 데이터 없음)
+      avgFeedCount: stats.feeding.dailyAverageCount.round(),
+      avgDiapers: stats.diaper.dailyAverageCount,
+      avgPlayMinutes: 0.0, // TODO: 놀이 시간 평균 (현재 데이터 없음)
+      sleepTrend: sleepTrend,
+      feedGapTrend: feedGapTrend,
+      avgNightSleepStartHour: null, // TODO: 밤잠 시작 시간 (현재 데이터 없음)
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context);
@@ -233,154 +256,170 @@ class _StatisticsTabState extends State<StatisticsTab> {
     final selectedBaby = homeProvider.selectedBaby;
     final correctedAgeDays = selectedBaby?.correctedAgeInDays;
 
+    // Sprint 19: WeeklySummary 생성 (WeeklyGrid, WeeklyInsight용)
+    final weeklySummary = _buildWeeklySummary(stats);
+
     return RefreshIndicator(
       onRefresh: _loadData,
       color: LuluColors.lavenderMist,
       backgroundColor: LuluColors.surfaceCard,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(LuluSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 요약 카드들
-            Row(
-              children: [
-                Expanded(
-                  child: StatSummaryCard(
-                    type: StatType.sleep,
-                    value: stats.sleep.dailyAverageHours,
-                    unit: l10n?.unitHours ?? '시간',
-                    change: stats.sleep.changeMinutes.toDouble(),
-                    correctedAgeDays: correctedAgeDays,
+            // Sprint 19: WeeklyGrid (1x4 요약 그리드)
+            WeeklyGrid(weeklySummary: weeklySummary),
+
+            // Sprint 19: WeeklyInsight (트렌드 한줄 요약)
+            WeeklyInsight(weeklySummary: weeklySummary),
+
+            Padding(
+              padding: const EdgeInsets.all(LuluSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 요약 카드들
+                  Row(
+                    children: [
+                      Expanded(
+                        child: StatSummaryCard(
+                          type: StatType.sleep,
+                          value: stats.sleep.dailyAverageHours,
+                          unit: l10n?.unitHours ?? '시간',
+                          change: stats.sleep.changeMinutes.toDouble(),
+                          correctedAgeDays: correctedAgeDays,
+                        ),
+                      ),
+                      const SizedBox(width: LuluSpacing.sm),
+                      Expanded(
+                        child: StatSummaryCard(
+                          type: StatType.feeding,
+                          value: stats.feeding.dailyAverageCount,
+                          unit: l10n?.unitTimes ?? '회',
+                          change: stats.feeding.changeCount.toDouble(),
+                          correctedAgeDays: correctedAgeDays,
+                        ),
+                      ),
+                      const SizedBox(width: LuluSpacing.sm),
+                      Expanded(
+                        child: StatSummaryCard(
+                          type: StatType.diaper,
+                          value: stats.diaper.dailyAverageCount,
+                          unit: l10n?.unitTimes ?? '회',
+                          change: stats.diaper.changeCount.toDouble(),
+                          correctedAgeDays: correctedAgeDays,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(width: LuluSpacing.sm),
-                Expanded(
-                  child: StatSummaryCard(
-                    type: StatType.feeding,
-                    value: stats.feeding.dailyAverageCount,
-                    unit: l10n?.unitTimes ?? '회',
-                    change: stats.feeding.changeCount.toDouble(),
-                    correctedAgeDays: correctedAgeDays,
-                  ),
-                ),
-                const SizedBox(width: LuluSpacing.sm),
-                Expanded(
-                  child: StatSummaryCard(
-                    type: StatType.diaper,
-                    value: stats.diaper.dailyAverageCount,
-                    unit: l10n?.unitTimes ?? '회',
-                    change: stats.diaper.changeCount.toDouble(),
-                    correctedAgeDays: correctedAgeDays,
-                  ),
-                ),
-              ],
-            ),
 
-            const SizedBox(height: LuluSpacing.xl),
+                  const SizedBox(height: LuluSpacing.xl),
 
-            // 주간 수면 트렌드 차트
-            Text(
-              l10n?.weeklyTrendTitle ?? '주간 수면 추이',
-              style: LuluTextStyles.titleSmall.copyWith(
-                color: LuluTextColors.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: LuluSpacing.md),
-            WeeklyTrendChart(
-              dailyHours: stats.sleep.dailyHours,
-              barColor: LuluActivityColors.sleep,
-              highlightIndex: _dataProvider.insight?.highlightDayIndex,
-            ),
-
-            const SizedBox(height: LuluSpacing.xl),
-
-            // 주간 패턴 차트
-            if (_patternProvider.isLoading) ...[
-              const WeeklyPatternChartSkeleton(),
-              const SizedBox(height: LuluSpacing.xl),
-            ] else if (_patternProvider.weeklyPattern != null) ...[
-              // 다태아인 경우 함께보기 버튼 표시
-              if (homeProvider.babies.length > 1) ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TogetherViewButton(
-                      isEnabled: _patternProvider.togetherViewEnabled,
-                      onTap: () => _toggleTogetherView(homeProvider),
+                  // 주간 수면 트렌드 차트
+                  Text(
+                    l10n?.weeklyTrendTitle ?? '주간 수면 추이',
+                    style: LuluTextStyles.titleSmall.copyWith(
+                      color: LuluTextColors.primary,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
-                const SizedBox(height: LuluSpacing.sm),
-              ],
+                  ),
+                  const SizedBox(height: LuluSpacing.md),
+                  WeeklyTrendChart(
+                    dailyHours: stats.sleep.dailyHours,
+                    barColor: LuluActivityColors.sleep,
+                    highlightIndex: _dataProvider.insight?.highlightDayIndex,
+                  ),
 
-              // 함께보기 모드
-              if (_patternProvider.togetherViewEnabled &&
-                  _patternProvider.multiplePatterns.isNotEmpty) ...[
-                ..._patternProvider.multiplePatterns.map((pattern) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: LuluSpacing.md),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          pattern.babyName,
-                          style: LuluTextStyles.labelMedium.copyWith(
-                            color: LuluColors.lavenderMist,
-                            fontWeight: FontWeight.w600,
+                  const SizedBox(height: LuluSpacing.xl),
+
+                  // 주간 패턴 차트
+                  if (_patternProvider.isLoading) ...[
+                    const WeeklyPatternChartSkeleton(),
+                    const SizedBox(height: LuluSpacing.xl),
+                  ] else if (_patternProvider.weeklyPattern != null) ...[
+                    // 다태아인 경우 함께보기 버튼 표시
+                    if (homeProvider.babies.length > 1) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TogetherViewButton(
+                            isEnabled: _patternProvider.togetherViewEnabled,
+                            onTap: () => _toggleTogetherView(homeProvider),
                           ),
-                        ),
-                        const SizedBox(height: LuluSpacing.xs),
-                        WeeklyPatternChart(
-                          weeklyPattern: pattern,
-                          filter: _patternProvider.filter,
-                          onFilterChanged: (filter) {
-                            setState(() {
-                              _patternProvider.setFilter(filter);
-                            });
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
+                      const SizedBox(height: LuluSpacing.sm),
+                    ],
+
+                    // 함께보기 모드
+                    if (_patternProvider.togetherViewEnabled &&
+                        _patternProvider.multiplePatterns.isNotEmpty) ...[
+                      ..._patternProvider.multiplePatterns.map((pattern) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: LuluSpacing.md),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                pattern.babyName,
+                                style: LuluTextStyles.labelMedium.copyWith(
+                                  color: LuluColors.lavenderMist,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: LuluSpacing.xs),
+                              WeeklyPatternChart(
+                                weeklyPattern: pattern,
+                                filter: _patternProvider.filter,
+                                onFilterChanged: (filter) {
+                                  setState(() {
+                                    _patternProvider.setFilter(filter);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ] else ...[
+                      // 단일 아기 모드
+                      WeeklyPatternChart(
+                        weeklyPattern: _patternProvider.weeklyPattern!,
+                        filter: _patternProvider.filter,
+                        onFilterChanged: (filter) {
+                          setState(() {
+                            _patternProvider.setFilter(filter);
+                          });
+                        },
+                        onPreviousWeek: () => _navigateWeek(isPrevious: true),
+                        onNextWeek: () => _navigateWeek(isPrevious: false),
+                        canGoNext: !_isCurrentWeek(),
+                      ),
+                    ],
+                    const SizedBox(height: LuluSpacing.xl),
+                  ],
+
+                  // AI 인사이트 (있으면)
+                  if (_dataProvider.insight != null) ...[
+                    _buildInsightCard(),
+                    const SizedBox(height: LuluSpacing.lg),
+                  ],
+
+                  // 의료 면책 문구
+                  Center(
+                    child: Text(
+                      l10n?.statisticsDisclaimer ?? '통계는 참고용이며 의료 조언이 아닙니다',
+                      style: LuluTextStyles.caption.copyWith(
+                        color: LuluTextColors.tertiary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  );
-                }),
-              ] else ...[
-                // 단일 아기 모드
-                WeeklyPatternChart(
-                  weeklyPattern: _patternProvider.weeklyPattern!,
-                  filter: _patternProvider.filter,
-                  onFilterChanged: (filter) {
-                    setState(() {
-                      _patternProvider.setFilter(filter);
-                    });
-                  },
-                  onPreviousWeek: () => _navigateWeek(isPrevious: true),
-                  onNextWeek: () => _navigateWeek(isPrevious: false),
-                  canGoNext: !_isCurrentWeek(),
-                ),
-              ],
-              const SizedBox(height: LuluSpacing.xl),
-            ],
-
-            // AI 인사이트 (있으면)
-            if (_dataProvider.insight != null) ...[
-              _buildInsightCard(),
-              const SizedBox(height: LuluSpacing.lg),
-            ],
-
-            // 의료 면책 문구
-            Center(
-              child: Text(
-                l10n?.statisticsDisclaimer ?? '통계는 참고용이며 의료 조언이 아닙니다',
-                style: LuluTextStyles.caption.copyWith(
-                  color: LuluTextColors.tertiary,
-                ),
-                textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: LuluSpacing.lg),
+                ],
               ),
             ),
-            const SizedBox(height: LuluSpacing.lg),
           ],
         ),
       ),

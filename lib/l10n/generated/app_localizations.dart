@@ -2352,6 +2352,114 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'일평균 기저귀'**
   String get summaryDailyAvgDiaper;
+
+  /// 일간 그리드 - 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'수면'**
+  String get dailyGridSleep;
+
+  /// 일간 그리드 - 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get dailyGridFeeding;
+
+  /// 일간 그리드 - 기저귀
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀'**
+  String get dailyGridDiaper;
+
+  /// 일간 그리드 - 놀이
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이'**
+  String get dailyGridPlay;
+
+  /// 일간 그리드 - 데이터 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 없음'**
+  String get dailyGridNoData;
+
+  /// 일간 그리드 - 수유 간격
+  ///
+  /// In ko, this message translates to:
+  /// **'{gap}h 간격'**
+  String dailyGridGapInterval(String gap);
+
+  /// 일간 그리드 - 경과 시간 (시간)
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}시간 전'**
+  String dailyGridElapsedHours(int hours);
+
+  /// 일간 그리드 - 경과 시간 (분)
+  ///
+  /// In ko, this message translates to:
+  /// **'{minutes}분 전'**
+  String dailyGridElapsedMinutes(int minutes);
+
+  /// 일간 그리드 - 횟수
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}회'**
+  String dailyGridCount(int count);
+
+  /// 일간 그리드 - 분
+  ///
+  /// In ko, this message translates to:
+  /// **'{minutes}분'**
+  String dailyGridMinutes(int minutes);
+
+  /// 일간 그리드 - 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}h'**
+  String dailyGridHours(String hours);
+
+  /// 주간 차트 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'주간 활동 차트'**
+  String get weeklyChartTitle;
+
+  /// 주간 인사이트 - 수면 증가
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 시간이 늘고 있어요'**
+  String get weeklyInsightSleepIncrease;
+
+  /// 주간 인사이트 - 수면 감소
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 시간이 줄고 있어요. 컨디션을 살펴보세요'**
+  String get weeklyInsightSleepDecrease;
+
+  /// 주간 인사이트 - 수유 간격 증가
+  ///
+  /// In ko, this message translates to:
+  /// **'수유 간격이 늘고 있어요'**
+  String get weeklyInsightFeedGapIncrease;
+
+  /// 주간 인사이트 - 수유 간격 감소
+  ///
+  /// In ko, this message translates to:
+  /// **'수유 간격이 줄고 있어요'**
+  String get weeklyInsightFeedGapDecrease;
+
+  /// 주간 인사이트 - 밤잠 시작 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 밤잠 시작 시간: {time}'**
+  String weeklyInsightNightSleepStart(String time);
+
+  /// 주간 인사이트 - 안정
+  ///
+  /// In ko, this message translates to:
+  /// **'안정적인 패턴을 유지하고 있어요'**
+  String get weeklyInsightStable;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {
