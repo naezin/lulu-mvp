@@ -206,68 +206,6 @@ class _StatisticsTabState extends State<StatisticsTab> {
         stats.diaper.dailyAverageCount == 0;
   }
 
-  /// 주간 네비게이션 (Sprint 19 v2: DayTimeline 로드 추가)
-  Future<void> _navigateWeek({required bool isPrevious}) async {
-    final homeProvider = context.read<HomeProvider>();
-    final family = homeProvider.family;
-    final selectedBaby = homeProvider.selectedBaby;
-
-    if (family == null || selectedBaby == null) return;
-
-    // 주간 시작일 업데이트
-    setState(() {
-      if (isPrevious) {
-        _weekStartDate = _weekStartDate.subtract(const Duration(days: 7));
-      } else {
-        final newStart = _weekStartDate.add(const Duration(days: 7));
-        if (!newStart.isAfter(DateTime.now())) {
-          _weekStartDate = newStart;
-        }
-      }
-    });
-
-    // 레거시 패턴 로드
-    if (isPrevious) {
-      _patternProvider.goToPreviousWeek(
-        familyId: family.id,
-        babyId: selectedBaby.id,
-        babyName: selectedBaby.name,
-      );
-    } else {
-      _patternProvider.goToNextWeek(
-        familyId: family.id,
-        babyId: selectedBaby.id,
-        babyName: selectedBaby.name,
-      );
-    }
-
-    // Sprint 19 v2: DayTimeline 로드
-    try {
-      final timelines = await _patternProvider.getWeekTimelines(
-        familyId: family.id,
-        babyId: selectedBaby.id,
-        weekStart: _weekStartDate,
-      );
-      if (mounted) {
-        setState(() {
-          _weekTimelines = timelines;
-        });
-      }
-    } catch (e) {
-      debugPrint('[WARN] [StatisticsTab] Timeline load error: $e');
-    }
-  }
-
-  /// 현재 주인지 확인
-  bool _isCurrentWeek() {
-    final weekStart = _patternProvider.weekStartDate;
-    final now = DateTime.now();
-    final currentWeekStart = now.subtract(Duration(days: now.weekday - 1));
-    return weekStart.year == currentWeekStart.year &&
-        weekStart.month == currentWeekStart.month &&
-        weekStart.day == currentWeekStart.day;
-  }
-
   /// 다태아 함께보기 토글
   void _toggleTogetherView(HomeProvider homeProvider) {
     final family = homeProvider.family;
@@ -411,9 +349,6 @@ class _StatisticsTabState extends State<StatisticsTab> {
                     _chartFilter = filter;
                   });
                 },
-                onPreviousWeek: () => _navigateWeek(isPrevious: true),
-                onNextWeek: () => _navigateWeek(isPrevious: false),
-                canGoNext: !_isCurrentWeek(),
               ),
               const SizedBox(height: LuluSpacing.xl),
             ],

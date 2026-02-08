@@ -2658,6 +2658,18 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'함께보기 인사이트'**
   String get insightTitleTogether;
+
+  /// 주간 캘린더 피커 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'주 선택'**
+  String get weekPickerTitle;
+
+  /// 이번 주 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주'**
+  String get weekPickerThisWeek;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

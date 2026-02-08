@@ -1380,4 +1380,10 @@ class SKo extends S {
 
   @override
   String get insightTitleTogether => '함께보기 인사이트';
+
+  @override
+  String get weekPickerTitle => '주 선택';
+
+  @override
+  String get weekPickerThisWeek => '이번 주';
 }

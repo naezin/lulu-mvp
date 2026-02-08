@@ -20,11 +20,6 @@ class WeeklyChartFull extends StatelessWidget {
   final String? filter;
   final ValueChanged<String?>? onFilterChanged;
 
-  /// 주간 네비게이션
-  final VoidCallback? onPreviousWeek;
-  final VoidCallback? onNextWeek;
-  final bool canGoNext;
-
   /// 주 시작일
   final DateTime weekStartDate;
 
@@ -34,9 +29,6 @@ class WeeklyChartFull extends StatelessWidget {
     required this.weekStartDate,
     this.filter,
     this.onFilterChanged,
-    this.onPreviousWeek,
-    this.onNextWeek,
-    this.canGoNext = true,
   });
 
   @override
@@ -105,16 +97,6 @@ class WeeklyChartFull extends StatelessWidget {
               selectedFilter: filter,
               onFilterChanged: onFilterChanged!,
             ),
-          ),
-        ],
-        // 주간 네비게이터
-        if (onPreviousWeek != null || onNextWeek != null) ...[
-          const SizedBox(height: 12),
-          _WeekNavigatorV4(
-            weekStartDate: weekStartDate,
-            onPreviousWeek: onPreviousWeek,
-            onNextWeek: onNextWeek,
-            canGoNext: canGoNext,
           ),
         ],
       ],
@@ -359,77 +341,6 @@ class _WeeklyGridPainter extends CustomPainter {
     return oldDelegate.timelines != timelines ||
         oldDelegate.filter != filter ||
         oldDelegate.labels != labels;
-  }
-}
-
-/// 주간 네비게이터 v4
-class _WeekNavigatorV4 extends StatelessWidget {
-  final DateTime weekStartDate;
-  final VoidCallback? onPreviousWeek;
-  final VoidCallback? onNextWeek;
-  final bool canGoNext;
-
-  const _WeekNavigatorV4({
-    required this.weekStartDate,
-    this.onPreviousWeek,
-    this.onNextWeek,
-    this.canGoNext = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final endDate = weekStartDate.add(const Duration(days: 6));
-    final dateRangeText =
-        '${weekStartDate.month}/${weekStartDate.day} - ${endDate.month}/${endDate.day}';
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: onPreviousWeek,
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: LuluColors.navButtonBg,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              LuluIcons.chevronLeft,
-              size: 20,
-              color: onPreviousWeek != null
-                  ? LuluTextColors.primary
-                  : LuluTextColors.tertiary,
-            ),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Text(
-          dateRangeText,
-          style: LuluTextStyles.bodyMedium.copyWith(
-            color: LuluTextColors.primary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(width: 16),
-        GestureDetector(
-          onTap: canGoNext ? onNextWeek : null,
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: LuluColors.navButtonBg,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              LuluIcons.chevronRight,
-              size: 20,
-              color: canGoNext && onNextWeek != null
-                  ? LuluTextColors.primary
-                  : LuluTextColors.tertiary,
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }
 

@@ -1400,4 +1400,10 @@ class SEn extends S {
 
   @override
   String get insightTitleTogether => 'Together view insight';
+
+  @override
+  String get weekPickerTitle => 'Select Week';
+
+  @override
+  String get weekPickerThisWeek => 'This Week';
 }

@@ -1162,5 +1162,10 @@
   "insightTitleDefault": "이번 주 인사이트",
   "@insightTitleDefault": {"description": "인사이트 제목 - 기본"},
   "insightTitleTogether": "함께보기 인사이트",
-  "@insightTitleTogether": {"description": "인사이트 제목 - 함께보기"}
+  "@insightTitleTogether": {"description": "인사이트 제목 - 함께보기"},
+
+  "weekPickerTitle": "주 선택",
+  "@weekPickerTitle": {"description": "주간 캘린더 피커 제목"},
+  "weekPickerThisWeek": "이번 주",
+  "@weekPickerThisWeek": {"description": "이번 주 버튼"}
 }

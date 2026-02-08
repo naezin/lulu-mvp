@@ -653,5 +653,8 @@
   "insightTitleGood": "Good news!",
   "insightTitleCaution": "Heads up",
   "insightTitleDefault": "This week's insight",
-  "insightTitleTogether": "Together view insight"
+  "insightTitleTogether": "Together view insight",
+
+  "weekPickerTitle": "Select Week",
+  "weekPickerThisWeek": "This Week"
 }
