@@ -9,10 +9,6 @@ export 'daily_grid.dart';                // Sprint 19 v4 (MiniTimeBar/DailySumma
 export 'date_navigator.dart';
 export 'edit_activity_sheet.dart';
 export 'stat_summary_card.dart';
-export 'statistics_tab.dart';
-export 'timeline_tab.dart';
 export 'weekly_chart_full.dart';         // Sprint 19 v4 (DayTimeline 기반)
-export 'weekly_grid.dart';               // Sprint 19 v4
-export 'weekly_insight.dart';            // Sprint 19 v4
 // weekly_pattern_chart.dart 삭제됨 (Sprint 19 v2 - WeeklyChartFull로 대체)
 export 'weekly_trend_chart.dart';

@@ -10,5 +10,4 @@ export 'screens/email_login_screen.dart';
 
 // Widgets
 export 'widgets/apple_login_button.dart';
-export 'widgets/google_login_button.dart';
 export 'widgets/divider_with_text.dart';
