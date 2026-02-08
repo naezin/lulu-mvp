@@ -172,7 +172,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
           const Spacer(),
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.close, color: LuluTextColors.secondary),
+            icon: const Icon(LuluIcons.close, color: LuluTextColors.secondary),
           ),
         ],
       ),
@@ -250,7 +250,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
             ),
             const SizedBox(width: LuluSpacing.sm),
             Icon(
-              Icons.keyboard_arrow_down_rounded,
+              LuluIcons.chevronDown,
               color: LuluTextColors.tertiary,
               size: 20,
             ),
@@ -524,7 +524,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                   border: Border.all(color: LuluColors.glassBorder),
                 ),
                 child: Icon(
-                  Icons.remove,
+                  LuluIcons.remove,
                   color: LuluTextColors.secondary,
                   size: 20,
                 ),
@@ -569,7 +569,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                   border: Border.all(color: LuluColors.glassBorder),
                 ),
                 child: Icon(
-                  Icons.add,
+                  LuluIcons.add,
                   color: LuluTextColors.secondary,
                   size: 20,
                 ),
@@ -630,7 +630,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       child: Row(
         children: [
           Icon(
-            Icons.error_outline,
+            LuluIcons.error,
             color: LuluStatusColors.error,
             size: 20,
           ),

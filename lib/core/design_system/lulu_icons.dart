@@ -189,6 +189,14 @@ class LuluIcons {
   static const IconData arrowDown = Icons.arrow_downward_rounded;
   static const IconData chevronLeft = Icons.chevron_left_rounded;
   static const IconData chevronRight = Icons.chevron_right_rounded;
+  static const IconData chevronDown = Icons.keyboard_arrow_down_rounded;
+  static const IconData chevronUp = Icons.keyboard_arrow_up_rounded;
+
+  // ========================================
+  // 조작 (Manipulation)
+  // ========================================
+
+  static const IconData remove = Icons.remove_rounded;
 
   // ========================================
   // 추가 UI 요소 (Additional UI Elements)

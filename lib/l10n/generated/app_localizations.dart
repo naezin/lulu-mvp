@@ -1231,16 +1231,16 @@ abstract class S {
   /// **'이 예측은 참고용이며, 아기마다 다를 수 있어요'**
   String get sweetSpotDisclaimer;
 
-  /// Sweet Spot 수면 기록 없을 때 제목
+  /// Sweet Spot 오늘 수면 기록 없을 때 제목
   ///
   /// In ko, this message translates to:
-  /// **'수면을 기록하면 예측이 시작돼요'**
+  /// **'오늘 수면 기록이 없어요'**
   String get sweetSpotNoSleepTitle;
 
-  /// Sweet Spot 수면 기록 없을 때 힌트
+  /// Sweet Spot 오늘 수면 기록 없을 때 힌트
   ///
   /// In ko, this message translates to:
-  /// **'수면 기록이 쌓이면 다음 수면 시간을 예측해 드릴게요'**
+  /// **'수면을 기록하면 다음 수면 시간을 예측해 드릴게요'**
   String get sweetSpotNoSleepHint;
 
   /// Sweet Spot 수면 기록 버튼
@@ -2394,6 +2394,270 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'vs 전주'**
   String get vsPrev;
+
+  /// DailyGrid 수면 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'수면'**
+  String get dailyGridSleep;
+
+  /// DailyGrid 수유 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get dailyGridFeeding;
+
+  /// DailyGrid 기저귀 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀'**
+  String get dailyGridDiaper;
+
+  /// DailyGrid 놀이 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이'**
+  String get dailyGridPlay;
+
+  /// WeeklyGrid 평균 수면 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 수면'**
+  String get weeklyGridAvgSleep;
+
+  /// WeeklyGrid 평균 수유 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 수유'**
+  String get weeklyGridAvgFeeding;
+
+  /// WeeklyGrid 평균 기저귀 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 기저귀'**
+  String get weeklyGridAvgDiaper;
+
+  /// WeeklyGrid 평균 놀이 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 놀이'**
+  String get weeklyGridAvgPlay;
+
+  /// 수유 횟수
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}회'**
+  String dailyGridFeedingCount(int count);
+
+  /// 일반 횟수
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}회'**
+  String dailyGridCount(int count);
+
+  /// 경과 시간 (시간+분)
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}h {minutes}m 전'**
+  String dailyGridElapsedHours(int hours, int minutes);
+
+  /// 경과 시간 (분)
+  ///
+  /// In ko, this message translates to:
+  /// **'{minutes}m 전'**
+  String dailyGridElapsedMinutes(int minutes);
+
+  /// 기록 없음 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'-'**
+  String get dailyGridNoRecord;
+
+  /// 횟수 단위
+  ///
+  /// In ko, this message translates to:
+  /// **'회'**
+  String get dailyGridCountUnit;
+
+  /// 시간 단위
+  ///
+  /// In ko, this message translates to:
+  /// **'시간'**
+  String get dailyGridUnitHours;
+
+  /// 분 단위
+  ///
+  /// In ko, this message translates to:
+  /// **'분'**
+  String get dailyGridUnitMinutes;
+
+  /// 기존 유저 - 오늘 기록 없음 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘은 아직 기록이 없어요'**
+  String get dailyViewNoRecordsToday;
+
+  /// 기존 유저 - 특정 날짜 기록 없음 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'{date}에는 기록이 없어요'**
+  String dailyViewNoRecordsDate(String date);
+
+  /// WeeklyChartFull 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'주간 패턴'**
+  String get weeklyChartTitle;
+
+  /// WeeklyChartFull 빈 상태 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 패턴을 분석하기엔\n데이터가 부족해요'**
+  String get weeklyChartEmptyTitle;
+
+  /// WeeklyChartFull 빈 상태 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'3일 이상 기록하면 패턴이 나타나요'**
+  String get weeklyChartEmptyHint;
+
+  /// 요일 - 월요일
+  ///
+  /// In ko, this message translates to:
+  /// **'월'**
+  String get weekdayMon;
+
+  /// 요일 - 화요일
+  ///
+  /// In ko, this message translates to:
+  /// **'화'**
+  String get weekdayTue;
+
+  /// 요일 - 수요일
+  ///
+  /// In ko, this message translates to:
+  /// **'수'**
+  String get weekdayWed;
+
+  /// 요일 - 목요일
+  ///
+  /// In ko, this message translates to:
+  /// **'목'**
+  String get weekdayThu;
+
+  /// 요일 - 금요일
+  ///
+  /// In ko, this message translates to:
+  /// **'금'**
+  String get weekdayFri;
+
+  /// 요일 - 토요일
+  ///
+  /// In ko, this message translates to:
+  /// **'토'**
+  String get weekdaySat;
+
+  /// 요일 - 일요일
+  ///
+  /// In ko, this message translates to:
+  /// **'일'**
+  String get weekdaySun;
+
+  /// 차트 필터 - 전체
+  ///
+  /// In ko, this message translates to:
+  /// **'전체'**
+  String get chartFilterAll;
+
+  /// 차트 필터 - 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'수면'**
+  String get chartFilterSleep;
+
+  /// 차트 필터 - 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get chartFilterFeeding;
+
+  /// 차트 필터 - 기저귀
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀'**
+  String get chartFilterDiaper;
+
+  /// 차트 필터 - 놀이
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이'**
+  String get chartFilterPlay;
+
+  /// 차트 필터 - 건강
+  ///
+  /// In ko, this message translates to:
+  /// **'건강'**
+  String get chartFilterHealth;
+
+  /// 차트 범례 - 밤잠
+  ///
+  /// In ko, this message translates to:
+  /// **'밤잠'**
+  String get chartLegendNightSleep;
+
+  /// 차트 범례 - 낮잠
+  ///
+  /// In ko, this message translates to:
+  /// **'낮잠'**
+  String get chartLegendDaySleep;
+
+  /// 차트 범례 - 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get chartLegendFeeding;
+
+  /// 차트 범례 - 기저귀
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀'**
+  String get chartLegendDiaper;
+
+  /// 차트 범례 - 놀이
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이'**
+  String get chartLegendPlay;
+
+  /// 차트 범례 - 건강
+  ///
+  /// In ko, this message translates to:
+  /// **'건강'**
+  String get chartLegendHealth;
+
+  /// 인사이트 제목 - 좋음
+  ///
+  /// In ko, this message translates to:
+  /// **'좋은 소식!'**
+  String get insightTitleGood;
+
+  /// 인사이트 제목 - 주의
+  ///
+  /// In ko, this message translates to:
+  /// **'참고하세요'**
+  String get insightTitleCaution;
+
+  /// 인사이트 제목 - 기본
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 인사이트'**
+  String get insightTitleDefault;
+
+  /// 인사이트 제목 - 함께보기
+  ///
+  /// In ko, this message translates to:
+  /// **'함께보기 인사이트'**
+  String get insightTitleTogether;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

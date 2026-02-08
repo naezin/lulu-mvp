@@ -1256,4 +1256,148 @@ class SEn extends S {
 
   @override
   String get vsPrev => 'vs prev';
+
+  @override
+  String get dailyGridSleep => 'Sleep';
+
+  @override
+  String get dailyGridFeeding => 'Feeding';
+
+  @override
+  String get dailyGridDiaper => 'Diaper';
+
+  @override
+  String get dailyGridPlay => 'Play';
+
+  @override
+  String get weeklyGridAvgSleep => 'Avg Sleep';
+
+  @override
+  String get weeklyGridAvgFeeding => 'Avg Feeding';
+
+  @override
+  String get weeklyGridAvgDiaper => 'Avg Diaper';
+
+  @override
+  String get weeklyGridAvgPlay => 'Avg Play';
+
+  @override
+  String dailyGridFeedingCount(int count) {
+    return '${count}x';
+  }
+
+  @override
+  String dailyGridCount(int count) {
+    return '${count}x';
+  }
+
+  @override
+  String dailyGridElapsedHours(int hours, int minutes) {
+    return '${hours}h ${minutes}m ago';
+  }
+
+  @override
+  String dailyGridElapsedMinutes(int minutes) {
+    return '${minutes}m ago';
+  }
+
+  @override
+  String get dailyGridNoRecord => '-';
+
+  @override
+  String get dailyGridCountUnit => 'times';
+
+  @override
+  String get dailyGridUnitHours => 'h';
+
+  @override
+  String get dailyGridUnitMinutes => 'm';
+
+  @override
+  String get dailyViewNoRecordsToday => 'No records yet today';
+
+  @override
+  String dailyViewNoRecordsDate(String date) {
+    return 'No records on $date';
+  }
+
+  @override
+  String get weeklyChartTitle => 'Weekly Pattern';
+
+  @override
+  String get weeklyChartEmptyTitle =>
+      'Not enough data\nto analyze patterns yet';
+
+  @override
+  String get weeklyChartEmptyHint =>
+      'Patterns will appear after 3+ days of records';
+
+  @override
+  String get weekdayMon => 'Mon';
+
+  @override
+  String get weekdayTue => 'Tue';
+
+  @override
+  String get weekdayWed => 'Wed';
+
+  @override
+  String get weekdayThu => 'Thu';
+
+  @override
+  String get weekdayFri => 'Fri';
+
+  @override
+  String get weekdaySat => 'Sat';
+
+  @override
+  String get weekdaySun => 'Sun';
+
+  @override
+  String get chartFilterAll => 'All';
+
+  @override
+  String get chartFilterSleep => 'Sleep';
+
+  @override
+  String get chartFilterFeeding => 'Feeding';
+
+  @override
+  String get chartFilterDiaper => 'Diaper';
+
+  @override
+  String get chartFilterPlay => 'Play';
+
+  @override
+  String get chartFilterHealth => 'Health';
+
+  @override
+  String get chartLegendNightSleep => 'Night';
+
+  @override
+  String get chartLegendDaySleep => 'Nap';
+
+  @override
+  String get chartLegendFeeding => 'Feeding';
+
+  @override
+  String get chartLegendDiaper => 'Diaper';
+
+  @override
+  String get chartLegendPlay => 'Play';
+
+  @override
+  String get chartLegendHealth => 'Health';
+
+  @override
+  String get insightTitleGood => 'Good news!';
+
+  @override
+  String get insightTitleCaution => 'Heads up';
+
+  @override
+  String get insightTitleDefault => 'This week\'s insight';
+
+  @override
+  String get insightTitleTogether => 'Together view insight';
 }

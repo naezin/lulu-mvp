@@ -92,6 +92,10 @@ class HomeProvider extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  /// Sprint 19 수정 2: 전체 기록 존재 여부 (신규 유저 판별)
+  bool _hasAnyRecordsEver = true; // 기본 true (깜빡임 방지)
+  bool get hasAnyRecordsEver => _hasAnyRecordsEver;
+
   // ========================================
   // Sweet Spot 관련
   // ========================================
@@ -382,6 +386,7 @@ class HomeProvider extends ChangeNotifier {
   /// 초기 데이터 로드 (가족 설정 후 호출)
   ///
   /// 가족과 아기 정보가 설정된 후 오늘 활동을 로드합니다.
+  /// Sprint 19: hasAnyRecordsEver도 함께 체크
   Future<void> loadTodayActivities() async {
     if (_family == null) {
       debugPrint('[WARN] [HomeProvider] Cannot load activities: family not set');
@@ -390,12 +395,22 @@ class HomeProvider extends ChangeNotifier {
 
     try {
       final activityRepo = ActivityRepository();
-      final activities = await activityRepo.getTodayActivities(_family!.id);
+
+      // Sprint 19 수정 2: 전체 기록 존재 여부 체크 (병렬 실행)
+      final results = await Future.wait([
+        activityRepo.getTodayActivities(_family!.id),
+        activityRepo.hasAnyActivities(_family!.id),
+      ]);
+
+      final activities = results[0] as List<ActivityModel>;
+      final hasAny = results[1] as bool;
+
       _todayActivities = activities;
+      _hasAnyRecordsEver = hasAny;
       _invalidateCache();
       _calculateSweetSpot();
 
-      debugPrint('[OK] [HomeProvider] Today activities loaded: ${activities.length}');
+      debugPrint('[OK] [HomeProvider] Today activities loaded: ${activities.length}, hasAnyRecordsEver: $hasAny');
       notifyListeners();
     } catch (e) {
       debugPrint('❌ [HomeProvider] Error loading activities: $e');

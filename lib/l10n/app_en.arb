@@ -574,5 +574,84 @@
       "count": {"type": "int", "example": "5"}
     }
   },
-  "vsPrev": "vs prev"
+  "vsPrev": "vs prev",
+
+  "dailyGridSleep": "Sleep",
+  "dailyGridFeeding": "Feeding",
+  "dailyGridDiaper": "Diaper",
+  "dailyGridPlay": "Play",
+
+  "weeklyGridAvgSleep": "Avg Sleep",
+  "weeklyGridAvgFeeding": "Avg Feeding",
+  "weeklyGridAvgDiaper": "Avg Diaper",
+  "weeklyGridAvgPlay": "Avg Play",
+
+  "dailyGridFeedingCount": "{count}x",
+  "@dailyGridFeedingCount": {
+    "placeholders": {
+      "count": {"type": "int", "example": "8"}
+    }
+  },
+  "dailyGridCount": "{count}x",
+  "@dailyGridCount": {
+    "placeholders": {
+      "count": {"type": "int", "example": "6"}
+    }
+  },
+  "dailyGridElapsedHours": "{hours}h {minutes}m ago",
+  "@dailyGridElapsedHours": {
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"},
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "dailyGridElapsedMinutes": "{minutes}m ago",
+  "@dailyGridElapsedMinutes": {
+    "placeholders": {
+      "minutes": {"type": "int", "example": "45"}
+    }
+  },
+  "dailyGridNoRecord": "-",
+  "dailyGridCountUnit": "times",
+  "dailyGridUnitHours": "h",
+  "dailyGridUnitMinutes": "m",
+
+  "dailyViewNoRecordsToday": "No records yet today",
+  "dailyViewNoRecordsDate": "No records on {date}",
+  "@dailyViewNoRecordsDate": {
+    "placeholders": {
+      "date": {"type": "String", "example": "Jan 15 (Wed)"}
+    }
+  },
+
+  "weeklyChartTitle": "Weekly Pattern",
+  "weeklyChartEmptyTitle": "Not enough data\nto analyze patterns yet",
+  "weeklyChartEmptyHint": "Patterns will appear after 3+ days of records",
+
+  "weekdayMon": "Mon",
+  "weekdayTue": "Tue",
+  "weekdayWed": "Wed",
+  "weekdayThu": "Thu",
+  "weekdayFri": "Fri",
+  "weekdaySat": "Sat",
+  "weekdaySun": "Sun",
+
+  "chartFilterAll": "All",
+  "chartFilterSleep": "Sleep",
+  "chartFilterFeeding": "Feeding",
+  "chartFilterDiaper": "Diaper",
+  "chartFilterPlay": "Play",
+  "chartFilterHealth": "Health",
+
+  "chartLegendNightSleep": "Night",
+  "chartLegendDaySleep": "Nap",
+  "chartLegendFeeding": "Feeding",
+  "chartLegendDiaper": "Diaper",
+  "chartLegendPlay": "Play",
+  "chartLegendHealth": "Health",
+
+  "insightTitleGood": "Good news!",
+  "insightTitleCaution": "Heads up",
+  "insightTitleDefault": "This week's insight",
+  "insightTitleTogether": "Together view insight"
 }

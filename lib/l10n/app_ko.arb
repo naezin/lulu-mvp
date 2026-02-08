@@ -536,10 +536,10 @@
   "@sweetSpotEmptyHint": {"description": "Sweet Spot Empty State 힌트"},
   "sweetSpotDisclaimer": "이 예측은 참고용이며, 아기마다 다를 수 있어요",
   "@sweetSpotDisclaimer": {"description": "Sweet Spot 면책 문구"},
-  "sweetSpotNoSleepTitle": "수면을 기록하면 예측이 시작돼요",
-  "@sweetSpotNoSleepTitle": {"description": "Sweet Spot 수면 기록 없을 때 제목"},
-  "sweetSpotNoSleepHint": "수면 기록이 쌓이면 다음 수면 시간을 예측해 드릴게요",
-  "@sweetSpotNoSleepHint": {"description": "Sweet Spot 수면 기록 없을 때 힌트"},
+  "sweetSpotNoSleepTitle": "오늘 수면 기록이 없어요",
+  "@sweetSpotNoSleepTitle": {"description": "Sweet Spot 오늘 수면 기록 없을 때 제목"},
+  "sweetSpotNoSleepHint": "수면을 기록하면 다음 수면 시간을 예측해 드릴게요",
+  "@sweetSpotNoSleepHint": {"description": "Sweet Spot 오늘 수면 기록 없을 때 힌트"},
   "sweetSpotRecordSleepButton": "수면 기록하기",
   "@sweetSpotRecordSleepButton": {"description": "Sweet Spot 수면 기록 버튼"},
 
@@ -1039,5 +1039,128 @@
     }
   },
   "vsPrev": "vs 전주",
-  "@vsPrev": {"description": "전주 대비"}
+  "@vsPrev": {"description": "전주 대비"},
+
+  "dailyGridSleep": "수면",
+  "@dailyGridSleep": {"description": "DailyGrid 수면 레이블"},
+  "dailyGridFeeding": "수유",
+  "@dailyGridFeeding": {"description": "DailyGrid 수유 레이블"},
+  "dailyGridDiaper": "기저귀",
+  "@dailyGridDiaper": {"description": "DailyGrid 기저귀 레이블"},
+  "dailyGridPlay": "놀이",
+  "@dailyGridPlay": {"description": "DailyGrid 놀이 레이블"},
+
+  "weeklyGridAvgSleep": "평균 수면",
+  "@weeklyGridAvgSleep": {"description": "WeeklyGrid 평균 수면 레이블"},
+  "weeklyGridAvgFeeding": "평균 수유",
+  "@weeklyGridAvgFeeding": {"description": "WeeklyGrid 평균 수유 레이블"},
+  "weeklyGridAvgDiaper": "평균 기저귀",
+  "@weeklyGridAvgDiaper": {"description": "WeeklyGrid 평균 기저귀 레이블"},
+  "weeklyGridAvgPlay": "평균 놀이",
+  "@weeklyGridAvgPlay": {"description": "WeeklyGrid 평균 놀이 레이블"},
+
+  "dailyGridFeedingCount": "{count}회",
+  "@dailyGridFeedingCount": {
+    "description": "수유 횟수",
+    "placeholders": {
+      "count": {"type": "int", "example": "8"}
+    }
+  },
+  "dailyGridCount": "{count}회",
+  "@dailyGridCount": {
+    "description": "일반 횟수",
+    "placeholders": {
+      "count": {"type": "int", "example": "6"}
+    }
+  },
+  "dailyGridElapsedHours": "{hours}h {minutes}m 전",
+  "@dailyGridElapsedHours": {
+    "description": "경과 시간 (시간+분)",
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"},
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "dailyGridElapsedMinutes": "{minutes}m 전",
+  "@dailyGridElapsedMinutes": {
+    "description": "경과 시간 (분)",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "45"}
+    }
+  },
+  "dailyGridNoRecord": "-",
+  "@dailyGridNoRecord": {"description": "기록 없음 표시"},
+  "dailyGridCountUnit": "회",
+  "@dailyGridCountUnit": {"description": "횟수 단위"},
+  "dailyGridUnitHours": "시간",
+  "@dailyGridUnitHours": {"description": "시간 단위"},
+  "dailyGridUnitMinutes": "분",
+  "@dailyGridUnitMinutes": {"description": "분 단위"},
+
+  "dailyViewNoRecordsToday": "오늘은 아직 기록이 없어요",
+  "@dailyViewNoRecordsToday": {"description": "기존 유저 - 오늘 기록 없음 안내"},
+  "dailyViewNoRecordsDate": "{date}에는 기록이 없어요",
+  "@dailyViewNoRecordsDate": {
+    "description": "기존 유저 - 특정 날짜 기록 없음 안내",
+    "placeholders": {
+      "date": {"type": "String", "example": "1월 15일 (수)"}
+    }
+  },
+
+  "weeklyChartTitle": "주간 패턴",
+  "@weeklyChartTitle": {"description": "WeeklyChartFull 제목"},
+  "weeklyChartEmptyTitle": "아직 패턴을 분석하기엔\n데이터가 부족해요",
+  "@weeklyChartEmptyTitle": {"description": "WeeklyChartFull 빈 상태 제목"},
+  "weeklyChartEmptyHint": "3일 이상 기록하면 패턴이 나타나요",
+  "@weeklyChartEmptyHint": {"description": "WeeklyChartFull 빈 상태 힌트"},
+
+  "weekdayMon": "월",
+  "@weekdayMon": {"description": "요일 - 월요일"},
+  "weekdayTue": "화",
+  "@weekdayTue": {"description": "요일 - 화요일"},
+  "weekdayWed": "수",
+  "@weekdayWed": {"description": "요일 - 수요일"},
+  "weekdayThu": "목",
+  "@weekdayThu": {"description": "요일 - 목요일"},
+  "weekdayFri": "금",
+  "@weekdayFri": {"description": "요일 - 금요일"},
+  "weekdaySat": "토",
+  "@weekdaySat": {"description": "요일 - 토요일"},
+  "weekdaySun": "일",
+  "@weekdaySun": {"description": "요일 - 일요일"},
+
+  "chartFilterAll": "전체",
+  "@chartFilterAll": {"description": "차트 필터 - 전체"},
+  "chartFilterSleep": "수면",
+  "@chartFilterSleep": {"description": "차트 필터 - 수면"},
+  "chartFilterFeeding": "수유",
+  "@chartFilterFeeding": {"description": "차트 필터 - 수유"},
+  "chartFilterDiaper": "기저귀",
+  "@chartFilterDiaper": {"description": "차트 필터 - 기저귀"},
+  "chartFilterPlay": "놀이",
+  "@chartFilterPlay": {"description": "차트 필터 - 놀이"},
+  "chartFilterHealth": "건강",
+  "@chartFilterHealth": {"description": "차트 필터 - 건강"},
+
+  "chartLegendNightSleep": "밤잠",
+  "@chartLegendNightSleep": {"description": "차트 범례 - 밤잠"},
+  "chartLegendDaySleep": "낮잠",
+  "@chartLegendDaySleep": {"description": "차트 범례 - 낮잠"},
+  "chartLegendFeeding": "수유",
+  "@chartLegendFeeding": {"description": "차트 범례 - 수유"},
+  "chartLegendDiaper": "기저귀",
+  "@chartLegendDiaper": {"description": "차트 범례 - 기저귀"},
+  "chartLegendPlay": "놀이",
+  "@chartLegendPlay": {"description": "차트 범례 - 놀이"},
+  "chartLegendHealth": "건강",
+  "@chartLegendHealth": {"description": "차트 범례 - 건강"},
+
+  "insightTitleGood": "좋은 소식!",
+  "@insightTitleGood": {"description": "인사이트 제목 - 좋음"},
+  "insightTitleCaution": "참고하세요",
+  "@insightTitleCaution": {"description": "인사이트 제목 - 주의"},
+  "insightTitleDefault": "이번 주 인사이트",
+  "@insightTitleDefault": {"description": "인사이트 제목 - 기본"},
+  "insightTitleTogether": "함께보기 인사이트",
+  "@insightTitleTogether": {"description": "인사이트 제목 - 함께보기"}
 }

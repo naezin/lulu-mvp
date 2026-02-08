@@ -622,10 +622,10 @@ class SKo extends S {
   String get sweetSpotDisclaimer => '이 예측은 참고용이며, 아기마다 다를 수 있어요';
 
   @override
-  String get sweetSpotNoSleepTitle => '수면을 기록하면 예측이 시작돼요';
+  String get sweetSpotNoSleepTitle => '오늘 수면 기록이 없어요';
 
   @override
-  String get sweetSpotNoSleepHint => '수면 기록이 쌓이면 다음 수면 시간을 예측해 드릴게요';
+  String get sweetSpotNoSleepHint => '수면을 기록하면 다음 수면 시간을 예측해 드릴게요';
 
   @override
   String get sweetSpotRecordSleepButton => '수면 기록하기';
@@ -1238,4 +1238,146 @@ class SKo extends S {
 
   @override
   String get vsPrev => 'vs 전주';
+
+  @override
+  String get dailyGridSleep => '수면';
+
+  @override
+  String get dailyGridFeeding => '수유';
+
+  @override
+  String get dailyGridDiaper => '기저귀';
+
+  @override
+  String get dailyGridPlay => '놀이';
+
+  @override
+  String get weeklyGridAvgSleep => '평균 수면';
+
+  @override
+  String get weeklyGridAvgFeeding => '평균 수유';
+
+  @override
+  String get weeklyGridAvgDiaper => '평균 기저귀';
+
+  @override
+  String get weeklyGridAvgPlay => '평균 놀이';
+
+  @override
+  String dailyGridFeedingCount(int count) {
+    return '$count회';
+  }
+
+  @override
+  String dailyGridCount(int count) {
+    return '$count회';
+  }
+
+  @override
+  String dailyGridElapsedHours(int hours, int minutes) {
+    return '${hours}h ${minutes}m 전';
+  }
+
+  @override
+  String dailyGridElapsedMinutes(int minutes) {
+    return '${minutes}m 전';
+  }
+
+  @override
+  String get dailyGridNoRecord => '-';
+
+  @override
+  String get dailyGridCountUnit => '회';
+
+  @override
+  String get dailyGridUnitHours => '시간';
+
+  @override
+  String get dailyGridUnitMinutes => '분';
+
+  @override
+  String get dailyViewNoRecordsToday => '오늘은 아직 기록이 없어요';
+
+  @override
+  String dailyViewNoRecordsDate(String date) {
+    return '$date에는 기록이 없어요';
+  }
+
+  @override
+  String get weeklyChartTitle => '주간 패턴';
+
+  @override
+  String get weeklyChartEmptyTitle => '아직 패턴을 분석하기엔\n데이터가 부족해요';
+
+  @override
+  String get weeklyChartEmptyHint => '3일 이상 기록하면 패턴이 나타나요';
+
+  @override
+  String get weekdayMon => '월';
+
+  @override
+  String get weekdayTue => '화';
+
+  @override
+  String get weekdayWed => '수';
+
+  @override
+  String get weekdayThu => '목';
+
+  @override
+  String get weekdayFri => '금';
+
+  @override
+  String get weekdaySat => '토';
+
+  @override
+  String get weekdaySun => '일';
+
+  @override
+  String get chartFilterAll => '전체';
+
+  @override
+  String get chartFilterSleep => '수면';
+
+  @override
+  String get chartFilterFeeding => '수유';
+
+  @override
+  String get chartFilterDiaper => '기저귀';
+
+  @override
+  String get chartFilterPlay => '놀이';
+
+  @override
+  String get chartFilterHealth => '건강';
+
+  @override
+  String get chartLegendNightSleep => '밤잠';
+
+  @override
+  String get chartLegendDaySleep => '낮잠';
+
+  @override
+  String get chartLegendFeeding => '수유';
+
+  @override
+  String get chartLegendDiaper => '기저귀';
+
+  @override
+  String get chartLegendPlay => '놀이';
+
+  @override
+  String get chartLegendHealth => '건강';
+
+  @override
+  String get insightTitleGood => '좋은 소식!';
+
+  @override
+  String get insightTitleCaution => '참고하세요';
+
+  @override
+  String get insightTitleDefault => '이번 주 인사이트';
+
+  @override
+  String get insightTitleTogether => '함께보기 인사이트';
 }

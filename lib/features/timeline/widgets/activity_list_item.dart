@@ -57,7 +57,7 @@ class ActivityListItem extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.edit_rounded, size: 20),
+                  const Icon(LuluIcons.edit, size: 20),
                   const SizedBox(height: 2),
                   Text(
                     l10n?.actionEdit ?? 'Edit',
@@ -83,7 +83,7 @@ class ActivityListItem extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.delete_rounded, size: 20),
+                  const Icon(LuluIcons.delete, size: 20),
                   const SizedBox(height: 2),
                   Text(
                     l10n?.buttonDelete ?? 'Delete',
@@ -113,7 +113,7 @@ class ActivityListItem extends StatelessWidget {
                     const SizedBox(width: 16),
                     Expanded(child: _buildContent(l10n)),
                     Icon(
-                      Icons.chevron_left_rounded,
+                      LuluIcons.chevronLeft,
                       color: LuluTextColors.tertiary.withValues(alpha: 0.5),
                       size: 20,
                     ),
@@ -137,7 +137,7 @@ class ActivityListItem extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.swipe_left_rounded,
+                          const Icon(LuluIcons.chevronLeft,
                               size: 14, color: Colors.white),
                           const SizedBox(width: 4),
                           Text(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../core/config/feature_flags.dart';
@@ -110,10 +111,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       // 아기가 없으면 빈 상태
                       if (homeProvider.babies.isEmpty)
                         _buildEmptyBabiesState()
-                      // 아기는 있지만 활동이 없으면 빈 활동 상태 (BUG-002 FIX: 필터링된 활동 사용)
-                      else if (homeProvider.filteredTodayActivities.isEmpty)
+                      // Sprint 19 수정 2: 신규 유저(전체 기록 0)만 Empty State 표시
+                      // 기존 유저는 오늘 기록 없어도 Normal Content 표시
+                      else if (homeProvider.filteredTodayActivities.isEmpty &&
+                          !homeProvider.hasAnyRecordsEver)
                         _buildEmptyActivitiesState(context, homeProvider)
-                      // 정상 상태: 모든 카드 표시
+                      // 정상 상태: 모든 카드 표시 (오늘 활동 없어도)
                       else
                         _buildNormalContent(context, homeProvider),
 
@@ -223,9 +226,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildNormalContent(BuildContext context, HomeProvider homeProvider) {
     // Sweet Spot Empty State 판단: 수면 기록 없음
     final hasSleepRecord = homeProvider.lastSleep != null;
-    // 🆕 HOTFIX: 수유/기저귀만 있고 수면 없는 경우 안내 메시지 표시
-    final hasOtherActivitiesOnly = !hasSleepRecord &&
-        (homeProvider.lastFeeding != null || homeProvider.lastDiaper != null);
 
     return Consumer<OngoingSleepProvider>(
       builder: (context, sleepProvider, _) {
@@ -248,8 +248,9 @@ class _HomeScreenState extends State<HomeScreen> {
             SweetSpotCard(
               // 기존 props
               state: homeProvider.sweetSpotState,
-              // 🆕 HOTFIX: isEmpty는 수면 중이 아니고 수면 기록도 없고 다른 활동도 없을 때만 true
-              isEmpty: !isSleeping && !hasSleepRecord && !hasOtherActivitiesOnly,
+              // 🔧 Sprint 19 FIX: isEmpty는 신규 유저(전체 기록 0건)일 때만 true
+              // 기존 유저는 오늘 수면 없어도 Normal State 또는 NoSleepGuide 표시
+              isEmpty: !isSleeping && !homeProvider.hasAnyRecordsEver,
               estimatedTime: _getEstimatedTimeText(homeProvider),
               onRecordSleep: () => _navigateToRecord(context, 'sleep'),
               // 🆕 수면 중 props (Sprint 7 Day 2)
@@ -263,8 +264,10 @@ class _HomeScreenState extends State<HomeScreen> {
               progress: homeProvider.sweetSpotProgress,
               recommendedTime: homeProvider.recommendedSleepTime,
               isNightTime: homeProvider.isNightTime,
-              // 🆕 HOTFIX: 수면 기록 없지만 다른 활동 있을 때 안내 메시지
-              hasOtherActivitiesOnly: hasOtherActivitiesOnly,
+              // 🔧 Sprint 19 FIX: 기존 유저 + 오늘 수면 없음 → NoSleepGuide 표시
+              hasOtherActivitiesOnly: homeProvider.hasAnyRecordsEver && !hasSleepRecord,
+              // 🆕 Sprint 19: 신규 유저 여부 (전체 기록 0건)
+              isNewUser: !homeProvider.hasAnyRecordsEver,
             ),
 
             // 🆕 울음 분석 카드 (Feature Flag로 제어)
@@ -468,27 +471,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 homeProvider.addActivity(savedActivity);
               }
 
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Row(
-                    children: [
-                      const Icon(LuluIcons.sleep, size: 18, color: Colors.white),
-                      const SizedBox(width: 8),
-                      Text(
-                        '수면 기록이 저장되었어요',
-                        style: LuluTextStyles.bodyMedium.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: LuluActivityColors.sleep,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              );
+              // 🔧 Sprint 19 G-R2: 토스트 제거 → 햅틱 대체
+              HapticFeedback.mediumImpact();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: LuluActivityColors.sleep,

@@ -70,6 +70,10 @@ class SweetSpotCard extends StatefulWidget {
   /// 수면 기록 없지만 다른 활동(수유/기저귀)은 있음
   final bool hasOtherActivitiesOnly;
 
+  // 🆕 Sprint 19: 신규 유저 여부 (전체 기록 0건)
+  /// true면 "첫 기록을 시작해보세요" 표시, false면 "오늘 수면 기록이 없어요" 표시
+  final bool isNewUser;
+
   const SweetSpotCard({
     super.key,
     required this.state,
@@ -89,6 +93,7 @@ class SweetSpotCard extends StatefulWidget {
     this.recommendedTime,
     this.isNightTime = false,
     this.hasOtherActivitiesOnly = false,
+    this.isNewUser = true, // 기본값 true (하위 호환)
   });
 
   @override
@@ -324,11 +329,13 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           ),
           const SizedBox(height: LuluSpacing.md),
 
-          // 타이틀
+          // 타이틀 - Sprint 19: 신규 유저 vs 기존 유저 분기
           Text(
-            babyName != null
-                ? l10n.sweetSpotEmptyTitleWithName(babyName)
-                : l10n.sweetSpotEmptyTitleDefault,
+            widget.isNewUser
+                ? (babyName != null
+                    ? l10n.sweetSpotEmptyTitleWithName(babyName)
+                    : l10n.sweetSpotEmptyTitleDefault)
+                : l10n.sweetSpotNoSleepTitle,
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.bold,
@@ -337,9 +344,11 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           ),
           const SizedBox(height: LuluSpacing.sm),
 
-          // 액션 힌트
+          // 액션 힌트 - Sprint 19: 신규 유저 vs 기존 유저 분기
           Text(
-            l10n.sweetSpotEmptyActionHint,
+            widget.isNewUser
+                ? l10n.sweetSpotEmptyActionHint
+                : l10n.sweetSpotNoSleepHint,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),

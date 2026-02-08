@@ -16,7 +16,8 @@ import '../../statistics/models/weekly_statistics.dart';
 import '../providers/pattern_data_provider.dart';
 import 'stat_summary_card.dart';
 import 'weekly_trend_chart.dart';
-import 'weekly_pattern_chart.dart';
+import 'weekly_chart_full.dart';
+import '../models/day_timeline.dart';
 
 /// 통계 탭
 ///
@@ -38,6 +39,20 @@ class _StatisticsTabState extends State<StatisticsTab> {
   bool _isLoading = true;
   String? _errorMessage;
 
+  // 🔧 Sprint 19 FIX (버그 2): HomeProvider 변경 감지
+  int _lastActivityCount = -1;
+
+  // Sprint 19 v2: WeeklyChartFull용 상태
+  List<DayTimeline> _weekTimelines = [];
+  String? _chartFilter;
+  DateTime _weekStartDate = _getWeekStart(DateTime.now());
+
+  static DateTime _getWeekStart(DateTime date) {
+    final daysFromMonday = date.weekday - 1;
+    return DateTime(date.year, date.month, date.day)
+        .subtract(Duration(days: daysFromMonday));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +63,22 @@ class _StatisticsTabState extends State<StatisticsTab> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // 🔧 Sprint 19 FIX (버그 2): HomeProvider의 활동 개수 변경 시 데이터 새로 로드
+    final homeProvider = context.watch<HomeProvider>();
+    final currentCount = homeProvider.todayActivities.length;
+
+    if (_lastActivityCount != -1 && _lastActivityCount != currentCount) {
+      debugPrint('[DEBUG] [StatisticsTab] Activity count changed: $_lastActivityCount -> $currentCount, reloading...');
+      _patternProvider.clearCache(); // 캐시 무효화
+      _loadData();
+    }
+    _lastActivityCount = currentCount;
   }
 
   @override
@@ -99,17 +130,18 @@ class _StatisticsTabState extends State<StatisticsTab> {
       ]).timeout(
         Duration(seconds: _loadTimeoutSeconds),
         onTimeout: () {
-          throw TimeoutException('통계 로딩 타임아웃');
+          throw TimeoutException('Statistics loading timeout');
         },
       );
 
       debugPrint('[DEBUG] [StatisticsTab] currentStatistics: ${_dataProvider.currentStatistics}');
       debugPrint('[DEBUG] [StatisticsTab] hasData: ${_dataProvider.hasData}');
 
-      // 주간 패턴 로드 (별도 타임아웃 - 실패해도 통계는 표시)
+      // Sprint 19 v2: WeeklyChartFull용 DayTimeline 로드
       final selectedBaby = homeProvider.selectedBaby;
       if (selectedBaby != null) {
         try {
+          // 레거시 패턴 로드 (기존 호환)
           await _patternProvider.loadWeeklyPattern(
             familyId: family.id,
             babyId: selectedBaby.id,
@@ -121,6 +153,18 @@ class _StatisticsTabState extends State<StatisticsTab> {
               return;
             },
           );
+
+          // Sprint 19 v2: DayTimeline 기반 데이터 로드
+          final timelines = await _patternProvider.getWeekTimelines(
+            familyId: family.id,
+            babyId: selectedBaby.id,
+            weekStart: _weekStartDate,
+          );
+          if (mounted) {
+            setState(() {
+              _weekTimelines = timelines;
+            });
+          }
         } catch (patternError) {
           debugPrint('⚠️ [StatisticsTab] Pattern load error: $patternError');
           // 패턴 로드 실패해도 통계는 계속 표시
@@ -162,14 +206,27 @@ class _StatisticsTabState extends State<StatisticsTab> {
         stats.diaper.dailyAverageCount == 0;
   }
 
-  /// 주간 네비게이션
-  void _navigateWeek({required bool isPrevious}) {
+  /// 주간 네비게이션 (Sprint 19 v2: DayTimeline 로드 추가)
+  Future<void> _navigateWeek({required bool isPrevious}) async {
     final homeProvider = context.read<HomeProvider>();
     final family = homeProvider.family;
     final selectedBaby = homeProvider.selectedBaby;
 
     if (family == null || selectedBaby == null) return;
 
+    // 주간 시작일 업데이트
+    setState(() {
+      if (isPrevious) {
+        _weekStartDate = _weekStartDate.subtract(const Duration(days: 7));
+      } else {
+        final newStart = _weekStartDate.add(const Duration(days: 7));
+        if (!newStart.isAfter(DateTime.now())) {
+          _weekStartDate = newStart;
+        }
+      }
+    });
+
+    // 레거시 패턴 로드
     if (isPrevious) {
       _patternProvider.goToPreviousWeek(
         familyId: family.id,
@@ -183,7 +240,22 @@ class _StatisticsTabState extends State<StatisticsTab> {
         babyName: selectedBaby.name,
       );
     }
-    setState(() {});
+
+    // Sprint 19 v2: DayTimeline 로드
+    try {
+      final timelines = await _patternProvider.getWeekTimelines(
+        familyId: family.id,
+        babyId: selectedBaby.id,
+        weekStart: _weekStartDate,
+      );
+      if (mounted) {
+        setState(() {
+          _weekTimelines = timelines;
+        });
+      }
+    } catch (e) {
+      debugPrint('[WARN] [StatisticsTab] Timeline load error: $e');
+    }
   }
 
   /// 현재 주인지 확인
@@ -260,7 +332,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
                   child: StatSummaryCard(
                     type: StatType.sleep,
                     value: stats.sleep.dailyAverageHours,
-                    unit: l10n?.unitHours ?? '시간',
+                    unit: l10n?.unitHours ?? 'h',
                     change: stats.sleep.changeMinutes.toDouble(),
                     correctedAgeDays: correctedAgeDays,
                   ),
@@ -270,9 +342,12 @@ class _StatisticsTabState extends State<StatisticsTab> {
                   child: StatSummaryCard(
                     type: StatType.feeding,
                     value: stats.feeding.dailyAverageCount,
-                    unit: l10n?.unitTimes ?? '회',
+                    unit: l10n?.unitTimes ?? 'times',
                     change: stats.feeding.changeCount.toDouble(),
                     correctedAgeDays: correctedAgeDays,
+                    // 🔧 Sprint 19 E: ml 표시
+                    feedingMl: stats.feeding.dailyAverageMl,
+                    feedingCount: stats.feeding.dailyAverageCount,
                   ),
                 ),
                 const SizedBox(width: LuluSpacing.sm),
@@ -280,7 +355,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
                   child: StatSummaryCard(
                     type: StatType.diaper,
                     value: stats.diaper.dailyAverageCount,
-                    unit: l10n?.unitTimes ?? '회',
+                    unit: l10n?.unitTimes ?? 'times',
                     change: stats.diaper.changeCount.toDouble(),
                     correctedAgeDays: correctedAgeDays,
                   ),
@@ -292,7 +367,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
 
             // 주간 수면 트렌드 차트
             Text(
-              l10n?.weeklyTrendTitle ?? '주간 수면 추이',
+              l10n?.weeklyTrendTitle ?? 'Weekly Sleep Trend',
               style: LuluTextStyles.titleSmall.copyWith(
                 color: LuluTextColors.primary,
                 fontWeight: FontWeight.w600,
@@ -307,11 +382,11 @@ class _StatisticsTabState extends State<StatisticsTab> {
 
             const SizedBox(height: LuluSpacing.xl),
 
-            // 주간 패턴 차트
+            // Sprint 19 v2: WeeklyChartFull (DayTimeline 기반)
             if (_patternProvider.isLoading) ...[
-              const WeeklyPatternChartSkeleton(),
+              _buildChartSkeleton(),
               const SizedBox(height: LuluSpacing.xl),
-            ] else if (_patternProvider.weeklyPattern != null) ...[
+            ] else ...[
               // 다태아인 경우 함께보기 버튼 표시
               if (homeProvider.babies.length > 1) ...[
                 Row(
@@ -326,51 +401,20 @@ class _StatisticsTabState extends State<StatisticsTab> {
                 const SizedBox(height: LuluSpacing.sm),
               ],
 
-              // 함께보기 모드
-              if (_patternProvider.togetherViewEnabled &&
-                  _patternProvider.multiplePatterns.isNotEmpty) ...[
-                ..._patternProvider.multiplePatterns.map((pattern) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: LuluSpacing.md),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          pattern.babyName,
-                          style: LuluTextStyles.labelMedium.copyWith(
-                            color: LuluColors.lavenderMist,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: LuluSpacing.xs),
-                        WeeklyPatternChart(
-                          weeklyPattern: pattern,
-                          filter: _patternProvider.filter,
-                          onFilterChanged: (filter) {
-                            setState(() {
-                              _patternProvider.setFilter(filter);
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ] else ...[
-                // 단일 아기 모드
-                WeeklyPatternChart(
-                  weeklyPattern: _patternProvider.weeklyPattern!,
-                  filter: _patternProvider.filter,
-                  onFilterChanged: (filter) {
-                    setState(() {
-                      _patternProvider.setFilter(filter);
-                    });
-                  },
-                  onPreviousWeek: () => _navigateWeek(isPrevious: true),
-                  onNextWeek: () => _navigateWeek(isPrevious: false),
-                  canGoNext: !_isCurrentWeek(),
-                ),
-              ],
+              // Sprint 19 v2: WeeklyChartFull
+              WeeklyChartFull(
+                weekTimelines: _weekTimelines,
+                weekStartDate: _weekStartDate,
+                filter: _chartFilter,
+                onFilterChanged: (filter) {
+                  setState(() {
+                    _chartFilter = filter;
+                  });
+                },
+                onPreviousWeek: () => _navigateWeek(isPrevious: true),
+                onNextWeek: () => _navigateWeek(isPrevious: false),
+                canGoNext: !_isCurrentWeek(),
+              ),
               const SizedBox(height: LuluSpacing.xl),
             ],
 
@@ -383,7 +427,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
             // 의료 면책 문구
             Center(
               child: Text(
-                l10n?.statisticsDisclaimer ?? '통계는 참고용이며 의료 조언이 아닙니다',
+                l10n?.statisticsDisclaimer ?? 'Statistics are for reference only, not medical advice',
                 style: LuluTextStyles.caption.copyWith(
                   color: LuluTextColors.tertiary,
                 ),
@@ -460,6 +504,27 @@ class _StatisticsTabState extends State<StatisticsTab> {
     );
   }
 
+  /// Sprint 19 v2: 차트 스켈레톤
+  Widget _buildChartSkeleton() {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: LuluColors.chartSkeletonBg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: LuluColors.chartSkeletonBorder,
+          width: 1,
+        ),
+      ),
+      child: Center(
+        child: CircularProgressIndicator(
+          color: LuluColors.lavenderMist,
+          strokeWidth: 2,
+        ),
+      ),
+    );
+  }
+
   /// 에러 상태
   Widget _buildErrorState() {
     final l10n = S.of(context);
@@ -518,7 +583,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
           ),
           const SizedBox(height: LuluSpacing.xl),
           Text(
-            l10n?.statisticsEmptyTitle ?? '아직 통계가 없어요',
+            l10n?.statisticsEmptyTitle ?? 'No statistics yet',
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.bold,
@@ -526,7 +591,7 @@ class _StatisticsTabState extends State<StatisticsTab> {
           ),
           const SizedBox(height: LuluSpacing.sm),
           Text(
-            l10n?.statisticsEmptyHint ?? '기록을 쌓으면 통계가 나타나요',
+            l10n?.statisticsEmptyHint ?? 'Statistics will appear as you add records',
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),

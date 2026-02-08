@@ -10,8 +10,8 @@ import 'parsed_activity.dart';
 /// - 분유, 모유, 유축수유 → feeding
 /// - 낮잠, 밤잠 → sleep
 /// - 기저귀 → diaper
-/// - 놀이, 터미타임 → play
-/// - 목욕 → health
+/// - 놀이, 터미타임, 목욕, 외출 → play
+/// - 체온, 투약 → health
 ///
 /// 파일 형식 예시:
 /// ```
@@ -180,6 +180,10 @@ class BabytimeParser {
     if (activityType == 'play') {
       if (recordType == '터미타임') {
         data['playType'] = 'tummyTime';
+      } else if (recordType == '목욕') {
+        data['playType'] = 'bath';
+      } else if (recordType == '외출') {
+        data['playType'] = 'outdoor';
       } else {
         data['playType'] = 'play';
       }
@@ -187,9 +191,7 @@ class BabytimeParser {
 
     // 7. 건강 타입 결정
     if (activityType == 'health') {
-      if (recordType == '목욕') {
-        data['healthType'] = 'bath';
-      }
+      // 체온/투약 등
     }
 
     return ParsedActivity(
@@ -244,8 +246,8 @@ class BabytimeParser {
       case '놀이':
       case '터미타임':
       case '외출':
-        return 'play';
       case '목욕':
+        return 'play';
       case '체온':
       case '투약':
         return 'health';

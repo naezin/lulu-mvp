@@ -12,6 +12,7 @@ enum StatType {
   sleep,
   feeding,
   diaper,
+  play,
 }
 
 /// 통계 요약 카드
@@ -20,12 +21,17 @@ enum StatType {
 /// - 수치 + 단위
 /// - 변화량 표시
 /// - 권장 범위 뱃지
+/// 🔧 Sprint 19 E: 수유 카드에 ml 표시 추가
 class StatSummaryCard extends StatelessWidget {
   final StatType type;
   final double value;
   final String unit;
   final double change;
   final int? correctedAgeDays;
+
+  /// 🔧 Sprint 19 E: 수유 ml 표시용
+  final double? feedingMl;
+  final double? feedingCount;
 
   const StatSummaryCard({
     super.key,
@@ -34,6 +40,8 @@ class StatSummaryCard extends StatelessWidget {
     required this.unit,
     required this.change,
     this.correctedAgeDays,
+    this.feedingMl,
+    this.feedingCount,
   });
 
   @override
@@ -88,27 +96,8 @@ class StatSummaryCard extends StatelessWidget {
 
           const SizedBox(height: LuluSpacing.sm),
 
-          // 수치
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                value.toStringAsFixed(1),
-                style: LuluTextStyles.titleLarge.copyWith(
-                  color: LuluTextColors.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 2),
-              Text(
-                unit,
-                style: LuluTextStyles.bodySmall.copyWith(
-                  color: LuluTextColors.secondary,
-                ),
-              ),
-            ],
-          ),
+          // 수치 - 🔧 Sprint 19 E: 수유 ml 표시
+          _buildValueDisplay(),
 
           const SizedBox(height: LuluSpacing.xs),
 
@@ -122,6 +111,67 @@ class StatSummaryCard extends StatelessWidget {
           ],
         ],
       ),
+    );
+  }
+
+  /// 🔧 Sprint 19 E: 수치 표시 (수유는 ml + 회수)
+  Widget _buildValueDisplay() {
+    // 수유이고 ml 데이터가 있으면 "685 ml (8.3회)" 형식
+    if (type == StatType.feeding && feedingMl != null && feedingMl! > 0) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                feedingMl!.toStringAsFixed(0),
+                style: LuluTextStyles.titleLarge.copyWith(
+                  color: LuluTextColors.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(width: 2),
+              Text(
+                'ml',
+                style: LuluTextStyles.bodySmall.copyWith(
+                  color: LuluTextColors.secondary,
+                ),
+              ),
+            ],
+          ),
+          if (feedingCount != null && feedingCount! > 0)
+            Text(
+              '(${feedingCount!.toStringAsFixed(1)}$unit)',
+              style: LuluTextStyles.caption.copyWith(
+                color: LuluTextColors.tertiary,
+              ),
+            ),
+        ],
+      );
+    }
+
+    // 기본 표시: value + unit
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.alphabetic,
+      children: [
+        Text(
+          value.toStringAsFixed(1),
+          style: LuluTextStyles.titleLarge.copyWith(
+            color: LuluTextColors.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 2),
+        Text(
+          unit,
+          style: LuluTextStyles.bodySmall.copyWith(
+            color: LuluTextColors.secondary,
+          ),
+        ),
+      ],
     );
   }
 
@@ -195,6 +245,9 @@ class StatSummaryCard extends StatelessWidget {
       case StatType.diaper:
         // 회 단위
         return '$sign${absChange.toStringAsFixed(0)}';
+      case StatType.play:
+        // 분 단위
+        return '$sign${absChange.toStringAsFixed(0)}m';
     }
   }
 
@@ -244,6 +297,7 @@ class StatSummaryCard extends StatelessWidget {
       StatType.sleep => LuluActivityColors.sleep,
       StatType.feeding => LuluActivityColors.feeding,
       StatType.diaper => LuluActivityColors.diaper,
+      StatType.play => LuluActivityColors.play,
     };
   }
 
@@ -253,6 +307,7 @@ class StatSummaryCard extends StatelessWidget {
       StatType.sleep => LuluIcons.sleep,
       StatType.feeding => LuluIcons.feedingSolid,
       StatType.diaper => LuluIcons.diaper,
+      StatType.play => LuluIcons.play,
     };
   }
 
@@ -264,6 +319,7 @@ class StatSummaryCard extends StatelessWidget {
       StatType.sleep => '$prefix ${l10n?.statsSleep ?? 'Sleep'}',
       StatType.feeding => '$prefix ${l10n?.statsFeeding ?? 'Feeding'}',
       StatType.diaper => '$prefix ${l10n?.statsDiaper ?? 'Diaper'}',
+      StatType.play => '$prefix ${l10n?.activityTypePlay ?? 'Play'}',
     };
   }
 
@@ -284,6 +340,7 @@ class StatSummaryCard extends StatelessWidget {
           correctedAgeDays: correctedAgeDays!,
           timesPerDay: value,
         ),
+      StatType.play => null, // 놀이는 권장 범위 없음
     };
   }
 }

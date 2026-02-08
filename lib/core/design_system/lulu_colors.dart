@@ -104,6 +104,88 @@ class LuluColors {
   static Color getBabyColorBg(int index) {
     return getBabyColor(index).withValues(alpha: 0.1);
   }
+
+  // ========================================
+  // Sprint 19: 차트 솔리드 컬러
+  // ========================================
+
+  /// 차트 컨테이너 배경 (lavenderMist 10%)
+  static const Color chartContainerBg = Color(0x1A9D8CD6);
+
+  /// 차트 컨테이너 테두리 (lavenderMist 30%)
+  static const Color chartContainerBorder = Color(0x4D9D8CD6);
+
+  /// 차트 칩 선택 배경 (lavenderMist 20%)
+  static const Color chartChipSelectedBg = Color(0x339D8CD6);
+
+  /// 차트 칩 선택 테두리 (lavenderMist 50%)
+  static const Color chartChipSelectedBorder = Color(0x809D8CD6);
+
+  /// 차트 스켈레톤 배경 (= chartContainerBg)
+  static const Color chartSkeletonBg = Color(0x1A9D8CD6);
+
+  /// 차트 스켈레톤 테두리 (= chartContainerBorder)
+  static const Color chartSkeletonBorder = Color(0x4D9D8CD6);
+
+  /// 네비게이터 버튼 배경 (= chartContainerBg)
+  static const Color navButtonBg = Color(0x1A9D8CD6);
+
+  /// 주간 피커 선택 배경 (lavenderMist 15%)
+  static const Color weekPickerSelected = Color(0x269D8CD6);
+
+  /// 범례 밤잠 (= nightSleep 솔리드)
+  static const Color legendNightSleep = Color(0xFF5B5381);
+
+  /// 범례 낮잠 (= daySleep 솔리드)
+  static const Color legendDaySleep = Color(0xFF9D8CD6);
+
+  // ========================================
+  // Sprint 19: 필터칩 타입별 선택 배경 (20%)
+  // ========================================
+
+  /// 수면 칩 선택 배경
+  static const Color chipSleepBg = Color(0x339575CD);
+
+  /// 수면 칩 선택 테두리
+  static const Color chipSleepBorder = Color(0x809575CD);
+
+  /// 수유 칩 선택 배경
+  static const Color chipFeedingBg = Color(0x33FFB74D);
+
+  /// 수유 칩 선택 테두리
+  static const Color chipFeedingBorder = Color(0x80FFB74D);
+
+  /// 기저귀 칩 선택 배경
+  static const Color chipDiaperBg = Color(0x334FC3F7);
+
+  /// 기저귀 칩 선택 테두리
+  static const Color chipDiaperBorder = Color(0x804FC3F7);
+
+  /// 놀이 칩 선택 배경
+  static const Color chipPlayBg = Color(0x3381C784);
+
+  /// 놀이 칩 선택 테두리
+  static const Color chipPlayBorder = Color(0x8081C784);
+
+  /// 건강 칩 선택 배경
+  static const Color chipHealthBg = Color(0x33E57373);
+
+  /// 건강 칩 선택 테두리
+  static const Color chipHealthBorder = Color(0x80E57373);
+
+  // ========================================
+  // Sprint 19: 빈 상태 원형 배경 (lavenderMist 20%)
+  // ========================================
+
+  /// 빈 상태 원형 배경
+  static const Color emptyCircleBg = Color(0x339D8CD6);
+
+  // ========================================
+  // Sprint 19: 차트 배경 바 (paint 내부)
+  // ========================================
+
+  /// 차트 배경 바
+  static const Color chartBarBg = Color(0xFF1E1E3A);
 }
 
 /// Text Colors (텍스트 컬러)
@@ -299,13 +381,14 @@ class LuluBadgeColors {
 
 /// Pattern Colors (패턴 차트 컬러)
 ///
-/// 작업 지시서 v1.1: 주간 패턴 차트 및 타임바 색상
+/// 작업 지시서 v2.0: 주간 패턴 차트 및 타임바 색상
+/// Sprint 19: 밤잠/낮잠 솔리드 컬러 분리
 class LuluPatternColors {
-  /// 밤잠 (21:00 ~ 06:00)
-  static const Color nightSleep = Color(0xFF9D8CD6); // lavenderMist 100%
+  /// 밤잠 (21:00 ~ 06:00) - 어두운 보라
+  static const Color nightSleep = Color(0xFF5B5381);
 
-  /// 낮잠 (06:00 ~ 21:00)
-  static Color get daySleep => nightSleep.withValues(alpha: 0.6); // 60%
+  /// 낮잠 (06:00 ~ 21:00) - 밝은 보라 (솔리드)
+  static const Color daySleep = Color(0xFF9D8CD6);
 
   /// 수유
   static const Color feeding = Color(0xFF4A90D9); // skyBlue

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 import '../../data/models/activity_model.dart';
 import '../../data/repositories/activity_repository.dart';
@@ -81,15 +82,8 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
       final created = await _activityRepository.createActivity(restoredActivity);
       homeProvider.addActivity(created);
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('기록이 복구되었어요'),
-            duration: Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      // 🔧 Sprint 19 G-F1: 복구 성공 토스트 제거 → 햅틱 대체
+      HapticFeedback.mediumImpact();
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

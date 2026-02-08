@@ -194,8 +194,10 @@ class RecentFeedingButtons extends StatelessWidget {
     // 저장 성공 콜백
     onSaveSuccess?.call();
 
-    // 저장 토스트 + 취소
-    ScaffoldMessenger.of(context).showSnackBar(
+    // 저장 토스트 + 취소 — K2: clearSnackBars + duration 3초
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
       SnackBar(
         content: Row(
           children: [
@@ -214,14 +216,9 @@ class RecentFeedingButtons extends StatelessWidget {
           textColor: Colors.white,
           onPressed: () async {
             final success = await provider.undoLastSave();
+            // 🔧 Sprint 19 G-F2: 취소 성공 토스트 제거 → 햅틱 대체
             if (context.mounted && success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n?.quickFeedingUndone ?? '취소됨'),
-                  duration: const Duration(seconds: 1),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              HapticFeedback.mediumImpact();
             }
           },
         ),

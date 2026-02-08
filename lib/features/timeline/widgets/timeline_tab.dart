@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
-import '../../../core/design_system/lulu_typography.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
+import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/undo_delete_mixin.dart';
 import '../../home/providers/home_provider.dart';
+import '../models/day_timeline.dart';
 import 'scope_toggle.dart';
 import 'date_navigator.dart';
 import 'timeline_filter_chips.dart';
-import 'mini_time_bar.dart';
-import 'context_ribbon.dart';
-import 'daily_summary_banner.dart';
+import 'daily_grid.dart';
 import 'activity_list_item.dart';
 import 'edit_activity_sheet.dart';
 
 /// 타임라인 탭 (기록 목록)
 ///
-/// Sprint 18-R: ScopeToggle 추가 (일간/주간 전환)
+/// Sprint 19 v4: 레거시 제거 + DailyGrid 도입
 /// - ScopeToggle: 일간/주간 전환
 /// - DateNavigator: 날짜 좌우 탐색
-/// - MiniTimeBar: 24h 패턴 시각화
-/// - DailySummaryBanner: 일간 요약
+/// - DailyGrid: 2x2 일간 요약 (MiniTimeBar/DailySummaryBanner/ContextRibbon 대체)
 /// - ActivityListItem: 스와이프 수정/삭제
-/// - WeeklyPatternChart: 주간 패턴 히트맵
 class TimelineTab extends StatefulWidget {
   const TimelineTab({super.key});
 
@@ -174,13 +173,8 @@ class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
       // HomeProvider 동기화
       context.read<HomeProvider>().updateActivity(result);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('기록이 수정되었어요'),
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      // 🔧 Sprint 19 G-R3: 토스트 제거 → 햅틱 대체
+      HapticFeedback.mediumImpact();
     }
   }
 
@@ -220,7 +214,7 @@ class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.error_outline,
+                Icon(LuluIcons.errorOutline,
                     size: 48, color: Colors.red.withValues(alpha: 0.7)),
                 const SizedBox(height: 16),
                 Text(_errorMessage!,
@@ -264,7 +258,7 @@ class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.bar_chart_rounded,
+                          LuluIcons.barChart,
                           size: 64,
                           color: LuluColors.lavenderMist,
                         ),
@@ -310,31 +304,13 @@ class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
                   ),
                 ),
 
-                // MiniTimeBar (활동이 있을 때만)
-                // ⚠️ BUG-003 FIX: ValueKey 추가하여 날짜/아기 변경 시 강제 리빌드
+                // Sprint 19 v4: DailyGrid (MiniTimeBar/ContextRibbon/DailySummaryBanner 대체)
                 if (activities.isNotEmpty)
                   SliverToBoxAdapter(
-                    child: MiniTimeBar(
-                      key: ValueKey('minibar_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
-                      activities: activities,
-                      date: _selectedDate,
-                    ),
-                  ),
-
-                // ContextRibbon (한 줄 요약)
-                if (activities.isNotEmpty)
-                  SliverToBoxAdapter(
-                    child: ContextRibbon(
-                      activities: _dateActivities, // 필터 전 전체 데이터 사용
-                    ),
-                  ),
-
-                // DailySummaryBanner (활동이 있을 때만) - Phase 4에서 ContextRibbon으로 대체 가능
-                // 현재는 둘 다 표시 (UX 판단에 따라 제거 가능)
-                if (activities.isNotEmpty)
-                  SliverToBoxAdapter(
-                    child: DailySummaryBanner(
-                      activities: activities,
+                    child: DailyGrid(
+                      key: ValueKey('dailygrid_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
+                      timeline: _buildDayTimeline(activities),
+                      isToday: _isToday(_selectedDate),
                     ),
                   ),
 
@@ -455,5 +431,82 @@ class _TimelineTabState extends State<TimelineTab> with UndoDeleteMixin {
     return date.year == now.year &&
         date.month == now.month &&
         date.day == now.day;
+  }
+
+  /// Sprint 19 v5: ActivityModel 목록 → DayTimeline 변환
+  ///
+  /// 모든 활동 → allBlocks에 추가 (세로 스택 렌더링용)
+  DayTimeline _buildDayTimeline(List<ActivityModel> activities) {
+    final dayStart = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
+    final dayEnd = dayStart.add(const Duration(days: 1));
+
+    final allBlocks = <DurationBlock>[];
+    final durationBlocks = <DurationBlock>[];
+    final instantMarkers = <InstantMarker>[];
+
+    for (final activity in activities) {
+      final activityType = activity.type.name;
+      final localStart = activity.startTime.toLocal();
+
+      // endTime 결정
+      DateTime localEnd;
+      if (activity.endTime != null) {
+        localEnd = activity.endTime!.toLocal();
+      } else {
+        // endTime 없으면 기본 5분
+        final durationMin = activity.data?['duration_minutes'] as int? ?? 5;
+        localEnd = localStart.add(Duration(minutes: durationMin));
+      }
+
+      // subType 결정
+      String? subType;
+      if (activityType == 'sleep') {
+        subType = activity.data?['sleepType'] as String? ??
+            activity.data?['sleep_type'] as String? ??
+            _inferSleepType(localStart);
+      } else if (activityType == 'feeding') {
+        subType = activity.data?['feeding_type'] as String?;
+      }
+
+      // DurationBlock 생성 (하루 경계로 클램핑)
+      final block = DurationBlock(
+        type: activityType,
+        startTime: localStart,
+        endTime: localEnd,
+        subType: subType,
+        activityId: activity.id,
+      ).clampToDay(dayStart, dayEnd);
+
+      allBlocks.add(block);
+
+      // 레거시 분리
+      if (activityType == 'diaper' || activityType == 'health') {
+        instantMarkers.add(InstantMarker(
+          type: activityType,
+          time: localStart,
+          activityId: activity.id,
+        ));
+      } else if (activity.endTime != null) {
+        durationBlocks.add(block);
+      }
+    }
+
+    // 시작 시간순 정렬
+    allBlocks.sort((a, b) => a.startTime.compareTo(b.startTime));
+    durationBlocks.sort((a, b) => a.startTime.compareTo(b.startTime));
+    instantMarkers.sort((a, b) => a.time.compareTo(b.time));
+
+    return DayTimeline(
+      date: _selectedDate,
+      allBlocks: allBlocks,
+      durationBlocks: durationBlocks,
+      instantMarkers: instantMarkers,
+    );
+  }
+
+  /// 밤잠/낮잠 추론 (DB 값이 없을 때 폴백)
+  String _inferSleepType(DateTime startTime) {
+    final hour = startTime.hour;
+    return (hour >= 19 || hour < 7) ? 'night' : 'nap';
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -693,7 +694,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               updatedBabies,
             );
           }
-          _showSnackBar('${baby.name}이(가) 추가되었습니다');
+          // 🔧 Sprint 19 G-R4: 토스트 제거 → 햅틱 대체
+          HapticFeedback.mediumImpact();
         },
       ),
     );
@@ -732,8 +734,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               );
             }
 
+            // 🔧 Sprint 19 G-R5: 토스트 제거 → 햅틱 대체
             if (mounted) {
-              _showSnackBar('${baby.name}이(가) 삭제되었습니다');
+              HapticFeedback.mediumImpact();
             }
           } catch (e) {
             if (mounted) {

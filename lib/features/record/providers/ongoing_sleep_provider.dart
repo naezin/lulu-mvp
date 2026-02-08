@@ -219,7 +219,8 @@ class OngoingSleepRecord {
       familyId: json['family_id'] as String,
       babyName: json['baby_name'] as String?,
       sleepType: json['sleep_type'] as String? ?? 'nap',
-      startTime: DateTime.parse(json['start_time'] as String),
+      // 🔧 Sprint 19 H-UTC1: .toLocal() 추가
+      startTime: DateTime.parse(json['start_time'] as String).toLocal(),
     );
   }
 

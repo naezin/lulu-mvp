@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 
@@ -34,30 +35,30 @@ class TimelineFilterChips extends StatelessWidget {
       _FilterItem(
         key: null,
         label: l10n?.filterAll ?? 'All',
-        icon: Icons.apps_rounded,
+        icon: LuluIcons.filter,
       ),
       _FilterItem(
         key: 'feeding',
         label: l10n?.activityFeeding ?? 'Feeding',
-        icon: Icons.local_cafe_rounded,
+        icon: LuluIcons.feeding,
         color: LuluActivityColors.feeding,
       ),
       _FilterItem(
         key: 'sleep',
         label: l10n?.activitySleep ?? 'Sleep',
-        icon: Icons.bedtime_rounded,
+        icon: LuluIcons.sleep,
         color: LuluActivityColors.sleep,
       ),
       _FilterItem(
         key: 'diaper',
         label: l10n?.activityDiaper ?? 'Diaper',
-        icon: Icons.baby_changing_station_rounded,
+        icon: LuluIcons.diaper,
         color: LuluActivityColors.diaper,
       ),
       _FilterItem(
         key: 'play',
         label: l10n?.activityPlay ?? 'Play',
-        icon: Icons.toys_rounded,
+        icon: LuluIcons.play,
         color: LuluActivityColors.play,
       ),
     ];

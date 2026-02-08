@@ -43,7 +43,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.calendar_today,
+              LuluIcons.calendar,
               color: LuluColors.lavenderMist,
             ),
             onPressed: _selectDate,
@@ -176,7 +176,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.edit_calendar,
+              LuluIcons.editCalendar,
               size: 40,
               color: LuluColors.lavenderMist,
             ),
@@ -349,7 +349,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
                   Row(
                     children: [
                       Icon(
-                        Icons.notes_rounded,
+                        LuluIcons.note,
                         size: 12,
                         color: LuluTextColors.tertiary,
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -222,10 +223,9 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
     try {
       await context.read<FamilyProvider>().transferOwnership(_selectedId!);
 
+      // 🔧 Sprint 19 G-R6: 토스트 제거 → 햅틱 대체
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.ownershipTransferred)),
-        );
+        HapticFeedback.mediumImpact();
         Navigator.pop(context);
       }
     } catch (e) {
