@@ -188,12 +188,23 @@ class _WeeklyViewState extends State<WeeklyView> {
 
     if (family == null || selectedBaby == null) return;
 
-    await _patternProvider.loadWeeklyPattern(
-      familyId: family.id,
-      babyId: selectedBaby.id,
-      babyName: selectedBaby.name,
-      weekStart: newWeekStart,
-    );
+    // 요약카드 + 차트 데이터 동시 갱신
+    final weekEnd = newWeekStart.add(const Duration(days: 6));
+    final weekDateRange = DateRange(start: newWeekStart, end: weekEnd);
+
+    await Future.wait([
+      _patternProvider.loadWeeklyPattern(
+        familyId: family.id,
+        babyId: selectedBaby.id,
+        babyName: selectedBaby.name,
+        weekStart: newWeekStart,
+      ),
+      _dataProvider.loadStatistics(
+        familyId: family.id,
+        babyId: selectedBaby.id,
+        dateRange: weekDateRange,
+      ),
+    ]);
     if (mounted) setState(() {});
   }
 

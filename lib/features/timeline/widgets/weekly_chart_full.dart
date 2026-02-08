@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
@@ -393,24 +394,27 @@ class _ChartFilterChipsV4 extends StatelessWidget {
     final l10n = S.of(context);
 
     final filters = [
-      (null, l10n?.chartFilterAll ?? 'All', LuluColors.lavenderMist),
-      ('sleep', l10n?.chartFilterSleep ?? 'Sleep', LuluActivityColors.sleep),
-      ('feeding', l10n?.chartFilterFeeding ?? 'Feeding', LuluActivityColors.feeding),
-      ('diaper', l10n?.chartFilterDiaper ?? 'Diaper', LuluActivityColors.diaper),
-      ('play', l10n?.chartFilterPlay ?? 'Play', LuluActivityColors.play),
-      ('health', l10n?.chartFilterHealth ?? 'Health', LuluActivityColors.health),
+      (null, l10n?.chartFilterAll ?? 'All', LuluColors.lavenderMist, LuluIcons.filter),
+      ('sleep', l10n?.chartFilterSleep ?? 'Sleep', LuluActivityColors.sleep, LuluIcons.sleep),
+      ('feeding', l10n?.chartFilterFeeding ?? 'Feeding', LuluActivityColors.feeding, LuluIcons.feeding),
+      ('diaper', l10n?.chartFilterDiaper ?? 'Diaper', LuluActivityColors.diaper, LuluIcons.diaper),
+      ('play', l10n?.chartFilterPlay ?? 'Play', LuluActivityColors.play, LuluIcons.play),
+      ('health', l10n?.chartFilterHealth ?? 'Health', LuluActivityColors.health, LuluIcons.health),
     ];
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: filters.map((f) {
-        final (filterValue, label, color) = f;
+        final (filterValue, label, color, icon) = f;
         final isSelected = selectedFilter == filterValue;
 
         return Padding(
           padding: const EdgeInsets.only(left: 4),
           child: GestureDetector(
-            onTap: () => onFilterChanged(filterValue),
+            onTap: () {
+              HapticFeedback.selectionClick();
+              onFilterChanged(filterValue);
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
@@ -424,13 +428,24 @@ class _ChartFilterChipsV4 extends StatelessWidget {
                       : LuluColors.glassBorder,
                 ),
               ),
-              child: Text(
-                label,
-                style: TextStyle(
-                  color: isSelected ? color : LuluTextColors.secondary,
-                  fontSize: 11,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    icon,
+                    size: 14,
+                    color: isSelected ? color : LuluTextColors.secondary,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      color: isSelected ? color : LuluTextColors.secondary,
+                      fontSize: 11,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

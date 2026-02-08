@@ -3,17 +3,14 @@ import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
-import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 타임라인 필터 칩
 ///
-/// Sprint 18-R Phase 3: 활동 유형별 필터링
-/// - 전체: 모든 활동
-/// - 수유: feeding
-/// - 수면: sleep
-/// - 기저귀: diaper
-/// - 놀이: play
+/// Sprint 19 Phase 5: 일간/주간 칩 스타일 통일
+/// - 아이콘 + 텍스트, 컴팩트 사이즈
+/// - 솔리드 선택 배경 (LuluColors.chipXxxBg)
+/// - 6개 필터: 전체/수면/수유/기저귀/놀이/건강
 class TimelineFilterChips extends StatelessWidget {
   const TimelineFilterChips({
     super.key,
@@ -27,137 +24,106 @@ class TimelineFilterChips extends StatelessWidget {
   /// 필터 변경 콜백
   final ValueChanged<String?> onFilterChanged;
 
+  static Color _getChipSelectedBg(String? filterValue) {
+    switch (filterValue) {
+      case 'sleep':
+        return LuluColors.chipSleepBg;
+      case 'feeding':
+        return LuluColors.chipFeedingBg;
+      case 'diaper':
+        return LuluColors.chipDiaperBg;
+      case 'play':
+        return LuluColors.chipPlayBg;
+      case 'health':
+        return LuluColors.chipHealthBg;
+      default:
+        return LuluColors.chartChipSelectedBg;
+    }
+  }
+
+  static Color _getChipSelectedBorder(String? filterValue) {
+    switch (filterValue) {
+      case 'sleep':
+        return LuluColors.chipSleepBorder;
+      case 'feeding':
+        return LuluColors.chipFeedingBorder;
+      case 'diaper':
+        return LuluColors.chipDiaperBorder;
+      case 'play':
+        return LuluColors.chipPlayBorder;
+      case 'health':
+        return LuluColors.chipHealthBorder;
+      default:
+        return LuluColors.chartChipSelectedBorder;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context);
 
     final filters = [
-      _FilterItem(
-        key: null,
-        label: l10n?.filterAll ?? 'All',
-        icon: LuluIcons.filter,
-      ),
-      _FilterItem(
-        key: 'feeding',
-        label: l10n?.activityFeeding ?? 'Feeding',
-        icon: LuluIcons.feeding,
-        color: LuluActivityColors.feeding,
-      ),
-      _FilterItem(
-        key: 'sleep',
-        label: l10n?.activitySleep ?? 'Sleep',
-        icon: LuluIcons.sleep,
-        color: LuluActivityColors.sleep,
-      ),
-      _FilterItem(
-        key: 'diaper',
-        label: l10n?.activityDiaper ?? 'Diaper',
-        icon: LuluIcons.diaper,
-        color: LuluActivityColors.diaper,
-      ),
-      _FilterItem(
-        key: 'play',
-        label: l10n?.activityPlay ?? 'Play',
-        icon: LuluIcons.play,
-        color: LuluActivityColors.play,
-      ),
+      (null, l10n?.filterAll ?? 'All', LuluColors.lavenderMist, LuluIcons.filter),
+      ('sleep', l10n?.activitySleep ?? 'Sleep', LuluActivityColors.sleep, LuluIcons.sleep),
+      ('feeding', l10n?.activityFeeding ?? 'Feeding', LuluActivityColors.feeding, LuluIcons.feeding),
+      ('diaper', l10n?.activityDiaper ?? 'Diaper', LuluActivityColors.diaper, LuluIcons.diaper),
+      ('play', l10n?.activityPlay ?? 'Play', LuluActivityColors.play, LuluIcons.play),
+      ('health', l10n?.activityTypeHealth ?? 'Health', LuluActivityColors.health, LuluIcons.health),
     ];
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
-        children: filters.map((filter) {
-          final isSelected = activeFilter == filter.key;
+        children: filters.map((f) {
+          final (filterValue, label, color, icon) = f;
+          final isSelected = activeFilter == filterValue;
+
           return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: _FilterChip(
-              label: filter.label,
-              icon: filter.icon,
-              color: filter.color,
-              isSelected: isSelected,
+            padding: const EdgeInsets.only(right: 4),
+            child: GestureDetector(
               onTap: () {
                 if (!isSelected) {
                   HapticFeedback.selectionClick();
-                  onFilterChanged(filter.key);
+                  onFilterChanged(filterValue);
                 }
               },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? _getChipSelectedBg(filterValue)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isSelected
+                        ? _getChipSelectedBorder(filterValue)
+                        : LuluColors.glassBorder,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      icon,
+                      size: 14,
+                      color: isSelected ? color : LuluTextColors.secondary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        color: isSelected ? color : LuluTextColors.secondary,
+                        fontSize: 11,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           );
         }).toList(),
-      ),
-    );
-  }
-}
-
-/// 필터 아이템 데이터
-class _FilterItem {
-  final String? key;
-  final String label;
-  final IconData icon;
-  final Color? color;
-
-  const _FilterItem({
-    required this.key,
-    required this.label,
-    required this.icon,
-    this.color,
-  });
-}
-
-/// 필터 칩 위젯
-class _FilterChip extends StatelessWidget {
-  const _FilterChip({
-    required this.label,
-    required this.icon,
-    this.color,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final IconData icon;
-  final Color? color;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final chipColor = color ?? LuluColors.lavenderMist;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? chipColor.withValues(alpha: 0.2)
-              : LuluColors.deepBlue,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? chipColor : Colors.transparent,
-            width: 1.5,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 16,
-              color: isSelected ? chipColor : LuluTextColors.secondary,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: LuluTextStyles.bodySmall.copyWith(
-                color: isSelected ? chipColor : LuluTextColors.secondary,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
