@@ -10,8 +10,8 @@ enum DateNavigatorScope { daily, weekly }
 
 /// 날짜 좌우 탐색 위젯
 ///
-/// daily: ◀ 어제 │ 2/8 (토) 오늘 📅 │ 내일 ▶
-/// weekly: ◀ │ 1/27 ~ 2/2 📅 │ ▶
+/// daily: ◀ │ 2/8 (일) 📅 │ ▶
+/// weekly: ◀ │ 2/2 ~ 2/8 📅 │ ▶
 class DateNavigator extends StatelessWidget {
   final DateTime selectedDate;
   final ValueChanged<DateTime> onDateChanged;
@@ -31,13 +31,6 @@ class DateNavigator extends StatelessWidget {
     this.scope = DateNavigatorScope.daily,
     this.canGoNext = true,
   });
-
-  bool get _isToday {
-    final now = DateTime.now();
-    return selectedDate.year == now.year &&
-        selectedDate.month == now.month &&
-        selectedDate.day == now.day;
-  }
 
   bool get _isFuture {
     final now = DateTime.now();
@@ -65,76 +58,63 @@ class DateNavigator extends StatelessWidget {
   }
 
   Widget _buildDailyNavigator(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
+    final l10n = S.of(context);
+    final nextEnabled = !_isFuture;
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 8,
       ),
-      child: Builder(
-        builder: (context) {
-          final l10n = S.of(context);
-          final locale = Localizations.localeOf(context).languageCode;
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _NavButton(
-                icon: LuluIcons.chevronLeft,
-                label: _formatShortDate(
-                    selectedDate.subtract(const Duration(days: 1)), locale),
-                onTap: () =>
-                    onDateChanged(selectedDate.subtract(const Duration(days: 1))),
-              ),
-              GestureDetector(
-                onTap: onCalendarTap,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _formatDate(selectedDate, locale),
-                      style: const TextStyle(
-                        color: LuluTextColors.primary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (_isToday)
-                      Text(
-                        l10n?.today ?? 'Today',
-                        style: const TextStyle(
-                          color: LuluColors.lavenderMist,
-                          fontSize: 12,
-                        ),
-                      ),
-                    const SizedBox(height: 2),
-                    Icon(
-                      LuluIcons.calendar,
-                      size: 16,
-                      color: LuluTextColors.secondary,
-                    ),
-                  ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _NavButton(
+            icon: LuluIcons.chevronLeft,
+            label: '',
+            onTap: () =>
+                onDateChanged(selectedDate.subtract(const Duration(days: 1))),
+          ),
+          GestureDetector(
+            onTap: onCalendarTap,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  _formatDate(selectedDate, locale, l10n),
+                  style: const TextStyle(
+                    color: LuluTextColors.primary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              _NavButton(
-                icon: LuluIcons.chevronRight,
-                label: _isFuture
-                    ? ''
-                    : _formatShortDate(selectedDate.add(const Duration(days: 1)), locale),
-                onTap: _isFuture
-                    ? null
-                    : () => onDateChanged(selectedDate.add(const Duration(days: 1))),
-                enabled: !_isFuture,
-              ),
-            ],
-          );
-        },
+                const SizedBox(width: 6),
+                Icon(
+                  LuluIcons.calendar,
+                  size: 16,
+                  color: LuluTextColors.secondary,
+                ),
+              ],
+            ),
+          ),
+          _NavButton(
+            icon: LuluIcons.chevronRight,
+            label: '',
+            onTap: nextEnabled
+                ? () => onDateChanged(selectedDate.add(const Duration(days: 1)))
+                : null,
+            enabled: nextEnabled,
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildWeeklyNavigator(BuildContext context) {
     final weekEnd = selectedDate.add(const Duration(days: 6));
-    final locale = Localizations.localeOf(context).languageCode;
-    final dateRangeText = _formatWeekRange(selectedDate, weekEnd, locale);
+    final l10n = S.of(context);
+    final dateRangeText = _formatWeekRange(selectedDate, weekEnd, l10n);
     final nextEnabled = canGoNext && !_isCurrentWeek;
 
     return Container(
@@ -186,18 +166,30 @@ class DateNavigator extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date, String locale) {
-    return DateFormat.MMMEd(locale).format(date);
+  /// daily: M/d (E) → 2/8 (일) or 2/8 (Sun)
+  String _formatDate(DateTime date, String locale, S? l10n) {
+    final weekday = DateFormat.E(locale).format(date);
+    if (l10n != null) {
+      return l10n.dateFormatDaily(
+        '${date.month}',
+        '${date.day}',
+        weekday,
+      );
+    }
+    return '${date.month}/${date.day} ($weekday)';
   }
 
-  String _formatShortDate(DateTime date, String locale) {
-    return DateFormat.Md(locale).format(date);
-  }
-
-  String _formatWeekRange(DateTime start, DateTime end, String locale) {
-    final startStr = DateFormat.Md(locale).format(start);
-    final endStr = DateFormat.Md(locale).format(end);
-    return '$startStr ~ $endStr';
+  /// weekly: M/d ~ M/d → 2/2 ~ 2/8
+  String _formatWeekRange(DateTime start, DateTime end, S? l10n) {
+    if (l10n != null) {
+      return l10n.dateFormatWeeklyRange(
+        '${start.month}',
+        '${start.day}',
+        '${end.month}',
+        '${end.day}',
+      );
+    }
+    return '${start.month}/${start.day} ~ ${end.month}/${end.day}';
   }
 }
 

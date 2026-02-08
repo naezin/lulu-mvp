@@ -1167,5 +1167,30 @@
   "weekPickerTitle": "주 선택",
   "@weekPickerTitle": {"description": "주간 캘린더 피커 제목"},
   "weekPickerThisWeek": "이번 주",
-  "@weekPickerThisWeek": {"description": "이번 주 버튼"}
+  "@weekPickerThisWeek": {"description": "이번 주 버튼"},
+
+  "dayPickerTitle": "날짜 선택",
+  "@dayPickerTitle": {"description": "일간 캘린더 피커 제목"},
+  "dayPickerToday": "오늘",
+  "@dayPickerToday": {"description": "오늘 버튼"},
+
+  "dateFormatDaily": "{month}/{day} ({weekday})",
+  "@dateFormatDaily": {
+    "description": "DateNavigator 일간 날짜 포맷: 2/8 (일)",
+    "placeholders": {
+      "month": {"type": "String", "example": "2"},
+      "day": {"type": "String", "example": "8"},
+      "weekday": {"type": "String", "example": "일"}
+    }
+  },
+  "dateFormatWeeklyRange": "{startMonth}/{startDay} ~ {endMonth}/{endDay}",
+  "@dateFormatWeeklyRange": {
+    "description": "DateNavigator 주간 날짜 범위 포맷: 2/2 ~ 2/8",
+    "placeholders": {
+      "startMonth": {"type": "String", "example": "2"},
+      "startDay": {"type": "String", "example": "2"},
+      "endMonth": {"type": "String", "example": "2"},
+      "endDay": {"type": "String", "example": "8"}
+    }
+  }
 }

@@ -1406,4 +1406,25 @@ class SEn extends S {
 
   @override
   String get weekPickerThisWeek => 'This Week';
+
+  @override
+  String get dayPickerTitle => 'Select Date';
+
+  @override
+  String get dayPickerToday => 'Today';
+
+  @override
+  String dateFormatDaily(String month, String day, String weekday) {
+    return '$month/$day ($weekday)';
+  }
+
+  @override
+  String dateFormatWeeklyRange(
+    String startMonth,
+    String startDay,
+    String endMonth,
+    String endDay,
+  ) {
+    return '$startMonth/$startDay ~ $endMonth/$endDay';
+  }
 }

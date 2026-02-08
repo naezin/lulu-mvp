@@ -656,5 +656,28 @@
   "insightTitleTogether": "Together view insight",
 
   "weekPickerTitle": "Select Week",
-  "weekPickerThisWeek": "This Week"
+  "weekPickerThisWeek": "This Week",
+
+  "dayPickerTitle": "Select Date",
+  "dayPickerToday": "Today",
+
+  "dateFormatDaily": "{month}/{day} ({weekday})",
+  "@dateFormatDaily": {
+    "description": "DateNavigator daily date format: 2/8 (Sun)",
+    "placeholders": {
+      "month": {"type": "String", "example": "2"},
+      "day": {"type": "String", "example": "8"},
+      "weekday": {"type": "String", "example": "Sun"}
+    }
+  },
+  "dateFormatWeeklyRange": "{startMonth}/{startDay} ~ {endMonth}/{endDay}",
+  "@dateFormatWeeklyRange": {
+    "description": "DateNavigator weekly date range format: 2/2 ~ 2/8",
+    "placeholders": {
+      "startMonth": {"type": "String", "example": "2"},
+      "startDay": {"type": "String", "example": "2"},
+      "endMonth": {"type": "String", "example": "2"},
+      "endDay": {"type": "String", "example": "8"}
+    }
+  }
 }

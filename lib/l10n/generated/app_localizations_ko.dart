@@ -1386,4 +1386,25 @@ class SKo extends S {
 
   @override
   String get weekPickerThisWeek => '이번 주';
+
+  @override
+  String get dayPickerTitle => '날짜 선택';
+
+  @override
+  String get dayPickerToday => '오늘';
+
+  @override
+  String dateFormatDaily(String month, String day, String weekday) {
+    return '$month/$day ($weekday)';
+  }
+
+  @override
+  String dateFormatWeeklyRange(
+    String startMonth,
+    String startDay,
+    String endMonth,
+    String endDay,
+  ) {
+    return '$startMonth/$startDay ~ $endMonth/$endDay';
+  }
 }

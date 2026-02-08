@@ -2670,6 +2670,35 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'이번 주'**
   String get weekPickerThisWeek;
+
+  /// 일간 캘린더 피커 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'날짜 선택'**
+  String get dayPickerTitle;
+
+  /// 오늘 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘'**
+  String get dayPickerToday;
+
+  /// DateNavigator 일간 날짜 포맷: 2/8 (일)
+  ///
+  /// In ko, this message translates to:
+  /// **'{month}/{day} ({weekday})'**
+  String dateFormatDaily(String month, String day, String weekday);
+
+  /// DateNavigator 주간 날짜 범위 포맷: 2/2 ~ 2/8
+  ///
+  /// In ko, this message translates to:
+  /// **'{startMonth}/{startDay} ~ {endMonth}/{endDay}'**
+  String dateFormatWeeklyRange(
+    String startMonth,
+    String startDay,
+    String endMonth,
+    String endDay,
+  );
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {
