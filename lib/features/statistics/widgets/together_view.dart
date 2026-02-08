@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../models/together_data.dart';
@@ -76,7 +77,7 @@ class TogetherView extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: LuluColors.surfaceCard,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
               border: Border.all(color: LuluColors.glassBorder),
             ),
             child: Column(
@@ -244,7 +245,7 @@ class TogetherView extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: const Color(0xFFFBBF24).withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
         border: Border.all(
           color: const Color(0xFFFBBF24).withValues(alpha: 0.3),
         ),

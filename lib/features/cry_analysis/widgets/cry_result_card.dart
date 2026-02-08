@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../models/models.dart';
@@ -30,7 +31,7 @@ class CryResultCard extends StatelessWidget {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: cryType.backgroundColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
           color: cryType.color.withValues(alpha: 0.3),
           width: 1,
@@ -125,7 +126,7 @@ class CryResultCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: badgeColor.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Column(
         children: [
@@ -157,7 +158,7 @@ class CryResultCard extends StatelessWidget {
         padding: const EdgeInsets.all(LuluSpacing.md),
         decoration: BoxDecoration(
           color: cryType.color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
         ),
         child: Row(
           children: [

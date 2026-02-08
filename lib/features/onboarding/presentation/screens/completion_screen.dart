@@ -6,6 +6,7 @@ import '../../../../core/services/onboarding_data_service.dart';
 import '../../../../core/utils/sga_calculator.dart';
 import '../providers/onboarding_provider.dart';
 import 'onboarding_screen.dart' show OnboardingCompleteCallback;
+import '../../../../core/design_system/lulu_radius.dart';
 
 /// Step 6: 온보딩 완료
 /// 환영 메시지 + 홈으로 이동
@@ -148,7 +149,7 @@ class _CompletionScreenState extends State<CompletionScreen>
                   foregroundColor: AppTheme.midnightNavy,
                   disabledBackgroundColor: AppTheme.surfaceElevated,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(LuluRadius.md),
                   ),
                 ),
                 child: provider.isLoading
@@ -264,7 +265,7 @@ class _BabySummaryCard extends StatelessWidget {
       constraints: const BoxConstraints(maxHeight: 280),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -364,7 +365,7 @@ class _BabyRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             color: AppTheme.warningSoft.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(LuluRadius.xs),
           ),
           child: Text(
             '${baby.gestationalWeeks}주',
@@ -380,7 +381,7 @@ class _BabyRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             color: const Color(0xFF00897B).withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(LuluRadius.xs),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

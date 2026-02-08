@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -113,13 +114,13 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
       margin: const EdgeInsets.symmetric(horizontal: LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
           color: LuluColors.lavenderMist.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(LuluRadius.section),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: LuluColors.lavenderMist,
@@ -173,7 +174,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
       ),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -207,7 +208,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
               ),
               decoration: BoxDecoration(
                 color: LuluColors.champagneGold.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Text(
                 'WHO 차트 전환 예정',
@@ -235,7 +236,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
       ),
       child: Row(
         children: [
@@ -269,7 +270,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
               ),
               decoration: BoxDecoration(
                 color: _getPercentileColor(percentile).withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Column(
                 children: [
@@ -351,7 +352,7 @@ class _InfoChip extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

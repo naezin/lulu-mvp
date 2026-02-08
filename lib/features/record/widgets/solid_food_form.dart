@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/feeding_type.dart';
@@ -63,7 +64,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
           color: LuluActivityColors.feeding.withValues(alpha: 0.2),
         ),
@@ -124,7 +125,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
         Container(
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _foodNameController,
@@ -161,7 +162,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
               color: widget.isFirstTry
                   ? LuluActivityColors.feeding
                   : LuluColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(6), // special: design system outer
               border: Border.all(
                 color: widget.isFirstTry
                     ? LuluActivityColors.feeding
@@ -227,7 +228,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
                     color: isSelected
                         ? LuluActivityColors.feedingBg
                         : LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(LuluRadius.xs),
                     border: Border.all(
                       color: isSelected
                           ? LuluActivityColors.feeding
@@ -272,7 +273,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
               padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
               decoration: BoxDecoration(
                 color: LuluColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Center(
                 child: Text(
@@ -332,7 +333,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
                 color: isSelected
                     ? LuluActivityColors.feedingBg
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(LuluRadius.xs),
                 border: Border.all(
                   color: isSelected
                       ? LuluActivityColors.feeding
@@ -387,7 +388,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
                     color: isSelected
                         ? reaction.color.withValues(alpha: 0.15)
                         : LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(LuluRadius.sm),
                     border: Border.all(
                       color: isSelected ? reaction.color : Colors.transparent,
                       width: 2,
@@ -443,7 +444,7 @@ class _AdjustButton extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           color: LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
         ),
         child: Center(
           child: Icon(

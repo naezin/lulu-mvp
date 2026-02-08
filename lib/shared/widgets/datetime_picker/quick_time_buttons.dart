@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
@@ -77,10 +78,10 @@ class _QuickButton extends StatelessWidget {
         color: isPrimary
             ? LuluColors.lavenderMist.withValues(alpha: 0.15)
             : LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(LuluRadius.xs),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             constraints: const BoxConstraints(minWidth: 44, minHeight: 44),

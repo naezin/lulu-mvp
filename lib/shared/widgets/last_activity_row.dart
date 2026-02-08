@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
 
 /// 마지막 활동 Row 위젯
@@ -29,7 +30,7 @@ class LastActivityRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(color: LuluColors.glassBorder),
       ),
       child: Row(

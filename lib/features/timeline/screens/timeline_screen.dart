@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -275,7 +276,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -285,7 +286,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
             height: 48,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Center(
               child: Icon(
@@ -323,7 +324,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
                         ),
                         decoration: BoxDecoration(
                           color: LuluColors.lavenderMist.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(LuluRadius.indicator),
                         ),
                         child: Text(
                           babyName,

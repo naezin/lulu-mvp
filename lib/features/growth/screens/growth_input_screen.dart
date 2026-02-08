@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -200,7 +201,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
       ),
       child: Row(
         children: [
@@ -245,7 +246,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,7 +297,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluStatusColors.warning.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(
           color: LuluStatusColors.warning.withValues(alpha: 0.3),
         ),
@@ -327,7 +328,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -431,7 +432,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
             backgroundColor: LuluStatusColors.success,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
           ),
         );

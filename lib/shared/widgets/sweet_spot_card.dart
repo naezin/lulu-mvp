@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
@@ -174,7 +175,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             LuluActivityColors.sleep.withValues(alpha: 0.08),
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
           color: LuluActivityColors.sleep.withValues(alpha: 0.4),
           width: 2,
@@ -247,7 +248,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
               ),
               child: Row(
@@ -312,7 +313,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
           color: LuluColors.glassBorder,
           width: 1,
@@ -421,7 +422,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
             color: color.withValues(alpha: 0.3),
             width: 1,
@@ -455,7 +456,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(color: LuluColors.glassBorder),
       ),
       child: Column(
@@ -529,7 +530,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(color: LuluColors.glassBorder),
       ),
       child: Column(
@@ -576,7 +577,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
               ),
             ),
@@ -623,7 +624,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       margin: const EdgeInsets.only(top: LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(LuluRadius.indicator),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -640,7 +641,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                       _getProgressColor(progressValue),
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(LuluRadius.indicator),
                 ),
               ),
               // Sweet Spot 마커 (80% 위치)
@@ -653,7 +654,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                   width: 3,
                   decoration: BoxDecoration(
                     color: LuluColors.champagneGold,
-                    borderRadius: BorderRadius.circular(1.5),
+                    borderRadius: BorderRadius.circular(1.5), // special: design system outer
                   ),
                 ),
               ),

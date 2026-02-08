@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../models/weekly_statistics.dart';
 
@@ -48,7 +49,7 @@ class SummaryCard extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(color: LuluColors.glassBorder),
         ),
         child: Column(

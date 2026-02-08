@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../home/providers/home_provider.dart';
 import '../models/invite_info_model.dart';
@@ -154,7 +155,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: LuluColors.deepIndigo.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -167,7 +168,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
                   height: 36,
                   decoration: BoxDecoration(
                     color: LuluColors.lavenderMist.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(LuluRadius.xs),
                   ),
                   child: Center(
                     child: Icon(
@@ -203,7 +204,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: LuluColors.midnightNavy,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(LuluRadius.xs),
                 border: Border.all(
                   color: LuluColors.lavenderMist.withOpacity(0.3),
                 ),

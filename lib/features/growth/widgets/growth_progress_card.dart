@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -25,7 +26,7 @@ class GrowthProgressCard extends StatelessWidget {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
           color: LuluColors.surfaceElevated,
         ),
@@ -190,7 +191,7 @@ class _PercentileBarState extends State<_PercentileBar>
         ),
         const SizedBox(height: LuluSpacing.xs),
         ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(LuluRadius.indicator),
           child: SizedBox(
             height: 8,
             child: Stack(
@@ -199,7 +200,7 @@ class _PercentileBarState extends State<_PercentileBar>
                 Container(
                   decoration: BoxDecoration(
                     color: LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(LuluRadius.indicator),
                   ),
                 ),
                 // 진행 바
@@ -212,7 +213,7 @@ class _PercentileBarState extends State<_PercentileBar>
                         child: Container(
                           decoration: BoxDecoration(
                             color: _getPercentileColor(percentile),
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(LuluRadius.indicator),
                           ),
                         ),
                       );
@@ -276,7 +277,7 @@ class _LegendItem extends StatelessWidget {
           height: 8,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(LuluRadius.xxs),
           ),
         ),
         const SizedBox(width: 4),

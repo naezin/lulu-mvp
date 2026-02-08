@@ -11,6 +11,7 @@ import 'baby_info_screen.dart';
 import 'preterm_info_screen.dart';
 import 'multiple_birth_tip_screen.dart';
 import 'completion_screen.dart';
+import '../../../../core/design_system/lulu_radius.dart';
 
 /// 온보딩 완료 콜백 타입
 typedef OnboardingCompleteCallback = void Function(
@@ -156,7 +157,7 @@ class _OnboardingHeader extends StatelessWidget {
 
           // 진행률 바
           ClipRRect(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(LuluRadius.indicator),
             child: LinearProgressIndicator(
               value: progress,
               backgroundColor: AppTheme.surfaceElevated,

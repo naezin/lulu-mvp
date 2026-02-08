@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -79,7 +80,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
             padding: const EdgeInsets.all(LuluSpacing.lg),
             decoration: BoxDecoration(
               color: LuluColors.deepBlue,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
                 color: LuluColors.lavenderMist.withValues(alpha: 0.2),
               ),
@@ -221,7 +222,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
       ),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -292,7 +293,7 @@ class _MeasurementItem extends StatelessWidget {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

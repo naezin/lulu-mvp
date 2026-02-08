@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../data/models/baby_type.dart';
 import '../providers/onboarding_provider.dart';
+import '../../../../core/design_system/lulu_radius.dart';
 
 /// Step 3: 아기 정보 입력
 /// 이름, 출생일, "조산아인가요?"
@@ -148,11 +149,11 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               filled: true,
               fillColor: AppTheme.surfaceElevated,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
                 borderSide: const BorderSide(
                   color: AppTheme.lavenderMist,
                   width: 2,
@@ -178,7 +179,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               decoration: BoxDecoration(
                 color: AppTheme.surfaceElevated,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
               ),
               child: Row(
                 children: [
@@ -278,11 +279,11 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               filled: true,
               fillColor: AppTheme.surfaceElevated,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
                 borderSide: const BorderSide(
                   color: AppTheme.lavenderMist,
                   width: 2,
@@ -305,7 +306,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppTheme.surfaceCard,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
                 color: provider.currentBaby.isPreterm
                     ? AppTheme.lavenderMist.withValues(alpha: 0.5)
@@ -368,7 +369,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                 disabledBackgroundColor: AppTheme.surfaceElevated,
                 disabledForegroundColor: AppTheme.textTertiary,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
               child: const Text(
@@ -417,7 +418,7 @@ class _GenderButton extends StatelessWidget {
           color: isSelected
               ? AppTheme.lavenderMist.withValues(alpha: 0.15)
               : AppTheme.surfaceElevated,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
             color: isSelected ? AppTheme.lavenderMist : Colors.transparent,
             width: 2,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
 import '../providers/import_provider.dart';
@@ -92,7 +93,7 @@ class _ImportScreenState extends State<ImportScreen> {
             height: 80,
             decoration: BoxDecoration(
               color: LuluColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
             ),
             child: const Icon(
               Icons.folder_open,
@@ -140,7 +141,7 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: LuluColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
               children: [
@@ -231,7 +232,7 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: LuluColors.surfaceCard,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(LuluRadius.md),
             ),
             child: Column(
               children: [
@@ -303,7 +304,7 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               color: LuluColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
@@ -357,7 +358,7 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: LuluStatusColors.warning.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
               border: Border.all(
                 color: LuluStatusColors.warning.withValues(alpha: 0.3),
               ),
@@ -400,7 +401,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 disabledBackgroundColor: LuluColors.surfaceElevated,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
               ),
               child: Text(
@@ -513,7 +514,7 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: LuluColors.surfaceCard,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(LuluRadius.md),
             ),
             child: Column(
               children: [
@@ -539,7 +540,7 @@ class _ImportScreenState extends State<ImportScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: LuluStatusColors.error.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(LuluRadius.xs),
                     ),
                     child: Text(
                       '에러: ${result.errors.first}',
@@ -574,7 +575,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 backgroundColor: LuluColors.lavenderMist,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
               ),
               child: Text(
@@ -639,7 +640,7 @@ class _ImportScreenState extends State<ImportScreen> {
               side: const BorderSide(color: LuluColors.lavenderMist),
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
             ),
             child: const Text(
@@ -673,12 +674,12 @@ class _FileTypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(LuluRadius.md),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(color: LuluColors.glassBorder),
         ),
         child: Row(
@@ -688,7 +689,7 @@ class _FileTypeCard extends StatelessWidget {
               height: 48,
               decoration: BoxDecoration(
                 color: LuluColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Icon(
                 icon,

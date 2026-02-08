@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../models/models.dart';
@@ -55,7 +56,7 @@ class ProbabilityBar extends StatelessWidget {
             height: 8,
             decoration: BoxDecoration(
               color: LuluColors.midnightNavy,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(LuluRadius.indicator),
             ),
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,
@@ -63,7 +64,7 @@ class ProbabilityBar extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: color,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(LuluRadius.indicator),
                 ),
               ),
             ),

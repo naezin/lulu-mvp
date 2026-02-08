@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../models/family_invite_model.dart';
 import '../providers/family_provider.dart';
@@ -71,7 +72,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
             height: 4,
             decoration: BoxDecoration(
               color: LuluTextColors.primary.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(LuluRadius.xxs),
             ),
           ),
           const SizedBox(height: 24),
@@ -104,7 +105,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: LuluColors.deepIndigo.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Column(
                 children: [
@@ -143,7 +144,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
                 filled: true,
                 fillColor: LuluColors.deepIndigo.withOpacity(0.3),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                   borderSide: BorderSide.none,
                 ),
                 suffixIcon: IconButton(

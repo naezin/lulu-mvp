@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../models/family_member_model.dart';
 
 /// 멤버 목록 타일
@@ -25,7 +26,7 @@ class MemberListTile extends StatelessWidget {
         color: isMe
             ? LuluColors.lavenderMist.withOpacity(0.15)
             : LuluColors.deepIndigo.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: isMe
             ? Border.all(color: LuluColors.lavenderMist.withOpacity(0.3))
             : null,
@@ -40,7 +41,7 @@ class MemberListTile extends StatelessWidget {
               color: member.isOwner
                   ? Colors.amber.withOpacity(0.2)
                   : LuluColors.lavenderMist.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(LuluRadius.section),
             ),
             child: Center(
               child: Text(
@@ -74,7 +75,7 @@ class MemberListTile extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: LuluColors.lavenderMist,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(LuluRadius.indicator),
                         ),
                         child: const Text(
                           '나',

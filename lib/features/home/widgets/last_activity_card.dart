@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -27,7 +28,7 @@ class LastActivityCard extends StatelessWidget {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

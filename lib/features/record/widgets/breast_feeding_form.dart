@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -43,7 +44,7 @@ class BreastFeedingForm extends StatelessWidget {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
           color: LuluActivityColors.feeding.withValues(alpha: 0.2),
         ),
@@ -142,7 +143,7 @@ class _MethodButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color:
                 isSelected ? LuluActivityColors.feeding : Colors.transparent,
@@ -267,7 +268,7 @@ class _SideButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color:
                 isSelected ? LuluActivityColors.feeding : Colors.transparent,
@@ -326,7 +327,7 @@ class _DurationInput extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
               decoration: BoxDecoration(
                 color: LuluColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Center(
                 child: Text(
@@ -419,7 +420,7 @@ class _AdjustButton extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           color: LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
         ),
         child: Center(
           child: Icon(
@@ -454,7 +455,7 @@ class _PresetButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(LuluRadius.xs),
           border: Border.all(
             color: isSelected
                 ? LuluActivityColors.feeding

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
@@ -18,7 +19,7 @@ class TogetherGuideDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: LuluColors.surfaceCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,

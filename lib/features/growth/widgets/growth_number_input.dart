@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/growth_measurement_model.dart';
@@ -69,7 +70,7 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
           color: _getBorderColor(),
           width: _isFocused ? 2 : 1,
@@ -202,7 +203,7 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
       ),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

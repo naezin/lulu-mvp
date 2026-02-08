@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 
 /// 아기 필터 탭 위젯
@@ -96,7 +97,7 @@ class BabyFilterTabs extends StatelessWidget {
           color: isSelected
               ? LuluColors.lavenderMist
               : LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
           border: Border.all(
             color: isSelected
                 ? LuluColors.lavenderMist

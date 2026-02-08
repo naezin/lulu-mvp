@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -43,7 +44,7 @@ class TodayPlaySummary extends StatelessWidget {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluActivityColors.playBg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,7 +181,7 @@ class _StatChip extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

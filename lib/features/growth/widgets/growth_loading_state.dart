@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 
 /// 성장 화면 로딩 상태
@@ -65,7 +66,7 @@ class _GrowthLoadingStateState extends State<GrowthLoadingState>
     return Container(
       height: height,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         gradient: LinearGradient(
           begin: Alignment(_animation.value - 1, 0),
           end: Alignment(_animation.value, 0),
@@ -98,7 +99,7 @@ class _GrowthLoadingStateState extends State<GrowthLoadingState>
       height: height,
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(LuluRadius.indicator),
       ),
     );
   }

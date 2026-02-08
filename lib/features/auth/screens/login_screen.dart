@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/apple_login_button.dart';
 import '../widgets/divider_with_text.dart';
@@ -119,7 +120,7 @@ class LoginScreen extends StatelessWidget {
                   backgroundColor: LuluColors.surfaceCard,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(LuluRadius.sm),
                   ),
                 ),
               ),
@@ -132,7 +133,7 @@ class LoginScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(LuluRadius.xs),
                 ),
                 child: Row(
                   children: [

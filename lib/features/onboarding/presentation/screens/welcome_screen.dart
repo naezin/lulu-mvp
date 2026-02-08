@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
+import '../../../../core/design_system/lulu_radius.dart';
 
 /// Step 1: 환영 화면
 /// "Lulu에 오신 것을 환영해요!"
@@ -73,7 +74,7 @@ class WelcomeScreen extends StatelessWidget {
                 backgroundColor: AppTheme.lavenderMist,
                 foregroundColor: AppTheme.midnightNavy,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
               child: const Text(

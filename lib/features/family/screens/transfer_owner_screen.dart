@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/family_provider.dart';
 
@@ -77,7 +78,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
                       disabledBackgroundColor: LuluColors.deepIndigo,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(LuluRadius.sm),
                       ),
                     ),
                     child: _isLoading
@@ -118,7 +119,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
           color: isSelected
               ? LuluColors.lavenderMist.withOpacity(0.2)
               : LuluColors.deepIndigo.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: isSelected
                 ? LuluColors.lavenderMist

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -56,7 +57,7 @@ class StatSummaryCard extends StatelessWidget {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(
           color: color.withValues(alpha: 0.3),
           width: 1,
@@ -73,7 +74,7 @@ class StatSummaryCard extends StatelessWidget {
                 height: 28,
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(LuluRadius.xs),
                 ),
                 child: Icon(
                   icon,
@@ -278,7 +279,7 @@ class StatSummaryCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(LuluRadius.indicator),
       ),
       child: Text(
         text,

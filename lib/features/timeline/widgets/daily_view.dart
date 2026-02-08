@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -591,7 +592,7 @@ class _DayCalendarPickerSheetState extends State<_DayCalendarPickerSheet> {
               margin: const EdgeInsets.only(bottom: LuluSpacing.md),
               decoration: BoxDecoration(
                 color: LuluColors.glassBorder,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(LuluRadius.xxs),
               ),
             ),
 
@@ -615,7 +616,7 @@ class _DayCalendarPickerSheetState extends State<_DayCalendarPickerSheet> {
                     ),
                     decoration: BoxDecoration(
                       color: LuluColors.navButtonBg,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(LuluRadius.xs),
                     ),
                     child: Text(
                       l10n?.dayPickerToday ?? 'Today',

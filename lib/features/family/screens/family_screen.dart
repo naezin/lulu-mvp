@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/family_provider.dart';
 import '../widgets/invite_bottom_sheet.dart';
@@ -90,7 +91,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
           height: 48,
           decoration: BoxDecoration(
             color: LuluColors.lavenderMist.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: const Center(
             child: Text('👨‍👩‍👧', style: TextStyle(fontSize: 24)),
@@ -172,7 +173,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: LuluColors.deepIndigo.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Row(
                 children: [

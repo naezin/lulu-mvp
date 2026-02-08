@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
@@ -135,7 +136,7 @@ class _DailyGridState extends State<DailyGrid> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),           // v4: 카드 배경 10%
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
           color: color.withValues(alpha: 0.3),         // v4: 보더 30%
           width: 1,
@@ -153,7 +154,7 @@ class _DailyGridState extends State<DailyGrid> {
                 height: 32,
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.2),  // v4: 아이콘 배경 20%
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(LuluRadius.xs),
                 ),
                 child: Icon(icon, size: 18, color: color),
               ),

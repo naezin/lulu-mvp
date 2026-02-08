@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -263,7 +264,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
           side: BorderSide(color: LuluColors.lavenderMist),
           padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: Row(
@@ -316,7 +317,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [

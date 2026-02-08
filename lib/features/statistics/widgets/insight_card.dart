@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../models/insight_data.dart';
 
@@ -30,7 +31,7 @@ class InsightCard extends StatelessWidget {
       padding: EdgeInsets.all(compact ? 8 : 12),
       decoration: BoxDecoration(
         color: _getBackgroundColor(),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
         border: Border.all(
           color: _getBorderColor(),
           width: 1,

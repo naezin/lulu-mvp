@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -181,13 +183,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
                   padding: const EdgeInsets.all(LuluSpacing.lg),
                   decoration: BoxDecoration(
                     color: LuluColors.midnightNavy,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
+                    boxShadow: LuluShadows.topBar,
                   ),
                   child: _buildSaveButton(provider),
                 ),
@@ -287,7 +283,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
             padding: const EdgeInsets.all(LuluSpacing.md),
             decoration: BoxDecoration(
               color: LuluStatusColors.infoSoft,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
               children: [
@@ -367,7 +363,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: Row(
             children: [
@@ -422,7 +418,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _notesController,
@@ -464,7 +460,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
           disabledForegroundColor: LuluTextColors.disabled,
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: provider.isLoading
@@ -491,7 +487,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluStatusColors.errorSoft,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -548,7 +544,7 @@ class _PlayTypeGridButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.playBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
             color: isSelected ? LuluActivityColors.play : Colors.transparent,
             width: 2,
@@ -607,7 +603,7 @@ class _DurationButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.playBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(LuluRadius.xs),
           border: Border.all(
             color: isSelected
                 ? LuluActivityColors.play

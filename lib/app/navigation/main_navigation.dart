@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../shared/widgets/expandable_fab.dart';
@@ -133,7 +134,7 @@ class _MainNavigationState extends State<MainNavigation> {
           backgroundColor: LuluColors.surfaceElevated,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
         ),
       );

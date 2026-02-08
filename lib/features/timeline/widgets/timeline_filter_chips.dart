@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 
@@ -94,7 +95,7 @@ class TimelineFilterChips extends StatelessWidget {
                   color: isSelected
                       ? _getChipSelectedBg(filterValue)
                       : Colors.transparent,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                   border: Border.all(
                     color: isSelected
                         ? _getChipSelectedBorder(filterValue)

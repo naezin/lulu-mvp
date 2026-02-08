@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
+import '../../../../core/design_system/lulu_radius.dart';
 
 /// Step 5 (다태아 전용): 다둥이 기록 팁 안내
 /// v5.0: "둘 다" 버튼 제거, 개별 기록 + 빠른 전환 강조
@@ -91,7 +92,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
                 backgroundColor: AppTheme.lavenderMist,
                 foregroundColor: AppTheme.midnightNavy,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
               child: const Text(
@@ -134,7 +135,7 @@ class _TipCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,7 +145,7 @@ class _TipCard extends StatelessWidget {
             height: 48,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14), // special: design system outer
             ),
             child: Icon(
               icon,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -167,13 +169,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
                   padding: const EdgeInsets.all(LuluSpacing.lg),
                   decoration: BoxDecoration(
                     color: LuluColors.midnightNavy,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
+                    boxShadow: LuluShadows.topBar,
                   ),
                   child: _buildSaveButton(provider),
                 ),
@@ -363,7 +359,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
                   color: isSelected
                       ? LuluActivityColors.healthBg
                       : LuluColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                   border: Border.all(
                     color: isSelected
                         ? LuluActivityColors.health
@@ -418,7 +414,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _medicationController,
@@ -460,7 +456,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _hospitalController,
@@ -502,7 +498,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _notesController,
@@ -533,7 +529,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluStatusColors.warningSoft,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(
           color: LuluStatusColors.warning.withValues(alpha: 0.3),
           width: 1,
@@ -578,7 +574,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
           disabledForegroundColor: LuluTextColors.disabled,
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: provider.isLoading
@@ -605,7 +601,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluStatusColors.errorSoft,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -665,7 +661,7 @@ class _HealthTypeButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.healthBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
             color: isSelected
                 ? LuluActivityColors.health

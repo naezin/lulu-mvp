@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../../../core/design_system/lulu_radius.dart';
 
 /// 이메일 로그인/회원가입 화면
 class EmailLoginScreen extends StatefulWidget {
@@ -99,7 +100,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: Colors.red.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(LuluRadius.xs),
                           ),
                           child: Row(
                             children: [
@@ -138,19 +139,19 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         labelStyle: TextStyle(color: Colors.grey[400]),
         prefixIcon: Icon(Icons.email_outlined, color: Colors.grey[400]),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: BorderSide(color: Colors.grey[600]!),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Color(0xFF9D8CD6)),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Colors.red),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Colors.red),
         ),
       ),
@@ -183,19 +184,19 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: BorderSide(color: Colors.grey[600]!),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Color(0xFF9D8CD6)),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Colors.red),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Colors.red),
         ),
       ),
@@ -220,11 +221,11 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         labelStyle: TextStyle(color: Colors.grey[400]),
         prefixIcon: Icon(Icons.person_outlined, color: Colors.grey[400]),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: BorderSide(color: Colors.grey[600]!),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Color(0xFF9D8CD6)),
         ),
       ),
@@ -242,7 +243,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
               backgroundColor: const Color(0xFF9D8CD6),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               disabledBackgroundColor: const Color(0xFF9D8CD6).withValues(alpha: 0.5),
             ),

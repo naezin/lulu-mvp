@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../shared/widgets/datetime_picker/datetime_picker_sheet.dart';
@@ -113,7 +114,7 @@ class _IntegratedTimeButton extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
             border: Border.all(
               color: LuluColors.glassBorder,
               width: 1,

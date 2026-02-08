@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
@@ -105,7 +106,7 @@ class ActivityListItem extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: LuluColors.deepIndigo.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
                 child: Row(
                   children: [
@@ -132,7 +133,7 @@ class ActivityListItem extends StatelessWidget {
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: LuluColors.lavenderMist,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(LuluRadius.sm),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

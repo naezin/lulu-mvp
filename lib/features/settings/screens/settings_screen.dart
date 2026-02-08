@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/services/export_service.dart';
@@ -129,7 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Column(
         children: [
@@ -174,7 +175,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         height: 48,
         decoration: BoxDecoration(
           color: _getBabyColor(baby.birthOrder ?? 1).withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
         ),
         child: Center(
           child: Text(
@@ -205,7 +206,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               color: baby.isPreterm
                   ? LuluStatusColors.warningSoft
                   : LuluStatusColors.successSoft,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(LuluRadius.indicator),
             ),
             child: Text(
               statusText,
@@ -245,7 +246,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         height: 48,
         decoration: BoxDecoration(
           color: LuluColors.lavenderMist.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: LuluColors.lavenderMist.withValues(alpha: 0.3),
             width: 1.5,
@@ -321,7 +322,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return Container(
           decoration: BoxDecoration(
             color: LuluColors.surfaceCard,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: ListTile(
             leading: Container(
@@ -329,7 +330,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               height: 40,
               decoration: BoxDecoration(
                 color: LuluColors.lavenderMist.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(LuluRadius.section),
               ),
               child: const Icon(
                 Icons.family_restroom,
@@ -380,7 +381,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return Container(
           decoration: BoxDecoration(
             color: LuluColors.surfaceCard,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: ListTile(
             leading: Container(
@@ -388,7 +389,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               height: 40,
               decoration: BoxDecoration(
                 color: LuluColors.lavenderMist.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(LuluRadius.section),
               ),
               child: const Icon(
                 Icons.language_rounded,
@@ -421,7 +422,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (dialogContext) => AlertDialog(
         backgroundColor: LuluColors.surfaceCard,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
         ),
         title: Text(
           l10n.languageChangeConfirm,
@@ -474,7 +475,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Column(
         children: [
@@ -498,7 +499,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         height: 40,
         decoration: BoxDecoration(
           color: LuluColors.lavenderMist.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(LuluRadius.section),
         ),
         child: const Icon(
           Icons.file_upload_outlined,
@@ -583,7 +584,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         height: 40,
         decoration: BoxDecoration(
           color: LuluColors.lavenderMist.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(LuluRadius.section),
         ),
         child: const Icon(
           Icons.file_download_outlined,
@@ -624,7 +625,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       margin: const EdgeInsets.only(bottom: LuluSpacing.sm),
       child: ListTile(
@@ -755,7 +756,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         backgroundColor: LuluColors.surfaceElevated,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
         ),
       ),
     );
@@ -769,7 +770,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(
           color: LuluStatusColors.error.withValues(alpha: 0.3),
         ),
@@ -780,7 +781,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           height: 40,
           decoration: BoxDecoration(
             color: LuluStatusColors.error.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(LuluRadius.section),
           ),
           child: Icon(
             Icons.delete_forever_rounded,
@@ -815,7 +816,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (dialogContext) => AlertDialog(
         backgroundColor: LuluColors.surfaceCard,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
         ),
         title: Row(
           children: [
@@ -844,7 +845,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: LuluStatusColors.error.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

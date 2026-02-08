@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -142,7 +143,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         height: 4,
         decoration: BoxDecoration(
           color: LuluTextColors.tertiary.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(LuluRadius.xxs),
         ),
       ),
     );
@@ -227,7 +228,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         padding: const EdgeInsets.all(LuluSpacing.md),
         decoration: BoxDecoration(
           color: LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(color: LuluColors.glassBorder),
         ),
         child: Row(
@@ -420,7 +421,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                 color: selectedValue == options[i]
                     ? LuluColors.lavenderMist.withValues(alpha: 0.2)
                     : LuluColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(LuluRadius.lg),
                 border: Border.all(
                   color: selectedValue == options[i]
                       ? LuluColors.lavenderMist
@@ -481,7 +482,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                         color: value.toInt() == presets[i]
                             ? LuluColors.lavenderMist.withValues(alpha: 0.2)
                             : LuluColors.surfaceElevated,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(LuluRadius.xs),
                         border: Border.all(
                           color: value.toInt() == presets[i]
                               ? LuluColors.lavenderMist
@@ -520,7 +521,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                 padding: const EdgeInsets.all(LuluSpacing.sm),
                 decoration: BoxDecoration(
                   color: LuluColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(LuluRadius.xs),
                   border: Border.all(color: LuluColors.glassBorder),
                 ),
                 child: Icon(
@@ -540,7 +541,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                 ),
                 decoration: BoxDecoration(
                   color: LuluColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(LuluRadius.xs),
                 ),
                 child: Text(
                   step < 1
@@ -565,7 +566,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                 padding: const EdgeInsets.all(LuluSpacing.sm),
                 decoration: BoxDecoration(
                   color: LuluColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(LuluRadius.xs),
                   border: Border.all(color: LuluColors.glassBorder),
                 ),
                 child: Icon(
@@ -597,7 +598,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _notesController,
@@ -625,7 +626,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluStatusColors.errorSoft,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -660,7 +661,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
           disabledForegroundColor: LuluTextColors.disabled,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: _isLoading

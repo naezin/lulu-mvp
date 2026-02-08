@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
+import '../../core/design_system/lulu_shadows.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_typography.dart';
 
@@ -64,14 +66,8 @@ class _LabeledFabState extends State<LabeledFab>
               color: _isOpen
                   ? LuluColors.surfaceElevated
                   : LuluColors.lavenderMist,
-              borderRadius: BorderRadius.circular(_isOpen ? 28 : 24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              borderRadius: BorderRadius.circular(_isOpen ? LuluRadius.xxl : LuluRadius.xl),
+              boxShadow: LuluShadows.elevated,
             ),
             child: _isOpen
                 ? const Icon(Icons.close, color: LuluTextColors.primary)
@@ -143,11 +139,11 @@ class _FabAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: LuluColors.surfaceElevated,
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(LuluRadius.xl),
       elevation: 4,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(LuluRadius.xl),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Row(

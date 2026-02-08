@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/design_system/lulu_icons.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
+import '../../../../core/design_system/lulu_radius.dart';
 
 /// Step 2: 아기 수 선택
 /// [1명] [2명] [3명] [4명+]
@@ -95,7 +96,7 @@ class BabyCountScreen extends StatelessWidget {
                 disabledBackgroundColor: AppTheme.surfaceElevated,
                 disabledForegroundColor: AppTheme.textTertiary,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
               child: const Text(
@@ -141,7 +142,7 @@ class _BabyCountCard extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
           color: isSelected ? AppTheme.lavenderMist.withValues(alpha: 0.15) : AppTheme.surfaceCard,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
           border: Border.all(
             color: isSelected ? AppTheme.lavenderMist : Colors.transparent,
             width: 2,

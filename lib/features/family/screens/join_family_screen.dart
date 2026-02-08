@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../home/providers/home_provider.dart';
 import '../models/invite_info_model.dart';
@@ -110,7 +111,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
                     disabledBackgroundColor: LuluColors.deepIndigo,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(LuluRadius.sm),
                     ),
                   ),
                   child: _isLoading
@@ -142,7 +143,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
     return Container(
       decoration: BoxDecoration(
         color: LuluColors.deepIndigo.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: TextField(
         controller: _codeController,
@@ -209,7 +210,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: LuluColors.lavenderMist.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(color: LuluColors.lavenderMist.withOpacity(0.3)),
       ),
       child: Column(

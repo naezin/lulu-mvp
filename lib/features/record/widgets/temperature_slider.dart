@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 
@@ -52,7 +53,7 @@ class TemperatureSlider extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: status.color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
                 color: status.color.withValues(alpha: 0.3),
                 width: 2,
@@ -166,7 +167,7 @@ class TemperatureSlider extends StatelessWidget {
           padding: const EdgeInsets.all(LuluSpacing.md),
           decoration: BoxDecoration(
             color: status.color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
             border: Border.all(
               color: status.color.withValues(alpha: 0.2),
             ),
@@ -319,7 +320,7 @@ class _QuickTempButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
           decoration: BoxDecoration(
             color: isSelected ? color.withValues(alpha: 0.2) : LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
             border: Border.all(
               color: isSelected ? color : Colors.transparent,
               width: 2,

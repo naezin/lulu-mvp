@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../data/models/baby_model.dart';
@@ -45,7 +46,7 @@ class BabyTabBar extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
       ),
       child: babies.length <= 2
           ? _buildFixedTabs()
@@ -166,7 +167,7 @@ class _BabyTab extends StatelessWidget {
           color: isSelected
               ? color.withValues(alpha: 0.15)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: isSelected ? color : Colors.transparent,
             width: 2,

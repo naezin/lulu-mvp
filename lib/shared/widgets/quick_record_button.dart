@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
+import '../../core/design_system/lulu_shadows.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
@@ -119,14 +121,8 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
               ),
               decoration: BoxDecoration(
                 color: LuluColors.surfaceCard,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(LuluRadius.xs),
+                boxShadow: LuluShadows.button,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -222,7 +218,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
           padding: const EdgeInsets.all(LuluSpacing.lg),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
             border: Border.all(
               color: color.withValues(alpha: 0.3),
               width: 1,
@@ -236,7 +232,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
                 height: 48,
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
                 child: Center(
                   child: widget.isLoading

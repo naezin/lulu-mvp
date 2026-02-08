@@ -121,7 +121,7 @@ class CryAnalysisCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: LuluBadgeColors.newBadge,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(LuluRadius.section),
       ),
       child: Text(
         'NEW',

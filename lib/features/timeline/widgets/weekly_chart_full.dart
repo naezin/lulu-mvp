@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
@@ -40,7 +41,7 @@ class WeeklyChartFull extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: LuluColors.chartContainerBg,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
           color: LuluColors.chartContainerBorder,
           width: 1,
@@ -421,7 +422,7 @@ class _ChartFilterChipsV4 extends StatelessWidget {
                 color: isSelected
                     ? _getChipSelectedBg(filterValue)
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
                 border: Border.all(
                   color: isSelected
                       ? _getChipSelectedBorder(filterValue)
@@ -512,7 +513,7 @@ class _ChartLegendV4 extends StatelessWidget {
           height: 12,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(3),
+            borderRadius: BorderRadius.circular(LuluRadius.bar),
           ),
         ),
         const SizedBox(width: 4),
@@ -557,7 +558,7 @@ class TogetherViewButton extends StatelessWidget {
           color: isEnabled
               ? const Color(0x33B8A9E8)
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
             color: isEnabled
                 ? LuluColors.lavenderMist

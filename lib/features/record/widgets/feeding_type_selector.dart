@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -108,7 +109,7 @@ class _ContentTypeButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color:
                 isSelected ? LuluActivityColors.feeding : Colors.transparent,

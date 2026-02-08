@@ -76,4 +76,67 @@ class LuluShadows {
       offset: const Offset(0, 2),
     ),
   ];
+
+  // ========================================
+  // 상단 바 그림자 (Top Bar - 기록 화면)
+  // ========================================
+
+  static List<BoxShadow> topBar = [
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.2),
+      blurRadius: 8,
+      offset: const Offset(0, -2),
+    ),
+  ];
+
+  // ========================================
+  // 버튼 그림자 (Button)
+  // ========================================
+
+  static List<BoxShadow> button = [
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.2),
+      blurRadius: 8,
+      offset: const Offset(0, 2),
+    ),
+  ];
+
+  // ========================================
+  // 떠있는 요소 그림자 (Elevated)
+  // ========================================
+
+  static List<BoxShadow> elevated = [
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.2),
+      blurRadius: 8,
+      offset: const Offset(0, 4),
+    ),
+  ];
+
+  // ========================================
+  // 글로우 효과 (Glow - 울음분석 버튼 등)
+  // ========================================
+
+  static List<BoxShadow> glow({required Color color}) {
+    return [
+      BoxShadow(
+        color: color.withValues(alpha: 0.3),
+        blurRadius: 16,
+        offset: const Offset(0, 4),
+      ),
+    ];
+  }
+
+  // ========================================
+  // 바 글로우 효과 (Bar Glow - 차트)
+  // ========================================
+
+  static List<BoxShadow> barGlow({required Color color}) {
+    return [
+      BoxShadow(
+        color: color.withValues(alpha: 0.4),
+        blurRadius: 8,
+      ),
+    ];
+  }
 }

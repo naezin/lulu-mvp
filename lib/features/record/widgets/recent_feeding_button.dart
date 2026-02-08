@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
 
@@ -41,19 +42,19 @@ class RecentFeedingButton extends StatelessWidget {
       label: _getAccessibilityLabel(feedingType, side, amountMl, durationMinutes),
       child: Material(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         child: InkWell(
           onTap: () {
             HapticFeedback.lightImpact();
             onTap();
           },
           onLongPress: onLongPress,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           child: Container(
             height: 56,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
               border: Border.all(color: LuluColors.glassBorder),
             ),
             child: Row(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
 
@@ -29,7 +30,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: LuluColors.lavenderMist.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
             color: LuluColors.lavenderMist.withValues(alpha: 0.2),
             width: 1,
@@ -43,7 +44,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
               height: 48,
               decoration: BoxDecoration(
                 color: LuluColors.lavenderMist.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Center(
                 child: Icon(
@@ -85,7 +86,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: LuluColors.lavenderMist.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Text(
                 'Coming Soon',
@@ -108,7 +109,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
       builder: (context) => AlertDialog(
         backgroundColor: LuluColors.deepBlue,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
         ),
         title: Row(
           children: [

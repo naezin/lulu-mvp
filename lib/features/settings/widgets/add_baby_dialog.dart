@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/baby_model.dart';
@@ -51,7 +52,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
     return Dialog(
       backgroundColor: LuluColors.surfaceCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(LuluSpacing.lg),
@@ -69,7 +70,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                     height: 40,
                     decoration: BoxDecoration(
                       color: LuluColors.lavenderMist.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(LuluRadius.section),
                     ),
                     child: const Icon(
                       Icons.child_care_rounded,
@@ -112,7 +113,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
               const SizedBox(height: LuluSpacing.xs),
               InkWell(
                 onTap: _selectBirthDate,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: LuluSpacing.md,
@@ -120,7 +121,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                   ),
                   decoration: BoxDecoration(
                     color: LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(LuluRadius.sm),
                   ),
                   child: Row(
                     children: [
@@ -185,7 +186,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                   padding: const EdgeInsets.symmetric(horizontal: LuluSpacing.md),
                   decoration: BoxDecoration(
                     color: LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(LuluRadius.sm),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<int>(
@@ -250,7 +251,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                         foregroundColor: LuluColors.midnightNavy,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(LuluRadius.sm),
                         ),
                       ),
                       child: _isLoading
@@ -317,7 +318,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
       filled: true,
       fillColor: LuluColors.surfaceElevated,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         borderSide: BorderSide.none,
       ),
       contentPadding: const EdgeInsets.symmetric(

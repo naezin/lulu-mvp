@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/baby_model.dart';
@@ -254,7 +255,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
             ),
             decoration: BoxDecoration(
               color: LuluColors.lavenderMist.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -378,7 +379,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           padding: LuluSpacing.cardPadding,
           decoration: BoxDecoration(
             color: LuluColors.deepBlue,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -412,7 +413,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
             padding: const EdgeInsets.all(LuluSpacing.md),
             decoration: BoxDecoration(
               color: LuluColors.lavenderMist.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
               children: [
@@ -508,7 +509,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
         ),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
           border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
         child: Row(
@@ -531,7 +532,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluStatusColors.error.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
           color: LuluStatusColors.error.withValues(alpha: 0.3),
         ),
@@ -576,7 +577,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       ),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -618,7 +619,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

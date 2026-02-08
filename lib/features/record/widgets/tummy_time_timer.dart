@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 
@@ -131,7 +132,7 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluActivityColors.playBg,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
           color: _hasReachedGoal
               ? LuluStatusColors.success
@@ -151,7 +152,7 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
               ),
               decoration: BoxDecoration(
                 color: LuluStatusColors.successSoft,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(LuluRadius.lg),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -259,13 +261,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                   padding: const EdgeInsets.all(LuluSpacing.lg),
                   decoration: BoxDecoration(
                     color: LuluColors.midnightNavy,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
+                    boxShadow: LuluShadows.topBar,
                   ),
                   child: _buildSaveButton(provider),
                 ),
@@ -364,7 +360,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _notesController,
@@ -406,7 +402,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
           disabledForegroundColor: LuluTextColors.disabled,
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: provider.isLoading
@@ -433,7 +429,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluStatusColors.errorSoft,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [

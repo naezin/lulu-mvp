@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
+import '../../../../core/design_system/lulu_radius.dart';
 
 /// Step 4: 조산아 정보 입력 (조건부)
 /// 출생주수만 입력 (출생체중은 baby_info_screen에서 이미 필수로 입력받음)
@@ -84,7 +85,7 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppTheme.infoSoft.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
                 color: AppTheme.infoSoft.withValues(alpha: 0.3),
               ),
@@ -137,7 +138,7 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
                 disabledBackgroundColor: AppTheme.surfaceElevated,
                 disabledForegroundColor: AppTheme.textTertiary,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
               child: const Text(
@@ -175,7 +176,7 @@ class _WeeksSelector extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           decoration: BoxDecoration(
             color: AppTheme.surfaceCard,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

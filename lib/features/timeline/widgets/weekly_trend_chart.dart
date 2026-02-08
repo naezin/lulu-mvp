@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 
@@ -34,7 +36,7 @@ class WeeklyTrendChart extends StatelessWidget {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Column(
         children: [
@@ -117,15 +119,9 @@ class WeeklyTrendChart extends StatelessWidget {
                   color: isHighlighted
                       ? barColor
                       : barColor.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(LuluRadius.indicator),
                   boxShadow: isHighlighted
-                      ? [
-                          BoxShadow(
-                            color: barColor.withValues(alpha: 0.4),
-                            blurRadius: 8,
-                            spreadRadius: 0,
-                          ),
-                        ]
+                      ? LuluShadows.barGlow(color: barColor)
                       : null,
                 ),
               ),

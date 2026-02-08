@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -177,13 +179,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                   padding: const EdgeInsets.all(LuluSpacing.lg),
                   decoration: BoxDecoration(
                     color: LuluColors.midnightNavy,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
+                    boxShadow: LuluShadows.topBar,
                   ),
                   child: _buildSaveButton(provider),
                 ),
@@ -247,7 +243,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
             LuluActivityColors.sleep.withValues(alpha: 0.08),
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
           color: LuluActivityColors.sleep.withValues(alpha: 0.5),
           width: 2,
@@ -311,7 +307,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(LuluRadius.sm),
                     ),
                   ),
                 ),
@@ -452,7 +448,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           padding: LuluSpacing.cardPadding,
           decoration: BoxDecoration(
             color: LuluActivityColors.sleepBg,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
             border: Border.all(
               color: LuluActivityColors.sleep.withValues(alpha: 0.3),
             ),
@@ -600,7 +596,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -644,7 +640,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _notesController,
@@ -687,7 +683,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           disabledForegroundColor: LuluTextColors.disabled,
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: provider.isLoading
@@ -723,7 +719,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluStatusColors.errorSoft,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -781,7 +777,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
             backgroundColor: LuluActivityColors.sleep,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             duration: const Duration(seconds: 3),
           ),
@@ -822,7 +818,7 @@ class _ModeButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.sleepBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: isSelected
                 ? LuluActivityColors.sleep
@@ -873,10 +869,10 @@ class _IntegratedTimeButton extends StatelessWidget {
       label: '시간 선택',
       child: Material(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           child: Container(
             padding: const EdgeInsets.symmetric(
               horizontal: LuluSpacing.lg,
@@ -936,7 +932,7 @@ class _SleepTypeButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.sleepBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: isSelected
                 ? LuluActivityColors.sleep

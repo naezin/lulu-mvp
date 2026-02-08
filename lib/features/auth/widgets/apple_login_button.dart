@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/design_system/lulu_radius.dart';
 
 /// Apple 로그인 버튼
 /// Human Interface Guidelines 준수
@@ -23,7 +24,7 @@ class AppleLoginButton extends StatelessWidget {
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           elevation: 0,
         ),

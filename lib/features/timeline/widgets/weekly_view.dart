@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -458,7 +459,7 @@ class _WeeklyViewState extends State<WeeklyView> {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(
           color: color.withValues(alpha: 0.3),
           width: 1,
@@ -588,7 +589,7 @@ class _WeeklyViewState extends State<WeeklyView> {
       height: 200,
       decoration: BoxDecoration(
         color: LuluColors.chartSkeletonBg,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
       ),
       child: Center(
         child: CircularProgressIndicator(
@@ -758,7 +759,7 @@ class _WeekCalendarPickerSheetState extends State<_WeekCalendarPickerSheet> {
               margin: const EdgeInsets.only(bottom: LuluSpacing.md),
               decoration: BoxDecoration(
                 color: LuluColors.glassBorder,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(LuluRadius.xxs),
               ),
             ),
 
@@ -782,7 +783,7 @@ class _WeekCalendarPickerSheetState extends State<_WeekCalendarPickerSheet> {
                     ),
                     decoration: BoxDecoration(
                       color: LuluColors.navButtonBg,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(LuluRadius.xs),
                     ),
                     child: Text(
                       l10n?.weekPickerThisWeek ?? 'This Week',
@@ -897,7 +898,7 @@ class _WeekCalendarPickerSheetState extends State<_WeekCalendarPickerSheet> {
         margin: const EdgeInsets.symmetric(vertical: 1),
         decoration: BoxDecoration(
           color: isSelected ? LuluColors.weekPickerSelected : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(LuluRadius.xs),
         ),
         padding: const EdgeInsets.symmetric(vertical: LuluSpacing.sm),
         child: Row(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 
@@ -174,7 +175,7 @@ class _AmountInputState extends State<AmountInput> {
           : LuluSpacing.inputPadding,
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -232,7 +233,7 @@ class _PresetButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: isSelected
                 ? LuluActivityColors.feeding
@@ -279,7 +280,7 @@ class _CompactPresetButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(LuluRadius.xs),
           border: Border.all(
             color: isSelected
                 ? LuluActivityColors.feeding
@@ -325,7 +326,7 @@ class _AdjustButton extends StatelessWidget {
           color: enabled
               ? LuluActivityColors.feedingBg
               : LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: enabled
                 ? LuluActivityColors.feeding.withValues(alpha: 0.5)

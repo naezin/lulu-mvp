@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import 'lulu_datetime_picker.dart';
@@ -96,7 +97,7 @@ class _DateTimePickerSheetState extends State<_DateTimePickerSheet> {
               height: 4,
               decoration: BoxDecoration(
                 color: LuluColors.glassBorder,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(LuluRadius.xxs),
               ),
             ),
 

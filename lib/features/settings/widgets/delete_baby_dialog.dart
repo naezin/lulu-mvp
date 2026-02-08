@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/baby_model.dart';
@@ -30,7 +31,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
     return AlertDialog(
       backgroundColor: LuluColors.surfaceCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       title: Row(
         children: [
@@ -39,7 +40,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
             height: 40,
             decoration: BoxDecoration(
               color: LuluStatusColors.errorSoft,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(LuluRadius.section),
             ),
             child: const Icon(
               Icons.warning_amber_rounded,
@@ -74,7 +75,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
             padding: const EdgeInsets.all(LuluSpacing.md),
             decoration: BoxDecoration(
               color: LuluStatusColors.errorSoft,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
               children: [
@@ -114,7 +115,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
             backgroundColor: LuluStatusColors.error,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
           ),
           child: _isDeleting

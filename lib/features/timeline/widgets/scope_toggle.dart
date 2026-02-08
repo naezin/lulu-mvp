@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 
@@ -31,7 +32,7 @@ class ScopeToggle extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           color: LuluColors.deepBlue,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
         ),
         child: Row(
           children: [
@@ -89,7 +90,7 @@ class _ScopeButton extends StatelessWidget {
         margin: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: isSelected ? LuluColors.lavenderMist : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
         ),
         alignment: Alignment.center,
         child: Text(

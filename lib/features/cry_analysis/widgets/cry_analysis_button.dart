@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../providers/cry_analysis_provider.dart';
@@ -61,19 +63,14 @@ class CryAnalysisButton extends StatelessWidget {
                   end: Alignment.bottomRight,
                 ),
           color: isAnalyzing ? LuluColors.softBlue : null,
-          borderRadius: BorderRadius.circular(isRecording ? 28 : 16),
+          borderRadius: BorderRadius.circular(isRecording ? LuluRadius.xxl : LuluRadius.md),
           boxShadow: isAnalyzing
               ? null
-              : [
-                  BoxShadow(
-                    color: (isRecording
-                            ? LuluStatusColors.error
-                            : LuluColors.lavenderMist)
-                        .withValues(alpha: 0.3),
-                    blurRadius: 16,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+              : LuluShadows.glow(
+                  color: isRecording
+                      ? LuluStatusColors.error
+                      : LuluColors.lavenderMist,
+                ),
         ),
         child: Center(
           child: _buildButtonContent(),
@@ -161,7 +158,7 @@ class CryAnalysisButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: LuluColors.deepBlue,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
         ),
         child: Text(
           '취소',
