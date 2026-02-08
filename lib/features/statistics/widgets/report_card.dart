@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -97,7 +98,7 @@ class ReportCard extends StatelessWidget {
             const SizedBox(width: 8),
           ],
           Icon(
-            isExpanded ? Icons.expand_less : Icons.expand_more,
+            isExpanded ? LuluIcons.expandLess : LuluIcons.expandMore,
             color: LuluTextColors.secondary,
           ),
         ],
@@ -108,13 +109,13 @@ class ReportCard extends StatelessWidget {
   IconData _getIcon() {
     switch (type) {
       case ReportType.sleep:
-        return Icons.bedtime_outlined;
+        return LuluIcons.sleepOutlined;
       case ReportType.feeding:
-        return Icons.local_drink_outlined;
+        return LuluIcons.feedingOutlined;
       case ReportType.diaper:
-        return Icons.baby_changing_station_outlined;
+        return LuluIcons.diaperOutlined;
       case ReportType.crying:
-        return Icons.mic_outlined;
+        return LuluIcons.micOutlined;
     }
   }
 

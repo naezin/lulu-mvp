@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/family_provider.dart';
@@ -145,7 +146,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
               child: isSelected
                   ? const Center(
                       child: Icon(
-                        Icons.check,
+                        LuluIcons.save,
                         size: 16,
                         color: LuluColors.lavenderMist,
                       ),

@@ -286,7 +286,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
               ),
               // 화살표
               Icon(
-                Icons.chevron_right,
+                LuluIcons.chevronRight,
                 color: color,
               ),
             ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -88,7 +89,7 @@ class CryAnalysisButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(
-              Icons.mic_rounded,
+              LuluIcons.microphone,
               color: Colors.white,
               size: 24,
             ),
@@ -112,7 +113,7 @@ class CryAnalysisButton extends StatelessWidget {
                 Transform.scale(
                   scale: 1.0 + (pulseAnimation.value * 0.2),
                   child: const Icon(
-                    Icons.stop_rounded,
+                    LuluIcons.stop,
                     color: Colors.white,
                     size: 28,
                   ),

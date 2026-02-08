@@ -56,7 +56,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
             backgroundColor: LuluColors.midnightNavy,
             elevation: 0,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: LuluTextColors.primary),
+              icon: Icon(LuluIcons.back, color: LuluTextColors.primary),
               onPressed: () => Navigator.pop(context),
             ),
             title: Text(
@@ -68,7 +68,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
             actions: [
               IconButton(
                 icon: Icon(
-                  Icons.add_circle_outline,
+                  LuluIcons.addCircleOutline,
                   color: LuluColors.lavenderMist,
                 ),
                 onPressed: () => _navigateToInput(context, provider),

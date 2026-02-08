@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 
 /// 통계 스켈레톤 로딩 위젯
@@ -130,7 +131,7 @@ class OfflineBanner extends StatelessWidget {
       child: Row(
         children: [
           const Icon(
-            Icons.cloud_off,
+            LuluIcons.cloudOff,
             size: 16,
             color: Color(0xFFFBBF24),
           ),
@@ -180,7 +181,7 @@ class StatisticsErrorView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.cloud_off,
+              LuluIcons.cloudOff,
               size: 48,
               color: LuluTextColors.tertiary,
             ),
@@ -196,7 +197,7 @@ class StatisticsErrorView extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(LuluIcons.refresh),
               label: const Text('다시 시도'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: LuluColors.lavenderMist,
@@ -228,7 +229,7 @@ class StatisticsEmptyView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.insert_chart_outlined,
+              LuluIcons.insertChart,
               size: 64,
               color: LuluColors.glassBorder,
             ),
@@ -253,7 +254,7 @@ class StatisticsEmptyView extends StatelessWidget {
               const SizedBox(height: 24),
               OutlinedButton.icon(
                 onPressed: onStartRecording,
-                icon: const Icon(Icons.add),
+                icon: const Icon(LuluIcons.add),
                 label: const Text('기록 시작하기'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: LuluColors.lavenderMist,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -158,7 +159,7 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    Icons.check_circle,
+                    LuluIcons.checkCircle,
                     color: LuluStatusColors.success,
                     size: 16,
                   ),
@@ -232,7 +233,7 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
               if (!_isRunning && _elapsedSeconds == 0)
                 // 시작 버튼
                 _TimerButton(
-                  icon: Icons.play_arrow_rounded,
+                  icon: LuluIcons.playArrow,
                   label: '시작',
                   color: LuluActivityColors.play,
                   onTap: _startTimer,
@@ -242,14 +243,14 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
                 Row(
                   children: [
                     _TimerButton(
-                      icon: Icons.pause_rounded,
+                      icon: LuluIcons.pause,
                       label: '일시정지',
                       color: LuluStatusColors.warning,
                       onTap: _pauseTimer,
                     ),
                     const SizedBox(width: LuluSpacing.md),
                     _TimerButton(
-                      icon: Icons.check_rounded,
+                      icon: LuluIcons.save,
                       label: '완료',
                       color: LuluStatusColors.success,
                       onTap: _completeTimer,
@@ -261,21 +262,21 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
                 Row(
                   children: [
                     _TimerButton(
-                      icon: Icons.play_arrow_rounded,
+                      icon: LuluIcons.playArrow,
                       label: '계속',
                       color: LuluActivityColors.play,
                       onTap: _startTimer,
                     ),
                     const SizedBox(width: LuluSpacing.md),
                     _TimerButton(
-                      icon: Icons.check_rounded,
+                      icon: LuluIcons.save,
                       label: '완료',
                       color: LuluStatusColors.success,
                       onTap: _completeTimer,
                     ),
                     const SizedBox(width: LuluSpacing.md),
                     _TimerButton(
-                      icon: Icons.refresh_rounded,
+                      icon: LuluIcons.refresh,
                       label: '초기화',
                       color: LuluTextColors.tertiary,
                       onTap: _resetTimer,

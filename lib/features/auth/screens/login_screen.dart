@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/apple_login_button.dart';
@@ -61,7 +62,7 @@ class LoginScreen extends StatelessWidget {
           fit: BoxFit.contain,
           errorBuilder: (context, error, stackTrace) {
             return const Icon(
-              Icons.nightlight_round,
+              LuluIcons.moon,
               size: 60,
               color: LuluColors.lavenderMist,
             );
@@ -108,7 +109,7 @@ class LoginScreen extends StatelessWidget {
               height: 50,
               child: ElevatedButton.icon(
                 onPressed: () => _navigateToEmailLogin(context),
-                icon: const Icon(Icons.email_outlined, size: 20),
+                icon: const Icon(LuluIcons.emailOutlined, size: 20),
                 label: const Text(
                   '이메일로 로그인',
                   style: TextStyle(
@@ -137,7 +138,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.error_outline, color: Colors.red, size: 20),
+                    const Icon(LuluIcons.errorOutline, color: Colors.red, size: 20),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(

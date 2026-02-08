@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -34,7 +35,7 @@ class TogetherGuideDialog extends StatelessWidget {
             ),
             child: Center(
               child: Icon(
-                Icons.favorite_rounded,
+                LuluIcons.heart,
                 size: 32,
                 color: LuluColors.lavenderMist,
               ),

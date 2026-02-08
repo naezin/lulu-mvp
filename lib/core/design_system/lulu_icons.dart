@@ -208,6 +208,132 @@ class LuluIcons {
   static const IconData barChart = Icons.bar_chart_rounded;
 
   // ========================================
+  // 네비게이션 확장 (Navigation Extended)
+  // ========================================
+
+  static const IconData backIos = Icons.arrow_back_ios_new_rounded;
+  static const IconData forwardIos = Icons.arrow_forward_ios_rounded;
+  static const IconData expandMore = Icons.expand_more_rounded;
+  static const IconData expandLess = Icons.expand_less_rounded;
+  static const IconData menuIcon = Icons.menu_rounded;
+  static const IconData history = Icons.history_rounded;
+  static const IconData settingsOutlined = Icons.settings_outlined;
+
+  // ========================================
+  // 액션 확장 (Actions Extended)
+  // ========================================
+
+  static const IconData addCircleOutline = Icons.add_circle_outline_rounded;
+  static const IconData removeCircleOutline = Icons.remove_circle_outline_rounded;
+  static const IconData deleteForever = Icons.delete_forever_rounded;
+  static const IconData refresh = Icons.refresh_rounded;
+  static const IconData send = Icons.send_rounded;
+  static const IconData copy = Icons.copy_rounded;
+  static const IconData skipNext = Icons.skip_next_rounded;
+  static const IconData playArrow = Icons.play_arrow_rounded;
+  static const IconData pause = Icons.pause_rounded;
+  static const IconData stop = Icons.stop_rounded;
+  static const IconData helpOutline = Icons.help_outline_rounded;
+  static const IconData exitToApp = Icons.exit_to_app_rounded;
+  static const IconData compareArrows = Icons.compare_arrows_rounded;
+  static const IconData swapHoriz = Icons.swap_horiz_rounded;
+
+  // ========================================
+  // 상태 확장 (Status Extended)
+  // ========================================
+
+  static const IconData checkCircleOutline = Icons.check_circle_outline_rounded;
+  static const IconData infoOutline = Icons.info_outline_rounded;
+  static const IconData notificationActive = Icons.notifications_active_rounded;
+  static const IconData newRelease = Icons.new_releases_outlined;
+  static const IconData cloudOff = Icons.cloud_off_rounded;
+
+  // ========================================
+  // 사용자/가족 (User/Family)
+  // ========================================
+
+  static const IconData personOutlined = Icons.person_outlined;
+  static const IconData personAdd = Icons.person_add_rounded;
+  static const IconData people = Icons.people_rounded;
+  static const IconData groupAdd = Icons.group_add_rounded;
+  static const IconData male = Icons.male_rounded;
+  static const IconData female = Icons.female_rounded;
+
+  // ========================================
+  // 인증/보안 (Auth/Security)
+  // ========================================
+
+  static const IconData apple = Icons.apple;
+  static const IconData emailOutlined = Icons.email_outlined;
+  static const IconData lockOutlined = Icons.lock_outlined;
+  static const IconData mailOutline = Icons.mail_outline_rounded;
+  static const IconData visibility = Icons.visibility_rounded;
+  static const IconData visibilityOff = Icons.visibility_off_rounded;
+
+  // ========================================
+  // 데이터/파일 (Data/File)
+  // ========================================
+
+  static const IconData fileDownload = Icons.file_download_outlined;
+  static const IconData fileUpload = Icons.file_upload_outlined;
+  static const IconData folderOpen = Icons.folder_open_rounded;
+  static const IconData description = Icons.description_rounded;
+  static const IconData summarize = Icons.summarize_rounded;
+  static const IconData tableChart = Icons.table_chart_rounded;
+  static const IconData insertChart = Icons.insert_chart_outlined_rounded;
+
+  // ========================================
+  // 수유 확장 (Feeding Extended)
+  // ========================================
+
+  static const IconData feedingOutlined = Icons.local_drink_outlined;
+  static const IconData restaurantOutlined = Icons.restaurant_outlined;
+  static const IconData cafe = Icons.local_cafe_rounded;
+
+  // ========================================
+  // 기저귀 확장 (Diaper Extended)
+  // ========================================
+
+  static const IconData diaperOutlined = Icons.baby_changing_station_outlined;
+
+  // ========================================
+  // 수면 확장 (Sleep Extended)
+  // ========================================
+
+  static const IconData sleepOutlined = Icons.bedtime_outlined;
+
+  // ========================================
+  // 감정 표현 (Sentiment)
+  // ========================================
+
+  static const IconData sentimentHappy = Icons.sentiment_very_satisfied_rounded;
+  static const IconData sentimentNeutral = Icons.sentiment_neutral_rounded;
+  static const IconData sentimentSad = Icons.sentiment_dissatisfied_rounded;
+  static const IconData sentimentSadOutlined = Icons.sentiment_dissatisfied_outlined;
+  static const IconData thumbUp = Icons.thumb_up_outlined;
+  static const IconData thumbDown = Icons.thumb_down_outlined;
+
+  // ========================================
+  // 차트/분석 (Charts/Analytics)
+  // ========================================
+
+  static const IconData analyticsOutlined = Icons.analytics_outlined;
+  static const IconData bubbleChart = Icons.bubble_chart_outlined;
+  static const IconData trendingFlat = Icons.trending_flat_rounded;
+
+  // ========================================
+  // 기타 (Miscellaneous)
+  // ========================================
+
+  static const IconData language = Icons.language_rounded;
+  static const IconData timer = Icons.timer_rounded;
+  static const IconData timerOutlined = Icons.timer_outlined;
+  static const IconData sportsEsports = Icons.sports_esports_rounded;
+  static const IconData snowflake = Icons.ac_unit_rounded;
+  static const IconData bolt = Icons.bolt_rounded;
+  static const IconData micOutlined = Icons.mic_outlined;
+
+  // ========================================
   // 아이콘 크기 (Icon Sizes)
   // ========================================
 

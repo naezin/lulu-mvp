@@ -71,7 +71,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: LuluTextColors.primary),
+          icon: const Icon(LuluIcons.close, color: LuluTextColors.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -288,7 +288,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
             child: Row(
               children: [
                 Icon(
-                  Icons.info_outline,
+                  LuluIcons.infoOutline,
                   color: LuluStatusColors.info,
                   size: 20,
                 ),
@@ -492,7 +492,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
       child: Row(
         children: [
           Icon(
-            Icons.error_outline,
+            LuluIcons.errorOutline,
             color: LuluStatusColors.error,
             size: 20,
           ),

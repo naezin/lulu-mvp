@@ -87,7 +87,7 @@ class TodayPlaySummary extends StatelessWidget {
               if (stats.hasBath)
                 _StatChip(
                   label: '목욕 완료',
-                  icon: Icons.check_circle_outline,
+                  icon: LuluIcons.checkCircleOutline,
                   color: LuluStatusColors.info,
                 ),
 
@@ -95,7 +95,7 @@ class TodayPlaySummary extends StatelessWidget {
               if (stats.hasOutdoor)
                 _StatChip(
                   label: '외출',
-                  icon: Icons.check_circle_outline,
+                  icon: LuluIcons.checkCircleOutline,
                   color: LuluStatusColors.info,
                 ),
             ],

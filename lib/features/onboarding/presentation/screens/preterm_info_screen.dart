@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
 import '../../../../core/design_system/lulu_radius.dart';
+import '../../../../core/design_system/lulu_icons.dart';
 
 /// Step 4: 조산아 정보 입력 (조건부)
 /// 출생주수만 입력 (출생체중은 baby_info_screen에서 이미 필수로 입력받음)
@@ -94,7 +95,7 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Icon(
-                  Icons.info_outline,
+                  LuluIcons.infoOutline,
                   color: AppTheme.infoSoft,
                   size: 24,
                 ),

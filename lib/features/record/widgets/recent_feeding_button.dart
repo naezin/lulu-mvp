@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -104,16 +105,16 @@ class RecentFeedingButton extends StatelessWidget {
   IconData _getIcon(String feedingType, String? side) {
     switch (feedingType) {
       case 'breast':
-        if (side == 'left') return Icons.arrow_back_rounded;
-        if (side == 'right') return Icons.arrow_forward_rounded;
-        return Icons.compare_arrows_rounded;
+        if (side == 'left') return LuluIcons.back;
+        if (side == 'right') return LuluIcons.forward;
+        return LuluIcons.compareArrows;
       case 'formula':
       case 'bottle':
-        return Icons.local_drink_rounded;
+        return LuluIcons.feeding;
       case 'solid':
-        return Icons.restaurant_rounded;
+        return LuluIcons.feedingSolid;
       default:
-        return Icons.local_drink_rounded;
+        return LuluIcons.feeding;
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -93,7 +94,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: LuluTextColors.primary),
+          icon: const Icon(LuluIcons.close, color: LuluTextColors.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -434,7 +435,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
       child: Row(
         children: [
           Icon(
-            Icons.error_outline,
+            LuluIcons.errorOutline,
             color: LuluStatusColors.error,
             size: 20,
           ),

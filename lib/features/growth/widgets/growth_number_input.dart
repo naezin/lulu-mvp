@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -159,7 +160,7 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
             Row(
               children: [
                 Icon(
-                  Icons.warning_amber_rounded,
+                  LuluIcons.statusWarn,
                   size: 14,
                   color: LuluStatusColors.error,
                 ),

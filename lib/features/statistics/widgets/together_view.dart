@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -102,7 +103,7 @@ class TogetherView extends StatelessWidget {
 
                 // 수면
                 _buildStatRow(
-                  icon: Icons.bedtime_outlined,
+                  icon: LuluIcons.sleepOutlined,
                   color: LuluStatisticsColors.sleep,
                   value: '${baby.statistics.sleep.dailyAverageHours.toStringAsFixed(1)}h',
                 ),
@@ -111,7 +112,7 @@ class TogetherView extends StatelessWidget {
 
                 // 수유
                 _buildStatRow(
-                  icon: Icons.local_drink_outlined,
+                  icon: LuluIcons.feedingOutlined,
                   color: LuluStatisticsColors.feeding,
                   value: '${baby.statistics.feeding.dailyAverageCount.toStringAsFixed(1)}회',
                 ),
@@ -120,7 +121,7 @@ class TogetherView extends StatelessWidget {
 
                 // 기저귀
                 _buildStatRow(
-                  icon: Icons.baby_changing_station_outlined,
+                  icon: LuluIcons.diaperOutlined,
                   color: LuluStatisticsColors.diaper,
                   value: '${baby.statistics.diaper.dailyAverageCount.toStringAsFixed(1)}회',
                 ),
@@ -160,7 +161,7 @@ class TogetherView extends StatelessWidget {
         Row(
           children: [
             Icon(
-              Icons.bedtime_outlined,
+              LuluIcons.sleepOutlined,
               size: 20,
               color: LuluStatisticsColors.sleep,
             ),
@@ -253,7 +254,7 @@ class TogetherView extends StatelessWidget {
       child: Row(
         children: [
           const Icon(
-            Icons.lightbulb_outline,
+            LuluIcons.tip,
             size: 20,
             color: Color(0xFFFBBF24),
           ),

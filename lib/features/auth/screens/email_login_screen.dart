@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_icons.dart';
 
 /// 이메일 로그인/회원가입 화면
 class EmailLoginScreen extends StatefulWidget {
@@ -42,7 +43,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(LuluIcons.backIos, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -104,7 +105,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.error_outline, color: Colors.red, size: 20),
+                              const Icon(LuluIcons.errorOutline, color: Colors.red, size: 20),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -137,7 +138,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       decoration: InputDecoration(
         labelText: '이메일',
         labelStyle: TextStyle(color: Colors.grey[400]),
-        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey[400]),
+        prefixIcon: Icon(LuluIcons.emailOutlined, color: Colors.grey[400]),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: BorderSide(color: Colors.grey[600]!),
@@ -175,10 +176,10 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       decoration: InputDecoration(
         labelText: '비밀번호',
         labelStyle: TextStyle(color: Colors.grey[400]),
-        prefixIcon: Icon(Icons.lock_outlined, color: Colors.grey[400]),
+        prefixIcon: Icon(LuluIcons.lockOutlined, color: Colors.grey[400]),
         suffixIcon: IconButton(
           icon: Icon(
-            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+            _obscurePassword ? LuluIcons.visibilityOff : LuluIcons.visibility,
             color: Colors.grey[400],
           ),
           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -219,7 +220,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       decoration: InputDecoration(
         labelText: '닉네임 (선택)',
         labelStyle: TextStyle(color: Colors.grey[400]),
-        prefixIcon: Icon(Icons.person_outlined, color: Colors.grey[400]),
+        prefixIcon: Icon(LuluIcons.personOutlined, color: Colors.grey[400]),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: BorderSide(color: Colors.grey[600]!),

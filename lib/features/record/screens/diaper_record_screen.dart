@@ -68,7 +68,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: LuluTextColors.primary),
+          icon: const Icon(LuluIcons.close, color: LuluTextColors.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -367,7 +367,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             child: Row(
               children: [
                 Icon(
-                  Icons.warning_amber_rounded,
+                  LuluIcons.statusWarn,
                   color: LuluStatusColors.warning,
                   size: 20,
                 ),
@@ -478,7 +478,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
       child: Row(
         children: [
           Icon(
-            Icons.error_outline,
+            LuluIcons.errorOutline,
             color: LuluStatusColors.error,
             size: 20,
           ),
@@ -630,7 +630,7 @@ class _StoolColorButton extends StatelessWidget {
             // 높이 통일: 모든 버튼에 아이콘 공간 확보 (isWarning 아닐 때는 투명)
             const SizedBox(height: 2),
             Icon(
-              Icons.warning_amber_rounded,
+              LuluIcons.statusWarn,
               size: 12,
               color: isWarning
                   ? (isSelected ? LuluStatusColors.warning : LuluTextColors.tertiary)

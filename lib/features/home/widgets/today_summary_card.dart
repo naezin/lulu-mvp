@@ -35,7 +35,7 @@ class TodaySummaryCard extends StatelessWidget {
           Row(
             children: [
               Icon(
-                Icons.bar_chart_rounded,
+                LuluIcons.barChart,
                 size: 20,
                 color: LuluColors.lavenderMist,
               ),

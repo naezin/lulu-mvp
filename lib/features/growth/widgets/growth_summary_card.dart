@@ -146,7 +146,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
         const Spacer(),
         if (widget.onTap != null)
           Icon(
-            Icons.chevron_right,
+            LuluIcons.chevronRight,
             color: LuluTextColors.tertiary,
           ),
       ],

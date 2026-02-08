@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 
 /// 울음 분류 타입 (Dunstan Baby Language 기반)
 ///
@@ -117,17 +118,17 @@ enum CryType {
   IconData get icon {
     switch (this) {
       case CryType.hungry:
-        return Icons.restaurant_outlined;
+        return LuluIcons.restaurantOutlined;
       case CryType.tired:
-        return Icons.bedtime_outlined;
+        return LuluIcons.sleepOutlined;
       case CryType.discomfort:
-        return Icons.sentiment_dissatisfied_outlined;
+        return LuluIcons.sentimentSadOutlined;
       case CryType.gas:
-        return Icons.air_outlined;
+        return LuluIcons.cough;
       case CryType.burp:
-        return Icons.bubble_chart_outlined;
+        return LuluIcons.bubbleChart;
       case CryType.unknown:
-        return Icons.help_outline_rounded;
+        return LuluIcons.helpOutline;
     }
   }
 

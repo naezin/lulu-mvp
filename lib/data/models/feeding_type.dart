@@ -6,6 +6,7 @@
 // - 기존 데이터 하위 호환성 유지
 
 import 'package:flutter/material.dart' show Color, IconData, Icons;
+import '../../core/design_system/lulu_icons.dart';
 
 /// 수유 내용물 타입 (What)
 enum FeedingContentType {
@@ -271,11 +272,11 @@ extension BabyReactionExtension on BabyReaction {
   IconData get icon {
     switch (this) {
       case BabyReaction.liked:
-        return Icons.sentiment_very_satisfied;
+        return LuluIcons.sentimentHappy;
       case BabyReaction.neutral:
-        return Icons.sentiment_neutral;
+        return LuluIcons.sentimentNeutral;
       case BabyReaction.rejected:
-        return Icons.sentiment_dissatisfied;
+        return LuluIcons.sentimentSad;
     }
   }
 

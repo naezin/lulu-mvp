@@ -76,7 +76,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: LuluTextColors.primary),
+          icon: const Icon(LuluIcons.close, color: LuluTextColors.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -539,7 +539,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            Icons.warning_amber_rounded,
+            LuluIcons.statusWarn,
             color: LuluStatusColors.warning,
             size: 18,
           ),
@@ -606,7 +606,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
       child: Row(
         children: [
           Icon(
-            Icons.error_outline,
+            LuluIcons.errorOutline,
             color: LuluStatusColors.error,
             size: 20,
           ),

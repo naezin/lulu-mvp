@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../home/providers/home_provider.dart';
@@ -178,7 +179,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
                       color: LuluColors.lavenderMist,
                     ),
                   )
-                : const Icon(Icons.search, color: LuluColors.lavenderMist),
+                : const Icon(LuluIcons.search, color: LuluColors.lavenderMist),
           ),
         ),
         onChanged: (value) {
@@ -218,7 +219,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.check_circle,
+              const Icon(LuluIcons.checkCircle,
                   color: LuluColors.lavenderMist, size: 20),
               const SizedBox(width: 8),
               Text(
@@ -232,11 +233,11 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
           ),
           const SizedBox(height: 12),
           _buildInfoRow(
-              Icons.people, l10n.memberCount(info.memberCount.toString())),
+              LuluIcons.people, l10n.memberCount(info.memberCount.toString())),
           if (info.babies.isNotEmpty)
-            _buildInfoRow(Icons.child_care,
+            _buildInfoRow(LuluIcons.baby,
                 l10n.babyNames(info.babies.map((b) => b.name).join(', '))),
-          _buildInfoRow(Icons.timer, l10n.expiresIn(info.daysLeft.toString())),
+          _buildInfoRow(LuluIcons.timer, l10n.expiresIn(info.daysLeft.toString())),
         ],
       ),
     );

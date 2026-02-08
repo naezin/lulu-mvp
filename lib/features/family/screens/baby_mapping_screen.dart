@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../home/providers/home_provider.dart';
@@ -172,7 +173,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
                   ),
                   child: Center(
                     child: Icon(
-                      Icons.child_care_rounded,
+                      LuluIcons.baby,
                       size: 18,
                       color: LuluColors.lavenderMist,
                     ),
@@ -192,7 +193,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
 
           // 화살표
           Icon(
-            Icons.arrow_forward,
+            LuluIcons.forward,
             size: 20,
             color: LuluTextColors.primary.withOpacity(0.5),
           ),

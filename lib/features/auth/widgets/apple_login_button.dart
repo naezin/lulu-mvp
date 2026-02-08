@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_icons.dart';
 
 /// Apple 로그인 버튼
 /// Human Interface Guidelines 준수
@@ -42,7 +43,7 @@ class AppleLoginButton extends StatelessWidget {
                 children: [
                   // Apple Logo
                   const Icon(
-                    Icons.apple,
+                    LuluIcons.apple,
                     size: 24,
                     color: Colors.black,
                   ),

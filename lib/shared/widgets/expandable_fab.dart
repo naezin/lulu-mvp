@@ -70,12 +70,12 @@ class _LabeledFabState extends State<LabeledFab>
               boxShadow: LuluShadows.elevated,
             ),
             child: _isOpen
-                ? const Icon(Icons.close, color: LuluTextColors.primary)
+                ? const Icon(LuluIcons.close, color: LuluTextColors.primary)
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(
-                        Icons.add,
+                        LuluIcons.add,
                         color: LuluColors.midnightNavy,
                         size: 20,
                       ),

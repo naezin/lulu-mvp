@@ -72,7 +72,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: LuluTextColors.primary),
+          icon: const Icon(LuluIcons.close, color: LuluTextColors.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -300,7 +300,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                 flex: 2,
                 child: ElevatedButton.icon(
                   onPressed: () => _endSleep(provider),
-                  icon: const Icon(Icons.bedtime_rounded),
+                  icon: const Icon(LuluIcons.sleep),
                   label: const Text('수면 종료'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: LuluActivityColors.sleep,
@@ -315,7 +315,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
               const SizedBox(width: LuluSpacing.md),
               TextButton.icon(
                 onPressed: () => _cancelSleep(provider),
-                icon: const Icon(Icons.close, size: 18),
+                icon: const Icon(LuluIcons.close, size: 18),
                 label: const Text('취소'),
                 style: TextButton.styleFrom(
                   foregroundColor: LuluTextColors.secondary,
@@ -602,7 +602,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(
-            Icons.timer_outlined,
+            LuluIcons.timerOutlined,
             color: LuluActivityColors.sleep,
             size: 20,
           ),
@@ -724,7 +724,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
       child: Row(
         children: [
           Icon(
-            Icons.error_outline,
+            LuluIcons.errorOutline,
             color: LuluStatusColors.error,
             size: 20,
           ),
@@ -882,7 +882,7 @@ class _IntegratedTimeButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.access_time_rounded,
+                  LuluIcons.time,
                   size: 20,
                   color: LuluActivityColors.sleep,
                 ),
@@ -896,7 +896,7 @@ class _IntegratedTimeButton extends StatelessWidget {
                 ),
                 const SizedBox(width: LuluSpacing.sm),
                 Icon(
-                  Icons.keyboard_arrow_down_rounded,
+                  LuluIcons.chevronDown,
                   size: 20,
                   color: LuluTextColors.tertiary,
                 ),

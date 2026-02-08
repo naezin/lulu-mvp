@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../models/weekly_statistics.dart';
@@ -41,7 +42,7 @@ class DashboardSummary extends StatelessWidget {
               // 수면 카드
               Expanded(
                 child: SummaryCard(
-                  icon: Icons.bedtime_outlined,
+                  icon: LuluIcons.sleepOutlined,
                   iconColor: LuluStatisticsColors.sleep,
                   label: l10n?.statisticsSleep ?? 'Sleep',
                   value: '${statistics.sleep.dailyAverageHours.toStringAsFixed(1)}h',
@@ -56,7 +57,7 @@ class DashboardSummary extends StatelessWidget {
               // 수유 카드
               Expanded(
                 child: SummaryCard(
-                  icon: Icons.local_drink_outlined,
+                  icon: LuluIcons.feedingOutlined,
                   iconColor: LuluStatisticsColors.feeding,
                   label: l10n?.statisticsFeeding ?? 'Feeding',
                   value: '${statistics.feeding.dailyAverageCount.toStringAsFixed(1)}회',
@@ -71,7 +72,7 @@ class DashboardSummary extends StatelessWidget {
               // 기저귀 카드
               Expanded(
                 child: SummaryCard(
-                  icon: Icons.baby_changing_station_outlined,
+                  icon: LuluIcons.diaperOutlined,
                   iconColor: LuluStatisticsColors.diaper,
                   label: l10n?.statisticsDiaper ?? 'Diaper',
                   value: '${statistics.diaper.dailyAverageCount.toStringAsFixed(1)}회',

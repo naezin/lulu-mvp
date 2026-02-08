@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -117,7 +118,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       backgroundColor: LuluColors.midnightNavy,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        icon: const Icon(LuluIcons.backIos),
         onPressed: () => Navigator.of(context).pop(),
       ),
       title: Text(
@@ -130,7 +131,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       actions: [
         // 히스토리 버튼
         IconButton(
-          icon: const Icon(Icons.history_rounded),
+          icon: const Icon(LuluIcons.history),
           onPressed: () {
             // TODO: 히스토리 화면 이동
             ScaffoldMessenger.of(context).showSnackBar(
@@ -226,7 +227,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
             shape: BoxShape.circle,
           ),
           child: Icon(
-            Icons.graphic_eq_rounded,
+            LuluIcons.soundWave,
             size: 56,
             color: LuluColors.lavenderMist,
           ),
@@ -261,7 +262,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  Icons.info_outline_rounded,
+                  LuluIcons.infoOutline,
                   size: 16,
                   color: LuluColors.lavenderMist,
                 ),
@@ -301,7 +302,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
                   ),
                 ),
                 child: Icon(
-                  Icons.mic_rounded,
+                  LuluIcons.microphone,
                   size: 56,
                   color: LuluStatusColors.error,
                 ),
@@ -418,7 +419,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
             child: Row(
               children: [
                 Icon(
-                  Icons.info_outline_rounded,
+                  LuluIcons.infoOutline,
                   size: 20,
                   color: LuluColors.lavenderMist,
                 ),
@@ -473,7 +474,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           children: [
             _buildFeedbackButton(
               label: '맞아요',
-              icon: Icons.thumb_up_outlined,
+              icon: LuluIcons.thumbUp,
               color: LuluStatusColors.success,
               onTap: () {
                 provider.addFeedback(latestRecord.id, CryFeedback.accurate);
@@ -482,7 +483,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
             const SizedBox(width: LuluSpacing.md),
             _buildFeedbackButton(
               label: '아니에요',
-              icon: Icons.thumb_down_outlined,
+              icon: LuluIcons.thumbDown,
               color: LuluStatusColors.error,
               onTap: () {
                 provider.addFeedback(latestRecord.id, CryFeedback.inaccurate);
@@ -540,7 +541,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       child: Column(
         children: [
           Icon(
-            Icons.error_outline_rounded,
+            LuluIcons.errorOutline,
             size: 48,
             color: LuluStatusColors.error,
           ),
@@ -583,7 +584,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            Icons.analytics_outlined,
+            LuluIcons.analyticsOutlined,
             size: 16,
             color: remaining > 0 ? LuluTextColors.secondary : LuluStatusColors.warning,
           ),
@@ -625,7 +626,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            Icons.info_outline_rounded,
+            LuluIcons.infoOutline,
             size: 16,
             color: LuluTextColors.tertiary,
           ),
@@ -652,7 +653,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.child_care_rounded,
+            LuluIcons.baby,
             size: 64,
             color: LuluTextColors.tertiary,
           ),

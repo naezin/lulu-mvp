@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -76,7 +77,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
           Row(
             children: [
               Icon(
-                Icons.restaurant,
+                LuluIcons.feedingSolid,
                 size: 20,
                 color: LuluActivityColors.feeding,
               ),
@@ -172,7 +173,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
             ),
             child: widget.isFirstTry
                 ? const Icon(
-                    Icons.check,
+                    LuluIcons.save,
                     size: 16,
                     color: LuluColors.midnightNavy,
                   )
@@ -187,7 +188,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
           ),
           const SizedBox(width: LuluSpacing.xs),
           Icon(
-            Icons.new_releases_outlined,
+            LuluIcons.newRelease,
             size: 16,
             color: LuluColors.champagneGold,
           ),
@@ -260,7 +261,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _AdjustButton(
-              icon: Icons.remove,
+              icon: LuluIcons.remove,
               onTap: () {
                 final step = widget.unit.step;
                 final newAmount = (widget.amount - step).clamp(0.0, 1000.0);
@@ -287,7 +288,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
             ),
             const SizedBox(width: LuluSpacing.lg),
             _AdjustButton(
-              icon: Icons.add,
+              icon: LuluIcons.add,
               onTap: () {
                 final step = widget.unit.step;
                 final newAmount = (widget.amount + step).clamp(0.0, 1000.0);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
@@ -46,7 +47,7 @@ class _ImportScreenState extends State<ImportScreen> {
           backgroundColor: LuluColors.midnightNavy,
           title: Text(l10n.importTitle),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(LuluIcons.back),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
@@ -96,7 +97,7 @@ class _ImportScreenState extends State<ImportScreen> {
               borderRadius: BorderRadius.circular(LuluRadius.lg),
             ),
             child: const Icon(
-              Icons.folder_open,
+              LuluIcons.folderOpen,
               size: 40,
               color: LuluColors.lavenderMist,
             ),
@@ -118,7 +119,7 @@ class _ImportScreenState extends State<ImportScreen> {
 
           // TXT 파일 옵션
           _FileTypeCard(
-            icon: Icons.description,
+            icon: LuluIcons.description,
             title: l10n.importTxtOption,
             subtitle: l10n.importTxtDesc,
             onTap: () => provider.pickTxtFile(),
@@ -128,7 +129,7 @@ class _ImportScreenState extends State<ImportScreen> {
 
           // CSV 파일 옵션
           _FileTypeCard(
-            icon: Icons.table_chart,
+            icon: LuluIcons.tableChart,
             title: l10n.importCsvOption,
             subtitle: l10n.importCsvDesc,
             onTap: () => provider.pickCsvFile(),
@@ -146,7 +147,7 @@ class _ImportScreenState extends State<ImportScreen> {
             child: Row(
               children: [
                 const Icon(
-                  Icons.lightbulb_outline,
+                  LuluIcons.tip,
                   color: LuluColors.champagneGold,
                   size: 20,
                 ),
@@ -209,7 +210,7 @@ class _ImportScreenState extends State<ImportScreen> {
           Row(
             children: [
               const Icon(
-                Icons.check_circle,
+                LuluIcons.checkCircle,
                 color: LuluStatusColors.success,
                 size: 24,
               ),
@@ -237,21 +238,21 @@ class _ImportScreenState extends State<ImportScreen> {
             child: Column(
               children: [
                 _PreviewRow(
-                  icon: Icons.local_cafe,
+                  icon: LuluIcons.cafe,
                   iconColor: LuluActivityColors.feeding,
                   label: l10n.importFeedingCount,
                   count: preview.feedingCount,
                 ),
                 const Divider(height: 24, color: LuluColors.surfaceElevated),
                 _PreviewRow(
-                  icon: Icons.bedtime,
+                  icon: LuluIcons.sleep,
                   iconColor: LuluActivityColors.sleep,
                   label: l10n.importSleepCount,
                   count: preview.sleepCount,
                 ),
                 const Divider(height: 24, color: LuluColors.surfaceElevated),
                 _PreviewRow(
-                  icon: Icons.baby_changing_station,
+                  icon: LuluIcons.diaper,
                   iconColor: LuluActivityColors.diaper,
                   label: l10n.importDiaperCount,
                   count: preview.diaperCount,
@@ -259,7 +260,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 if (preview.playCount > 0) ...[
                   const Divider(height: 24, color: LuluColors.surfaceElevated),
                   _PreviewRow(
-                    icon: Icons.sports_esports,
+                    icon: LuluIcons.sportsEsports,
                     iconColor: LuluActivityColors.play,
                     label: l10n.importPlayCount,
                     count: preview.playCount,
@@ -267,7 +268,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 ],
                 const Divider(height: 24, color: LuluColors.surfaceElevated),
                 _PreviewRow(
-                  icon: Icons.summarize,
+                  icon: LuluIcons.summarize,
                   iconColor: LuluColors.lavenderMist,
                   label: l10n.importTotal,
                   count: preview.totalCount,
@@ -366,7 +367,7 @@ class _ImportScreenState extends State<ImportScreen> {
             child: Row(
               children: [
                 const Icon(
-                  Icons.info_outline,
+                  LuluIcons.infoOutline,
                   color: LuluStatusColors.warning,
                   size: 20,
                 ),
@@ -489,7 +490,7 @@ class _ImportScreenState extends State<ImportScreen> {
               shape: BoxShape.circle,
             ),
             child: const Icon(
-              Icons.celebration,
+              LuluIcons.celebration,
               size: 40,
               color: LuluStatusColors.success,
             ),
@@ -519,7 +520,7 @@ class _ImportScreenState extends State<ImportScreen> {
             child: Column(
               children: [
                 _ResultRow(
-                  icon: Icons.check_circle,
+                  icon: LuluIcons.checkCircle,
                   iconColor: LuluStatusColors.success,
                   label: l10n.importSuccess,
                   count: result.successCount,
@@ -527,7 +528,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 if (result.skipCount > 0) ...[
                   const SizedBox(height: 16),
                   _ResultRow(
-                    icon: Icons.skip_next,
+                    icon: LuluIcons.skipNext,
                     iconColor: LuluStatusColors.warning,
                     label: l10n.importSkipped,
                     count: result.skipCount,
@@ -613,7 +614,7 @@ class _ImportScreenState extends State<ImportScreen> {
               shape: BoxShape.circle,
             ),
             child: const Icon(
-              Icons.error_outline,
+              LuluIcons.errorOutline,
               size: 40,
               color: LuluStatusColors.error,
             ),
@@ -722,7 +723,7 @@ class _FileTypeCard extends StatelessWidget {
               ),
             ),
             const Icon(
-              Icons.chevron_right,
+              LuluIcons.chevronRight,
               color: LuluTextColors.secondary,
             ),
           ],

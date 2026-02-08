@@ -104,7 +104,7 @@ class LastActivityCard extends StatelessWidget {
       case 'health':
         return LuluIcons.health;
       default:
-        return Icons.circle_rounded;
+        return LuluIcons.other;
     }
   }
 }

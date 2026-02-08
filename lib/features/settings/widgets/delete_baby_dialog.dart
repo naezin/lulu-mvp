@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -43,7 +44,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
               borderRadius: BorderRadius.circular(LuluRadius.section),
             ),
             child: const Icon(
-              Icons.warning_amber_rounded,
+              LuluIcons.statusWarn,
               color: LuluStatusColors.error,
               size: 22,
             ),
@@ -80,7 +81,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
             child: Row(
               children: [
                 Icon(
-                  Icons.info_outline_rounded,
+                  LuluIcons.infoOutline,
                   color: LuluStatusColors.error,
                   size: 20,
                 ),

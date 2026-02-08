@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -73,7 +74,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                       borderRadius: BorderRadius.circular(LuluRadius.section),
                     ),
                     child: const Icon(
-                      Icons.child_care_rounded,
+                      LuluIcons.baby,
                       color: LuluColors.lavenderMist,
                       size: 22,
                     ),
@@ -126,7 +127,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                   child: Row(
                     children: [
                       Icon(
-                        Icons.calendar_today_rounded,
+                        LuluIcons.calendar,
                         color: LuluTextColors.secondary,
                         size: 20,
                       ),

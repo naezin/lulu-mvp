@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
 import '../../../../core/design_system/lulu_radius.dart';
+import '../../../../core/design_system/lulu_icons.dart';
 
 /// Step 1: 환영 화면
 /// "Lulu에 오신 것을 환영해요!"
@@ -28,7 +29,7 @@ class WelcomeScreen extends StatelessWidget {
             errorBuilder: (context, error, stackTrace) {
               // 이미지 로드 실패 시 fallback 아이콘
               return const Icon(
-                Icons.nightlight_round,
+                LuluIcons.moon,
                 size: 60,
                 color: AppTheme.lavenderMist,
               );

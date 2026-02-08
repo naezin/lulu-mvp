@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -240,28 +241,28 @@ class TemperatureSlider extends StatelessWidget {
         color: const Color(0xFF64B5F6), // 파란색
         label: '체온이 낮아요',
         message: '보온에 신경써주세요.',
-        icon: Icons.ac_unit_rounded,
+        icon: LuluIcons.snowflake,
       );
     } else if (temp < 37.5) {
       return _TemperatureStatus(
         color: const Color(0xFF81C784), // 초록색
         label: '정상 체온이에요',
         message: '체온이 정상 범위입니다.',
-        icon: Icons.check_circle_rounded,
+        icon: LuluIcons.checkCircle,
       );
     } else if (temp < 38.0) {
       return _TemperatureStatus(
         color: const Color(0xFFFFB74D), // 주황색
         label: '체온이 조금 높아요',
         message: '지켜봐주세요.',
-        icon: Icons.thermostat_rounded,
+        icon: LuluIcons.temperature,
       );
     } else {
       return _TemperatureStatus(
         color: const Color(0xFFE57373), // 빨간색
         label: '열이 있어요',
         message: '병원 방문을 고려해주세요.',
-        icon: Icons.warning_rounded,
+        icon: LuluIcons.warning,
       );
     }
   }

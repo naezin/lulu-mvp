@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -229,7 +230,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       trailing: totalBabies > 1
           ? IconButton(
               icon: Icon(
-                Icons.delete_outline_rounded,
+                LuluIcons.delete,
                 color: LuluStatusColors.error.withValues(alpha: 0.7),
                 size: 22,
               ),
@@ -253,7 +254,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
         child: const Icon(
-          Icons.add_rounded,
+          LuluIcons.add,
           color: LuluColors.lavenderMist,
           size: 24,
         ),
@@ -333,7 +334,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 borderRadius: BorderRadius.circular(LuluRadius.section),
               ),
               child: const Icon(
-                Icons.family_restroom,
+                LuluIcons.family,
                 color: LuluColors.lavenderMist,
                 size: 22,
               ),
@@ -353,7 +354,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             trailing: const Icon(
-              Icons.chevron_right_rounded,
+              LuluIcons.chevronRight,
               color: LuluTextColors.secondary,
             ),
             onTap: () {
@@ -392,7 +393,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 borderRadius: BorderRadius.circular(LuluRadius.section),
               ),
               child: const Icon(
-                Icons.language_rounded,
+                LuluIcons.language,
                 color: LuluColors.lavenderMist,
                 size: 22,
               ),
@@ -404,7 +405,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             trailing: const Icon(
-              Icons.chevron_right_rounded,
+              LuluIcons.chevronRight,
               color: LuluTextColors.secondary,
             ),
             onTap: () => _showLanguageDialog(settingsProvider),
@@ -502,7 +503,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           borderRadius: BorderRadius.circular(LuluRadius.section),
         ),
         child: const Icon(
-          Icons.file_upload_outlined,
+          LuluIcons.fileUpload,
           color: LuluColors.lavenderMist,
           size: 22,
         ),
@@ -520,7 +521,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       trailing: const Icon(
-        Icons.chevron_right_rounded,
+        LuluIcons.chevronRight,
         color: LuluTextColors.secondary,
       ),
       onTap: () {
@@ -587,7 +588,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           borderRadius: BorderRadius.circular(LuluRadius.section),
         ),
         child: const Icon(
-          Icons.file_download_outlined,
+          LuluIcons.fileDownload,
           color: LuluColors.lavenderMist,
           size: 22,
         ),
@@ -614,7 +615,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             )
           : const Icon(
-              Icons.chevron_right_rounded,
+              LuluIcons.chevronRight,
               color: LuluTextColors.secondary,
             ),
       onTap: _isExporting ? null : _handleExport,
@@ -784,7 +785,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             borderRadius: BorderRadius.circular(LuluRadius.section),
           ),
           child: Icon(
-            Icons.delete_forever_rounded,
+            LuluIcons.deleteForever,
             color: LuluStatusColors.error,
             size: 22,
           ),
@@ -802,7 +803,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
         trailing: Icon(
-          Icons.chevron_right_rounded,
+          LuluIcons.chevronRight,
           color: LuluStatusColors.error.withValues(alpha: 0.7),
         ),
         onTap: () => _showResetConfirmDialog(),
@@ -820,7 +821,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         title: Row(
           children: [
-            Icon(Icons.warning_amber_rounded, color: LuluStatusColors.error),
+            Icon(LuluIcons.statusWarn, color: LuluStatusColors.error),
             const SizedBox(width: 8),
             Text(
               '데이터 초기화',
@@ -896,7 +897,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Row(
         children: [
           Icon(
-            Icons.remove_circle_outline,
+            LuluIcons.removeCircleOutline,
             size: 16,
             color: LuluStatusColors.error,
           ),

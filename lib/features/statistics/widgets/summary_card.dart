@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../models/weekly_statistics.dart';
@@ -111,10 +112,10 @@ class SummaryCard extends StatelessWidget {
     switch (changeType) {
       case ChangeType.increase:
         color = LuluStatisticsColors.increase;
-        changeIcon = Icons.arrow_upward;
+        changeIcon = LuluIcons.arrowUp;
       case ChangeType.decrease:
         color = LuluStatisticsColors.decrease;
-        changeIcon = Icons.arrow_downward;
+        changeIcon = LuluIcons.arrowDown;
       case ChangeType.neutral:
         color = LuluStatisticsColors.neutral;
         changeIcon = null;

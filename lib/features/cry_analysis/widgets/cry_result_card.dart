@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -163,7 +164,7 @@ class CryResultCard extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              Icons.lightbulb_outline_rounded,
+              LuluIcons.tip,
               size: 20,
               color: cryType.color,
             ),
@@ -179,7 +180,7 @@ class CryResultCard extends StatelessWidget {
             ),
             if (cryType.relatedActivityType != null) ...[
               Icon(
-                Icons.arrow_forward_ios_rounded,
+                LuluIcons.forwardIos,
                 size: 14,
                 color: cryType.color.withValues(alpha: 0.6),
               ),

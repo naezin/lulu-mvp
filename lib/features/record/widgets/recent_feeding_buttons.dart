@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -65,7 +66,7 @@ class RecentFeedingButtons extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  Icons.bolt,
+                  LuluIcons.bolt,
                   size: 18,
                   color: LuluColors.lavenderMist,
                 ),
@@ -144,7 +145,7 @@ class RecentFeedingButtons extends StatelessWidget {
       child: Row(
         children: [
           Icon(
-            Icons.edit_note_rounded,
+            LuluIcons.memo,
             size: 32,
             color: LuluTextColors.tertiary,
           ),
@@ -202,7 +203,7 @@ class RecentFeedingButtons extends StatelessWidget {
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.check_circle, color: Colors.white, size: 20),
+            const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
             const SizedBox(width: 8),
             Expanded(
               child: Text(

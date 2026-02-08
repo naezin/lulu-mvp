@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../models/family_invite_model.dart';
@@ -158,7 +159,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
                             color: LuluColors.lavenderMist,
                           ),
                         )
-                      : const Icon(Icons.send, color: LuluColors.lavenderMist),
+                      : const Icon(LuluIcons.send, color: LuluColors.lavenderMist),
                 ),
               ),
             ),
@@ -171,7 +172,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
                   child: OutlinedButton.icon(
                     onPressed: _shareKakao,
                     icon:
-                        const Icon(Icons.chat_bubble, color: LuluColors.lavenderMist),
+                        const Icon(LuluIcons.chat, color: LuluColors.lavenderMist),
                     label: Text(
                       l10n.shareKakao,
                       style: const TextStyle(color: LuluColors.lavenderMist),
@@ -186,7 +187,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: _copyCode,
-                    icon: const Icon(Icons.copy, color: LuluColors.lavenderMist),
+                    icon: const Icon(LuluIcons.copy, color: LuluColors.lavenderMist),
                     label: Text(
                       l10n.copyCode,
                       style: const TextStyle(color: LuluColors.lavenderMist),

@@ -7,6 +7,7 @@ import '../../../../core/utils/sga_calculator.dart';
 import '../providers/onboarding_provider.dart';
 import 'onboarding_screen.dart' show OnboardingCompleteCallback;
 import '../../../../core/design_system/lulu_radius.dart';
+import '../../../../core/design_system/lulu_icons.dart';
 
 /// Step 6: 온보딩 완료
 /// 환영 메시지 + 홈으로 이동
@@ -90,7 +91,7 @@ class _CompletionScreenState extends State<CompletionScreen>
                 ),
               ),
               child: const Icon(
-                Icons.check_rounded,
+                LuluIcons.save,
                 size: 60,
                 color: Colors.white,
               ),
@@ -387,7 +388,7 @@ class _BabyRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                Icons.trending_up_rounded,
+                LuluIcons.growth,
                 size: 12,
                 color: Color(0xFF00897B),
               ),

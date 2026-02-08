@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -28,7 +29,7 @@ class QuickTimeButtons extends StatelessWidget {
       children: [
         _QuickButton(
           label: l10n?.dateTimeNow ?? '지금',
-          icon: Icons.access_time,
+          icon: LuluIcons.time,
           onTap: () => onTimeSelected(DateTime.now()),
           isPrimary: true,
         ),

@@ -324,7 +324,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         children: [
           // 헤더 아이콘
           Icon(
-            Icons.celebration_rounded,
+            LuluIcons.celebration,
             size: 48,
             color: LuluColors.champagneGold,
           ),
@@ -388,7 +388,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.lightbulb_outline_rounded,
+                LuluIcons.tip,
                 size: 16,
                 color: LuluColors.champagneGold,
               ),

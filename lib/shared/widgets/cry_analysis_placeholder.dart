@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
@@ -48,7 +49,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
               ),
               child: Center(
                 child: Icon(
-                  Icons.graphic_eq_rounded,
+                  LuluIcons.soundWave,
                   size: 24,
                   color: LuluColors.lavenderMist,
                 ),
@@ -113,7 +114,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
         ),
         title: Row(
           children: [
-            Icon(Icons.graphic_eq_rounded, size: 28, color: LuluColors.lavenderMist),
+            Icon(LuluIcons.soundWave, size: 28, color: LuluColors.lavenderMist),
             const SizedBox(width: LuluSpacing.sm),
             Text(
               '울음 분석',

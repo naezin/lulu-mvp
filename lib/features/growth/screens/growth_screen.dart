@@ -96,7 +96,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
                   actions: [
                     IconButton(
                       icon: Icon(
-                        Icons.add_circle_outline,
+                        LuluIcons.addCircleOutline,
                         color: LuluColors.lavenderMist,
                       ),
                       onPressed: () => _navigateToInput(context, provider),

@@ -318,7 +318,7 @@ class _DurationInput extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _AdjustButton(
-              icon: Icons.remove,
+              icon: LuluIcons.remove,
               onTap: () => onDurationChanged((duration - 5).clamp(0, 60)),
             ),
             const SizedBox(width: LuluSpacing.lg),
@@ -341,7 +341,7 @@ class _DurationInput extends StatelessWidget {
             ),
             const SizedBox(width: LuluSpacing.lg),
             _AdjustButton(
-              icon: Icons.add,
+              icon: LuluIcons.add,
               onTap: () => onDurationChanged((duration + 5).clamp(0, 60)),
             ),
           ],

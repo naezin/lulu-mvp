@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../../data/models/activity_model.dart';
 import '../../data/repositories/activity_repository.dart';
 import '../../features/home/providers/home_provider.dart';
+import '../../core/design_system/lulu_icons.dart';
 
 /// Undo 삭제 기능을 제공하는 Mixin
 ///
@@ -45,7 +46,7 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
         SnackBar(
           content: const Row(
             children: [
-              Icon(Icons.check_circle_outline, color: Colors.white, size: 20),
+              Icon(LuluIcons.checkCircleOutline, color: Colors.white, size: 20),
               SizedBox(width: 8),
               Text('기록이 삭제되었어요'),
             ],

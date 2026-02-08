@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../core/design_system/lulu_spacing.dart';
@@ -113,7 +114,7 @@ class BabyTabBar extends StatelessWidget {
               ),
               child: const Center(
                 child: Icon(
-                  Icons.chevron_right_rounded,
+                  LuluIcons.chevronRight,
                   color: LuluTextColors.tertiary,
                   size: 20,
                 ),
@@ -202,7 +203,7 @@ class _BabyTab extends StatelessWidget {
             // SGA-01: SGA인 경우 아이콘 추가
             if (baby.isSGA) ...[
               Icon(
-                Icons.trending_up_rounded,
+                LuluIcons.growth,
                 size: 10,
                 color: isSelected
                     ? (baby.statusBadgeColor ?? color).withValues(alpha: 0.8)

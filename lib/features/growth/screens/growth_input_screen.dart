@@ -64,7 +64,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: LuluTextColors.primary),
+          icon: Icon(LuluIcons.back, color: LuluTextColors.primary),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -305,7 +305,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       child: Row(
         children: [
           Icon(
-            Icons.info_outline,
+            LuluIcons.infoOutline,
             size: 18,
             color: LuluStatusColors.warning,
           ),

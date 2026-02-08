@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -125,7 +126,7 @@ class _IntegratedTimeButton extends StatelessWidget {
               // 날짜 아이콘 + 텍스트
               if (showDate) ...[
                 Icon(
-                  Icons.calendar_today_rounded,
+                  LuluIcons.calendar,
                   size: 18,
                   color: LuluColors.lavenderMist,
                 ),
@@ -141,7 +142,7 @@ class _IntegratedTimeButton extends StatelessWidget {
 
               // 시간 아이콘 + 텍스트
               Icon(
-                Icons.access_time_rounded,
+                LuluIcons.time,
                 size: 18,
                 color: LuluColors.lavenderMist,
               ),
@@ -157,7 +158,7 @@ class _IntegratedTimeButton extends StatelessWidget {
 
               // 화살표 아이콘
               Icon(
-                Icons.keyboard_arrow_down_rounded,
+                LuluIcons.chevronDown,
                 size: 24,
                 color: LuluTextColors.secondary,
               ),

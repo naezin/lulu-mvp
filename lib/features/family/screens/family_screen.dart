@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/family_provider.dart';
@@ -177,7 +178,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.mail_outline,
+                  const Icon(LuluIcons.mailOutline,
                       color: LuluColors.lavenderMist, size: 20),
                   const SizedBox(width: 12),
                   Expanded(
@@ -229,7 +230,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
           child: const InviteBottomSheet(),
         ),
       ),
-      icon: const Icon(Icons.person_add, color: LuluColors.lavenderMist),
+      icon: const Icon(LuluIcons.personAdd, color: LuluColors.lavenderMist),
       label: Text(
         l10n.inviteFamily,
         style: const TextStyle(color: LuluColors.lavenderMist),
@@ -262,7 +263,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
         // 관리자 넘기기 (owner이고 다른 멤버가 있을 때만)
         if (provider.isOwner && provider.memberCount > 1)
           _buildSettingTile(
-            icon: Icons.swap_horiz,
+            icon: LuluIcons.swapHoriz,
             title: l10n.transferOwnership,
             onTap: () => Navigator.push(
               context,
@@ -272,14 +273,14 @@ class _FamilyScreenState extends State<FamilyScreen> {
 
         // 다른 가족 참여
         _buildSettingTile(
-          icon: Icons.group_add,
+          icon: LuluIcons.groupAdd,
           title: l10n.joinOtherFamily,
           onTap: () => _showJoinOtherDialog(context, l10n),
         ),
 
         // 가족 나가기
         _buildSettingTile(
-          icon: Icons.exit_to_app,
+          icon: LuluIcons.exitToApp,
           title: l10n.leaveFamily,
           color: Colors.red[300],
           onTap: () => _showLeaveDialog(context, provider, l10n),
@@ -301,7 +302,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
         style: TextStyle(color: color ?? LuluTextColors.primary),
       ),
       trailing: Icon(
-        Icons.chevron_right,
+        LuluIcons.chevronRight,
         color: color ?? LuluTextColors.primary.withOpacity(0.5),
       ),
       onTap: onTap,

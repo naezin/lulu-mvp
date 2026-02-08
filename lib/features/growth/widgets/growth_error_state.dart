@@ -84,7 +84,7 @@ class GrowthErrorState extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.refresh_rounded, size: 18, color: LuluTextColors.primary),
+                      Icon(LuluIcons.refresh, size: 18, color: LuluTextColors.primary),
                       const SizedBox(width: LuluSpacing.sm),
                       Text(
                         '다시 시도',

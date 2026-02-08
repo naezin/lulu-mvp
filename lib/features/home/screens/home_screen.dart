@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: Padding(
                     padding: const EdgeInsets.only(left: LuluSpacing.lg),
                     child: Icon(
-                      Icons.menu,
+                      LuluIcons.menuIcon,
                       color: LuluTextColors.secondary,
                     ),
                   ),
@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(right: LuluSpacing.lg),
                       child: Icon(
-                        Icons.settings_outlined,
+                        LuluIcons.settingsOutlined,
                         color: LuluTextColors.secondary,
                       ),
                     ),
@@ -432,7 +432,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(
-                    Icons.timer_outlined,
+                    LuluIcons.timerOutlined,
                     color: LuluActivityColors.sleep,
                     size: 24,
                   ),

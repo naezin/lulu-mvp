@@ -6,6 +6,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../data/models/baby_type.dart';
 import '../providers/onboarding_provider.dart';
 import '../../../../core/design_system/lulu_radius.dart';
+import '../../../../core/design_system/lulu_icons.dart';
 
 /// Step 3: 아기 정보 입력
 /// 이름, 출생일, "조산아인가요?"
@@ -197,7 +198,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                     ),
                   ),
                   const Icon(
-                    Icons.calendar_today,
+                    LuluIcons.calendar,
                     color: AppTheme.textSecondary,
                     size: 20,
                   ),
@@ -221,7 +222,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               Expanded(
                 child: _GenderButton(
                   label: '남아',
-                  icon: Icons.male,
+                  icon: LuluIcons.male,
                   isSelected: provider.currentBaby.gender == Gender.male,
                   onTap: () => provider.updateBabyGender(Gender.male),
                 ),
@@ -230,7 +231,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               Expanded(
                 child: _GenderButton(
                   label: '여아',
-                  icon: Icons.female,
+                  icon: LuluIcons.female,
                   isSelected: provider.currentBaby.gender == Gender.female,
                   onTap: () => provider.updateBabyGender(Gender.female),
                 ),
