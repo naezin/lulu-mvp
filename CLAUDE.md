@@ -829,9 +829,27 @@ debugPrint('debug');                       // debugPrint
 ## TestFlight 빌드 가이드
 
 1. **Info.plist 수출규정 면제** (필수): `ITSAppUsesNonExemptEncryption` = `false`
-2. **빌드**: `flutter build ipa` 또는 Xcode Archive (`flutter build ios --release` → Xcode Product → Archive)
-3. **업로드**: Xcode Organizer → Distribute App → App Store Connect (또는 Transporter)
+2. **빌드**: `flutter build ipa --release`
+3. **업로드** (아래 명령어 그대로 실행, 절대 변경 금지):
+
+```bash
+xcrun altool --upload-app --type ios \
+  -f "/Users/naezin/Desktop/LULU ver2/build/ios/ipa/Lulu.ipa" \
+  --apiKey FHY33UJUU2 \
+  --apiIssuer 69a6de8c-25c7-47e3-e053-5b8c7c11a4d1
+```
+
 4. **버전**: `pubspec.yaml`의 `version: X.Y.Z+BUILD_NUMBER` 업데이트 필수
+
+### App Store Connect 인증 (절대 잊지 말 것)
+
+| 항목 | 값 |
+|------|-----|
+| API Key | `FHY33UJUU2` |
+| Issuer ID | `69a6de8c-25c7-47e3-e053-5b8c7c11a4d1` |
+| Key 파일 | `~/private_keys/AuthKey_FHY33UJUU2.p8` |
+| Bundle ID | `com.lululabs.lulu` |
+| Team ID | `F3GQ59884R` |
 
 ---
 
