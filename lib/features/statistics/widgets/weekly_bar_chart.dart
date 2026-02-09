@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../models/weekly_statistics.dart';
 
 /// 주간 막대 차트 위젯
@@ -71,8 +72,14 @@ class WeeklyBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+    final dayNames = [
+      l10n.dayNameMon, l10n.dayNameTue, l10n.dayNameWed,
+      l10n.dayNameThu, l10n.dayNameFri, l10n.dayNameSat, l10n.dayNameSun,
+    ];
+
     // 접근성 레이블 생성
-    final accessibilityLabel = _buildAccessibilityLabel();
+    final accessibilityLabel = _buildAccessibilityLabel(l10n);
 
     return Semantics(
       label: accessibilityLabel,
@@ -93,9 +100,11 @@ class WeeklyBarChart extends StatelessWidget {
                     tooltipPadding: const EdgeInsets.all(8),
                     tooltipMargin: 8,
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                      final dayNames = ['월', '화', '수', '목', '금', '토', '일'];
                       return BarTooltipItem(
-                        '${dayNames[group.x.toInt()]}: ${rod.toY.toStringAsFixed(1)}',
+                        l10n.chartTooltipDayValue(
+                          dayNames[group.x.toInt()],
+                          rod.toY.toStringAsFixed(1),
+                        ),
                         LuluTextStyles.caption.copyWith(
                           color: LuluTextColors.primary,
                           fontWeight: FontWeight.w600,
@@ -116,7 +125,8 @@ class WeeklyBarChart extends StatelessWidget {
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      getTitlesWidget: _buildBottomTitle,
+                      getTitlesWidget: (value, meta) =>
+                          _buildBottomTitle(value, meta, dayNames),
                       reservedSize: 30,
                     ),
                   ),
@@ -180,8 +190,7 @@ class WeeklyBarChart extends StatelessWidget {
     });
   }
 
-  Widget _buildBottomTitle(double value, TitleMeta meta) {
-    const dayNames = ['월', '화', '수', '목', '금', '토', '일'];
+  Widget _buildBottomTitle(double value, TitleMeta meta, List<String> dayNames) {
     final index = value.toInt();
     if (index < 0 || index >= 7) return const SizedBox.shrink();
 
@@ -228,9 +237,12 @@ class WeeklyBarChart extends StatelessWidget {
     return 10;
   }
 
-  String _buildAccessibilityLabel() {
-    final dayNames = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
-    final buffer = StringBuffer('지난 7일 차트. ');
+  String _buildAccessibilityLabel(S l10n) {
+    final dayNames = [
+      l10n.dayNameMonFull, l10n.dayNameTueFull, l10n.dayNameWedFull,
+      l10n.dayNameThuFull, l10n.dayNameFriFull, l10n.dayNameSatFull, l10n.dayNameSunFull,
+    ];
+    final buffer = StringBuffer('${l10n.chartAccessibilityLast7Days} ');
 
     for (int i = 0; i < data.length && i < 7; i++) {
       buffer.write('${dayNames[i]} ${data[i].toStringAsFixed(1)}, ');
@@ -238,7 +250,7 @@ class WeeklyBarChart extends StatelessWidget {
 
     if (data.isNotEmpty) {
       final average = data.reduce((a, b) => a + b) / data.length;
-      buffer.write('평균 ${average.toStringAsFixed(1)}');
+      buffer.write(l10n.chartAccessibilityAverage(average.toStringAsFixed(1)));
     }
 
     return buffer.toString();

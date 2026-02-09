@@ -6,6 +6,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 개별 빠른 수유 버튼
 ///
@@ -32,6 +33,7 @@ class RecentFeedingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
     final data = record.data;
     final feedingType = data?['feeding_type'] as String? ?? 'bottle';
     final side = data?['breast_side'] as String?;
@@ -40,7 +42,7 @@ class RecentFeedingButton extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: _getAccessibilityLabel(feedingType, side, amountMl, durationMinutes),
+      label: _getAccessibilityLabel(feedingType, side, amountMl, durationMinutes, l10n),
       child: Material(
         color: LuluColors.surfaceCard,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
@@ -75,7 +77,7 @@ class RecentFeedingButton extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _getTypeLabel(feedingType, side),
+                        _getTypeLabel(feedingType, side, l10n),
                         style: LuluTextStyles.labelSmall.copyWith(
                           color: LuluTextColors.primary,
                           fontWeight: FontWeight.w600,
@@ -84,7 +86,7 @@ class RecentFeedingButton extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        _getAmountLabel(feedingType, amountMl, durationMinutes),
+                        _getAmountLabel(feedingType, amountMl, durationMinutes, l10n),
                         style: LuluTextStyles.caption.copyWith(
                           color: LuluTextColors.secondary,
                         ),
@@ -118,19 +120,19 @@ class RecentFeedingButton extends StatelessWidget {
     }
   }
 
-  String _getTypeLabel(String feedingType, String? side) {
+  String _getTypeLabel(String feedingType, String? side, S l10n) {
     switch (feedingType) {
       case 'breast':
-        if (side == 'left') return '모유 좌측';
-        if (side == 'right') return '모유 우측';
-        return '모유 양쪽';
+        if (side == 'left') return l10n.feedingBreastLeft;
+        if (side == 'right') return l10n.feedingBreastRight;
+        return l10n.feedingBreastBoth;
       case 'formula':
       case 'bottle':
-        return '분유';
+        return l10n.feedingTypeFormula;
       case 'solid':
-        return '이유식';
+        return l10n.feedingTypeSolid;
       default:
-        return '수유';
+        return l10n.activityTypeFeeding;
     }
   }
 
@@ -138,12 +140,13 @@ class RecentFeedingButton extends StatelessWidget {
     String feedingType,
     dynamic amountMl,
     dynamic durationMinutes,
+    S l10n,
   ) {
     if (feedingType == 'breast' && durationMinutes != null) {
-      return '$durationMinutes분';
+      return l10n.feedingDurationMinutes(durationMinutes as int);
     }
     if (amountMl != null) {
-      return '${(amountMl as num).toInt()}ml';
+      return l10n.feedingAmountMl((amountMl as num).toInt());
     }
     return '';
   }
@@ -153,9 +156,10 @@ class RecentFeedingButton extends StatelessWidget {
     String? side,
     dynamic amountMl,
     dynamic durationMinutes,
+    S l10n,
   ) {
-    final type = _getTypeLabel(feedingType, side);
-    final amount = _getAmountLabel(feedingType, amountMl, durationMinutes);
-    return '$type $amount 빠른 저장 버튼. 길게 누르면 수정 모드';
+    final type = _getTypeLabel(feedingType, side, l10n);
+    final amount = _getAmountLabel(feedingType, amountMl, durationMinutes, l10n);
+    return l10n.recentFeedingAccessibility(type, amount);
   }
 }

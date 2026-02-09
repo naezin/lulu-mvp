@@ -1,3 +1,4 @@
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../models/models.dart';
 
 /// 조산아 신뢰도 보정 서비스
@@ -92,21 +93,23 @@ class PretermAdjustment {
   }
 
   /// 보정 계수 설명 텍스트
-  String getAdjustmentDescription(int? correctedAgeWeeks, bool isPreterm) {
+  String getAdjustmentDescription(
+    int? correctedAgeWeeks,
+    bool isPreterm,
+    S l10n,
+  ) {
     if (!isPreterm || correctedAgeWeeks == null) {
-      return '만삭아 기준으로 분석했어요.';
+      return l10n.pretermAnalysisFullTerm;
     }
 
     final factor = _getAdjustmentFactor(correctedAgeWeeks);
     final percentage = (factor * 100).round();
 
     if (factor >= 1.0) {
-      return '교정연령 $correctedAgeWeeks주로, 만삭아와 유사한 신뢰도예요.';
+      return l10n.pretermAnalysisSimilar(correctedAgeWeeks);
     }
 
-    return '교정연령 $correctedAgeWeeks주 기준, '
-        '신뢰도를 $percentage%로 보정했어요.\n'
-        '조산아의 울음 패턴은 만삭아와 다를 수 있어요.';
+    return l10n.pretermAnalysisAdjusted(correctedAgeWeeks, percentage);
   }
 
   /// 보정 필요 여부 확인
@@ -116,8 +119,10 @@ class PretermAdjustment {
   }
 
   /// 의료 면책 문구
-  static const String medicalDisclaimer = '이 분석 결과는 참고용이며, '
-      '의료적 조언을 대체하지 않습니다. '
-      '조산아의 울음 패턴은 개인차가 크므로, '
-      '걱정되시면 담당 의료진과 상담하세요.';
+  ///
+  /// Use [S.cryDisclaimerWithPreterm] from l10n for the localized string.
+  /// This static getter is kept for backward compatibility.
+  static String getMedicalDisclaimer(S l10n) {
+    return l10n.cryDisclaimerWithPreterm;
+  }
 }

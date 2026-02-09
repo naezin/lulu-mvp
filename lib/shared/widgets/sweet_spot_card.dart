@@ -160,8 +160,9 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
   /// 🆕 수면 진행 중 카드 (OngoingSleepCard 대체)
   Widget _buildSleepingCard(BuildContext context) {
-    final sleepTypeText = widget.sleepType == 'night' ? '밤잠' : '낮잠';
-    final babyName = widget.babyName ?? '아기';
+    final l10n = S.of(context)!;
+    final sleepTypeText = widget.sleepType == 'night' ? l10n.sleepTypeNight : l10n.sleepTypeNap;
+    final babyName = widget.babyName ?? l10n.babyDefault;
     final elapsed = DateTime.now().difference(widget.sleepStartTime!);
 
     return Container(
@@ -208,7 +209,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$babyName $sleepTypeText 중',
+                      l10n.sleepOngoingStatus(babyName, sleepTypeText),
                       style: LuluTextStyles.titleSmall.copyWith(
                         color: LuluTextColors.primary,
                         fontWeight: FontWeight.w600,
@@ -232,7 +233,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
           // 시작 시간
           _buildInfoRow(
-            '시작',
+            l10n.sweetSpotSleepStart,
             DateFormat('a h:mm', 'ko').format(widget.sleepStartTime!),
           ),
 
@@ -257,7 +258,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                   const Icon(LuluIcons.sleep, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    '탭하여 수면 종료',
+                    l10n.sweetSpotTapToEndSleep,
                     style: LuluTextStyles.labelLarge.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -274,12 +275,13 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
   /// Duration 포맷팅
   String _formatDuration(Duration duration) {
+    final l10n = S.of(context)!;
     final hours = duration.inHours;
     final minutes = duration.inMinutes.remainder(60);
     if (hours > 0) {
-      return '$hours시간 $minutes분';
+      return l10n.durationHoursMinutes(hours, minutes);
     }
-    return '$minutes분';
+    return l10n.durationMinutes(minutes);
   }
 
   /// 정보 Row
@@ -592,9 +594,9 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     final sleepType = widget.isNightTime ? l10n.sleepTypeNight : l10n.sleepTypeNap;
 
     if (widget.babyName != null) {
-      return '${widget.babyName}의 다음 $sleepType';
+      return l10n.sweetSpotTitleWithName(widget.babyName!, sleepType);
     }
-    return '다음 $sleepType';
+    return l10n.sweetSpotNextSleepType(sleepType);
   }
 
   /// 시간 텍스트: "약 오후 2:30 (45분 후)"
@@ -602,7 +604,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     if (widget.recommendedTime != null) {
       final formattedTime = DateFormat('a h:mm', 'ko').format(widget.recommendedTime!);
       final minutesUntil = widget.recommendedTime!.difference(DateTime.now()).inMinutes.clamp(0, 999);
-      return '약 $formattedTime ($minutesUntil분 후)';
+      return l10n.sweetSpotTimeEstimate(formattedTime, minutesUntil);
     }
     return widget.estimatedTime ?? '';
   }

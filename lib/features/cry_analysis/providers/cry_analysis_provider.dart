@@ -107,8 +107,7 @@ class CryAnalysisProvider extends ChangeNotifier {
 
     // 일일 한도 체크
     if (isLimitExceeded) {
-      _errorMessage = '오늘의 무료 분석 횟수를 모두 사용했어요.\n'
-          '프리미엄으로 업그레이드하면 무제한 분석이 가능해요.';
+      _errorMessage = 'daily_limit_exceeded';
       _state = CryAnalysisState.error;
       notifyListeners();
       return null;
@@ -122,7 +121,7 @@ class CryAnalysisProvider extends ChangeNotifier {
       // 1. 녹음 시작
       final started = await _audioService.startRecording();
       if (!started) {
-        throw Exception('마이크 접근 권한이 필요해요.');
+        throw Exception('microphone_permission_required');
       }
 
       // 2. 녹음 완료 대기 (자동 또는 수동 중지)
@@ -130,7 +129,7 @@ class CryAnalysisProvider extends ChangeNotifier {
 
       return null; // 녹음 중에는 결과 없음
     } catch (e) {
-      _handleError('녹음 시작 실패: $e');
+      _handleError('Recording start failed: $e');
       return null;
     }
   }
@@ -152,7 +151,7 @@ class CryAnalysisProvider extends ChangeNotifier {
       // 1. 녹음 중지
       final recording = await _audioService.stopRecording();
       if (recording == null || !recording.isValid) {
-        throw Exception('녹음이 너무 짧아요. 2초 이상 녹음해주세요.');
+        throw Exception('recording_too_short');
       }
 
       // 2. 전처리 (Mel Spectrogram)
@@ -198,7 +197,7 @@ class CryAnalysisProvider extends ChangeNotifier {
 
       return result;
     } catch (e) {
-      _handleError('분석 실패: $e');
+      _handleError('Analysis failed: $e');
       return null;
     }
   }

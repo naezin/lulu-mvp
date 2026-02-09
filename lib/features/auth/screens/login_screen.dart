@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../providers/auth_provider.dart';
 import '../widgets/apple_login_button.dart';
 import '../widgets/divider_with_text.dart';
@@ -41,7 +42,7 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 32),
 
               // Terms
-              _buildTerms(),
+              _buildTerms(context),
 
               const SizedBox(height: 24),
             ],
@@ -86,6 +87,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildLoginButtons(BuildContext context) {
+    final l10n = S.of(context)!;
     return Consumer<AuthProvider>(
       builder: (context, authProvider, _) {
         return Column(
@@ -99,7 +101,7 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Divider
-            const DividerWithText(text: '또는'),
+            DividerWithText(text: l10n.authOrDivider),
 
             const SizedBox(height: 24),
 
@@ -110,9 +112,9 @@ class LoginScreen extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () => _navigateToEmailLogin(context),
                 icon: const Icon(LuluIcons.emailOutlined, size: 20),
-                label: const Text(
-                  '이메일로 로그인',
-                  style: TextStyle(
+                label: Text(
+                  l10n.authEmailLogin,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -142,7 +144,7 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        authProvider.errorMessage!,
+                        AuthProvider.resolveErrorMessage(l10n, authProvider.errorMessage),
                         style: const TextStyle(color: Colors.red, fontSize: 14),
                       ),
                     ),
@@ -156,26 +158,27 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTerms() {
+  Widget _buildTerms(BuildContext context) {
+    final l10n = S.of(context)!;
     return Text.rich(
       TextSpan(
-        text: '로그인 시 ',
+        text: l10n.authTermsPrefix,
         style: TextStyle(color: Colors.grey[500], fontSize: 12),
-        children: const [
+        children: [
           TextSpan(
-            text: '서비스 이용약관',
-            style: TextStyle(
+            text: l10n.authTermsOfService,
+            style: const TextStyle(
               decoration: TextDecoration.underline,
             ),
           ),
-          TextSpan(text: ' 및 '),
+          TextSpan(text: l10n.authTermsAnd),
           TextSpan(
-            text: '개인정보처리방침',
-            style: TextStyle(
+            text: l10n.authPrivacyPolicy,
+            style: const TextStyle(
               decoration: TextDecoration.underline,
             ),
           ),
-          TextSpan(text: '에 동의하게 됩니다.'),
+          TextSpan(text: l10n.authTermsSuffix),
         ],
       ),
       textAlign: TextAlign.center,

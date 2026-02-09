@@ -2191,5 +2191,385 @@
   "authPasswordResetSent": "비밀번호 재설정 이메일을 발송했습니다",
   "@authPasswordResetSent": {"description": "비밀번호 재설정 이메일 발송 성공"},
   "authPasswordResetFailed": "이메일 발송에 실패했습니다",
-  "@authPasswordResetFailed": {"description": "비밀번호 재설정 이메일 발송 실패"}
+  "@authPasswordResetFailed": {"description": "비밀번호 재설정 이메일 발송 실패"},
+
+  "sweetSpotSleepStart": "시작",
+  "@sweetSpotSleepStart": {"description": "Sweet Spot 수면 카드 - 시작 시간 라벨"},
+  "sweetSpotTapToEndSleep": "탭하여 수면 종료",
+  "@sweetSpotTapToEndSleep": {"description": "Sweet Spot 수면 카드 - 종료 버튼 텍스트"},
+  "sweetSpotNextSleepType": "다음 {sleepType}",
+  "@sweetSpotNextSleepType": {
+    "description": "Sweet Spot 카드 헤더 - 다음 수면 타입 (이름 없음)",
+    "placeholders": {
+      "sleepType": {"type": "String", "example": "낮잠"}
+    }
+  },
+  "sweetSpotTimeEstimate": "약 {time} ({minutes}분 후)",
+  "@sweetSpotTimeEstimate": {
+    "description": "Sweet Spot 카드 시간 예측 표시",
+    "placeholders": {
+      "time": {"type": "String", "example": "오후 2:30"},
+      "minutes": {"type": "int", "example": "45"}
+    }
+  },
+
+  "pretermInfoTitle": "{label}의 출생 정보를\n입력해 주세요",
+  "@pretermInfoTitle": {
+    "description": "조산아 정보 화면 제목",
+    "placeholders": {
+      "label": {"type": "String", "example": "첫째 아기"}
+    }
+  },
+  "pretermInfoSubtitle": "교정연령 계산에 사용돼요",
+  "@pretermInfoSubtitle": {"description": "조산아 정보 화면 부제목"},
+  "pretermGestationalWeeksLabel": "출생 주수",
+  "@pretermGestationalWeeksLabel": {"description": "조산아 정보 - 출생 주수 라벨"},
+  "pretermWeeksUnit": "주",
+  "@pretermWeeksUnit": {"description": "조산아 정보 - 주 단위"},
+  "pretermCorrectedAgeTitle": "교정연령이란?",
+  "@pretermCorrectedAgeTitle": {"description": "조산아 정보 - 교정연령 설명 제목"},
+  "pretermCorrectedAgeDesc": "만삭 예정일을 기준으로 계산한 나이예요. 조산아의 발달을 더 정확하게 평가할 수 있어요.",
+  "@pretermCorrectedAgeDesc": {"description": "조산아 정보 - 교정연령 설명 본문"},
+  "buttonNext": "다음",
+  "@buttonNext": {"description": "버튼 - 다음"},
+  "pretermWeeksMin": "22주",
+  "@pretermWeeksMin": {"description": "조산아 정보 - 최소 주수 라벨"},
+  "pretermWeeksPreterm": "37주 미만 = 조산",
+  "@pretermWeeksPreterm": {"description": "조산아 정보 - 조산 기준 안내"},
+  "pretermWeeksMax": "42주",
+  "@pretermWeeksMax": {"description": "조산아 정보 - 최대 주수 라벨"},
+
+  "errorLoadActivities": "활동 데이터를 불러오는데 실패했습니다",
+  "@errorLoadActivities": {"description": "에러 - 활동 데이터 로드 실패"},
+  "errorLoadFamilyData": "가족 데이터를 불러오는데 실패했습니다",
+  "@errorLoadFamilyData": {"description": "에러 - 가족 데이터 로드 실패"},
+  "sweetSpotStateLabelUnknown": "확인 중",
+  "@sweetSpotStateLabelUnknown": {"description": "Sweet Spot 상태 라벨 - 확인 중"},
+  "sweetSpotStateLabelTooEarly": "아직 일찍",
+  "@sweetSpotStateLabelTooEarly": {"description": "Sweet Spot 상태 라벨 - 아직 일찍"},
+  "sweetSpotStateLabelApproaching": "곧 수면 시간",
+  "@sweetSpotStateLabelApproaching": {"description": "Sweet Spot 상태 라벨 - 곧 수면 시간"},
+  "sweetSpotStateLabelOptimal": "지금이 최적!",
+  "@sweetSpotStateLabelOptimal": {"description": "Sweet Spot 상태 라벨 - 지금이 최적"},
+  "sweetSpotStateLabelOvertired": "과로 상태",
+  "@sweetSpotStateLabelOvertired": {"description": "Sweet Spot 상태 라벨 - 과로 상태"},
+
+  "growthAddMeasurement": "측정 기록 추가",
+  "@growthAddMeasurement": {"description": "성장 화면 - 측정 기록 추가 버튼"},
+  "growthErrorUnknown": "알 수 없는 오류",
+  "@growthErrorUnknown": {"description": "성장 화면 - 알 수 없는 오류"},
+  "growthRecordToday": "오늘",
+  "@growthRecordToday": {"description": "성장 화면 - 오늘 날짜 표시"},
+  "growthRecordYesterday": "어제",
+  "@growthRecordYesterday": {"description": "성장 화면 - 어제 날짜 표시"},
+  "growthRecordDaysAgo": "{count}일 전",
+  "@growthRecordDaysAgo": {
+    "description": "성장 화면 - N일 전 표시",
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+
+  "importBabySelectHint": "아기 선택",
+  "@importBabySelectHint": {"description": "Import - 아기 선택 드롭다운 힌트"},
+  "countItems": "{count}개",
+  "@countItems": {
+    "description": "개수 단위 - N개",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "importErrorPrefix": "에러: {error}",
+  "@importErrorPrefix": {
+    "description": "Import - 에러 접두사",
+    "placeholders": {
+      "error": {"type": "String", "example": "Network error"}
+    }
+  },
+  "errorUnknown": "알 수 없는 오류가 발생했습니다.",
+  "@errorUnknown": {"description": "알 수 없는 오류 메시지"},
+  "feedingTimeLabel": "수유 시간",
+  "@feedingTimeLabel": {"description": "수유 시간 라벨"},
+  "notesPlaceholder": "특이사항을 기록하세요",
+  "@notesPlaceholder": {"description": "메모 입력 힌트 텍스트"},
+  "todaySummaryTitle": "오늘 요약",
+  "@todaySummaryTitle": {"description": "오늘 요약 카드 제목"},
+  "countTimes": "{count}회",
+  "@countTimes": {
+    "description": "횟수 단위 - N회",
+    "placeholders": {
+      "count": {"type": "int", "example": "4"}
+    }
+  },
+
+  "babyCountTitle": "아기가 몇 명인가요?",
+  "@babyCountTitle": {"description": "온보딩 - 아기 수 선택 제목"},
+  "babyCountSubtitle": "다둥이 가정도 함께 할 수 있어요",
+  "@babyCountSubtitle": {"description": "온보딩 - 아기 수 선택 부제"},
+  "babyCountOne": "1명",
+  "@babyCountOne": {"description": "온보딩 - 아기 수 1명"},
+  "babyLabelDefault": "아기",
+  "@babyLabelDefault": {"description": "기본 아기 라벨 (단태아)"},
+
+  "authOrDivider": "또는",
+  "@authOrDivider": {"description": "로그인 화면 - 구분선 텍스트"},
+  "authEmailLogin": "이메일로 로그인",
+  "@authEmailLogin": {"description": "로그인 화면 - 이메일 로그인 버튼"},
+  "authTermsPrefix": "로그인 시 ",
+  "@authTermsPrefix": {"description": "로그인 화면 - 약관 동의 접두사"},
+  "authTermsOfService": "서비스 이용약관",
+  "@authTermsOfService": {"description": "로그인 화면 - 서비스 이용약관"},
+  "authTermsAnd": " 및 ",
+  "@authTermsAnd": {"description": "로그인 화면 - 약관 연결 텍스트"},
+  "authPrivacyPolicy": "개인정보처리방침",
+  "@authPrivacyPolicy": {"description": "로그인 화면 - 개인정보처리방침"},
+  "authTermsSuffix": "에 동의하게 됩니다.",
+  "@authTermsSuffix": {"description": "로그인 화면 - 약관 동의 접미사"},
+
+  "correctedAgeFormatPrefix": "교정 ",
+  "@correctedAgeFormatPrefix": {"description": "교정연령 포맷 - 접두사"},
+  "correctedAgeFormatWeeksOnly": "{prefix}{weeks}주",
+  "@correctedAgeFormatWeeksOnly": {
+    "description": "교정연령 포맷 - 주만 표시",
+    "placeholders": {
+      "prefix": {"type": "String", "example": "교정 "},
+      "weeks": {"type": "int", "example": "2"}
+    }
+  },
+  "correctedAgeFormatMonthsOnly": "{prefix}{months}개월",
+  "@correctedAgeFormatMonthsOnly": {
+    "description": "교정연령 포맷 - 개월만 표시",
+    "placeholders": {
+      "prefix": {"type": "String", "example": "교정 "},
+      "months": {"type": "int", "example": "3"}
+    }
+  },
+  "correctedAgeFormatMonthsWeeks": "{prefix}{months}개월 {weeks}주",
+  "@correctedAgeFormatMonthsWeeks": {
+    "description": "교정연령 포맷 - 개월+주 표시",
+    "placeholders": {
+      "prefix": {"type": "String", "example": "교정 "},
+      "months": {"type": "int", "example": "3"},
+      "weeks": {"type": "int", "example": "2"}
+    }
+  },
+  "actualAgeFormatWeeksOnly": "{weeks}주",
+  "@actualAgeFormatWeeksOnly": {
+    "description": "실제연령 포맷 - 주만 표시",
+    "placeholders": {
+      "weeks": {"type": "int", "example": "2"}
+    }
+  },
+  "actualAgeFormatMonthsOnly": "{months}개월",
+  "@actualAgeFormatMonthsOnly": {
+    "description": "실제연령 포맷 - 개월만 표시",
+    "placeholders": {
+      "months": {"type": "int", "example": "3"}
+    }
+  },
+  "actualAgeFormatMonthsWeeks": "{months}개월 {weeks}주",
+  "@actualAgeFormatMonthsWeeks": {
+    "description": "실제연령 포맷 - 개월+주 표시",
+    "placeholders": {
+      "months": {"type": "int", "example": "3"},
+      "weeks": {"type": "int", "example": "2"}
+    }
+  },
+
+  "labelRequired": "필수",
+  "@labelRequired": {"description": "라벨 - 필수 항목"},
+  "errorInvalidNumber": "올바른 숫자를 입력해주세요",
+  "@errorInvalidNumber": {"description": "에러 - 유효하지 않은 숫자"},
+  "errorValueTooLow": "{label}이(가) 너무 작습니다 (최소 {min}{unit})",
+  "@errorValueTooLow": {
+    "description": "에러 - 값이 최소값 미달",
+    "placeholders": {
+      "label": {"type": "String", "example": "체중"},
+      "min": {"type": "String", "example": "0.3"},
+      "unit": {"type": "String", "example": "kg"}
+    }
+  },
+  "errorValueTooHigh": "{label}이(가) 너무 큽니다 (최대 {max}{unit})",
+  "@errorValueTooHigh": {
+    "description": "에러 - 값이 최대값 초과",
+    "placeholders": {
+      "label": {"type": "String", "example": "체중"},
+      "max": {"type": "String", "example": "30"},
+      "unit": {"type": "String", "example": "kg"}
+    }
+  },
+  "growthPreviousValue": "이전: {value}{unit}",
+  "@growthPreviousValue": {
+    "description": "성장 입력 - 이전 측정값 표시",
+    "placeholders": {
+      "value": {"type": "String", "example": "3.5"},
+      "unit": {"type": "String", "example": "kg"}
+    }
+  },
+  "growthPreviousDaysAgo": "({days}일 전)",
+  "@growthPreviousDaysAgo": {
+    "description": "성장 입력 - 이전 측정일 (N일 전)",
+    "placeholders": {
+      "days": {"type": "int", "example": "7"}
+    }
+  },
+
+  "cryAnalysisDetailedDescription": "AI 기반 울음 분석 기능이\nPhase 2에서 출시됩니다.\n\n아기의 울음 패턴을 분석하여\n배고픔, 졸림, 불편함 등을\n구분해드릴게요.",
+  "@cryAnalysisDetailedDescription": {"description": "울음 분석 상세 설명 다이얼로그"},
+  "comingSoonBadge": "Coming Soon",
+  "@comingSoonBadge": {"description": "출시 예정 배지"},
+
+  "dayNameMon": "월",
+  "@dayNameMon": {"description": "요일 약자 - 월"},
+  "dayNameTue": "화",
+  "@dayNameTue": {"description": "요일 약자 - 화"},
+  "dayNameWed": "수",
+  "@dayNameWed": {"description": "요일 약자 - 수"},
+  "dayNameThu": "목",
+  "@dayNameThu": {"description": "요일 약자 - 목"},
+  "dayNameFri": "금",
+  "@dayNameFri": {"description": "요일 약자 - 금"},
+  "dayNameSat": "토",
+  "@dayNameSat": {"description": "요일 약자 - 토"},
+  "dayNameSun": "일",
+  "@dayNameSun": {"description": "요일 약자 - 일"},
+  "dayNameMonFull": "월요일",
+  "@dayNameMonFull": {"description": "요일 전체 - 월요일"},
+  "dayNameTueFull": "화요일",
+  "@dayNameTueFull": {"description": "요일 전체 - 화요일"},
+  "dayNameWedFull": "수요일",
+  "@dayNameWedFull": {"description": "요일 전체 - 수요일"},
+  "dayNameThuFull": "목요일",
+  "@dayNameThuFull": {"description": "요일 전체 - 목요일"},
+  "dayNameFriFull": "금요일",
+  "@dayNameFriFull": {"description": "요일 전체 - 금요일"},
+  "dayNameSatFull": "토요일",
+  "@dayNameSatFull": {"description": "요일 전체 - 토요일"},
+  "dayNameSunFull": "일요일",
+  "@dayNameSunFull": {"description": "요일 전체 - 일요일"},
+  "chartTooltipDayValue": "{day}: {value}",
+  "@chartTooltipDayValue": {
+    "description": "차트 툴팁 - 요일: 값",
+    "placeholders": {
+      "day": {"type": "String", "example": "월"},
+      "value": {"type": "String", "example": "8.5"}
+    }
+  },
+  "chartAccessibilityLast7Days": "지난 7일 차트.",
+  "@chartAccessibilityLast7Days": {"description": "차트 접근성 - 지난 7일"},
+  "chartAccessibilityAverage": "평균 {value}",
+  "@chartAccessibilityAverage": {
+    "description": "차트 접근성 - 평균값",
+    "placeholders": {
+      "value": {"type": "String", "example": "8.5"}
+    }
+  },
+
+  "todayPlayWithName": "{name} 오늘의 놀이",
+  "@todayPlayWithName": {
+    "description": "오늘 놀이 요약 - 아기 이름 포함",
+    "placeholders": {
+      "name": {"type": "String", "example": "하늘이"}
+    }
+  },
+  "todayPlay": "오늘의 놀이",
+  "@todayPlay": {"description": "오늘 놀이 요약 제목"},
+  "totalMinutesLabel": "총 {minutes}분",
+  "@totalMinutesLabel": {
+    "description": "오늘 놀이 - 총 시간",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "tummyTimeCountMinutes": "터미타임 {count}회 ({minutes}분)",
+  "@tummyTimeCountMinutes": {
+    "description": "오늘 놀이 - 터미타임 횟수 및 시간",
+    "placeholders": {
+      "count": {"type": "int", "example": "2"},
+      "minutes": {"type": "int", "example": "10"}
+    }
+  },
+  "bathComplete": "목욕 완료",
+  "@bathComplete": {"description": "오늘 놀이 - 목욕 완료 배지"},
+  "outdoorLabel": "외출",
+  "@outdoorLabel": {"description": "오늘 놀이 - 외출 배지"},
+
+  "tempSliderLowLabel": "체온이 낮아요",
+  "@tempSliderLowLabel": {"description": "체온 슬라이더 - 저체온 라벨"},
+  "tempSliderLowMessage": "보온에 신경써주세요.",
+  "@tempSliderLowMessage": {"description": "체온 슬라이더 - 저체온 메시지"},
+  "tempSliderNormalLabel": "정상 체온이에요",
+  "@tempSliderNormalLabel": {"description": "체온 슬라이더 - 정상 라벨"},
+  "tempSliderNormalMessage": "체온이 정상 범위입니다.",
+  "@tempSliderNormalMessage": {"description": "체온 슬라이더 - 정상 메시지"},
+  "tempSliderMildLabel": "체온이 조금 높아요",
+  "@tempSliderMildLabel": {"description": "체온 슬라이더 - 미열 라벨"},
+  "tempSliderMildMessage": "지켜봐주세요.",
+  "@tempSliderMildMessage": {"description": "체온 슬라이더 - 미열 메시지"},
+  "tempSliderHighLabel": "열이 있어요",
+  "@tempSliderHighLabel": {"description": "체온 슬라이더 - 발열 라벨"},
+  "tempSliderHighMessage": "병원 방문을 고려해주세요.",
+  "@tempSliderHighMessage": {"description": "체온 슬라이더 - 발열 메시지"},
+
+  "pretermAnalysisFullTerm": "만삭아 기준으로 분석했어요.",
+  "@pretermAnalysisFullTerm": {"description": "조산아 보정 - 만삭아 기준 분석"},
+  "pretermAnalysisSimilar": "교정연령 {weeks}주로, 만삭아와 유사한 신뢰도예요.",
+  "@pretermAnalysisSimilar": {
+    "description": "조산아 보정 - 만삭아 유사 신뢰도",
+    "placeholders": {
+      "weeks": {"type": "int", "example": "12"}
+    }
+  },
+  "pretermAnalysisAdjusted": "교정연령 {weeks}주 기준, 신뢰도를 {percentage}%로 보정했어요.\n조산아의 울음 패턴은 만삭아와 다를 수 있어요.",
+  "@pretermAnalysisAdjusted": {
+    "description": "조산아 보정 - 신뢰도 보정 안내",
+    "placeholders": {
+      "weeks": {"type": "int", "example": "6"},
+      "percentage": {"type": "int", "example": "80"}
+    }
+  },
+
+  "tummyTimerGoalReached": "권장 시간 달성!",
+  "@tummyTimerGoalReached": {"description": "터미타임 타이머 - 목표 달성"},
+  "tummyTimerGoalMinutes": "목표: {minutes}분",
+  "@tummyTimerGoalMinutes": {
+    "description": "터미타임 타이머 - 목표 시간",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "5"}
+    }
+  },
+  "tummyTimerPause": "일시정지",
+  "@tummyTimerPause": {"description": "터미타임 타이머 - 일시정지 버튼"},
+  "tummyTimerComplete": "완료",
+  "@tummyTimerComplete": {"description": "터미타임 타이머 - 완료 버튼"},
+  "tummyTimerReset": "초기화",
+  "@tummyTimerReset": {"description": "터미타임 타이머 - 초기화 버튼"},
+
+  "feedingBreastLeft": "모유 좌측",
+  "@feedingBreastLeft": {"description": "수유 버튼 - 모유 좌측"},
+  "feedingBreastRight": "모유 우측",
+  "@feedingBreastRight": {"description": "수유 버튼 - 모유 우측"},
+  "feedingBreastBoth": "모유 양쪽",
+  "@feedingBreastBoth": {"description": "수유 버튼 - 모유 양쪽"},
+  "recentFeedingAccessibility": "{type} {amount} 빠른 저장 버튼. 길게 누르면 수정 모드",
+  "@recentFeedingAccessibility": {
+    "description": "빠른 수유 버튼 접근성 라벨",
+    "placeholders": {
+      "type": {"type": "String", "example": "분유"},
+      "amount": {"type": "String", "example": "120ml"}
+    }
+  },
+
+  "authErrorInvalidCredentials": "이메일 또는 비밀번호가 올바르지 않습니다.",
+  "@authErrorInvalidCredentials": {"description": "인증 에러 - 잘못된 자격증명"},
+  "authErrorEmailNotConfirmed": "이메일 인증이 필요합니다. 메일함을 확인해주세요.",
+  "@authErrorEmailNotConfirmed": {"description": "인증 에러 - 이메일 미인증"},
+  "authErrorUserAlreadyRegistered": "이미 가입된 이메일입니다.",
+  "@authErrorUserAlreadyRegistered": {"description": "인증 에러 - 이미 가입된 사용자"},
+  "authErrorPasswordTooShort": "비밀번호는 최소 6자 이상이어야 합니다.",
+  "@authErrorPasswordTooShort": {"description": "인증 에러 - 비밀번호 너무 짧음"},
+  "authErrorInvalidEmail": "유효한 이메일 주소를 입력해주세요.",
+  "@authErrorInvalidEmail": {"description": "인증 에러 - 유효하지 않은 이메일"},
+  "authErrorGeneric": "오류가 발생했습니다. 다시 시도해주세요.",
+  "@authErrorGeneric": {"description": "인증 에러 - 일반 오류"}
 }

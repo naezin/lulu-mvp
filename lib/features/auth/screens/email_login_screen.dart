@@ -114,7 +114,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  authProvider.errorMessage!,
+                                  AuthProvider.resolveErrorMessage(S.of(context)!, authProvider.errorMessage),
                                   style: const TextStyle(color: Colors.red, fontSize: 14),
                                 ),
                               ),

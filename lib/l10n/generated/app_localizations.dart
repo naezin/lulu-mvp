@@ -2383,7 +2383,7 @@ abstract class S {
   /// **'오늘'**
   String get today;
 
-  /// 횟수 표시
+  /// 횟수 단위 - N회
   ///
   /// In ko, this message translates to:
   /// **'{count}회'**
@@ -4738,6 +4738,648 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'이메일 발송에 실패했습니다'**
   String get authPasswordResetFailed;
+
+  /// Sweet Spot 수면 카드 - 시작 시간 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'시작'**
+  String get sweetSpotSleepStart;
+
+  /// Sweet Spot 수면 카드 - 종료 버튼 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'탭하여 수면 종료'**
+  String get sweetSpotTapToEndSleep;
+
+  /// Sweet Spot 카드 헤더 - 다음 수면 타입 (이름 없음)
+  ///
+  /// In ko, this message translates to:
+  /// **'다음 {sleepType}'**
+  String sweetSpotNextSleepType(String sleepType);
+
+  /// Sweet Spot 카드 시간 예측 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'약 {time} ({minutes}분 후)'**
+  String sweetSpotTimeEstimate(String time, int minutes);
+
+  /// 조산아 정보 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'{label}의 출생 정보를\n입력해 주세요'**
+  String pretermInfoTitle(String label);
+
+  /// 조산아 정보 화면 부제목
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 계산에 사용돼요'**
+  String get pretermInfoSubtitle;
+
+  /// 조산아 정보 - 출생 주수 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'출생 주수'**
+  String get pretermGestationalWeeksLabel;
+
+  /// 조산아 정보 - 주 단위
+  ///
+  /// In ko, this message translates to:
+  /// **'주'**
+  String get pretermWeeksUnit;
+
+  /// 조산아 정보 - 교정연령 설명 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령이란?'**
+  String get pretermCorrectedAgeTitle;
+
+  /// 조산아 정보 - 교정연령 설명 본문
+  ///
+  /// In ko, this message translates to:
+  /// **'만삭 예정일을 기준으로 계산한 나이예요. 조산아의 발달을 더 정확하게 평가할 수 있어요.'**
+  String get pretermCorrectedAgeDesc;
+
+  /// 조산아 정보 - 최소 주수 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'22주'**
+  String get pretermWeeksMin;
+
+  /// 조산아 정보 - 조산 기준 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'37주 미만 = 조산'**
+  String get pretermWeeksPreterm;
+
+  /// 조산아 정보 - 최대 주수 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'42주'**
+  String get pretermWeeksMax;
+
+  /// 에러 - 활동 데이터 로드 실패
+  ///
+  /// In ko, this message translates to:
+  /// **'활동 데이터를 불러오는데 실패했습니다'**
+  String get errorLoadActivities;
+
+  /// 에러 - 가족 데이터 로드 실패
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 데이터를 불러오는데 실패했습니다'**
+  String get errorLoadFamilyData;
+
+  /// Sweet Spot 상태 라벨 - 확인 중
+  ///
+  /// In ko, this message translates to:
+  /// **'확인 중'**
+  String get sweetSpotStateLabelUnknown;
+
+  /// Sweet Spot 상태 라벨 - 아직 일찍
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 일찍'**
+  String get sweetSpotStateLabelTooEarly;
+
+  /// Sweet Spot 상태 라벨 - 곧 수면 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'곧 수면 시간'**
+  String get sweetSpotStateLabelApproaching;
+
+  /// Sweet Spot 상태 라벨 - 지금이 최적
+  ///
+  /// In ko, this message translates to:
+  /// **'지금이 최적!'**
+  String get sweetSpotStateLabelOptimal;
+
+  /// Sweet Spot 상태 라벨 - 과로 상태
+  ///
+  /// In ko, this message translates to:
+  /// **'과로 상태'**
+  String get sweetSpotStateLabelOvertired;
+
+  /// 성장 화면 - 측정 기록 추가 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'측정 기록 추가'**
+  String get growthAddMeasurement;
+
+  /// 성장 화면 - 알 수 없는 오류
+  ///
+  /// In ko, this message translates to:
+  /// **'알 수 없는 오류'**
+  String get growthErrorUnknown;
+
+  /// 성장 화면 - 오늘 날짜 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘'**
+  String get growthRecordToday;
+
+  /// 성장 화면 - 어제 날짜 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'어제'**
+  String get growthRecordYesterday;
+
+  /// 성장 화면 - N일 전 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}일 전'**
+  String growthRecordDaysAgo(int count);
+
+  /// Import - 아기 선택 드롭다운 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 선택'**
+  String get importBabySelectHint;
+
+  /// 개수 단위 - N개
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}개'**
+  String countItems(int count);
+
+  /// Import - 에러 접두사
+  ///
+  /// In ko, this message translates to:
+  /// **'에러: {error}'**
+  String importErrorPrefix(String error);
+
+  /// 알 수 없는 오류 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'알 수 없는 오류가 발생했습니다.'**
+  String get errorUnknown;
+
+  /// 수유 시간 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'수유 시간'**
+  String get feedingTimeLabel;
+
+  /// 메모 입력 힌트 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'특이사항을 기록하세요'**
+  String get notesPlaceholder;
+
+  /// 오늘 요약 카드 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 요약'**
+  String get todaySummaryTitle;
+
+  /// 온보딩 - 아기 수 선택 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'아기가 몇 명인가요?'**
+  String get babyCountTitle;
+
+  /// 온보딩 - 아기 수 선택 부제
+  ///
+  /// In ko, this message translates to:
+  /// **'다둥이 가정도 함께 할 수 있어요'**
+  String get babyCountSubtitle;
+
+  /// 온보딩 - 아기 수 1명
+  ///
+  /// In ko, this message translates to:
+  /// **'1명'**
+  String get babyCountOne;
+
+  /// 기본 아기 라벨 (단태아)
+  ///
+  /// In ko, this message translates to:
+  /// **'아기'**
+  String get babyLabelDefault;
+
+  /// 로그인 화면 - 구분선 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'또는'**
+  String get authOrDivider;
+
+  /// 로그인 화면 - 이메일 로그인 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'이메일로 로그인'**
+  String get authEmailLogin;
+
+  /// 로그인 화면 - 약관 동의 접두사
+  ///
+  /// In ko, this message translates to:
+  /// **'로그인 시 '**
+  String get authTermsPrefix;
+
+  /// 로그인 화면 - 서비스 이용약관
+  ///
+  /// In ko, this message translates to:
+  /// **'서비스 이용약관'**
+  String get authTermsOfService;
+
+  /// 로그인 화면 - 약관 연결 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **' 및 '**
+  String get authTermsAnd;
+
+  /// 로그인 화면 - 개인정보처리방침
+  ///
+  /// In ko, this message translates to:
+  /// **'개인정보처리방침'**
+  String get authPrivacyPolicy;
+
+  /// 로그인 화면 - 약관 동의 접미사
+  ///
+  /// In ko, this message translates to:
+  /// **'에 동의하게 됩니다.'**
+  String get authTermsSuffix;
+
+  /// 교정연령 포맷 - 접두사
+  ///
+  /// In ko, this message translates to:
+  /// **'교정 '**
+  String get correctedAgeFormatPrefix;
+
+  /// 교정연령 포맷 - 주만 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{prefix}{weeks}주'**
+  String correctedAgeFormatWeeksOnly(String prefix, int weeks);
+
+  /// 교정연령 포맷 - 개월만 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{prefix}{months}개월'**
+  String correctedAgeFormatMonthsOnly(String prefix, int months);
+
+  /// 교정연령 포맷 - 개월+주 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{prefix}{months}개월 {weeks}주'**
+  String correctedAgeFormatMonthsWeeks(String prefix, int months, int weeks);
+
+  /// 실제연령 포맷 - 주만 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{weeks}주'**
+  String actualAgeFormatWeeksOnly(int weeks);
+
+  /// 실제연령 포맷 - 개월만 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{months}개월'**
+  String actualAgeFormatMonthsOnly(int months);
+
+  /// 실제연령 포맷 - 개월+주 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{months}개월 {weeks}주'**
+  String actualAgeFormatMonthsWeeks(int months, int weeks);
+
+  /// 라벨 - 필수 항목
+  ///
+  /// In ko, this message translates to:
+  /// **'필수'**
+  String get labelRequired;
+
+  /// 에러 - 유효하지 않은 숫자
+  ///
+  /// In ko, this message translates to:
+  /// **'올바른 숫자를 입력해주세요'**
+  String get errorInvalidNumber;
+
+  /// 에러 - 값이 최소값 미달
+  ///
+  /// In ko, this message translates to:
+  /// **'{label}이(가) 너무 작습니다 (최소 {min}{unit})'**
+  String errorValueTooLow(String label, String min, String unit);
+
+  /// 에러 - 값이 최대값 초과
+  ///
+  /// In ko, this message translates to:
+  /// **'{label}이(가) 너무 큽니다 (최대 {max}{unit})'**
+  String errorValueTooHigh(String label, String max, String unit);
+
+  /// 성장 입력 - 이전 측정값 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'이전: {value}{unit}'**
+  String growthPreviousValue(String value, String unit);
+
+  /// 성장 입력 - 이전 측정일 (N일 전)
+  ///
+  /// In ko, this message translates to:
+  /// **'({days}일 전)'**
+  String growthPreviousDaysAgo(int days);
+
+  /// 울음 분석 상세 설명 다이얼로그
+  ///
+  /// In ko, this message translates to:
+  /// **'AI 기반 울음 분석 기능이\nPhase 2에서 출시됩니다.\n\n아기의 울음 패턴을 분석하여\n배고픔, 졸림, 불편함 등을\n구분해드릴게요.'**
+  String get cryAnalysisDetailedDescription;
+
+  /// 출시 예정 배지
+  ///
+  /// In ko, this message translates to:
+  /// **'Coming Soon'**
+  String get comingSoonBadge;
+
+  /// 요일 약자 - 월
+  ///
+  /// In ko, this message translates to:
+  /// **'월'**
+  String get dayNameMon;
+
+  /// 요일 약자 - 화
+  ///
+  /// In ko, this message translates to:
+  /// **'화'**
+  String get dayNameTue;
+
+  /// 요일 약자 - 수
+  ///
+  /// In ko, this message translates to:
+  /// **'수'**
+  String get dayNameWed;
+
+  /// 요일 약자 - 목
+  ///
+  /// In ko, this message translates to:
+  /// **'목'**
+  String get dayNameThu;
+
+  /// 요일 약자 - 금
+  ///
+  /// In ko, this message translates to:
+  /// **'금'**
+  String get dayNameFri;
+
+  /// 요일 약자 - 토
+  ///
+  /// In ko, this message translates to:
+  /// **'토'**
+  String get dayNameSat;
+
+  /// 요일 약자 - 일
+  ///
+  /// In ko, this message translates to:
+  /// **'일'**
+  String get dayNameSun;
+
+  /// 요일 전체 - 월요일
+  ///
+  /// In ko, this message translates to:
+  /// **'월요일'**
+  String get dayNameMonFull;
+
+  /// 요일 전체 - 화요일
+  ///
+  /// In ko, this message translates to:
+  /// **'화요일'**
+  String get dayNameTueFull;
+
+  /// 요일 전체 - 수요일
+  ///
+  /// In ko, this message translates to:
+  /// **'수요일'**
+  String get dayNameWedFull;
+
+  /// 요일 전체 - 목요일
+  ///
+  /// In ko, this message translates to:
+  /// **'목요일'**
+  String get dayNameThuFull;
+
+  /// 요일 전체 - 금요일
+  ///
+  /// In ko, this message translates to:
+  /// **'금요일'**
+  String get dayNameFriFull;
+
+  /// 요일 전체 - 토요일
+  ///
+  /// In ko, this message translates to:
+  /// **'토요일'**
+  String get dayNameSatFull;
+
+  /// 요일 전체 - 일요일
+  ///
+  /// In ko, this message translates to:
+  /// **'일요일'**
+  String get dayNameSunFull;
+
+  /// 차트 툴팁 - 요일: 값
+  ///
+  /// In ko, this message translates to:
+  /// **'{day}: {value}'**
+  String chartTooltipDayValue(String day, String value);
+
+  /// 차트 접근성 - 지난 7일
+  ///
+  /// In ko, this message translates to:
+  /// **'지난 7일 차트.'**
+  String get chartAccessibilityLast7Days;
+
+  /// 차트 접근성 - 평균값
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 {value}'**
+  String chartAccessibilityAverage(String value);
+
+  /// 오늘 놀이 요약 - 아기 이름 포함
+  ///
+  /// In ko, this message translates to:
+  /// **'{name} 오늘의 놀이'**
+  String todayPlayWithName(String name);
+
+  /// 오늘 놀이 요약 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘의 놀이'**
+  String get todayPlay;
+
+  /// 오늘 놀이 - 총 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'총 {minutes}분'**
+  String totalMinutesLabel(int minutes);
+
+  /// 오늘 놀이 - 터미타임 횟수 및 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'터미타임 {count}회 ({minutes}분)'**
+  String tummyTimeCountMinutes(int count, int minutes);
+
+  /// 오늘 놀이 - 목욕 완료 배지
+  ///
+  /// In ko, this message translates to:
+  /// **'목욕 완료'**
+  String get bathComplete;
+
+  /// 오늘 놀이 - 외출 배지
+  ///
+  /// In ko, this message translates to:
+  /// **'외출'**
+  String get outdoorLabel;
+
+  /// 체온 슬라이더 - 저체온 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'체온이 낮아요'**
+  String get tempSliderLowLabel;
+
+  /// 체온 슬라이더 - 저체온 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'보온에 신경써주세요.'**
+  String get tempSliderLowMessage;
+
+  /// 체온 슬라이더 - 정상 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'정상 체온이에요'**
+  String get tempSliderNormalLabel;
+
+  /// 체온 슬라이더 - 정상 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'체온이 정상 범위입니다.'**
+  String get tempSliderNormalMessage;
+
+  /// 체온 슬라이더 - 미열 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'체온이 조금 높아요'**
+  String get tempSliderMildLabel;
+
+  /// 체온 슬라이더 - 미열 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'지켜봐주세요.'**
+  String get tempSliderMildMessage;
+
+  /// 체온 슬라이더 - 발열 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'열이 있어요'**
+  String get tempSliderHighLabel;
+
+  /// 체온 슬라이더 - 발열 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'병원 방문을 고려해주세요.'**
+  String get tempSliderHighMessage;
+
+  /// 조산아 보정 - 만삭아 기준 분석
+  ///
+  /// In ko, this message translates to:
+  /// **'만삭아 기준으로 분석했어요.'**
+  String get pretermAnalysisFullTerm;
+
+  /// 조산아 보정 - 만삭아 유사 신뢰도
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 {weeks}주로, 만삭아와 유사한 신뢰도예요.'**
+  String pretermAnalysisSimilar(int weeks);
+
+  /// 조산아 보정 - 신뢰도 보정 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 {weeks}주 기준, 신뢰도를 {percentage}%로 보정했어요.\n조산아의 울음 패턴은 만삭아와 다를 수 있어요.'**
+  String pretermAnalysisAdjusted(int weeks, int percentage);
+
+  /// 터미타임 타이머 - 목표 달성
+  ///
+  /// In ko, this message translates to:
+  /// **'권장 시간 달성!'**
+  String get tummyTimerGoalReached;
+
+  /// 터미타임 타이머 - 목표 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'목표: {minutes}분'**
+  String tummyTimerGoalMinutes(int minutes);
+
+  /// 터미타임 타이머 - 일시정지 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'일시정지'**
+  String get tummyTimerPause;
+
+  /// 터미타임 타이머 - 완료 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'완료'**
+  String get tummyTimerComplete;
+
+  /// 터미타임 타이머 - 초기화 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'초기화'**
+  String get tummyTimerReset;
+
+  /// 수유 버튼 - 모유 좌측
+  ///
+  /// In ko, this message translates to:
+  /// **'모유 좌측'**
+  String get feedingBreastLeft;
+
+  /// 수유 버튼 - 모유 우측
+  ///
+  /// In ko, this message translates to:
+  /// **'모유 우측'**
+  String get feedingBreastRight;
+
+  /// 수유 버튼 - 모유 양쪽
+  ///
+  /// In ko, this message translates to:
+  /// **'모유 양쪽'**
+  String get feedingBreastBoth;
+
+  /// 빠른 수유 버튼 접근성 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'{type} {amount} 빠른 저장 버튼. 길게 누르면 수정 모드'**
+  String recentFeedingAccessibility(String type, String amount);
+
+  /// 인증 에러 - 잘못된 자격증명
+  ///
+  /// In ko, this message translates to:
+  /// **'이메일 또는 비밀번호가 올바르지 않습니다.'**
+  String get authErrorInvalidCredentials;
+
+  /// 인증 에러 - 이메일 미인증
+  ///
+  /// In ko, this message translates to:
+  /// **'이메일 인증이 필요합니다. 메일함을 확인해주세요.'**
+  String get authErrorEmailNotConfirmed;
+
+  /// 인증 에러 - 이미 가입된 사용자
+  ///
+  /// In ko, this message translates to:
+  /// **'이미 가입된 이메일입니다.'**
+  String get authErrorUserAlreadyRegistered;
+
+  /// 인증 에러 - 비밀번호 너무 짧음
+  ///
+  /// In ko, this message translates to:
+  /// **'비밀번호는 최소 6자 이상이어야 합니다.'**
+  String get authErrorPasswordTooShort;
+
+  /// 인증 에러 - 유효하지 않은 이메일
+  ///
+  /// In ko, this message translates to:
+  /// **'유효한 이메일 주소를 입력해주세요.'**
+  String get authErrorInvalidEmail;
+
+  /// 인증 에러 - 일반 오류
+  ///
+  /// In ko, this message translates to:
+  /// **'오류가 발생했습니다. 다시 시도해주세요.'**
+  String get authErrorGeneric;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

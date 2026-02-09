@@ -87,7 +87,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<OnboardingProvider>();
     final l10n = S.of(context)!;
-    final babyLabel = provider.currentBabyLabel;
+    final babyLabel = provider.currentBabyLabel(l10n);
 
     // UX-04: 스크롤 시 키보드 자동 내림 + 탭하면 키보드 내림
     return GestureDetector(

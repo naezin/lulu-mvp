@@ -40,11 +40,11 @@ class ImportService {
     } else if (extension == 'csv') {
       activities = await _huckleberryParser.parse(content);
     } else {
-      throw ImportException('지원하지 않는 파일 형식입니다. (TXT, CSV만 지원)');
+      throw ImportException('Unsupported file format. Only TXT and CSV are supported.');
     }
 
     if (activities.isEmpty) {
-      throw ImportException('파일에서 기록을 찾을 수 없습니다.');
+      throw ImportException('No records found in the file.');
     }
 
     return ImportPreview.fromActivities(activities);
@@ -60,7 +60,7 @@ class ImportService {
       try {
         return await file.readAsString(encoding: latin1);
       } catch (e) {
-        throw ImportException('파일을 읽을 수 없습니다. 인코딩을 확인해주세요.');
+        throw ImportException('Unable to read file. Please check the encoding.');
       }
     }
   }
@@ -100,7 +100,7 @@ class ImportService {
 
       for (final parsed in batch) {
         try {
-          // ⚠️ BUG-001 FIX: babyId 포함하여 중복 체크
+          // BUG-001 FIX: babyId 포함하여 중복 체크
           final key = _buildActivityKey(parsed.type, parsed.startTime, babyId: babyId);
           final isDuplicate = existingKeys.contains(key);
 
@@ -113,7 +113,7 @@ class ImportService {
             }
           }
 
-          // ⚠️ BUG-001 FIX: 중복 체크 다시 활성화
+          // BUG-001 FIX: 중복 체크 다시 활성화
           if (isDuplicate) {
             skipCount++;
             continue;
@@ -132,8 +132,8 @@ class ImportService {
           // 중복 방지를 위해 키 추가
           existingKeys.add(key);
         } catch (e) {
-          debugPrint('❌ [ImportService] Save error: $e');
-          errors.add('기록 저장 실패: ${parsed.startTime} - $e');
+          debugPrint('[ERROR] [ImportService] Save error: $e');
+          errors.add('Failed to save record: ${parsed.startTime} - $e');
           skipCount++;
         }
       }
@@ -145,7 +145,7 @@ class ImportService {
     }
 
     debugPrint(
-        '✅ [ImportService] Import complete: $successCount success, $skipCount skipped');
+        '[OK] [ImportService] Import complete: $successCount success, $skipCount skipped');
 
     return ImportResult(
       successCount: successCount,
@@ -166,14 +166,14 @@ class ImportService {
       debugPrint('[INFO] [ImportService] Fetched ${activities.length} existing activities from family');
       return activities;
     } catch (e) {
-      debugPrint('⚠️ [ImportService] Failed to get existing activities: $e');
+      debugPrint('[WARN] [ImportService] Failed to get existing activities: $e');
       return [];
     }
   }
 
   /// 기존 활동 키 세트 생성
   ///
-  /// ⚠️ BUG-001 FIX: babyId 포함하여 각 아기별로 키 생성
+  /// BUG-001 FIX: babyId 포함하여 각 아기별로 키 생성
   Set<String> _buildExistingKeys(List<ActivityModel> activities) {
     final keys = <String>{};
     for (final activity in activities) {
@@ -187,7 +187,7 @@ class ImportService {
   /// 활동 키 생성 (중복 체크용)
   /// 같은 babyId + 같은 타입 + 같은 시작시간(분 단위) = 중복
   ///
-  /// ⚠️ BUG-001 FIX: babyId 포함하여 다태아 환경에서 중복 체크 정확도 향상
+  /// BUG-001 FIX: babyId 포함하여 다태아 환경에서 중복 체크 정확도 향상
   String _buildActivityKey(String type, DateTime startTime, {String? babyId}) {
     // 분 단위로 반올림 (±1분 오차 허용)
     final rounded = DateTime(
@@ -213,11 +213,11 @@ class ImportService {
     final extension = filePath.split('.').last.toLowerCase();
     switch (extension) {
       case 'txt':
-        return '텍스트 파일';
+        return 'Text File';
       case 'csv':
-        return 'CSV 파일';
+        return 'CSV File';
       default:
-        return '알 수 없는 형식';
+        return 'Unknown Format';
     }
   }
 }

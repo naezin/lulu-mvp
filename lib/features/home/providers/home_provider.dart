@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 홈 화면 상태 관리 Provider
 ///
@@ -375,8 +376,8 @@ class HomeProvider extends ChangeNotifier {
 
       _calculateSweetSpot();
     } catch (e) {
-      _errorMessage = '데이터를 불러오는데 실패했습니다: $e';
-      debugPrint('❌ [HomeProvider] Error: $e');
+      _errorMessage = 'Failed to load data: $e';
+      debugPrint('[ERROR] [HomeProvider] Refresh error: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -413,8 +414,8 @@ class HomeProvider extends ChangeNotifier {
       debugPrint('[OK] [HomeProvider] Today activities loaded: ${activities.length}, hasAnyRecordsEver: $hasAny');
       notifyListeners();
     } catch (e) {
-      debugPrint('❌ [HomeProvider] Error loading activities: $e');
-      _errorMessage = '활동 데이터를 불러오는데 실패했습니다';
+      debugPrint('[ERROR] [HomeProvider] Error loading activities: $e');
+      _errorMessage = 'Failed to load activity data';
       notifyListeners();
     }
   }
@@ -480,7 +481,7 @@ class HomeProvider extends ChangeNotifier {
   /// BUG-009 FIX: family 존재 확인 후 아기 추가
   Future<void> addBaby(BabyModel baby) async {
     try {
-      // ✅ 1. family 존재 확인
+      // 1. family 존재 확인
       await _ensureFamilyExists(baby.familyId);
 
       // 2. Supabase에 저장
@@ -635,8 +636,8 @@ class HomeProvider extends ChangeNotifier {
 
       debugPrint('[OK] [HomeProvider] Family data reloaded');
     } catch (e) {
-      _errorMessage = '가족 데이터를 불러오는데 실패했습니다: $e';
-      debugPrint('❌ [HomeProvider] Error: $e');
+      _errorMessage = 'Failed to load family data: $e';
+      debugPrint('[ERROR] [HomeProvider] Family change error: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -663,6 +664,7 @@ enum SweetSpotState {
 }
 
 extension SweetSpotStateExtension on SweetSpotState {
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   String get label {
     return switch (this) {
       SweetSpotState.unknown => '확인 중',
@@ -670,6 +672,17 @@ extension SweetSpotStateExtension on SweetSpotState {
       SweetSpotState.approaching => '곧 수면 시간',
       SweetSpotState.optimal => '지금이 최적!',
       SweetSpotState.overtired => '과로 상태',
+    };
+  }
+
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) {
+    return switch (this) {
+      SweetSpotState.unknown => l10n.sweetSpotStateLabelUnknown,
+      SweetSpotState.tooEarly => l10n.sweetSpotStateLabelTooEarly,
+      SweetSpotState.approaching => l10n.sweetSpotStateLabelApproaching,
+      SweetSpotState.optimal => l10n.sweetSpotStateLabelOptimal,
+      SweetSpotState.overtired => l10n.sweetSpotStateLabelOvertired,
     };
   }
 

@@ -2589,4 +2589,380 @@ class SEn extends S {
 
   @override
   String get authPasswordResetFailed => 'Failed to send email';
+
+  @override
+  String get sweetSpotSleepStart => 'Start';
+
+  @override
+  String get sweetSpotTapToEndSleep => 'Tap to end sleep';
+
+  @override
+  String sweetSpotNextSleepType(String sleepType) {
+    return 'Next $sleepType';
+  }
+
+  @override
+  String sweetSpotTimeEstimate(String time, int minutes) {
+    return 'Around $time (${minutes}min left)';
+  }
+
+  @override
+  String pretermInfoTitle(String label) {
+    return 'Enter $label\'s\nbirth information';
+  }
+
+  @override
+  String get pretermInfoSubtitle => 'Used for corrected age calculation';
+
+  @override
+  String get pretermGestationalWeeksLabel => 'Gestational weeks';
+
+  @override
+  String get pretermWeeksUnit => 'wk';
+
+  @override
+  String get pretermCorrectedAgeTitle => 'What is corrected age?';
+
+  @override
+  String get pretermCorrectedAgeDesc =>
+      'Age calculated based on the due date. It allows for more accurate assessment of preterm baby development.';
+
+  @override
+  String get pretermWeeksMin => '22 wk';
+
+  @override
+  String get pretermWeeksPreterm => 'Under 37 wk = Preterm';
+
+  @override
+  String get pretermWeeksMax => '42 wk';
+
+  @override
+  String get errorLoadActivities => 'Failed to load activity data';
+
+  @override
+  String get errorLoadFamilyData => 'Failed to load family data';
+
+  @override
+  String get sweetSpotStateLabelUnknown => 'Checking';
+
+  @override
+  String get sweetSpotStateLabelTooEarly => 'Still early';
+
+  @override
+  String get sweetSpotStateLabelApproaching => 'Sleep time soon';
+
+  @override
+  String get sweetSpotStateLabelOptimal => 'Optimal now!';
+
+  @override
+  String get sweetSpotStateLabelOvertired => 'Overtired';
+
+  @override
+  String get growthAddMeasurement => 'Add Measurement';
+
+  @override
+  String get growthErrorUnknown => 'Unknown error';
+
+  @override
+  String get growthRecordToday => 'Today';
+
+  @override
+  String get growthRecordYesterday => 'Yesterday';
+
+  @override
+  String growthRecordDaysAgo(int count) {
+    return '${count}d ago';
+  }
+
+  @override
+  String get importBabySelectHint => 'Select baby';
+
+  @override
+  String countItems(int count) {
+    return '$count items';
+  }
+
+  @override
+  String importErrorPrefix(String error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get errorUnknown => 'An unknown error occurred.';
+
+  @override
+  String get feedingTimeLabel => 'Feeding Time';
+
+  @override
+  String get notesPlaceholder => 'Record any special notes';
+
+  @override
+  String get todaySummaryTitle => 'Today\'s Summary';
+
+  @override
+  String get babyCountTitle => 'How many babies?';
+
+  @override
+  String get babyCountSubtitle => 'We support families with multiples too';
+
+  @override
+  String get babyCountOne => '1';
+
+  @override
+  String get babyLabelDefault => 'Baby';
+
+  @override
+  String get authOrDivider => 'or';
+
+  @override
+  String get authEmailLogin => 'Log in with Email';
+
+  @override
+  String get authTermsPrefix => 'By logging in, you agree to our ';
+
+  @override
+  String get authTermsOfService => 'Terms of Service';
+
+  @override
+  String get authTermsAnd => ' and ';
+
+  @override
+  String get authPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get authTermsSuffix => '.';
+
+  @override
+  String get correctedAgeFormatPrefix => 'Corrected ';
+
+  @override
+  String correctedAgeFormatWeeksOnly(String prefix, int weeks) {
+    return '$prefix${weeks}w';
+  }
+
+  @override
+  String correctedAgeFormatMonthsOnly(String prefix, int months) {
+    return '$prefix${months}mo';
+  }
+
+  @override
+  String correctedAgeFormatMonthsWeeks(String prefix, int months, int weeks) {
+    return '$prefix${months}mo ${weeks}w';
+  }
+
+  @override
+  String actualAgeFormatWeeksOnly(int weeks) {
+    return '${weeks}w';
+  }
+
+  @override
+  String actualAgeFormatMonthsOnly(int months) {
+    return '${months}mo';
+  }
+
+  @override
+  String actualAgeFormatMonthsWeeks(int months, int weeks) {
+    return '${months}mo ${weeks}w';
+  }
+
+  @override
+  String get labelRequired => 'Required';
+
+  @override
+  String get errorInvalidNumber => 'Please enter a valid number';
+
+  @override
+  String errorValueTooLow(String label, String min, String unit) {
+    return '$label is too low (min $min$unit)';
+  }
+
+  @override
+  String errorValueTooHigh(String label, String max, String unit) {
+    return '$label is too high (max $max$unit)';
+  }
+
+  @override
+  String growthPreviousValue(String value, String unit) {
+    return 'Previous: $value$unit';
+  }
+
+  @override
+  String growthPreviousDaysAgo(int days) {
+    return '(${days}d ago)';
+  }
+
+  @override
+  String get cryAnalysisDetailedDescription =>
+      'AI-powered cry analysis\nwill be available in Phase 2.\n\nWe\'ll analyze your baby\'s cry patterns\nto distinguish hunger, sleepiness,\ndiscomfort, and more.';
+
+  @override
+  String get comingSoonBadge => 'Coming Soon';
+
+  @override
+  String get dayNameMon => 'Mon';
+
+  @override
+  String get dayNameTue => 'Tue';
+
+  @override
+  String get dayNameWed => 'Wed';
+
+  @override
+  String get dayNameThu => 'Thu';
+
+  @override
+  String get dayNameFri => 'Fri';
+
+  @override
+  String get dayNameSat => 'Sat';
+
+  @override
+  String get dayNameSun => 'Sun';
+
+  @override
+  String get dayNameMonFull => 'Monday';
+
+  @override
+  String get dayNameTueFull => 'Tuesday';
+
+  @override
+  String get dayNameWedFull => 'Wednesday';
+
+  @override
+  String get dayNameThuFull => 'Thursday';
+
+  @override
+  String get dayNameFriFull => 'Friday';
+
+  @override
+  String get dayNameSatFull => 'Saturday';
+
+  @override
+  String get dayNameSunFull => 'Sunday';
+
+  @override
+  String chartTooltipDayValue(String day, String value) {
+    return '$day: $value';
+  }
+
+  @override
+  String get chartAccessibilityLast7Days => 'Last 7 days chart.';
+
+  @override
+  String chartAccessibilityAverage(String value) {
+    return 'Average $value';
+  }
+
+  @override
+  String todayPlayWithName(String name) {
+    return '$name\'s play today';
+  }
+
+  @override
+  String get todayPlay => 'Today\'s Play';
+
+  @override
+  String totalMinutesLabel(int minutes) {
+    return 'Total ${minutes}min';
+  }
+
+  @override
+  String tummyTimeCountMinutes(int count, int minutes) {
+    return 'Tummy time ${count}x (${minutes}min)';
+  }
+
+  @override
+  String get bathComplete => 'Bath done';
+
+  @override
+  String get outdoorLabel => 'Outdoor';
+
+  @override
+  String get tempSliderLowLabel => 'Temperature is low';
+
+  @override
+  String get tempSliderLowMessage => 'Please keep baby warm.';
+
+  @override
+  String get tempSliderNormalLabel => 'Normal temperature';
+
+  @override
+  String get tempSliderNormalMessage => 'Temperature is in normal range.';
+
+  @override
+  String get tempSliderMildLabel => 'Temperature is slightly high';
+
+  @override
+  String get tempSliderMildMessage => 'Please monitor closely.';
+
+  @override
+  String get tempSliderHighLabel => 'Baby has a fever';
+
+  @override
+  String get tempSliderHighMessage => 'Please consider a doctor visit.';
+
+  @override
+  String get pretermAnalysisFullTerm => 'Analysis based on full-term criteria.';
+
+  @override
+  String pretermAnalysisSimilar(int weeks) {
+    return 'At corrected age $weeks weeks, reliability is similar to full-term.';
+  }
+
+  @override
+  String pretermAnalysisAdjusted(int weeks, int percentage) {
+    return 'Based on corrected age $weeks weeks, reliability adjusted to $percentage%.\nPreterm cry patterns may differ from full-term.';
+  }
+
+  @override
+  String get tummyTimerGoalReached => 'Goal reached!';
+
+  @override
+  String tummyTimerGoalMinutes(int minutes) {
+    return 'Goal: $minutes min';
+  }
+
+  @override
+  String get tummyTimerPause => 'Pause';
+
+  @override
+  String get tummyTimerComplete => 'Done';
+
+  @override
+  String get tummyTimerReset => 'Reset';
+
+  @override
+  String get feedingBreastLeft => 'Breast Left';
+
+  @override
+  String get feedingBreastRight => 'Breast Right';
+
+  @override
+  String get feedingBreastBoth => 'Breast Both';
+
+  @override
+  String recentFeedingAccessibility(String type, String amount) {
+    return '$type $amount quick save button. Long press to edit';
+  }
+
+  @override
+  String get authErrorInvalidCredentials => 'Invalid email or password.';
+
+  @override
+  String get authErrorEmailNotConfirmed =>
+      'Email verification required. Please check your inbox.';
+
+  @override
+  String get authErrorUserAlreadyRegistered =>
+      'This email is already registered.';
+
+  @override
+  String get authErrorPasswordTooShort =>
+      'Password must be at least 6 characters.';
+
+  @override
+  String get authErrorInvalidEmail => 'Please enter a valid email address.';
+
+  @override
+  String get authErrorGeneric => 'An error occurred. Please try again.';
 }

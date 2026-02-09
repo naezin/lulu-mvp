@@ -1362,5 +1362,284 @@
   "authToggleToSignup": "Don't have an account? Sign Up",
   "authForgotPassword": "Forgot your password?",
   "authPasswordResetSent": "Password reset email has been sent",
-  "authPasswordResetFailed": "Failed to send email"
+  "authPasswordResetFailed": "Failed to send email",
+
+  "sweetSpotSleepStart": "Start",
+  "sweetSpotTapToEndSleep": "Tap to end sleep",
+  "sweetSpotNextSleepType": "Next {sleepType}",
+  "@sweetSpotNextSleepType": {
+    "description": "Sweet Spot card header - next sleep type (no name)",
+    "placeholders": {
+      "sleepType": {"type": "String", "example": "nap"}
+    }
+  },
+  "sweetSpotTimeEstimate": "Around {time} ({minutes}min left)",
+  "@sweetSpotTimeEstimate": {
+    "description": "Sweet Spot card time estimate display",
+    "placeholders": {
+      "time": {"type": "String", "example": "2:30 PM"},
+      "minutes": {"type": "int", "example": "45"}
+    }
+  },
+
+  "pretermInfoTitle": "Enter {label}'s\nbirth information",
+  "@pretermInfoTitle": {
+    "description": "Preterm info screen title",
+    "placeholders": {
+      "label": {"type": "String", "example": "First baby"}
+    }
+  },
+  "pretermInfoSubtitle": "Used for corrected age calculation",
+  "pretermGestationalWeeksLabel": "Gestational weeks",
+  "pretermWeeksUnit": "wk",
+  "pretermCorrectedAgeTitle": "What is corrected age?",
+  "pretermCorrectedAgeDesc": "Age calculated based on the due date. It allows for more accurate assessment of preterm baby development.",
+  "buttonNext": "Next",
+  "pretermWeeksMin": "22 wk",
+  "pretermWeeksPreterm": "Under 37 wk = Preterm",
+  "pretermWeeksMax": "42 wk",
+
+  "errorLoadActivities": "Failed to load activity data",
+  "errorLoadFamilyData": "Failed to load family data",
+  "sweetSpotStateLabelUnknown": "Checking",
+  "sweetSpotStateLabelTooEarly": "Still early",
+  "sweetSpotStateLabelApproaching": "Sleep time soon",
+  "sweetSpotStateLabelOptimal": "Optimal now!",
+  "sweetSpotStateLabelOvertired": "Overtired",
+
+  "growthAddMeasurement": "Add Measurement",
+  "growthErrorUnknown": "Unknown error",
+  "growthRecordToday": "Today",
+  "growthRecordYesterday": "Yesterday",
+  "growthRecordDaysAgo": "{count}d ago",
+  "@growthRecordDaysAgo": {
+    "description": "Growth screen - days ago display",
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+
+  "importBabySelectHint": "Select baby",
+  "countItems": "{count} items",
+  "@countItems": {
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "importErrorPrefix": "Error: {error}",
+  "@importErrorPrefix": {
+    "placeholders": {
+      "error": {"type": "String", "example": "Network error"}
+    }
+  },
+  "errorUnknown": "An unknown error occurred.",
+  "feedingTimeLabel": "Feeding Time",
+  "notesPlaceholder": "Record any special notes",
+  "todaySummaryTitle": "Today's Summary",
+  "countTimes": "{count}x",
+  "@countTimes": {
+    "placeholders": {
+      "count": {"type": "int", "example": "4"}
+    }
+  },
+
+  "babyCountTitle": "How many babies?",
+  "babyCountSubtitle": "We support families with multiples too",
+  "babyCountOne": "1",
+  "babyLabelDefault": "Baby",
+
+  "authOrDivider": "or",
+  "authEmailLogin": "Log in with Email",
+  "authTermsPrefix": "By logging in, you agree to our ",
+  "authTermsOfService": "Terms of Service",
+  "authTermsAnd": " and ",
+  "authPrivacyPolicy": "Privacy Policy",
+  "authTermsSuffix": ".",
+
+  "correctedAgeFormatPrefix": "Corrected ",
+  "correctedAgeFormatWeeksOnly": "{prefix}{weeks}w",
+  "@correctedAgeFormatWeeksOnly": {
+    "placeholders": {
+      "prefix": {"type": "String", "example": "Corrected "},
+      "weeks": {"type": "int", "example": "2"}
+    }
+  },
+  "correctedAgeFormatMonthsOnly": "{prefix}{months}mo",
+  "@correctedAgeFormatMonthsOnly": {
+    "placeholders": {
+      "prefix": {"type": "String", "example": "Corrected "},
+      "months": {"type": "int", "example": "3"}
+    }
+  },
+  "correctedAgeFormatMonthsWeeks": "{prefix}{months}mo {weeks}w",
+  "@correctedAgeFormatMonthsWeeks": {
+    "placeholders": {
+      "prefix": {"type": "String", "example": "Corrected "},
+      "months": {"type": "int", "example": "3"},
+      "weeks": {"type": "int", "example": "2"}
+    }
+  },
+  "actualAgeFormatWeeksOnly": "{weeks}w",
+  "@actualAgeFormatWeeksOnly": {
+    "placeholders": {
+      "weeks": {"type": "int", "example": "2"}
+    }
+  },
+  "actualAgeFormatMonthsOnly": "{months}mo",
+  "@actualAgeFormatMonthsOnly": {
+    "placeholders": {
+      "months": {"type": "int", "example": "3"}
+    }
+  },
+  "actualAgeFormatMonthsWeeks": "{months}mo {weeks}w",
+  "@actualAgeFormatMonthsWeeks": {
+    "placeholders": {
+      "months": {"type": "int", "example": "3"},
+      "weeks": {"type": "int", "example": "2"}
+    }
+  },
+
+  "labelRequired": "Required",
+  "errorInvalidNumber": "Please enter a valid number",
+  "errorValueTooLow": "{label} is too low (min {min}{unit})",
+  "@errorValueTooLow": {
+    "placeholders": {
+      "label": {"type": "String", "example": "Weight"},
+      "min": {"type": "String", "example": "0.3"},
+      "unit": {"type": "String", "example": "kg"}
+    }
+  },
+  "errorValueTooHigh": "{label} is too high (max {max}{unit})",
+  "@errorValueTooHigh": {
+    "placeholders": {
+      "label": {"type": "String", "example": "Weight"},
+      "max": {"type": "String", "example": "30"},
+      "unit": {"type": "String", "example": "kg"}
+    }
+  },
+  "growthPreviousValue": "Previous: {value}{unit}",
+  "@growthPreviousValue": {
+    "placeholders": {
+      "value": {"type": "String", "example": "3.5"},
+      "unit": {"type": "String", "example": "kg"}
+    }
+  },
+  "growthPreviousDaysAgo": "({days}d ago)",
+  "@growthPreviousDaysAgo": {
+    "placeholders": {
+      "days": {"type": "int", "example": "7"}
+    }
+  },
+
+  "cryAnalysisDetailedDescription": "AI-powered cry analysis\nwill be available in Phase 2.\n\nWe'll analyze your baby's cry patterns\nto distinguish hunger, sleepiness,\ndiscomfort, and more.",
+  "comingSoonBadge": "Coming Soon",
+
+  "dayNameMon": "Mon",
+  "dayNameTue": "Tue",
+  "dayNameWed": "Wed",
+  "dayNameThu": "Thu",
+  "dayNameFri": "Fri",
+  "dayNameSat": "Sat",
+  "dayNameSun": "Sun",
+  "dayNameMonFull": "Monday",
+  "dayNameTueFull": "Tuesday",
+  "dayNameWedFull": "Wednesday",
+  "dayNameThuFull": "Thursday",
+  "dayNameFriFull": "Friday",
+  "dayNameSatFull": "Saturday",
+  "dayNameSunFull": "Sunday",
+  "chartTooltipDayValue": "{day}: {value}",
+  "@chartTooltipDayValue": {
+    "placeholders": {
+      "day": {"type": "String", "example": "Mon"},
+      "value": {"type": "String", "example": "8.5"}
+    }
+  },
+  "chartAccessibilityLast7Days": "Last 7 days chart.",
+  "chartAccessibilityAverage": "Average {value}",
+  "@chartAccessibilityAverage": {
+    "placeholders": {
+      "value": {"type": "String", "example": "8.5"}
+    }
+  },
+
+  "todayPlayWithName": "{name}'s play today",
+  "@todayPlayWithName": {
+    "placeholders": {
+      "name": {"type": "String", "example": "Emma"}
+    }
+  },
+  "todayPlay": "Today's Play",
+  "totalMinutesLabel": "Total {minutes}min",
+  "@totalMinutesLabel": {
+    "placeholders": {
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "tummyTimeCountMinutes": "Tummy time {count}x ({minutes}min)",
+  "@tummyTimeCountMinutes": {
+    "placeholders": {
+      "count": {"type": "int", "example": "2"},
+      "minutes": {"type": "int", "example": "10"}
+    }
+  },
+  "bathComplete": "Bath done",
+  "outdoorLabel": "Outdoor",
+
+  "tempSliderLowLabel": "Temperature is low",
+  "tempSliderLowMessage": "Please keep baby warm.",
+  "tempSliderNormalLabel": "Normal temperature",
+  "tempSliderNormalMessage": "Temperature is in normal range.",
+  "tempSliderMildLabel": "Temperature is slightly high",
+  "tempSliderMildMessage": "Please monitor closely.",
+  "tempSliderHighLabel": "Baby has a fever",
+  "tempSliderHighMessage": "Please consider a doctor visit.",
+
+  "pretermAnalysisFullTerm": "Analysis based on full-term criteria.",
+  "pretermAnalysisSimilar": "At corrected age {weeks} weeks, reliability is similar to full-term.",
+  "@pretermAnalysisSimilar": {
+    "description": "Preterm adjustment - similar to full-term",
+    "placeholders": {
+      "weeks": {"type": "int", "example": "12"}
+    }
+  },
+  "pretermAnalysisAdjusted": "Based on corrected age {weeks} weeks, reliability adjusted to {percentage}%.\nPreterm cry patterns may differ from full-term.",
+  "@pretermAnalysisAdjusted": {
+    "description": "Preterm adjustment - reliability adjusted",
+    "placeholders": {
+      "weeks": {"type": "int", "example": "6"},
+      "percentage": {"type": "int", "example": "80"}
+    }
+  },
+
+  "tummyTimerGoalReached": "Goal reached!",
+  "tummyTimerGoalMinutes": "Goal: {minutes} min",
+  "@tummyTimerGoalMinutes": {
+    "description": "Tummy time timer - goal display",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "5"}
+    }
+  },
+  "tummyTimerPause": "Pause",
+  "tummyTimerComplete": "Done",
+  "tummyTimerReset": "Reset",
+
+  "feedingBreastLeft": "Breast Left",
+  "feedingBreastRight": "Breast Right",
+  "feedingBreastBoth": "Breast Both",
+  "recentFeedingAccessibility": "{type} {amount} quick save button. Long press to edit",
+  "@recentFeedingAccessibility": {
+    "description": "Recent feeding button accessibility label",
+    "placeholders": {
+      "type": {"type": "String", "example": "Formula"},
+      "amount": {"type": "String", "example": "120ml"}
+    }
+  },
+
+  "authErrorInvalidCredentials": "Invalid email or password.",
+  "authErrorEmailNotConfirmed": "Email verification required. Please check your inbox.",
+  "authErrorUserAlreadyRegistered": "This email is already registered.",
+  "authErrorPasswordTooShort": "Password must be at least 6 characters.",
+  "authErrorInvalidEmail": "Please enter a valid email address.",
+  "authErrorGeneric": "An error occurred. Please try again."
 }

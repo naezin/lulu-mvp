@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// PL-03: 오늘 놀이 기록 요약 위젯
 ///
@@ -55,7 +56,9 @@ class TodayPlaySummary extends StatelessWidget {
               Icon(LuluIcons.play, size: 16, color: LuluActivityColors.play),
               const SizedBox(width: LuluSpacing.xs),
               Text(
-                babyName != null ? '$babyName 오늘의 놀이' : '오늘의 놀이',
+                babyName != null
+                    ? S.of(context)!.todayPlayWithName(babyName!)
+                    : S.of(context)!.todayPlay,
                 style: LuluTextStyles.labelMedium.copyWith(
                   color: LuluActivityColors.play,
                   fontWeight: FontWeight.bold,
@@ -72,21 +75,24 @@ class TodayPlaySummary extends StatelessWidget {
             children: [
               // 총 놀이 시간
               _StatChip(
-                label: '총 ${stats.totalMinutes}분',
+                label: S.of(context)!.totalMinutesLabel(stats.totalMinutes),
                 color: LuluActivityColors.play,
               ),
 
               // 터미타임
               if (stats.tummyTimeCount > 0)
                 _StatChip(
-                  label: '터미타임 ${stats.tummyTimeCount}회 (${stats.tummyTimeMinutes}분)',
+                  label: S.of(context)!.tummyTimeCountMinutes(
+                    stats.tummyTimeCount,
+                    stats.tummyTimeMinutes,
+                  ),
                   color: LuluStatusColors.success,
                 ),
 
               // 목욕
               if (stats.hasBath)
                 _StatChip(
-                  label: '목욕 완료',
+                  label: S.of(context)!.bathComplete,
                   icon: LuluIcons.checkCircleOutline,
                   color: LuluStatusColors.info,
                 ),
@@ -94,7 +100,7 @@ class TodayPlaySummary extends StatelessWidget {
               // 외출
               if (stats.hasOutdoor)
                 _StatChip(
-                  label: '외출',
+                  label: S.of(context)!.outdoorLabel,
                   icon: LuluIcons.checkCircleOutline,
                   color: LuluStatusColors.info,
                 ),

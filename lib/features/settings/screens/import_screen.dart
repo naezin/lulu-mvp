@@ -312,9 +312,9 @@ class _ImportScreenState extends State<ImportScreen> {
                 value: _selectedBabyId,
                 isExpanded: true,
                 dropdownColor: LuluColors.surfaceElevated,
-                hint: const Text(
-                  '아기 선택',
-                  style: TextStyle(color: LuluTextColors.secondary),
+                hint: Text(
+                  l10n.importBabySelectHint,
+                  style: const TextStyle(color: LuluTextColors.secondary),
                 ),
                 items: babies.map((baby) {
                   return DropdownMenuItem<String>(
@@ -544,7 +544,7 @@ class _ImportScreenState extends State<ImportScreen> {
                       borderRadius: BorderRadius.circular(LuluRadius.xs),
                     ),
                     child: Text(
-                      '에러: ${result.errors.first}',
+                      l10n.importErrorPrefix(result.errors.first),
                       style: const TextStyle(
                         fontSize: 12,
                         color: LuluStatusColors.error,
@@ -624,7 +624,7 @@ class _ImportScreenState extends State<ImportScreen> {
 
           // 에러 메시지
           Text(
-            provider.errorMessage ?? '알 수 없는 오류가 발생했습니다.',
+            provider.errorMessage ?? l10n.errorUnknown,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
@@ -644,9 +644,9 @@ class _ImportScreenState extends State<ImportScreen> {
                 borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
             ),
-            child: const Text(
-              '다시 시도',
-              style: TextStyle(
+            child: Text(
+              l10n.buttonRetry,
+              style: const TextStyle(
                 color: LuluColors.lavenderMist,
               ),
             ),
@@ -765,7 +765,7 @@ class _PreviewRow extends StatelessWidget {
         ),
         const Spacer(),
         Text(
-          '$count개',
+          S.of(context)!.countItems(count),
           style: TextStyle(
             fontSize: 15,
             fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
@@ -806,7 +806,7 @@ class _ResultRow extends StatelessWidget {
         ),
         const Spacer(),
         Text(
-          '$count개',
+          S.of(context)!.countItems(count),
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

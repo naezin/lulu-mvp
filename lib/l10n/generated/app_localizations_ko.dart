@@ -2547,4 +2547,377 @@ class SKo extends S {
 
   @override
   String get authPasswordResetFailed => '이메일 발송에 실패했습니다';
+
+  @override
+  String get sweetSpotSleepStart => '시작';
+
+  @override
+  String get sweetSpotTapToEndSleep => '탭하여 수면 종료';
+
+  @override
+  String sweetSpotNextSleepType(String sleepType) {
+    return '다음 $sleepType';
+  }
+
+  @override
+  String sweetSpotTimeEstimate(String time, int minutes) {
+    return '약 $time ($minutes분 후)';
+  }
+
+  @override
+  String pretermInfoTitle(String label) {
+    return '$label의 출생 정보를\n입력해 주세요';
+  }
+
+  @override
+  String get pretermInfoSubtitle => '교정연령 계산에 사용돼요';
+
+  @override
+  String get pretermGestationalWeeksLabel => '출생 주수';
+
+  @override
+  String get pretermWeeksUnit => '주';
+
+  @override
+  String get pretermCorrectedAgeTitle => '교정연령이란?';
+
+  @override
+  String get pretermCorrectedAgeDesc =>
+      '만삭 예정일을 기준으로 계산한 나이예요. 조산아의 발달을 더 정확하게 평가할 수 있어요.';
+
+  @override
+  String get pretermWeeksMin => '22주';
+
+  @override
+  String get pretermWeeksPreterm => '37주 미만 = 조산';
+
+  @override
+  String get pretermWeeksMax => '42주';
+
+  @override
+  String get errorLoadActivities => '활동 데이터를 불러오는데 실패했습니다';
+
+  @override
+  String get errorLoadFamilyData => '가족 데이터를 불러오는데 실패했습니다';
+
+  @override
+  String get sweetSpotStateLabelUnknown => '확인 중';
+
+  @override
+  String get sweetSpotStateLabelTooEarly => '아직 일찍';
+
+  @override
+  String get sweetSpotStateLabelApproaching => '곧 수면 시간';
+
+  @override
+  String get sweetSpotStateLabelOptimal => '지금이 최적!';
+
+  @override
+  String get sweetSpotStateLabelOvertired => '과로 상태';
+
+  @override
+  String get growthAddMeasurement => '측정 기록 추가';
+
+  @override
+  String get growthErrorUnknown => '알 수 없는 오류';
+
+  @override
+  String get growthRecordToday => '오늘';
+
+  @override
+  String get growthRecordYesterday => '어제';
+
+  @override
+  String growthRecordDaysAgo(int count) {
+    return '$count일 전';
+  }
+
+  @override
+  String get importBabySelectHint => '아기 선택';
+
+  @override
+  String countItems(int count) {
+    return '$count개';
+  }
+
+  @override
+  String importErrorPrefix(String error) {
+    return '에러: $error';
+  }
+
+  @override
+  String get errorUnknown => '알 수 없는 오류가 발생했습니다.';
+
+  @override
+  String get feedingTimeLabel => '수유 시간';
+
+  @override
+  String get notesPlaceholder => '특이사항을 기록하세요';
+
+  @override
+  String get todaySummaryTitle => '오늘 요약';
+
+  @override
+  String get babyCountTitle => '아기가 몇 명인가요?';
+
+  @override
+  String get babyCountSubtitle => '다둥이 가정도 함께 할 수 있어요';
+
+  @override
+  String get babyCountOne => '1명';
+
+  @override
+  String get babyLabelDefault => '아기';
+
+  @override
+  String get authOrDivider => '또는';
+
+  @override
+  String get authEmailLogin => '이메일로 로그인';
+
+  @override
+  String get authTermsPrefix => '로그인 시 ';
+
+  @override
+  String get authTermsOfService => '서비스 이용약관';
+
+  @override
+  String get authTermsAnd => ' 및 ';
+
+  @override
+  String get authPrivacyPolicy => '개인정보처리방침';
+
+  @override
+  String get authTermsSuffix => '에 동의하게 됩니다.';
+
+  @override
+  String get correctedAgeFormatPrefix => '교정 ';
+
+  @override
+  String correctedAgeFormatWeeksOnly(String prefix, int weeks) {
+    return '$prefix$weeks주';
+  }
+
+  @override
+  String correctedAgeFormatMonthsOnly(String prefix, int months) {
+    return '$prefix$months개월';
+  }
+
+  @override
+  String correctedAgeFormatMonthsWeeks(String prefix, int months, int weeks) {
+    return '$prefix$months개월 $weeks주';
+  }
+
+  @override
+  String actualAgeFormatWeeksOnly(int weeks) {
+    return '$weeks주';
+  }
+
+  @override
+  String actualAgeFormatMonthsOnly(int months) {
+    return '$months개월';
+  }
+
+  @override
+  String actualAgeFormatMonthsWeeks(int months, int weeks) {
+    return '$months개월 $weeks주';
+  }
+
+  @override
+  String get labelRequired => '필수';
+
+  @override
+  String get errorInvalidNumber => '올바른 숫자를 입력해주세요';
+
+  @override
+  String errorValueTooLow(String label, String min, String unit) {
+    return '$label이(가) 너무 작습니다 (최소 $min$unit)';
+  }
+
+  @override
+  String errorValueTooHigh(String label, String max, String unit) {
+    return '$label이(가) 너무 큽니다 (최대 $max$unit)';
+  }
+
+  @override
+  String growthPreviousValue(String value, String unit) {
+    return '이전: $value$unit';
+  }
+
+  @override
+  String growthPreviousDaysAgo(int days) {
+    return '($days일 전)';
+  }
+
+  @override
+  String get cryAnalysisDetailedDescription =>
+      'AI 기반 울음 분석 기능이\nPhase 2에서 출시됩니다.\n\n아기의 울음 패턴을 분석하여\n배고픔, 졸림, 불편함 등을\n구분해드릴게요.';
+
+  @override
+  String get comingSoonBadge => 'Coming Soon';
+
+  @override
+  String get dayNameMon => '월';
+
+  @override
+  String get dayNameTue => '화';
+
+  @override
+  String get dayNameWed => '수';
+
+  @override
+  String get dayNameThu => '목';
+
+  @override
+  String get dayNameFri => '금';
+
+  @override
+  String get dayNameSat => '토';
+
+  @override
+  String get dayNameSun => '일';
+
+  @override
+  String get dayNameMonFull => '월요일';
+
+  @override
+  String get dayNameTueFull => '화요일';
+
+  @override
+  String get dayNameWedFull => '수요일';
+
+  @override
+  String get dayNameThuFull => '목요일';
+
+  @override
+  String get dayNameFriFull => '금요일';
+
+  @override
+  String get dayNameSatFull => '토요일';
+
+  @override
+  String get dayNameSunFull => '일요일';
+
+  @override
+  String chartTooltipDayValue(String day, String value) {
+    return '$day: $value';
+  }
+
+  @override
+  String get chartAccessibilityLast7Days => '지난 7일 차트.';
+
+  @override
+  String chartAccessibilityAverage(String value) {
+    return '평균 $value';
+  }
+
+  @override
+  String todayPlayWithName(String name) {
+    return '$name 오늘의 놀이';
+  }
+
+  @override
+  String get todayPlay => '오늘의 놀이';
+
+  @override
+  String totalMinutesLabel(int minutes) {
+    return '총 $minutes분';
+  }
+
+  @override
+  String tummyTimeCountMinutes(int count, int minutes) {
+    return '터미타임 $count회 ($minutes분)';
+  }
+
+  @override
+  String get bathComplete => '목욕 완료';
+
+  @override
+  String get outdoorLabel => '외출';
+
+  @override
+  String get tempSliderLowLabel => '체온이 낮아요';
+
+  @override
+  String get tempSliderLowMessage => '보온에 신경써주세요.';
+
+  @override
+  String get tempSliderNormalLabel => '정상 체온이에요';
+
+  @override
+  String get tempSliderNormalMessage => '체온이 정상 범위입니다.';
+
+  @override
+  String get tempSliderMildLabel => '체온이 조금 높아요';
+
+  @override
+  String get tempSliderMildMessage => '지켜봐주세요.';
+
+  @override
+  String get tempSliderHighLabel => '열이 있어요';
+
+  @override
+  String get tempSliderHighMessage => '병원 방문을 고려해주세요.';
+
+  @override
+  String get pretermAnalysisFullTerm => '만삭아 기준으로 분석했어요.';
+
+  @override
+  String pretermAnalysisSimilar(int weeks) {
+    return '교정연령 $weeks주로, 만삭아와 유사한 신뢰도예요.';
+  }
+
+  @override
+  String pretermAnalysisAdjusted(int weeks, int percentage) {
+    return '교정연령 $weeks주 기준, 신뢰도를 $percentage%로 보정했어요.\n조산아의 울음 패턴은 만삭아와 다를 수 있어요.';
+  }
+
+  @override
+  String get tummyTimerGoalReached => '권장 시간 달성!';
+
+  @override
+  String tummyTimerGoalMinutes(int minutes) {
+    return '목표: $minutes분';
+  }
+
+  @override
+  String get tummyTimerPause => '일시정지';
+
+  @override
+  String get tummyTimerComplete => '완료';
+
+  @override
+  String get tummyTimerReset => '초기화';
+
+  @override
+  String get feedingBreastLeft => '모유 좌측';
+
+  @override
+  String get feedingBreastRight => '모유 우측';
+
+  @override
+  String get feedingBreastBoth => '모유 양쪽';
+
+  @override
+  String recentFeedingAccessibility(String type, String amount) {
+    return '$type $amount 빠른 저장 버튼. 길게 누르면 수정 모드';
+  }
+
+  @override
+  String get authErrorInvalidCredentials => '이메일 또는 비밀번호가 올바르지 않습니다.';
+
+  @override
+  String get authErrorEmailNotConfirmed => '이메일 인증이 필요합니다. 메일함을 확인해주세요.';
+
+  @override
+  String get authErrorUserAlreadyRegistered => '이미 가입된 이메일입니다.';
+
+  @override
+  String get authErrorPasswordTooShort => '비밀번호는 최소 6자 이상이어야 합니다.';
+
+  @override
+  String get authErrorInvalidEmail => '유효한 이메일 주소를 입력해주세요.';
+
+  @override
+  String get authErrorGeneric => '오류가 발생했습니다. 다시 시도해주세요.';
 }

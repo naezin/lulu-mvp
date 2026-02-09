@@ -70,14 +70,14 @@ class AuthService {
     } on SignInWithAppleAuthorizationException catch (e) {
       debugPrint('[ERROR] AuthService.signInWithApple: ${e.code} - ${e.message}');
       if (e.code == AuthorizationErrorCode.canceled) {
-        throw AuthException('사용자가 로그인을 취소했습니다.');
+        throw AuthException('User canceled sign in.');
       }
-      throw AuthException('Apple 로그인 실패: ${e.message}');
+      throw AuthException('Apple sign in failed: ${e.message}');
     } on AuthException {
       rethrow;
     } catch (e) {
       debugPrint('[ERROR] AuthService.signInWithApple: $e');
-      throw AuthException('Apple 로그인 중 오류가 발생했습니다.');
+      throw AuthException('An error occurred during Apple sign in.');
     }
   }
 
@@ -102,7 +102,7 @@ class AuthService {
       rethrow;
     } catch (e) {
       debugPrint('[ERROR] AuthService.signInWithGoogle: $e');
-      throw AuthException('Google 로그인 중 오류가 발생했습니다.');
+      throw AuthException('An error occurred during Google sign in.');
     }
   }
 
@@ -131,7 +131,7 @@ class AuthService {
       rethrow;
     } catch (e) {
       debugPrint('[ERROR] AuthService.signUpWithEmail: $e');
-      throw AuthException('회원가입 중 오류가 발생했습니다.');
+      throw AuthException('An error occurred during sign up.');
     }
   }
 
@@ -154,7 +154,7 @@ class AuthService {
       rethrow;
     } catch (e) {
       debugPrint('[ERROR] AuthService.signInWithEmail: $e');
-      throw AuthException('로그인 중 오류가 발생했습니다.');
+      throw AuthException('An error occurred during sign in.');
     }
   }
 
@@ -170,7 +170,7 @@ class AuthService {
       rethrow;
     } catch (e) {
       debugPrint('[ERROR] AuthService.sendPasswordResetEmail: $e');
-      throw AuthException('비밀번호 재설정 이메일 발송 중 오류가 발생했습니다.');
+      throw AuthException('An error occurred while sending password reset email.');
     }
   }
 
@@ -186,7 +186,7 @@ class AuthService {
       debugPrint('[OK] AuthService: Sign out success');
     } catch (e) {
       debugPrint('[ERROR] AuthService.signOut: $e');
-      throw AuthException('로그아웃 중 오류가 발생했습니다.');
+      throw AuthException('An error occurred during sign out.');
     }
   }
 

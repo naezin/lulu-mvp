@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// PL-01: 터미타임 타이머 위젯
 ///
@@ -129,6 +130,7 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
@@ -165,7 +167,7 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
                   ),
                   const SizedBox(width: LuluSpacing.xs),
                   Text(
-                    '권장 시간 달성!',
+                    l10n.tummyTimerGoalReached,
                     style: LuluTextStyles.labelSmall.copyWith(
                       color: LuluStatusColors.success,
                       fontWeight: FontWeight.bold,
@@ -213,7 +215,7 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
                       ),
                     ),
                     Text(
-                      '목표: ${widget.recommendedMinutes}분',
+                      l10n.tummyTimerGoalMinutes(widget.recommendedMinutes),
                       style: LuluTextStyles.caption.copyWith(
                         color: LuluTextColors.tertiary,
                       ),
@@ -234,7 +236,7 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
                 // 시작 버튼
                 _TimerButton(
                   icon: LuluIcons.playArrow,
-                  label: '시작',
+                  label: l10n.labelStart,
                   color: LuluActivityColors.play,
                   onTap: _startTimer,
                 )
@@ -244,14 +246,14 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
                   children: [
                     _TimerButton(
                       icon: LuluIcons.pause,
-                      label: '일시정지',
+                      label: l10n.tummyTimerPause,
                       color: LuluStatusColors.warning,
                       onTap: _pauseTimer,
                     ),
                     const SizedBox(width: LuluSpacing.md),
                     _TimerButton(
                       icon: LuluIcons.save,
-                      label: '완료',
+                      label: l10n.tummyTimerComplete,
                       color: LuluStatusColors.success,
                       onTap: _completeTimer,
                     ),
@@ -263,21 +265,21 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
                   children: [
                     _TimerButton(
                       icon: LuluIcons.playArrow,
-                      label: '계속',
+                      label: l10n.continueButton,
                       color: LuluActivityColors.play,
                       onTap: _startTimer,
                     ),
                     const SizedBox(width: LuluSpacing.md),
                     _TimerButton(
                       icon: LuluIcons.save,
-                      label: '완료',
+                      label: l10n.tummyTimerComplete,
                       color: LuluStatusColors.success,
                       onTap: _completeTimer,
                     ),
                     const SizedBox(width: LuluSpacing.md),
                     _TimerButton(
                       icon: LuluIcons.refresh,
-                      label: '초기화',
+                      label: l10n.tummyTimerReset,
                       color: LuluTextColors.tertiary,
                       onTap: _resetTimer,
                     ),

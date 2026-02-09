@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/design_system/lulu_colors.dart';
 import '../../../../core/design_system/lulu_icons.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../l10n/generated/app_localizations.dart' show S;
 import '../providers/onboarding_provider.dart';
 import '../../../../core/design_system/lulu_radius.dart';
 
@@ -15,6 +16,7 @@ class BabyCountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<OnboardingProvider>();
+    final l10n = S.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -25,7 +27,7 @@ class BabyCountScreen extends StatelessWidget {
 
           // 질문 텍스트
           Text(
-            '아기가 몇 명인가요?',
+            l10n.babyCountTitle,
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
@@ -35,7 +37,7 @@ class BabyCountScreen extends StatelessWidget {
           const SizedBox(height: 12),
 
           Text(
-            '다둥이 가정도 함께 할 수 있어요',
+            l10n.babyCountSubtitle,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppTheme.textSecondary,
                 ),
@@ -55,28 +57,28 @@ class BabyCountScreen extends StatelessWidget {
               children: [
                 _BabyCountCard(
                   count: 1,
-                  label: '1명',
+                  label: l10n.babyCountOne,
                   iconCount: 1,
                   isSelected: provider.babyCount == 1,
                   onTap: () => provider.setBabyCount(1),
                 ),
                 _BabyCountCard(
                   count: 2,
-                  label: '쌍둥이',
+                  label: l10n.babyTypeTwin,
                   iconCount: 2,
                   isSelected: provider.babyCount == 2,
                   onTap: () => provider.setBabyCount(2),
                 ),
                 _BabyCountCard(
                   count: 3,
-                  label: '세쌍둥이',
+                  label: l10n.babyTypeTriplet,
                   iconCount: 3,
                   isSelected: provider.babyCount == 3,
                   onTap: () => provider.setBabyCount(3),
                 ),
                 _BabyCountCard(
                   count: 4,
-                  label: '네쌍둥이',
+                  label: l10n.babyTypeQuadruplet,
                   iconCount: 4,
                   isSelected: provider.babyCount == 4,
                   onTap: () => provider.setBabyCount(4),
@@ -100,9 +102,9 @@ class BabyCountScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
-              child: const Text(
-                '다음',
-                style: TextStyle(
+              child: Text(
+                l10n.buttonNext,
+                style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
                 ),

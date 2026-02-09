@@ -6,6 +6,7 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/baby_model.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 아기 삭제 확인 다이얼로그
 ///
@@ -29,6 +30,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
     return AlertDialog(
       backgroundColor: LuluColors.surfaceCard,
       shape: RoundedRectangleBorder(
@@ -52,7 +54,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
           const SizedBox(width: LuluSpacing.md),
           Expanded(
             child: Text(
-              '아기 삭제',
+              l10n.deleteBabyTitle,
               style: LuluTextStyles.titleMedium.copyWith(
                 color: LuluTextColors.primary,
                 fontWeight: FontWeight.bold,
@@ -66,7 +68,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${widget.baby.name}의 모든 기록이 삭제됩니다.',
+            l10n.deleteBabyConfirmMessage(widget.baby.name),
             style: LuluTextStyles.bodyLarge.copyWith(
               color: LuluTextColors.primary,
             ),
@@ -88,7 +90,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
                 const SizedBox(width: LuluSpacing.sm),
                 Expanded(
                   child: Text(
-                    '이 작업은 되돌릴 수 없습니다.',
+                    l10n.deleteBabyWarning,
                     style: LuluTextStyles.bodySmall.copyWith(
                       color: LuluStatusColors.error,
                       fontWeight: FontWeight.w500,
@@ -104,7 +106,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
         TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text(
-            '취소',
+            l10n.buttonCancel,
             style: LuluTextStyles.labelLarge.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -129,7 +131,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
                   ),
                 )
               : Text(
-                  '삭제',
+                  l10n.buttonDelete,
                   style: LuluTextStyles.labelLarge.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -151,7 +153,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('삭제 실패: $e')),
+          SnackBar(content: Text(S.of(context)!.errorDeleteFailed(e.toString()))),
         );
         setState(() => _isDeleting = false);
       }

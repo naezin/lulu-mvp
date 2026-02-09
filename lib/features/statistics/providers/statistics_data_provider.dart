@@ -194,23 +194,23 @@ class StatisticsDataProvider extends ChangeNotifier {
       }
     }
 
-    final dayNames = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+    final dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     // 인사이트 메시지 생성
     String message;
     InsightType type;
 
     if (sleep.changeMinutes > 30) {
-      message = '수면 시간이 지난주보다 증가했어요';
+      message = 'insight_sleep_increased';
       type = InsightType.positive;
     } else if (sleep.changeMinutes < -30) {
-      message = '수면 시간이 지난주보다 감소했어요';
+      message = 'insight_sleep_decreased';
       type = InsightType.attention;
     } else if (maxHours > 0) {
-      message = '${dayNames[maxDayIndex]}에 수면이 가장 많았어요';
+      message = 'insight_most_sleep_day:${dayNames[maxDayIndex]}';
       type = InsightType.neutral;
     } else {
-      message = '이번 주 기록을 시작해보세요';
+      message = 'insight_start_recording';
       type = InsightType.neutral;
     }
 

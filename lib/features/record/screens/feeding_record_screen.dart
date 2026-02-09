@@ -99,7 +99,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          '수유 기록',
+          S.of(context)!.recordTitleFeeding,
           style: LuluTextStyles.titleMedium.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -157,7 +157,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
 
                       // 시간 선택
                       RecordTimePicker(
-                        label: '수유 시간',
+                        label: S.of(context)!.feedingTimeLabel,
                         time: provider.recordTime,
                         onTimeChanged: provider.setRecordTime,
                       ),
@@ -329,7 +329,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '수유량',
+          S.of(context)!.feedingAmount,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -351,7 +351,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '메모 (선택)',
+          S.of(context)!.notesOptionalLabel,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -371,7 +371,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '특이사항을 기록하세요',
+              hintText: S.of(context)!.notesPlaceholder,
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -417,7 +417,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                 ),
               )
             : Text(
-                '저장하기',
+                S.of(context)!.buttonSave,
                 style: LuluTextStyles.labelLarge.copyWith(
                   color: LuluColors.midnightNavy,
                 ),

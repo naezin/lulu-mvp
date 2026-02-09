@@ -4,6 +4,7 @@ import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_shadows.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_typography.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 
 /// 라벨이 있는 확장 FAB (시안 B-4)
 ///
@@ -80,7 +81,7 @@ class _LabeledFabState extends State<LabeledFab>
                         size: 20,
                       ),
                       Text(
-                        '기록',
+                        S.of(context)!.navRecord,
                         style: LuluTextStyles.caption.copyWith(
                           color: LuluColors.midnightNavy,
                           fontWeight: FontWeight.bold,
@@ -96,12 +97,13 @@ class _LabeledFabState extends State<LabeledFab>
   }
 
   List<Widget> _buildExpandedActions() {
+    final l10n = S.of(context)!;
     final actions = [
-      _FabAction(icon: LuluIcons.sleep, label: '수면', color: LuluActivityColors.sleep, onTap: () => _onRecord('sleep')),
-      _FabAction(icon: LuluIcons.feeding, label: '수유', color: LuluActivityColors.feeding, onTap: () => _onRecord('feeding')),
-      _FabAction(icon: LuluIcons.diaper, label: '기저귀', color: LuluActivityColors.diaper, onTap: () => _onRecord('diaper')),
-      _FabAction(icon: LuluIcons.play, label: '놀이', color: LuluActivityColors.play, onTap: () => _onRecord('play')),
-      _FabAction(icon: LuluIcons.health, label: '건강', color: LuluActivityColors.health, onTap: () => _onRecord('health')),
+      _FabAction(icon: LuluIcons.sleep, label: l10n.activityTypeSleep, color: LuluActivityColors.sleep, onTap: () => _onRecord('sleep')),
+      _FabAction(icon: LuluIcons.feeding, label: l10n.activityTypeFeeding, color: LuluActivityColors.feeding, onTap: () => _onRecord('feeding')),
+      _FabAction(icon: LuluIcons.diaper, label: l10n.activityTypeDiaper, color: LuluActivityColors.diaper, onTap: () => _onRecord('diaper')),
+      _FabAction(icon: LuluIcons.play, label: l10n.activityTypePlay, color: LuluActivityColors.play, onTap: () => _onRecord('play')),
+      _FabAction(icon: LuluIcons.health, label: l10n.activityTypeHealth, color: LuluActivityColors.health, onTap: () => _onRecord('health')),
     ];
 
     return actions.reversed.map((action) {

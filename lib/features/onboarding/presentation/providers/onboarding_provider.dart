@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../data/models/baby_type.dart';
 import '../../../../data/models/baby_model.dart';
 import '../../../../data/models/family_model.dart';
+import '../../../../l10n/generated/app_localizations.dart' show S;
 
 /// 온보딩 단계
 enum OnboardingStep {
@@ -366,7 +367,7 @@ class OnboardingProvider extends ChangeNotifier {
       return (family: family, babies: babyModels);
     } catch (e) {
       _isLoading = false;
-      _errorMessage = '온보딩 완료 중 오류가 발생했습니다: $e';
+      _errorMessage = 'Failed to complete onboarding: $e';
       notifyListeners();
       rethrow;
     }
@@ -425,14 +426,14 @@ class OnboardingProvider extends ChangeNotifier {
   }
 
   /// 현재 아기 라벨 (첫째, 둘째, ...)
-  String get currentBabyLabel {
-    if (_babyCount == 1) return '아기';
+  String currentBabyLabel(S l10n) {
+    if (_babyCount == 1) return l10n.babyLabelDefault;
     return switch (_currentBabyIndex) {
-      0 => '첫째',
-      1 => '둘째',
-      2 => '셋째',
-      3 => '넷째',
-      _ => '아기',
+      0 => l10n.birthOrderFirst,
+      1 => l10n.birthOrderSecond,
+      2 => l10n.birthOrderThird,
+      3 => l10n.birthOrderFourth,
+      _ => l10n.babyLabelDefault,
     };
   }
 }
