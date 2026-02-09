@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
@@ -72,7 +73,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          '기저귀 기록',
+          S.of(context)?.recordTitleDiaper ?? 'Diaper Record',
           style: LuluTextStyles.titleMedium.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -129,7 +130,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
 
                       // 시간 선택
                       RecordTimePicker(
-                        label: '기저귀 교체 시간',
+                        label: S.of(context)?.diaperChangeTime ?? 'Diaper Change Time',
                         time: provider.recordTime,
                         onTimeChanged: provider.setRecordTime,
                       ),
@@ -142,7 +143,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
                       // 에러 메시지
                       if (provider.errorMessage != null) ...[
                         const SizedBox(height: LuluSpacing.md),
-                        _buildErrorMessage(provider.errorMessage!),
+                        _buildErrorMessage(_localizeError(provider.errorMessage!)),
                       ],
 
                       const SizedBox(height: LuluSpacing.xxl),
@@ -209,11 +210,13 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
   }
 
   Widget _buildDiaperTypeSelector(RecordProvider provider) {
+    final l10n = S.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '기저귀 상태',
+          l10n?.diaperStatus ?? 'Diaper Status',
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -225,7 +228,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             Expanded(
               child: _DiaperTypeButton(
                 type: 'wet',
-                label: '소변',
+                label: l10n?.diaperTypeWet ?? 'Wet',
                 icon: LuluIcons.diaperWet,
                 isSelected: provider.diaperType == 'wet',
                 onTap: () => provider.setDiaperType('wet'),
@@ -235,7 +238,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             Expanded(
               child: _DiaperTypeButton(
                 type: 'dirty',
-                label: '대변',
+                label: l10n?.diaperTypeDirty ?? 'Dirty',
                 icon: LuluIcons.diaperDirty,
                 isSelected: provider.diaperType == 'dirty',
                 onTap: () => provider.setDiaperType('dirty'),
@@ -249,7 +252,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             Expanded(
               child: _DiaperTypeButton(
                 type: 'both',
-                label: '혼합',
+                label: l10n?.diaperTypeBoth ?? 'Both',
                 icon: LuluIcons.diaperBoth,
                 isSelected: provider.diaperType == 'both',
                 onTap: () => provider.setDiaperType('both'),
@@ -259,7 +262,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             Expanded(
               child: _DiaperTypeButton(
                 type: 'dry',
-                label: '건조',
+                label: l10n?.diaperTypeDry ?? 'Dry',
                 icon: LuluIcons.diaperDry,
                 isSelected: provider.diaperType == 'dry',
                 onTap: () => provider.setDiaperType('dry'),
@@ -272,11 +275,13 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
   }
 
   Widget _buildStoolColorSelector(RecordProvider provider) {
+    final l10n = S.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '대변 색상 (선택)',
+          l10n?.stoolColorOptional ?? 'Stool Color (optional)',
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -284,7 +289,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
         ),
         const SizedBox(height: LuluSpacing.sm),
         Text(
-          '색상을 선택하면 건강 추적에 도움이 됩니다',
+          l10n?.stoolColorHelpText ?? 'Selecting a color helps with health tracking',
           style: LuluTextStyles.bodySmall.copyWith(
             color: LuluTextColors.tertiary,
           ),
@@ -296,7 +301,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
           children: [
             _StoolColorButton(
               color: 'yellow',
-              label: '노랑',
+              label: l10n?.stoolColorYellow ?? 'Yellow',
               colorValue: const Color(0xFFF9A825),
               isSelected: provider.stoolColor == 'yellow',
               onTap: () => provider.setStoolColor(
@@ -305,7 +310,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             ),
             _StoolColorButton(
               color: 'brown',
-              label: '갈색',
+              label: l10n?.stoolColorBrown ?? 'Brown',
               colorValue: const Color(0xFF6D4C41),
               isSelected: provider.stoolColor == 'brown',
               onTap: () => provider.setStoolColor(
@@ -314,7 +319,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             ),
             _StoolColorButton(
               color: 'green',
-              label: '녹색',
+              label: l10n?.stoolColorGreen ?? 'Green',
               colorValue: const Color(0xFF4CAF50),
               isSelected: provider.stoolColor == 'green',
               onTap: () => provider.setStoolColor(
@@ -323,7 +328,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             ),
             _StoolColorButton(
               color: 'black',
-              label: '검정',
+              label: l10n?.stoolColorBlack ?? 'Black',
               colorValue: const Color(0xFF212121),
               isSelected: provider.stoolColor == 'black',
               isWarning: true,
@@ -333,7 +338,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             ),
             _StoolColorButton(
               color: 'red',
-              label: '빨강',
+              label: l10n?.stoolColorRed ?? 'Red',
               colorValue: const Color(0xFFE53935),
               isSelected: provider.stoolColor == 'red',
               isWarning: true,
@@ -343,7 +348,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
             ),
             _StoolColorButton(
               color: 'white',
-              label: '흰색',
+              label: l10n?.stoolColorWhite ?? 'White',
               colorValue: const Color(0xFFECEFF1),
               isSelected: provider.stoolColor == 'white',
               isWarning: true,
@@ -374,7 +379,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
                 const SizedBox(width: LuluSpacing.sm),
                 Expanded(
                   child: Text(
-                    '이 색상은 의료 상담이 필요할 수 있습니다.\n지속되면 소아과 방문을 권장합니다.',
+                    l10n?.stoolColorWarning ?? 'This color may require medical consultation.\nIf it persists, we recommend visiting a pediatrician.',
                     style: LuluTextStyles.bodySmall.copyWith(
                       color: LuluStatusColors.warning,
                     ),
@@ -389,11 +394,13 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
   }
 
   Widget _buildNotesInput() {
+    final l10n = S.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '메모 (선택)',
+          l10n?.notesOptionalLabel ?? 'Notes (optional)',
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -413,7 +420,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '색상, 양, 특이사항 등',
+              hintText: l10n?.diaperNotesHint ?? 'Color, amount, unusual notes, etc.',
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -459,7 +466,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
                 ),
               )
             : Text(
-                '저장하기',
+                S.of(context)?.buttonSave ?? 'Save',
                 style: LuluTextStyles.labelLarge.copyWith(
                   color: LuluColors.midnightNavy,
                 ),
@@ -494,6 +501,19 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
         ],
       ),
     );
+  }
+
+  String _localizeError(String errorKey) {
+    final l10n = S.of(context);
+    if (errorKey == 'errorSelectBaby') {
+      return l10n?.errorSelectBaby ?? 'Please select a baby';
+    } else if (errorKey == 'errorNoFamily') {
+      return l10n?.errorNoFamily ?? 'No family information';
+    } else if (errorKey.startsWith('errorSaveFailed:')) {
+      final detail = errorKey.substring('errorSaveFailed:'.length);
+      return l10n?.errorSaveFailed(detail) ?? 'Save failed: $detail';
+    }
+    return errorKey;
   }
 
   Future<void> _handleSave(RecordProvider provider) async {

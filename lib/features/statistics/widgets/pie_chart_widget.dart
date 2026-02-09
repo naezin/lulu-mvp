@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../models/weekly_statistics.dart';
 
 /// 파이 차트 위젯
@@ -29,6 +30,8 @@ class PieChartWidget extends StatefulWidget {
   factory PieChartWidget.fromSleepStats({
     Key? key,
     required SleepStatistics stats,
+    required String napLabel,
+    required String nightLabel,
     double size = 140,
   }) {
     return PieChartWidget(
@@ -36,12 +39,12 @@ class PieChartWidget extends StatefulWidget {
       sections: [
         PieSection(
           value: stats.napRatio,
-          label: '낮잠',
+          label: napLabel,
           color: LuluStatisticsColors.sleep.withValues(alpha: 0.7),
         ),
         PieSection(
           value: stats.nightRatio,
-          label: '밤잠',
+          label: nightLabel,
           color: LuluStatisticsColors.sleep,
         ),
       ],
@@ -53,6 +56,9 @@ class PieChartWidget extends StatefulWidget {
   factory PieChartWidget.fromFeedingStats({
     Key? key,
     required FeedingStatistics stats,
+    required String breastLabel,
+    required String formulaLabel,
+    required String solidLabel,
     double size = 140,
   }) {
     return PieChartWidget(
@@ -61,19 +67,19 @@ class PieChartWidget extends StatefulWidget {
         if (stats.breastMilkRatio > 0)
           PieSection(
             value: stats.breastMilkRatio,
-            label: '모유',
+            label: breastLabel,
             color: LuluStatisticsColors.feeding,
           ),
         if (stats.formulaRatio > 0)
           PieSection(
             value: stats.formulaRatio,
-            label: '분유',
+            label: formulaLabel,
             color: LuluStatisticsColors.feeding.withValues(alpha: 0.7),
           ),
         if (stats.solidFoodRatio > 0)
           PieSection(
             value: stats.solidFoodRatio,
-            label: '이유식',
+            label: solidLabel,
             color: LuluStatisticsColors.feeding.withValues(alpha: 0.5),
           ),
       ],
@@ -85,6 +91,9 @@ class PieChartWidget extends StatefulWidget {
   factory PieChartWidget.fromDiaperStats({
     Key? key,
     required DiaperStatistics stats,
+    required String wetLabel,
+    required String dirtyLabel,
+    required String bothLabel,
     double size = 140,
   }) {
     return PieChartWidget(
@@ -93,19 +102,19 @@ class PieChartWidget extends StatefulWidget {
         if (stats.wetRatio > 0)
           PieSection(
             value: stats.wetRatio,
-            label: '소변',
+            label: wetLabel,
             color: LuluStatisticsColors.diaper,
           ),
         if (stats.dirtyRatio > 0)
           PieSection(
             value: stats.dirtyRatio,
-            label: '대변',
+            label: dirtyLabel,
             color: LuluStatisticsColors.diaper.withValues(alpha: 0.7),
           ),
         if (stats.bothRatio > 0)
           PieSection(
             value: stats.bothRatio,
-            label: '혼합',
+            label: bothLabel,
             color: LuluStatisticsColors.diaper.withValues(alpha: 0.5),
           ),
       ],
@@ -186,11 +195,12 @@ class _PieChartWidgetState extends State<PieChartWidget> {
   }
 
   String _buildAccessibilityLabel() {
-    final buffer = StringBuffer('비율 차트. ');
+    final l10n = S.of(context)!;
+    final buffer = StringBuffer('${l10n.pieChartAccessibilityPrefix} ');
 
     for (final section in widget.sections) {
       final percent = (section.value * 100).toInt();
-      buffer.write('${section.label} $percent퍼센트, ');
+      buffer.write('${l10n.pieChartAccessibilitySection(section.label, percent)}, ');
     }
 
     return buffer.toString().trimRight().replaceAll(RegExp(r', $'), '');

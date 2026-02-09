@@ -155,7 +155,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
                       // 에러 메시지
                       if (provider.errorMessage != null) ...[
                         const SizedBox(height: LuluSpacing.md),
-                        _buildErrorMessage(provider.errorMessage!),
+                        _buildErrorMessage(_localizeError(provider.errorMessage!)),
                       ],
 
                       const SizedBox(height: LuluSpacing.xxl),
@@ -629,6 +629,19 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
         ],
       ),
     );
+  }
+
+  String _localizeError(String errorKey) {
+    final l10n = S.of(context);
+    if (errorKey == 'errorSelectBaby') {
+      return l10n?.errorSelectBaby ?? 'Please select a baby';
+    } else if (errorKey == 'errorNoFamily') {
+      return l10n?.errorNoFamily ?? 'No family information';
+    } else if (errorKey.startsWith('errorSaveFailed:')) {
+      final detail = errorKey.substring('errorSaveFailed:'.length);
+      return l10n?.errorSaveFailed(detail) ?? 'Save failed: $detail';
+    }
+    return errorKey;
   }
 
   Future<void> _handleSave(RecordProvider provider) async {

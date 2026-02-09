@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
@@ -75,7 +76,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          '놀이 기록',
+          S.of(context)?.recordTitlePlay ?? 'Play Record',
           style: LuluTextStyles.titleMedium.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -128,7 +129,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
                                 horizontal: LuluSpacing.md,
                               ),
                               child: Text(
-                                '또는 상세 입력',
+                                S.of(context)?.orDetailedEntry ?? 'or enter details',
                                 style: LuluTextStyles.caption.copyWith(
                                   color: LuluTextColors.tertiary,
                                 ),
@@ -154,7 +155,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
 
                       // 시간 선택
                       RecordTimePicker(
-                        label: '놀이 시간',
+                        label: S.of(context)?.playTimeLabel ?? 'Play Time',
                         time: provider.recordTime,
                         onTimeChanged: provider.setRecordTime,
                       ),
@@ -167,7 +168,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
                       // 에러 메시지
                       if (provider.errorMessage != null) ...[
                         const SizedBox(height: LuluSpacing.md),
-                        _buildErrorMessage(provider.errorMessage!),
+                        _buildErrorMessage(_localizeError(provider.errorMessage!)),
                       ],
 
                       const SizedBox(height: LuluSpacing.xxl),
@@ -232,21 +233,23 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
   }
 
   Widget _buildPlayTypeSelector(RecordProvider provider) {
+    final l10n = S.of(context);
+
     // UX-01: 활동 유형 2x3 그리드 레이아웃
     final playTypes = [
-      ('tummy_time', '터미타임', LuluIcons.tummyTime),
-      ('bath', '목욕', LuluIcons.bath),
-      ('outdoor', '외출', LuluIcons.outdoor),
-      ('play', '실내놀이', LuluIcons.indoorPlay),
-      ('reading', '독서', LuluIcons.reading),
-      ('other', '기타', LuluIcons.other),
+      ('tummy_time', l10n?.playTypeTummyTime ?? 'Tummy Time', LuluIcons.tummyTime),
+      ('bath', l10n?.playTypeBath ?? 'Bath', LuluIcons.bath),
+      ('outdoor', l10n?.playTypeOutdoor ?? 'Outdoor', LuluIcons.outdoor),
+      ('play', l10n?.playTypeIndoor ?? 'Indoor Play', LuluIcons.indoorPlay),
+      ('reading', l10n?.playTypeReading ?? 'Reading', LuluIcons.reading),
+      ('other', l10n?.playTypeOther ?? 'Other', LuluIcons.other),
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '활동 유형',
+          l10n?.playActivityType ?? 'Activity Type',
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -295,7 +298,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
                 const SizedBox(width: LuluSpacing.sm),
                 Expanded(
                   child: Text(
-                    '교정연령 기준 권장: 하루 3-5분씩 여러 번',
+                    l10n?.playTummyTimeRecommendation ?? 'Recommended: 3-5 min sessions, several times a day',
                     style: LuluTextStyles.bodySmall.copyWith(
                       color: LuluStatusColors.info,
                     ),
@@ -319,6 +322,8 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
   }
 
   Widget _buildDurationInput(RecordProvider provider) {
+    final l10n = S.of(context);
+
     // UX-01: 시간 선택 강화 - 터미타임은 짧은 시간, 외출은 긴 시간
     final isShortActivity =
         provider.playType == 'tummy_time' || provider.playType == 'reading';
@@ -328,7 +333,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '활동 시간 (선택)',
+          l10n?.playDurationOptional ?? 'Duration (optional)',
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -375,7 +380,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
                     color: LuluTextColors.primary,
                   ),
                   decoration: InputDecoration(
-                    hintText: '직접 입력',
+                    hintText: l10n?.playDirectInput ?? 'Enter manually',
                     hintStyle: LuluTextStyles.bodyMedium.copyWith(
                       color: LuluTextColors.tertiary,
                     ),
@@ -390,7 +395,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
                 ),
               ),
               Text(
-                '분',
+                l10n?.unitMinute ?? 'min',
                 style: LuluTextStyles.bodyMedium.copyWith(
                   color: LuluTextColors.secondary,
                 ),
@@ -403,11 +408,13 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
   }
 
   Widget _buildNotesInput() {
+    final l10n = S.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '메모 (선택)',
+          l10n?.notesOptionalLabel ?? 'Notes (optional)',
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -427,7 +434,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '아기의 반응, 특이사항 등',
+              hintText: l10n?.playNotesHint ?? "Baby's reactions, notes, etc.",
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -473,7 +480,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
                 ),
               )
             : Text(
-                '저장하기',
+                S.of(context)?.buttonSave ?? 'Save',
                 style: LuluTextStyles.labelLarge.copyWith(
                   color: LuluColors.midnightNavy,
                 ),
@@ -508,6 +515,19 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
         ],
       ),
     );
+  }
+
+  String _localizeError(String errorKey) {
+    final l10n = S.of(context);
+    if (errorKey == 'errorSelectBaby') {
+      return l10n?.errorSelectBaby ?? 'Please select a baby';
+    } else if (errorKey == 'errorNoFamily') {
+      return l10n?.errorNoFamily ?? 'No family information';
+    } else if (errorKey.startsWith('errorSaveFailed:')) {
+      final detail = errorKey.substring('errorSaveFailed:'.length);
+      return l10n?.errorSaveFailed(detail) ?? 'Save failed: $detail';
+    }
+    return errorKey;
   }
 
   Future<void> _handleSave(RecordProvider provider) async {
@@ -612,7 +632,7 @@ class _DurationButton extends StatelessWidget {
           ),
         ),
         child: Text(
-          '$minutes분',
+          S.of(context)?.durationMinutes(minutes) ?? '${minutes}min',
           style: LuluTextStyles.labelSmall.copyWith(
             color: isSelected
                 ? LuluActivityColors.play

@@ -4,7 +4,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
-import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../models/weekly_statistics.dart';
 import '../models/insight_data.dart';
 import 'weekly_bar_chart.dart';
@@ -151,11 +151,14 @@ class ReportCard extends StatelessWidget {
       case ReportType.sleep:
         return '${statistics.sleep.dailyAverageHours.toStringAsFixed(1)}h $perDay';
       case ReportType.feeding:
-        return '${statistics.feeding.dailyAverageCount.toStringAsFixed(1)}회 $perDay';
+        final feedCount = statistics.feeding.dailyAverageCount.toStringAsFixed(1);
+        return '${l10n?.countTimes(double.parse(feedCount).round()) ?? feedCount} $perDay';
       case ReportType.diaper:
-        return '${statistics.diaper.dailyAverageCount.toStringAsFixed(1)}회 $perDay';
+        final diaperCount = statistics.diaper.dailyAverageCount.toStringAsFixed(1);
+        return '${l10n?.countTimes(double.parse(diaperCount).round()) ?? diaperCount} $perDay';
       case ReportType.crying:
-        return '이번 주 ${statistics.crying?.totalCount ?? 0}회';
+        return l10n?.reportThisWeekCount(statistics.crying?.totalCount ?? 0) ??
+            'This week ${statistics.crying?.totalCount ?? 0}x';
     }
   }
 
@@ -178,7 +181,7 @@ class ReportCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 파이차트
-              _buildPieChart(),
+              _buildPieChart(context),
 
               const SizedBox(width: 16),
 
@@ -197,36 +200,51 @@ class ReportCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPieChart() {
+  Widget _buildPieChart(BuildContext context) {
+    final l10n = S.of(context)!;
     switch (type) {
       case ReportType.sleep:
-        return PieChartWidget.fromSleepStats(stats: statistics.sleep);
+        return PieChartWidget.fromSleepStats(
+          stats: statistics.sleep,
+          napLabel: l10n.sleepTypeNap,
+          nightLabel: l10n.sleepTypeNight,
+        );
       case ReportType.feeding:
-        return PieChartWidget.fromFeedingStats(stats: statistics.feeding);
+        return PieChartWidget.fromFeedingStats(
+          stats: statistics.feeding,
+          breastLabel: l10n.feedingContentBreastMilk,
+          formulaLabel: l10n.feedingTypeFormula,
+          solidLabel: l10n.feedingTypeSolid,
+        );
       case ReportType.diaper:
-        return PieChartWidget.fromDiaperStats(stats: statistics.diaper);
+        return PieChartWidget.fromDiaperStats(
+          stats: statistics.diaper,
+          wetLabel: l10n.diaperTypeWet,
+          dirtyLabel: l10n.diaperTypeDirty,
+          bothLabel: l10n.diaperTypeBoth,
+        );
       case ReportType.crying:
         if (statistics.crying != null) {
           return PieChartWidget(
             sections: [
               PieSection(
                 value: statistics.crying!.hungryRatio,
-                label: '배고픔',
+                label: l10n.cryTypeHungryLabel,
                 color: LuluStatisticsColors.crying,
               ),
               PieSection(
                 value: statistics.crying!.tiredRatio,
-                label: '졸림',
+                label: l10n.cryTypeTiredLabel,
                 color: LuluStatisticsColors.crying.withValues(alpha: 0.8),
               ),
               PieSection(
                 value: statistics.crying!.gasRatio,
-                label: '가스',
+                label: l10n.cryTypeGasLabel,
                 color: LuluStatisticsColors.crying.withValues(alpha: 0.6),
               ),
               PieSection(
                 value: statistics.crying!.discomfortRatio,
-                label: '불편',
+                label: l10n.cryTypeDiscomfortLabel,
                 color: LuluStatisticsColors.crying.withValues(alpha: 0.4),
               ),
             ],
@@ -237,20 +255,23 @@ class ReportCard extends StatelessWidget {
   }
 
   Widget _buildDetailMetrics(BuildContext context) {
+    final l10n = S.of(context);
+
     switch (type) {
       case ReportType.sleep:
         return _buildMetricsList([
           _MetricItem(
-            label: '낮잠',
+            label: l10n?.sleepTypeNap ?? 'Nap',
             value: '${(statistics.sleep.napRatio * 100).toInt()}%',
           ),
           _MetricItem(
-            label: '밤잠',
+            label: l10n?.sleepTypeNight ?? 'Night',
             value: '${(statistics.sleep.nightRatio * 100).toInt()}%',
           ),
           _MetricItem(
-            label: '야간 기상',
-            value: '${statistics.sleep.nightWakeups}회',
+            label: l10n?.reportNightWakeups ?? 'Night wakeups',
+            value: l10n?.countTimes(statistics.sleep.nightWakeups) ??
+                '${statistics.sleep.nightWakeups}x',
           ),
         ]);
 
@@ -258,17 +279,17 @@ class ReportCard extends StatelessWidget {
         return _buildMetricsList([
           if (statistics.feeding.breastMilkRatio > 0)
             _MetricItem(
-              label: '모유',
+              label: l10n?.feedingTypeBreast ?? 'Breast',
               value: '${(statistics.feeding.breastMilkRatio * 100).toInt()}%',
             ),
           if (statistics.feeding.formulaRatio > 0)
             _MetricItem(
-              label: '분유',
+              label: l10n?.feedingTypeFormula ?? 'Formula',
               value: '${(statistics.feeding.formulaRatio * 100).toInt()}%',
             ),
           if (statistics.feeding.solidFoodRatio > 0)
             _MetricItem(
-              label: '이유식',
+              label: l10n?.feedingTypeSolid ?? 'Solid',
               value: '${(statistics.feeding.solidFoodRatio * 100).toInt()}%',
             ),
         ]);
@@ -276,15 +297,15 @@ class ReportCard extends StatelessWidget {
       case ReportType.diaper:
         return _buildMetricsList([
           _MetricItem(
-            label: '소변',
+            label: l10n?.diaperTypeWet ?? 'Wet',
             value: '${(statistics.diaper.wetRatio * 100).toInt()}%',
           ),
           _MetricItem(
-            label: '대변',
+            label: l10n?.diaperTypeDirty ?? 'Dirty',
             value: '${(statistics.diaper.dirtyRatio * 100).toInt()}%',
           ),
           _MetricItem(
-            label: '혼합',
+            label: l10n?.diaperTypeBoth ?? 'Both',
             value: '${(statistics.diaper.bothRatio * 100).toInt()}%',
           ),
         ]);
@@ -293,15 +314,15 @@ class ReportCard extends StatelessWidget {
         if (statistics.crying != null) {
           return _buildMetricsList([
             _MetricItem(
-              label: '배고픔',
+              label: l10n?.cryTypeHungryLabel ?? 'Hungry',
               value: '${(statistics.crying!.hungryRatio * 100).toInt()}%',
             ),
             _MetricItem(
-              label: '졸림',
+              label: l10n?.cryTypeTiredLabel ?? 'Tired',
               value: '${(statistics.crying!.tiredRatio * 100).toInt()}%',
             ),
             _MetricItem(
-              label: '가스',
+              label: l10n?.cryTypeGasLabel ?? 'Gas',
               value: '${(statistics.crying!.gasRatio * 100).toInt()}%',
             ),
           ]);

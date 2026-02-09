@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/models.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../widgets/growth_number_input.dart';
 import '../validators/growth_input_validator.dart';
@@ -68,7 +69,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          '성장 기록',
+          S.of(context)!.screenTitleGrowthInput,
           style: LuluTextStyles.titleMedium.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -77,7 +78,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
           TextButton(
             onPressed: _isSaving ? null : _onSave,
             child: Text(
-              '저장하기',
+              S.of(context)!.buttonSave,
               style: LuluTextStyles.bodyMedium.copyWith(
                 color: _canSave()
                     ? LuluColors.lavenderMist
@@ -116,7 +117,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
 
             // 체중 (필수)
             GrowthNumberInput(
-              label: '체중',
+              label: S.of(context)!.growthWeight,
               icon: LuluIcons.weight,
               unit: 'kg',
               value: _weight,
@@ -136,7 +137,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
 
             // 신장 (선택)
             GrowthNumberInput(
-              label: '신장',
+              label: S.of(context)!.growthLength,
               icon: LuluIcons.ruler,
               unit: 'cm',
               value: _length,
@@ -156,7 +157,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
 
             // 두위 (선택)
             GrowthNumberInput(
-              label: '두위',
+              label: S.of(context)!.growthHeadCircumference,
               icon: LuluIcons.head,
               unit: 'cm',
               value: _headCircumference,
@@ -194,7 +195,8 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
   }
 
   Widget _buildDateSelector() {
-    final formatter = DateFormat('yyyy년 M월 d일', 'ko_KR');
+    final locale = Localizations.localeOf(context).toString();
+    final formatter = DateFormat.yMMMd(locale);
     final isToday = DateUtils.isSameDay(_measuredAt, DateTime.now());
 
     return Container(
@@ -212,13 +214,13 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '측정일',
+                  S.of(context)!.growthMeasuredDateLabel,
                   style: LuluTextStyles.caption.copyWith(
                     color: LuluTextColors.secondary,
                   ),
                 ),
                 Text(
-                  '${formatter.format(_measuredAt)}${isToday ? ' (오늘)' : ''}',
+                  '${formatter.format(_measuredAt)}${isToday ? ' (${S.of(context)!.today})' : ''}',
                   style: LuluTextStyles.bodyLarge.copyWith(
                     color: LuluTextColors.primary,
                     fontWeight: FontWeight.w600,
@@ -230,7 +232,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
           TextButton(
             onPressed: _selectDate,
             child: Text(
-              '변경',
+              S.of(context)!.buttonChange,
               style: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluColors.lavenderMist,
               ),
@@ -256,7 +258,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
               Icon(LuluIcons.memo, size: 18, color: LuluColors.lavenderMist),
               const SizedBox(width: LuluSpacing.sm),
               Text(
-                '메모',
+                S.of(context)!.labelNotes,
                 style: LuluTextStyles.bodyLarge.copyWith(
                   color: LuluTextColors.primary,
                   fontWeight: FontWeight.w600,
@@ -264,7 +266,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
               ),
               const Spacer(),
               Text(
-                '선택',
+                S.of(context)!.labelOptional,
                 style: LuluTextStyles.caption.copyWith(
                   color: LuluTextColors.tertiary,
                 ),
@@ -278,7 +280,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '소아과 정기검진, 예방접종 등',
+              hintText: S.of(context)!.growthNoteHint,
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -336,7 +338,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
           const SizedBox(width: LuluSpacing.sm),
           Expanded(
             child: Text(
-              '소아과 정기검진 후 기록하면 정확해요',
+              S.of(context)!.growthTipCheckup,
               style: LuluTextStyles.caption.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -390,6 +392,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       _weight,
       widget.previousMeasurement!.weightKg,
       daysDiff,
+      l10n: S.of(context)!,
     );
 
     setState(() => _warningMessage = warning);
@@ -422,7 +425,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
                 const Icon(LuluIcons.checkCircle, size: 16, color: Colors.white),
                 const SizedBox(width: 8),
                 Text(
-                  '성장 기록이 저장되었어요',
+                  S.of(context)!.successGrowthRecordSaved,
                   style: LuluTextStyles.bodyMedium.copyWith(
                     color: Colors.white,
                   ),

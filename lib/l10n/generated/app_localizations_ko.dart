@@ -2083,4 +2083,468 @@ class SKo extends S {
 
   @override
   String get labelRecordTime => '기록 시간';
+
+  @override
+  String reportThisWeekCount(int count) {
+    return '이번 주 $count회';
+  }
+
+  @override
+  String get reportNightWakeups => '야간 기상';
+
+  @override
+  String get cryTypeHungryLabel => '배고픔';
+
+  @override
+  String get cryTypeTiredLabel => '졸림';
+
+  @override
+  String get cryTypeGasLabel => '가스';
+
+  @override
+  String get cryTypeDiscomfortLabel => '불편';
+
+  @override
+  String get diaperStatus => '기저귀 상태';
+
+  @override
+  String get diaperChangeTime => '기저귀 교체 시간';
+
+  @override
+  String get stoolColorOptional => '대변 색상 (선택)';
+
+  @override
+  String get stoolColorHelpText => '색상을 선택하면 건강 추적에 도움이 됩니다';
+
+  @override
+  String get stoolColorWarning =>
+      '이 색상은 의료 상담이 필요할 수 있습니다.\n지속되면 소아과 방문을 권장합니다.';
+
+  @override
+  String get diaperNotesHint => '색상, 양, 특이사항 등';
+
+  @override
+  String get orDetailedEntry => '또는 상세 입력';
+
+  @override
+  String get playActivityType => '활동 유형';
+
+  @override
+  String get playTummyTimeRecommendation => '교정연령 기준 권장: 하루 3-5분씩 여러 번';
+
+  @override
+  String get playDurationOptional => '활동 시간 (선택)';
+
+  @override
+  String get playDirectInput => '직접 입력';
+
+  @override
+  String get playNotesHint => '아기의 반응, 특이사항 등';
+
+  @override
+  String get playTimeLabel => '놀이 시간';
+
+  @override
+  String get unitMinute => '분';
+
+  @override
+  String get cryTypeHungry => '배고파요';
+
+  @override
+  String get cryTypeTired => '졸려요';
+
+  @override
+  String get cryTypeDiscomfort => '불편해요';
+
+  @override
+  String get cryTypeGas => '배가 아파요';
+
+  @override
+  String get cryTypeBurp => '트림이 필요해요';
+
+  @override
+  String get cryTypeUnknown => '분석 중...';
+
+  @override
+  String get cryDescHungry => '아기가 배고플 때 내는 울음이에요.\n입을 벌리거나 손을 빠는 행동과 함께 나타나요.';
+
+  @override
+  String get cryDescTired =>
+      '아기가 졸리고 피곤할 때 내는 울음이에요.\n하품을 하거나 눈을 비비는 신호와 함께 나타나요.';
+
+  @override
+  String get cryDescDiscomfort =>
+      '아기가 신체적으로 불편할 때 내는 울음이에요.\n기저귀가 젖었거나, 덥거나 추울 수 있어요.';
+
+  @override
+  String get cryDescGas => '아기 배에 가스가 찼을 때 내는 울음이에요.\n다리를 배 쪽으로 끌어당기는 동작을 해요.';
+
+  @override
+  String get cryDescBurp => '아기가 트림을 하고 싶을 때 내는 울음이에요.\n수유 후에 자주 나타나요.';
+
+  @override
+  String get cryDescUnknown => '울음 패턴을 분석 중이에요.\n좀 더 명확한 울음 소리가 필요해요.';
+
+  @override
+  String get cryActionHungry => '수유를 시작해보세요';
+
+  @override
+  String get cryActionTired => '재우기를 시도해보세요';
+
+  @override
+  String get cryActionDiscomfort => '기저귀와 옷을 확인해보세요';
+
+  @override
+  String get cryActionGas => '배를 부드럽게 마사지해보세요';
+
+  @override
+  String get cryActionBurp => '등을 토닥이며 트림시켜주세요';
+
+  @override
+  String get cryActionUnknown => '다시 분석해보세요';
+
+  @override
+  String crySoundLabel(String code) {
+    return '$code 사운드';
+  }
+
+  @override
+  String get errorSelectBaby => '아기를 선택해주세요';
+
+  @override
+  String get growthMeasuredDateLabel => '측정일';
+
+  @override
+  String get buttonChange => '변경';
+
+  @override
+  String get labelOptional => '선택';
+
+  @override
+  String get growthNoteHint => '소아과 정기검진, 예방접종 등';
+
+  @override
+  String get successGrowthRecordSaved => '성장 기록이 저장되었어요';
+
+  @override
+  String get growthTipCheckup => '소아과 정기검진 후 기록하면 정확해요';
+
+  @override
+  String sweetSpotEstimateMinutes(int count) {
+    return '약 $count분 후';
+  }
+
+  @override
+  String sweetSpotEstimateHours(int count) {
+    return '약 $count시간 후';
+  }
+
+  @override
+  String sweetSpotEstimateHoursMinutes(int hours, int minutes) {
+    return '약 $hours시간 $minutes분 후';
+  }
+
+  @override
+  String get sleepEndConfirmTitle => '수면을 종료할까요?';
+
+  @override
+  String get buttonEnd => '종료';
+
+  @override
+  String growthChartTitleWithName(String name) {
+    return '$name 성장 차트';
+  }
+
+  @override
+  String get growthChartWhoTransition => 'WHO 차트 전환 예정';
+
+  @override
+  String growthCurrentMetric(String metric) {
+    return '현재 $metric';
+  }
+
+  @override
+  String get growthPercentile => '백분위';
+
+  @override
+  String get growthNeedMeasurement => '측정 필요';
+
+  @override
+  String get errorEnterWeight => '체중을 입력해주세요';
+
+  @override
+  String get errorWeightTooLow => '체중이 너무 작습니다 (최소 0.3kg)';
+
+  @override
+  String get errorWeightTooHigh => '체중이 너무 큽니다 (최대 30kg)';
+
+  @override
+  String get errorLengthTooLow => '신장이 너무 작습니다 (최소 20cm)';
+
+  @override
+  String get errorLengthTooHigh => '신장이 너무 큽니다 (최대 120cm)';
+
+  @override
+  String get errorHeadCircTooLow => '두위가 너무 작습니다 (최소 15cm)';
+
+  @override
+  String get errorHeadCircTooHigh => '두위가 너무 큽니다 (최대 60cm)';
+
+  @override
+  String get errorSelectMeasuredDate => '측정일을 선택해주세요';
+
+  @override
+  String get errorMeasuredDateAfterBirth => '측정일은 출생일 이후여야 합니다';
+
+  @override
+  String get errorFutureDate => '미래 날짜는 선택할 수 없습니다';
+
+  @override
+  String get warningRapidWeightChange => '급격한 변화가 감지되었어요. 입력값을 확인해주세요.';
+
+  @override
+  String get warningRapidLengthChange => '급격한 신장 변화가 감지되었어요. 입력값을 확인해주세요.';
+
+  @override
+  String get togetherViewNeedMultipleBabies => '아기 2명 이상일 때 함께 보기가 가능해요';
+
+  @override
+  String get sleepPattern => '수면 패턴';
+
+  @override
+  String napRatioPercent(int percent) {
+    return '낮잠 $percent%';
+  }
+
+  @override
+  String nightRatioPercent(int percent) {
+    return '밤잠 $percent%';
+  }
+
+  @override
+  String get insightNapRatioHigh => '낮잠 비율이 높아요';
+
+  @override
+  String get insightNightRatioHigh => '밤잠 비율이 높아요';
+
+  @override
+  String insightPatternDifference(
+    String baby1,
+    String insight1,
+    String baby2,
+    String insight2,
+  ) {
+    return '$baby1은 $insight1,\n$baby2이는 $insight2\n(패턴이 달라요)';
+  }
+
+  @override
+  String get errorRetryLater => '잠시 후 다시 시도해주세요';
+
+  @override
+  String get errorNetworkCheck => '인터넷 연결을 확인해주세요';
+
+  @override
+  String get errorConnectionSlow => '연결이 느려요. 다시 시도할까요?';
+
+  @override
+  String get errorDataLoadFailed => '데이터를 불러오지 못했어요';
+
+  @override
+  String get percentileMeasureNeeded => '측정 필요';
+
+  @override
+  String get percentileBelow3 => '3% 미만';
+
+  @override
+  String get percentileAbove97 => '97% 초과';
+
+  @override
+  String get percentileGrowingWell => '잘 자라고 있어요';
+
+  @override
+  String get percentileWatchNeeded => '지켜봐 주세요';
+
+  @override
+  String get percentileDoctorConsult => '소아과 상담을 고려해주세요';
+
+  @override
+  String get percentileMeasurementNeeded => '측정이 필요해요';
+
+  @override
+  String get multipleBirthTipTitle => '다둥이 기록 팁';
+
+  @override
+  String get multipleBirthTipSubtitle => '더 쉽게 기록할 수 있어요';
+
+  @override
+  String get multipleBirthTipQuickSwitchTitle => '탭으로 빠른 전환';
+
+  @override
+  String get multipleBirthTipQuickSwitchDesc =>
+      '상단 탭을 눌러 아기별 기록을\n빠르게 확인하고 전환해요 (1초 이내!)';
+
+  @override
+  String get multipleBirthTipIndividualStatsTitle => '개별 통계';
+
+  @override
+  String get multipleBirthTipIndividualStatsDesc =>
+      '각 아기의 수유, 수면, 기저귀 패턴을\n개별로 분석해드려요';
+
+  @override
+  String get multipleBirthTipIndividualAlertTitle => '개별 알림';
+
+  @override
+  String get multipleBirthTipIndividualAlertDesc =>
+      '각 아기 맞춤 수유/수면 시간을\n따로 알려드려요';
+
+  @override
+  String get multipleBirthTipColorCodeTitle => '색상으로 구분';
+
+  @override
+  String get multipleBirthTipColorCodeDesc => '각 아기만의 색상으로\n한눈에 구분할 수 있어요';
+
+  @override
+  String get pieChartAccessibilityPrefix => '비율 차트.';
+
+  @override
+  String pieChartAccessibilitySection(String label, int percent) {
+    return '$label $percent퍼센트';
+  }
+
+  @override
+  String offlineModeLastSync(String time) {
+    return '오프라인 모드 - 마지막 동기화: $time';
+  }
+
+  @override
+  String get timeUnknown => '알 수 없음';
+
+  @override
+  String get statisticsEmptyStartHint => '첫 기록을 시작해보세요!';
+
+  @override
+  String get statisticsStartRecording => '기록 시작하기';
+
+  @override
+  String get onboardingCompletionTitle => '준비 완료!';
+
+  @override
+  String onboardingCompletionPreterm(String names) {
+    return '$names의 교정연령에 맞춰\n발달을 꼼꼼히 기록해드릴게요';
+  }
+
+  @override
+  String onboardingCompletionSGA(String names) {
+    return '$names의 성장을 세심하게\n추적해드릴게요';
+  }
+
+  @override
+  String onboardingCompletionReady(String names) {
+    return '$names의 육아 기록을\n시작할 준비가 되었어요';
+  }
+
+  @override
+  String onboardingCompletionError(String error) {
+    return '오류가 발생했습니다: $error';
+  }
+
+  @override
+  String gestationalWeeksShort(int weeks) {
+    return '$weeks주';
+  }
+
+  @override
+  String get growthTracking => '성장 추적';
+
+  @override
+  String ageInfoDays(int count) {
+    return '$count일';
+  }
+
+  @override
+  String ageInfoMonths(int count) {
+    return '$count개월';
+  }
+
+  @override
+  String ageInfoYears(int count) {
+    return '$count살';
+  }
+
+  @override
+  String ageInfoYearsMonths(int years, int months) {
+    return '$years살 $months개월';
+  }
+
+  @override
+  String get feedingContentBreastMilkSub => '(직접/유축)';
+
+  @override
+  String get feedingMethodExpressedBottle => '유축 젖병';
+
+  @override
+  String get solidFoodUnitGram => 'g';
+
+  @override
+  String get solidFoodUnitSpoon => '숟가락';
+
+  @override
+  String get solidFoodUnitBowl => '그릇';
+
+  @override
+  String get zygosityIdentical => '일란성';
+
+  @override
+  String get zygosityFraternal => '이란성';
+
+  @override
+  String get zygosityUnknown => '모름';
+
+  @override
+  String get authEmailLoginTitle => '이메일 로그인';
+
+  @override
+  String get authSignupTitle => '회원가입';
+
+  @override
+  String get authEmailLabel => '이메일';
+
+  @override
+  String get authPasswordLabel => '비밀번호';
+
+  @override
+  String get authEmailRequired => '이메일을 입력해주세요';
+
+  @override
+  String get authEmailInvalid => '유효한 이메일 주소를 입력해주세요';
+
+  @override
+  String get authPasswordRequired => '비밀번호를 입력해주세요';
+
+  @override
+  String get authPasswordMinLength => '비밀번호는 최소 6자 이상이어야 합니다';
+
+  @override
+  String get authNicknameLabel => '닉네임 (선택)';
+
+  @override
+  String get authSignupButton => '회원가입';
+
+  @override
+  String get authLoginButton => '로그인';
+
+  @override
+  String get authToggleToLogin => '이미 계정이 있으신가요? 로그인';
+
+  @override
+  String get authToggleToSignup => '계정이 없으신가요? 회원가입';
+
+  @override
+  String get authForgotPassword => '비밀번호를 잊으셨나요?';
+
+  @override
+  String get authPasswordResetSent => '비밀번호 재설정 이메일을 발송했습니다';
+
+  @override
+  String get authPasswordResetFailed => '이메일 발송에 실패했습니다';
 }

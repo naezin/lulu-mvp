@@ -2113,4 +2113,480 @@ class SEn extends S {
 
   @override
   String get labelRecordTime => 'Record Time';
+
+  @override
+  String reportThisWeekCount(int count) {
+    return 'This week ${count}x';
+  }
+
+  @override
+  String get reportNightWakeups => 'Night wakeups';
+
+  @override
+  String get cryTypeHungryLabel => 'Hungry';
+
+  @override
+  String get cryTypeTiredLabel => 'Tired';
+
+  @override
+  String get cryTypeGasLabel => 'Gas';
+
+  @override
+  String get cryTypeDiscomfortLabel => 'Discomfort';
+
+  @override
+  String get diaperStatus => 'Diaper Status';
+
+  @override
+  String get diaperChangeTime => 'Diaper Change Time';
+
+  @override
+  String get stoolColorOptional => 'Stool Color (optional)';
+
+  @override
+  String get stoolColorHelpText =>
+      'Selecting a color helps with health tracking';
+
+  @override
+  String get stoolColorWarning =>
+      'This color may require medical consultation.\nIf it persists, we recommend visiting a pediatrician.';
+
+  @override
+  String get diaperNotesHint => 'Color, amount, unusual notes, etc.';
+
+  @override
+  String get orDetailedEntry => 'or enter details';
+
+  @override
+  String get playActivityType => 'Activity Type';
+
+  @override
+  String get playTummyTimeRecommendation =>
+      'Recommended: 3-5 min sessions, several times a day';
+
+  @override
+  String get playDurationOptional => 'Duration (optional)';
+
+  @override
+  String get playDirectInput => 'Enter manually';
+
+  @override
+  String get playNotesHint => 'Baby\'s reactions, notes, etc.';
+
+  @override
+  String get playTimeLabel => 'Play Time';
+
+  @override
+  String get unitMinute => 'min';
+
+  @override
+  String get cryTypeHungry => 'Hungry';
+
+  @override
+  String get cryTypeTired => 'Tired';
+
+  @override
+  String get cryTypeDiscomfort => 'Uncomfortable';
+
+  @override
+  String get cryTypeGas => 'Gas / Colic';
+
+  @override
+  String get cryTypeBurp => 'Needs Burping';
+
+  @override
+  String get cryTypeUnknown => 'Analyzing...';
+
+  @override
+  String get cryDescHungry =>
+      'Baby cries from hunger.\nOften accompanied by opening mouth or sucking on hands.';
+
+  @override
+  String get cryDescTired =>
+      'Baby cries from being tired.\nOften accompanied by yawning or rubbing eyes.';
+
+  @override
+  String get cryDescDiscomfort =>
+      'Baby cries from physical discomfort.\nMay need a diaper change, or feel too hot or cold.';
+
+  @override
+  String get cryDescGas =>
+      'Baby cries from gas in the tummy.\nOften pulls legs toward the belly.';
+
+  @override
+  String get cryDescBurp =>
+      'Baby cries when needing to burp.\nCommon after feeding.';
+
+  @override
+  String get cryDescUnknown =>
+      'Analyzing the cry pattern.\nA clearer cry sound is needed.';
+
+  @override
+  String get cryActionHungry => 'Try starting a feeding';
+
+  @override
+  String get cryActionTired => 'Try putting baby to sleep';
+
+  @override
+  String get cryActionDiscomfort => 'Check diaper and clothing';
+
+  @override
+  String get cryActionGas => 'Gently massage baby\'s tummy';
+
+  @override
+  String get cryActionBurp => 'Pat baby\'s back to help burp';
+
+  @override
+  String get cryActionUnknown => 'Try analyzing again';
+
+  @override
+  String crySoundLabel(String code) {
+    return '$code sound';
+  }
+
+  @override
+  String get errorSelectBaby => 'Please select a baby';
+
+  @override
+  String get growthMeasuredDateLabel => 'Measured Date';
+
+  @override
+  String get buttonChange => 'Change';
+
+  @override
+  String get labelOptional => 'Optional';
+
+  @override
+  String get growthNoteHint => 'Checkup, vaccination, etc.';
+
+  @override
+  String get successGrowthRecordSaved => 'Growth record saved';
+
+  @override
+  String get growthTipCheckup =>
+      'Recording after pediatric checkups is more accurate';
+
+  @override
+  String sweetSpotEstimateMinutes(int count) {
+    return 'In about $count min';
+  }
+
+  @override
+  String sweetSpotEstimateHours(int count) {
+    return 'In about $count hr';
+  }
+
+  @override
+  String sweetSpotEstimateHoursMinutes(int hours, int minutes) {
+    return 'In about $hours hr $minutes min';
+  }
+
+  @override
+  String get sleepEndConfirmTitle => 'End sleep?';
+
+  @override
+  String get buttonEnd => 'End';
+
+  @override
+  String growthChartTitleWithName(String name) {
+    return '$name Growth Chart';
+  }
+
+  @override
+  String get growthChartWhoTransition => 'WHO chart transition upcoming';
+
+  @override
+  String growthCurrentMetric(String metric) {
+    return 'Current $metric';
+  }
+
+  @override
+  String get growthPercentile => 'Percentile';
+
+  @override
+  String get growthNeedMeasurement => 'Needs measurement';
+
+  @override
+  String get errorEnterWeight => 'Please enter weight';
+
+  @override
+  String get errorWeightTooLow => 'Weight too low (min 0.3kg)';
+
+  @override
+  String get errorWeightTooHigh => 'Weight too high (max 30kg)';
+
+  @override
+  String get errorLengthTooLow => 'Height too short (min 20cm)';
+
+  @override
+  String get errorLengthTooHigh => 'Height too tall (max 120cm)';
+
+  @override
+  String get errorHeadCircTooLow => 'Head circumference too small (min 15cm)';
+
+  @override
+  String get errorHeadCircTooHigh => 'Head circumference too large (max 60cm)';
+
+  @override
+  String get errorSelectMeasuredDate => 'Please select measurement date';
+
+  @override
+  String get errorMeasuredDateAfterBirth =>
+      'Measurement date must be after birth date';
+
+  @override
+  String get errorFutureDate => 'Cannot select a future date';
+
+  @override
+  String get warningRapidWeightChange =>
+      'Rapid change detected. Please verify the value.';
+
+  @override
+  String get warningRapidLengthChange =>
+      'Rapid height change detected. Please verify the value.';
+
+  @override
+  String get togetherViewNeedMultipleBabies =>
+      'Together view is available with 2 or more babies';
+
+  @override
+  String get sleepPattern => 'Sleep Pattern';
+
+  @override
+  String napRatioPercent(int percent) {
+    return 'Nap $percent%';
+  }
+
+  @override
+  String nightRatioPercent(int percent) {
+    return 'Night $percent%';
+  }
+
+  @override
+  String get insightNapRatioHigh => 'Nap ratio is high';
+
+  @override
+  String get insightNightRatioHigh => 'Night ratio is high';
+
+  @override
+  String insightPatternDifference(
+    String baby1,
+    String insight1,
+    String baby2,
+    String insight2,
+  ) {
+    return '$baby1: $insight1,\n$baby2: $insight2\n(Patterns are different)';
+  }
+
+  @override
+  String get errorRetryLater => 'Please try again later';
+
+  @override
+  String get errorNetworkCheck => 'Please check your internet connection';
+
+  @override
+  String get errorConnectionSlow => 'Connection is slow. Try again?';
+
+  @override
+  String get errorDataLoadFailed => 'Failed to load data';
+
+  @override
+  String get percentileMeasureNeeded => 'Measurement needed';
+
+  @override
+  String get percentileBelow3 => 'Below 3%';
+
+  @override
+  String get percentileAbove97 => 'Above 97%';
+
+  @override
+  String get percentileGrowingWell => 'Growing well';
+
+  @override
+  String get percentileWatchNeeded => 'Keep an eye on it';
+
+  @override
+  String get percentileDoctorConsult => 'Consider consulting a pediatrician';
+
+  @override
+  String get percentileMeasurementNeeded => 'Measurement is needed';
+
+  @override
+  String get multipleBirthTipTitle => 'Tips for Recording Multiples';
+
+  @override
+  String get multipleBirthTipSubtitle => 'Easier recording tips';
+
+  @override
+  String get multipleBirthTipQuickSwitchTitle => 'Quick Tab Switch';
+
+  @override
+  String get multipleBirthTipQuickSwitchDesc =>
+      'Tap the top tabs to quickly view\nand switch between each baby\'s records (under 1 second!)';
+
+  @override
+  String get multipleBirthTipIndividualStatsTitle => 'Individual Statistics';
+
+  @override
+  String get multipleBirthTipIndividualStatsDesc =>
+      'We analyze each baby\'s feeding, sleep,\nand diaper patterns individually';
+
+  @override
+  String get multipleBirthTipIndividualAlertTitle => 'Individual Alerts';
+
+  @override
+  String get multipleBirthTipIndividualAlertDesc =>
+      'We\'ll notify you of each baby\'s\nfeeding/sleep times separately';
+
+  @override
+  String get multipleBirthTipColorCodeTitle => 'Color Coded';
+
+  @override
+  String get multipleBirthTipColorCodeDesc =>
+      'Each baby has their own color\nfor easy identification';
+
+  @override
+  String get pieChartAccessibilityPrefix => 'Ratio chart.';
+
+  @override
+  String pieChartAccessibilitySection(String label, int percent) {
+    return '$label $percent percent';
+  }
+
+  @override
+  String offlineModeLastSync(String time) {
+    return 'Offline mode - Last sync: $time';
+  }
+
+  @override
+  String get timeUnknown => 'Unknown';
+
+  @override
+  String get statisticsEmptyStartHint => 'Start your first record!';
+
+  @override
+  String get statisticsStartRecording => 'Start Recording';
+
+  @override
+  String get onboardingCompletionTitle => 'All Set!';
+
+  @override
+  String onboardingCompletionPreterm(String names) {
+    return 'We\'ll carefully track\n$names\'s development by corrected age';
+  }
+
+  @override
+  String onboardingCompletionSGA(String names) {
+    return 'We\'ll carefully track\n$names\'s growth';
+  }
+
+  @override
+  String onboardingCompletionReady(String names) {
+    return 'Ready to start\nrecording $names\'s care';
+  }
+
+  @override
+  String onboardingCompletionError(String error) {
+    return 'An error occurred: $error';
+  }
+
+  @override
+  String gestationalWeeksShort(int weeks) {
+    return '${weeks}wk';
+  }
+
+  @override
+  String get growthTracking => 'Growth Tracking';
+
+  @override
+  String ageInfoDays(int count) {
+    return '${count}d';
+  }
+
+  @override
+  String ageInfoMonths(int count) {
+    return '${count}mo';
+  }
+
+  @override
+  String ageInfoYears(int count) {
+    return '${count}yr';
+  }
+
+  @override
+  String ageInfoYearsMonths(int years, int months) {
+    return '${years}yr ${months}mo';
+  }
+
+  @override
+  String get feedingContentBreastMilkSub => '(Direct/Expressed)';
+
+  @override
+  String get feedingMethodExpressedBottle => 'Expressed Bottle';
+
+  @override
+  String get solidFoodUnitGram => 'g';
+
+  @override
+  String get solidFoodUnitSpoon => 'spoon';
+
+  @override
+  String get solidFoodUnitBowl => 'bowl';
+
+  @override
+  String get zygosityIdentical => 'Identical';
+
+  @override
+  String get zygosityFraternal => 'Fraternal';
+
+  @override
+  String get zygosityUnknown => 'Unknown';
+
+  @override
+  String get authEmailLoginTitle => 'Email Login';
+
+  @override
+  String get authSignupTitle => 'Sign Up';
+
+  @override
+  String get authEmailLabel => 'Email';
+
+  @override
+  String get authPasswordLabel => 'Password';
+
+  @override
+  String get authEmailRequired => 'Please enter your email';
+
+  @override
+  String get authEmailInvalid => 'Please enter a valid email address';
+
+  @override
+  String get authPasswordRequired => 'Please enter your password';
+
+  @override
+  String get authPasswordMinLength => 'Password must be at least 6 characters';
+
+  @override
+  String get authNicknameLabel => 'Nickname (Optional)';
+
+  @override
+  String get authSignupButton => 'Sign Up';
+
+  @override
+  String get authLoginButton => 'Log In';
+
+  @override
+  String get authToggleToLogin => 'Already have an account? Log In';
+
+  @override
+  String get authToggleToSignup => 'Don\'t have an account? Sign Up';
+
+  @override
+  String get authForgotPassword => 'Forgot your password?';
+
+  @override
+  String get authPasswordResetSent => 'Password reset email has been sent';
+
+  @override
+  String get authPasswordResetFailed => 'Failed to send email';
 }

@@ -5,6 +5,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../models/models.dart';
 
 /// 울음 분석 결과 카드
@@ -27,6 +28,7 @@ class CryResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cryType = result.cryType;
     final isUnknown = cryType == CryType.unknown;
+    final l10n = S.of(context);
 
     return Container(
       padding: LuluSpacing.cardPadding,
@@ -65,14 +67,14 @@ class CryResultCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cryType.label,
+                      cryType.localizedLabel(l10n),
                       style: LuluTextStyles.titleLarge.copyWith(
                         color: cryType.color,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${cryType.dunstanCode} 사운드',
+                      l10n?.crySoundLabel(cryType.dunstanCode) ?? '${cryType.dunstanCode} sound',
                       style: LuluTextStyles.caption.copyWith(
                         color: LuluTextColors.tertiary,
                       ),
@@ -90,7 +92,7 @@ class CryResultCard extends StatelessWidget {
 
           // 설명
           Text(
-            cryType.description,
+            cryType.localizedDescription(l10n),
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
               height: 1.5,
@@ -100,7 +102,7 @@ class CryResultCard extends StatelessWidget {
           // 권장 행동 (Unknown이 아닐 때만)
           if (!isUnknown) ...[
             const SizedBox(height: LuluSpacing.lg),
-            _buildSuggestedAction(),
+            _buildSuggestedAction(context),
           ],
         ],
       ),
@@ -150,8 +152,9 @@ class CryResultCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSuggestedAction() {
+  Widget _buildSuggestedAction(BuildContext context) {
     final cryType = result.cryType;
+    final l10n = S.of(context);
 
     return GestureDetector(
       onTap: onActionTap,
@@ -171,7 +174,7 @@ class CryResultCard extends StatelessWidget {
             const SizedBox(width: LuluSpacing.sm),
             Expanded(
               child: Text(
-                cryType.suggestedAction,
+                cryType.localizedSuggestedAction(l10n),
                 style: LuluTextStyles.bodyMedium.copyWith(
                   color: cryType.color,
                   fontWeight: FontWeight.w500,

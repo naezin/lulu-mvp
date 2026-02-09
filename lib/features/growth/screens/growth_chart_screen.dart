@@ -6,6 +6,7 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../data/fenton_data.dart';
 import '../data/growth_data_cache.dart';
 import '../providers/growth_provider.dart';
@@ -60,7 +61,9 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
               onPressed: () => Navigator.pop(context),
             ),
             title: Text(
-              '${provider.selectedBaby?.name ?? '아기'} 성장 차트',
+              S.of(context)!.growthChartTitleWithName(
+                provider.selectedBaby?.name ?? S.of(context)!.babyDefault,
+              ),
               style: LuluTextStyles.titleMedium.copyWith(
                 color: LuluTextColors.primary,
               ),
@@ -136,7 +139,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
               children: [
                 Icon(LuluIcons.weight, size: 14),
                 const SizedBox(width: 4),
-                const Text('체중'),
+                Text(S.of(context)!.growthWeight),
               ],
             ),
           ),
@@ -146,7 +149,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
               children: [
                 Icon(LuluIcons.ruler, size: 14),
                 const SizedBox(width: 4),
-                const Text('신장'),
+                Text(S.of(context)!.growthLength),
               ],
             ),
           ),
@@ -156,7 +159,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
               children: [
                 Icon(LuluIcons.head, size: 14),
                 const SizedBox(width: 4),
-                const Text('두위'),
+                Text(S.of(context)!.growthHeadCircumference),
               ],
             ),
           ),
@@ -192,8 +195,8 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
           _InfoChip(
             icon: LuluIcons.baby,
             label: provider.chartType == GrowthChartType.fenton
-                ? '${provider.correctedWeeks ?? 0}주'
-                : '${provider.correctedMonths}개월',
+                ? S.of(context)!.weekUnit(provider.correctedWeeks ?? 0)
+                : S.of(context)!.ageMonths(provider.correctedMonths),
           ),
 
           const Spacer(),
@@ -211,7 +214,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
                 borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Text(
-                'WHO 차트 전환 예정',
+                S.of(context)!.growthChartWhoTransition,
                 style: LuluTextStyles.caption.copyWith(
                   color: LuluColors.champagneGold,
                   fontSize: 10,
@@ -245,7 +248,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '현재 ${_selectedMetric.label}',
+                S.of(context)!.growthCurrentMetric(_metricLabel(context)),
                 style: LuluTextStyles.caption.copyWith(
                   color: LuluTextColors.secondary,
                 ),
@@ -282,7 +285,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
                     ),
                   ),
                   Text(
-                    '백분위',
+                    S.of(context)!.growthPercentile,
                     style: LuluTextStyles.caption.copyWith(
                       color: LuluTextColors.secondary,
                     ),
@@ -296,18 +299,28 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
   }
 
   String _getCurrentValue(GrowthProvider provider) {
+    final l10n = S.of(context)!;
     final measurement = provider.latestMeasurement;
-    if (measurement == null) return '측정 필요';
+    if (measurement == null) return l10n.growthNeedMeasurement;
 
     return switch (_selectedMetric) {
       GrowthMetric.weight =>
         '${measurement.weightKg.toStringAsFixed(2)} ${_selectedMetric.unit}',
       GrowthMetric.length => measurement.lengthCm != null
           ? '${measurement.lengthCm!.toStringAsFixed(1)} ${_selectedMetric.unit}'
-          : '미측정',
+          : l10n.notMeasured,
       GrowthMetric.headCircumference => measurement.headCircumferenceCm != null
           ? '${measurement.headCircumferenceCm!.toStringAsFixed(1)} ${_selectedMetric.unit}'
-          : '미측정',
+          : l10n.notMeasured,
+    };
+  }
+
+  String _metricLabel(BuildContext context) {
+    final l10n = S.of(context)!;
+    return switch (_selectedMetric) {
+      GrowthMetric.weight => l10n.growthWeight,
+      GrowthMetric.length => l10n.growthLength,
+      GrowthMetric.headCircumference => l10n.growthHeadCircumference,
     };
   }
 

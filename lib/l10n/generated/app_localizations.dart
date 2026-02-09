@@ -3911,6 +3911,833 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'기록 시간'**
   String get labelRecordTime;
+
+  /// 리포트 카드 - 이번 주 횟수
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 {count}회'**
+  String reportThisWeekCount(int count);
+
+  /// 리포트 카드 - 야간 기상 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'야간 기상'**
+  String get reportNightWakeups;
+
+  /// 울음 타입 - 배고픔 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'배고픔'**
+  String get cryTypeHungryLabel;
+
+  /// 울음 타입 - 졸림 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'졸림'**
+  String get cryTypeTiredLabel;
+
+  /// 울음 타입 - 가스 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'가스'**
+  String get cryTypeGasLabel;
+
+  /// 울음 타입 - 불편 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'불편'**
+  String get cryTypeDiscomfortLabel;
+
+  /// 기저귀 기록 - 상태 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀 상태'**
+  String get diaperStatus;
+
+  /// 기저귀 기록 - 교체 시간 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀 교체 시간'**
+  String get diaperChangeTime;
+
+  /// 기저귀 기록 - 대변 색상 선택적 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'대변 색상 (선택)'**
+  String get stoolColorOptional;
+
+  /// 기저귀 기록 - 대변 색상 도움말
+  ///
+  /// In ko, this message translates to:
+  /// **'색상을 선택하면 건강 추적에 도움이 됩니다'**
+  String get stoolColorHelpText;
+
+  /// 기저귀 기록 - 위험 대변 색상 경고
+  ///
+  /// In ko, this message translates to:
+  /// **'이 색상은 의료 상담이 필요할 수 있습니다.\n지속되면 소아과 방문을 권장합니다.'**
+  String get stoolColorWarning;
+
+  /// 기저귀 기록 - 메모 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'색상, 양, 특이사항 등'**
+  String get diaperNotesHint;
+
+  /// 빠른 기록과 상세 입력 사이 구분 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'또는 상세 입력'**
+  String get orDetailedEntry;
+
+  /// 놀이 기록 - 활동 유형 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'활동 유형'**
+  String get playActivityType;
+
+  /// 놀이 기록 - 터미타임 권장 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 기준 권장: 하루 3-5분씩 여러 번'**
+  String get playTummyTimeRecommendation;
+
+  /// 놀이 기록 - 활동 시간 선택적 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'활동 시간 (선택)'**
+  String get playDurationOptional;
+
+  /// 놀이 기록 - 직접 입력 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'직접 입력'**
+  String get playDirectInput;
+
+  /// 놀이 기록 - 메모 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'아기의 반응, 특이사항 등'**
+  String get playNotesHint;
+
+  /// 놀이 기록 - 시간 선택 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이 시간'**
+  String get playTimeLabel;
+
+  /// 단위 - 분 (단일)
+  ///
+  /// In ko, this message translates to:
+  /// **'분'**
+  String get unitMinute;
+
+  /// 울음 타입 - 배고픔 (상세)
+  ///
+  /// In ko, this message translates to:
+  /// **'배고파요'**
+  String get cryTypeHungry;
+
+  /// 울음 타입 - 졸림 (상세)
+  ///
+  /// In ko, this message translates to:
+  /// **'졸려요'**
+  String get cryTypeTired;
+
+  /// 울음 타입 - 불편함 (상세)
+  ///
+  /// In ko, this message translates to:
+  /// **'불편해요'**
+  String get cryTypeDiscomfort;
+
+  /// 울음 타입 - 가스/복통 (상세)
+  ///
+  /// In ko, this message translates to:
+  /// **'배가 아파요'**
+  String get cryTypeGas;
+
+  /// 울음 타입 - 트림 (상세)
+  ///
+  /// In ko, this message translates to:
+  /// **'트림이 필요해요'**
+  String get cryTypeBurp;
+
+  /// 울음 타입 - 분류 불가
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 중...'**
+  String get cryTypeUnknown;
+
+  /// 울음 설명 - 배고픔
+  ///
+  /// In ko, this message translates to:
+  /// **'아기가 배고플 때 내는 울음이에요.\n입을 벌리거나 손을 빠는 행동과 함께 나타나요.'**
+  String get cryDescHungry;
+
+  /// 울음 설명 - 졸림
+  ///
+  /// In ko, this message translates to:
+  /// **'아기가 졸리고 피곤할 때 내는 울음이에요.\n하품을 하거나 눈을 비비는 신호와 함께 나타나요.'**
+  String get cryDescTired;
+
+  /// 울음 설명 - 불편함
+  ///
+  /// In ko, this message translates to:
+  /// **'아기가 신체적으로 불편할 때 내는 울음이에요.\n기저귀가 젖었거나, 덥거나 추울 수 있어요.'**
+  String get cryDescDiscomfort;
+
+  /// 울음 설명 - 가스
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 배에 가스가 찼을 때 내는 울음이에요.\n다리를 배 쪽으로 끌어당기는 동작을 해요.'**
+  String get cryDescGas;
+
+  /// 울음 설명 - 트림
+  ///
+  /// In ko, this message translates to:
+  /// **'아기가 트림을 하고 싶을 때 내는 울음이에요.\n수유 후에 자주 나타나요.'**
+  String get cryDescBurp;
+
+  /// 울음 설명 - 분류 불가
+  ///
+  /// In ko, this message translates to:
+  /// **'울음 패턴을 분석 중이에요.\n좀 더 명확한 울음 소리가 필요해요.'**
+  String get cryDescUnknown;
+
+  /// 울음 권장 행동 - 배고픔
+  ///
+  /// In ko, this message translates to:
+  /// **'수유를 시작해보세요'**
+  String get cryActionHungry;
+
+  /// 울음 권장 행동 - 졸림
+  ///
+  /// In ko, this message translates to:
+  /// **'재우기를 시도해보세요'**
+  String get cryActionTired;
+
+  /// 울음 권장 행동 - 불편함
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀와 옷을 확인해보세요'**
+  String get cryActionDiscomfort;
+
+  /// 울음 권장 행동 - 가스
+  ///
+  /// In ko, this message translates to:
+  /// **'배를 부드럽게 마사지해보세요'**
+  String get cryActionGas;
+
+  /// 울음 권장 행동 - 트림
+  ///
+  /// In ko, this message translates to:
+  /// **'등을 토닥이며 트림시켜주세요'**
+  String get cryActionBurp;
+
+  /// 울음 권장 행동 - 분류 불가
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 분석해보세요'**
+  String get cryActionUnknown;
+
+  /// 울음 분석 - Dunstan 사운드 코드 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'{code} 사운드'**
+  String crySoundLabel(String code);
+
+  /// 에러 - 아기 선택 필요
+  ///
+  /// In ko, this message translates to:
+  /// **'아기를 선택해주세요'**
+  String get errorSelectBaby;
+
+  /// 성장 기록 - 측정일 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'측정일'**
+  String get growthMeasuredDateLabel;
+
+  /// 버튼 - 변경
+  ///
+  /// In ko, this message translates to:
+  /// **'변경'**
+  String get buttonChange;
+
+  /// 라벨 - 선택 (필수가 아닌 항목)
+  ///
+  /// In ko, this message translates to:
+  /// **'선택'**
+  String get labelOptional;
+
+  /// 성장 기록 - 메모 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'소아과 정기검진, 예방접종 등'**
+  String get growthNoteHint;
+
+  /// 성공 - 성장 기록 저장됨
+  ///
+  /// In ko, this message translates to:
+  /// **'성장 기록이 저장되었어요'**
+  String get successGrowthRecordSaved;
+
+  /// 성장 기록 - 팁
+  ///
+  /// In ko, this message translates to:
+  /// **'소아과 정기검진 후 기록하면 정확해요'**
+  String get growthTipCheckup;
+
+  /// Sweet Spot 예상 시간 - 분 단위
+  ///
+  /// In ko, this message translates to:
+  /// **'약 {count}분 후'**
+  String sweetSpotEstimateMinutes(int count);
+
+  /// Sweet Spot 예상 시간 - 시간 단위
+  ///
+  /// In ko, this message translates to:
+  /// **'약 {count}시간 후'**
+  String sweetSpotEstimateHours(int count);
+
+  /// Sweet Spot 예상 시간 - 시간+분 단위
+  ///
+  /// In ko, this message translates to:
+  /// **'약 {hours}시간 {minutes}분 후'**
+  String sweetSpotEstimateHoursMinutes(int hours, int minutes);
+
+  /// 수면 종료 확인 다이얼로그 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'수면을 종료할까요?'**
+  String get sleepEndConfirmTitle;
+
+  /// 버튼 - 종료
+  ///
+  /// In ko, this message translates to:
+  /// **'종료'**
+  String get buttonEnd;
+
+  /// 성장 차트 화면 제목 (아기 이름 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'{name} 성장 차트'**
+  String growthChartTitleWithName(String name);
+
+  /// 성장 차트 - WHO 전환 예정 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'WHO 차트 전환 예정'**
+  String get growthChartWhoTransition;
+
+  /// 성장 차트 - 현재 측정 항목
+  ///
+  /// In ko, this message translates to:
+  /// **'현재 {metric}'**
+  String growthCurrentMetric(String metric);
+
+  /// 성장 차트 - 백분위 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'백분위'**
+  String get growthPercentile;
+
+  /// 성장 차트 - 측정 필요 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'측정 필요'**
+  String get growthNeedMeasurement;
+
+  /// 에러 - 체중 입력 필수
+  ///
+  /// In ko, this message translates to:
+  /// **'체중을 입력해주세요'**
+  String get errorEnterWeight;
+
+  /// 에러 - 체중 최소값 미달
+  ///
+  /// In ko, this message translates to:
+  /// **'체중이 너무 작습니다 (최소 0.3kg)'**
+  String get errorWeightTooLow;
+
+  /// 에러 - 체중 최대값 초과
+  ///
+  /// In ko, this message translates to:
+  /// **'체중이 너무 큽니다 (최대 30kg)'**
+  String get errorWeightTooHigh;
+
+  /// 에러 - 신장 최소값 미달
+  ///
+  /// In ko, this message translates to:
+  /// **'신장이 너무 작습니다 (최소 20cm)'**
+  String get errorLengthTooLow;
+
+  /// 에러 - 신장 최대값 초과
+  ///
+  /// In ko, this message translates to:
+  /// **'신장이 너무 큽니다 (최대 120cm)'**
+  String get errorLengthTooHigh;
+
+  /// 에러 - 두위 최소값 미달
+  ///
+  /// In ko, this message translates to:
+  /// **'두위가 너무 작습니다 (최소 15cm)'**
+  String get errorHeadCircTooLow;
+
+  /// 에러 - 두위 최대값 초과
+  ///
+  /// In ko, this message translates to:
+  /// **'두위가 너무 큽니다 (최대 60cm)'**
+  String get errorHeadCircTooHigh;
+
+  /// 에러 - 측정일 선택 필수
+  ///
+  /// In ko, this message translates to:
+  /// **'측정일을 선택해주세요'**
+  String get errorSelectMeasuredDate;
+
+  /// 에러 - 측정일이 출생일 이전
+  ///
+  /// In ko, this message translates to:
+  /// **'측정일은 출생일 이후여야 합니다'**
+  String get errorMeasuredDateAfterBirth;
+
+  /// 에러 - 미래 날짜 선택 불가
+  ///
+  /// In ko, this message translates to:
+  /// **'미래 날짜는 선택할 수 없습니다'**
+  String get errorFutureDate;
+
+  /// 경고 - 급격한 체중 변화
+  ///
+  /// In ko, this message translates to:
+  /// **'급격한 변화가 감지되었어요. 입력값을 확인해주세요.'**
+  String get warningRapidWeightChange;
+
+  /// 경고 - 급격한 신장 변화
+  ///
+  /// In ko, this message translates to:
+  /// **'급격한 신장 변화가 감지되었어요. 입력값을 확인해주세요.'**
+  String get warningRapidLengthChange;
+
+  /// 함께 보기 - 다태아 필요 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 2명 이상일 때 함께 보기가 가능해요'**
+  String get togetherViewNeedMultipleBabies;
+
+  /// 수면 패턴 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 패턴'**
+  String get sleepPattern;
+
+  /// 낮잠 비율 퍼센트
+  ///
+  /// In ko, this message translates to:
+  /// **'낮잠 {percent}%'**
+  String napRatioPercent(int percent);
+
+  /// 밤잠 비율 퍼센트
+  ///
+  /// In ko, this message translates to:
+  /// **'밤잠 {percent}%'**
+  String nightRatioPercent(int percent);
+
+  /// 인사이트 - 낮잠 비율 높음
+  ///
+  /// In ko, this message translates to:
+  /// **'낮잠 비율이 높아요'**
+  String get insightNapRatioHigh;
+
+  /// 인사이트 - 밤잠 비율 높음
+  ///
+  /// In ko, this message translates to:
+  /// **'밤잠 비율이 높아요'**
+  String get insightNightRatioHigh;
+
+  /// 인사이트 - 패턴 차이 안내 (비교 금지, 차이만 표현)
+  ///
+  /// In ko, this message translates to:
+  /// **'{baby1}은 {insight1},\n{baby2}이는 {insight2}\n(패턴이 달라요)'**
+  String insightPatternDifference(
+    String baby1,
+    String insight1,
+    String baby2,
+    String insight2,
+  );
+
+  /// 에러 - 재시도 한도 초과
+  ///
+  /// In ko, this message translates to:
+  /// **'잠시 후 다시 시도해주세요'**
+  String get errorRetryLater;
+
+  /// 에러 - 네트워크 연결 확인
+  ///
+  /// In ko, this message translates to:
+  /// **'인터넷 연결을 확인해주세요'**
+  String get errorNetworkCheck;
+
+  /// 에러 - 연결 타임아웃
+  ///
+  /// In ko, this message translates to:
+  /// **'연결이 느려요. 다시 시도할까요?'**
+  String get errorConnectionSlow;
+
+  /// 에러 - 데이터 로드 실패 (일반)
+  ///
+  /// In ko, this message translates to:
+  /// **'데이터를 불러오지 못했어요'**
+  String get errorDataLoadFailed;
+
+  /// 백분위 - 측정 필요 (짧은)
+  ///
+  /// In ko, this message translates to:
+  /// **'측정 필요'**
+  String get percentileMeasureNeeded;
+
+  /// 백분위 - 3% 미만
+  ///
+  /// In ko, this message translates to:
+  /// **'3% 미만'**
+  String get percentileBelow3;
+
+  /// 백분위 - 97% 초과
+  ///
+  /// In ko, this message translates to:
+  /// **'97% 초과'**
+  String get percentileAbove97;
+
+  /// 백분위 상태 - 정상 (Huckleberry 스타일)
+  ///
+  /// In ko, this message translates to:
+  /// **'잘 자라고 있어요'**
+  String get percentileGrowingWell;
+
+  /// 백분위 상태 - 관찰 (Huckleberry 스타일)
+  ///
+  /// In ko, this message translates to:
+  /// **'지켜봐 주세요'**
+  String get percentileWatchNeeded;
+
+  /// 백분위 상태 - 주의 (Huckleberry 스타일)
+  ///
+  /// In ko, this message translates to:
+  /// **'소아과 상담을 고려해주세요'**
+  String get percentileDoctorConsult;
+
+  /// 백분위 상태 - 측정 필요
+  ///
+  /// In ko, this message translates to:
+  /// **'측정이 필요해요'**
+  String get percentileMeasurementNeeded;
+
+  /// 온보딩 - 다둥이 팁 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'다둥이 기록 팁'**
+  String get multipleBirthTipTitle;
+
+  /// 온보딩 - 다둥이 팁 부제목
+  ///
+  /// In ko, this message translates to:
+  /// **'더 쉽게 기록할 수 있어요'**
+  String get multipleBirthTipSubtitle;
+
+  /// 다둥이 팁 - 빠른 전환 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'탭으로 빠른 전환'**
+  String get multipleBirthTipQuickSwitchTitle;
+
+  /// 다둥이 팁 - 빠른 전환 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'상단 탭을 눌러 아기별 기록을\n빠르게 확인하고 전환해요 (1초 이내!)'**
+  String get multipleBirthTipQuickSwitchDesc;
+
+  /// 다둥이 팁 - 개별 통계 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'개별 통계'**
+  String get multipleBirthTipIndividualStatsTitle;
+
+  /// 다둥이 팁 - 개별 통계 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'각 아기의 수유, 수면, 기저귀 패턴을\n개별로 분석해드려요'**
+  String get multipleBirthTipIndividualStatsDesc;
+
+  /// 다둥이 팁 - 개별 알림 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'개별 알림'**
+  String get multipleBirthTipIndividualAlertTitle;
+
+  /// 다둥이 팁 - 개별 알림 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'각 아기 맞춤 수유/수면 시간을\n따로 알려드려요'**
+  String get multipleBirthTipIndividualAlertDesc;
+
+  /// 다둥이 팁 - 색상 구분 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'색상으로 구분'**
+  String get multipleBirthTipColorCodeTitle;
+
+  /// 다둥이 팁 - 색상 구분 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'각 아기만의 색상으로\n한눈에 구분할 수 있어요'**
+  String get multipleBirthTipColorCodeDesc;
+
+  /// 파이 차트 접근성 - 접두어
+  ///
+  /// In ko, this message translates to:
+  /// **'비율 차트.'**
+  String get pieChartAccessibilityPrefix;
+
+  /// 파이 차트 접근성 - 섹션 읽기
+  ///
+  /// In ko, this message translates to:
+  /// **'{label} {percent}퍼센트'**
+  String pieChartAccessibilitySection(String label, int percent);
+
+  /// 오프라인 배너 - 마지막 동기화 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'오프라인 모드 - 마지막 동기화: {time}'**
+  String offlineModeLastSync(String time);
+
+  /// 시간 - 알 수 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'알 수 없음'**
+  String get timeUnknown;
+
+  /// 통계 빈 상태 - 첫 기록 시작 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 기록을 시작해보세요!'**
+  String get statisticsEmptyStartHint;
+
+  /// 통계 빈 상태 - 기록 시작 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 시작하기'**
+  String get statisticsStartRecording;
+
+  /// 온보딩 완료 화면 타이틀
+  ///
+  /// In ko, this message translates to:
+  /// **'준비 완료!'**
+  String get onboardingCompletionTitle;
+
+  /// 온보딩 완료 - 조산아 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'{names}의 교정연령에 맞춰\n발달을 꼼꼼히 기록해드릴게요'**
+  String onboardingCompletionPreterm(String names);
+
+  /// 온보딩 완료 - SGA 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'{names}의 성장을 세심하게\n추적해드릴게요'**
+  String onboardingCompletionSGA(String names);
+
+  /// 온보딩 완료 - 일반 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'{names}의 육아 기록을\n시작할 준비가 되었어요'**
+  String onboardingCompletionReady(String names);
+
+  /// 온보딩 완료 - 에러 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'오류가 발생했습니다: {error}'**
+  String onboardingCompletionError(String error);
+
+  /// 재태주수 짧은 표기
+  ///
+  /// In ko, this message translates to:
+  /// **'{weeks}주'**
+  String gestationalWeeksShort(int weeks);
+
+  /// SGA 성장 추적 배지
+  ///
+  /// In ko, this message translates to:
+  /// **'성장 추적'**
+  String get growthTracking;
+
+  /// 나이 표시 - N일
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}일'**
+  String ageInfoDays(int count);
+
+  /// 나이 표시 - N개월
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}개월'**
+  String ageInfoMonths(int count);
+
+  /// 나이 표시 - N살
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}살'**
+  String ageInfoYears(int count);
+
+  /// 나이 표시 - N살 N개월
+  ///
+  /// In ko, this message translates to:
+  /// **'{years}살 {months}개월'**
+  String ageInfoYearsMonths(int years, int months);
+
+  /// 수유 컨텐츠 - 모유 서브 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'(직접/유축)'**
+  String get feedingContentBreastMilkSub;
+
+  /// 수유 방법 - 유축 젖병
+  ///
+  /// In ko, this message translates to:
+  /// **'유축 젖병'**
+  String get feedingMethodExpressedBottle;
+
+  /// 이유식 단위 - 그램
+  ///
+  /// In ko, this message translates to:
+  /// **'g'**
+  String get solidFoodUnitGram;
+
+  /// 이유식 단위 - 숟가락
+  ///
+  /// In ko, this message translates to:
+  /// **'숟가락'**
+  String get solidFoodUnitSpoon;
+
+  /// 이유식 단위 - 그릇
+  ///
+  /// In ko, this message translates to:
+  /// **'그릇'**
+  String get solidFoodUnitBowl;
+
+  /// 동일란 구분 - 일란성
+  ///
+  /// In ko, this message translates to:
+  /// **'일란성'**
+  String get zygosityIdentical;
+
+  /// 동일란 구분 - 이란성
+  ///
+  /// In ko, this message translates to:
+  /// **'이란성'**
+  String get zygosityFraternal;
+
+  /// 동일란 구분 - 모름
+  ///
+  /// In ko, this message translates to:
+  /// **'모름'**
+  String get zygosityUnknown;
+
+  /// 이메일 로그인 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'이메일 로그인'**
+  String get authEmailLoginTitle;
+
+  /// 회원가입 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'회원가입'**
+  String get authSignupTitle;
+
+  /// 이메일 입력 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'이메일'**
+  String get authEmailLabel;
+
+  /// 비밀번호 입력 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'비밀번호'**
+  String get authPasswordLabel;
+
+  /// 이메일 필수 입력 검증
+  ///
+  /// In ko, this message translates to:
+  /// **'이메일을 입력해주세요'**
+  String get authEmailRequired;
+
+  /// 이메일 형식 검증
+  ///
+  /// In ko, this message translates to:
+  /// **'유효한 이메일 주소를 입력해주세요'**
+  String get authEmailInvalid;
+
+  /// 비밀번호 필수 입력 검증
+  ///
+  /// In ko, this message translates to:
+  /// **'비밀번호를 입력해주세요'**
+  String get authPasswordRequired;
+
+  /// 비밀번호 최소 길이 검증
+  ///
+  /// In ko, this message translates to:
+  /// **'비밀번호는 최소 6자 이상이어야 합니다'**
+  String get authPasswordMinLength;
+
+  /// 닉네임 입력 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'닉네임 (선택)'**
+  String get authNicknameLabel;
+
+  /// 회원가입 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'회원가입'**
+  String get authSignupButton;
+
+  /// 로그인 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'로그인'**
+  String get authLoginButton;
+
+  /// 로그인으로 전환 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'이미 계정이 있으신가요? 로그인'**
+  String get authToggleToLogin;
+
+  /// 회원가입으로 전환 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'계정이 없으신가요? 회원가입'**
+  String get authToggleToSignup;
+
+  /// 비밀번호 찾기 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'비밀번호를 잊으셨나요?'**
+  String get authForgotPassword;
+
+  /// 비밀번호 재설정 이메일 발송 성공
+  ///
+  /// In ko, this message translates to:
+  /// **'비밀번호 재설정 이메일을 발송했습니다'**
+  String get authPasswordResetSent;
+
+  /// 비밀번호 재설정 이메일 발송 실패
+  ///
+  /// In ko, this message translates to:
+  /// **'이메일 발송에 실패했습니다'**
+  String get authPasswordResetFailed;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

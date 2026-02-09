@@ -9,6 +9,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/services/supabase_service.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/last_activity_row.dart';
 import '../../../shared/widgets/sweet_spot_card.dart';
@@ -148,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: LuluSpacing.lg),
           Text(
-            '아기 정보가 없습니다',
+            S.of(context)!.emptyBabiesTitle,
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.bold,
@@ -156,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: LuluSpacing.sm),
           Text(
-            '온보딩을 완료해주세요',
+            S.of(context)!.emptyBabiesHint,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -289,18 +290,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Sweet Spot 예상 시간 텍스트
   String? _getEstimatedTimeText(HomeProvider homeProvider) {
+    final l10n = S.of(context)!;
     final minutes = homeProvider.minutesUntilSweetSpot;
     if (minutes <= 0) return null;
 
     if (minutes < 60) {
-      return '약 $minutes분 후';
+      return l10n.sweetSpotEstimateMinutes(minutes);
     } else {
       final hours = minutes ~/ 60;
       final mins = minutes % 60;
       if (mins == 0) {
-        return '약 $hours시간 후';
+        return l10n.sweetSpotEstimateHours(hours);
       }
-      return '약 $hours시간 $mins분 후';
+      return l10n.sweetSpotEstimateHoursMinutes(hours, mins);
     }
   }
 
@@ -388,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
     BuildContext context,
     OngoingSleepProvider sleepProvider,
   ) {
-    final babyName = sleepProvider.ongoingSleep?.babyName ?? '아기';
+    final babyName = sleepProvider.ongoingSleep?.babyName ?? S.of(context)!.babyDefault;
     final startTime = sleepProvider.sleepStartTime;
 
     if (startTime == null) return;
@@ -401,7 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(LuluRadius.lg),
         ),
         title: Text(
-          '수면을 종료할까요?',
+          S.of(context)!.sleepEndConfirmTitle,
           style: LuluTextStyles.titleMedium.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -410,16 +412,16 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDialogInfoRow('아기', babyName),
+            _buildDialogInfoRow(S.of(context)!.babyDefault, babyName),
             const SizedBox(height: 8),
             _buildDialogInfoRow(
-              '시작',
-              DateFormat('a h:mm', 'ko').format(startTime),
+              S.of(context)!.labelStart,
+              DateFormat.jm(Localizations.localeOf(context).toString()).format(startTime),
             ),
             const SizedBox(height: 8),
             _buildDialogInfoRow(
-              '종료',
-              DateFormat('a h:mm', 'ko').format(DateTime.now()),
+              S.of(context)!.labelEnd,
+              DateFormat.jm(Localizations.localeOf(context).toString()).format(DateTime.now()),
             ),
             const SizedBox(height: 16),
             Container(
@@ -438,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '총 수면: ${sleepProvider.formattedElapsedTime}',
+                    '${S.of(context)!.sleepTotalDuration}${sleepProvider.formattedElapsedTime}',
                     style: LuluTextStyles.titleMedium.copyWith(
                       color: LuluActivityColors.sleep,
                       fontWeight: FontWeight.bold,
@@ -453,7 +455,7 @@ class _HomeScreenState extends State<HomeScreen> {
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: Text(
-              '취소',
+              S.of(context)!.buttonCancel,
               style: LuluTextStyles.labelLarge.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -482,7 +484,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
             ),
-            child: const Text('종료'),
+            child: Text(S.of(context)!.buttonEnd),
           ),
         ],
       ),

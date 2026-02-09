@@ -1096,5 +1096,271 @@
   "hintHospital": "Hospital name, treatment, prescription, etc.",
   "hintAdditionalNotes": "Additional notes",
   "medicalDisclaimer": "This record is for reference only and does not replace medical diagnosis.\nConsult a pediatrician if you notice any unusual symptoms.",
-  "labelRecordTime": "Record Time"
+  "labelRecordTime": "Record Time",
+
+  "reportThisWeekCount": "This week {count}x",
+  "@reportThisWeekCount": {
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "reportNightWakeups": "Night wakeups",
+  "cryTypeHungryLabel": "Hungry",
+  "cryTypeTiredLabel": "Tired",
+  "cryTypeGasLabel": "Gas",
+  "cryTypeDiscomfortLabel": "Discomfort",
+
+  "diaperStatus": "Diaper Status",
+  "diaperChangeTime": "Diaper Change Time",
+  "stoolColorOptional": "Stool Color (optional)",
+  "stoolColorHelpText": "Selecting a color helps with health tracking",
+  "stoolColorWarning": "This color may require medical consultation.\nIf it persists, we recommend visiting a pediatrician.",
+  "diaperNotesHint": "Color, amount, unusual notes, etc.",
+
+  "orDetailedEntry": "or enter details",
+  "playActivityType": "Activity Type",
+  "playTummyTimeRecommendation": "Recommended: 3-5 min sessions, several times a day",
+  "playDurationOptional": "Duration (optional)",
+  "playDirectInput": "Enter manually",
+  "playNotesHint": "Baby's reactions, notes, etc.",
+  "playTimeLabel": "Play Time",
+  "unitMinute": "min",
+
+  "cryTypeHungry": "Hungry",
+  "cryTypeTired": "Tired",
+  "cryTypeDiscomfort": "Uncomfortable",
+  "cryTypeGas": "Gas / Colic",
+  "cryTypeBurp": "Needs Burping",
+  "cryTypeUnknown": "Analyzing...",
+  "cryDescHungry": "Baby cries from hunger.\nOften accompanied by opening mouth or sucking on hands.",
+  "cryDescTired": "Baby cries from being tired.\nOften accompanied by yawning or rubbing eyes.",
+  "cryDescDiscomfort": "Baby cries from physical discomfort.\nMay need a diaper change, or feel too hot or cold.",
+  "cryDescGas": "Baby cries from gas in the tummy.\nOften pulls legs toward the belly.",
+  "cryDescBurp": "Baby cries when needing to burp.\nCommon after feeding.",
+  "cryDescUnknown": "Analyzing the cry pattern.\nA clearer cry sound is needed.",
+  "cryActionHungry": "Try starting a feeding",
+  "cryActionTired": "Try putting baby to sleep",
+  "cryActionDiscomfort": "Check diaper and clothing",
+  "cryActionGas": "Gently massage baby's tummy",
+  "cryActionBurp": "Pat baby's back to help burp",
+  "cryActionUnknown": "Try analyzing again",
+  "crySoundLabel": "{code} sound",
+  "@crySoundLabel": {
+    "placeholders": {
+      "code": {"type": "String", "example": "Neh"}
+    }
+  },
+
+  "errorSelectBaby": "Please select a baby",
+
+  "growthMeasuredDateLabel": "Measured Date",
+  "buttonChange": "Change",
+  "labelOptional": "Optional",
+  "growthNoteHint": "Checkup, vaccination, etc.",
+  "successGrowthRecordSaved": "Growth record saved",
+  "growthTipCheckup": "Recording after pediatric checkups is more accurate",
+
+  "sweetSpotEstimateMinutes": "In about {count} min",
+  "@sweetSpotEstimateMinutes": {
+    "placeholders": {
+      "count": {"type": "int", "example": "30"}
+    }
+  },
+  "sweetSpotEstimateHours": "In about {count} hr",
+  "@sweetSpotEstimateHours": {
+    "placeholders": {
+      "count": {"type": "int", "example": "2"}
+    }
+  },
+  "sweetSpotEstimateHoursMinutes": "In about {hours} hr {minutes} min",
+  "@sweetSpotEstimateHoursMinutes": {
+    "placeholders": {
+      "hours": {"type": "int", "example": "1"},
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "sleepEndConfirmTitle": "End sleep?",
+  "buttonEnd": "End",
+
+  "growthChartTitleWithName": "{name} Growth Chart",
+  "@growthChartTitleWithName": {
+    "placeholders": {
+      "name": {"type": "String", "example": "Baby"}
+    }
+  },
+  "growthChartWhoTransition": "WHO chart transition upcoming",
+  "growthCurrentMetric": "Current {metric}",
+  "@growthCurrentMetric": {
+    "placeholders": {
+      "metric": {"type": "String", "example": "Weight"}
+    }
+  },
+  "growthPercentile": "Percentile",
+  "growthNeedMeasurement": "Needs measurement",
+
+  "errorEnterWeight": "Please enter weight",
+  "errorWeightTooLow": "Weight too low (min 0.3kg)",
+  "errorWeightTooHigh": "Weight too high (max 30kg)",
+  "errorLengthTooLow": "Height too short (min 20cm)",
+  "errorLengthTooHigh": "Height too tall (max 120cm)",
+  "errorHeadCircTooLow": "Head circumference too small (min 15cm)",
+  "errorHeadCircTooHigh": "Head circumference too large (max 60cm)",
+  "errorSelectMeasuredDate": "Please select measurement date",
+  "errorMeasuredDateAfterBirth": "Measurement date must be after birth date",
+  "errorFutureDate": "Cannot select a future date",
+  "warningRapidWeightChange": "Rapid change detected. Please verify the value.",
+  "warningRapidLengthChange": "Rapid height change detected. Please verify the value.",
+
+  "togetherViewNeedMultipleBabies": "Together view is available with 2 or more babies",
+  "sleepPattern": "Sleep Pattern",
+  "napRatioPercent": "Nap {percent}%",
+  "@napRatioPercent": {
+    "placeholders": {
+      "percent": {"type": "int", "example": "35"}
+    }
+  },
+  "nightRatioPercent": "Night {percent}%",
+  "@nightRatioPercent": {
+    "placeholders": {
+      "percent": {"type": "int", "example": "65"}
+    }
+  },
+  "insightNapRatioHigh": "Nap ratio is high",
+  "insightNightRatioHigh": "Night ratio is high",
+  "insightPatternDifference": "{baby1}: {insight1},\n{baby2}: {insight2}\n(Patterns are different)",
+  "@insightPatternDifference": {
+    "placeholders": {
+      "baby1": {"type": "String", "example": "Baby A"},
+      "insight1": {"type": "String", "example": "Nap ratio is high"},
+      "baby2": {"type": "String", "example": "Baby B"},
+      "insight2": {"type": "String", "example": "Night ratio is high"}
+    }
+  },
+
+  "errorRetryLater": "Please try again later",
+  "errorNetworkCheck": "Please check your internet connection",
+  "errorConnectionSlow": "Connection is slow. Try again?",
+  "errorDataLoadFailed": "Failed to load data",
+  "percentileMeasureNeeded": "Measurement needed",
+  "percentileBelow3": "Below 3%",
+  "percentileAbove97": "Above 97%",
+  "percentileGrowingWell": "Growing well",
+  "percentileWatchNeeded": "Keep an eye on it",
+  "percentileDoctorConsult": "Consider consulting a pediatrician",
+  "percentileMeasurementNeeded": "Measurement is needed",
+
+  "multipleBirthTipTitle": "Tips for Recording Multiples",
+  "multipleBirthTipSubtitle": "Easier recording tips",
+  "multipleBirthTipQuickSwitchTitle": "Quick Tab Switch",
+  "multipleBirthTipQuickSwitchDesc": "Tap the top tabs to quickly view\nand switch between each baby's records (under 1 second!)",
+  "multipleBirthTipIndividualStatsTitle": "Individual Statistics",
+  "multipleBirthTipIndividualStatsDesc": "We analyze each baby's feeding, sleep,\nand diaper patterns individually",
+  "multipleBirthTipIndividualAlertTitle": "Individual Alerts",
+  "multipleBirthTipIndividualAlertDesc": "We'll notify you of each baby's\nfeeding/sleep times separately",
+  "multipleBirthTipColorCodeTitle": "Color Coded",
+  "multipleBirthTipColorCodeDesc": "Each baby has their own color\nfor easy identification",
+
+  "pieChartAccessibilityPrefix": "Ratio chart.",
+  "pieChartAccessibilitySection": "{label} {percent} percent",
+  "@pieChartAccessibilitySection": {
+    "placeholders": {
+      "label": {"type": "String", "example": "Nap"},
+      "percent": {"type": "int", "example": "35"}
+    }
+  },
+
+  "offlineModeLastSync": "Offline mode - Last sync: {time}",
+  "@offlineModeLastSync": {
+    "placeholders": {
+      "time": {"type": "String", "example": "5 min ago"}
+    }
+  },
+  "timeUnknown": "Unknown",
+  "statisticsEmptyStartHint": "Start your first record!",
+  "statisticsStartRecording": "Start Recording",
+
+  "onboardingCompletionTitle": "All Set!",
+  "onboardingCompletionPreterm": "We'll carefully track\n{names}'s development by corrected age",
+  "@onboardingCompletionPreterm": {
+    "placeholders": {
+      "names": {"type": "String", "example": "Sky"}
+    }
+  },
+  "onboardingCompletionSGA": "We'll carefully track\n{names}'s growth",
+  "@onboardingCompletionSGA": {
+    "placeholders": {
+      "names": {"type": "String", "example": "Sky"}
+    }
+  },
+  "onboardingCompletionReady": "Ready to start\nrecording {names}'s care",
+  "@onboardingCompletionReady": {
+    "placeholders": {
+      "names": {"type": "String", "example": "Sky"}
+    }
+  },
+  "onboardingCompletionError": "An error occurred: {error}",
+  "@onboardingCompletionError": {
+    "placeholders": {
+      "error": {"type": "String", "example": "Network error"}
+    }
+  },
+  "gestationalWeeksShort": "{weeks}wk",
+  "@gestationalWeeksShort": {
+    "placeholders": {
+      "weeks": {"type": "int", "example": "34"}
+    }
+  },
+  "growthTracking": "Growth Tracking",
+  "ageInfoDays": "{count}d",
+  "@ageInfoDays": {
+    "placeholders": {
+      "count": {"type": "int", "example": "15"}
+    }
+  },
+  "ageInfoMonths": "{count}mo",
+  "@ageInfoMonths": {
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+  "ageInfoYears": "{count}yr",
+  "@ageInfoYears": {
+    "placeholders": {
+      "count": {"type": "int", "example": "1"}
+    }
+  },
+  "ageInfoYearsMonths": "{years}yr {months}mo",
+  "@ageInfoYearsMonths": {
+    "placeholders": {
+      "years": {"type": "int", "example": "1"},
+      "months": {"type": "int", "example": "3"}
+    }
+  },
+
+  "feedingContentBreastMilkSub": "(Direct/Expressed)",
+  "feedingMethodExpressedBottle": "Expressed Bottle",
+  "solidFoodUnitGram": "g",
+  "solidFoodUnitSpoon": "spoon",
+  "solidFoodUnitBowl": "bowl",
+
+  "zygosityIdentical": "Identical",
+  "zygosityFraternal": "Fraternal",
+  "zygosityUnknown": "Unknown",
+
+  "authEmailLoginTitle": "Email Login",
+  "authSignupTitle": "Sign Up",
+  "authEmailLabel": "Email",
+  "authPasswordLabel": "Password",
+  "authEmailRequired": "Please enter your email",
+  "authEmailInvalid": "Please enter a valid email address",
+  "authPasswordRequired": "Please enter your password",
+  "authPasswordMinLength": "Password must be at least 6 characters",
+  "authNicknameLabel": "Nickname (Optional)",
+  "authSignupButton": "Sign Up",
+  "authLoginButton": "Log In",
+  "authToggleToLogin": "Already have an account? Log In",
+  "authToggleToSignup": "Don't have an account? Sign Up",
+  "authForgotPassword": "Forgot your password?",
+  "authPasswordResetSent": "Password reset email has been sent",
+  "authPasswordResetFailed": "Failed to send email"
 }

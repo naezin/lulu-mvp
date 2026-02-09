@@ -465,13 +465,13 @@ class RecordProvider extends ChangeNotifier {
   /// 수유 기록 저장
   Future<ActivityModel?> saveFeeding() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -528,7 +528,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Feeding saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving feeding: $e');
       return null;
     } finally {
@@ -579,13 +579,13 @@ class RecordProvider extends ChangeNotifier {
   /// 수면 기록 저장
   Future<ActivityModel?> saveSleep() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -612,7 +612,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Sleep saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving sleep: $e');
       return null;
     } finally {
@@ -660,13 +660,13 @@ class RecordProvider extends ChangeNotifier {
   /// 놀이 기록 저장
   Future<ActivityModel?> savePlay() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -703,7 +703,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Play saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving play: $e');
       return null;
     } finally {
@@ -754,13 +754,13 @@ class RecordProvider extends ChangeNotifier {
   /// 건강 기록 저장
   Future<ActivityModel?> saveHealth() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -814,7 +814,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Health saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving health: $e');
       return null;
     } finally {
@@ -826,13 +826,13 @@ class RecordProvider extends ChangeNotifier {
   /// 기저귀 기록 저장
   Future<ActivityModel?> saveDiaper() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -868,7 +868,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Diaper saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving diaper: $e');
       return null;
     } finally {
@@ -1061,7 +1061,7 @@ class RecordProvider extends ChangeNotifier {
     _lastQuickSaveTime = now;
 
     if (_familyId == null || selectedBabyId == null) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
@@ -1086,7 +1086,7 @@ class RecordProvider extends ChangeNotifier {
 
       return saved.id;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error quick save feeding: $e');
       notifyListeners();
       return null;

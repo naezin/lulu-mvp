@@ -1788,5 +1788,408 @@
   "medicalDisclaimer": "이 기록은 참고용이며 의료 진단을 대체하지 않습니다.\n이상 증상이 있으면 소아과 전문의와 상담하세요.",
   "@medicalDisclaimer": {"description": "의료 면책 조항 (2줄)"},
   "labelRecordTime": "기록 시간",
-  "@labelRecordTime": {"description": "라벨 - 기록 시간"}
+  "@labelRecordTime": {"description": "라벨 - 기록 시간"},
+
+  "reportThisWeekCount": "이번 주 {count}회",
+  "@reportThisWeekCount": {
+    "description": "리포트 카드 - 이번 주 횟수",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "reportNightWakeups": "야간 기상",
+  "@reportNightWakeups": {"description": "리포트 카드 - 야간 기상 레이블"},
+  "cryTypeHungryLabel": "배고픔",
+  "@cryTypeHungryLabel": {"description": "울음 타입 - 배고픔 라벨"},
+  "cryTypeTiredLabel": "졸림",
+  "@cryTypeTiredLabel": {"description": "울음 타입 - 졸림 라벨"},
+  "cryTypeGasLabel": "가스",
+  "@cryTypeGasLabel": {"description": "울음 타입 - 가스 라벨"},
+  "cryTypeDiscomfortLabel": "불편",
+  "@cryTypeDiscomfortLabel": {"description": "울음 타입 - 불편 라벨"},
+
+  "diaperStatus": "기저귀 상태",
+  "@diaperStatus": {"description": "기저귀 기록 - 상태 섹션 제목"},
+  "diaperChangeTime": "기저귀 교체 시간",
+  "@diaperChangeTime": {"description": "기저귀 기록 - 교체 시간 라벨"},
+  "stoolColorOptional": "대변 색상 (선택)",
+  "@stoolColorOptional": {"description": "기저귀 기록 - 대변 색상 선택적 라벨"},
+  "stoolColorHelpText": "색상을 선택하면 건강 추적에 도움이 됩니다",
+  "@stoolColorHelpText": {"description": "기저귀 기록 - 대변 색상 도움말"},
+  "stoolColorWarning": "이 색상은 의료 상담이 필요할 수 있습니다.\n지속되면 소아과 방문을 권장합니다.",
+  "@stoolColorWarning": {"description": "기저귀 기록 - 위험 대변 색상 경고"},
+  "diaperNotesHint": "색상, 양, 특이사항 등",
+  "@diaperNotesHint": {"description": "기저귀 기록 - 메모 힌트"},
+
+  "orDetailedEntry": "또는 상세 입력",
+  "@orDetailedEntry": {"description": "빠른 기록과 상세 입력 사이 구분 텍스트"},
+  "playActivityType": "활동 유형",
+  "@playActivityType": {"description": "놀이 기록 - 활동 유형 섹션 제목"},
+  "playTummyTimeRecommendation": "교정연령 기준 권장: 하루 3-5분씩 여러 번",
+  "@playTummyTimeRecommendation": {"description": "놀이 기록 - 터미타임 권장 안내"},
+  "playDurationOptional": "활동 시간 (선택)",
+  "@playDurationOptional": {"description": "놀이 기록 - 활동 시간 선택적 라벨"},
+  "playDirectInput": "직접 입력",
+  "@playDirectInput": {"description": "놀이 기록 - 직접 입력 힌트"},
+  "playNotesHint": "아기의 반응, 특이사항 등",
+  "@playNotesHint": {"description": "놀이 기록 - 메모 힌트"},
+  "playTimeLabel": "놀이 시간",
+  "@playTimeLabel": {"description": "놀이 기록 - 시간 선택 라벨"},
+  "unitMinute": "분",
+  "@unitMinute": {"description": "단위 - 분 (단일)"},
+
+  "cryTypeHungry": "배고파요",
+  "@cryTypeHungry": {"description": "울음 타입 - 배고픔 (상세)"},
+  "cryTypeTired": "졸려요",
+  "@cryTypeTired": {"description": "울음 타입 - 졸림 (상세)"},
+  "cryTypeDiscomfort": "불편해요",
+  "@cryTypeDiscomfort": {"description": "울음 타입 - 불편함 (상세)"},
+  "cryTypeGas": "배가 아파요",
+  "@cryTypeGas": {"description": "울음 타입 - 가스/복통 (상세)"},
+  "cryTypeBurp": "트림이 필요해요",
+  "@cryTypeBurp": {"description": "울음 타입 - 트림 (상세)"},
+  "cryTypeUnknown": "분석 중...",
+  "@cryTypeUnknown": {"description": "울음 타입 - 분류 불가"},
+  "cryDescHungry": "아기가 배고플 때 내는 울음이에요.\n입을 벌리거나 손을 빠는 행동과 함께 나타나요.",
+  "@cryDescHungry": {"description": "울음 설명 - 배고픔"},
+  "cryDescTired": "아기가 졸리고 피곤할 때 내는 울음이에요.\n하품을 하거나 눈을 비비는 신호와 함께 나타나요.",
+  "@cryDescTired": {"description": "울음 설명 - 졸림"},
+  "cryDescDiscomfort": "아기가 신체적으로 불편할 때 내는 울음이에요.\n기저귀가 젖었거나, 덥거나 추울 수 있어요.",
+  "@cryDescDiscomfort": {"description": "울음 설명 - 불편함"},
+  "cryDescGas": "아기 배에 가스가 찼을 때 내는 울음이에요.\n다리를 배 쪽으로 끌어당기는 동작을 해요.",
+  "@cryDescGas": {"description": "울음 설명 - 가스"},
+  "cryDescBurp": "아기가 트림을 하고 싶을 때 내는 울음이에요.\n수유 후에 자주 나타나요.",
+  "@cryDescBurp": {"description": "울음 설명 - 트림"},
+  "cryDescUnknown": "울음 패턴을 분석 중이에요.\n좀 더 명확한 울음 소리가 필요해요.",
+  "@cryDescUnknown": {"description": "울음 설명 - 분류 불가"},
+  "cryActionHungry": "수유를 시작해보세요",
+  "@cryActionHungry": {"description": "울음 권장 행동 - 배고픔"},
+  "cryActionTired": "재우기를 시도해보세요",
+  "@cryActionTired": {"description": "울음 권장 행동 - 졸림"},
+  "cryActionDiscomfort": "기저귀와 옷을 확인해보세요",
+  "@cryActionDiscomfort": {"description": "울음 권장 행동 - 불편함"},
+  "cryActionGas": "배를 부드럽게 마사지해보세요",
+  "@cryActionGas": {"description": "울음 권장 행동 - 가스"},
+  "cryActionBurp": "등을 토닥이며 트림시켜주세요",
+  "@cryActionBurp": {"description": "울음 권장 행동 - 트림"},
+  "cryActionUnknown": "다시 분석해보세요",
+  "@cryActionUnknown": {"description": "울음 권장 행동 - 분류 불가"},
+  "crySoundLabel": "{code} 사운드",
+  "@crySoundLabel": {
+    "description": "울음 분석 - Dunstan 사운드 코드 라벨",
+    "placeholders": {
+      "code": {"type": "String", "example": "Neh"}
+    }
+  },
+
+  "errorSelectBaby": "아기를 선택해주세요",
+  "@errorSelectBaby": {"description": "에러 - 아기 선택 필요"},
+
+  "growthMeasuredDateLabel": "측정일",
+  "@growthMeasuredDateLabel": {"description": "성장 기록 - 측정일 라벨"},
+  "buttonChange": "변경",
+  "@buttonChange": {"description": "버튼 - 변경"},
+  "labelOptional": "선택",
+  "@labelOptional": {"description": "라벨 - 선택 (필수가 아닌 항목)"},
+  "growthNoteHint": "소아과 정기검진, 예방접종 등",
+  "@growthNoteHint": {"description": "성장 기록 - 메모 힌트"},
+  "successGrowthRecordSaved": "성장 기록이 저장되었어요",
+  "@successGrowthRecordSaved": {"description": "성공 - 성장 기록 저장됨"},
+  "growthTipCheckup": "소아과 정기검진 후 기록하면 정확해요",
+  "@growthTipCheckup": {"description": "성장 기록 - 팁"},
+
+  "sweetSpotEstimateMinutes": "약 {count}분 후",
+  "@sweetSpotEstimateMinutes": {
+    "description": "Sweet Spot 예상 시간 - 분 단위",
+    "placeholders": {
+      "count": {"type": "int", "example": "30"}
+    }
+  },
+  "sweetSpotEstimateHours": "약 {count}시간 후",
+  "@sweetSpotEstimateHours": {
+    "description": "Sweet Spot 예상 시간 - 시간 단위",
+    "placeholders": {
+      "count": {"type": "int", "example": "2"}
+    }
+  },
+  "sweetSpotEstimateHoursMinutes": "약 {hours}시간 {minutes}분 후",
+  "@sweetSpotEstimateHoursMinutes": {
+    "description": "Sweet Spot 예상 시간 - 시간+분 단위",
+    "placeholders": {
+      "hours": {"type": "int", "example": "1"},
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "sleepEndConfirmTitle": "수면을 종료할까요?",
+  "@sleepEndConfirmTitle": {"description": "수면 종료 확인 다이얼로그 제목"},
+  "buttonEnd": "종료",
+  "@buttonEnd": {"description": "버튼 - 종료"},
+
+  "growthChartTitleWithName": "{name} 성장 차트",
+  "@growthChartTitleWithName": {
+    "description": "성장 차트 화면 제목 (아기 이름 포함)",
+    "placeholders": {
+      "name": {"type": "String", "example": "하늘이"}
+    }
+  },
+  "growthChartWhoTransition": "WHO 차트 전환 예정",
+  "@growthChartWhoTransition": {"description": "성장 차트 - WHO 전환 예정 안내"},
+  "growthCurrentMetric": "현재 {metric}",
+  "@growthCurrentMetric": {
+    "description": "성장 차트 - 현재 측정 항목",
+    "placeholders": {
+      "metric": {"type": "String", "example": "체중"}
+    }
+  },
+  "growthPercentile": "백분위",
+  "@growthPercentile": {"description": "성장 차트 - 백분위 라벨"},
+  "growthNeedMeasurement": "측정 필요",
+  "@growthNeedMeasurement": {"description": "성장 차트 - 측정 필요 표시"},
+
+  "errorEnterWeight": "체중을 입력해주세요",
+  "@errorEnterWeight": {"description": "에러 - 체중 입력 필수"},
+  "errorWeightTooLow": "체중이 너무 작습니다 (최소 0.3kg)",
+  "@errorWeightTooLow": {"description": "에러 - 체중 최소값 미달"},
+  "errorWeightTooHigh": "체중이 너무 큽니다 (최대 30kg)",
+  "@errorWeightTooHigh": {"description": "에러 - 체중 최대값 초과"},
+  "errorLengthTooLow": "신장이 너무 작습니다 (최소 20cm)",
+  "@errorLengthTooLow": {"description": "에러 - 신장 최소값 미달"},
+  "errorLengthTooHigh": "신장이 너무 큽니다 (최대 120cm)",
+  "@errorLengthTooHigh": {"description": "에러 - 신장 최대값 초과"},
+  "errorHeadCircTooLow": "두위가 너무 작습니다 (최소 15cm)",
+  "@errorHeadCircTooLow": {"description": "에러 - 두위 최소값 미달"},
+  "errorHeadCircTooHigh": "두위가 너무 큽니다 (최대 60cm)",
+  "@errorHeadCircTooHigh": {"description": "에러 - 두위 최대값 초과"},
+  "errorSelectMeasuredDate": "측정일을 선택해주세요",
+  "@errorSelectMeasuredDate": {"description": "에러 - 측정일 선택 필수"},
+  "errorMeasuredDateAfterBirth": "측정일은 출생일 이후여야 합니다",
+  "@errorMeasuredDateAfterBirth": {"description": "에러 - 측정일이 출생일 이전"},
+  "errorFutureDate": "미래 날짜는 선택할 수 없습니다",
+  "@errorFutureDate": {"description": "에러 - 미래 날짜 선택 불가"},
+  "warningRapidWeightChange": "급격한 변화가 감지되었어요. 입력값을 확인해주세요.",
+  "@warningRapidWeightChange": {"description": "경고 - 급격한 체중 변화"},
+  "warningRapidLengthChange": "급격한 신장 변화가 감지되었어요. 입력값을 확인해주세요.",
+  "@warningRapidLengthChange": {"description": "경고 - 급격한 신장 변화"},
+
+  "togetherViewNeedMultipleBabies": "아기 2명 이상일 때 함께 보기가 가능해요",
+  "@togetherViewNeedMultipleBabies": {"description": "함께 보기 - 다태아 필요 안내"},
+  "sleepPattern": "수면 패턴",
+  "@sleepPattern": {"description": "수면 패턴 섹션 제목"},
+  "napRatioPercent": "낮잠 {percent}%",
+  "@napRatioPercent": {
+    "description": "낮잠 비율 퍼센트",
+    "placeholders": {
+      "percent": {"type": "int", "example": "35"}
+    }
+  },
+  "nightRatioPercent": "밤잠 {percent}%",
+  "@nightRatioPercent": {
+    "description": "밤잠 비율 퍼센트",
+    "placeholders": {
+      "percent": {"type": "int", "example": "65"}
+    }
+  },
+  "insightNapRatioHigh": "낮잠 비율이 높아요",
+  "@insightNapRatioHigh": {"description": "인사이트 - 낮잠 비율 높음"},
+  "insightNightRatioHigh": "밤잠 비율이 높아요",
+  "@insightNightRatioHigh": {"description": "인사이트 - 밤잠 비율 높음"},
+  "insightPatternDifference": "{baby1}은 {insight1},\n{baby2}이는 {insight2}\n(패턴이 달라요)",
+  "@insightPatternDifference": {
+    "description": "인사이트 - 패턴 차이 안내 (비교 금지, 차이만 표현)",
+    "placeholders": {
+      "baby1": {"type": "String", "example": "하늘이"},
+      "insight1": {"type": "String", "example": "낮잠 비율이 높아요"},
+      "baby2": {"type": "String", "example": "바다"},
+      "insight2": {"type": "String", "example": "밤잠 비율이 높아요"}
+    }
+  },
+
+  "errorRetryLater": "잠시 후 다시 시도해주세요",
+  "@errorRetryLater": {"description": "에러 - 재시도 한도 초과"},
+  "errorNetworkCheck": "인터넷 연결을 확인해주세요",
+  "@errorNetworkCheck": {"description": "에러 - 네트워크 연결 확인"},
+  "errorConnectionSlow": "연결이 느려요. 다시 시도할까요?",
+  "@errorConnectionSlow": {"description": "에러 - 연결 타임아웃"},
+  "errorDataLoadFailed": "데이터를 불러오지 못했어요",
+  "@errorDataLoadFailed": {"description": "에러 - 데이터 로드 실패 (일반)"},
+  "percentileMeasureNeeded": "측정 필요",
+  "@percentileMeasureNeeded": {"description": "백분위 - 측정 필요 (짧은)"},
+  "percentileBelow3": "3% 미만",
+  "@percentileBelow3": {"description": "백분위 - 3% 미만"},
+  "percentileAbove97": "97% 초과",
+  "@percentileAbove97": {"description": "백분위 - 97% 초과"},
+  "percentileGrowingWell": "잘 자라고 있어요",
+  "@percentileGrowingWell": {"description": "백분위 상태 - 정상 (Huckleberry 스타일)"},
+  "percentileWatchNeeded": "지켜봐 주세요",
+  "@percentileWatchNeeded": {"description": "백분위 상태 - 관찰 (Huckleberry 스타일)"},
+  "percentileDoctorConsult": "소아과 상담을 고려해주세요",
+  "@percentileDoctorConsult": {"description": "백분위 상태 - 주의 (Huckleberry 스타일)"},
+  "percentileMeasurementNeeded": "측정이 필요해요",
+  "@percentileMeasurementNeeded": {"description": "백분위 상태 - 측정 필요"},
+
+  "multipleBirthTipTitle": "다둥이 기록 팁",
+  "@multipleBirthTipTitle": {"description": "온보딩 - 다둥이 팁 화면 제목"},
+  "multipleBirthTipSubtitle": "더 쉽게 기록할 수 있어요",
+  "@multipleBirthTipSubtitle": {"description": "온보딩 - 다둥이 팁 부제목"},
+  "multipleBirthTipQuickSwitchTitle": "탭으로 빠른 전환",
+  "@multipleBirthTipQuickSwitchTitle": {"description": "다둥이 팁 - 빠른 전환 제목"},
+  "multipleBirthTipQuickSwitchDesc": "상단 탭을 눌러 아기별 기록을\n빠르게 확인하고 전환해요 (1초 이내!)",
+  "@multipleBirthTipQuickSwitchDesc": {"description": "다둥이 팁 - 빠른 전환 설명"},
+  "multipleBirthTipIndividualStatsTitle": "개별 통계",
+  "@multipleBirthTipIndividualStatsTitle": {"description": "다둥이 팁 - 개별 통계 제목"},
+  "multipleBirthTipIndividualStatsDesc": "각 아기의 수유, 수면, 기저귀 패턴을\n개별로 분석해드려요",
+  "@multipleBirthTipIndividualStatsDesc": {"description": "다둥이 팁 - 개별 통계 설명"},
+  "multipleBirthTipIndividualAlertTitle": "개별 알림",
+  "@multipleBirthTipIndividualAlertTitle": {"description": "다둥이 팁 - 개별 알림 제목"},
+  "multipleBirthTipIndividualAlertDesc": "각 아기 맞춤 수유/수면 시간을\n따로 알려드려요",
+  "@multipleBirthTipIndividualAlertDesc": {"description": "다둥이 팁 - 개별 알림 설명"},
+  "multipleBirthTipColorCodeTitle": "색상으로 구분",
+  "@multipleBirthTipColorCodeTitle": {"description": "다둥이 팁 - 색상 구분 제목"},
+  "multipleBirthTipColorCodeDesc": "각 아기만의 색상으로\n한눈에 구분할 수 있어요",
+  "@multipleBirthTipColorCodeDesc": {"description": "다둥이 팁 - 색상 구분 설명"},
+
+  "pieChartAccessibilityPrefix": "비율 차트.",
+  "@pieChartAccessibilityPrefix": {"description": "파이 차트 접근성 - 접두어"},
+  "pieChartAccessibilitySection": "{label} {percent}퍼센트",
+  "@pieChartAccessibilitySection": {
+    "description": "파이 차트 접근성 - 섹션 읽기",
+    "placeholders": {
+      "label": {"type": "String", "example": "낮잠"},
+      "percent": {"type": "int", "example": "35"}
+    }
+  },
+
+  "offlineModeLastSync": "오프라인 모드 - 마지막 동기화: {time}",
+  "@offlineModeLastSync": {
+    "description": "오프라인 배너 - 마지막 동기화 시간",
+    "placeholders": {
+      "time": {"type": "String", "example": "5분 전"}
+    }
+  },
+  "timeUnknown": "알 수 없음",
+  "@timeUnknown": {"description": "시간 - 알 수 없음"},
+  "statisticsEmptyStartHint": "첫 기록을 시작해보세요!",
+  "@statisticsEmptyStartHint": {"description": "통계 빈 상태 - 첫 기록 시작 안내"},
+  "statisticsStartRecording": "기록 시작하기",
+  "@statisticsStartRecording": {"description": "통계 빈 상태 - 기록 시작 버튼"},
+
+  "onboardingCompletionTitle": "준비 완료!",
+  "@onboardingCompletionTitle": {"description": "온보딩 완료 화면 타이틀"},
+  "onboardingCompletionPreterm": "{names}의 교정연령에 맞춰\n발달을 꼼꼼히 기록해드릴게요",
+  "@onboardingCompletionPreterm": {
+    "description": "온보딩 완료 - 조산아 메시지",
+    "placeholders": {
+      "names": {"type": "String", "example": "하늘이"}
+    }
+  },
+  "onboardingCompletionSGA": "{names}의 성장을 세심하게\n추적해드릴게요",
+  "@onboardingCompletionSGA": {
+    "description": "온보딩 완료 - SGA 메시지",
+    "placeholders": {
+      "names": {"type": "String", "example": "하늘이"}
+    }
+  },
+  "onboardingCompletionReady": "{names}의 육아 기록을\n시작할 준비가 되었어요",
+  "@onboardingCompletionReady": {
+    "description": "온보딩 완료 - 일반 메시지",
+    "placeholders": {
+      "names": {"type": "String", "example": "하늘이"}
+    }
+  },
+  "onboardingCompletionError": "오류가 발생했습니다: {error}",
+  "@onboardingCompletionError": {
+    "description": "온보딩 완료 - 에러 메시지",
+    "placeholders": {
+      "error": {"type": "String", "example": "네트워크 에러"}
+    }
+  },
+  "gestationalWeeksShort": "{weeks}주",
+  "@gestationalWeeksShort": {
+    "description": "재태주수 짧은 표기",
+    "placeholders": {
+      "weeks": {"type": "int", "example": "34"}
+    }
+  },
+  "growthTracking": "성장 추적",
+  "@growthTracking": {"description": "SGA 성장 추적 배지"},
+  "ageInfoDays": "{count}일",
+  "@ageInfoDays": {
+    "description": "나이 표시 - N일",
+    "placeholders": {
+      "count": {"type": "int", "example": "15"}
+    }
+  },
+  "ageInfoMonths": "{count}개월",
+  "@ageInfoMonths": {
+    "description": "나이 표시 - N개월",
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+  "ageInfoYears": "{count}살",
+  "@ageInfoYears": {
+    "description": "나이 표시 - N살",
+    "placeholders": {
+      "count": {"type": "int", "example": "1"}
+    }
+  },
+  "ageInfoYearsMonths": "{years}살 {months}개월",
+  "@ageInfoYearsMonths": {
+    "description": "나이 표시 - N살 N개월",
+    "placeholders": {
+      "years": {"type": "int", "example": "1"},
+      "months": {"type": "int", "example": "3"}
+    }
+  },
+
+  "feedingContentBreastMilkSub": "(직접/유축)",
+  "@feedingContentBreastMilkSub": {"description": "수유 컨텐츠 - 모유 서브 라벨"},
+  "feedingMethodExpressedBottle": "유축 젖병",
+  "@feedingMethodExpressedBottle": {"description": "수유 방법 - 유축 젖병"},
+  "solidFoodUnitGram": "g",
+  "@solidFoodUnitGram": {"description": "이유식 단위 - 그램"},
+  "solidFoodUnitSpoon": "숟가락",
+  "@solidFoodUnitSpoon": {"description": "이유식 단위 - 숟가락"},
+  "solidFoodUnitBowl": "그릇",
+  "@solidFoodUnitBowl": {"description": "이유식 단위 - 그릇"},
+
+  "zygosityIdentical": "일란성",
+  "@zygosityIdentical": {"description": "동일란 구분 - 일란성"},
+  "zygosityFraternal": "이란성",
+  "@zygosityFraternal": {"description": "동일란 구분 - 이란성"},
+  "zygosityUnknown": "모름",
+  "@zygosityUnknown": {"description": "동일란 구분 - 모름"},
+
+  "authEmailLoginTitle": "이메일 로그인",
+  "@authEmailLoginTitle": {"description": "이메일 로그인 화면 제목"},
+  "authSignupTitle": "회원가입",
+  "@authSignupTitle": {"description": "회원가입 화면 제목"},
+  "authEmailLabel": "이메일",
+  "@authEmailLabel": {"description": "이메일 입력 라벨"},
+  "authPasswordLabel": "비밀번호",
+  "@authPasswordLabel": {"description": "비밀번호 입력 라벨"},
+  "authEmailRequired": "이메일을 입력해주세요",
+  "@authEmailRequired": {"description": "이메일 필수 입력 검증"},
+  "authEmailInvalid": "유효한 이메일 주소를 입력해주세요",
+  "@authEmailInvalid": {"description": "이메일 형식 검증"},
+  "authPasswordRequired": "비밀번호를 입력해주세요",
+  "@authPasswordRequired": {"description": "비밀번호 필수 입력 검증"},
+  "authPasswordMinLength": "비밀번호는 최소 6자 이상이어야 합니다",
+  "@authPasswordMinLength": {"description": "비밀번호 최소 길이 검증"},
+  "authNicknameLabel": "닉네임 (선택)",
+  "@authNicknameLabel": {"description": "닉네임 입력 라벨"},
+  "authSignupButton": "회원가입",
+  "@authSignupButton": {"description": "회원가입 버튼"},
+  "authLoginButton": "로그인",
+  "@authLoginButton": {"description": "로그인 버튼"},
+  "authToggleToLogin": "이미 계정이 있으신가요? 로그인",
+  "@authToggleToLogin": {"description": "로그인으로 전환 텍스트"},
+  "authToggleToSignup": "계정이 없으신가요? 회원가입",
+  "@authToggleToSignup": {"description": "회원가입으로 전환 텍스트"},
+  "authForgotPassword": "비밀번호를 잊으셨나요?",
+  "@authForgotPassword": {"description": "비밀번호 찾기 텍스트"},
+  "authPasswordResetSent": "비밀번호 재설정 이메일을 발송했습니다",
+  "@authPasswordResetSent": {"description": "비밀번호 재설정 이메일 발송 성공"},
+  "authPasswordResetFailed": "이메일 발송에 실패했습니다",
+  "@authPasswordResetFailed": {"description": "비밀번호 재설정 이메일 발송 실패"}
 }

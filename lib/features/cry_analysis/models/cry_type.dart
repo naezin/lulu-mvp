@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 울음 분류 타입 (Dunstan Baby Language 기반)
 ///
@@ -42,77 +43,68 @@ enum CryType {
     );
   }
 
-  /// 한국어 라벨
-  String get label {
+  /// 지역화된 라벨 (S l10n 필요)
+  String localizedLabel(S? l10n) {
     switch (this) {
       case CryType.hungry:
-        return '배고파요';
+        return l10n?.cryTypeHungry ?? 'Hungry';
       case CryType.tired:
-        return '졸려요';
+        return l10n?.cryTypeTired ?? 'Tired';
       case CryType.discomfort:
-        return '불편해요';
+        return l10n?.cryTypeDiscomfort ?? 'Uncomfortable';
       case CryType.gas:
-        return '배가 아파요';
+        return l10n?.cryTypeGas ?? 'Gas / Colic';
       case CryType.burp:
-        return '트림이 필요해요';
+        return l10n?.cryTypeBurp ?? 'Needs Burping';
       case CryType.unknown:
-        return '분석 중...';
+        return l10n?.cryTypeUnknown ?? 'Analyzing...';
     }
   }
 
-  /// 영어 라벨
-  String get labelEn {
+  /// 라벨 (하위 호환용 - 기본값은 영어)
+  String get label => localizedLabel(null);
+
+  /// 지역화된 상세 설명 (부모 가이드)
+  String localizedDescription(S? l10n) {
     switch (this) {
       case CryType.hungry:
-        return 'Hungry';
+        return l10n?.cryDescHungry ?? 'Baby cries from hunger.\nOften accompanied by opening mouth or sucking on hands.';
       case CryType.tired:
-        return 'Tired';
+        return l10n?.cryDescTired ?? 'Baby cries from being tired.\nOften accompanied by yawning or rubbing eyes.';
       case CryType.discomfort:
-        return 'Uncomfortable';
+        return l10n?.cryDescDiscomfort ?? 'Baby cries from physical discomfort.\nMay need a diaper change, or feel too hot or cold.';
       case CryType.gas:
-        return 'Gas / Colic';
+        return l10n?.cryDescGas ?? 'Baby cries from gas in the tummy.\nOften pulls legs toward the belly.';
       case CryType.burp:
-        return 'Needs Burping';
+        return l10n?.cryDescBurp ?? 'Baby cries when needing to burp.\nCommon after feeding.';
       case CryType.unknown:
-        return 'Analyzing...';
+        return l10n?.cryDescUnknown ?? 'Analyzing the cry pattern.\nA clearer cry sound is needed.';
     }
   }
 
-  /// 상세 설명 (부모 가이드)
-  String get description {
+  /// 상세 설명 (하위 호환용 - 기본값은 영어)
+  String get description => localizedDescription(null);
+
+  /// 지역화된 권장 행동
+  String localizedSuggestedAction(S? l10n) {
     switch (this) {
       case CryType.hungry:
-        return '아기가 배고플 때 내는 울음이에요.\n입을 벌리거나 손을 빠는 행동과 함께 나타나요.';
+        return l10n?.cryActionHungry ?? 'Try starting a feeding';
       case CryType.tired:
-        return '아기가 졸리고 피곤할 때 내는 울음이에요.\n하품을 하거나 눈을 비비는 신호와 함께 나타나요.';
+        return l10n?.cryActionTired ?? 'Try putting baby to sleep';
       case CryType.discomfort:
-        return '아기가 신체적으로 불편할 때 내는 울음이에요.\n기저귀가 젖었거나, 덥거나 추울 수 있어요.';
+        return l10n?.cryActionDiscomfort ?? 'Check diaper and clothing';
       case CryType.gas:
-        return '아기 배에 가스가 찼을 때 내는 울음이에요.\n다리를 배 쪽으로 끌어당기는 동작을 해요.';
+        return l10n?.cryActionGas ?? "Gently massage baby's tummy";
       case CryType.burp:
-        return '아기가 트림을 하고 싶을 때 내는 울음이에요.\n수유 후에 자주 나타나요.';
+        return l10n?.cryActionBurp ?? "Pat baby's back to help burp";
       case CryType.unknown:
-        return '울음 패턴을 분석 중이에요.\n좀 더 명확한 울음 소리가 필요해요.';
+        return l10n?.cryActionUnknown ?? 'Try analyzing again';
     }
   }
 
-  /// 권장 행동
-  String get suggestedAction {
-    switch (this) {
-      case CryType.hungry:
-        return '수유를 시작해보세요';
-      case CryType.tired:
-        return '재우기를 시도해보세요';
-      case CryType.discomfort:
-        return '기저귀와 옷을 확인해보세요';
-      case CryType.gas:
-        return '배를 부드럽게 마사지해보세요';
-      case CryType.burp:
-        return '등을 토닥이며 트림시켜주세요';
-      case CryType.unknown:
-        return '다시 분석해보세요';
-    }
-  }
+  /// 권장 행동 (하위 호환용 - 기본값은 영어)
+  String get suggestedAction => localizedSuggestedAction(null);
 
   /// 아이콘
   IconData get icon {

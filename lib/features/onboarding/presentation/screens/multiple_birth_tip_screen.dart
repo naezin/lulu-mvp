@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
-import '../providers/onboarding_provider.dart';
 import '../../../../core/design_system/lulu_radius.dart';
 import '../../../../core/design_system/lulu_icons.dart';
+import '../../../../l10n/generated/app_localizations.dart' show S;
+import '../providers/onboarding_provider.dart';
 
 /// Step 5 (다태아 전용): 다둥이 기록 팁 안내
 /// v5.0: "둘 다" 버튼 제거, 개별 기록 + 빠른 전환 강조
@@ -14,6 +15,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<OnboardingProvider>();
+    final l10n = S.of(context)!;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -23,7 +25,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
 
           // 제목
           Text(
-            '다둥이 기록 팁',
+            l10n.multipleBirthTipTitle,
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
@@ -33,7 +35,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
           const SizedBox(height: 12),
 
           Text(
-            '더 쉽게 기록할 수 있어요',
+            l10n.multipleBirthTipSubtitle,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppTheme.textSecondary,
                 ),
@@ -44,8 +46,8 @@ class MultipleBirthTipScreen extends StatelessWidget {
           // 팁 1: 탭으로 빠른 전환
           _TipCard(
             icon: LuluIcons.swapHoriz,
-            title: '탭으로 빠른 전환',
-            description: '상단 탭을 눌러 아기별 기록을\n빠르게 확인하고 전환해요 (1초 이내!)',
+            title: l10n.multipleBirthTipQuickSwitchTitle,
+            description: l10n.multipleBirthTipQuickSwitchDesc,
             color: AppTheme.lavenderMist,
           ),
 
@@ -54,8 +56,8 @@ class MultipleBirthTipScreen extends StatelessWidget {
           // 팁 2: 개별 통계
           _TipCard(
             icon: LuluIcons.barChart,
-            title: '개별 통계',
-            description: '각 아기의 수유, 수면, 기저귀 패턴을\n개별로 분석해드려요',
+            title: l10n.multipleBirthTipIndividualStatsTitle,
+            description: l10n.multipleBirthTipIndividualStatsDesc,
             color: AppTheme.babyAvatarColors[0],
           ),
 
@@ -64,8 +66,8 @@ class MultipleBirthTipScreen extends StatelessWidget {
           // 팁 3: 개별 알림
           _TipCard(
             icon: LuluIcons.notificationActive,
-            title: '개별 알림',
-            description: '각 아기 맞춤 수유/수면 시간을\n따로 알려드려요',
+            title: l10n.multipleBirthTipIndividualAlertTitle,
+            description: l10n.multipleBirthTipIndividualAlertDesc,
             color: AppTheme.babyAvatarColors[1],
           ),
 
@@ -74,8 +76,8 @@ class MultipleBirthTipScreen extends StatelessWidget {
           // 팁 4: 색상으로 구분
           _TipCard(
             icon: LuluIcons.indoorPlay,
-            title: '색상으로 구분',
-            description: '각 아기만의 색상으로\n한눈에 구분할 수 있어요',
+            title: l10n.multipleBirthTipColorCodeTitle,
+            description: l10n.multipleBirthTipColorCodeDesc,
             color: AppTheme.babyAvatarColors[2],
             showBabyColors: true,
             babyCount: provider.babyCount,
@@ -96,9 +98,9 @@ class MultipleBirthTipScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
-              child: const Text(
-                '알겠어요',
-                style: TextStyle(
+              child: Text(
+                l10n.buttonOk,
+                style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
                 ),

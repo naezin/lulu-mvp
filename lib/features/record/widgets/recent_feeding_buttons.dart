@@ -72,12 +72,12 @@ class RecentFeedingButtons extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  l10n?.quickFeedingTitle ?? '빠른 기록',
+                  l10n?.quickFeedingTitle ?? '',
                   style: LuluTextStyles.titleSmall,
                 ),
                 const Spacer(),
                 Text(
-                  l10n?.quickFeedingHint ?? '탭: 저장 / 길게: 수정',
+                  l10n?.quickFeedingHint ?? '',
                   style: LuluTextStyles.caption.copyWith(
                     color: LuluTextColors.tertiary,
                   ),
@@ -116,7 +116,7 @@ class RecentFeedingButtons extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
-                    l10n?.orNewEntry ?? '또는 새로 입력',
+                    l10n?.orNewEntry ?? '',
                     style: LuluTextStyles.caption.copyWith(
                       color: LuluTextColors.tertiary,
                     ),
@@ -155,15 +155,14 @@ class RecentFeedingButtons extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n?.quickFeedingEmpty ?? '아직 기록이 없어요',
+                  l10n?.quickFeedingEmpty ?? '',
                   style: LuluTextStyles.bodyMedium.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  l10n?.quickFeedingEmptyDesc ??
-                      '첫 수유를 기록하면 빠른 버튼이 나타나요!',
+                  l10n?.quickFeedingEmptyDesc ?? '',
                   style: LuluTextStyles.caption.copyWith(
                     color: LuluTextColors.secondary,
                   ),
@@ -207,14 +206,13 @@ class RecentFeedingButtons extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                l10n?.quickFeedingSaved(_getSummary(record, l10n)) ??
-                    '${_getSummary(record, l10n)} saved',
+                l10n?.quickFeedingSaved(_getSummary(record, l10n)) ?? '',
               ),
             ),
           ],
         ),
         action: SnackBarAction(
-          label: l10n?.quickFeedingUndo ?? '취소',
+          label: l10n?.quickFeedingUndo ?? '',
           textColor: Colors.white,
           onPressed: () async {
             final success = await provider.undoLastSave();
@@ -233,7 +231,7 @@ class RecentFeedingButtons extends StatelessWidget {
 
   String _getSummary(ActivityModel record, S? l10n) {
     final data = record.data;
-    if (data == null) return '수유';
+    if (data == null) return l10n?.activityTypeFeeding ?? '';
 
     final type = data['feeding_type'] as String? ?? 'bottle';
     final side = data['breast_side'] as String?;
@@ -244,26 +242,27 @@ class RecentFeedingButtons extends StatelessWidget {
     switch (type) {
       case 'breast':
         final sideLabel = side == 'left'
-            ? '좌측'
+            ? (l10n?.feedingSideLeft ?? '')
             : side == 'right'
-                ? '우측'
-                : '양쪽';
-        typeLabel = '모유 $sideLabel';
+                ? (l10n?.feedingSideRight ?? '')
+                : (l10n?.feedingSideBoth ?? '');
+        typeLabel =
+            '${l10n?.feedingTypeBreast ?? ''} $sideLabel';
         break;
       case 'formula':
       case 'bottle':
-        typeLabel = '분유';
+        typeLabel = l10n?.feedingTypeFormula ?? '';
         break;
       case 'solid':
-        typeLabel = '이유식';
+        typeLabel = l10n?.feedingTypeSolid ?? '';
         break;
       default:
-        typeLabel = '수유';
+        typeLabel = l10n?.activityTypeFeeding ?? '';
     }
 
     String amountLabel = '';
     if (type == 'breast' && durationMinutes != null) {
-      amountLabel = '$durationMinutes분';
+      amountLabel = l10n?.unitMinutes(durationMinutes as int) ?? '';
     } else if (amountMl != null) {
       amountLabel = '${(amountMl as num).toInt()}ml';
     }
