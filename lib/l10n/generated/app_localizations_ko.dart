@@ -2338,6 +2338,39 @@ class SKo extends S {
   }
 
   @override
+  String get insightSleepIncreased => '지난주보다 수면 시간이 늘었어요';
+
+  @override
+  String get insightSleepDecreased => '지난주보다 수면 시간이 줄었어요';
+
+  @override
+  String insightMostSleepDay(String dayName) {
+    return '$dayName에 가장 많이 잤어요';
+  }
+
+  @override
+  String get insightStartRecording => '기록을 시작해보세요';
+
+  @override
+  String sleepInProgressTitle(String babyName) {
+    return '$babyName 수면이 진행 중이에요';
+  }
+
+  @override
+  String sleepInProgressDuration(int hours, int minutes) {
+    return '$hours시간 $minutes분째 수면 중';
+  }
+
+  @override
+  String get sleepEndAndStart => '종료 후 새로 시작';
+
+  @override
+  String get sleepOverlapWarning => '수면 시간이 겹칩니다. 확인해주세요';
+
+  @override
+  String get viewRecord => '기록 보기';
+
+  @override
   String get errorRetryLater => '잠시 후 다시 시도해주세요';
 
   @override

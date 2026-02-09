@@ -1300,6 +1300,28 @@
       }
     }
   },
+  "insightSleepIncreased": "Sleep time increased compared to last week",
+  "@insightSleepIncreased": {
+    "description": "Insight - sleep time increased"
+  },
+  "insightSleepDecreased": "Sleep time decreased compared to last week",
+  "@insightSleepDecreased": {
+    "description": "Insight - sleep time decreased"
+  },
+  "insightMostSleepDay": "Slept the most on {dayName}",
+  "@insightMostSleepDay": {
+    "description": "Insight - day with most sleep",
+    "placeholders": {
+      "dayName": {
+        "type": "String",
+        "example": "Monday"
+      }
+    }
+  },
+  "insightStartRecording": "Start recording to see insights",
+  "@insightStartRecording": {
+    "description": "Insight - no records yet"
+  },
   "errorRetryLater": "Please try again later",
   "errorNetworkCheck": "Please check your internet connection",
   "errorConnectionSlow": "Connection is slow. Try again?",
@@ -2180,5 +2202,41 @@
   "importSuccess": "Success",
   "importTotal": "Total",
   "importTxtDesc": "Babytime, etc.",
-  "importTxtOption": "Text file (.txt)"
+  "importTxtOption": "Text file (.txt)",
+  "sleepInProgressTitle": "{babyName} is currently sleeping",
+  "@sleepInProgressTitle": {
+    "description": "Sleep in progress dialog title",
+    "placeholders": {
+      "babyName": {
+        "type": "String",
+        "example": "Emma"
+      }
+    }
+  },
+  "sleepInProgressDuration": "Started {hours}h {minutes}m ago",
+  "@sleepInProgressDuration": {
+    "description": "Sleep in progress duration display",
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "example": "2"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
+    }
+  },
+  "sleepEndAndStart": "End current and start new sleep",
+  "@sleepEndAndStart": {
+    "description": "Button to end current sleep and start new one"
+  },
+  "sleepOverlapWarning": "This sleep record overlaps with an existing record",
+  "@sleepOverlapWarning": {
+    "description": "Warning toast for overlapping sleep records"
+  },
+  "viewRecord": "View Records",
+  "@viewRecord": {
+    "description": "SnackBar action to navigate to records tab"
+  }
 }

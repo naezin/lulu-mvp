@@ -2381,6 +2381,42 @@ class SEn extends S {
   }
 
   @override
+  String get insightSleepIncreased =>
+      'Sleep time increased compared to last week';
+
+  @override
+  String get insightSleepDecreased =>
+      'Sleep time decreased compared to last week';
+
+  @override
+  String insightMostSleepDay(String dayName) {
+    return 'Slept the most on $dayName';
+  }
+
+  @override
+  String get insightStartRecording => 'Start recording to see insights';
+
+  @override
+  String sleepInProgressTitle(String babyName) {
+    return '$babyName is currently sleeping';
+  }
+
+  @override
+  String sleepInProgressDuration(int hours, int minutes) {
+    return 'Started ${hours}h ${minutes}m ago';
+  }
+
+  @override
+  String get sleepEndAndStart => 'End current and start new sleep';
+
+  @override
+  String get sleepOverlapWarning =>
+      'This sleep record overlaps with an existing record';
+
+  @override
+  String get viewRecord => 'View Records';
+
+  @override
   String get errorRetryLater => 'Please try again later';
 
   @override

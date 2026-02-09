@@ -4367,6 +4367,60 @@ abstract class S {
     String insight2,
   );
 
+  /// 인사이트 - 수면 시간 증가
+  ///
+  /// In ko, this message translates to:
+  /// **'지난주보다 수면 시간이 늘었어요'**
+  String get insightSleepIncreased;
+
+  /// 인사이트 - 수면 시간 감소
+  ///
+  /// In ko, this message translates to:
+  /// **'지난주보다 수면 시간이 줄었어요'**
+  String get insightSleepDecreased;
+
+  /// 인사이트 - 가장 수면이 많은 요일
+  ///
+  /// In ko, this message translates to:
+  /// **'{dayName}에 가장 많이 잤어요'**
+  String insightMostSleepDay(String dayName);
+
+  /// 인사이트 - 기록 없을 때 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'기록을 시작해보세요'**
+  String get insightStartRecording;
+
+  /// 수면 중복 다이얼로그 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'{babyName} 수면이 진행 중이에요'**
+  String sleepInProgressTitle(String babyName);
+
+  /// 수면 중복 다이얼로그 경과 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}시간 {minutes}분째 수면 중'**
+  String sleepInProgressDuration(int hours, int minutes);
+
+  /// 수면 중복 다이얼로그 확인 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'종료 후 새로 시작'**
+  String get sleepEndAndStart;
+
+  /// 과거 수면 추가 시 겹침 경고
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 시간이 겹칩니다. 확인해주세요'**
+  String get sleepOverlapWarning;
+
+  /// 저장 확인 토스트 액션 - 기록 탭으로 이동
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 보기'**
+  String get viewRecord;
+
   /// 에러 - 재시도 한도 초과
   ///
   /// In ko, this message translates to:

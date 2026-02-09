@@ -3460,6 +3460,64 @@
       }
     }
   },
+  "insightSleepIncreased": "지난주보다 수면 시간이 늘었어요",
+  "@insightSleepIncreased": {
+    "description": "인사이트 - 수면 시간 증가"
+  },
+  "insightSleepDecreased": "지난주보다 수면 시간이 줄었어요",
+  "@insightSleepDecreased": {
+    "description": "인사이트 - 수면 시간 감소"
+  },
+  "insightMostSleepDay": "{dayName}에 가장 많이 잤어요",
+  "@insightMostSleepDay": {
+    "description": "인사이트 - 가장 수면이 많은 요일",
+    "placeholders": {
+      "dayName": {
+        "type": "String",
+        "example": "월요일"
+      }
+    }
+  },
+  "insightStartRecording": "기록을 시작해보세요",
+  "@insightStartRecording": {
+    "description": "인사이트 - 기록 없을 때 안내"
+  },
+  "sleepInProgressTitle": "{babyName} 수면이 진행 중이에요",
+  "@sleepInProgressTitle": {
+    "description": "수면 중복 다이얼로그 제목",
+    "placeholders": {
+      "babyName": {
+        "type": "String",
+        "example": "하늘이"
+      }
+    }
+  },
+  "sleepInProgressDuration": "{hours}시간 {minutes}분째 수면 중",
+  "@sleepInProgressDuration": {
+    "description": "수면 중복 다이얼로그 경과 시간",
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "example": "2"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
+    }
+  },
+  "sleepEndAndStart": "종료 후 새로 시작",
+  "@sleepEndAndStart": {
+    "description": "수면 중복 다이얼로그 확인 버튼"
+  },
+  "sleepOverlapWarning": "수면 시간이 겹칩니다. 확인해주세요",
+  "@sleepOverlapWarning": {
+    "description": "과거 수면 추가 시 겹침 경고"
+  },
+  "viewRecord": "기록 보기",
+  "@viewRecord": {
+    "description": "저장 확인 토스트 액션 - 기록 탭으로 이동"
+  },
   "errorRetryLater": "잠시 후 다시 시도해주세요",
   "@errorRetryLater": {
     "description": "에러 - 재시도 한도 초과"

@@ -90,7 +90,7 @@ class StatisticsDataProvider extends ChangeNotifier {
       _generateInsight();
       notifyListeners();
     } catch (e) {
-      debugPrint('❌ [StatisticsDataProvider] Load error: $e');
+      debugPrint('[ERR] [StatisticsDataProvider] Load error: $e');
       // 오프라인이거나 에러 발생 시 캐시 데이터 사용
       if (_cache.containsKey(cacheKey)) {
         _currentStatistics = _cache[cacheKey]!.data;
@@ -135,7 +135,7 @@ class StatisticsDataProvider extends ChangeNotifier {
       _isOffline = false;
       notifyListeners();
     } catch (e) {
-      debugPrint('❌ [StatisticsDataProvider] Together data error: $e');
+      debugPrint('[ERR] [StatisticsDataProvider] Together data error: $e');
       rethrow;
     }
   }
@@ -194,9 +194,8 @@ class StatisticsDataProvider extends ChangeNotifier {
       }
     }
 
-    final dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-    // 인사이트 메시지 생성
+    // Sprint 20 HF #13: i18n 키 기반 인사이트 메시지
+    // Provider에는 BuildContext가 없으므로 키만 전달, UI에서 i18n 변환
     String message;
     InsightType type;
 
@@ -207,7 +206,8 @@ class StatisticsDataProvider extends ChangeNotifier {
       message = 'insight_sleep_decreased';
       type = InsightType.attention;
     } else if (maxHours > 0) {
-      message = 'insight_most_sleep_day:${dayNames[maxDayIndex]}';
+      // 요일 인덱스(0=월~6=일)를 전달, UI에서 i18n 요일명으로 변환
+      message = 'insight_most_sleep_day:$maxDayIndex';
       type = InsightType.neutral;
     } else {
       message = 'insight_start_recording';
