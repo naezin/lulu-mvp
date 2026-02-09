@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../core/services/supabase_service.dart';
 import '../models/family_invite_model.dart';
 import '../models/family_member_model.dart';
 import '../services/invite_service.dart';
@@ -10,13 +10,10 @@ import '../services/invite_service.dart';
 /// 가족 멤버, 초대, 소유권 이전 등을 관리합니다.
 class FamilyProvider extends ChangeNotifier {
   final InviteService _inviteService;
-  final SupabaseClient _supabase;
 
   FamilyProvider({
     InviteService? inviteService,
-    SupabaseClient? supabase,
-  })  : _inviteService = inviteService ?? InviteService(),
-        _supabase = supabase ?? Supabase.instance.client;
+  })  : _inviteService = inviteService ?? InviteService();
 
   // State
   String? _familyId;
@@ -39,14 +36,14 @@ class FamilyProvider extends ChangeNotifier {
 
   /// 현재 사용자가 소유자인지 확인
   bool get isOwner {
-    final userId = _supabase.auth.currentUser?.id;
+    final userId = SupabaseService.currentUserId;
     if (userId == null) return false;
     return _members.any((m) => m.userId == userId && m.isOwner);
   }
 
   /// 현재 사용자 멤버 정보
   FamilyMemberModel? get currentMember {
-    final userId = _supabase.auth.currentUser?.id;
+    final userId = SupabaseService.currentUserId;
     if (userId == null) return null;
     try {
       return _members.firstWhere((m) => m.userId == userId);
@@ -134,7 +131,7 @@ class FamilyProvider extends ChangeNotifier {
     await _inviteService.transferOwnership(_familyId!, newOwnerId);
 
     // 로컬 상태 업데이트
-    final userId = _supabase.auth.currentUser?.id;
+    final userId = SupabaseService.currentUserId;
     _members = _members.map((m) {
       if (m.userId == userId) {
         return m.copyWith(role: 'member');

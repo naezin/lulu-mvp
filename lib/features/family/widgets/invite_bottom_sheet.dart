@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/services/supabase_service.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -248,7 +247,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
     if (_invite == null) return;
 
     final userName =
-        Supabase.instance.client.auth.currentUser?.userMetadata?['name'];
+        SupabaseService.currentUser?.userMetadata?['name'];
 
     await _inviteService.shareInvite(_invite!.inviteCode, userName as String?);
   }

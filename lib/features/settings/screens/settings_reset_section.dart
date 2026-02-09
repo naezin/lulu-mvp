@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../core/services/supabase_service.dart';
+import '../../../data/repositories/family_repository.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
 
@@ -178,99 +179,17 @@ class SettingsResetSection extends StatelessWidget {
     );
 
     try {
-      final supabase = Supabase.instance.client;
-      final userId = supabase.auth.currentUser?.id;
+      final familyRepository = FamilyRepository();
 
-      if (userId == null) {
-        throw Exception('Not authenticated');
-      }
+      // 1. Repository를 통해 전체 데이터 삭제
+      await familyRepository.resetAllData();
 
-      // 1. Find family_id (family_members first, families fallback)
-      String? familyId;
-
-      // 1-1. family_members
-      try {
-        final memberData = await supabase
-            .from('family_members')
-            .select('family_id')
-            .eq('user_id', userId)
-            .maybeSingle();
-
-        if (memberData != null) {
-          familyId = memberData['family_id'] as String?;
-          debugPrint('[OK] Found family via family_members: $familyId');
-        }
-      } catch (e) {
-        debugPrint('[WARN] family_members query failed: $e');
-      }
-
-      // 1-2. fallback: families.user_id
-      if (familyId == null) {
-        final familyData = await supabase
-            .from('families')
-            .select('id')
-            .eq('user_id', userId)
-            .maybeSingle();
-
-        if (familyData != null) {
-          familyId = familyData['id'] as String?;
-          debugPrint('[OK] Found family via families.user_id: $familyId');
-        }
-      }
-
-      if (familyId != null) {
-        debugPrint('[INFO] Deleting all data for family: $familyId');
-
-        // 2. Delete activities
-        await supabase
-            .from('activities')
-            .delete()
-            .eq('family_id', familyId);
-        debugPrint('[OK] Activities deleted');
-
-        // 3. Delete babies
-        await supabase
-            .from('babies')
-            .delete()
-            .eq('family_id', familyId);
-        debugPrint('[OK] Babies deleted');
-
-        // 4. Delete family_invites (Family Sharing v3.2)
-        try {
-          await supabase
-              .from('family_invites')
-              .delete()
-              .eq('family_id', familyId);
-          debugPrint('[OK] Family invites deleted');
-        } catch (e) {
-          debugPrint('[WARN] family_invites deletion failed: $e');
-        }
-
-        // 5. Delete family_members (Family Sharing v3.2)
-        try {
-          await supabase
-              .from('family_members')
-              .delete()
-              .eq('family_id', familyId);
-          debugPrint('[OK] Family members deleted');
-        } catch (e) {
-          debugPrint('[WARN] family_members deletion failed: $e');
-        }
-
-        // 6. Delete families
-        await supabase
-            .from('families')
-            .delete()
-            .eq('id', familyId);
-        debugPrint('[OK] Family deleted');
-      }
-
-      // 7. Clear local data
+      // 2. Clear local data
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
       debugPrint('[OK] Local data cleared');
 
-      // 8. Reset Provider
+      // 3. Reset Provider
       if (context.mounted) {
         context.read<HomeProvider>().reset();
       }
@@ -280,12 +199,10 @@ class SettingsResetSection extends StatelessWidget {
         Navigator.pop(context);
       }
 
-      debugPrint('[OK] All data reset complete');
-
-      // 9. Sign out (restart to onboarding)
+      // 4. Sign out (restart to onboarding)
       if (context.mounted) {
         _showSnackBar(context, S.of(context)!.resetCompleteMessage);
-        await supabase.auth.signOut();
+        await SupabaseService.client.auth.signOut();
       }
     } catch (e) {
       // Close loading

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/services/supabase_service.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -35,7 +34,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
       ),
       body: Consumer<FamilyProvider>(
         builder: (context, provider, _) {
-          final currentUserId = Supabase.instance.client.auth.currentUser?.id;
+          final currentUserId = SupabaseService.currentUserId;
           final others =
               provider.members.where((m) => m.userId != currentUserId).toList();
 

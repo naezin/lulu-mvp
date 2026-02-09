@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
+import '../../../data/repositories/baby_repository.dart';
+import '../../../data/repositories/family_repository.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 홈 화면 상태 관리 Provider
@@ -476,18 +477,18 @@ class HomeProvider extends ChangeNotifier {
   // BUG-009 FIX: 아기 추가 (Supabase + 로컬)
   // ========================================
 
-  /// 아기 추가 (Supabase + 로컬)
+  /// 아기 추가 (Repository + 로컬)
   ///
   /// BUG-009 FIX: family 존재 확인 후 아기 추가
   Future<void> addBaby(BabyModel baby) async {
+    final babyRepository = BabyRepository();
+    final familyRepository = FamilyRepository();
     try {
-      // 1. family 존재 확인
-      await _ensureFamilyExists(baby.familyId);
+      // 1. family 존재 확인 + family_members 등록
+      await familyRepository.ensureFamilyMember(baby.familyId);
 
-      // 2. Supabase에 저장
-      await Supabase.instance.client
-          .from('babies')
-          .insert(baby.toJson());
+      // 2. Repository를 통해 저장
+      await babyRepository.createBaby(baby);
 
       // 3. 로컬 상태 업데이트
       _babies = [..._babies, baby];
@@ -513,12 +514,10 @@ class HomeProvider extends ChangeNotifier {
 
   /// 아기 삭제
   Future<void> removeBaby(String babyId) async {
+    final babyRepository = BabyRepository();
     try {
-      // Supabase에서 삭제
-      await Supabase.instance.client
-          .from('babies')
-          .delete()
-          .eq('id', babyId);
+      // Repository를 통해 삭제
+      await babyRepository.deleteBaby(babyId);
 
       // 로컬 상태 업데이트
       _babies = _babies.where((b) => b.id != babyId).toList();
@@ -541,75 +540,6 @@ class HomeProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('[ERROR] [HomeProvider] removeBaby failed: $e');
       rethrow;
-    }
-  }
-
-  /// family가 없으면 생성 + family_members에 owner로 추가
-  /// Family Sharing v3.2: family_members 테이블 사용
-  Future<void> _ensureFamilyExists(String familyId) async {
-    final supabase = Supabase.instance.client;
-    final userId = supabase.auth.currentUser?.id;
-    if (userId == null) throw Exception('Not authenticated');
-
-    // 1. families 테이블에 있는지 확인
-    final existing = await supabase
-        .from('families')
-        .select('id')
-        .eq('id', familyId)
-        .maybeSingle();
-
-    if (existing != null) {
-      debugPrint('[OK] [HomeProvider] Family exists: $familyId');
-
-      // family_members에도 있는지 확인하고 없으면 추가
-      await _ensureFamilyMember(familyId, userId);
-      return;
-    }
-
-    // 2. 없으면 생성
-    debugPrint('[INFO] [HomeProvider] Creating family: $familyId');
-
-    await supabase.from('families').upsert({
-      'id': familyId,
-      'user_id': userId,
-      'created_by': userId,
-      'created_at': DateTime.now().toIso8601String(),
-    });
-
-    // 3. family_members에 owner로 추가
-    await supabase.from('family_members').upsert({
-      'family_id': familyId,
-      'user_id': userId,
-      'role': 'owner',
-    });
-
-    debugPrint('[OK] [HomeProvider] Family created with owner: $familyId');
-  }
-
-  /// family_members에 사용자가 없으면 owner로 추가
-  Future<void> _ensureFamilyMember(String familyId, String userId) async {
-    final supabase = Supabase.instance.client;
-
-    try {
-      final memberData = await supabase
-          .from('family_members')
-          .select('id')
-          .eq('family_id', familyId)
-          .eq('user_id', userId)
-          .maybeSingle();
-
-      if (memberData == null) {
-        // 멤버로 등록되어 있지 않으면 owner로 추가
-        await supabase.from('family_members').insert({
-          'family_id': familyId,
-          'user_id': userId,
-          'role': 'owner',
-        });
-        debugPrint('[OK] [HomeProvider] Added user to family_members as owner');
-      }
-    } catch (e) {
-      // family_members 테이블 접근 실패 시 무시 (레거시 호환)
-      debugPrint('[WARN] [HomeProvider] family_members check failed: $e');
     }
   }
 

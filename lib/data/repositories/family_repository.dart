@@ -243,4 +243,89 @@ class FamilyRepository {
       return null;
     }
   }
+
+  /// 전체 데이터 초기화 (설정 > 데이터 초기화)
+  ///
+  /// activities, babies, family_invites, family_members, families 순서로 삭제.
+  /// 로그아웃은 호출측에서 처리.
+  Future<void> resetAllData() async {
+    final userId = SupabaseService.currentUserId;
+    if (userId == null) throw Exception('Not authenticated');
+
+    // 1. family_id 찾기 (family_members 우선, families 폴백)
+    String? familyId;
+
+    try {
+      final memberData = await SupabaseService.client
+          .from('family_members')
+          .select('family_id')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      if (memberData != null) {
+        familyId = memberData['family_id'] as String?;
+        debugPrint('[OK] Found family via family_members: $familyId');
+      }
+    } catch (e) {
+      debugPrint('[WARN] family_members query failed: $e');
+    }
+
+    if (familyId == null) {
+      final familyData = await SupabaseService.families
+          .select('id')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      if (familyData != null) {
+        familyId = familyData['id'] as String?;
+        debugPrint('[OK] Found family via families.user_id: $familyId');
+      }
+    }
+
+    if (familyId != null) {
+      debugPrint('[INFO] Deleting all data for family: $familyId');
+
+      // 2. activities
+      await SupabaseService.activities
+          .delete()
+          .eq('family_id', familyId);
+      debugPrint('[OK] Activities deleted');
+
+      // 3. babies
+      await SupabaseService.babies
+          .delete()
+          .eq('family_id', familyId);
+      debugPrint('[OK] Babies deleted');
+
+      // 4. family_invites
+      try {
+        await SupabaseService.client
+            .from('family_invites')
+            .delete()
+            .eq('family_id', familyId);
+        debugPrint('[OK] Family invites deleted');
+      } catch (e) {
+        debugPrint('[WARN] family_invites deletion failed: $e');
+      }
+
+      // 5. family_members
+      try {
+        await SupabaseService.client
+            .from('family_members')
+            .delete()
+            .eq('family_id', familyId);
+        debugPrint('[OK] Family members deleted');
+      } catch (e) {
+        debugPrint('[WARN] family_members deletion failed: $e');
+      }
+
+      // 6. families
+      await SupabaseService.families
+          .delete()
+          .eq('id', familyId);
+      debugPrint('[OK] Family deleted');
+    }
+
+    debugPrint('[OK] All data reset complete');
+  }
 }

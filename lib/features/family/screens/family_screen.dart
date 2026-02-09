@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/services/supabase_service.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/family_provider.dart';
@@ -132,7 +131,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
     FamilyProvider provider,
     S l10n,
   ) {
-    final currentUserId = Supabase.instance.client.auth.currentUser?.id;
+    final currentUserId = SupabaseService.currentUserId;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
