@@ -91,11 +91,11 @@ class _FamilyScreenState extends State<FamilyScreen> {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: LuluColors.lavenderMist.withOpacity(0.2),
+            color: LuluColors.lavenderSelected,
             borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: const Center(
-            child: Text('👨‍👩‍👧', style: TextStyle(fontSize: 24)),
+            child: Icon(LuluIcons.people, color: LuluColors.lavenderMist, size: 24),
           ),
         ),
         const SizedBox(width: 12),
@@ -115,7 +115,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                 '${provider.memberCount}명의 가족',
                 style: TextStyle(
                   fontSize: 14,
-                  color: LuluTextColors.primary.withOpacity(0.7),
+                  color: LuluTextColors.primaryStrong,
                 ),
               ),
             ],
@@ -173,7 +173,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: LuluColors.deepIndigo.withOpacity(0.3),
+                color: LuluColors.deepIndigoBorder,
                 borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Row(
@@ -196,7 +196,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                           '${invite.daysLeft}일 남음',
                           style: TextStyle(
                             fontSize: 12,
-                            color: LuluTextColors.primary.withOpacity(0.6),
+                            color: LuluTextColors.primarySoft,
                           ),
                         ),
                       ],
@@ -206,7 +206,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                     onPressed: () => provider.cancelInvite(invite.id),
                     child: Text(
                       l10n.cancel,
-                      style: TextStyle(color: Colors.red[300]),
+                      style: TextStyle(color: LuluStatusColors.error),
                     ),
                   ),
                 ],
@@ -282,7 +282,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
         _buildSettingTile(
           icon: LuluIcons.exitToApp,
           title: l10n.leaveFamily,
-          color: Colors.red[300],
+          color: LuluStatusColors.error,
           onTap: () => _showLeaveDialog(context, provider, l10n),
         ),
       ],
@@ -303,7 +303,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
       ),
       trailing: Icon(
         LuluIcons.chevronRight,
-        color: color ?? LuluTextColors.primary.withOpacity(0.5),
+        color: color ?? LuluTextColors.primaryMedium,
       ),
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
@@ -319,13 +319,13 @@ class _FamilyScreenState extends State<FamilyScreen> {
             style: const TextStyle(color: LuluTextColors.primary)),
         content: Text(
           l10n.joinOtherFamilyDesc,
-          style: TextStyle(color: LuluTextColors.primary.withOpacity(0.8)),
+          style: TextStyle(color: LuluTextColors.primaryBold),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child:
-                Text(l10n.cancel, style: const TextStyle(color: Colors.grey)),
+                Text(l10n.cancel, style: const TextStyle(color: LuluTextColors.tertiary)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -357,7 +357,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
               style: const TextStyle(color: LuluTextColors.primary)),
           content: Text(
             l10n.transferOwnershipFirst,
-            style: TextStyle(color: LuluTextColors.primary.withOpacity(0.8)),
+            style: TextStyle(color: LuluTextColors.primaryBold),
           ),
           actions: [
             TextButton(
@@ -383,13 +383,13 @@ class _FamilyScreenState extends State<FamilyScreen> {
         ),
         content: Text(
           isLastMember ? l10n.deleteFamilyDesc : l10n.leaveFamilyDesc,
-          style: TextStyle(color: LuluTextColors.primary.withOpacity(0.8)),
+          style: TextStyle(color: LuluTextColors.primaryBold),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child:
-                Text(l10n.cancel, style: const TextStyle(color: Colors.grey)),
+                Text(l10n.cancel, style: const TextStyle(color: LuluTextColors.tertiary)),
           ),
           TextButton(
             onPressed: () async {
@@ -400,7 +400,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                     context, '/home', (r) => false);
               }
             },
-            child: Text(l10n.leave, style: TextStyle(color: Colors.red[300])),
+            child: Text(l10n.leave, style: TextStyle(color: LuluStatusColors.error)),
           ),
         ],
       ),

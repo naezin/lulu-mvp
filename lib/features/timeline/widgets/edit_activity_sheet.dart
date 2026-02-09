@@ -142,7 +142,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         width: 40,
         height: 4,
         decoration: BoxDecoration(
-          color: LuluTextColors.tertiary.withValues(alpha: 0.5),
+          color: LuluTextColors.tertiaryMedium,
           borderRadius: BorderRadius.circular(LuluRadius.xxs),
         ),
       ),
@@ -419,7 +419,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
               ),
               decoration: BoxDecoration(
                 color: selectedValue == options[i]
-                    ? LuluColors.lavenderMist.withValues(alpha: 0.2)
+                    ? LuluColors.lavenderSelected
                     : LuluColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(LuluRadius.lg),
                 border: Border.all(
@@ -480,7 +480,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
                         color: value.toInt() == presets[i]
-                            ? LuluColors.lavenderMist.withValues(alpha: 0.2)
+                            ? LuluColors.lavenderSelected
                             : LuluColors.surfaceElevated,
                         borderRadius: BorderRadius.circular(LuluRadius.xs),
                         border: Border.all(

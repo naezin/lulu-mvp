@@ -77,7 +77,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
                 l10n.enterInviteCodeDesc,
                 style: TextStyle(
                   fontSize: 14,
-                  color: LuluTextColors.primary.withOpacity(0.7),
+                  color: LuluTextColors.primaryStrong,
                 ),
               ),
               const SizedBox(height: 32),
@@ -90,7 +90,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
                 const SizedBox(height: 12),
                 Text(
                   _error!,
-                  style: TextStyle(color: Colors.red[300], fontSize: 14),
+                  style: TextStyle(color: LuluStatusColors.error, fontSize: 14),
                 ),
               ],
 
@@ -143,7 +143,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
   Widget _buildCodeInput(S l10n) {
     return Container(
       decoration: BoxDecoration(
-        color: LuluColors.deepIndigo.withOpacity(0.5),
+        color: LuluColors.deepIndigoMedium,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: TextField(
@@ -163,7 +163,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
         decoration: InputDecoration(
           hintText: 'ABC-123',
           hintStyle: TextStyle(
-            color: LuluTextColors.primary.withOpacity(0.3),
+            color: LuluTextColors.primaryHint,
             letterSpacing: 4,
           ),
           border: InputBorder.none,
@@ -210,9 +210,9 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: LuluColors.lavenderMist.withOpacity(0.1),
+        color: LuluColors.lavenderBg,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
-        border: Border.all(color: LuluColors.lavenderMist.withOpacity(0.3)),
+        border: Border.all(color: LuluColors.lavenderBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,12 +248,12 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
       padding: const EdgeInsets.only(top: 8),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: LuluTextColors.primary.withOpacity(0.6)),
+          Icon(icon, size: 16, color: LuluTextColors.primarySoft),
           const SizedBox(width: 8),
           Text(
             text,
             style: TextStyle(
-              color: LuluTextColors.primary.withOpacity(0.8),
+              color: LuluTextColors.primaryBold,
               fontSize: 14,
             ),
           ),

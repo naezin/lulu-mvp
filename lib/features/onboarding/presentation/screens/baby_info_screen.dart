@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/design_system/lulu_colors.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../data/models/baby_type.dart';
 import '../providers/onboarding_provider.dart';
@@ -417,7 +418,7 @@ class _GenderButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppTheme.lavenderMist.withValues(alpha: 0.15)
+              ? LuluColors.lavenderLight
               : AppTheme.surfaceElevated,
           borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(

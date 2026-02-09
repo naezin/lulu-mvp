@@ -173,7 +173,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+              color: LuluColors.lavenderSelected,
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -323,7 +323,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+                          color: LuluColors.lavenderSelected,
                           borderRadius: BorderRadius.circular(LuluRadius.indicator),
                         ),
                         child: Text(

@@ -119,7 +119,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+          color: LuluColors.lavenderSelected,
           borderRadius: BorderRadius.circular(LuluRadius.section),
         ),
         indicatorSize: TabBarIndicatorSize.tab,

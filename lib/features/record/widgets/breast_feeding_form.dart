@@ -43,10 +43,10 @@ class BreastFeedingForm extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
-        color: LuluColors.surfaceElevated.withValues(alpha: 0.5),
+        color: LuluColors.surfaceElevatedMedium,
         borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
-          color: LuluActivityColors.feeding.withValues(alpha: 0.2),
+          color: LuluActivityColors.feedingSelected,
         ),
       ),
       child: Column(

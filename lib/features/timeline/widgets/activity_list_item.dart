@@ -105,7 +105,7 @@ class ActivityListItem extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: LuluColors.deepIndigo.withValues(alpha: 0.5),
+                  color: LuluColors.deepIndigoMedium,
                   borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
                 child: Row(
@@ -115,7 +115,7 @@ class ActivityListItem extends StatelessWidget {
                     Expanded(child: _buildContent(l10n)),
                     Icon(
                       LuluIcons.chevronLeft,
-                      color: LuluTextColors.tertiary.withValues(alpha: 0.5),
+                      color: LuluTextColors.tertiaryMedium,
                       size: 20,
                     ),
                   ],

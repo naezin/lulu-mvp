@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 
@@ -100,7 +101,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.red.withValues(alpha: 0.1),
+                            color: LuluColors.redBg,
                             borderRadius: BorderRadius.circular(LuluRadius.xs),
                           ),
                           child: Row(
@@ -246,7 +247,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
-              disabledBackgroundColor: const Color(0xFF9D8CD6).withValues(alpha: 0.5),
+              disabledBackgroundColor: LuluColors.lavenderMedium,
             ),
             child: authProvider.isLoading
                 ? const SizedBox(

@@ -554,7 +554,7 @@ class _WeeklyViewState extends State<WeeklyView> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+              color: LuluColors.lavenderSelected,
               shape: BoxShape.circle,
             ),
             child: Icon(

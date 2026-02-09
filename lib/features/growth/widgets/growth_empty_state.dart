@@ -31,7 +31,7 @@ class GrowthEmptyState extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+                color: LuluColors.lavenderLight,
                 shape: BoxShape.circle,
               ),
               child: Center(

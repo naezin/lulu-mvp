@@ -70,7 +70,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+                      color: LuluColors.lavenderLight,
                       borderRadius: BorderRadius.circular(LuluRadius.section),
                     ),
                     child: const Icon(
@@ -173,7 +173,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                     color: LuluTextColors.primary,
                   ),
                 ),
-                activeTrackColor: LuluColors.lavenderMist.withValues(alpha: 0.5),
+                activeTrackColor: LuluColors.lavenderMedium,
                 activeThumbColor: LuluColors.lavenderMist,
                 contentPadding: EdgeInsets.zero,
               ),

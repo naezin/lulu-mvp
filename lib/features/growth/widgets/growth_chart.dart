@@ -153,12 +153,12 @@ class _GrowthChartState extends State<GrowthChart>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _LegendItem(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.3),
+          color: LuluColors.lavenderBorder,
           label: '3-97%',
         ),
         const SizedBox(width: LuluSpacing.lg),
         _LegendItem(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.5),
+          color: LuluColors.lavenderMedium,
           label: '10-90%',
         ),
         const SizedBox(width: LuluSpacing.lg),

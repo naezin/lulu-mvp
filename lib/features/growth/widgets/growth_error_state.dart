@@ -33,7 +33,7 @@ class GrowthErrorState extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: LuluStatusColors.error.withValues(alpha: 0.15),
+                color: LuluStatusColors.errorLight,
                 shape: BoxShape.circle,
               ),
               child: Center(

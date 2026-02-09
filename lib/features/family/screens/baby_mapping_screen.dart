@@ -84,7 +84,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
               l10n.mapBabiesDesc,
               style: TextStyle(
                 fontSize: 14,
-                color: LuluTextColors.primary.withOpacity(0.7),
+                color: LuluTextColors.primaryStrong,
               ),
             ),
             const SizedBox(height: 32),
@@ -155,7 +155,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: LuluColors.deepIndigo.withOpacity(0.3),
+        color: LuluColors.deepIndigoBorder,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
@@ -168,7 +168,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    color: LuluColors.lavenderMist.withOpacity(0.2),
+                    color: LuluColors.lavenderSelected,
                     borderRadius: BorderRadius.circular(LuluRadius.xs),
                   ),
                   child: Center(
@@ -195,7 +195,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
           Icon(
             LuluIcons.forward,
             size: 20,
-            color: LuluTextColors.primary.withOpacity(0.5),
+            color: LuluTextColors.primaryMedium,
           ),
           const SizedBox(width: 12),
 
@@ -207,7 +207,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
                 color: LuluColors.midnightNavy,
                 borderRadius: BorderRadius.circular(LuluRadius.xs),
                 border: Border.all(
-                  color: LuluColors.lavenderMist.withOpacity(0.3),
+                  color: LuluColors.lavenderBorder,
                 ),
               ),
               child: DropdownButton<String?>(
@@ -218,7 +218,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
                 hint: Text(
                   l10n.selectBaby,
                   style: TextStyle(
-                    color: LuluTextColors.primary.withOpacity(0.5),
+                    color: LuluTextColors.primaryMedium,
                   ),
                 ),
                 items: [
@@ -227,7 +227,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
                     child: Text(
                       l10n.doNotLink,
                       style: TextStyle(
-                        color: LuluTextColors.primary.withOpacity(0.7),
+                        color: LuluTextColors.primaryStrong,
                       ),
                     ),
                   ),

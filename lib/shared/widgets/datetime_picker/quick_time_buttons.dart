@@ -77,7 +77,7 @@ class _QuickButton extends StatelessWidget {
       label: label,
       child: Material(
         color: isPrimary
-            ? LuluColors.lavenderMist.withValues(alpha: 0.15)
+            ? LuluColors.lavenderLight
             : LuluColors.surfaceCard,
         borderRadius: BorderRadius.circular(LuluRadius.xs),
         child: InkWell(

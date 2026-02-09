@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../core/design_system/lulu_colors.dart';
 import '../../core/design_system/lulu_radius.dart';
 
 /// Lulu Theme - MVP-F (다태아 중심)
@@ -125,9 +126,9 @@ class AppTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: deepBlue,
-        indicatorColor: lavenderMist.withValues(alpha: 0.2),
+        indicatorColor: LuluColors.lavenderSelected,
         elevation: 8,
-        shadowColor: Colors.black.withValues(alpha: 0.3),
+        shadowColor: LuluColors.shadowBlack,
         height: 72,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {

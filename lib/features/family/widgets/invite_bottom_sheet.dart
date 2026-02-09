@@ -72,7 +72,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: LuluTextColors.primary.withOpacity(0.3),
+              color: LuluTextColors.primaryHint,
               borderRadius: BorderRadius.circular(LuluRadius.xxs),
             ),
           ),
@@ -81,7 +81,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
           // 헤더
           Row(
             children: [
-              const Text('👨‍👩‍👧', style: TextStyle(fontSize: 28)),
+              const Icon(LuluIcons.people, color: LuluColors.lavenderMist, size: 28),
               const SizedBox(width: 12),
               Text(
                 l10n.inviteFamily,
@@ -105,7 +105,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: LuluColors.deepIndigo.withOpacity(0.5),
+                color: LuluColors.deepIndigoMedium,
                 borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Column(
@@ -123,7 +123,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
                   Text(
                     l10n.inviteValidDays(_invite!.daysLeft.toString()),
                     style: TextStyle(
-                      color: LuluTextColors.primary.withOpacity(0.6),
+                      color: LuluTextColors.primarySoft,
                       fontSize: 14,
                     ),
                   ),
@@ -140,10 +140,10 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
               decoration: InputDecoration(
                 labelText: l10n.inviteByEmail,
                 labelStyle: TextStyle(
-                  color: LuluTextColors.primary.withOpacity(0.6),
+                  color: LuluTextColors.primarySoft,
                 ),
                 filled: true,
-                fillColor: LuluColors.deepIndigo.withOpacity(0.3),
+                fillColor: LuluColors.deepIndigoBorder,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(LuluRadius.sm),
                   borderSide: BorderSide.none,

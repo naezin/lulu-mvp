@@ -531,7 +531,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
         color: LuluStatusColors.warningSoft,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(
-          color: LuluStatusColors.warning.withValues(alpha: 0.3),
+          color: LuluStatusColors.warningBorder,
           width: 1,
         ),
       ),

@@ -239,13 +239,13 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            LuluActivityColors.sleep.withValues(alpha: 0.15),
-            LuluActivityColors.sleep.withValues(alpha: 0.08),
+            LuluActivityColors.sleepLight,
+            LuluActivityColors.sleepSubtle,
           ],
         ),
         borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
-          color: LuluActivityColors.sleep.withValues(alpha: 0.5),
+          color: LuluActivityColors.sleepMedium,
           width: 2,
         ),
       ),
@@ -258,7 +258,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: LuluActivityColors.sleep.withValues(alpha: 0.2),
+                  color: LuluActivityColors.sleepSelected,
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
@@ -459,7 +459,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: LuluActivityColors.sleep.withValues(alpha: 0.2),
+                  color: LuluActivityColors.sleepSelected,
                   shape: BoxShape.circle,
                 ),
                 child: const Center(

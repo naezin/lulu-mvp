@@ -163,7 +163,7 @@ class _DailyGridState extends State<DailyGrid> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: LuluTextColors.primary.withValues(alpha: 0.7),
+                    color: LuluTextColors.primaryStrong,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),

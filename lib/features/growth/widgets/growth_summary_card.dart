@@ -82,7 +82,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
               color: LuluColors.deepBlue,
               borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
-                color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+                color: LuluColors.lavenderSelected,
               ),
             ),
             child: Column(

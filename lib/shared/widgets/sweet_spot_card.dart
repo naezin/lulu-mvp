@@ -171,8 +171,8 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            LuluActivityColors.sleep.withValues(alpha: 0.15),
-            LuluActivityColors.sleep.withValues(alpha: 0.08),
+            LuluActivityColors.sleepLight,
+            LuluActivityColors.sleepSubtle,
           ],
         ),
         borderRadius: BorderRadius.circular(LuluRadius.lg),
@@ -191,7 +191,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: LuluActivityColors.sleep.withValues(alpha: 0.2),
+                  color: LuluActivityColors.sleepSelected,
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
@@ -573,7 +573,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
               style: OutlinedButton.styleFrom(
                 foregroundColor: LuluActivityColors.sleep,
                 side: BorderSide(
-                  color: LuluActivityColors.sleep.withValues(alpha: 0.5),
+                  color: LuluActivityColors.sleepMedium,
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(

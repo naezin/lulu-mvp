@@ -33,7 +33,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
           color: LuluColors.lavenderMist.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
-            color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+            color: LuluColors.lavenderSelected,
             width: 1,
           ),
         ),
@@ -44,7 +44,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+                color: LuluColors.lavenderLight,
                 borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Center(
@@ -86,7 +86,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
                 vertical: LuluSpacing.xs,
               ),
               decoration: BoxDecoration(
-                color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+                color: LuluColors.lavenderSelected,
                 borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Text(

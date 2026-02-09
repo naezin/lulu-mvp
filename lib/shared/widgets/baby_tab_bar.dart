@@ -106,7 +106,7 @@ class BabyTabBar extends StatelessWidget {
                   end: Alignment.centerRight,
                   colors: [
                     LuluColors.deepBlue.withValues(alpha: 0),
-                    LuluColors.deepBlue.withValues(alpha: 0.8),
+                    LuluColors.deepBlueStrong,
                     LuluColors.deepBlue,
                   ],
                   stops: const [0.0, 0.5, 1.0],

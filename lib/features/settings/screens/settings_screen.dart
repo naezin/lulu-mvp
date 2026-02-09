@@ -231,7 +231,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ? IconButton(
               icon: Icon(
                 LuluIcons.delete,
-                color: LuluStatusColors.error.withValues(alpha: 0.7),
+                color: LuluStatusColors.errorStrong,
                 size: 22,
               ),
               onPressed: () => _showDeleteBabyDialog(baby),
@@ -246,10 +246,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         width: 48,
         height: 48,
         decoration: BoxDecoration(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.1),
+          color: LuluColors.lavenderBg,
           borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
-            color: LuluColors.lavenderMist.withValues(alpha: 0.3),
+            color: LuluColors.lavenderBorder,
             width: 1.5,
           ),
         ),
@@ -330,7 +330,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+                color: LuluColors.lavenderLight,
                 borderRadius: BorderRadius.circular(LuluRadius.section),
               ),
               child: const Icon(
@@ -389,7 +389,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+                color: LuluColors.lavenderLight,
                 borderRadius: BorderRadius.circular(LuluRadius.section),
               ),
               child: const Icon(
@@ -499,7 +499,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+          color: LuluColors.lavenderLight,
           borderRadius: BorderRadius.circular(LuluRadius.section),
         ),
         child: const Icon(
@@ -584,7 +584,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+          color: LuluColors.lavenderLight,
           borderRadius: BorderRadius.circular(LuluRadius.section),
         ),
         child: const Icon(
@@ -773,7 +773,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         color: LuluColors.surfaceCard,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(
-          color: LuluStatusColors.error.withValues(alpha: 0.3),
+          color: LuluStatusColors.errorBorder,
         ),
       ),
       child: ListTile(
@@ -781,7 +781,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: LuluStatusColors.error.withValues(alpha: 0.15),
+            color: LuluStatusColors.errorLight,
             borderRadius: BorderRadius.circular(LuluRadius.section),
           ),
           child: Icon(
@@ -804,7 +804,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         trailing: Icon(
           LuluIcons.chevronRight,
-          color: LuluStatusColors.error.withValues(alpha: 0.7),
+          color: LuluStatusColors.errorStrong,
         ),
         onTap: () => _showResetConfirmDialog(),
       ),
@@ -845,7 +845,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: LuluStatusColors.error.withValues(alpha: 0.1),
+                color: LuluStatusColors.errorBg,
                 borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Column(

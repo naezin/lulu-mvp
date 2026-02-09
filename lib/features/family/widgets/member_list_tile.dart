@@ -24,11 +24,11 @@ class MemberListTile extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isMe
-            ? LuluColors.lavenderMist.withOpacity(0.15)
-            : LuluColors.deepIndigo.withOpacity(0.3),
+            ? LuluColors.lavenderLight
+            : LuluColors.deepIndigoBorder,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: isMe
-            ? Border.all(color: LuluColors.lavenderMist.withOpacity(0.3))
+            ? Border.all(color: LuluColors.lavenderBorder)
             : null,
       ),
       child: Row(
@@ -39,8 +39,8 @@ class MemberListTile extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: member.isOwner
-                  ? Colors.amber.withOpacity(0.2)
-                  : LuluColors.lavenderMist.withOpacity(0.2),
+                  ? Colors.amber.withValues(alpha: 0.2)
+                  : LuluColors.lavenderSelected,
               borderRadius: BorderRadius.circular(LuluRadius.section),
             ),
             child: Center(
@@ -95,7 +95,7 @@ class MemberListTile extends StatelessWidget {
                       ? '관리자'
                       : '${member.joinedAt.month}월 ${member.joinedAt.day}일 참여',
                   style: TextStyle(
-                    color: LuluTextColors.primary.withOpacity(0.6),
+                    color: LuluTextColors.primarySoft,
                     fontSize: 12,
                   ),
                 ),

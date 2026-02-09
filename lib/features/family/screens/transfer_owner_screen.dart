@@ -58,7 +58,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
                   l10n.transferOwnershipDesc,
                   style: TextStyle(
                     fontSize: 14,
-                    color: LuluTextColors.primary.withOpacity(0.7),
+                    color: LuluTextColors.primaryStrong,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -118,13 +118,13 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? LuluColors.lavenderMist.withOpacity(0.2)
-              : LuluColors.deepIndigo.withOpacity(0.3),
+              ? LuluColors.lavenderSelected
+              : LuluColors.deepIndigoBorder,
           borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: isSelected
                 ? LuluColors.lavenderMist
-                : LuluColors.deepIndigo.withOpacity(0.5),
+                : LuluColors.deepIndigoMedium,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -139,7 +139,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
                 border: Border.all(
                   color: isSelected
                       ? LuluColors.lavenderMist
-                      : LuluColors.lavenderMist.withOpacity(0.5),
+                      : LuluColors.lavenderMedium,
                   width: 2,
                 ),
               ),
@@ -172,7 +172,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
                     Text(
                       member.userEmail!,
                       style: TextStyle(
-                        color: LuluTextColors.primary.withOpacity(0.6),
+                        color: LuluTextColors.primarySoft,
                         fontSize: 14,
                       ),
                     ),
@@ -199,13 +199,13 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
             style: const TextStyle(color: LuluTextColors.primary)),
         content: Text(
           l10n.confirmTransferDesc,
-          style: TextStyle(color: LuluTextColors.primary.withOpacity(0.8)),
+          style: TextStyle(color: LuluTextColors.primaryBold),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child:
-                Text(l10n.cancel, style: const TextStyle(color: Colors.grey)),
+                Text(l10n.cancel, style: const TextStyle(color: LuluTextColors.tertiary)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),

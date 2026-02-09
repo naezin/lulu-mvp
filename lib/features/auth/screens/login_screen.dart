@@ -133,7 +133,7 @@ class LoginScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.red.withValues(alpha: 0.1),
+                  color: LuluColors.redBg,
                   borderRadius: BorderRadius.circular(LuluRadius.xs),
                 ),
                 child: Row(

@@ -30,7 +30,7 @@ class TogetherGuideDialog extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.3),
+              color: LuluColors.lavenderBorder,
               shape: BoxShape.circle,
             ),
             child: Center(

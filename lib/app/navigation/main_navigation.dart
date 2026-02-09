@@ -75,7 +75,7 @@ class _MainNavigationState extends State<MainNavigation> {
       notchMargin: 8,
       height: 68,
       elevation: 8,
-      shadowColor: Colors.black.withValues(alpha: 0.3),
+      shadowColor: LuluColors.shadowBlack,
       padding: EdgeInsets.zero,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -72,7 +72,7 @@ class _GrowthLoadingStateState extends State<GrowthLoadingState>
           end: Alignment(_animation.value, 0),
           colors: [
             LuluColors.surfaceElevated,
-            LuluColors.surfaceElevated.withValues(alpha: 0.5),
+            LuluColors.surfaceElevatedMedium,
             LuluColors.surfaceElevated,
           ],
         ),

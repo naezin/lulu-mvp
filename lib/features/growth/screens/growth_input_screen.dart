@@ -299,7 +299,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
         color: LuluStatusColors.warning.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(
-          color: LuluStatusColors.warning.withValues(alpha: 0.3),
+          color: LuluStatusColors.warningBorder,
         ),
       ),
       child: Row(

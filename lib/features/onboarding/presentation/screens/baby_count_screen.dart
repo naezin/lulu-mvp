@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/design_system/lulu_colors.dart';
 import '../../../../core/design_system/lulu_icons.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
@@ -141,7 +142,7 @@ class _BabyCountCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.lavenderMist.withValues(alpha: 0.15) : AppTheme.surfaceCard,
+          color: isSelected ? LuluColors.lavenderLight : AppTheme.surfaceCard,
           borderRadius: BorderRadius.circular(LuluRadius.lg),
           border: Border.all(
             color: isSelected ? AppTheme.lavenderMist : Colors.transparent,

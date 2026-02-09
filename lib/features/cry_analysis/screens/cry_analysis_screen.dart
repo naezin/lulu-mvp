@@ -223,7 +223,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           width: 120,
           height: 120,
           decoration: BoxDecoration(
-            color: LuluColors.lavenderMist.withValues(alpha: 0.1),
+            color: LuluColors.lavenderBg,
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -255,7 +255,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
               vertical: LuluSpacing.sm,
             ),
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.1),
+              color: LuluColors.lavenderBg,
               borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
@@ -413,7 +413,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           Container(
             padding: const EdgeInsets.all(LuluSpacing.md),
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.1),
+              color: LuluColors.lavenderBg,
               borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
@@ -532,10 +532,10 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
     return Container(
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
-        color: LuluStatusColors.error.withValues(alpha: 0.1),
+        color: LuluStatusColors.errorBg,
         borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
-          color: LuluStatusColors.error.withValues(alpha: 0.3),
+          color: LuluStatusColors.errorBorder,
         ),
       ),
       child: Column(

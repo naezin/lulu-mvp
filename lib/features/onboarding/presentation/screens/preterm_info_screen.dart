@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
+import '../../../../core/design_system/lulu_colors.dart';
 import '../../../../core/design_system/lulu_radius.dart';
 import '../../../../core/design_system/lulu_icons.dart';
 
@@ -208,7 +209,7 @@ class _WeeksSelector extends StatelessWidget {
             activeTrackColor: AppTheme.lavenderMist,
             inactiveTrackColor: AppTheme.surfaceElevated,
             thumbColor: AppTheme.lavenderMist,
-            overlayColor: AppTheme.lavenderMist.withValues(alpha: 0.2),
+            overlayColor: LuluColors.lavenderSelected,
             trackHeight: 8,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
           ),
