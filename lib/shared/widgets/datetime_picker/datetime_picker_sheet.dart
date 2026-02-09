@@ -110,20 +110,20 @@ class _DateTimePickerSheetState extends State<_DateTimePickerSheet> {
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
-                      l10n?.dateTimeCancel ?? '취소',
+                      l10n?.dateTimeCancel ?? 'Cancel',
                       style: LuluTextStyles.labelMedium.copyWith(
                         color: LuluTextColors.secondary,
                       ),
                     ),
                   ),
                   Text(
-                    widget.title ?? l10n?.dateTimePickerTitle ?? '시간 선택',
+                    widget.title ?? l10n?.dateTimePickerTitle ?? 'Select Time',
                     style: LuluTextStyles.titleSmall,
                   ),
                   TextButton(
                     onPressed: () => Navigator.pop(context, _selectedDateTime),
                     child: Text(
-                      l10n?.dateTimeConfirm ?? '확인',
+                      l10n?.dateTimeConfirm ?? 'Confirm',
                       style: LuluTextStyles.labelMedium.copyWith(
                         color: LuluColors.lavenderMist,
                         fontWeight: FontWeight.w600,

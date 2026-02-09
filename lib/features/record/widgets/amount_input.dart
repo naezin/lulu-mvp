@@ -4,6 +4,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 수유량/수면 시간 등 수치 입력 위젯
 ///
@@ -169,6 +170,7 @@ class _AmountInputState extends State<AmountInput> {
   }
 
   Widget _buildInputField({bool compact = false}) {
+    final l10n = S.of(context)!;
     return Container(
       padding: compact
           ? const EdgeInsets.symmetric(horizontal: 12, vertical: 8)
@@ -186,7 +188,7 @@ class _AmountInputState extends State<AmountInput> {
               style: compact ? LuluTextStyles.bodyMedium : LuluTextStyles.bodyLarge,
               textAlign: compact ? TextAlign.center : TextAlign.start,
               decoration: InputDecoration(
-                hintText: compact ? '직접' : '직접 입력',
+                hintText: compact ? l10n.amountInputDirectShort : l10n.amountInputDirect,
                 hintStyle: (compact ? LuluTextStyles.bodySmall : LuluTextStyles.bodyMedium)
                     .copyWith(color: LuluTextColors.tertiary),
                 border: InputBorder.none,

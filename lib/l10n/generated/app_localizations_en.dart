@@ -2965,4 +2965,254 @@ class SEn extends S {
 
   @override
   String get authErrorGeneric => 'An error occurred. Please try again.';
+
+  @override
+  String get growthChartFentonDesc => 'Preterm growth chart (22-50 weeks)';
+
+  @override
+  String get growthChartWhoDesc => 'WHO growth chart (0-24 months)';
+
+  @override
+  String summaryCardAccessibility(
+    String label,
+    String value,
+    String subLabel,
+    String change,
+  ) {
+    return '$label $value $subLabel, compared to last week $change';
+  }
+
+  @override
+  String get amountInputDirectShort => 'Custom';
+
+  @override
+  String get amountInputDirect => 'Enter amount';
+
+  @override
+  String get inviteCodeVerifyError => 'Could not verify the invite code';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String growthEmptyTitleWithName(String babyName) {
+    return 'Start $babyName\'s first\ngrowth record!';
+  }
+
+  @override
+  String get growthEmptyTitle => 'Start your first\ngrowth record!';
+
+  @override
+  String get growthEmptyDescription =>
+      'Record after pediatric checkups\nto track growth trends';
+
+  @override
+  String get growthEmptyButton => 'Add first record';
+
+  @override
+  String get filterViewTogether => 'View Together';
+
+  @override
+  String filterCorrectedAgeDays(int days) {
+    return 'CA ${days}d';
+  }
+
+  @override
+  String get cryAnalysisCardSubtitle => 'Find out why your baby is crying';
+
+  @override
+  String get cryAnalysisStartButton => 'Start Analysis';
+
+  @override
+  String growthChartTitleWithMetric(String metric) {
+    return '$metric Growth Chart';
+  }
+
+  @override
+  String get growthChartLegendMedian => '50% (median)';
+
+  @override
+  String get growthChartLegendMeasured => 'Measured';
+
+  @override
+  String get growthMetricWeight => 'Weight';
+
+  @override
+  String get growthMetricLength => 'Length';
+
+  @override
+  String get growthMetricHeadCircumference => 'Head Circ.';
+
+  @override
+  String get memberBadgeMe => 'Me';
+
+  @override
+  String get memberRoleOwner => 'Admin';
+
+  @override
+  String memberJoinedDate(int month, int day) {
+    return 'Joined $month/$day';
+  }
+
+  @override
+  String get growthPercentileTitle => 'Growth Percentile';
+
+  @override
+  String get navRecords => 'Records';
+
+  @override
+  String get registerBabyFirst => 'Please register baby info first';
+
+  @override
+  String get recordDeleted => 'Record deleted';
+
+  @override
+  String get undoAction => 'Undo';
+
+  @override
+  String statisticsCountUnit(String count) {
+    return '${count}x';
+  }
+
+  @override
+  String statisticsMinuteChange(String sign, String minutes) {
+    return '$sign${minutes}min';
+  }
+
+  @override
+  String statisticsCountChange(String sign, String count) {
+    return '$sign${count}x';
+  }
+
+  @override
+  String get defaultFamilyName => 'My Family';
+
+  @override
+  String inviteDaysRemaining(int days) {
+    return '$days days left';
+  }
+
+  @override
+  String get togetherDifferentPatternsNormal =>
+      'Different patterns are all normal';
+
+  @override
+  String get cryReanalyzeShort => 'Reanalyze';
+
+  @override
+  String get confidenceLevelHigh => 'High';
+
+  @override
+  String get confidenceLevelMedium => 'Medium';
+
+  @override
+  String get confidenceLevelLow => 'Low';
+
+  @override
+  String get cryFeedbackAccurate => 'Accurate';
+
+  @override
+  String get cryFeedbackInaccurate => 'Seems different';
+
+  @override
+  String get cryFeedbackUnsure => 'Not sure';
+
+  @override
+  String get directionIncreasing => 'Increasing';
+
+  @override
+  String get directionStable => 'Stable';
+
+  @override
+  String get directionDecreasing => 'Decreasing';
+
+  @override
+  String sgaCorrectedAgeDMinus(int days) {
+    return 'Corrected age D$days';
+  }
+
+  @override
+  String sgaCorrectedAgeDPlus(int days) {
+    return 'Corrected age D+$days';
+  }
+
+  @override
+  String get sgaGrowthTrackingMode => 'Growth tracking mode';
+
+  @override
+  String semanticsTimeSelect(String time) {
+    return 'Select time: $time';
+  }
+
+  @override
+  String ongoingSleepElapsedHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
+  String ongoingSleepElapsedMinutes(int minutes) {
+    return '${minutes}m';
+  }
+
+  @override
+  String get togetherOkButton => 'Got it';
+
+  @override
+  String get cryAnalysisCardTitle => 'Cry Analysis';
+
+  @override
+  String get cryAnalysisStartButtonHome => 'Start Analysis';
+
+  @override
+  String get cryAnalyzing => 'Analyzing...';
+
+  @override
+  String get cryCancelButton => 'Cancel';
+
+  @override
+  String get familyDefaultName => 'My Family';
+
+  @override
+  String familyMemberCount(int count) {
+    return '$count members';
+  }
+
+  @override
+  String familyInviteDaysLeft(int days) {
+    return '$days days left';
+  }
+
+  @override
+  String get growthErrorTitle => 'Failed to load data';
+
+  @override
+  String get growthErrorRetry => 'Retry';
+
+  @override
+  String get growthChartLegend50 => '50% (median)';
+
+  @override
+  String get welcomeStartButton => 'Get Started';
+
+  @override
+  String importCannotSelectFile(String error) {
+    return 'Cannot select file: $error';
+  }
+
+  @override
+  String get importNoFamilyInfo =>
+      'No family info found. Please complete onboarding.';
+
+  @override
+  String importFailed(String error) {
+    return 'Import failed: $error';
+  }
+
+  @override
+  String get dateFormatMonthDay => 'MMM d (E)';
+
+  @override
+  String growthMetricChartTitle(String metric) {
+    return '$metric Growth Chart';
+  }
 }

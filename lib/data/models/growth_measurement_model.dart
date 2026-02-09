@@ -1,5 +1,7 @@
 import 'package:uuid/uuid.dart';
 
+import '../../l10n/generated/app_localizations.dart' show S;
+
 /// 성장 측정 기록 모델
 ///
 /// 다태아 지원: 아기별 개별 기록
@@ -194,11 +196,16 @@ enum MeasurementDirection {
 }
 
 extension MeasurementDirectionExtension on MeasurementDirection {
-  String get label => switch (this) {
-        MeasurementDirection.increasing => '증가',
-        MeasurementDirection.stable => '유지',
-        MeasurementDirection.decreasing => '감소',
+  String localizedLabel(S? l10n) => switch (this) {
+        MeasurementDirection.increasing =>
+          l10n?.directionIncreasing ?? 'Increasing',
+        MeasurementDirection.stable =>
+          l10n?.directionStable ?? 'Stable',
+        MeasurementDirection.decreasing =>
+          l10n?.directionDecreasing ?? 'Decreasing',
       };
+
+  String get label => localizedLabel(null);
 
   String get emoji => switch (this) {
         MeasurementDirection.increasing => '↑',

@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/constants/animation_constants.dart';
 import '../../../data/models/growth_measurement_model.dart';
 import '../data/fenton_data.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../data/growth_data_cache.dart';
 
 /// 통합 성장 차트 위젯
@@ -131,13 +132,13 @@ class _GrowthChartState extends State<GrowthChart>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${widget.metric.label} 성장 차트',
+              S.of(context)!.growthChartTitleWithMetric(widget.metric.localizedLabel(S.of(context)!)),
               style: LuluTextStyles.titleSmall.copyWith(
                 color: LuluTextColors.primary,
               ),
             ),
             Text(
-              widget.chartType.description,
+              widget.chartType.localizedDescription(S.of(context)!),
               style: LuluTextStyles.caption.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -164,12 +165,12 @@ class _GrowthChartState extends State<GrowthChart>
         const SizedBox(width: LuluSpacing.lg),
         _LegendItem(
           color: LuluColors.champagneGold,
-          label: '50% (중앙값)',
+          label: S.of(context)!.growthChartLegendMedian,
         ),
         const SizedBox(width: LuluSpacing.lg),
         _LegendItem(
           color: LuluColors.lavenderMist,
-          label: '측정값',
+          label: S.of(context)!.growthChartLegendMeasured,
           isPoint: true,
         ),
       ],

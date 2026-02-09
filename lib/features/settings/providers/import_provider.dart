@@ -95,7 +95,7 @@ class ImportProvider extends ChangeNotifier {
 
       return false;
     } catch (e) {
-      _setError('파일을 선택할 수 없습니다: $e');
+      _setError('Failed to select file: $e');
       return false;
     }
   }
@@ -143,7 +143,7 @@ class ImportProvider extends ChangeNotifier {
       debugPrint('[INFO] [ImportProvider] Final familyId to use: $actualFamilyId');
 
       if (actualFamilyId.isEmpty) {
-        _setError('가족 정보가 없습니다. 온보딩을 완료해주세요.');
+        _setError('No family info found. Please complete onboarding.');
         return false;
       }
 
@@ -161,7 +161,7 @@ class ImportProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _setError('가져오기 실패: $e');
+      _setError('Import failed: $e');
       return false;
     }
   }

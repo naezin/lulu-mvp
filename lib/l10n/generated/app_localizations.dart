@@ -5380,6 +5380,419 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'오류가 발생했습니다. 다시 시도해주세요.'**
   String get authErrorGeneric;
+
+  /// Fenton 성장 차트 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'조산아 성장 차트 (22-50주)'**
+  String get growthChartFentonDesc;
+
+  /// WHO 성장 차트 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'세계보건기구 성장 차트 (0-24개월)'**
+  String get growthChartWhoDesc;
+
+  /// 요약 카드 접근성 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'{label} {value} {subLabel}, 지난주 대비 {change}'**
+  String summaryCardAccessibility(
+    String label,
+    String value,
+    String subLabel,
+    String change,
+  );
+
+  /// 수량 입력 - 직접 입력 축약 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'직접'**
+  String get amountInputDirectShort;
+
+  /// 수량 입력 - 직접 입력 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'직접 입력'**
+  String get amountInputDirect;
+
+  /// 초대 코드 검증 실패 에러
+  ///
+  /// In ko, this message translates to:
+  /// **'초대 코드를 확인할 수 없어요'**
+  String get inviteCodeVerifyError;
+
+  /// Apple 로그인 버튼 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'Apple로 계속하기'**
+  String get continueWithApple;
+
+  /// 성장 빈 상태 - 이름 포함 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'{babyName}의 첨 성장 기록을\n남겨보세요!'**
+  String growthEmptyTitleWithName(String babyName);
+
+  /// 성장 빈 상태 - 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'첨 성장 기록을\n남겨보세요!'**
+  String get growthEmptyTitle;
+
+  /// 성장 빈 상태 - 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'소아과 정기검진 후 기록하면\n성장 추이를 확인할 수 있어요'**
+  String get growthEmptyDescription;
+
+  /// 성장 빈 상태 - CTA 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'첨 기록 남기기'**
+  String get growthEmptyButton;
+
+  /// 통계 필터 - 함께 보기
+  ///
+  /// In ko, this message translates to:
+  /// **'함께 보기'**
+  String get filterViewTogether;
+
+  /// 통계 필터 - 교정연령 일수
+  ///
+  /// In ko, this message translates to:
+  /// **'교정{days}일'**
+  String filterCorrectedAgeDays(int days);
+
+  /// 울음 분석 카드 - 부제목
+  ///
+  /// In ko, this message translates to:
+  /// **'아기가 왜 우는지 알아보세요'**
+  String get cryAnalysisCardSubtitle;
+
+  /// 울음 분석 카드 - CTA 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 시작하기'**
+  String get cryAnalysisStartButton;
+
+  /// 성장 차트 - 지표 포함 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'{metric} 성장 차트'**
+  String growthChartTitleWithMetric(String metric);
+
+  /// 성장 차트 범례 - 중앙값
+  ///
+  /// In ko, this message translates to:
+  /// **'50% (중앙값)'**
+  String get growthChartLegendMedian;
+
+  /// 성장 차트 범례 - 측정값
+  ///
+  /// In ko, this message translates to:
+  /// **'측정값'**
+  String get growthChartLegendMeasured;
+
+  /// 성장 지표 - 체중
+  ///
+  /// In ko, this message translates to:
+  /// **'체중'**
+  String get growthMetricWeight;
+
+  /// 성장 지표 - 신장
+  ///
+  /// In ko, this message translates to:
+  /// **'신장'**
+  String get growthMetricLength;
+
+  /// 성장 지표 - 두위
+  ///
+  /// In ko, this message translates to:
+  /// **'두위'**
+  String get growthMetricHeadCircumference;
+
+  /// 가족 멤버 - 본인 배지
+  ///
+  /// In ko, this message translates to:
+  /// **'나'**
+  String get memberBadgeMe;
+
+  /// 가족 멤버 - 관리자 역할
+  ///
+  /// In ko, this message translates to:
+  /// **'관리자'**
+  String get memberRoleOwner;
+
+  /// 가족 멤버 - 참여 날짜
+  ///
+  /// In ko, this message translates to:
+  /// **'{month}월 {day}일 참여'**
+  String memberJoinedDate(int month, int day);
+
+  /// 성장 백분위 카드 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'성장 백분위'**
+  String get growthPercentileTitle;
+
+  /// 하단 네비게이션 - 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'기록'**
+  String get navRecords;
+
+  /// 아기 정보 미등록 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 정보를 먼저 등록해주세요'**
+  String get registerBabyFirst;
+
+  /// 기록 삭제 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'기록이 삭제되었어요'**
+  String get recordDeleted;
+
+  /// 실행취소 버튼 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'실행취소'**
+  String get undoAction;
+
+  /// 통계 - 회수 단위
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}회'**
+  String statisticsCountUnit(String count);
+
+  /// 통계 - 분 변화량
+  ///
+  /// In ko, this message translates to:
+  /// **'{sign}{minutes}분'**
+  String statisticsMinuteChange(String sign, String minutes);
+
+  /// 통계 - 회수 변화량
+  ///
+  /// In ko, this message translates to:
+  /// **'{sign}{count}회'**
+  String statisticsCountChange(String sign, String count);
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'우리 가족'**
+  String get defaultFamilyName;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'{days}일 남음'**
+  String inviteDaysRemaining(int days);
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'서로 다른 패턴도 모두 정상이에요'**
+  String get togetherDifferentPatternsNormal;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 분석'**
+  String get cryReanalyzeShort;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'높음'**
+  String get confidenceLevelHigh;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'보통'**
+  String get confidenceLevelMedium;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'낮음'**
+  String get confidenceLevelLow;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'정확해요'**
+  String get cryFeedbackAccurate;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'다른 것 같아요'**
+  String get cryFeedbackInaccurate;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'잘 모르겠어요'**
+  String get cryFeedbackUnsure;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'증가'**
+  String get directionIncreasing;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'유지'**
+  String get directionStable;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'감소'**
+  String get directionDecreasing;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 D{days}'**
+  String sgaCorrectedAgeDMinus(int days);
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 D+{days}'**
+  String sgaCorrectedAgeDPlus(int days);
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'성장 추적 모드'**
+  String get sgaGrowthTrackingMode;
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'시간 선택: {time}'**
+  String semanticsTimeSelect(String time);
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}시간 {minutes}분'**
+  String ongoingSleepElapsedHoursMinutes(int hours, int minutes);
+
+  /// x
+  ///
+  /// In ko, this message translates to:
+  /// **'{minutes}분'**
+  String ongoingSleepElapsedMinutes(int minutes);
+
+  /// 함께보기 가이드 확인 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'알겠어요'**
+  String get togetherOkButton;
+
+  /// 홈 울음분석 카드 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'울음 분석'**
+  String get cryAnalysisCardTitle;
+
+  /// 홈 울음분석 카드 시작 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 시작하기'**
+  String get cryAnalysisStartButtonHome;
+
+  /// 울음 분석 진행 중 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 중...'**
+  String get cryAnalyzing;
+
+  /// 울음 분석 취소 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'취소'**
+  String get cryCancelButton;
+
+  /// 가족 기본 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'우리 가족'**
+  String get familyDefaultName;
+
+  /// 가족 구성원 수
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}명의 가족'**
+  String familyMemberCount(int count);
+
+  /// 초대 만료 남은 일수
+  ///
+  /// In ko, this message translates to:
+  /// **'{days}일 남음'**
+  String familyInviteDaysLeft(int days);
+
+  /// 성장 데이터 로딩 에러 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'데이터를 불러오지 못했어요'**
+  String get growthErrorTitle;
+
+  /// 성장 데이터 에러 재시도 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 시도'**
+  String get growthErrorRetry;
+
+  /// 성장 차트 50% 범례
+  ///
+  /// In ko, this message translates to:
+  /// **'50% (중앙값)'**
+  String get growthChartLegend50;
+
+  /// 온보딩 시작 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'시작하기'**
+  String get welcomeStartButton;
+
+  /// 파일 선택 실패 에러
+  ///
+  /// In ko, this message translates to:
+  /// **'파일을 선택할 수 없습니다: {error}'**
+  String importCannotSelectFile(String error);
+
+  /// 가족 정보 없음 에러
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 정보가 없습니다. 온보딩을 완료해주세요.'**
+  String get importNoFamilyInfo;
+
+  /// 가져오기 실패 에러
+  ///
+  /// In ko, this message translates to:
+  /// **'가져오기 실패: {error}'**
+  String importFailed(String error);
+
+  /// 월일 날짜 포맷
+  ///
+  /// In ko, this message translates to:
+  /// **'M월 d일 (E)'**
+  String get dateFormatMonthDay;
+
+  /// 성장 차트 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'{metric} 성장 차트'**
+  String growthMetricChartTitle(String metric);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

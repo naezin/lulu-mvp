@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../models/family_member_model.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 멤버 목록 타일
 ///
@@ -77,9 +78,9 @@ class MemberListTile extends StatelessWidget {
                           color: LuluColors.lavenderMist,
                           borderRadius: BorderRadius.circular(LuluRadius.indicator),
                         ),
-                        child: const Text(
-                          '나',
-                          style: TextStyle(
+                        child: Text(
+                          S.of(context)!.memberBadgeMe,
+                          style: const TextStyle(
                             color: LuluColors.midnightNavy,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
@@ -92,8 +93,8 @@ class MemberListTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   member.isOwner
-                      ? '관리자'
-                      : '${member.joinedAt.month}월 ${member.joinedAt.day}일 참여',
+                      ? S.of(context)!.memberRoleOwner
+                      : S.of(context)!.memberJoinedDate(member.joinedAt.month, member.joinedAt.day),
                   style: TextStyle(
                     color: LuluTextColors.primarySoft,
                     fontSize: 12,

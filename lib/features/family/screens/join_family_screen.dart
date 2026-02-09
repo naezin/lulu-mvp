@@ -284,7 +284,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
       });
     } catch (e) {
       setState(() {
-        _error = '초대 코드를 확인할 수 없어요';
+        _error = S.of(context)!.inviteCodeVerifyError;
       });
     } finally {
       setState(() => _isLoading = false);

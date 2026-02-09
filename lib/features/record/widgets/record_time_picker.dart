@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
@@ -98,13 +99,15 @@ class _IntegratedTimeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 날짜 + 시간 표시 형식
-    final dateText = DateFormat('M월 d일 (E)', 'ko').format(time);
-    final timeText = DateFormat('a h:mm', 'ko').format(time);
+    final l10n = S.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
+    final dateText = DateFormat(l10n.dateFormatMonthDay, locale).format(time);
+    final timeText = DateFormat('a h:mm', locale).format(time);
     final displayText = showDate ? '$dateText  $timeText' : timeText;
 
     return Semantics(
       button: true,
-      label: '시간 선택: $displayText',
+      label: S.of(context)!.semanticsTimeSelect(displayText),
       child: GestureDetector(
         onTap: onTap,
         child: Container(

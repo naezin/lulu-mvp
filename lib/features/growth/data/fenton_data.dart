@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_icons.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// Fenton 성장 차트 데이터 모델
 ///
@@ -145,6 +146,12 @@ extension GrowthMetricExtension on GrowthMetric {
         GrowthMetric.weight => '체중',
         GrowthMetric.length => '신장',
         GrowthMetric.headCircumference => '두위',
+      };
+
+  String localizedLabel(S l10n) => switch (this) {
+        GrowthMetric.weight => l10n.growthMetricWeight,
+        GrowthMetric.length => l10n.growthMetricLength,
+        GrowthMetric.headCircumference => l10n.growthMetricHeadCircumference,
       };
 
   String get unit => switch (this) {

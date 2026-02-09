@@ -368,7 +368,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         _buildChipSelector(
           label: l10n.labelType,
           options: const ['터미타임', '목욕', '외출', '놀이', '독서', '기타'],
-          displayLabels: const ['터미타임', '목욕', '외출', '놀이', '독서', '기타'],
+          displayLabels: [l10n.playTypeTummyTime, l10n.playTypeBath, l10n.playTypeOutdoor, l10n.activityPlay, l10n.playTypeReading, l10n.playTypeOther],
           selectedValue: playType,
           onChanged: (value) => setState(() => _data['play_type'] = value),
         ),

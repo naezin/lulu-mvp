@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
@@ -28,21 +29,23 @@ class CryAnalysisButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Column(
       children: [
         // 메인 버튼
-        _buildMainButton(),
+        _buildMainButton(l10n),
 
         // 취소 버튼 (녹음 중에만)
         if (state == CryAnalysisState.recording) ...[
           const SizedBox(height: LuluSpacing.md),
-          _buildCancelButton(),
+          _buildCancelButton(l10n),
         ],
       ],
     );
   }
 
-  Widget _buildMainButton() {
+  Widget _buildMainButton(S l10n) {
     final isAnalyzing = state == CryAnalysisState.analyzing;
     final isRecording = state == CryAnalysisState.recording;
 
@@ -74,13 +77,13 @@ class CryAnalysisButton extends StatelessWidget {
                 ),
         ),
         child: Center(
-          child: _buildButtonContent(),
+          child: _buildButtonContent(l10n),
         ),
       ),
     );
   }
 
-  Widget _buildButtonContent() {
+  Widget _buildButtonContent(S l10n) {
     switch (state) {
       case CryAnalysisState.idle:
       case CryAnalysisState.completed:
@@ -95,7 +98,7 @@ class CryAnalysisButton extends StatelessWidget {
             ),
             const SizedBox(width: LuluSpacing.sm),
             Text(
-              state == CryAnalysisState.idle ? '분석 시작' : '다시 분석',
+              state == CryAnalysisState.idle ? l10n.cryAnalysisStart : l10n.cryReanalyzeShort,
               style: LuluTextStyles.labelLarge.copyWith(
                 color: Colors.white,
               ),
@@ -139,7 +142,7 @@ class CryAnalysisButton extends StatelessWidget {
             ),
             const SizedBox(width: LuluSpacing.sm),
             Text(
-              '분석 중...',
+              l10n.cryAnalyzingText,
               style: LuluTextStyles.labelMedium.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -149,7 +152,7 @@ class CryAnalysisButton extends StatelessWidget {
     }
   }
 
-  Widget _buildCancelButton() {
+  Widget _buildCancelButton(S l10n) {
     return GestureDetector(
       onTap: onCancel,
       child: Container(
@@ -162,7 +165,7 @@ class CryAnalysisButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(LuluRadius.lg),
         ),
         child: Text(
-          '취소',
+          l10n.cancel,
           style: LuluTextStyles.labelSmall.copyWith(
             color: LuluTextColors.secondary,
           ),

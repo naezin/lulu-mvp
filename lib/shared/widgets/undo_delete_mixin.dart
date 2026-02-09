@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../../data/models/activity_model.dart';
 import '../../data/repositories/activity_repository.dart';
 import '../../features/home/providers/home_provider.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 import '../../core/design_system/lulu_icons.dart';
 
 /// Undo 삭제 기능을 제공하는 Mixin
@@ -33,7 +34,7 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
       _pendingDelete = null;
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('삭제 실패: $e')),
+          SnackBar(content: Text('Delete failed: $e')),
         );
       }
       return;
@@ -44,17 +45,17 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Row(
+          content: Row(
             children: [
               Icon(LuluIcons.checkCircleOutline, color: Colors.white, size: 20),
               SizedBox(width: 8),
-              Text('기록이 삭제되었어요'),
+              Text(S.of(context)?.recordDeleted ?? 'Record deleted'),
             ],
           ),
           duration: const Duration(seconds: 5),
           behavior: SnackBarBehavior.floating,
           action: SnackBarAction(
-            label: '실행취소',
+            label: S.of(context)?.undoAction ?? 'Undo',
             textColor: Colors.white,
             onPressed: () => _undoDelete(homeProvider, context),
           ),
@@ -88,7 +89,7 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('복구 실패: $e')),
+          SnackBar(content: Text('Restore failed: $e')),
         );
       }
     } finally {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/generated/app_localizations.dart' show S;
+
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_shadows.dart';
@@ -64,20 +66,7 @@ class WeeklyTrendChart extends StatelessWidget {
           const SizedBox(height: LuluSpacing.sm),
 
           // 요일 라벨
-          Row(
-            children: _dayLabels.map((label) {
-              return Expanded(
-                child: Text(
-                  label,
-                  style: LuluTextStyles.caption.copyWith(
-                    color: LuluTextColors.tertiary,
-                    fontSize: 10,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              );
-            }).toList(),
-          ),
+          _buildDayLabels(context),
         ],
       ),
     );
@@ -132,5 +121,30 @@ class WeeklyTrendChart extends StatelessWidget {
     );
   }
 
-  static const _dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
+  Widget _buildDayLabels(BuildContext context) {
+    final l10n = S.of(context)!;
+    final labels = [
+      l10n.weekdayMon,
+      l10n.weekdayTue,
+      l10n.weekdayWed,
+      l10n.weekdayThu,
+      l10n.weekdayFri,
+      l10n.weekdaySat,
+      l10n.weekdaySun,
+    ];
+    return Row(
+      children: labels.map((label) {
+        return Expanded(
+          child: Text(
+            label,
+            style: LuluTextStyles.caption.copyWith(
+              color: LuluTextColors.tertiary,
+              fontSize: 10,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        );
+      }).toList(),
+    );
+  }
 }

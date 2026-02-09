@@ -56,7 +56,7 @@ class TogetherGuideDialog extends StatelessWidget {
           const SizedBox(height: 8),
 
           Text(
-            '서로 다른 패턴도 모두 정상이에요',
+            l10n?.togetherDifferentPatternsNormal ?? 'Different patterns are all normal',
             style: LuluTextStyles.bodySmall.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -73,7 +73,7 @@ class TogetherGuideDialog extends StatelessWidget {
               foregroundColor: LuluColors.lavenderMist,
               padding: const EdgeInsets.symmetric(vertical: 12),
             ),
-            child: const Text('알겠어요'),
+            child: Text(l10n?.buttonOk ?? 'OK'),
           ),
         ),
       ],

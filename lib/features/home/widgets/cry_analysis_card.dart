@@ -4,6 +4,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 울음 분석 카드 (홈 화면용)
 ///
@@ -53,7 +54,7 @@ class CryAnalysisCard extends StatelessWidget {
                 ),
                 const SizedBox(width: LuluSpacing.sm),
                 Text(
-                  '울음 분석',
+                  S.of(context)!.cryAnalysisTitle,
                   style: LuluTextStyles.titleSmall.copyWith(
                     color: LuluTextColors.primary,
                   ),
@@ -67,7 +68,7 @@ class CryAnalysisCard extends StatelessWidget {
 
             // 중단: 설명 텍스트
             Text(
-              '아기가 왜 우는지 알아보세요',
+              S.of(context)!.cryAnalysisCardSubtitle,
               style: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -91,7 +92,7 @@ class CryAnalysisCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      '분석 시작하기',
+                      S.of(context)!.cryAnalysisStartButton,
                       style: LuluTextStyles.labelMedium.copyWith(
                         color: LuluTextColors.primary,
                       ),

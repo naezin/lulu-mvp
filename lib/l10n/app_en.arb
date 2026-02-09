@@ -1,104 +1,86 @@
 {
   "@@locale": "en",
   "@@last_modified": "2026-01-31",
-
   "appTitle": "LULU",
   "navHome": "Home",
   "navRecord": "Record",
   "navGrowth": "Growth",
   "navSettings": "Settings",
-
   "screenTitleSettings": "Settings",
   "screenTitleTimeline": "Activity History",
   "screenTitleGrowth": "Growth",
   "screenTitleGrowthChart": "Growth Chart",
   "screenTitleGrowthInput": "Growth Record",
-
   "recordTitleFeeding": "Feeding Record",
   "recordTitleSleep": "Sleep Record",
   "recordTitleDiaper": "Diaper Record",
   "recordTitlePlay": "Play Record",
   "recordTitleHealth": "Health Record",
-
   "activityTypeFeeding": "Feeding",
   "activityTypeSleep": "Sleep",
   "activityTypeDiaper": "Diaper",
   "activityTypePlay": "Play",
   "activityTypeHealth": "Health",
-
   "feedingTypeBreast": "Breast",
   "feedingTypeBottle": "Bottle",
   "feedingTypeFormula": "Formula",
   "feedingTypeSolid": "Solid",
-
   "breastSideLeft": "Left",
   "breastSideRight": "Right",
   "breastSideBoth": "Both",
-
   "sleepTypeNap": "Nap",
   "sleepTypeNight": "Night",
   "sleepStart": "Sleep Start",
   "sleepEnd": "Sleep End",
-
   "diaperTypeWet": "Wet",
   "diaperTypeDirty": "Dirty",
   "diaperTypeBoth": "Both",
   "diaperTypeDry": "Dry",
   "diaperTypeBothDetail": "Wet+Dirty",
   "diaperTypeClean": "Clean",
-
   "stoolColorYellow": "Yellow",
   "stoolColorBrown": "Brown",
   "stoolColorGreen": "Green",
   "stoolColorBlack": "Black",
   "stoolColorRed": "Red",
   "stoolColorWhite": "White",
-
   "playTypeTummyTime": "Tummy Time",
   "playTypeBath": "Bath",
   "playTypeOutdoor": "Outdoor",
   "playTypeIndoor": "Indoor Play",
   "playTypeReading": "Reading",
   "playTypeOther": "Other",
-
   "healthTypeTemperature": "Temperature",
   "healthTypeSymptom": "Symptom",
   "healthTypeMedication": "Medication",
   "healthTypeMedicationShort": "Med",
   "healthTypeHospital": "Hospital Visit",
-
   "symptomCough": "Cough",
   "symptomRunnyNose": "Runny Nose",
   "symptomFever": "Fever",
   "symptomVomiting": "Vomiting",
   "symptomDiarrhea": "Diarrhea",
   "symptomRash": "Rash",
-
   "tempStatusLow": "Low",
   "tempStatusNormal": "Normal",
   "tempStatusMild": "Mild Fever",
   "tempStatusHigh": "Fever",
   "temperature": "Temperature",
-
   "genderMale": "Boy",
   "genderFemale": "Girl",
   "genderUnknown": "Unknown",
-
   "babyTypeSingleton": "Singleton",
   "babyTypeTwin": "Twin",
   "babyTypeTriplet": "Triplet",
   "babyTypeQuadruplet": "Quadruplet",
-
   "birthOrderFirst": "First",
   "birthOrderSecond": "Second",
   "birthOrderThird": "Third",
   "birthOrderFourth": "Fourth",
-
   "preterm": "Preterm",
   "fullTerm": "Full Term",
   "correctedAge": "Corrected",
   "actualAge": "Actual",
-
   "buttonStart": "Get Started",
   "buttonNext": "Next",
   "buttonSave": "Save",
@@ -111,10 +93,9 @@
   "buttonViewAll": "View All",
   "buttonStartSleep": "Start Sleep",
   "buttonExportCsv": "Export to CSV",
-
   "labelName": "Name",
   "labelBirthDate": "Birth Date",
-  "labelBirthDateShort": "DOB",
+  "labelBirthDateShort": "Birth date",
   "labelGender": "Gender",
   "labelIsPreterm": "Preterm Status",
   "labelGestationalWeeks": "Gestational Weeks",
@@ -122,28 +103,22 @@
   "labelBirthWeightOptional": "Birth Weight (Optional)",
   "labelFeedingAmount": "Amount",
   "labelExportPeriod": "Export Period",
-
   "hintEnterBabyName": "Enter baby's name",
   "hintSelectWeeks": "Select weeks",
   "hintGrams": "In grams (e.g., 2500)",
-
   "questionIsPreterm": "Born before 37 weeks?",
-
   "sectionBabyManagement": "Baby Management",
   "sectionData": "Data",
   "sectionAppInfo": "App Info",
   "sectionRecentRecords": "Recent Records",
-
   "infoVersion": "Version",
   "infoDeveloper": "Developer",
   "infoTeamName": "LULU Team",
-
   "addBabyTitle": "Add Baby",
   "addBabySubtitle": "Up to 4 babies allowed",
   "deleteBabyTitle": "Delete Baby",
   "deleteBabyWarning": "This action cannot be undone.",
   "deleteBabyConfirmMessage": "All records for {name} will be deleted.",
-
   "exportPeriodToday": "Today",
   "exportPeriodWeek": "Last 7 days",
   "exportPeriodMonth": "Last 30 days",
@@ -151,11 +126,9 @@
   "exportToFile": "Save {period} records to file",
   "exportEmailSubject": "LULU Baby Records",
   "exportEmailBody": "Here is your baby care data.",
-
   "successBabyAdded": "{name} has been added",
   "successBabyDeleted": "{name} has been deleted",
   "successRecordSaved": "Record saved",
-
   "errorNoFamily": "No family information",
   "errorNoRecords": "No records to export",
   "errorExportFailed": "Export failed: {error}",
@@ -167,16 +140,13 @@
   "errorNoBabyInfo": "No baby information",
   "errorCompleteOnboarding": "Please complete onboarding",
   "errorLoadData": "Failed to load data: {error}",
-
   "emptyNoRecordsToday": "No records today",
   "emptyNoRecordsDate": "No records for {date}",
   "emptyNoTodayRecords": "No records for today",
   "emptyStartRecording": "Tap + to start your first record",
   "emptySelectOtherDate": "Try selecting another date",
-
   "statusOngoing": "Ongoing",
   "statusInProgress": "In Progress",
-
   "timeMinute": "min",
   "timeHour": "hr",
   "timeDay": "day",
@@ -188,32 +158,24 @@
   "timeDaysAgo": "{count}d ago",
   "timeNow": "Now",
   "timeBirth": "Birth",
-
   "durationMinutes": "{count}min",
   "durationHours": "{count}hr",
   "durationHoursMinutes": "{hours}hr {minutes}min",
-
   "recordCount": "{count} records",
-
   "ageDays": "{count} days old",
   "ageWeeks": "{count} weeks old",
   "ageMonths": "{count} months",
   "ageCorrectedMonths": "Corrected {corrected}mo (Actual {actual}mo)",
-
   "weekUnit": "{count} weeks",
-
   "welcomeTitle": "Welcome to Lulu!",
   "welcomeSubtitle": "Easily track your baby's sleep, feeding, and diapers",
-
   "quickRecordHint": "Tap to save with the same content as last time!",
   "quickRecordTapToSave": "Tap to save",
   "quickRecordRepeat": "Repeat last record",
-
   "cryAnalysisTitle": "Cry Analysis",
   "cryAnalysisPreparing": "Cry analysis coming soon",
   "cryAnalysisComingSoon": "Coming in Phase 2!",
   "cryAnalysisDescription": "AI-powered cry analysis will be available in Phase 2.",
-
   "sweetSpotTitle": "Next Nap",
   "sweetSpotUnknown": "Checking",
   "sweetSpotTooEarly": "Still has time",
@@ -234,62 +196,56 @@
   "@sweetSpotTitleWithName": {
     "description": "Sweet Spot card title with baby name and sleep type",
     "placeholders": {
-      "babyName": {"type": "String", "example": "Emma"},
-      "sleepType": {"type": "String", "example": "Nap"}
+      "babyName": {
+        "type": "String",
+        "example": "Emma"
+      },
+      "sleepType": {
+        "type": "String",
+        "example": "Nap"
+      }
     }
   },
-
   "timelineEmptyTodayTitle": "Start {babyName}'s first record",
   "timelineEmptyTodayHint": "Tap the + button below to\nstart recording feeding, sleep, and diaper",
   "timelineEmptyPastTitle": "No records for {date}",
   "timelineEmptyPastHint": "Try selecting a different date",
-
   "sectionLanguage": "Language",
   "languageChangeConfirm": "Change language?",
   "languageChangeMessage": "The app will be displayed in the selected language.",
-
   "feedingContentBreastMilk": "Breast Milk",
   "feedingContentFormula": "Formula",
   "feedingContentSolid": "Solid Food",
-
   "feedingMethodDirect": "Direct Nursing",
   "feedingMethodExpressed": "Expressed Milk",
-
   "feedingBreastMilkSubLabel": "(direct/expressed)",
-
   "feedingQuestionContent": "What type of feeding?",
   "feedingQuestionMethod": "How was the milk given?",
   "feedingQuestionSide": "Which side?",
   "feedingQuestionDuration": "How long was the feeding?",
   "feedingQuestionAmount": "Enter the amount",
-
   "feedingSideLeft": "Left",
   "feedingSideRight": "Right",
   "feedingSideBoth": "Both",
   "feedingSideLeftShort": "L",
   "feedingSideRightShort": "R",
   "feedingSideBothShort": "Both",
-
   "feedingDurationMinutes": "{count}min",
   "feedingPresetDurationMinutes": "{minutes}min",
   "feedingAmountMl": "{amount}ml",
   "feedingDirectInputPlaceholder": "Enter manually",
-
   "solidFoodTitle": "Solid Food",
   "solidFoodNameLabel": "Food name",
   "solidFoodNameHint": "e.g., Carrot puree, Rice porridge",
   "solidFoodFirstTry": "First time trying this food",
   "solidFoodAmountLabel": "Amount",
   "solidFoodReactionLabel": "Baby's reaction",
-
   "solidUnitGram": "g",
   "solidUnitSpoon": "spoon",
   "solidUnitBowl": "bowl",
-
   "babyReactionLiked": "Liked",
   "babyReactionNeutral": "Neutral",
   "babyReactionRejected": "Rejected",
-
   "statisticsTitle": "Statistics",
   "statisticsWeeklySummary": "This Week's Summary",
   "statisticsSleep": "Sleep",
@@ -305,7 +261,10 @@
   "@statisticsCorrectedAge": {
     "description": "Corrected age display",
     "placeholders": {
-      "days": {"type": "int", "example": "42"}
+      "days": {
+        "type": "int",
+        "example": "42"
+      }
     }
   },
   "statisticsSleepReport": "Sleep Report",
@@ -314,7 +273,6 @@
   "statisticsCryingReport": "Crying Report",
   "statisticsDisclaimer": "These statistics are for reference only, not medical advice",
   "statisticsCorrectedAgeNote": "Analyzed based on corrected age",
-
   "recordHistoryTitle": "Records",
   "tabTimeline": "Timeline",
   "tabStatistics": "Statistics",
@@ -327,7 +285,6 @@
   "weeklyTrendTitle": "Weekly Sleep Trend",
   "statisticsEmptyTitle": "No statistics yet",
   "statisticsEmptyHint": "Statistics will appear as you add records",
-
   "dateTimePickerTitle": "Select Time",
   "dateTimeNow": "Now",
   "dateTime5MinAgo": "-5 min",
@@ -339,7 +296,6 @@
   "sleepEndTime": "Sleep End",
   "sleepEndNow": "End Now",
   "sleepSelectEndTime": "Select",
-
   "quickFeedingTitle": "Quick Record",
   "quickFeedingHint": "Tap: Save / Hold: Edit",
   "quickFeedingEmpty": "No records yet",
@@ -348,13 +304,15 @@
   "@quickFeedingSaved": {
     "description": "Quick feeding save confirmation",
     "placeholders": {
-      "summary": {"type": "String", "example": "Formula 120ml"}
+      "summary": {
+        "type": "String",
+        "example": "Formula 120ml"
+      }
     }
   },
   "quickFeedingUndo": "Undo",
   "quickFeedingUndone": "Undone",
   "orNewEntry": "or enter new",
-
   "importTitle": "Import Data",
   "importSubtitle": "Bring records from other apps",
   "importSelectFormat": "Select App Format",
@@ -369,44 +327,60 @@
   "importPreviewDesc": "{count} records found",
   "@importPreviewDesc": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "importPreviewPeriod": "Period: {start} ~ {end}",
   "@importPreviewPeriod": {
     "placeholders": {
-      "start": {"type": "String"},
-      "end": {"type": "String"}
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
     }
   },
   "importPreviewFeeding": "Feeding {count}",
   "@importPreviewFeeding": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "importPreviewSleep": "Sleep {count}",
   "@importPreviewSleep": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "importPreviewDiaper": "Diaper {count}",
   "@importPreviewDiaper": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "importPreviewPlay": "Play {count}",
   "@importPreviewPlay": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "importPreviewHealth": "Health {count}",
   "@importPreviewHealth": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "importSelectBaby": "Select Baby",
@@ -417,20 +391,26 @@
   "importProgress": "{percent}% complete",
   "@importProgress": {
     "placeholders": {
-      "percent": {"type": "int"}
+      "percent": {
+        "type": "int"
+      }
     }
   },
   "importCompleteTitle": "Import Complete!",
   "importCompleteSuccess": "{count} records imported",
   "@importCompleteSuccess": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "importCompleteSkipped": "{count} duplicates skipped",
   "@importCompleteSkipped": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "importErrorTitle": "Import Failed",
@@ -439,7 +419,6 @@
   "importDone": "Done",
   "importNewImport": "Import Another File",
   "importDuplicateNote": "Duplicate records (same type and time) are automatically skipped",
-
   "familyManagement": "Family Management",
   "familyMembers": "Family Members",
   "pendingInvites": "Pending Invites",
@@ -458,7 +437,6 @@
   "cancel": "Cancel",
   "confirm": "Confirm",
   "continueButton": "Continue",
-
   "joinFamily": "Join Family",
   "enterInviteCode": "Enter invite code",
   "enterInviteCodeDesc": "Enter the 6-digit code you received from the family owner.",
@@ -467,30 +445,34 @@
   "memberCount": "{count} family members",
   "@memberCount": {
     "placeholders": {
-      "count": {"type": "String"}
+      "count": {
+        "type": "String"
+      }
     }
   },
   "babyNames": "Babies: {names}",
   "@babyNames": {
     "placeholders": {
-      "names": {"type": "String"}
+      "names": {
+        "type": "String"
+      }
     }
   },
   "expiresIn": "Expires in {days} days",
   "@expiresIn": {
     "placeholders": {
-      "days": {"type": "String"}
+      "days": {
+        "type": "String"
+      }
     }
   },
   "joinedFamily": "Joined the family!",
-
   "transferOwnershipTitle": "Who should be the new owner?",
   "transferOwnershipDesc": "The owner can invite and manage family members.",
   "transferOwnershipButton": "Transfer Ownership",
   "confirmTransfer": "Transfer ownership?",
   "confirmTransferDesc": "This action cannot be undone.",
   "ownershipTransferred": "Ownership transferred",
-
   "importRecords": "Import Records",
   "mapBabiesTitle": "Import existing records?",
   "mapBabiesDesc": "Link your babies to the new family babies to import records.",
@@ -501,15 +483,18 @@
   "recordsImported": "{count} records imported!",
   "@recordsImported": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
-
   "inviteByEmail": "Invite by email",
   "inviteValidDays": "Valid for {days} days",
   "@inviteValidDays": {
     "placeholders": {
-      "days": {"type": "String"}
+      "days": {
+        "type": "String"
+      }
     }
   },
   "shareKakao": "KakaoTalk",
@@ -533,29 +518,43 @@
   "elapsedMinutesAgo": "{minutes}m ago",
   "@elapsedMinutesAgo": {
     "placeholders": {
-      "minutes": {"type": "int", "example": "5"}
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
     }
   },
   "elapsedHoursAgo": "{hours}h ago",
   "@elapsedHoursAgo": {
     "placeholders": {
-      "hours": {"type": "int", "example": "2"}
+      "hours": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "elapsedHoursMinutesAgo": "{hours}h {minutes}m ago",
   "@elapsedHoursMinutesAgo": {
     "placeholders": {
-      "hours": {"type": "int", "example": "1"},
-      "minutes": {"type": "int", "example": "30"}
+      "hours": {
+        "type": "int",
+        "example": "1"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
     }
   },
   "elapsedDaysAgo": "{days}d ago",
   "@elapsedDaysAgo": {
     "placeholders": {
-      "days": {"type": "int", "example": "3"}
+      "days": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
-
   "recordUpdated": "Record updated",
   "retry": "Retry",
   "babyDefault": "Baby",
@@ -571,63 +570,78 @@
   "countTimes": "{count}x",
   "@countTimes": {
     "placeholders": {
-      "count": {"type": "int", "example": "5"}
+      "count": {
+        "type": "int",
+        "example": "4"
+      }
     }
   },
   "vsPrev": "vs prev",
-
   "dailyGridSleep": "Sleep",
   "dailyGridFeeding": "Feeding",
   "dailyGridDiaper": "Diaper",
   "dailyGridPlay": "Play",
-
   "weeklyGridAvgSleep": "Avg Sleep",
   "weeklyGridAvgFeeding": "Avg Feeding",
   "weeklyGridAvgDiaper": "Avg Diaper",
   "weeklyGridAvgPlay": "Avg Play",
-
   "dailyGridFeedingCount": "{count}x",
   "@dailyGridFeedingCount": {
     "placeholders": {
-      "count": {"type": "int", "example": "8"}
+      "count": {
+        "type": "int",
+        "example": "8"
+      }
     }
   },
   "dailyGridCount": "{count}x",
   "@dailyGridCount": {
     "placeholders": {
-      "count": {"type": "int", "example": "6"}
+      "count": {
+        "type": "int",
+        "example": "6"
+      }
     }
   },
   "dailyGridElapsedHours": "{hours}h {minutes}m ago",
   "@dailyGridElapsedHours": {
     "placeholders": {
-      "hours": {"type": "int", "example": "2"},
-      "minutes": {"type": "int", "example": "30"}
+      "hours": {
+        "type": "int",
+        "example": "2"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
     }
   },
   "dailyGridElapsedMinutes": "{minutes}m ago",
   "@dailyGridElapsedMinutes": {
     "placeholders": {
-      "minutes": {"type": "int", "example": "45"}
+      "minutes": {
+        "type": "int",
+        "example": "45"
+      }
     }
   },
   "dailyGridNoRecord": "-",
   "dailyGridCountUnit": "times",
   "dailyGridUnitHours": "h",
   "dailyGridUnitMinutes": "m",
-
   "dailyViewNoRecordsToday": "No records yet today",
   "dailyViewNoRecordsDate": "No records on {date}",
   "@dailyViewNoRecordsDate": {
     "placeholders": {
-      "date": {"type": "String", "example": "Jan 15 (Wed)"}
+      "date": {
+        "type": "String",
+        "example": "Jan 15 (Wed)"
+      }
     }
   },
-
   "weeklyChartTitle": "Weekly Pattern",
   "weeklyChartEmptyTitle": "Not enough data\nto analyze patterns yet",
   "weeklyChartEmptyHint": "Patterns will appear after 3+ days of records",
-
   "weekdayMon": "Mon",
   "weekdayTue": "Tue",
   "weekdayWed": "Wed",
@@ -635,81 +649,102 @@
   "weekdayFri": "Fri",
   "weekdaySat": "Sat",
   "weekdaySun": "Sun",
-
   "chartFilterAll": "All",
   "chartFilterSleep": "Sleep",
   "chartFilterFeeding": "Feeding",
   "chartFilterDiaper": "Diaper",
   "chartFilterPlay": "Play",
   "chartFilterHealth": "Health",
-
   "chartLegendNightSleep": "Night",
   "chartLegendDaySleep": "Nap",
   "chartLegendFeeding": "Feeding",
   "chartLegendDiaper": "Diaper",
   "chartLegendPlay": "Play",
   "chartLegendHealth": "Health",
-
   "insightTitleGood": "Good news!",
   "insightTitleCaution": "Heads up",
   "insightTitleDefault": "This week's insight",
   "insightTitleTogether": "Together view insight",
-
   "weekPickerTitle": "Select Week",
   "weekPickerThisWeek": "This Week",
-
   "dayPickerTitle": "Select Date",
   "dayPickerToday": "Today",
-
   "dateFormatDaily": "{month}/{day} ({weekday})",
   "@dateFormatDaily": {
     "description": "DateNavigator daily date format: 2/8 (Sun)",
     "placeholders": {
-      "month": {"type": "String", "example": "2"},
-      "day": {"type": "String", "example": "8"},
-      "weekday": {"type": "String", "example": "Sun"}
+      "month": {
+        "type": "String",
+        "example": "2"
+      },
+      "day": {
+        "type": "String",
+        "example": "8"
+      },
+      "weekday": {
+        "type": "String",
+        "example": "Sun"
+      }
     }
   },
   "dateFormatWeeklyRange": "{startMonth}/{startDay} ~ {endMonth}/{endDay}",
   "@dateFormatWeeklyRange": {
     "description": "DateNavigator weekly date range format: 2/2 ~ 2/8",
     "placeholders": {
-      "startMonth": {"type": "String", "example": "2"},
-      "startDay": {"type": "String", "example": "2"},
-      "endMonth": {"type": "String", "example": "2"},
-      "endDay": {"type": "String", "example": "8"}
+      "startMonth": {
+        "type": "String",
+        "example": "2"
+      },
+      "startDay": {
+        "type": "String",
+        "example": "2"
+      },
+      "endMonth": {
+        "type": "String",
+        "example": "2"
+      },
+      "endDay": {
+        "type": "String",
+        "example": "8"
+      }
     }
   },
-
-  "sleepModeNow": "Sleep Mode - Now",
+  "sleepModeNow": "Sleep Now",
   "sleepCancelConfirmTitle": "Cancel sleep record?",
   "sleepCancelConfirmMessage": "The current sleep record will be deleted.",
   "sleepSessionCanceled": "Sleep record canceled",
-
   "quickRecordSameAsLast": "Same as last",
   "quickRecordFormulaWithAmount": "Formula {amount}ml",
   "@quickRecordFormulaWithAmount": {
     "description": "Quick record - formula with amount",
     "placeholders": {
-      "amount": {"type": "int", "example": "120"}
+      "amount": {
+        "type": "int",
+        "example": "120"
+      }
     }
   },
   "quickRecordBreastWithDuration": "Breast milk {duration}min",
   "@quickRecordBreastWithDuration": {
     "description": "Quick record - breast milk with duration",
     "placeholders": {
-      "duration": {"type": "int", "example": "15"}
+      "duration": {
+        "type": "int",
+        "example": "15"
+      }
     }
   },
   "quickRecordBreastWithSide": "Breast milk {side}",
   "@quickRecordBreastWithSide": {
     "description": "Quick record - breast milk with side",
     "placeholders": {
-      "side": {"type": "String", "example": "left"}
+      "side": {
+        "type": "String",
+        "example": "left"
+      }
     }
   },
   "quickRecordSolidFood": "Solid food",
-
   "sleepTypeLabel": "Sleep Type",
   "sleepTimeLabel": "Sleep Time",
   "sleepNotesHint": "Enter any notes",
@@ -718,7 +753,6 @@
   "sleepSuggestNap": "Based on current time, nap seems appropriate",
   "sleepSuggestNight": "Based on current time, night sleep seems appropriate",
   "sleepOngoing": "In Progress",
-
   "exportColumnDate": "Date",
   "exportColumnTime": "Time",
   "exportColumnType": "Type",
@@ -729,77 +763,118 @@
   "@exportDateFormat": {
     "description": "CSV export date format",
     "placeholders": {
-      "year": {"type": "String", "example": "2026"},
-      "month": {"type": "String", "example": "2"},
-      "day": {"type": "String", "example": "8"}
+      "year": {
+        "type": "String",
+        "example": "2026"
+      },
+      "month": {
+        "type": "String",
+        "example": "2"
+      },
+      "day": {
+        "type": "String",
+        "example": "8"
+      }
     }
   },
   "exportSleptMinutes": "{minutes}min sleep",
   "@exportSleptMinutes": {
     "description": "CSV export - sleep duration in minutes",
     "placeholders": {
-      "minutes": {"type": "int", "example": "30"}
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
     }
   },
   "exportSleptHoursMinutes": "{hours}h {minutes}min sleep",
   "@exportSleptHoursMinutes": {
     "description": "CSV export - sleep duration in hours and minutes",
     "placeholders": {
-      "hours": {"type": "int", "example": "2"},
-      "minutes": {"type": "int", "example": "30"}
+      "hours": {
+        "type": "int",
+        "example": "2"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
     }
   },
   "exportBreastSide": "{side} {duration}min",
   "@exportBreastSide": {
     "description": "CSV export - breast feeding side and duration",
     "placeholders": {
-      "side": {"type": "String", "example": "Left"},
-      "duration": {"type": "int", "example": "15"}
+      "side": {
+        "type": "String",
+        "example": "Left"
+      },
+      "duration": {
+        "type": "int",
+        "example": "15"
+      }
     }
   },
   "exportFormulaAmount": "Formula {amount}ml",
   "@exportFormulaAmount": {
     "description": "CSV export - formula amount",
     "placeholders": {
-      "amount": {"type": "String", "example": "120"}
+      "amount": {
+        "type": "String",
+        "example": "120"
+      }
     }
   },
   "exportSolidFoodDetail": "Solid food: {name}",
   "@exportSolidFoodDetail": {
     "description": "CSV export - solid food detail",
     "placeholders": {
-      "name": {"type": "String", "example": "rice porridge"}
+      "name": {
+        "type": "String",
+        "example": "rice porridge"
+      }
     }
   },
   "exportTemperature": "Temperature {temp}°C",
   "@exportTemperature": {
     "description": "CSV export - temperature",
     "placeholders": {
-      "temp": {"type": "String", "example": "37.5"}
+      "temp": {
+        "type": "String",
+        "example": "37.5"
+      }
     }
   },
   "exportMedication": "Medication: {name}",
   "@exportMedication": {
     "description": "CSV export - medication",
     "placeholders": {
-      "name": {"type": "String", "example": "Tylenol"}
+      "name": {
+        "type": "String",
+        "example": "Tylenol"
+      }
     }
   },
   "exportHospitalVisit": "Hospital: {name}",
   "@exportHospitalVisit": {
     "description": "CSV export - hospital visit",
     "placeholders": {
-      "name": {"type": "String", "example": "Pediatrics"}
+      "name": {
+        "type": "String",
+        "example": "Pediatrics"
+      }
     }
   },
   "exportSymptom": "Symptom: {name}",
   "@exportSymptom": {
     "description": "CSV export - symptom",
     "placeholders": {
-      "name": {"type": "String", "example": "cough"}
+      "name": {
+        "type": "String",
+        "example": "cough"
+      }
     }
   },
-
   "editActivityTitle": "Edit Record",
   "editActivityTypeLabel": "Record Type",
   "editStartTimeLabel": "Start Time",
@@ -812,14 +887,16 @@
   "@editSaveFailed": {
     "description": "Edit record save failed message",
     "placeholders": {
-      "error": {"type": "String", "example": "Network error"}
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
     }
   },
   "editDeleteConfirmTitle": "Delete this record?",
   "editDeleteConfirmMessage": "Are you sure you want to delete this record?",
   "editDeleteSuccess": "Record deleted",
   "editUndoDelete": "Undo delete",
-
   "settingsDangerZone": "Danger Zone",
   "settingsDeleteAccount": "Delete Account",
   "settingsDeleteAccountDesc": "All data will be permanently deleted",
@@ -827,7 +904,6 @@
   "settingsLogout": "Log out",
   "settingsLogoutConfirm": "Log out?",
   "settingsNotLoggedIn": "Not logged in",
-
   "cryIdleTitle": "Is your baby crying?",
   "cryIdleSubtitle": "Press the button below to analyze",
   "cryRecordingTitle": "Listening to the cry",
@@ -842,7 +918,10 @@
   "@cryConfidence": {
     "description": "Cry analysis confidence display",
     "placeholders": {
-      "percent": {"type": "int", "example": "85"}
+      "percent": {
+        "type": "int",
+        "example": "85"
+      }
     }
   },
   "cryRecordSaved": "Cry analysis saved",
@@ -854,7 +933,6 @@
   "cryRecordButton": "Record",
   "cryActionSuggestion": "Try this",
   "cryDunstanLabel": "Dunstan Baby Language",
-
   "healthRecordTimeLabel": "Record Time",
   "healthSelectType": "Select record type",
   "healthNotesHint": "Enter additional notes",
@@ -869,15 +947,20 @@
   "healthTempWarningHigh": "Fever detected. A doctor visit is recommended.",
   "healthTempNormal": "Normal temperature.",
   "notesOptionalLabel": "Notes (optional)",
-
   "yesterday": "Yesterday",
   "growthOverview": "Growth Overview",
   "growthMeasuredAt": "Measured on {date} ({relative})",
   "@growthMeasuredAt": {
     "description": "Growth measurement date display",
     "placeholders": {
-      "date": {"type": "String", "example": "2/8"},
-      "relative": {"type": "String", "example": "yesterday"}
+      "date": {
+        "type": "String",
+        "example": "2/8"
+      },
+      "relative": {
+        "type": "String",
+        "example": "yesterday"
+      }
     }
   },
   "growthWeight": "Weight",
@@ -888,14 +971,20 @@
   "@growthChartApplied": {
     "description": "Growth card - applied chart type",
     "placeholders": {
-      "chartType": {"type": "String", "example": "WHO"}
+      "chartType": {
+        "type": "String",
+        "example": "WHO"
+      }
     }
   },
   "growthCorrectedAge": "Corrected age {age}",
   "@growthCorrectedAge": {
     "description": "Growth card - corrected age display",
     "placeholders": {
-      "age": {"type": "String", "example": "3 months"}
+      "age": {
+        "type": "String",
+        "example": "3 months"
+      }
     }
   },
   "tapToViewGrowthChart": "Tap to view growth chart",
@@ -903,25 +992,28 @@
   "@daysAgoCount": {
     "description": "Days ago count display",
     "placeholders": {
-      "count": {"type": "int", "example": "3"}
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
-
   "onboardingBabyInfoTitle": "Enter {label}'s\ninformation",
   "@onboardingBabyInfoTitle": {
     "description": "Onboarding baby info input title",
     "placeholders": {
-      "label": {"type": "String", "example": "Baby"}
+      "label": {
+        "type": "String",
+        "example": "Baby"
+      }
     }
   },
-  "labelBirthDateShort": "Birth date",
   "hintSelectBirthDate": "Select birth date",
   "labelBirthWeightRequired": "Birth weight (required)",
   "hintBirthWeight": "e.g. 3200",
   "birthWeightHelperText": "Used for growth tracking",
   "questionIsPretermFull": "Was your baby born prematurely?",
   "prematureAgeInfo": "If born before 37 weeks, development is tracked using corrected age",
-
   "emptyBabyInfoTitle": "No baby information",
   "emptyBabyInfoHint": "Please complete onboarding",
   "defaultBabyName": "Baby",
@@ -929,7 +1021,10 @@
   "@unitMinutes": {
     "description": "Unit - N minutes",
     "placeholders": {
-      "count": {"type": "int", "example": "5"}
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
     }
   },
   "diaperChange": "Diaper Change",
@@ -940,7 +1035,10 @@
   "@quickRecordRepeatWithName": {
     "description": "Quick record - repeat last record with baby name",
     "placeholders": {
-      "name": {"type": "String", "example": "Baby"}
+      "name": {
+        "type": "String",
+        "example": "Baby"
+      }
     }
   },
   "timeAgoJustNow": "Just now",
@@ -948,14 +1046,20 @@
   "@timeAgoMinutes": {
     "description": "Time ago - N minutes ago",
     "placeholders": {
-      "count": {"type": "int", "example": "5"}
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
     }
   },
   "timeAgoHours": "{count}h ago",
   "@timeAgoHours": {
     "description": "Time ago - N hours ago",
     "placeholders": {
-      "count": {"type": "int", "example": "2"}
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "labelRecord": "Record",
@@ -963,10 +1067,12 @@
   "@healthTempValue": {
     "description": "Health - temperature value display",
     "placeholders": {
-      "temp": {"type": "String", "example": "36.5"}
+      "temp": {
+        "type": "String",
+        "example": "36.5"
+      }
     }
   },
-
   "sectionDangerZone": "Danger Zone",
   "statusPreterm": "Preterm",
   "statusFullTerm": "Full Term",
@@ -985,16 +1091,21 @@
   "errorResetFailed": "Reset failed: {error}",
   "@errorResetFailed": {
     "placeholders": {
-      "error": {"type": "String", "example": "Network error"}
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
     }
   },
-
   "cryHistoryComingSoon": "History feature coming soon.",
   "cryIdleHint": "Press the button and let us hear the cry",
   "cryCorrectedAgeInfo": "Analyzing based on corrected age {weeks} weeks",
   "@cryCorrectedAgeInfo": {
     "placeholders": {
-      "weeks": {"type": "int", "example": "34"}
+      "weeks": {
+        "type": "int",
+        "example": "34"
+      }
     }
   },
   "cryListeningTitle": "Listening...",
@@ -1005,7 +1116,10 @@
   "cryPretermAdjustInfo": "Confidence adjusted based on corrected age {weeks} weeks.",
   "@cryPretermAdjustInfo": {
     "placeholders": {
-      "weeks": {"type": "int", "example": "34"}
+      "weeks": {
+        "type": "int",
+        "example": "34"
+      }
     }
   },
   "cryFeedbackThanks": "Thank you for your feedback!",
@@ -1017,14 +1131,16 @@
   "cryRemainingCount": "Remaining today: {count}",
   "@cryRemainingCount": {
     "placeholders": {
-      "count": {"type": "int", "example": "3"}
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
   "buttonUpgrade": "Upgrade",
   "cryDisclaimer": "This analysis is for reference only and does not replace medical advice. Consult your doctor if concerned.",
   "cryDisclaimerWithPreterm": "This analysis is for reference only and does not replace medical advice. Preterm babies may have varying cry patterns, so consult your doctor if concerned.",
   "cryEmptyBabyInfo": "Please register baby information first",
-
   "csvHeaderDate": "Date",
   "csvHeaderTime": "Time",
   "csvHeaderEndTime": "End Time",
@@ -1034,17 +1150,21 @@
   "csvHeaderAmountDuration": "Amount/Duration",
   "csvHeaderNotes": "Notes",
   "unknownBaby": "Unknown",
-
   "sleepOrAddNewRecord": "or add new record",
   "sleepOngoingStatus": "{babyName} {sleepType} in progress",
   "@sleepOngoingStatus": {
     "placeholders": {
-      "babyName": {"type": "String", "example": "Emma"},
-      "sleepType": {"type": "String", "example": "nap"}
+      "babyName": {
+        "type": "String",
+        "example": "Emma"
+      },
+      "sleepType": {
+        "type": "String",
+        "example": "nap"
+      }
     }
   },
   "sleepCancelConfirmBody": "The ongoing sleep record will be deleted.",
-  "sleepModeNow": "Sleep Now",
   "sleepModeAddRecord": "Add Record",
   "sleepStartNow": "Start Sleep Now",
   "sleepStartNowHint": "Sleep will start when you save.\nPress the end button on the home screen when baby wakes up.",
@@ -1053,15 +1173,20 @@
   "sleepStartedMessage": "{name} sleep started! End it from the home screen",
   "@sleepStartedMessage": {
     "placeholders": {
-      "name": {"type": "String", "example": "Emma"}
+      "name": {
+        "type": "String",
+        "example": "Emma"
+      }
     }
   },
   "labelTimeSelect": "Select time",
-
   "editActivityTitleWithType": "Edit {title}",
   "@editActivityTitleWithType": {
     "placeholders": {
-      "title": {"type": "String", "example": "Feeding"}
+      "title": {
+        "type": "String",
+        "example": "Feeding"
+      }
     }
   },
   "labelTime": "Time",
@@ -1081,12 +1206,14 @@
   "errorSaveFailed": "Save failed: {error}",
   "@errorSaveFailed": {
     "placeholders": {
-      "error": {"type": "String", "example": "Network error"}
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
     }
   },
   "activityHealth": "Health",
   "labelOther": "Other",
-
   "healthTypeSelectLabel": "Select record type",
   "healthSymptomSelectLabel": "Select symptoms (multiple)",
   "symptomOther": "Other",
@@ -1097,11 +1224,13 @@
   "hintAdditionalNotes": "Additional notes",
   "medicalDisclaimer": "This record is for reference only and does not replace medical diagnosis.\nConsult a pediatrician if you notice any unusual symptoms.",
   "labelRecordTime": "Record Time",
-
   "reportThisWeekCount": "This week {count}x",
   "@reportThisWeekCount": {
     "placeholders": {
-      "count": {"type": "int", "example": "5"}
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
     }
   },
   "reportNightWakeups": "Night wakeups",
@@ -1109,14 +1238,12 @@
   "cryTypeTiredLabel": "Tired",
   "cryTypeGasLabel": "Gas",
   "cryTypeDiscomfortLabel": "Discomfort",
-
   "diaperStatus": "Diaper Status",
   "diaperChangeTime": "Diaper Change Time",
   "stoolColorOptional": "Stool Color (optional)",
   "stoolColorHelpText": "Selecting a color helps with health tracking",
   "stoolColorWarning": "This color may require medical consultation.\nIf it persists, we recommend visiting a pediatrician.",
   "diaperNotesHint": "Color, amount, unusual notes, etc.",
-
   "orDetailedEntry": "or enter details",
   "playActivityType": "Activity Type",
   "playTummyTimeRecommendation": "Recommended: 3-5 min sessions, several times a day",
@@ -1125,7 +1252,6 @@
   "playNotesHint": "Baby's reactions, notes, etc.",
   "playTimeLabel": "Play Time",
   "unitMinute": "min",
-
   "cryTypeHungry": "Hungry",
   "cryTypeTired": "Tired",
   "cryTypeDiscomfort": "Uncomfortable",
@@ -1147,57 +1273,73 @@
   "crySoundLabel": "{code} sound",
   "@crySoundLabel": {
     "placeholders": {
-      "code": {"type": "String", "example": "Neh"}
+      "code": {
+        "type": "String",
+        "example": "Neh"
+      }
     }
   },
-
   "errorSelectBaby": "Please select a baby",
-
   "growthMeasuredDateLabel": "Measured Date",
   "buttonChange": "Change",
   "labelOptional": "Optional",
   "growthNoteHint": "Checkup, vaccination, etc.",
   "successGrowthRecordSaved": "Growth record saved",
   "growthTipCheckup": "Recording after pediatric checkups is more accurate",
-
   "sweetSpotEstimateMinutes": "In about {count} min",
   "@sweetSpotEstimateMinutes": {
     "placeholders": {
-      "count": {"type": "int", "example": "30"}
+      "count": {
+        "type": "int",
+        "example": "30"
+      }
     }
   },
   "sweetSpotEstimateHours": "In about {count} hr",
   "@sweetSpotEstimateHours": {
     "placeholders": {
-      "count": {"type": "int", "example": "2"}
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "sweetSpotEstimateHoursMinutes": "In about {hours} hr {minutes} min",
   "@sweetSpotEstimateHoursMinutes": {
     "placeholders": {
-      "hours": {"type": "int", "example": "1"},
-      "minutes": {"type": "int", "example": "30"}
+      "hours": {
+        "type": "int",
+        "example": "1"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
     }
   },
   "sleepEndConfirmTitle": "End sleep?",
   "buttonEnd": "End",
-
   "growthChartTitleWithName": "{name} Growth Chart",
   "@growthChartTitleWithName": {
     "placeholders": {
-      "name": {"type": "String", "example": "Baby"}
+      "name": {
+        "type": "String",
+        "example": "Baby"
+      }
     }
   },
   "growthChartWhoTransition": "WHO chart transition upcoming",
   "growthCurrentMetric": "Current {metric}",
   "@growthCurrentMetric": {
     "placeholders": {
-      "metric": {"type": "String", "example": "Weight"}
+      "metric": {
+        "type": "String",
+        "example": "Weight"
+      }
     }
   },
   "growthPercentile": "Percentile",
   "growthNeedMeasurement": "Needs measurement",
-
   "errorEnterWeight": "Please enter weight",
   "errorWeightTooLow": "Weight too low (min 0.3kg)",
   "errorWeightTooHigh": "Weight too high (max 30kg)",
@@ -1210,19 +1352,24 @@
   "errorFutureDate": "Cannot select a future date",
   "warningRapidWeightChange": "Rapid change detected. Please verify the value.",
   "warningRapidLengthChange": "Rapid height change detected. Please verify the value.",
-
   "togetherViewNeedMultipleBabies": "Together view is available with 2 or more babies",
   "sleepPattern": "Sleep Pattern",
   "napRatioPercent": "Nap {percent}%",
   "@napRatioPercent": {
     "placeholders": {
-      "percent": {"type": "int", "example": "35"}
+      "percent": {
+        "type": "int",
+        "example": "35"
+      }
     }
   },
   "nightRatioPercent": "Night {percent}%",
   "@nightRatioPercent": {
     "placeholders": {
-      "percent": {"type": "int", "example": "65"}
+      "percent": {
+        "type": "int",
+        "example": "65"
+      }
     }
   },
   "insightNapRatioHigh": "Nap ratio is high",
@@ -1230,13 +1377,24 @@
   "insightPatternDifference": "{baby1}: {insight1},\n{baby2}: {insight2}\n(Patterns are different)",
   "@insightPatternDifference": {
     "placeholders": {
-      "baby1": {"type": "String", "example": "Baby A"},
-      "insight1": {"type": "String", "example": "Nap ratio is high"},
-      "baby2": {"type": "String", "example": "Baby B"},
-      "insight2": {"type": "String", "example": "Night ratio is high"}
+      "baby1": {
+        "type": "String",
+        "example": "Baby A"
+      },
+      "insight1": {
+        "type": "String",
+        "example": "Nap ratio is high"
+      },
+      "baby2": {
+        "type": "String",
+        "example": "Baby B"
+      },
+      "insight2": {
+        "type": "String",
+        "example": "Night ratio is high"
+      }
     }
   },
-
   "errorRetryLater": "Please try again later",
   "errorNetworkCheck": "Please check your internet connection",
   "errorConnectionSlow": "Connection is slow. Try again?",
@@ -1248,7 +1406,6 @@
   "percentileWatchNeeded": "Keep an eye on it",
   "percentileDoctorConsult": "Consider consulting a pediatrician",
   "percentileMeasurementNeeded": "Measurement is needed",
-
   "multipleBirthTipTitle": "Tips for Recording Multiples",
   "multipleBirthTipSubtitle": "Easier recording tips",
   "multipleBirthTipQuickSwitchTitle": "Quick Tab Switch",
@@ -1259,94 +1416,127 @@
   "multipleBirthTipIndividualAlertDesc": "We'll notify you of each baby's\nfeeding/sleep times separately",
   "multipleBirthTipColorCodeTitle": "Color Coded",
   "multipleBirthTipColorCodeDesc": "Each baby has their own color\nfor easy identification",
-
   "pieChartAccessibilityPrefix": "Ratio chart.",
   "pieChartAccessibilitySection": "{label} {percent} percent",
   "@pieChartAccessibilitySection": {
     "placeholders": {
-      "label": {"type": "String", "example": "Nap"},
-      "percent": {"type": "int", "example": "35"}
+      "label": {
+        "type": "String",
+        "example": "Nap"
+      },
+      "percent": {
+        "type": "int",
+        "example": "35"
+      }
     }
   },
-
   "offlineModeLastSync": "Offline mode - Last sync: {time}",
   "@offlineModeLastSync": {
     "placeholders": {
-      "time": {"type": "String", "example": "5 min ago"}
+      "time": {
+        "type": "String",
+        "example": "5 min ago"
+      }
     }
   },
   "timeUnknown": "Unknown",
   "statisticsEmptyStartHint": "Start your first record!",
   "statisticsStartRecording": "Start Recording",
-
   "onboardingCompletionTitle": "All Set!",
   "onboardingCompletionPreterm": "We'll carefully track\n{names}'s development by corrected age",
   "@onboardingCompletionPreterm": {
     "placeholders": {
-      "names": {"type": "String", "example": "Sky"}
+      "names": {
+        "type": "String",
+        "example": "Sky"
+      }
     }
   },
   "onboardingCompletionSGA": "We'll carefully track\n{names}'s growth",
   "@onboardingCompletionSGA": {
     "placeholders": {
-      "names": {"type": "String", "example": "Sky"}
+      "names": {
+        "type": "String",
+        "example": "Sky"
+      }
     }
   },
   "onboardingCompletionReady": "Ready to start\nrecording {names}'s care",
   "@onboardingCompletionReady": {
     "placeholders": {
-      "names": {"type": "String", "example": "Sky"}
+      "names": {
+        "type": "String",
+        "example": "Sky"
+      }
     }
   },
   "onboardingCompletionError": "An error occurred: {error}",
   "@onboardingCompletionError": {
     "placeholders": {
-      "error": {"type": "String", "example": "Network error"}
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
     }
   },
   "gestationalWeeksShort": "{weeks}wk",
   "@gestationalWeeksShort": {
     "placeholders": {
-      "weeks": {"type": "int", "example": "34"}
+      "weeks": {
+        "type": "int",
+        "example": "34"
+      }
     }
   },
   "growthTracking": "Growth Tracking",
   "ageInfoDays": "{count}d",
   "@ageInfoDays": {
     "placeholders": {
-      "count": {"type": "int", "example": "15"}
+      "count": {
+        "type": "int",
+        "example": "15"
+      }
     }
   },
   "ageInfoMonths": "{count}mo",
   "@ageInfoMonths": {
     "placeholders": {
-      "count": {"type": "int", "example": "3"}
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
   "ageInfoYears": "{count}yr",
   "@ageInfoYears": {
     "placeholders": {
-      "count": {"type": "int", "example": "1"}
+      "count": {
+        "type": "int",
+        "example": "1"
+      }
     }
   },
   "ageInfoYearsMonths": "{years}yr {months}mo",
   "@ageInfoYearsMonths": {
     "placeholders": {
-      "years": {"type": "int", "example": "1"},
-      "months": {"type": "int", "example": "3"}
+      "years": {
+        "type": "int",
+        "example": "1"
+      },
+      "months": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
-
   "feedingContentBreastMilkSub": "(Direct/Expressed)",
   "feedingMethodExpressedBottle": "Expressed Bottle",
   "solidFoodUnitGram": "g",
   "solidFoodUnitSpoon": "spoon",
   "solidFoodUnitBowl": "bowl",
-
   "zygosityIdentical": "Identical",
   "zygosityFraternal": "Fraternal",
   "zygosityUnknown": "Unknown",
-
   "authEmailLoginTitle": "Email Login",
   "authSignupTitle": "Sign Up",
   "authEmailLabel": "Email",
@@ -1363,30 +1553,40 @@
   "authForgotPassword": "Forgot your password?",
   "authPasswordResetSent": "Password reset email has been sent",
   "authPasswordResetFailed": "Failed to send email",
-
   "sweetSpotSleepStart": "Start",
   "sweetSpotTapToEndSleep": "Tap to end sleep",
   "sweetSpotNextSleepType": "Next {sleepType}",
   "@sweetSpotNextSleepType": {
     "description": "Sweet Spot card header - next sleep type (no name)",
     "placeholders": {
-      "sleepType": {"type": "String", "example": "nap"}
+      "sleepType": {
+        "type": "String",
+        "example": "nap"
+      }
     }
   },
   "sweetSpotTimeEstimate": "Around {time} ({minutes}min left)",
   "@sweetSpotTimeEstimate": {
     "description": "Sweet Spot card time estimate display",
     "placeholders": {
-      "time": {"type": "String", "example": "2:30 PM"},
-      "minutes": {"type": "int", "example": "45"}
+      "time": {
+        "type": "String",
+        "example": "2:30 PM"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "45"
+      }
     }
   },
-
   "pretermInfoTitle": "Enter {label}'s\nbirth information",
   "@pretermInfoTitle": {
     "description": "Preterm info screen title",
     "placeholders": {
-      "label": {"type": "String", "example": "First baby"}
+      "label": {
+        "type": "String",
+        "example": "First baby"
+      }
     }
   },
   "pretermInfoSubtitle": "Used for corrected age calculation",
@@ -1394,11 +1594,9 @@
   "pretermWeeksUnit": "wk",
   "pretermCorrectedAgeTitle": "What is corrected age?",
   "pretermCorrectedAgeDesc": "Age calculated based on the due date. It allows for more accurate assessment of preterm baby development.",
-  "buttonNext": "Next",
   "pretermWeeksMin": "22 wk",
   "pretermWeeksPreterm": "Under 37 wk = Preterm",
   "pretermWeeksMax": "42 wk",
-
   "errorLoadActivities": "Failed to load activity data",
   "errorLoadFamilyData": "Failed to load family data",
   "sweetSpotStateLabelUnknown": "Checking",
@@ -1406,7 +1604,6 @@
   "sweetSpotStateLabelApproaching": "Sleep time soon",
   "sweetSpotStateLabelOptimal": "Optimal now!",
   "sweetSpotStateLabelOvertired": "Overtired",
-
   "growthAddMeasurement": "Add Measurement",
   "growthErrorUnknown": "Unknown error",
   "growthRecordToday": "Today",
@@ -1415,39 +1612,39 @@
   "@growthRecordDaysAgo": {
     "description": "Growth screen - days ago display",
     "placeholders": {
-      "count": {"type": "int", "example": "3"}
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
-
   "importBabySelectHint": "Select baby",
   "countItems": "{count} items",
   "@countItems": {
     "placeholders": {
-      "count": {"type": "int", "example": "5"}
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
     }
   },
   "importErrorPrefix": "Error: {error}",
   "@importErrorPrefix": {
     "placeholders": {
-      "error": {"type": "String", "example": "Network error"}
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
     }
   },
   "errorUnknown": "An unknown error occurred.",
   "feedingTimeLabel": "Feeding Time",
   "notesPlaceholder": "Record any special notes",
   "todaySummaryTitle": "Today's Summary",
-  "countTimes": "{count}x",
-  "@countTimes": {
-    "placeholders": {
-      "count": {"type": "int", "example": "4"}
-    }
-  },
-
   "babyCountTitle": "How many babies?",
   "babyCountSubtitle": "We support families with multiples too",
   "babyCountOne": "1",
   "babyLabelDefault": "Baby",
-
   "authOrDivider": "or",
   "authEmailLogin": "Log in with Email",
   "authTermsPrefix": "By logging in, you agree to our ",
@@ -1455,85 +1652,141 @@
   "authTermsAnd": " and ",
   "authPrivacyPolicy": "Privacy Policy",
   "authTermsSuffix": ".",
-
   "correctedAgeFormatPrefix": "Corrected ",
   "correctedAgeFormatWeeksOnly": "{prefix}{weeks}w",
   "@correctedAgeFormatWeeksOnly": {
     "placeholders": {
-      "prefix": {"type": "String", "example": "Corrected "},
-      "weeks": {"type": "int", "example": "2"}
+      "prefix": {
+        "type": "String",
+        "example": "Corrected "
+      },
+      "weeks": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "correctedAgeFormatMonthsOnly": "{prefix}{months}mo",
   "@correctedAgeFormatMonthsOnly": {
     "placeholders": {
-      "prefix": {"type": "String", "example": "Corrected "},
-      "months": {"type": "int", "example": "3"}
+      "prefix": {
+        "type": "String",
+        "example": "Corrected "
+      },
+      "months": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
   "correctedAgeFormatMonthsWeeks": "{prefix}{months}mo {weeks}w",
   "@correctedAgeFormatMonthsWeeks": {
     "placeholders": {
-      "prefix": {"type": "String", "example": "Corrected "},
-      "months": {"type": "int", "example": "3"},
-      "weeks": {"type": "int", "example": "2"}
+      "prefix": {
+        "type": "String",
+        "example": "Corrected "
+      },
+      "months": {
+        "type": "int",
+        "example": "3"
+      },
+      "weeks": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "actualAgeFormatWeeksOnly": "{weeks}w",
   "@actualAgeFormatWeeksOnly": {
     "placeholders": {
-      "weeks": {"type": "int", "example": "2"}
+      "weeks": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "actualAgeFormatMonthsOnly": "{months}mo",
   "@actualAgeFormatMonthsOnly": {
     "placeholders": {
-      "months": {"type": "int", "example": "3"}
+      "months": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
   "actualAgeFormatMonthsWeeks": "{months}mo {weeks}w",
   "@actualAgeFormatMonthsWeeks": {
     "placeholders": {
-      "months": {"type": "int", "example": "3"},
-      "weeks": {"type": "int", "example": "2"}
+      "months": {
+        "type": "int",
+        "example": "3"
+      },
+      "weeks": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
-
   "labelRequired": "Required",
   "errorInvalidNumber": "Please enter a valid number",
   "errorValueTooLow": "{label} is too low (min {min}{unit})",
   "@errorValueTooLow": {
     "placeholders": {
-      "label": {"type": "String", "example": "Weight"},
-      "min": {"type": "String", "example": "0.3"},
-      "unit": {"type": "String", "example": "kg"}
+      "label": {
+        "type": "String",
+        "example": "Weight"
+      },
+      "min": {
+        "type": "String",
+        "example": "0.3"
+      },
+      "unit": {
+        "type": "String",
+        "example": "kg"
+      }
     }
   },
   "errorValueTooHigh": "{label} is too high (max {max}{unit})",
   "@errorValueTooHigh": {
     "placeholders": {
-      "label": {"type": "String", "example": "Weight"},
-      "max": {"type": "String", "example": "30"},
-      "unit": {"type": "String", "example": "kg"}
+      "label": {
+        "type": "String",
+        "example": "Weight"
+      },
+      "max": {
+        "type": "String",
+        "example": "30"
+      },
+      "unit": {
+        "type": "String",
+        "example": "kg"
+      }
     }
   },
   "growthPreviousValue": "Previous: {value}{unit}",
   "@growthPreviousValue": {
     "placeholders": {
-      "value": {"type": "String", "example": "3.5"},
-      "unit": {"type": "String", "example": "kg"}
+      "value": {
+        "type": "String",
+        "example": "3.5"
+      },
+      "unit": {
+        "type": "String",
+        "example": "kg"
+      }
     }
   },
   "growthPreviousDaysAgo": "({days}d ago)",
   "@growthPreviousDaysAgo": {
     "placeholders": {
-      "days": {"type": "int", "example": "7"}
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
     }
   },
-
   "cryAnalysisDetailedDescription": "AI-powered cry analysis\nwill be available in Phase 2.\n\nWe'll analyze your baby's cry patterns\nto distinguish hunger, sleepiness,\ndiscomfort, and more.",
   "comingSoonBadge": "Coming Soon",
-
   "dayNameMon": "Mon",
   "dayNameTue": "Tue",
   "dayNameWed": "Wed",
@@ -1551,41 +1804,60 @@
   "chartTooltipDayValue": "{day}: {value}",
   "@chartTooltipDayValue": {
     "placeholders": {
-      "day": {"type": "String", "example": "Mon"},
-      "value": {"type": "String", "example": "8.5"}
+      "day": {
+        "type": "String",
+        "example": "Mon"
+      },
+      "value": {
+        "type": "String",
+        "example": "8.5"
+      }
     }
   },
   "chartAccessibilityLast7Days": "Last 7 days chart.",
   "chartAccessibilityAverage": "Average {value}",
   "@chartAccessibilityAverage": {
     "placeholders": {
-      "value": {"type": "String", "example": "8.5"}
+      "value": {
+        "type": "String",
+        "example": "8.5"
+      }
     }
   },
-
   "todayPlayWithName": "{name}'s play today",
   "@todayPlayWithName": {
     "placeholders": {
-      "name": {"type": "String", "example": "Emma"}
+      "name": {
+        "type": "String",
+        "example": "Emma"
+      }
     }
   },
   "todayPlay": "Today's Play",
   "totalMinutesLabel": "Total {minutes}min",
   "@totalMinutesLabel": {
     "placeholders": {
-      "minutes": {"type": "int", "example": "30"}
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
     }
   },
   "tummyTimeCountMinutes": "Tummy time {count}x ({minutes}min)",
   "@tummyTimeCountMinutes": {
     "placeholders": {
-      "count": {"type": "int", "example": "2"},
-      "minutes": {"type": "int", "example": "10"}
+      "count": {
+        "type": "int",
+        "example": "2"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "10"
+      }
     }
   },
   "bathComplete": "Bath done",
   "outdoorLabel": "Outdoor",
-
   "tempSliderLowLabel": "Temperature is low",
   "tempSliderLowMessage": "Please keep baby warm.",
   "tempSliderNormalLabel": "Normal temperature",
@@ -1594,36 +1866,45 @@
   "tempSliderMildMessage": "Please monitor closely.",
   "tempSliderHighLabel": "Baby has a fever",
   "tempSliderHighMessage": "Please consider a doctor visit.",
-
   "pretermAnalysisFullTerm": "Analysis based on full-term criteria.",
   "pretermAnalysisSimilar": "At corrected age {weeks} weeks, reliability is similar to full-term.",
   "@pretermAnalysisSimilar": {
     "description": "Preterm adjustment - similar to full-term",
     "placeholders": {
-      "weeks": {"type": "int", "example": "12"}
+      "weeks": {
+        "type": "int",
+        "example": "12"
+      }
     }
   },
   "pretermAnalysisAdjusted": "Based on corrected age {weeks} weeks, reliability adjusted to {percentage}%.\nPreterm cry patterns may differ from full-term.",
   "@pretermAnalysisAdjusted": {
     "description": "Preterm adjustment - reliability adjusted",
     "placeholders": {
-      "weeks": {"type": "int", "example": "6"},
-      "percentage": {"type": "int", "example": "80"}
+      "weeks": {
+        "type": "int",
+        "example": "6"
+      },
+      "percentage": {
+        "type": "int",
+        "example": "80"
+      }
     }
   },
-
   "tummyTimerGoalReached": "Goal reached!",
   "tummyTimerGoalMinutes": "Goal: {minutes} min",
   "@tummyTimerGoalMinutes": {
     "description": "Tummy time timer - goal display",
     "placeholders": {
-      "minutes": {"type": "int", "example": "5"}
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
     }
   },
   "tummyTimerPause": "Pause",
   "tummyTimerComplete": "Done",
   "tummyTimerReset": "Reset",
-
   "feedingBreastLeft": "Breast Left",
   "feedingBreastRight": "Breast Right",
   "feedingBreastBoth": "Breast Both",
@@ -1631,15 +1912,248 @@
   "@recentFeedingAccessibility": {
     "description": "Recent feeding button accessibility label",
     "placeholders": {
-      "type": {"type": "String", "example": "Formula"},
-      "amount": {"type": "String", "example": "120ml"}
+      "type": {
+        "type": "String",
+        "example": "Formula"
+      },
+      "amount": {
+        "type": "String",
+        "example": "120ml"
+      }
     }
   },
-
   "authErrorInvalidCredentials": "Invalid email or password.",
   "authErrorEmailNotConfirmed": "Email verification required. Please check your inbox.",
   "authErrorUserAlreadyRegistered": "This email is already registered.",
   "authErrorPasswordTooShort": "Password must be at least 6 characters.",
   "authErrorInvalidEmail": "Please enter a valid email address.",
-  "authErrorGeneric": "An error occurred. Please try again."
+  "authErrorGeneric": "An error occurred. Please try again.",
+  "growthChartFentonDesc": "Preterm growth chart (22-50 weeks)",
+  "growthChartWhoDesc": "WHO growth chart (0-24 months)",
+  "summaryCardAccessibility": "{label} {value} {subLabel}, compared to last week {change}",
+  "@summaryCardAccessibility": {
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Sleep"
+      },
+      "value": {
+        "type": "String",
+        "example": "14.2h"
+      },
+      "subLabel": {
+        "type": "String",
+        "example": "/day avg"
+      },
+      "change": {
+        "type": "String",
+        "example": "+30min"
+      }
+    }
+  },
+  "amountInputDirectShort": "Custom",
+  "amountInputDirect": "Enter amount",
+  "inviteCodeVerifyError": "Could not verify the invite code",
+  "continueWithApple": "Continue with Apple",
+  "growthEmptyTitleWithName": "Start {babyName}'s first\ngrowth record!",
+  "@growthEmptyTitleWithName": {
+    "description": "Growth empty state - title with name",
+    "placeholders": {
+      "babyName": {
+        "type": "String",
+        "example": "Baby"
+      }
+    }
+  },
+  "growthEmptyTitle": "Start your first\ngrowth record!",
+  "@growthEmptyTitle": {
+    "description": "Growth empty state - title"
+  },
+  "growthEmptyDescription": "Record after pediatric checkups\nto track growth trends",
+  "@growthEmptyDescription": {
+    "description": "Growth empty state - description"
+  },
+  "growthEmptyButton": "Add first record",
+  "@growthEmptyButton": {
+    "description": "Growth empty state - CTA button"
+  },
+  "filterViewTogether": "View Together",
+  "@filterViewTogether": {
+    "description": "Statistics filter - view together"
+  },
+  "filterCorrectedAgeDays": "CA {days}d",
+  "@filterCorrectedAgeDays": {
+    "description": "Statistics filter - corrected age days",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "42"
+      }
+    }
+  },
+  "cryAnalysisCardSubtitle": "Find out why your baby is crying",
+  "@cryAnalysisCardSubtitle": {
+    "description": "Cry analysis card - subtitle"
+  },
+  "cryAnalysisStartButton": "Start Analysis",
+  "@cryAnalysisStartButton": {
+    "description": "Cry analysis card - CTA button"
+  },
+  "growthChartTitleWithMetric": "{metric} Growth Chart",
+  "@growthChartTitleWithMetric": {
+    "description": "Growth chart - title with metric",
+    "placeholders": {
+      "metric": {
+        "type": "String",
+        "example": "Weight"
+      }
+    }
+  },
+  "growthChartLegendMedian": "50% (median)",
+  "@growthChartLegendMedian": {
+    "description": "Growth chart legend - median"
+  },
+  "growthChartLegendMeasured": "Measured",
+  "@growthChartLegendMeasured": {
+    "description": "Growth chart legend - measured value"
+  },
+  "growthMetricWeight": "Weight",
+  "@growthMetricWeight": {
+    "description": "Growth metric - weight"
+  },
+  "growthMetricLength": "Length",
+  "@growthMetricLength": {
+    "description": "Growth metric - length"
+  },
+  "growthMetricHeadCircumference": "Head Circ.",
+  "@growthMetricHeadCircumference": {
+    "description": "Growth metric - head circumference"
+  },
+  "memberBadgeMe": "Me",
+  "@memberBadgeMe": {
+    "description": "Family member - me badge"
+  },
+  "memberRoleOwner": "Admin",
+  "@memberRoleOwner": {
+    "description": "Family member - owner role"
+  },
+  "memberJoinedDate": "Joined {month}/{day}",
+  "@memberJoinedDate": {
+    "description": "Family member - joined date",
+    "placeholders": {
+      "month": {
+        "type": "int",
+        "example": "2"
+      },
+      "day": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "growthPercentileTitle": "Growth Percentile",
+  "@growthPercentileTitle": {
+    "description": "Growth percentile card title"
+  },
+  "navRecords": "Records",
+  "@navRecords": {
+    "description": "Bottom navigation - Records"
+  },
+  "registerBabyFirst": "Please register baby info first",
+  "@registerBabyFirst": {
+    "description": "No baby registered prompt"
+  },
+  "recordDeleted": "Record deleted",
+  "@recordDeleted": {
+    "description": "Record deleted snackbar message"
+  },
+  "undoAction": "Undo",
+  "@undoAction": {
+    "description": "Undo button label"
+  },
+  "statisticsCountUnit": "{count}x",
+  "@statisticsCountUnit": {
+    "description": "Statistics - count unit",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "5.2"
+      }
+    }
+  },
+  "statisticsMinuteChange": "{sign}{minutes}min",
+  "@statisticsMinuteChange": {
+    "description": "Statistics - minute change amount",
+    "placeholders": {
+      "sign": {
+        "type": "String",
+        "example": "+"
+      },
+      "minutes": {
+        "type": "String",
+        "example": "15"
+      }
+    }
+  },
+  "statisticsCountChange": "{sign}{count}x",
+  "@statisticsCountChange": {
+    "description": "Statistics - count change amount",
+    "placeholders": {
+      "sign": {
+        "type": "String",
+        "example": "+"
+      },
+      "count": {
+        "type": "String",
+        "example": "2"
+      }
+    }
+  },
+  "defaultFamilyName": "My Family",
+  "inviteDaysRemaining": "{days} days left",
+  "@inviteDaysRemaining": {"description":"x","placeholders":{"days":{"type":"int","example":"5"}}},
+  "togetherDifferentPatternsNormal": "Different patterns are all normal",
+  "cryReanalyzeShort": "Reanalyze",
+  "confidenceLevelHigh": "High",
+  "confidenceLevelMedium": "Medium",
+  "confidenceLevelLow": "Low",
+  "cryFeedbackAccurate": "Accurate",
+  "cryFeedbackInaccurate": "Seems different",
+  "cryFeedbackUnsure": "Not sure",
+  "directionIncreasing": "Increasing",
+  "directionStable": "Stable",
+  "directionDecreasing": "Decreasing",
+  "sgaCorrectedAgeDMinus": "Corrected age D{days}",
+  "@sgaCorrectedAgeDMinus": {"description":"x","placeholders":{"days":{"type":"int","example":"-14"}}},
+  "sgaCorrectedAgeDPlus": "Corrected age D+{days}",
+  "@sgaCorrectedAgeDPlus": {"description":"x","placeholders":{"days":{"type":"int","example":"30"}}},
+  "sgaGrowthTrackingMode": "Growth tracking mode",
+  "semanticsTimeSelect": "Select time: {time}",
+  "@semanticsTimeSelect": {"description":"x","placeholders":{"time":{"type":"String","example":"3:30"}}},
+  "ongoingSleepElapsedHoursMinutes": "{hours}h {minutes}m",
+  "@ongoingSleepElapsedHoursMinutes": {"description":"x","placeholders":{"hours":{"type":"int","example":"2"},"minutes":{"type":"int","example":"30"}}},
+  "ongoingSleepElapsedMinutes": "{minutes}m",
+  "@ongoingSleepElapsedMinutes": {"description":"x","placeholders":{"minutes":{"type":"int","example":"45"}}},
+  "togetherOkButton": "Got it",
+  "cryAnalysisCardTitle": "Cry Analysis",
+  "cryAnalysisStartButtonHome": "Start Analysis",
+  "cryAnalyzing": "Analyzing...",
+  "cryCancelButton": "Cancel",
+  "familyDefaultName": "My Family",
+  "familyMemberCount": "{count} members",
+  "@familyMemberCount": {"description":"x","placeholders":{"count":{"type":"int","example":"3"}}},
+  "familyInviteDaysLeft": "{days} days left",
+  "@familyInviteDaysLeft": {"description":"x","placeholders":{"days":{"type":"int","example":"5"}}},
+  "growthErrorTitle": "Failed to load data",
+  "growthErrorRetry": "Retry",
+  "growthChartLegend50": "50% (median)",
+  "welcomeStartButton": "Get Started",
+  "importCannotSelectFile": "Cannot select file: {error}",
+  "@importCannotSelectFile": {"description":"x","placeholders":{"error":{"type":"String","example":"Permission denied"}}},
+  "importNoFamilyInfo": "No family info found. Please complete onboarding.",
+  "importFailed": "Import failed: {error}",
+  "@importFailed": {"description":"x","placeholders":{"error":{"type":"String","example":"Network error"}}},
+  "dateFormatMonthDay": "MMM d (E)",
+  "growthMetricChartTitle": "{metric} Growth Chart",
+  "@growthMetricChartTitle": {"description":"x","placeholders":{"metric":{"type":"String","example":"Weight"}}}
 }

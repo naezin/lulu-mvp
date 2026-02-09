@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 import '../../../data/models/baby_type.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import 'fenton_data.dart';
 import 'who_data.dart';
 
@@ -111,8 +112,8 @@ class GrowthDataCache {
 }
 
 extension GrowthChartTypeDescriptionExtension on GrowthChartType {
-  String get description => switch (this) {
-        GrowthChartType.fenton => '조산아 성장 차트 (22-50주)',
-        GrowthChartType.who => '세계보건기구 성장 차트 (0-24개월)',
+  String localizedDescription(S l10n) => switch (this) {
+        GrowthChartType.fenton => l10n.growthChartFentonDesc,
+        GrowthChartType.who => l10n.growthChartWhoDesc,
       };
 }

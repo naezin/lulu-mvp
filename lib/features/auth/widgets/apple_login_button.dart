@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// Apple 로그인 버튼
 /// Human Interface Guidelines 준수
@@ -48,9 +49,9 @@ class AppleLoginButton extends StatelessWidget {
                     color: Colors.black,
                   ),
                   const SizedBox(width: 12),
-                  const Text(
-                    'Apple로 계속하기',
-                    style: TextStyle(
+                  Text(
+                    S.of(context)!.continueWithApple,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.black,

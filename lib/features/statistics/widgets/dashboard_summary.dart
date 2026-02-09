@@ -60,7 +60,7 @@ class DashboardSummary extends StatelessWidget {
                   icon: LuluIcons.feedingOutlined,
                   iconColor: LuluStatisticsColors.feeding,
                   label: l10n?.statisticsFeeding ?? 'Feeding',
-                  value: '${statistics.feeding.dailyAverageCount.toStringAsFixed(1)}회',
+                  value: l10n?.statisticsCountUnit(statistics.feeding.dailyAverageCount.toStringAsFixed(1)) ?? '${statistics.feeding.dailyAverageCount.toStringAsFixed(1)}x',
                   subLabel: l10n?.statisticsPerDayAverage ?? '/day',
                   change: _formatCountChange(statistics.feeding.changeCount, l10n),
                   changeType: statistics.feeding.changeType,
@@ -75,7 +75,7 @@ class DashboardSummary extends StatelessWidget {
                   icon: LuluIcons.diaperOutlined,
                   iconColor: LuluStatisticsColors.diaper,
                   label: l10n?.statisticsDiaper ?? 'Diaper',
-                  value: '${statistics.diaper.dailyAverageCount.toStringAsFixed(1)}회',
+                  value: l10n?.statisticsCountUnit(statistics.diaper.dailyAverageCount.toStringAsFixed(1)) ?? '${statistics.diaper.dailyAverageCount.toStringAsFixed(1)}x',
                   subLabel: l10n?.statisticsPerDayAverage ?? '/day',
                   change: _formatCountChange(statistics.diaper.changeCount, l10n),
                   changeType: statistics.diaper.changeType,
@@ -93,13 +93,13 @@ class DashboardSummary extends StatelessWidget {
     if (minutes == 0) return l10n?.statisticsAverage ?? 'Avg';
     final absMinutes = minutes.abs();
     final sign = minutes > 0 ? '+' : '-';
-    return '$sign$absMinutes분';
+    return l10n?.statisticsMinuteChange(sign, absMinutes.toString()) ?? '$sign${absMinutes}min';
   }
 
   /// 횟수 변화량 포맷
   String _formatCountChange(int count, S? l10n) {
     if (count == 0) return l10n?.statisticsAverage ?? 'Avg';
     final sign = count > 0 ? '+' : '';
-    return '$sign$count회';
+    return l10n?.statisticsCountChange(sign, count.abs().toString()) ?? '$sign${count.abs()}x';
   }
 }

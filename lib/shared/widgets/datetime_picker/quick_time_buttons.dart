@@ -28,25 +28,25 @@ class QuickTimeButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _QuickButton(
-          label: l10n?.dateTimeNow ?? '지금',
+          label: l10n?.dateTimeNow ?? 'Now',
           icon: LuluIcons.time,
           onTap: () => onTimeSelected(DateTime.now()),
           isPrimary: true,
         ),
         _QuickButton(
-          label: l10n?.dateTime5MinAgo ?? '-5분',
+          label: l10n?.dateTime5MinAgo ?? '-5min',
           onTap: () => onTimeSelected(
             DateTime.now().subtract(const Duration(minutes: 5)),
           ),
         ),
         _QuickButton(
-          label: l10n?.dateTime15MinAgo ?? '-15분',
+          label: l10n?.dateTime15MinAgo ?? '-15min',
           onTap: () => onTimeSelected(
             DateTime.now().subtract(const Duration(minutes: 15)),
           ),
         ),
         _QuickButton(
-          label: l10n?.dateTime30MinAgo ?? '-30분',
+          label: l10n?.dateTime30MinAgo ?? '-30min',
           onTap: () => onTimeSelected(
             DateTime.now().subtract(const Duration(minutes: 30)),
           ),

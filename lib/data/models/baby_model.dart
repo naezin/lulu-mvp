@@ -155,7 +155,7 @@ class BabyModel {
     return BabyModel(
       id: json['id'] as String? ?? '',
       familyId: json['familyId'] as String? ?? '',
-      name: json['name'] as String? ?? '아기',
+      name: json['name'] as String? ?? 'Baby',
       birthDate: json['birthDate'] != null
           ? DateTime.parse(json['birthDate'] as String)
           : DateTime.now(),
@@ -186,7 +186,7 @@ class BabyModel {
     return BabyModel(
       id: json['id'] as String? ?? '',
       familyId: json['family_id'] as String? ?? '',
-      name: json['name'] as String? ?? '아기',
+      name: json['name'] as String? ?? 'Baby',
       birthDate: json['birth_date'] != null
           ? DateTime.parse(json['birth_date'] as String)
           : DateTime.now(),

@@ -85,6 +85,8 @@ class _FamilyScreenState extends State<FamilyScreen> {
   }
 
   Widget _buildFamilyHeader(BuildContext context, FamilyProvider provider) {
+    final l10n = S.of(context)!;
+
     return Row(
       children: [
         Container(
@@ -104,7 +106,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                provider.familyDisplayName ?? '우리 가족',
+                provider.familyDisplayName ?? S.of(context)!.defaultFamilyName,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -112,7 +114,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                 ),
               ),
               Text(
-                '${provider.memberCount}명의 가족',
+                l10n.memberCount('${provider.memberCount}'),
                 style: TextStyle(
                   fontSize: 14,
                   color: LuluTextColors.primaryStrong,
@@ -193,7 +195,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                           ),
                         ),
                         Text(
-                          '${invite.daysLeft}일 남음',
+                          l10n.inviteDaysRemaining(invite.daysLeft),
                           style: TextStyle(
                             fontSize: 12,
                             color: LuluTextColors.primarySoft,

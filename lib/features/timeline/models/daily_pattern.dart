@@ -94,7 +94,7 @@ class DailyPattern {
   }
 
   String get weekdayString {
-    const days = ['', '월', '화', '수', '목', '금', '토', '일'];
+    const days = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return days[date.weekday];
   }
 

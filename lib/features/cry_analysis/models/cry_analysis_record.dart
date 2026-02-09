@@ -1,3 +1,4 @@
+import '../../../l10n/generated/app_localizations.dart' show S;
 import 'cry_type.dart';
 import 'cry_analysis_result.dart';
 
@@ -167,16 +168,18 @@ enum CryFeedback {
     );
   }
 
-  String get label {
+  String localizedLabel(S? l10n) {
     switch (this) {
       case CryFeedback.accurate:
-        return '정확해요';
+        return l10n?.cryFeedbackAccurate ?? 'Accurate';
       case CryFeedback.inaccurate:
-        return '다른 것 같아요';
+        return l10n?.cryFeedbackInaccurate ?? 'Seems different';
       case CryFeedback.unsure:
-        return '잘 모르겠어요';
+        return l10n?.cryFeedbackUnsure ?? 'Not sure';
     }
   }
+
+  String get label => localizedLabel(null);
 }
 
 /// 분석 기록 통계 (일별/주별 집계용)

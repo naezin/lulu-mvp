@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/generated/app_localizations.dart' show S;
 import '../design_system/lulu_colors.dart';
 
 /// SGA (Small for Gestational Age) 판별 유틸리티
@@ -69,6 +70,7 @@ class SGACalculator {
     required BirthClassification classification,
     required DateTime birthDate,
     required int? gestationalWeeks,
+    S? l10n,
   }) {
     switch (classification) {
       case BirthClassification.preterm:
@@ -81,15 +83,17 @@ class SGACalculator {
         final correctedDays = actualDays - (weeksDiff * 7);
 
         if (correctedDays < 0) {
-          return '교정연령 D$correctedDays';
+          return l10n?.sgaCorrectedAgeDMinus(correctedDays) ??
+              'D$correctedDays';
         }
-        return '교정연령 D+$correctedDays';
+        return l10n?.sgaCorrectedAgeDPlus(correctedDays) ??
+            'D+$correctedDays';
 
       case BirthClassification.fullTermSGA:
-        return '성장 추적 모드';
+        return l10n?.sgaGrowthTrackingMode ?? 'Growth tracking mode';
 
       case BirthClassification.fullTermAGA:
-        return null; // 뱃지 없음
+        return null; // No badge
     }
   }
 

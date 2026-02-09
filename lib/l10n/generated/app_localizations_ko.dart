@@ -2920,4 +2920,251 @@ class SKo extends S {
 
   @override
   String get authErrorGeneric => '오류가 발생했습니다. 다시 시도해주세요.';
+
+  @override
+  String get growthChartFentonDesc => '조산아 성장 차트 (22-50주)';
+
+  @override
+  String get growthChartWhoDesc => '세계보건기구 성장 차트 (0-24개월)';
+
+  @override
+  String summaryCardAccessibility(
+    String label,
+    String value,
+    String subLabel,
+    String change,
+  ) {
+    return '$label $value $subLabel, 지난주 대비 $change';
+  }
+
+  @override
+  String get amountInputDirectShort => '직접';
+
+  @override
+  String get amountInputDirect => '직접 입력';
+
+  @override
+  String get inviteCodeVerifyError => '초대 코드를 확인할 수 없어요';
+
+  @override
+  String get continueWithApple => 'Apple로 계속하기';
+
+  @override
+  String growthEmptyTitleWithName(String babyName) {
+    return '$babyName의 첨 성장 기록을\n남겨보세요!';
+  }
+
+  @override
+  String get growthEmptyTitle => '첨 성장 기록을\n남겨보세요!';
+
+  @override
+  String get growthEmptyDescription => '소아과 정기검진 후 기록하면\n성장 추이를 확인할 수 있어요';
+
+  @override
+  String get growthEmptyButton => '첨 기록 남기기';
+
+  @override
+  String get filterViewTogether => '함께 보기';
+
+  @override
+  String filterCorrectedAgeDays(int days) {
+    return '교정$days일';
+  }
+
+  @override
+  String get cryAnalysisCardSubtitle => '아기가 왜 우는지 알아보세요';
+
+  @override
+  String get cryAnalysisStartButton => '분석 시작하기';
+
+  @override
+  String growthChartTitleWithMetric(String metric) {
+    return '$metric 성장 차트';
+  }
+
+  @override
+  String get growthChartLegendMedian => '50% (중앙값)';
+
+  @override
+  String get growthChartLegendMeasured => '측정값';
+
+  @override
+  String get growthMetricWeight => '체중';
+
+  @override
+  String get growthMetricLength => '신장';
+
+  @override
+  String get growthMetricHeadCircumference => '두위';
+
+  @override
+  String get memberBadgeMe => '나';
+
+  @override
+  String get memberRoleOwner => '관리자';
+
+  @override
+  String memberJoinedDate(int month, int day) {
+    return '$month월 $day일 참여';
+  }
+
+  @override
+  String get growthPercentileTitle => '성장 백분위';
+
+  @override
+  String get navRecords => '기록';
+
+  @override
+  String get registerBabyFirst => '아기 정보를 먼저 등록해주세요';
+
+  @override
+  String get recordDeleted => '기록이 삭제되었어요';
+
+  @override
+  String get undoAction => '실행취소';
+
+  @override
+  String statisticsCountUnit(String count) {
+    return '$count회';
+  }
+
+  @override
+  String statisticsMinuteChange(String sign, String minutes) {
+    return '$sign$minutes분';
+  }
+
+  @override
+  String statisticsCountChange(String sign, String count) {
+    return '$sign$count회';
+  }
+
+  @override
+  String get defaultFamilyName => '우리 가족';
+
+  @override
+  String inviteDaysRemaining(int days) {
+    return '$days일 남음';
+  }
+
+  @override
+  String get togetherDifferentPatternsNormal => '서로 다른 패턴도 모두 정상이에요';
+
+  @override
+  String get cryReanalyzeShort => '다시 분석';
+
+  @override
+  String get confidenceLevelHigh => '높음';
+
+  @override
+  String get confidenceLevelMedium => '보통';
+
+  @override
+  String get confidenceLevelLow => '낮음';
+
+  @override
+  String get cryFeedbackAccurate => '정확해요';
+
+  @override
+  String get cryFeedbackInaccurate => '다른 것 같아요';
+
+  @override
+  String get cryFeedbackUnsure => '잘 모르겠어요';
+
+  @override
+  String get directionIncreasing => '증가';
+
+  @override
+  String get directionStable => '유지';
+
+  @override
+  String get directionDecreasing => '감소';
+
+  @override
+  String sgaCorrectedAgeDMinus(int days) {
+    return '교정연령 D$days';
+  }
+
+  @override
+  String sgaCorrectedAgeDPlus(int days) {
+    return '교정연령 D+$days';
+  }
+
+  @override
+  String get sgaGrowthTrackingMode => '성장 추적 모드';
+
+  @override
+  String semanticsTimeSelect(String time) {
+    return '시간 선택: $time';
+  }
+
+  @override
+  String ongoingSleepElapsedHoursMinutes(int hours, int minutes) {
+    return '$hours시간 $minutes분';
+  }
+
+  @override
+  String ongoingSleepElapsedMinutes(int minutes) {
+    return '$minutes분';
+  }
+
+  @override
+  String get togetherOkButton => '알겠어요';
+
+  @override
+  String get cryAnalysisCardTitle => '울음 분석';
+
+  @override
+  String get cryAnalysisStartButtonHome => '분석 시작하기';
+
+  @override
+  String get cryAnalyzing => '분석 중...';
+
+  @override
+  String get cryCancelButton => '취소';
+
+  @override
+  String get familyDefaultName => '우리 가족';
+
+  @override
+  String familyMemberCount(int count) {
+    return '$count명의 가족';
+  }
+
+  @override
+  String familyInviteDaysLeft(int days) {
+    return '$days일 남음';
+  }
+
+  @override
+  String get growthErrorTitle => '데이터를 불러오지 못했어요';
+
+  @override
+  String get growthErrorRetry => '다시 시도';
+
+  @override
+  String get growthChartLegend50 => '50% (중앙값)';
+
+  @override
+  String get welcomeStartButton => '시작하기';
+
+  @override
+  String importCannotSelectFile(String error) {
+    return '파일을 선택할 수 없습니다: $error';
+  }
+
+  @override
+  String get importNoFamilyInfo => '가족 정보가 없습니다. 온보딩을 완료해주세요.';
+
+  @override
+  String importFailed(String error) {
+    return '가져오기 실패: $error';
+  }
+
+  @override
+  String get dateFormatMonthDay => 'M월 d일 (E)';
+
+  @override
+  String growthMetricChartTitle(String metric) {
+    return '$metric 성장 차트';
+  }
 }

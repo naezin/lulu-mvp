@@ -28,7 +28,7 @@ class FamilyProvider extends ChangeNotifier {
 
   // Getters
   String? get familyId => _familyId;
-  String? get familyDisplayName => _familyName ?? '우리 가족';
+  String? get familyDisplayName => _familyName ?? 'Our Family';
   List<FamilyMemberModel> get members => _members;
   List<FamilyInviteModel> get pendingInvites => _pendingInvites;
   bool get isLoading => _isLoading;
@@ -92,7 +92,7 @@ class FamilyProvider extends ChangeNotifier {
   /// 초대 생성
   Future<FamilyInviteModel> createInvite() async {
     if (_familyId == null) {
-      throw Exception('가족 정보가 없어요');
+      throw Exception('Family info not found');
     }
 
     final invite = await _inviteService.createInvite(_familyId!);
@@ -105,7 +105,7 @@ class FamilyProvider extends ChangeNotifier {
   /// 이메일 초대 생성
   Future<FamilyInviteModel> createEmailInvite(String email) async {
     if (_familyId == null) {
-      throw Exception('가족 정보가 없어요');
+      throw Exception('Family info not found');
     }
 
     final invite = await _inviteService.createInvite(_familyId!, email: email);
@@ -128,7 +128,7 @@ class FamilyProvider extends ChangeNotifier {
   /// 소유권 이전
   Future<void> transferOwnership(String newOwnerId) async {
     if (_familyId == null) {
-      throw Exception('가족 정보가 없어요');
+      throw Exception('Family info not found');
     }
 
     await _inviteService.transferOwnership(_familyId!, newOwnerId);
@@ -150,7 +150,7 @@ class FamilyProvider extends ChangeNotifier {
   /// 가족 나가기
   Future<bool> leaveFamily() async {
     if (_familyId == null) {
-      throw Exception('가족 정보가 없어요');
+      throw Exception('Family info not found');
     }
 
     final familyDeleted = await _inviteService.leaveFamily(_familyId!);

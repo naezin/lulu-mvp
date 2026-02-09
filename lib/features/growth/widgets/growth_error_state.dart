@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
@@ -45,7 +46,7 @@ class GrowthErrorState extends StatelessWidget {
 
             // 메시지
             Text(
-              '데이터를 불러오지 못했어요',
+              S.of(context)!.errorDataLoadFailed,
               style: LuluTextStyles.titleMedium.copyWith(
                 color: LuluTextColors.primary,
               ),
@@ -87,7 +88,7 @@ class GrowthErrorState extends StatelessWidget {
                       Icon(LuluIcons.refresh, size: 18, color: LuluTextColors.primary),
                       const SizedBox(width: LuluSpacing.sm),
                       Text(
-                        '다시 시도',
+                        S.of(context)!.retry,
                         style: LuluTextStyles.bodyMedium.copyWith(
                           color: LuluTextColors.primary,
                           fontWeight: FontWeight.w500,

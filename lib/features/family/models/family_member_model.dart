@@ -26,7 +26,7 @@ class FamilyMemberModel {
   bool get isOwner => role == 'owner';
 
   /// 표시 이름
-  String get displayName => userName ?? userEmail?.split('@').first ?? '멤버';
+  String get displayName => userName ?? userEmail?.split('@').first ?? 'Member';
 
   /// JSON에서 생성
   factory FamilyMemberModel.fromJson(Map<String, dynamic> json) {

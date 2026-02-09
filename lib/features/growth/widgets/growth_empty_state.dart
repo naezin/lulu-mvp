@@ -4,6 +4,7 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 성장 화면 Empty 상태 (측정 기록 없음)
 ///
@@ -20,6 +21,7 @@ class GrowthEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(LuluSpacing.xxl),
@@ -44,8 +46,8 @@ class GrowthEmptyState extends StatelessWidget {
             // 메시지
             Text(
               babyName != null
-                  ? '$babyName의 첫 성장 기록을\n남겨보세요!'
-                  : '첫 성장 기록을\n남겨보세요!',
+                  ? l10n.growthEmptyTitleWithName(babyName!)
+                  : l10n.growthEmptyTitle,
               style: LuluTextStyles.titleMedium.copyWith(
                 color: LuluTextColors.primary,
               ),
@@ -55,7 +57,7 @@ class GrowthEmptyState extends StatelessWidget {
             const SizedBox(height: LuluSpacing.md),
 
             Text(
-              '소아과 정기검진 후 기록하면\n성장 추이를 확인할 수 있어요',
+              l10n.growthEmptyDescription,
               style: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -86,7 +88,7 @@ class GrowthEmptyState extends StatelessWidget {
                     Icon(LuluIcons.memo, size: 18, color: LuluColors.midnightNavy),
                     const SizedBox(width: LuluSpacing.sm),
                     Text(
-                      '첫 기록 남기기',
+                      l10n.growthEmptyButton,
                       style: LuluTextStyles.bodyMedium.copyWith(
                         color: LuluColors.midnightNavy,
                         fontWeight: FontWeight.bold,

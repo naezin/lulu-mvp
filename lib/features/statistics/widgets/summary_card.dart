@@ -4,6 +4,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../models/weekly_statistics.dart';
 
 /// 요약 카드 위젯
@@ -45,7 +46,7 @@ class SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: '$label $value $subLabel, 지난주 대비 $change',
+      label: S.of(context)!.summaryCardAccessibility(label, value, subLabel, change),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(

@@ -196,7 +196,7 @@ class AIRequestResult<T> {
   factory AIRequestResult.limitReached(AIUsageSummary usage) {
     return AIRequestResult._(
       isSuccess: false,
-      errorMessage: '오늘의 AI 사용량을 모두 소진했습니다. (${usage.dailyLimit}회)',
+      errorMessage: 'Daily AI usage limit reached. (${usage.dailyLimit} requests)',
       usageSummary: usage,
     );
   }

@@ -93,9 +93,9 @@ class TogetherView extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                if (baby.correctedAgeLabel != null)
+                if (baby.correctedAgeDays != null)
                   Text(
-                    baby.correctedAgeLabel!,
+                    S.of(context)!.statisticsCorrectedAge(baby.correctedAgeDays!),
                     style: LuluTextStyles.caption.copyWith(
                       color: LuluTextColors.secondary,
                     ),
