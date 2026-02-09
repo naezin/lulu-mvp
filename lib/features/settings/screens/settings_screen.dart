@@ -100,7 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: LuluSpacing.xxxl),
 
                 // 위험 영역 섹션
-                _buildSectionHeader('위험 영역'),
+                _buildSectionHeader(l10n.sectionDangerZone),
                 const SizedBox(height: LuluSpacing.md),
                 _buildResetDataTile(),
               ],
@@ -168,7 +168,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _buildBabyTile(BabyModel baby, int totalBabies) {
     final ageText = _formatAge(baby);
-    final statusText = baby.isPreterm ? '조산아' : '만삭';
+    final l10n = S.of(context)!;
+    final statusText = baby.isPreterm ? l10n.statusPreterm : l10n.statusFullTerm;
 
     return ListTile(
       leading: Container(
@@ -260,13 +261,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       title: Text(
-        '아기 추가',
+        S.of(context)!.addBabyTitle,
         style: LuluTextStyles.bodyLarge.copyWith(
           color: LuluColors.lavenderMist,
         ),
       ),
       subtitle: Text(
-        '최대 4명까지 등록 가능',
+        S.of(context)!.addBabyMaxHint,
         style: LuluTextStyles.caption.copyWith(
           color: LuluTextColors.tertiary,
         ),
@@ -276,19 +277,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   String _formatAge(BabyModel baby) {
+    final l10n = S.of(context)!;
     final now = DateTime.now();
     final days = now.difference(baby.birthDate).inDays;
 
     if (days < 7) {
-      return '출생 $days일';
+      return l10n.ageDays(days);
     } else if (days < 30) {
-      return '출생 ${days ~/ 7}주';
+      return l10n.ageWeeks(days ~/ 7);
     } else {
       final months = days ~/ 30;
       if (baby.isPreterm && baby.correctedAgeInMonths != null) {
-        return '교정 ${baby.correctedAgeInMonths}개월 (실제 $months개월)';
+        return l10n.ageCorrectedMonths(baby.correctedAgeInMonths!, months);
       }
-      return '$months개월';
+      return l10n.ageMonths(months);
     }
   }
 
@@ -347,8 +349,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             subtitle: Text(
               familyProvider.memberCount > 0
-                  ? '${familyProvider.memberCount}명의 가족'
-                  : '가족 멤버 초대하기',
+                  ? l10n.memberCount(familyProvider.memberCount.toString())
+                  : l10n.familyInviteHint,
               style: LuluTextStyles.caption.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -509,13 +511,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       title: Text(
-        '기존 기록 가져오기',
+        S.of(context)!.importRecordsTitle,
         style: LuluTextStyles.bodyLarge.copyWith(
           color: LuluTextColors.primary,
         ),
       ),
       subtitle: Text(
-        '다른 앱에서 기록 이전',
+        S.of(context)!.importRecordsHint,
         style: LuluTextStyles.caption.copyWith(
           color: LuluTextColors.secondary,
         ),
@@ -540,7 +542,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '내보내기 기간',
+            S.of(context)!.labelExportPeriod,
             style: LuluTextStyles.labelMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -551,7 +553,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: ExportPeriod.values.map((period) {
               final isSelected = period == _selectedPeriod;
               return ChoiceChip(
-                label: Text(period.label),
+                label: Text(period.localizedLabel(S.of(context)!)),
                 selected: isSelected,
                 onSelected: (selected) {
                   if (selected) {
@@ -594,13 +596,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       title: Text(
-        'CSV로 내보내기',
+        S.of(context)!.exportCSVTitle,
         style: LuluTextStyles.bodyLarge.copyWith(
           color: LuluTextColors.primary,
         ),
       ),
       subtitle: Text(
-        '${_selectedPeriod.label} 기록을 파일로 저장',
+        S.of(context)!.exportToFile(_selectedPeriod.localizedLabel(S.of(context)!)),
         style: LuluTextStyles.caption.copyWith(
           color: LuluTextColors.secondary,
         ),
@@ -655,8 +657,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final family = homeProvider.family;
     final babies = homeProvider.babies;
 
+    final l10n = S.of(context)!;
+
     if (family == null) {
-      _showSnackBar('가족 정보가 없습니다');
+      _showSnackBar(l10n.errorNoFamily);
       return;
     }
 
@@ -667,13 +671,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         familyId: family.id,
         babies: babies,
         period: _selectedPeriod,
+        l10n: l10n,
       );
 
       if (count == 0) {
-        _showSnackBar('내보낼 기록이 없습니다');
+        _showSnackBar(l10n.errorNoRecords);
       }
     } catch (e) {
-      _showSnackBar('내보내기 실패: $e');
+      _showSnackBar(l10n.errorExportFailed(e.toString()));
     } finally {
       if (mounted) {
         setState(() => _isExporting = false);
@@ -742,7 +747,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             }
           } catch (e) {
             if (mounted) {
-              _showSnackBar('삭제 실패: $e');
+              _showSnackBar(S.of(context)!.errorDeleteFailed(e.toString()));
             }
           }
         },
@@ -791,13 +796,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
         title: Text(
-          '데이터 초기화',
+          S.of(context)!.resetDataTitle,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluStatusColors.error,
           ),
         ),
         subtitle: Text(
-          '모든 데이터를 삭제하고 처음부터 시작',
+          S.of(context)!.resetDataHint,
           style: LuluTextStyles.caption.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -812,6 +817,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _showResetConfirmDialog() async {
+    final l10n = S.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -824,7 +830,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Icon(LuluIcons.statusWarn, color: LuluStatusColors.error),
             const SizedBox(width: 8),
             Text(
-              '데이터 초기화',
+              l10n.resetDataTitle,
               style: LuluTextStyles.titleMedium.copyWith(
                 color: LuluTextColors.primary,
               ),
@@ -836,7 +842,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '정말 모든 데이터를 삭제하시겠어요?',
+              l10n.resetDataConfirm,
               style: LuluTextStyles.bodyLarge.copyWith(
                 color: LuluTextColors.primary,
               ),
@@ -851,9 +857,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildWarningItem('모든 기록이 삭제됩니다'),
-                  _buildWarningItem('아기 정보가 삭제됩니다'),
-                  _buildWarningItem('이 작업은 되돌릴 수 없습니다'),
+                  _buildWarningItem(l10n.resetWarningRecords),
+                  _buildWarningItem(l10n.resetWarningBabies),
+                  _buildWarningItem(l10n.resetWarningIrreversible),
                 ],
               ),
             ),
@@ -863,7 +869,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
             child: Text(
-              '취소',
+              l10n.buttonCancel,
               style: LuluTextStyles.labelLarge.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -875,7 +881,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               foregroundColor: LuluStatusColors.error,
             ),
             child: Text(
-              '삭제',
+              l10n.buttonDelete,
               style: LuluTextStyles.labelLarge.copyWith(
                 color: LuluStatusColors.error,
                 fontWeight: FontWeight.bold,
@@ -1032,7 +1038,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       // 9. 앱 재시작 (온보딩 다시 시작)
       if (mounted) {
-        _showSnackBar('초기화 완료! 앱을 다시 시작해주세요.');
+        _showSnackBar(S.of(context)!.resetCompleteMessage);
         // 로그아웃 처리
         await supabase.auth.signOut();
       }
@@ -1045,7 +1051,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       debugPrint('[ERROR] _resetAllData: $e');
 
       if (mounted) {
-        _showSnackBar('초기화 실패: $e');
+        _showSnackBar(S.of(context)!.errorResetFailed(e.toString()));
       }
     }
   }

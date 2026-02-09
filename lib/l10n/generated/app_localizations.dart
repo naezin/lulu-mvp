@@ -391,22 +391,22 @@ abstract class S {
   /// **'기타'**
   String get playTypeOther;
 
-  /// 건강 타입 - 체온 측정
+  /// 건강 타입 - 체온
   ///
   /// In ko, this message translates to:
-  /// **'체온 측정'**
+  /// **'체온'**
   String get healthTypeTemperature;
 
-  /// 건강 타입 - 증상 기록
+  /// 건강 타입 - 증상
   ///
   /// In ko, this message translates to:
-  /// **'증상 기록'**
+  /// **'증상'**
   String get healthTypeSymptom;
 
-  /// 건강 타입 - 투약 기록
+  /// 건강 타입 - 투약
   ///
   /// In ko, this message translates to:
-  /// **'투약 기록'**
+  /// **'투약'**
   String get healthTypeMedication;
 
   /// 건강 타입 - 투약 (짧은 버전)
@@ -415,10 +415,10 @@ abstract class S {
   /// **'투약'**
   String get healthTypeMedicationShort;
 
-  /// 건강 타입 - 병원 방문
+  /// 건강 타입 - 병원방문
   ///
   /// In ko, this message translates to:
-  /// **'병원 방문'**
+  /// **'병원방문'**
   String get healthTypeHospital;
 
   /// 증상 - 기침
@@ -661,7 +661,7 @@ abstract class S {
   /// **'생년월일'**
   String get labelBirthDate;
 
-  /// 라벨 - 출생일
+  /// 출생일 라벨 (짧은 형태)
   ///
   /// In ko, this message translates to:
   /// **'출생일'**
@@ -2699,6 +2699,1218 @@ abstract class S {
     String endMonth,
     String endDay,
   );
+
+  /// 수면 기록 - 지금 재우기 모드 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'지금 재우기'**
+  String get sleepModeNow;
+
+  /// 수면 기록 취소 확인 다이얼로그 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 기록을 취소하시겠습니까?'**
+  String get sleepCancelConfirmTitle;
+
+  /// 수면 기록 취소 확인 다이얼로그 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'진행 중인 수면 기록이 삭제됩니다.'**
+  String get sleepCancelConfirmMessage;
+
+  /// 수면 기록 취소 완료 스낵바 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 기록이 취소되었습니다'**
+  String get sleepSessionCanceled;
+
+  /// 빠른 기록 버튼 - 이전과 같이 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'이전과 같이'**
+  String get quickRecordSameAsLast;
+
+  /// 빠른 기록 - 분유 수량 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'분유 {amount}ml'**
+  String quickRecordFormulaWithAmount(int amount);
+
+  /// 빠른 기록 - 모유 시간 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'모유 {duration}분'**
+  String quickRecordBreastWithDuration(int duration);
+
+  /// 빠른 기록 - 모유 좌/우 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'모유 {side}'**
+  String quickRecordBreastWithSide(String side);
+
+  /// 빠른 기록 - 이유식 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'이유식'**
+  String get quickRecordSolidFood;
+
+  /// 수면 기록 화면 - 수면 종류 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 종류'**
+  String get sleepTypeLabel;
+
+  /// 수면 기록 화면 - 수면 시간 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 시간'**
+  String get sleepTimeLabel;
+
+  /// 수면 기록 화면 - 메모 힌트 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'특이사항이 있으면 입력해 주세요'**
+  String get sleepNotesHint;
+
+  /// 수면 기록 화면 - 시작 시간 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'시작 시간'**
+  String get sleepStartTimeLabel;
+
+  /// 수면 기록 화면 - 종료 시간 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'종료 시간'**
+  String get sleepEndTimeLabel;
+
+  /// 수면 기록 화면 - 낮잠 제안 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'현재 시간 기준 낮잠이 적절해 보여요'**
+  String get sleepSuggestNap;
+
+  /// 수면 기록 화면 - 밤잠 제안 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'현재 시간 기준 밤잠이 적절해 보여요'**
+  String get sleepSuggestNight;
+
+  /// 수면 기록 화면 - 진행 중 상태 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'진행 중'**
+  String get sleepOngoing;
+
+  /// CSV 내보내기 - 날짜 컬럼명
+  ///
+  /// In ko, this message translates to:
+  /// **'날짜'**
+  String get exportColumnDate;
+
+  /// CSV 내보내기 - 시간 컬럼명
+  ///
+  /// In ko, this message translates to:
+  /// **'시간'**
+  String get exportColumnTime;
+
+  /// CSV 내보내기 - 유형 컬럼명
+  ///
+  /// In ko, this message translates to:
+  /// **'유형'**
+  String get exportColumnType;
+
+  /// CSV 내보내기 - 상세 컬럼명
+  ///
+  /// In ko, this message translates to:
+  /// **'상세'**
+  String get exportColumnDetail;
+
+  /// CSV 내보내기 - 소요시간 컬럼명
+  ///
+  /// In ko, this message translates to:
+  /// **'소요시간'**
+  String get exportColumnDuration;
+
+  /// CSV 내보내기 - 메모 컬럼명
+  ///
+  /// In ko, this message translates to:
+  /// **'메모'**
+  String get exportColumnNotes;
+
+  /// CSV 내보내기 - 날짜 포맷
+  ///
+  /// In ko, this message translates to:
+  /// **'{year}년 {month}월 {day}일'**
+  String exportDateFormat(String year, String month, String day);
+
+  /// CSV 내보내기 - 분 단위 수면 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'{minutes}분 수면'**
+  String exportSleptMinutes(int minutes);
+
+  /// CSV 내보내기 - 시간+분 단위 수면 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}시간 {minutes}분 수면'**
+  String exportSleptHoursMinutes(int hours, int minutes);
+
+  /// CSV 내보내기 - 모유 좌/우 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'{side} {duration}분'**
+  String exportBreastSide(String side, int duration);
+
+  /// CSV 내보내기 - 분유량
+  ///
+  /// In ko, this message translates to:
+  /// **'분유 {amount}ml'**
+  String exportFormulaAmount(String amount);
+
+  /// CSV 내보내기 - 이유식 상세
+  ///
+  /// In ko, this message translates to:
+  /// **'이유식: {name}'**
+  String exportSolidFoodDetail(String name);
+
+  /// CSV 내보내기 - 체온
+  ///
+  /// In ko, this message translates to:
+  /// **'체온 {temp}°C'**
+  String exportTemperature(String temp);
+
+  /// CSV 내보내기 - 투약
+  ///
+  /// In ko, this message translates to:
+  /// **'투약: {name}'**
+  String exportMedication(String name);
+
+  /// CSV 내보내기 - 병원 방문
+  ///
+  /// In ko, this message translates to:
+  /// **'병원: {name}'**
+  String exportHospitalVisit(String name);
+
+  /// CSV 내보내기 - 증상
+  ///
+  /// In ko, this message translates to:
+  /// **'증상: {name}'**
+  String exportSymptom(String name);
+
+  /// 기록 수정 바텀시트 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 수정'**
+  String get editActivityTitle;
+
+  /// 기록 수정 - 유형 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 유형'**
+  String get editActivityTypeLabel;
+
+  /// 기록 수정 - 시작 시간 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'시작 시간'**
+  String get editStartTimeLabel;
+
+  /// 기록 수정 - 종료 시간 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'종료 시간'**
+  String get editEndTimeLabel;
+
+  /// 기록 수정 - 수유량 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'수유량 (ml)'**
+  String get editAmountLabel;
+
+  /// 기록 수정 - 메모 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'메모'**
+  String get editMemoLabel;
+
+  /// 기록 수정 - 메모 힌트 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'메모를 입력하세요'**
+  String get editMemoHint;
+
+  /// 기록 수정 성공 스낵바 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'기록이 수정되었어요'**
+  String get editSaveSuccess;
+
+  /// 기록 수정 실패 스낵바 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'수정 실패: {error}'**
+  String editSaveFailed(String error);
+
+  /// 기록 삭제 확인 다이얼로그 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기록을 삭제할까요?'**
+  String get editDeleteConfirmTitle;
+
+  /// 기록 삭제 확인 다이얼로그 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'이 기록을 삭제하시겠습니까?'**
+  String get editDeleteConfirmMessage;
+
+  /// 기록 삭제 성공 스낵바 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'기록이 삭제되었어요'**
+  String get editDeleteSuccess;
+
+  /// 기록 삭제 취소 버튼 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'삭제 취소'**
+  String get editUndoDelete;
+
+  /// 설정 화면 - 위험 구역 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'위험 구역'**
+  String get settingsDangerZone;
+
+  /// 설정 화면 - 계정 삭제 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'계정 삭제'**
+  String get settingsDeleteAccount;
+
+  /// 설정 화면 - 계정 삭제 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 데이터가 영구적으로 삭제됩니다'**
+  String get settingsDeleteAccountDesc;
+
+  /// 설정 화면 - 계정 삭제 확인 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'정말로 계정을 삭제하시겠습니까?'**
+  String get settingsDeleteAccountConfirm;
+
+  /// 설정 화면 - 로그아웃 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'로그아웃'**
+  String get settingsLogout;
+
+  /// 설정 화면 - 로그아웃 확인 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'로그아웃 하시겠습니까?'**
+  String get settingsLogoutConfirm;
+
+  /// 설정 화면 - 비로그인 상태 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'로그인되지 않았습니다'**
+  String get settingsNotLoggedIn;
+
+  /// 울음 분석 화면 - 대기 상태 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'아기가 울고 있나요?'**
+  String get cryIdleTitle;
+
+  /// 울음 분석 화면 - 대기 상태 부제
+  ///
+  /// In ko, this message translates to:
+  /// **'아래 버튼을 눌러 울음을 분석해보세요'**
+  String get cryIdleSubtitle;
+
+  /// 울음 분석 화면 - 녹음 중 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'울음 소리를 듣고 있어요'**
+  String get cryRecordingTitle;
+
+  /// 울음 분석 화면 - 녹음 중 부제
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 가까이에서 분석하면 더 정확해요'**
+  String get cryRecordingSubtitle;
+
+  /// 울음 분석 화면 - 분석 중 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'울음 패턴을 분석 중이에요'**
+  String get cryAnalyzingTitle;
+
+  /// 울음 분석 화면 - 분석 중 부제
+  ///
+  /// In ko, this message translates to:
+  /// **'잠시만 기다려 주세요'**
+  String get cryAnalyzingSubtitle;
+
+  /// 울음 분석 화면 - 결과 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 결과'**
+  String get cryResultTitle;
+
+  /// 울음 분석 화면 - 시작 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'울음 분석 시작'**
+  String get cryStartButton;
+
+  /// 울음 분석 화면 - 중지 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 중지'**
+  String get cryStopButton;
+
+  /// 울음 분석 화면 - 재분석 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 분석하기'**
+  String get cryReanalyzeButton;
+
+  /// 울음 분석 화면 - 신뢰도 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'신뢰도 {percent}%'**
+  String cryConfidence(int percent);
+
+  /// 울음 분석 기록 저장 완료 스낵바
+  ///
+  /// In ko, this message translates to:
+  /// **'울음 분석 기록이 저장되었어요'**
+  String get cryRecordSaved;
+
+  /// 울음 분석 화면 - 프라이버시 안내문
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 음성 데이터는 기기에서만 처리되며 저장되지 않습니다'**
+  String get cryPrivacyNote;
+
+  /// 울음 분석 화면 - 분석 시작 버튼 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 시작'**
+  String get cryAnalysisStart;
+
+  /// 울음 분석 모델 로드 실패 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'울음 분석 모델을 불러올 수 없습니다'**
+  String get cryModelLoadFailed;
+
+  /// 울음 분석 모델 로딩 중 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'울음 분석 모델 로딩 중...'**
+  String get cryModelLoading;
+
+  /// 울음 분석 결과 저장 확인 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'결과를 저장할까요?'**
+  String get cryResultSavePrompt;
+
+  /// 울음 분석 화면 - 기록 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'기록'**
+  String get cryRecordButton;
+
+  /// 울음 분석 화면 - 대응 제안 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'이렇게 해보세요'**
+  String get cryActionSuggestion;
+
+  /// 울음 분석 화면 - Dunstan 분류 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'Dunstan Baby Language'**
+  String get cryDunstanLabel;
+
+  /// 건강 기록 화면 - 기록 시간 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 시간'**
+  String get healthRecordTimeLabel;
+
+  /// 건강 기록 화면 - 유형 선택 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 유형을 선택하세요'**
+  String get healthSelectType;
+
+  /// 건강 기록 화면 - 메모 힌트 텍스트
+  ///
+  /// In ko, this message translates to:
+  /// **'추가 메모를 입력하세요'**
+  String get healthNotesHint;
+
+  /// 건강 기록 화면 - 체온 입력 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'체온을 입력하세요'**
+  String get healthTempInput;
+
+  /// 건강 기록 화면 - 증상 선택 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'증상을 선택하세요'**
+  String get healthSymptomSelect;
+
+  /// 건강 기록 화면 - 약 이름 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'약 이름'**
+  String get healthMedNameHint;
+
+  /// 건강 기록 화면 - 용량 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'용량'**
+  String get healthMedDoseHint;
+
+  /// 건강 기록 화면 - 병원명 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'병원명'**
+  String get healthHospitalNameHint;
+
+  /// 건강 기록 화면 - 의료 면책 조항
+  ///
+  /// In ko, this message translates to:
+  /// **'이 정보는 참고용이며 의료 조언이 아닙니다'**
+  String get healthMedicalDisclaimer;
+
+  /// 건강 기록 화면 - 저체온 경고
+  ///
+  /// In ko, this message translates to:
+  /// **'체온이 낮아요. 보온에 신경써주세요.'**
+  String get healthTempWarningLow;
+
+  /// 건강 기록 화면 - 미열 경고
+  ///
+  /// In ko, this message translates to:
+  /// **'미열이 있어요. 지켜봐주세요.'**
+  String get healthTempWarningMild;
+
+  /// 건강 기록 화면 - 발열 경고
+  ///
+  /// In ko, this message translates to:
+  /// **'열이 있어요. 병원 방문을 권장해요.'**
+  String get healthTempWarningHigh;
+
+  /// 건강 기록 화면 - 정상 체온 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'정상 체온이에요.'**
+  String get healthTempNormal;
+
+  /// 선택적 메모 필드 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'메모 (선택)'**
+  String get notesOptionalLabel;
+
+  /// 어제 날짜 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'어제'**
+  String get yesterday;
+
+  /// 성장 요약 카드 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'성장 현황'**
+  String get growthOverview;
+
+  /// 성장 측정일 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{date} 측정 ({relative})'**
+  String growthMeasuredAt(String date, String relative);
+
+  /// 성장 카드 - 체중 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'체중'**
+  String get growthWeight;
+
+  /// 성장 카드 - 신장 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'신장'**
+  String get growthLength;
+
+  /// 성장 카드 - 두위 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'두위'**
+  String get growthHeadCircumference;
+
+  /// 성장 카드 - 미측정 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'미측정'**
+  String get notMeasured;
+
+  /// 성장 카드 - 적용된 차트 유형 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{chartType} 적용'**
+  String growthChartApplied(String chartType);
+
+  /// 성장 카드 - 교정연령 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 {age}'**
+  String growthCorrectedAge(String age);
+
+  /// 성장 카드 - 차트 보기 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'탭하여 성장 차트 보기'**
+  String get tapToViewGrowthChart;
+
+  /// N일 전 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}일 전'**
+  String daysAgoCount(int count);
+
+  /// 온보딩 아기 정보 입력 타이틀
+  ///
+  /// In ko, this message translates to:
+  /// **'{label} 정보를\n입력해 주세요'**
+  String onboardingBabyInfoTitle(String label);
+
+  /// 출생일 선택 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'출생일을 선택해주세요'**
+  String get hintSelectBirthDate;
+
+  /// 출생체중 라벨 (필수)
+  ///
+  /// In ko, this message translates to:
+  /// **'출생체중 (필수)'**
+  String get labelBirthWeightRequired;
+
+  /// 출생체중 입력 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'예: 3200'**
+  String get hintBirthWeight;
+
+  /// 출생체중 도움말
+  ///
+  /// In ko, this message translates to:
+  /// **'성장 추적 기능에 활용돼요'**
+  String get birthWeightHelperText;
+
+  /// 조산아 여부 질문 (전체)
+  ///
+  /// In ko, this message translates to:
+  /// **'조산아인가요?'**
+  String get questionIsPretermFull;
+
+  /// 조산아 교정연령 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'37주 미만 출생 시, 교정연령으로 발달을 추적해요'**
+  String get prematureAgeInfo;
+
+  /// 아기 정보 없음 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 정보가 없습니다'**
+  String get emptyBabyInfoTitle;
+
+  /// 아기 정보 없음 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'온보딩을 완료해주세요'**
+  String get emptyBabyInfoHint;
+
+  /// 기본 아기 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'아기'**
+  String get defaultBabyName;
+
+  /// 단위 - N분
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}분'**
+  String unitMinutes(int count);
+
+  /// 활동 제목 - 기저귀 교체
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀 교체'**
+  String get diaperChange;
+
+  /// 수유 제목 - 모유 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'모유 수유'**
+  String get feedingBreastfeeding;
+
+  /// 수유 제목 - 젖병 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'젖병 수유'**
+  String get feedingBottleFeeding;
+
+  /// 빠른 기록 버튼 툴팁 (줄바꿈 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'탭하면 이전과 같은 내용으로\n바로 저장돼요!'**
+  String get quickRecordTooltip;
+
+  /// 빠른 기록 - 아기 이름 포함 마지막 기록 반복
+  ///
+  /// In ko, this message translates to:
+  /// **'{name}의 마지막 기록 반복'**
+  String quickRecordRepeatWithName(String name);
+
+  /// 시간 표시 - 방금
+  ///
+  /// In ko, this message translates to:
+  /// **'방금'**
+  String get timeAgoJustNow;
+
+  /// 시간 표시 - N분 전
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}분 전'**
+  String timeAgoMinutes(int count);
+
+  /// 시간 표시 - N시간 전
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}시간 전'**
+  String timeAgoHours(int count);
+
+  /// 라벨 - 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'기록'**
+  String get labelRecord;
+
+  /// 건강 - 체온 값 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'체온 {temp}°C'**
+  String healthTempValue(String temp);
+
+  /// 설정 화면 - 위험 영역 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'위험 영역'**
+  String get sectionDangerZone;
+
+  /// 아기 상태 - 조산아
+  ///
+  /// In ko, this message translates to:
+  /// **'조산아'**
+  String get statusPreterm;
+
+  /// 아기 상태 - 만삭
+  ///
+  /// In ko, this message translates to:
+  /// **'만삭'**
+  String get statusFullTerm;
+
+  /// 아기 추가 최대 인원 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'최대 4명까지 등록 가능'**
+  String get addBabyMaxHint;
+
+  /// 가족 관리 - 초대 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'가족 멤버 초대하기'**
+  String get familyInviteHint;
+
+  /// 설정 - 가져오기 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기존 기록 가져오기'**
+  String get importRecordsTitle;
+
+  /// 설정 - 가져오기 부제
+  ///
+  /// In ko, this message translates to:
+  /// **'다른 앱에서 기록 이전'**
+  String get importRecordsHint;
+
+  /// 설정 - CSV 내보내기 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'CSV로 내보내기'**
+  String get exportCSVTitle;
+
+  /// 설정 - 데이터 초기화 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'데이터 초기화'**
+  String get resetDataTitle;
+
+  /// 설정 - 데이터 초기화 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 데이터를 삭제하고 처음부터 시작'**
+  String get resetDataHint;
+
+  /// 데이터 초기화 확인 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'정말 모든 데이터를 삭제하시겠어요?'**
+  String get resetDataConfirm;
+
+  /// 초기화 경고 - 기록 삭제
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 기록이 삭제됩니다'**
+  String get resetWarningRecords;
+
+  /// 초기화 경고 - 아기 정보 삭제
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 정보가 삭제됩니다'**
+  String get resetWarningBabies;
+
+  /// 초기화 경고 - 되돌릴 수 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'이 작업은 되돌릴 수 없습니다'**
+  String get resetWarningIrreversible;
+
+  /// 데이터 초기화 완료 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'초기화 완료! 앱을 다시 시작해주세요.'**
+  String get resetCompleteMessage;
+
+  /// 에러 - 초기화 실패
+  ///
+  /// In ko, this message translates to:
+  /// **'초기화 실패: {error}'**
+  String errorResetFailed(String error);
+
+  /// 울음 분석 - 히스토리 준비중 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'히스토리 기능은 곧 추가됩니다.'**
+  String get cryHistoryComingSoon;
+
+  /// 울음 분석 - 대기 상태 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'버튼을 누르고 울음 소리를 들려주세요'**
+  String get cryIdleHint;
+
+  /// 울음 분석 - 교정연령 기준 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 {weeks}주 기준으로 분석해요'**
+  String cryCorrectedAgeInfo(int weeks);
+
+  /// 울음 분석 - 녹음 중 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'듣고 있어요...'**
+  String get cryListeningTitle;
+
+  /// 울음 분석 - 녹음 중 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'2-10초 동안 울음 소리를 들려주세요'**
+  String get cryListeningHint;
+
+  /// 울음 분석 - 분석 중 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 중...'**
+  String get cryAnalyzingText;
+
+  /// 울음 분석 - 분석 중 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'AI가 울음 패턴을 분석하고 있어요'**
+  String get cryAnalyzingHint;
+
+  /// 울음 분석 - 분석 상세 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 상세'**
+  String get cryDetailTitle;
+
+  /// 울음 분석 - 조산아 신뢰도 보정 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'교정연령 {weeks}주 기준으로 신뢰도를 보정했어요.'**
+  String cryPretermAdjustInfo(int weeks);
+
+  /// 울음 분석 - 피드백 감사 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'피드백을 보내주셨어요. 감사합니다!'**
+  String get cryFeedbackThanks;
+
+  /// 울음 분석 - 피드백 질문
+  ///
+  /// In ko, this message translates to:
+  /// **'분석 결과가 맞나요?'**
+  String get cryFeedbackQuestion;
+
+  /// 울음 분석 - 피드백 정확함
+  ///
+  /// In ko, this message translates to:
+  /// **'맞아요'**
+  String get cryFeedbackCorrect;
+
+  /// 울음 분석 - 피드백 부정확함
+  ///
+  /// In ko, this message translates to:
+  /// **'아니에요'**
+  String get cryFeedbackIncorrect;
+
+  /// 울음 분석 - 알 수 없는 오류
+  ///
+  /// In ko, this message translates to:
+  /// **'알 수 없는 오류가 발생했어요.'**
+  String get cryErrorUnknown;
+
+  /// 버튼 - 다시 시도
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 시도'**
+  String get buttonRetry;
+
+  /// 울음 분석 - 남은 분석 횟수
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 남은 분석: {count}회'**
+  String cryRemainingCount(int count);
+
+  /// 버튼 - 업그레이드
+  ///
+  /// In ko, this message translates to:
+  /// **'업그레이드'**
+  String get buttonUpgrade;
+
+  /// 울음 분석 - 면책 조항 (일반)
+  ///
+  /// In ko, this message translates to:
+  /// **'이 분석 결과는 참고용이며, 의료적 조언을 대체하지 않습니다. 걱정되시면 담당 의료진과 상담하세요.'**
+  String get cryDisclaimer;
+
+  /// 울음 분석 - 면책 조항 (조산아)
+  ///
+  /// In ko, this message translates to:
+  /// **'이 분석 결과는 참고용이며, 의료적 조언을 대체하지 않습니다. 조산아의 울음 패턴은 개인차가 크므로, 걱정되시면 담당 의료진과 상담하세요.'**
+  String get cryDisclaimerWithPreterm;
+
+  /// 울음 분석 - 아기 정보 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 정보를 먼저 등록해주세요'**
+  String get cryEmptyBabyInfo;
+
+  /// CSV 헤더 - 날짜
+  ///
+  /// In ko, this message translates to:
+  /// **'날짜'**
+  String get csvHeaderDate;
+
+  /// CSV 헤더 - 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'시간'**
+  String get csvHeaderTime;
+
+  /// CSV 헤더 - 종료시간
+  ///
+  /// In ko, this message translates to:
+  /// **'종료시간'**
+  String get csvHeaderEndTime;
+
+  /// CSV 헤더 - 아기
+  ///
+  /// In ko, this message translates to:
+  /// **'아기'**
+  String get csvHeaderBaby;
+
+  /// CSV 헤더 - 유형
+  ///
+  /// In ko, this message translates to:
+  /// **'유형'**
+  String get csvHeaderType;
+
+  /// CSV 헤더 - 상세
+  ///
+  /// In ko, this message translates to:
+  /// **'상세'**
+  String get csvHeaderDetail;
+
+  /// CSV 헤더 - 양/시간
+  ///
+  /// In ko, this message translates to:
+  /// **'양/시간'**
+  String get csvHeaderAmountDuration;
+
+  /// CSV 헤더 - 메모
+  ///
+  /// In ko, this message translates to:
+  /// **'메모'**
+  String get csvHeaderNotes;
+
+  /// 알 수 없는 아기 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'알 수 없음'**
+  String get unknownBaby;
+
+  /// 수면 기록 - 진행 중 수면 아래 새 기록 추가 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'또는 새 기록 추가'**
+  String get sleepOrAddNewRecord;
+
+  /// 수면 기록 - 진행 중 수면 상태 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{babyName} {sleepType} 중'**
+  String sleepOngoingStatus(String babyName, String sleepType);
+
+  /// 수면 취소 확인 다이얼로그 본문
+  ///
+  /// In ko, this message translates to:
+  /// **'진행 중인 수면 기록이 삭제됩니다.'**
+  String get sleepCancelConfirmBody;
+
+  /// 수면 기록 - 기록 추가 모드 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 추가'**
+  String get sleepModeAddRecord;
+
+  /// 수면 기록 - 지금 수면 시작 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'지금 수면 시작'**
+  String get sleepStartNow;
+
+  /// 수면 기록 - 지금 수면 시작 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'저장하면 수면이 시작됩니다.\n아기가 깨면 홈 화면에서 종료 버튼을 눌러주세요.'**
+  String get sleepStartNowHint;
+
+  /// 수면 기록 - 총 수면 시간 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'총 수면 시간: '**
+  String get sleepTotalDuration;
+
+  /// 수면 기록 - 메모 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 상태, 특이사항 등'**
+  String get hintSleepNotes;
+
+  /// 수면 시작 완료 스낵바 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'{name} 수면 시작! 홈에서 종료할 수 있어요'**
+  String sleepStartedMessage(String name);
+
+  /// 시간 선택 시맨틱 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'시간 선택'**
+  String get labelTimeSelect;
+
+  /// 기록 수정 바텀시트 - 유형별 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'{title} 수정'**
+  String editActivityTitleWithType(String title);
+
+  /// 라벨 - 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'시간'**
+  String get labelTime;
+
+  /// 라벨 - 시작
+  ///
+  /// In ko, this message translates to:
+  /// **'시작'**
+  String get labelStart;
+
+  /// 라벨 - 종료
+  ///
+  /// In ko, this message translates to:
+  /// **'종료'**
+  String get labelEnd;
+
+  /// 라벨 - 설정 안 함
+  ///
+  /// In ko, this message translates to:
+  /// **'설정 안 함'**
+  String get labelNotSet;
+
+  /// 라벨 - 종류
+  ///
+  /// In ko, this message translates to:
+  /// **'종류'**
+  String get labelType;
+
+  /// 수유 정보 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'수유 정보'**
+  String get feedingInfo;
+
+  /// 수유량 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'수유량'**
+  String get feedingAmount;
+
+  /// 기저귀 정보 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀 정보'**
+  String get diaperInfo;
+
+  /// 놀이 정보 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이 정보'**
+  String get playInfo;
+
+  /// 건강 정보 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'건강 정보'**
+  String get healthInfo;
+
+  /// 라벨 - 메모
+  ///
+  /// In ko, this message translates to:
+  /// **'메모'**
+  String get labelNotes;
+
+  /// 힌트 - 메모 입력
+  ///
+  /// In ko, this message translates to:
+  /// **'메모를 입력하세요'**
+  String get hintNotes;
+
+  /// 라벨 - 시작 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'시작 시간'**
+  String get labelStartTime;
+
+  /// 라벨 - 종료 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'종료 시간'**
+  String get labelEndTime;
+
+  /// 저장 실패 에러 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'저장 실패: {error}'**
+  String errorSaveFailed(String error);
+
+  /// 활동 - 건강
+  ///
+  /// In ko, this message translates to:
+  /// **'건강'**
+  String get activityHealth;
+
+  /// 라벨 - 기타
+  ///
+  /// In ko, this message translates to:
+  /// **'기타'**
+  String get labelOther;
+
+  /// 건강 기록 - 유형 선택 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 유형 선택'**
+  String get healthTypeSelectLabel;
+
+  /// 건강 기록 - 증상 선택 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'증상 선택 (복수 선택 가능)'**
+  String get healthSymptomSelectLabel;
+
+  /// 증상 - 기타
+  ///
+  /// In ko, this message translates to:
+  /// **'기타'**
+  String get symptomOther;
+
+  /// 건강 기록 - 투약 정보 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'투약 정보'**
+  String get healthMedicationInfo;
+
+  /// 건강 기록 - 투약 정보 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'약 이름, 용량, 복용 방법 등'**
+  String get hintMedication;
+
+  /// 건강 기록 - 병원 방문 정보 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'병원 방문 정보'**
+  String get healthHospitalInfo;
+
+  /// 건강 기록 - 병원 방문 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'병원명, 진료 내용, 처방 등'**
+  String get hintHospital;
+
+  /// 추가 메모 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'추가 메모'**
+  String get hintAdditionalNotes;
+
+  /// 의료 면책 조항 (2줄)
+  ///
+  /// In ko, this message translates to:
+  /// **'이 기록은 참고용이며 의료 진단을 대체하지 않습니다.\n이상 증상이 있으면 소아과 전문의와 상담하세요.'**
+  String get medicalDisclaimer;
+
+  /// 라벨 - 기록 시간
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 시간'**
+  String get labelRecordTime;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

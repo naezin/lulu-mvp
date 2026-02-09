@@ -111,16 +111,16 @@
   "playTypeOther": "기타",
   "@playTypeOther": {"description": "놀이 타입 - 기타"},
 
-  "healthTypeTemperature": "체온 측정",
-  "@healthTypeTemperature": {"description": "건강 타입 - 체온 측정"},
-  "healthTypeSymptom": "증상 기록",
-  "@healthTypeSymptom": {"description": "건강 타입 - 증상 기록"},
-  "healthTypeMedication": "투약 기록",
-  "@healthTypeMedication": {"description": "건강 타입 - 투약 기록"},
+  "healthTypeTemperature": "체온",
+  "@healthTypeTemperature": {"description": "건강 타입 - 체온"},
+  "healthTypeSymptom": "증상",
+  "@healthTypeSymptom": {"description": "건강 타입 - 증상"},
+  "healthTypeMedication": "투약",
+  "@healthTypeMedication": {"description": "건강 타입 - 투약"},
   "healthTypeMedicationShort": "투약",
   "@healthTypeMedicationShort": {"description": "건강 타입 - 투약 (짧은 버전)"},
-  "healthTypeHospital": "병원 방문",
-  "@healthTypeHospital": {"description": "건강 타입 - 병원 방문"},
+  "healthTypeHospital": "병원방문",
+  "@healthTypeHospital": {"description": "건강 타입 - 병원방문"},
 
   "symptomCough": "기침",
   "@symptomCough": {"description": "증상 - 기침"},
@@ -1192,5 +1192,601 @@
       "endMonth": {"type": "String", "example": "2"},
       "endDay": {"type": "String", "example": "8"}
     }
-  }
+  },
+
+  "sleepModeNow": "수면 모드 - 현재",
+  "@sleepModeNow": {"description": "타임라인 수면 모드 현재 상태 표시"},
+  "sleepCancelConfirmTitle": "수면 기록을 취소하시겠습니까?",
+  "@sleepCancelConfirmTitle": {"description": "수면 기록 취소 확인 다이얼로그 제목"},
+  "sleepCancelConfirmMessage": "진행 중인 수면 기록이 삭제됩니다.",
+  "@sleepCancelConfirmMessage": {"description": "수면 기록 취소 확인 다이얼로그 메시지"},
+  "sleepSessionCanceled": "수면 기록이 취소되었습니다",
+  "@sleepSessionCanceled": {"description": "수면 기록 취소 완료 스낵바 메시지"},
+
+  "quickRecordSameAsLast": "이전과 같이",
+  "@quickRecordSameAsLast": {"description": "빠른 기록 버튼 - 이전과 같이 레이블"},
+  "quickRecordFormulaWithAmount": "분유 {amount}ml",
+  "@quickRecordFormulaWithAmount": {
+    "description": "빠른 기록 - 분유 수량 표시",
+    "placeholders": {
+      "amount": {"type": "int", "example": "120"}
+    }
+  },
+  "quickRecordBreastWithDuration": "모유 {duration}분",
+  "@quickRecordBreastWithDuration": {
+    "description": "빠른 기록 - 모유 시간 표시",
+    "placeholders": {
+      "duration": {"type": "int", "example": "15"}
+    }
+  },
+  "quickRecordBreastWithSide": "모유 {side}",
+  "@quickRecordBreastWithSide": {
+    "description": "빠른 기록 - 모유 좌/우 표시",
+    "placeholders": {
+      "side": {"type": "String", "example": "왼쪽"}
+    }
+  },
+  "quickRecordSolidFood": "이유식",
+  "@quickRecordSolidFood": {"description": "빠른 기록 - 이유식 레이블"},
+
+  "sleepTypeLabel": "수면 종류",
+  "@sleepTypeLabel": {"description": "수면 기록 화면 - 수면 종류 레이블"},
+  "sleepTimeLabel": "수면 시간",
+  "@sleepTimeLabel": {"description": "수면 기록 화면 - 수면 시간 레이블"},
+  "sleepNotesHint": "특이사항이 있으면 입력해 주세요",
+  "@sleepNotesHint": {"description": "수면 기록 화면 - 메모 힌트 텍스트"},
+  "sleepStartTimeLabel": "시작 시간",
+  "@sleepStartTimeLabel": {"description": "수면 기록 화면 - 시작 시간 레이블"},
+  "sleepEndTimeLabel": "종료 시간",
+  "@sleepEndTimeLabel": {"description": "수면 기록 화면 - 종료 시간 레이블"},
+  "sleepSuggestNap": "현재 시간 기준 낮잠이 적절해 보여요",
+  "@sleepSuggestNap": {"description": "수면 기록 화면 - 낮잠 제안 메시지"},
+  "sleepSuggestNight": "현재 시간 기준 밤잠이 적절해 보여요",
+  "@sleepSuggestNight": {"description": "수면 기록 화면 - 밤잠 제안 메시지"},
+  "sleepOngoing": "진행 중",
+  "@sleepOngoing": {"description": "수면 기록 화면 - 진행 중 상태 표시"},
+
+  "exportColumnDate": "날짜",
+  "@exportColumnDate": {"description": "CSV 내보내기 - 날짜 컬럼명"},
+  "exportColumnTime": "시간",
+  "@exportColumnTime": {"description": "CSV 내보내기 - 시간 컬럼명"},
+  "exportColumnType": "유형",
+  "@exportColumnType": {"description": "CSV 내보내기 - 유형 컬럼명"},
+  "exportColumnDetail": "상세",
+  "@exportColumnDetail": {"description": "CSV 내보내기 - 상세 컬럼명"},
+  "exportColumnDuration": "소요시간",
+  "@exportColumnDuration": {"description": "CSV 내보내기 - 소요시간 컬럼명"},
+  "exportColumnNotes": "메모",
+  "@exportColumnNotes": {"description": "CSV 내보내기 - 메모 컬럼명"},
+  "exportDateFormat": "{year}년 {month}월 {day}일",
+  "@exportDateFormat": {
+    "description": "CSV 내보내기 - 날짜 포맷",
+    "placeholders": {
+      "year": {"type": "String", "example": "2026"},
+      "month": {"type": "String", "example": "2"},
+      "day": {"type": "String", "example": "8"}
+    }
+  },
+  "exportSleptMinutes": "{minutes}분 수면",
+  "@exportSleptMinutes": {
+    "description": "CSV 내보내기 - 분 단위 수면 시간",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "exportSleptHoursMinutes": "{hours}시간 {minutes}분 수면",
+  "@exportSleptHoursMinutes": {
+    "description": "CSV 내보내기 - 시간+분 단위 수면 시간",
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"},
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "exportBreastSide": "{side} {duration}분",
+  "@exportBreastSide": {
+    "description": "CSV 내보내기 - 모유 좌/우 시간",
+    "placeholders": {
+      "side": {"type": "String", "example": "왼쪽"},
+      "duration": {"type": "int", "example": "15"}
+    }
+  },
+  "exportFormulaAmount": "분유 {amount}ml",
+  "@exportFormulaAmount": {
+    "description": "CSV 내보내기 - 분유량",
+    "placeholders": {
+      "amount": {"type": "String", "example": "120"}
+    }
+  },
+  "exportSolidFoodDetail": "이유식: {name}",
+  "@exportSolidFoodDetail": {
+    "description": "CSV 내보내기 - 이유식 상세",
+    "placeholders": {
+      "name": {"type": "String", "example": "쌀죽"}
+    }
+  },
+  "exportTemperature": "체온 {temp}°C",
+  "@exportTemperature": {
+    "description": "CSV 내보내기 - 체온",
+    "placeholders": {
+      "temp": {"type": "String", "example": "37.5"}
+    }
+  },
+  "exportMedication": "투약: {name}",
+  "@exportMedication": {
+    "description": "CSV 내보내기 - 투약",
+    "placeholders": {
+      "name": {"type": "String", "example": "타이레놀"}
+    }
+  },
+  "exportHospitalVisit": "병원: {name}",
+  "@exportHospitalVisit": {
+    "description": "CSV 내보내기 - 병원 방문",
+    "placeholders": {
+      "name": {"type": "String", "example": "소아과"}
+    }
+  },
+  "exportSymptom": "증상: {name}",
+  "@exportSymptom": {
+    "description": "CSV 내보내기 - 증상",
+    "placeholders": {
+      "name": {"type": "String", "example": "기침"}
+    }
+  },
+
+  "editActivityTitle": "기록 수정",
+  "@editActivityTitle": {"description": "기록 수정 바텀시트 제목"},
+  "editActivityTypeLabel": "기록 유형",
+  "@editActivityTypeLabel": {"description": "기록 수정 - 유형 레이블"},
+  "editStartTimeLabel": "시작 시간",
+  "@editStartTimeLabel": {"description": "기록 수정 - 시작 시간 레이블"},
+  "editEndTimeLabel": "종료 시간",
+  "@editEndTimeLabel": {"description": "기록 수정 - 종료 시간 레이블"},
+  "editAmountLabel": "수유량 (ml)",
+  "@editAmountLabel": {"description": "기록 수정 - 수유량 레이블"},
+  "editMemoLabel": "메모",
+  "@editMemoLabel": {"description": "기록 수정 - 메모 레이블"},
+  "editMemoHint": "메모를 입력하세요",
+  "@editMemoHint": {"description": "기록 수정 - 메모 힌트 텍스트"},
+  "editSaveSuccess": "기록이 수정되었어요",
+  "@editSaveSuccess": {"description": "기록 수정 성공 스낵바 메시지"},
+  "editSaveFailed": "수정 실패: {error}",
+  "@editSaveFailed": {
+    "description": "기록 수정 실패 스낵바 메시지",
+    "placeholders": {
+      "error": {"type": "String", "example": "네트워크 오류"}
+    }
+  },
+  "editDeleteConfirmTitle": "기록을 삭제할까요?",
+  "@editDeleteConfirmTitle": {"description": "기록 삭제 확인 다이얼로그 제목"},
+  "editDeleteConfirmMessage": "이 기록을 삭제하시겠습니까?",
+  "@editDeleteConfirmMessage": {"description": "기록 삭제 확인 다이얼로그 메시지"},
+  "editDeleteSuccess": "기록이 삭제되었어요",
+  "@editDeleteSuccess": {"description": "기록 삭제 성공 스낵바 메시지"},
+  "editUndoDelete": "삭제 취소",
+  "@editUndoDelete": {"description": "기록 삭제 취소 버튼 레이블"},
+
+  "settingsDangerZone": "위험 구역",
+  "@settingsDangerZone": {"description": "설정 화면 - 위험 구역 섹션 제목"},
+  "settingsDeleteAccount": "계정 삭제",
+  "@settingsDeleteAccount": {"description": "설정 화면 - 계정 삭제 버튼"},
+  "settingsDeleteAccountDesc": "모든 데이터가 영구적으로 삭제됩니다",
+  "@settingsDeleteAccountDesc": {"description": "설정 화면 - 계정 삭제 설명"},
+  "settingsDeleteAccountConfirm": "정말로 계정을 삭제하시겠습니까?",
+  "@settingsDeleteAccountConfirm": {"description": "설정 화면 - 계정 삭제 확인 메시지"},
+  "settingsLogout": "로그아웃",
+  "@settingsLogout": {"description": "설정 화면 - 로그아웃 버튼"},
+  "settingsLogoutConfirm": "로그아웃 하시겠습니까?",
+  "@settingsLogoutConfirm": {"description": "설정 화면 - 로그아웃 확인 메시지"},
+  "settingsNotLoggedIn": "로그인되지 않았습니다",
+  "@settingsNotLoggedIn": {"description": "설정 화면 - 비로그인 상태 텍스트"},
+
+  "cryIdleTitle": "아기가 울고 있나요?",
+  "@cryIdleTitle": {"description": "울음 분석 화면 - 대기 상태 제목"},
+  "cryIdleSubtitle": "아래 버튼을 눌러 울음을 분석해보세요",
+  "@cryIdleSubtitle": {"description": "울음 분석 화면 - 대기 상태 부제"},
+  "cryRecordingTitle": "울음 소리를 듣고 있어요",
+  "@cryRecordingTitle": {"description": "울음 분석 화면 - 녹음 중 제목"},
+  "cryRecordingSubtitle": "아기 가까이에서 분석하면 더 정확해요",
+  "@cryRecordingSubtitle": {"description": "울음 분석 화면 - 녹음 중 부제"},
+  "cryAnalyzingTitle": "울음 패턴을 분석 중이에요",
+  "@cryAnalyzingTitle": {"description": "울음 분석 화면 - 분석 중 제목"},
+  "cryAnalyzingSubtitle": "잠시만 기다려 주세요",
+  "@cryAnalyzingSubtitle": {"description": "울음 분석 화면 - 분석 중 부제"},
+  "cryResultTitle": "분석 결과",
+  "@cryResultTitle": {"description": "울음 분석 화면 - 결과 제목"},
+  "cryStartButton": "울음 분석 시작",
+  "@cryStartButton": {"description": "울음 분석 화면 - 시작 버튼"},
+  "cryStopButton": "분석 중지",
+  "@cryStopButton": {"description": "울음 분석 화면 - 중지 버튼"},
+  "cryReanalyzeButton": "다시 분석하기",
+  "@cryReanalyzeButton": {"description": "울음 분석 화면 - 재분석 버튼"},
+  "cryConfidence": "신뢰도 {percent}%",
+  "@cryConfidence": {
+    "description": "울음 분석 화면 - 신뢰도 표시",
+    "placeholders": {
+      "percent": {"type": "int", "example": "85"}
+    }
+  },
+  "cryRecordSaved": "울음 분석 기록이 저장되었어요",
+  "@cryRecordSaved": {"description": "울음 분석 기록 저장 완료 스낵바"},
+  "cryPrivacyNote": "모든 음성 데이터는 기기에서만 처리되며 저장되지 않습니다",
+  "@cryPrivacyNote": {"description": "울음 분석 화면 - 프라이버시 안내문"},
+  "cryAnalysisStart": "분석 시작",
+  "@cryAnalysisStart": {"description": "울음 분석 화면 - 분석 시작 버튼 레이블"},
+  "cryModelLoadFailed": "울음 분석 모델을 불러올 수 없습니다",
+  "@cryModelLoadFailed": {"description": "울음 분석 모델 로드 실패 메시지"},
+  "cryModelLoading": "울음 분석 모델 로딩 중...",
+  "@cryModelLoading": {"description": "울음 분석 모델 로딩 중 메시지"},
+  "cryResultSavePrompt": "결과를 저장할까요?",
+  "@cryResultSavePrompt": {"description": "울음 분석 결과 저장 확인 메시지"},
+  "cryRecordButton": "기록",
+  "@cryRecordButton": {"description": "울음 분석 화면 - 기록 버튼"},
+  "cryActionSuggestion": "이렇게 해보세요",
+  "@cryActionSuggestion": {"description": "울음 분석 화면 - 대응 제안 제목"},
+  "cryDunstanLabel": "Dunstan Baby Language",
+  "@cryDunstanLabel": {"description": "울음 분석 화면 - Dunstan 분류 레이블"},
+
+  "healthRecordTimeLabel": "기록 시간",
+  "@healthRecordTimeLabel": {"description": "건강 기록 화면 - 기록 시간 레이블"},
+  "healthSelectType": "기록 유형을 선택하세요",
+  "@healthSelectType": {"description": "건강 기록 화면 - 유형 선택 안내"},
+  "healthNotesHint": "추가 메모를 입력하세요",
+  "@healthNotesHint": {"description": "건강 기록 화면 - 메모 힌트 텍스트"},
+  "healthTempInput": "체온을 입력하세요",
+  "@healthTempInput": {"description": "건강 기록 화면 - 체온 입력 힌트"},
+  "healthSymptomSelect": "증상을 선택하세요",
+  "@healthSymptomSelect": {"description": "건강 기록 화면 - 증상 선택 안내"},
+  "healthMedNameHint": "약 이름",
+  "@healthMedNameHint": {"description": "건강 기록 화면 - 약 이름 힌트"},
+  "healthMedDoseHint": "용량",
+  "@healthMedDoseHint": {"description": "건강 기록 화면 - 용량 힌트"},
+  "healthHospitalNameHint": "병원명",
+  "@healthHospitalNameHint": {"description": "건강 기록 화면 - 병원명 힌트"},
+  "healthMedicalDisclaimer": "이 정보는 참고용이며 의료 조언이 아닙니다",
+  "@healthMedicalDisclaimer": {"description": "건강 기록 화면 - 의료 면책 조항"},
+  "healthTempWarningLow": "체온이 낮아요. 보온에 신경써주세요.",
+  "@healthTempWarningLow": {"description": "건강 기록 화면 - 저체온 경고"},
+  "healthTempWarningMild": "미열이 있어요. 지켜봐주세요.",
+  "@healthTempWarningMild": {"description": "건강 기록 화면 - 미열 경고"},
+  "healthTempWarningHigh": "열이 있어요. 병원 방문을 권장해요.",
+  "@healthTempWarningHigh": {"description": "건강 기록 화면 - 발열 경고"},
+  "healthTempNormal": "정상 체온이에요.",
+  "@healthTempNormal": {"description": "건강 기록 화면 - 정상 체온 안내"},
+  "notesOptionalLabel": "메모 (선택)",
+  "@notesOptionalLabel": {"description": "선택적 메모 필드 레이블"},
+
+  "yesterday": "어제",
+  "@yesterday": {"description": "어제 날짜 표시"},
+  "growthOverview": "성장 현황",
+  "@growthOverview": {"description": "성장 요약 카드 제목"},
+  "growthMeasuredAt": "{date} 측정 ({relative})",
+  "@growthMeasuredAt": {
+    "description": "성장 측정일 표시",
+    "placeholders": {
+      "date": {"type": "String", "example": "2/8"},
+      "relative": {"type": "String", "example": "어제"}
+    }
+  },
+  "growthWeight": "체중",
+  "@growthWeight": {"description": "성장 카드 - 체중 레이블"},
+  "growthLength": "신장",
+  "@growthLength": {"description": "성장 카드 - 신장 레이블"},
+  "growthHeadCircumference": "두위",
+  "@growthHeadCircumference": {"description": "성장 카드 - 두위 레이블"},
+  "notMeasured": "미측정",
+  "@notMeasured": {"description": "성장 카드 - 미측정 표시"},
+  "growthChartApplied": "{chartType} 적용",
+  "@growthChartApplied": {
+    "description": "성장 카드 - 적용된 차트 유형 표시",
+    "placeholders": {
+      "chartType": {"type": "String", "example": "WHO"}
+    }
+  },
+  "growthCorrectedAge": "교정연령 {age}",
+  "@growthCorrectedAge": {
+    "description": "성장 카드 - 교정연령 표시",
+    "placeholders": {
+      "age": {"type": "String", "example": "3개월"}
+    }
+  },
+  "tapToViewGrowthChart": "탭하여 성장 차트 보기",
+  "@tapToViewGrowthChart": {"description": "성장 카드 - 차트 보기 안내"},
+  "daysAgoCount": "{count}일 전",
+  "@daysAgoCount": {
+    "description": "N일 전 표시",
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+
+  "onboardingBabyInfoTitle": "{label} 정보를\n입력해 주세요",
+  "@onboardingBabyInfoTitle": {
+    "description": "온보딩 아기 정보 입력 타이틀",
+    "placeholders": {
+      "label": {"type": "String", "example": "아기"}
+    }
+  },
+  "labelBirthDateShort": "출생일",
+  "@labelBirthDateShort": {"description": "출생일 라벨 (짧은 형태)"},
+  "hintSelectBirthDate": "출생일을 선택해주세요",
+  "@hintSelectBirthDate": {"description": "출생일 선택 힌트"},
+  "labelBirthWeightRequired": "출생체중 (필수)",
+  "@labelBirthWeightRequired": {"description": "출생체중 라벨 (필수)"},
+  "hintBirthWeight": "예: 3200",
+  "@hintBirthWeight": {"description": "출생체중 입력 힌트"},
+  "birthWeightHelperText": "성장 추적 기능에 활용돼요",
+  "@birthWeightHelperText": {"description": "출생체중 도움말"},
+  "questionIsPretermFull": "조산아인가요?",
+  "@questionIsPretermFull": {"description": "조산아 여부 질문 (전체)"},
+  "prematureAgeInfo": "37주 미만 출생 시, 교정연령으로 발달을 추적해요",
+  "@prematureAgeInfo": {"description": "조산아 교정연령 안내"},
+
+  "emptyBabyInfoTitle": "아기 정보가 없습니다",
+  "@emptyBabyInfoTitle": {"description": "아기 정보 없음 제목"},
+  "emptyBabyInfoHint": "온보딩을 완료해주세요",
+  "@emptyBabyInfoHint": {"description": "아기 정보 없음 안내"},
+  "defaultBabyName": "아기",
+  "@defaultBabyName": {"description": "기본 아기 이름"},
+  "unitMinutes": "{count}분",
+  "@unitMinutes": {
+    "description": "단위 - N분",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "diaperChange": "기저귀 교체",
+  "@diaperChange": {"description": "활동 제목 - 기저귀 교체"},
+  "feedingBreastfeeding": "모유 수유",
+  "@feedingBreastfeeding": {"description": "수유 제목 - 모유 수유"},
+  "feedingBottleFeeding": "젖병 수유",
+  "@feedingBottleFeeding": {"description": "수유 제목 - 젖병 수유"},
+  "quickRecordTooltip": "탭하면 이전과 같은 내용으로\n바로 저장돼요!",
+  "@quickRecordTooltip": {"description": "빠른 기록 버튼 툴팁 (줄바꿈 포함)"},
+  "quickRecordRepeatWithName": "{name}의 마지막 기록 반복",
+  "@quickRecordRepeatWithName": {
+    "description": "빠른 기록 - 아기 이름 포함 마지막 기록 반복",
+    "placeholders": {
+      "name": {"type": "String", "example": "하늘이"}
+    }
+  },
+  "timeAgoJustNow": "방금",
+  "@timeAgoJustNow": {"description": "시간 표시 - 방금"},
+  "timeAgoMinutes": "{count}분 전",
+  "@timeAgoMinutes": {
+    "description": "시간 표시 - N분 전",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "timeAgoHours": "{count}시간 전",
+  "@timeAgoHours": {
+    "description": "시간 표시 - N시간 전",
+    "placeholders": {
+      "count": {"type": "int", "example": "2"}
+    }
+  },
+  "labelRecord": "기록",
+  "@labelRecord": {"description": "라벨 - 기록"},
+  "healthTempValue": "체온 {temp}°C",
+  "@healthTempValue": {
+    "description": "건강 - 체온 값 표시",
+    "placeholders": {
+      "temp": {"type": "String", "example": "36.5"}
+    }
+  },
+
+  "sectionDangerZone": "위험 영역",
+  "@sectionDangerZone": {"description": "설정 화면 - 위험 영역 섹션 제목"},
+  "statusPreterm": "조산아",
+  "@statusPreterm": {"description": "아기 상태 - 조산아"},
+  "statusFullTerm": "만삭",
+  "@statusFullTerm": {"description": "아기 상태 - 만삭"},
+  "addBabyMaxHint": "최대 4명까지 등록 가능",
+  "@addBabyMaxHint": {"description": "아기 추가 최대 인원 안내"},
+  "familyInviteHint": "가족 멤버 초대하기",
+  "@familyInviteHint": {"description": "가족 관리 - 초대 안내"},
+  "importRecordsTitle": "기존 기록 가져오기",
+  "@importRecordsTitle": {"description": "설정 - 가져오기 제목"},
+  "importRecordsHint": "다른 앱에서 기록 이전",
+  "@importRecordsHint": {"description": "설정 - 가져오기 부제"},
+  "exportCSVTitle": "CSV로 내보내기",
+  "@exportCSVTitle": {"description": "설정 - CSV 내보내기 제목"},
+  "resetDataTitle": "데이터 초기화",
+  "@resetDataTitle": {"description": "설정 - 데이터 초기화 제목"},
+  "resetDataHint": "모든 데이터를 삭제하고 처음부터 시작",
+  "@resetDataHint": {"description": "설정 - 데이터 초기화 안내"},
+  "resetDataConfirm": "정말 모든 데이터를 삭제하시겠어요?",
+  "@resetDataConfirm": {"description": "데이터 초기화 확인 메시지"},
+  "resetWarningRecords": "모든 기록이 삭제됩니다",
+  "@resetWarningRecords": {"description": "초기화 경고 - 기록 삭제"},
+  "resetWarningBabies": "아기 정보가 삭제됩니다",
+  "@resetWarningBabies": {"description": "초기화 경고 - 아기 정보 삭제"},
+  "resetWarningIrreversible": "이 작업은 되돌릴 수 없습니다",
+  "@resetWarningIrreversible": {"description": "초기화 경고 - 되돌릴 수 없음"},
+  "resetCompleteMessage": "초기화 완료! 앱을 다시 시작해주세요.",
+  "@resetCompleteMessage": {"description": "데이터 초기화 완료 메시지"},
+  "errorResetFailed": "초기화 실패: {error}",
+  "@errorResetFailed": {
+    "description": "에러 - 초기화 실패",
+    "placeholders": {
+      "error": {"type": "String", "example": "Network error"}
+    }
+  },
+
+  "cryHistoryComingSoon": "히스토리 기능은 곧 추가됩니다.",
+  "@cryHistoryComingSoon": {"description": "울음 분석 - 히스토리 준비중 안내"},
+  "cryIdleHint": "버튼을 누르고 울음 소리를 들려주세요",
+  "@cryIdleHint": {"description": "울음 분석 - 대기 상태 안내"},
+  "cryCorrectedAgeInfo": "교정연령 {weeks}주 기준으로 분석해요",
+  "@cryCorrectedAgeInfo": {
+    "description": "울음 분석 - 교정연령 기준 안내",
+    "placeholders": {
+      "weeks": {"type": "int", "example": "34"}
+    }
+  },
+  "cryListeningTitle": "듣고 있어요...",
+  "@cryListeningTitle": {"description": "울음 분석 - 녹음 중 제목"},
+  "cryListeningHint": "2-10초 동안 울음 소리를 들려주세요",
+  "@cryListeningHint": {"description": "울음 분석 - 녹음 중 안내"},
+  "cryAnalyzingText": "분석 중...",
+  "@cryAnalyzingText": {"description": "울음 분석 - 분석 중 제목"},
+  "cryAnalyzingHint": "AI가 울음 패턴을 분석하고 있어요",
+  "@cryAnalyzingHint": {"description": "울음 분석 - 분석 중 안내"},
+  "cryDetailTitle": "분석 상세",
+  "@cryDetailTitle": {"description": "울음 분석 - 분석 상세 제목"},
+  "cryPretermAdjustInfo": "교정연령 {weeks}주 기준으로 신뢰도를 보정했어요.",
+  "@cryPretermAdjustInfo": {
+    "description": "울음 분석 - 조산아 신뢰도 보정 안내",
+    "placeholders": {
+      "weeks": {"type": "int", "example": "34"}
+    }
+  },
+  "cryFeedbackThanks": "피드백을 보내주셨어요. 감사합니다!",
+  "@cryFeedbackThanks": {"description": "울음 분석 - 피드백 감사 메시지"},
+  "cryFeedbackQuestion": "분석 결과가 맞나요?",
+  "@cryFeedbackQuestion": {"description": "울음 분석 - 피드백 질문"},
+  "cryFeedbackCorrect": "맞아요",
+  "@cryFeedbackCorrect": {"description": "울음 분석 - 피드백 정확함"},
+  "cryFeedbackIncorrect": "아니에요",
+  "@cryFeedbackIncorrect": {"description": "울음 분석 - 피드백 부정확함"},
+  "cryErrorUnknown": "알 수 없는 오류가 발생했어요.",
+  "@cryErrorUnknown": {"description": "울음 분석 - 알 수 없는 오류"},
+  "buttonRetry": "다시 시도",
+  "@buttonRetry": {"description": "버튼 - 다시 시도"},
+  "cryRemainingCount": "오늘 남은 분석: {count}회",
+  "@cryRemainingCount": {
+    "description": "울음 분석 - 남은 분석 횟수",
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+  "buttonUpgrade": "업그레이드",
+  "@buttonUpgrade": {"description": "버튼 - 업그레이드"},
+  "cryDisclaimer": "이 분석 결과는 참고용이며, 의료적 조언을 대체하지 않습니다. 걱정되시면 담당 의료진과 상담하세요.",
+  "@cryDisclaimer": {"description": "울음 분석 - 면책 조항 (일반)"},
+  "cryDisclaimerWithPreterm": "이 분석 결과는 참고용이며, 의료적 조언을 대체하지 않습니다. 조산아의 울음 패턴은 개인차가 크므로, 걱정되시면 담당 의료진과 상담하세요.",
+  "@cryDisclaimerWithPreterm": {"description": "울음 분석 - 면책 조항 (조산아)"},
+  "cryEmptyBabyInfo": "아기 정보를 먼저 등록해주세요",
+  "@cryEmptyBabyInfo": {"description": "울음 분석 - 아기 정보 없음"},
+
+  "csvHeaderDate": "날짜",
+  "@csvHeaderDate": {"description": "CSV 헤더 - 날짜"},
+  "csvHeaderTime": "시간",
+  "@csvHeaderTime": {"description": "CSV 헤더 - 시간"},
+  "csvHeaderEndTime": "종료시간",
+  "@csvHeaderEndTime": {"description": "CSV 헤더 - 종료시간"},
+  "csvHeaderBaby": "아기",
+  "@csvHeaderBaby": {"description": "CSV 헤더 - 아기"},
+  "csvHeaderType": "유형",
+  "@csvHeaderType": {"description": "CSV 헤더 - 유형"},
+  "csvHeaderDetail": "상세",
+  "@csvHeaderDetail": {"description": "CSV 헤더 - 상세"},
+  "csvHeaderAmountDuration": "양/시간",
+  "@csvHeaderAmountDuration": {"description": "CSV 헤더 - 양/시간"},
+  "csvHeaderNotes": "메모",
+  "@csvHeaderNotes": {"description": "CSV 헤더 - 메모"},
+  "unknownBaby": "알 수 없음",
+  "@unknownBaby": {"description": "알 수 없는 아기 이름"},
+
+  "sleepOrAddNewRecord": "또는 새 기록 추가",
+  "@sleepOrAddNewRecord": {"description": "수면 기록 - 진행 중 수면 아래 새 기록 추가 안내"},
+  "sleepOngoingStatus": "{babyName} {sleepType} 중",
+  "@sleepOngoingStatus": {
+    "description": "수면 기록 - 진행 중 수면 상태 표시",
+    "placeholders": {
+      "babyName": {"type": "String", "example": "하늘이"},
+      "sleepType": {"type": "String", "example": "밤잠"}
+    }
+  },
+  "sleepCancelConfirmBody": "진행 중인 수면 기록이 삭제됩니다.",
+  "@sleepCancelConfirmBody": {"description": "수면 취소 확인 다이얼로그 본문"},
+  "sleepModeNow": "지금 재우기",
+  "@sleepModeNow": {"description": "수면 기록 - 지금 재우기 모드 버튼"},
+  "sleepModeAddRecord": "기록 추가",
+  "@sleepModeAddRecord": {"description": "수면 기록 - 기록 추가 모드 버튼"},
+  "sleepStartNow": "지금 수면 시작",
+  "@sleepStartNow": {"description": "수면 기록 - 지금 수면 시작 제목"},
+  "sleepStartNowHint": "저장하면 수면이 시작됩니다.\n아기가 깨면 홈 화면에서 종료 버튼을 눌러주세요.",
+  "@sleepStartNowHint": {"description": "수면 기록 - 지금 수면 시작 안내"},
+  "sleepTotalDuration": "총 수면 시간: ",
+  "@sleepTotalDuration": {"description": "수면 기록 - 총 수면 시간 라벨"},
+  "hintSleepNotes": "수면 상태, 특이사항 등",
+  "@hintSleepNotes": {"description": "수면 기록 - 메모 힌트"},
+  "sleepStartedMessage": "{name} 수면 시작! 홈에서 종료할 수 있어요",
+  "@sleepStartedMessage": {
+    "description": "수면 시작 완료 스낵바 메시지",
+    "placeholders": {
+      "name": {"type": "String", "example": "하늘이"}
+    }
+  },
+  "labelTimeSelect": "시간 선택",
+  "@labelTimeSelect": {"description": "시간 선택 시맨틱 라벨"},
+
+  "editActivityTitleWithType": "{title} 수정",
+  "@editActivityTitleWithType": {
+    "description": "기록 수정 바텀시트 - 유형별 제목",
+    "placeholders": {
+      "title": {"type": "String", "example": "수유"}
+    }
+  },
+  "labelTime": "시간",
+  "@labelTime": {"description": "라벨 - 시간"},
+  "labelStart": "시작",
+  "@labelStart": {"description": "라벨 - 시작"},
+  "labelEnd": "종료",
+  "@labelEnd": {"description": "라벨 - 종료"},
+  "labelNotSet": "설정 안 함",
+  "@labelNotSet": {"description": "라벨 - 설정 안 함"},
+  "labelType": "종류",
+  "@labelType": {"description": "라벨 - 종류"},
+  "feedingInfo": "수유 정보",
+  "@feedingInfo": {"description": "수유 정보 섹션 제목"},
+  "feedingAmount": "수유량",
+  "@feedingAmount": {"description": "수유량 라벨"},
+  "diaperInfo": "기저귀 정보",
+  "@diaperInfo": {"description": "기저귀 정보 섹션 제목"},
+  "playInfo": "놀이 정보",
+  "@playInfo": {"description": "놀이 정보 섹션 제목"},
+  "healthInfo": "건강 정보",
+  "@healthInfo": {"description": "건강 정보 섹션 제목"},
+  "labelNotes": "메모",
+  "@labelNotes": {"description": "라벨 - 메모"},
+  "hintNotes": "메모를 입력하세요",
+  "@hintNotes": {"description": "힌트 - 메모 입력"},
+  "labelStartTime": "시작 시간",
+  "@labelStartTime": {"description": "라벨 - 시작 시간"},
+  "labelEndTime": "종료 시간",
+  "@labelEndTime": {"description": "라벨 - 종료 시간"},
+  "errorSaveFailed": "저장 실패: {error}",
+  "@errorSaveFailed": {
+    "description": "저장 실패 에러 메시지",
+    "placeholders": {
+      "error": {"type": "String", "example": "네트워크 오류"}
+    }
+  },
+  "activityHealth": "건강",
+  "@activityHealth": {"description": "활동 - 건강"},
+  "labelOther": "기타",
+  "@labelOther": {"description": "라벨 - 기타"},
+
+  "healthTypeSelectLabel": "기록 유형 선택",
+  "@healthTypeSelectLabel": {"description": "건강 기록 - 유형 선택 라벨"},
+  "healthSymptomSelectLabel": "증상 선택 (복수 선택 가능)",
+  "@healthSymptomSelectLabel": {"description": "건강 기록 - 증상 선택 라벨"},
+  "symptomOther": "기타",
+  "@symptomOther": {"description": "증상 - 기타"},
+  "healthMedicationInfo": "투약 정보",
+  "@healthMedicationInfo": {"description": "건강 기록 - 투약 정보 섹션 제목"},
+  "hintMedication": "약 이름, 용량, 복용 방법 등",
+  "@hintMedication": {"description": "건강 기록 - 투약 정보 힌트"},
+  "healthHospitalInfo": "병원 방문 정보",
+  "@healthHospitalInfo": {"description": "건강 기록 - 병원 방문 정보 섹션 제목"},
+  "hintHospital": "병원명, 진료 내용, 처방 등",
+  "@hintHospital": {"description": "건강 기록 - 병원 방문 힌트"},
+  "hintAdditionalNotes": "추가 메모",
+  "@hintAdditionalNotes": {"description": "추가 메모 힌트"},
+  "medicalDisclaimer": "이 기록은 참고용이며 의료 진단을 대체하지 않습니다.\n이상 증상이 있으면 소아과 전문의와 상담하세요.",
+  "@medicalDisclaimer": {"description": "의료 면책 조항 (2줄)"},
+  "labelRecordTime": "기록 시간",
+  "@labelRecordTime": {"description": "라벨 - 기록 시간"}
 }

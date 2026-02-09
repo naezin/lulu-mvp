@@ -156,19 +156,19 @@ class SKo extends S {
   String get playTypeOther => '기타';
 
   @override
-  String get healthTypeTemperature => '체온 측정';
+  String get healthTypeTemperature => '체온';
 
   @override
-  String get healthTypeSymptom => '증상 기록';
+  String get healthTypeSymptom => '증상';
 
   @override
-  String get healthTypeMedication => '투약 기록';
+  String get healthTypeMedication => '투약';
 
   @override
   String get healthTypeMedicationShort => '투약';
 
   @override
-  String get healthTypeHospital => '병원 방문';
+  String get healthTypeHospital => '병원방문';
 
   @override
   String get symptomCough => '기침';
@@ -1407,4 +1407,680 @@ class SKo extends S {
   ) {
     return '$startMonth/$startDay ~ $endMonth/$endDay';
   }
+
+  @override
+  String get sleepModeNow => '지금 재우기';
+
+  @override
+  String get sleepCancelConfirmTitle => '수면 기록을 취소하시겠습니까?';
+
+  @override
+  String get sleepCancelConfirmMessage => '진행 중인 수면 기록이 삭제됩니다.';
+
+  @override
+  String get sleepSessionCanceled => '수면 기록이 취소되었습니다';
+
+  @override
+  String get quickRecordSameAsLast => '이전과 같이';
+
+  @override
+  String quickRecordFormulaWithAmount(int amount) {
+    return '분유 ${amount}ml';
+  }
+
+  @override
+  String quickRecordBreastWithDuration(int duration) {
+    return '모유 $duration분';
+  }
+
+  @override
+  String quickRecordBreastWithSide(String side) {
+    return '모유 $side';
+  }
+
+  @override
+  String get quickRecordSolidFood => '이유식';
+
+  @override
+  String get sleepTypeLabel => '수면 종류';
+
+  @override
+  String get sleepTimeLabel => '수면 시간';
+
+  @override
+  String get sleepNotesHint => '특이사항이 있으면 입력해 주세요';
+
+  @override
+  String get sleepStartTimeLabel => '시작 시간';
+
+  @override
+  String get sleepEndTimeLabel => '종료 시간';
+
+  @override
+  String get sleepSuggestNap => '현재 시간 기준 낮잠이 적절해 보여요';
+
+  @override
+  String get sleepSuggestNight => '현재 시간 기준 밤잠이 적절해 보여요';
+
+  @override
+  String get sleepOngoing => '진행 중';
+
+  @override
+  String get exportColumnDate => '날짜';
+
+  @override
+  String get exportColumnTime => '시간';
+
+  @override
+  String get exportColumnType => '유형';
+
+  @override
+  String get exportColumnDetail => '상세';
+
+  @override
+  String get exportColumnDuration => '소요시간';
+
+  @override
+  String get exportColumnNotes => '메모';
+
+  @override
+  String exportDateFormat(String year, String month, String day) {
+    return '$year년 $month월 $day일';
+  }
+
+  @override
+  String exportSleptMinutes(int minutes) {
+    return '$minutes분 수면';
+  }
+
+  @override
+  String exportSleptHoursMinutes(int hours, int minutes) {
+    return '$hours시간 $minutes분 수면';
+  }
+
+  @override
+  String exportBreastSide(String side, int duration) {
+    return '$side $duration분';
+  }
+
+  @override
+  String exportFormulaAmount(String amount) {
+    return '분유 ${amount}ml';
+  }
+
+  @override
+  String exportSolidFoodDetail(String name) {
+    return '이유식: $name';
+  }
+
+  @override
+  String exportTemperature(String temp) {
+    return '체온 $temp°C';
+  }
+
+  @override
+  String exportMedication(String name) {
+    return '투약: $name';
+  }
+
+  @override
+  String exportHospitalVisit(String name) {
+    return '병원: $name';
+  }
+
+  @override
+  String exportSymptom(String name) {
+    return '증상: $name';
+  }
+
+  @override
+  String get editActivityTitle => '기록 수정';
+
+  @override
+  String get editActivityTypeLabel => '기록 유형';
+
+  @override
+  String get editStartTimeLabel => '시작 시간';
+
+  @override
+  String get editEndTimeLabel => '종료 시간';
+
+  @override
+  String get editAmountLabel => '수유량 (ml)';
+
+  @override
+  String get editMemoLabel => '메모';
+
+  @override
+  String get editMemoHint => '메모를 입력하세요';
+
+  @override
+  String get editSaveSuccess => '기록이 수정되었어요';
+
+  @override
+  String editSaveFailed(String error) {
+    return '수정 실패: $error';
+  }
+
+  @override
+  String get editDeleteConfirmTitle => '기록을 삭제할까요?';
+
+  @override
+  String get editDeleteConfirmMessage => '이 기록을 삭제하시겠습니까?';
+
+  @override
+  String get editDeleteSuccess => '기록이 삭제되었어요';
+
+  @override
+  String get editUndoDelete => '삭제 취소';
+
+  @override
+  String get settingsDangerZone => '위험 구역';
+
+  @override
+  String get settingsDeleteAccount => '계정 삭제';
+
+  @override
+  String get settingsDeleteAccountDesc => '모든 데이터가 영구적으로 삭제됩니다';
+
+  @override
+  String get settingsDeleteAccountConfirm => '정말로 계정을 삭제하시겠습니까?';
+
+  @override
+  String get settingsLogout => '로그아웃';
+
+  @override
+  String get settingsLogoutConfirm => '로그아웃 하시겠습니까?';
+
+  @override
+  String get settingsNotLoggedIn => '로그인되지 않았습니다';
+
+  @override
+  String get cryIdleTitle => '아기가 울고 있나요?';
+
+  @override
+  String get cryIdleSubtitle => '아래 버튼을 눌러 울음을 분석해보세요';
+
+  @override
+  String get cryRecordingTitle => '울음 소리를 듣고 있어요';
+
+  @override
+  String get cryRecordingSubtitle => '아기 가까이에서 분석하면 더 정확해요';
+
+  @override
+  String get cryAnalyzingTitle => '울음 패턴을 분석 중이에요';
+
+  @override
+  String get cryAnalyzingSubtitle => '잠시만 기다려 주세요';
+
+  @override
+  String get cryResultTitle => '분석 결과';
+
+  @override
+  String get cryStartButton => '울음 분석 시작';
+
+  @override
+  String get cryStopButton => '분석 중지';
+
+  @override
+  String get cryReanalyzeButton => '다시 분석하기';
+
+  @override
+  String cryConfidence(int percent) {
+    return '신뢰도 $percent%';
+  }
+
+  @override
+  String get cryRecordSaved => '울음 분석 기록이 저장되었어요';
+
+  @override
+  String get cryPrivacyNote => '모든 음성 데이터는 기기에서만 처리되며 저장되지 않습니다';
+
+  @override
+  String get cryAnalysisStart => '분석 시작';
+
+  @override
+  String get cryModelLoadFailed => '울음 분석 모델을 불러올 수 없습니다';
+
+  @override
+  String get cryModelLoading => '울음 분석 모델 로딩 중...';
+
+  @override
+  String get cryResultSavePrompt => '결과를 저장할까요?';
+
+  @override
+  String get cryRecordButton => '기록';
+
+  @override
+  String get cryActionSuggestion => '이렇게 해보세요';
+
+  @override
+  String get cryDunstanLabel => 'Dunstan Baby Language';
+
+  @override
+  String get healthRecordTimeLabel => '기록 시간';
+
+  @override
+  String get healthSelectType => '기록 유형을 선택하세요';
+
+  @override
+  String get healthNotesHint => '추가 메모를 입력하세요';
+
+  @override
+  String get healthTempInput => '체온을 입력하세요';
+
+  @override
+  String get healthSymptomSelect => '증상을 선택하세요';
+
+  @override
+  String get healthMedNameHint => '약 이름';
+
+  @override
+  String get healthMedDoseHint => '용량';
+
+  @override
+  String get healthHospitalNameHint => '병원명';
+
+  @override
+  String get healthMedicalDisclaimer => '이 정보는 참고용이며 의료 조언이 아닙니다';
+
+  @override
+  String get healthTempWarningLow => '체온이 낮아요. 보온에 신경써주세요.';
+
+  @override
+  String get healthTempWarningMild => '미열이 있어요. 지켜봐주세요.';
+
+  @override
+  String get healthTempWarningHigh => '열이 있어요. 병원 방문을 권장해요.';
+
+  @override
+  String get healthTempNormal => '정상 체온이에요.';
+
+  @override
+  String get notesOptionalLabel => '메모 (선택)';
+
+  @override
+  String get yesterday => '어제';
+
+  @override
+  String get growthOverview => '성장 현황';
+
+  @override
+  String growthMeasuredAt(String date, String relative) {
+    return '$date 측정 ($relative)';
+  }
+
+  @override
+  String get growthWeight => '체중';
+
+  @override
+  String get growthLength => '신장';
+
+  @override
+  String get growthHeadCircumference => '두위';
+
+  @override
+  String get notMeasured => '미측정';
+
+  @override
+  String growthChartApplied(String chartType) {
+    return '$chartType 적용';
+  }
+
+  @override
+  String growthCorrectedAge(String age) {
+    return '교정연령 $age';
+  }
+
+  @override
+  String get tapToViewGrowthChart => '탭하여 성장 차트 보기';
+
+  @override
+  String daysAgoCount(int count) {
+    return '$count일 전';
+  }
+
+  @override
+  String onboardingBabyInfoTitle(String label) {
+    return '$label 정보를\n입력해 주세요';
+  }
+
+  @override
+  String get hintSelectBirthDate => '출생일을 선택해주세요';
+
+  @override
+  String get labelBirthWeightRequired => '출생체중 (필수)';
+
+  @override
+  String get hintBirthWeight => '예: 3200';
+
+  @override
+  String get birthWeightHelperText => '성장 추적 기능에 활용돼요';
+
+  @override
+  String get questionIsPretermFull => '조산아인가요?';
+
+  @override
+  String get prematureAgeInfo => '37주 미만 출생 시, 교정연령으로 발달을 추적해요';
+
+  @override
+  String get emptyBabyInfoTitle => '아기 정보가 없습니다';
+
+  @override
+  String get emptyBabyInfoHint => '온보딩을 완료해주세요';
+
+  @override
+  String get defaultBabyName => '아기';
+
+  @override
+  String unitMinutes(int count) {
+    return '$count분';
+  }
+
+  @override
+  String get diaperChange => '기저귀 교체';
+
+  @override
+  String get feedingBreastfeeding => '모유 수유';
+
+  @override
+  String get feedingBottleFeeding => '젖병 수유';
+
+  @override
+  String get quickRecordTooltip => '탭하면 이전과 같은 내용으로\n바로 저장돼요!';
+
+  @override
+  String quickRecordRepeatWithName(String name) {
+    return '$name의 마지막 기록 반복';
+  }
+
+  @override
+  String get timeAgoJustNow => '방금';
+
+  @override
+  String timeAgoMinutes(int count) {
+    return '$count분 전';
+  }
+
+  @override
+  String timeAgoHours(int count) {
+    return '$count시간 전';
+  }
+
+  @override
+  String get labelRecord => '기록';
+
+  @override
+  String healthTempValue(String temp) {
+    return '체온 $temp°C';
+  }
+
+  @override
+  String get sectionDangerZone => '위험 영역';
+
+  @override
+  String get statusPreterm => '조산아';
+
+  @override
+  String get statusFullTerm => '만삭';
+
+  @override
+  String get addBabyMaxHint => '최대 4명까지 등록 가능';
+
+  @override
+  String get familyInviteHint => '가족 멤버 초대하기';
+
+  @override
+  String get importRecordsTitle => '기존 기록 가져오기';
+
+  @override
+  String get importRecordsHint => '다른 앱에서 기록 이전';
+
+  @override
+  String get exportCSVTitle => 'CSV로 내보내기';
+
+  @override
+  String get resetDataTitle => '데이터 초기화';
+
+  @override
+  String get resetDataHint => '모든 데이터를 삭제하고 처음부터 시작';
+
+  @override
+  String get resetDataConfirm => '정말 모든 데이터를 삭제하시겠어요?';
+
+  @override
+  String get resetWarningRecords => '모든 기록이 삭제됩니다';
+
+  @override
+  String get resetWarningBabies => '아기 정보가 삭제됩니다';
+
+  @override
+  String get resetWarningIrreversible => '이 작업은 되돌릴 수 없습니다';
+
+  @override
+  String get resetCompleteMessage => '초기화 완료! 앱을 다시 시작해주세요.';
+
+  @override
+  String errorResetFailed(String error) {
+    return '초기화 실패: $error';
+  }
+
+  @override
+  String get cryHistoryComingSoon => '히스토리 기능은 곧 추가됩니다.';
+
+  @override
+  String get cryIdleHint => '버튼을 누르고 울음 소리를 들려주세요';
+
+  @override
+  String cryCorrectedAgeInfo(int weeks) {
+    return '교정연령 $weeks주 기준으로 분석해요';
+  }
+
+  @override
+  String get cryListeningTitle => '듣고 있어요...';
+
+  @override
+  String get cryListeningHint => '2-10초 동안 울음 소리를 들려주세요';
+
+  @override
+  String get cryAnalyzingText => '분석 중...';
+
+  @override
+  String get cryAnalyzingHint => 'AI가 울음 패턴을 분석하고 있어요';
+
+  @override
+  String get cryDetailTitle => '분석 상세';
+
+  @override
+  String cryPretermAdjustInfo(int weeks) {
+    return '교정연령 $weeks주 기준으로 신뢰도를 보정했어요.';
+  }
+
+  @override
+  String get cryFeedbackThanks => '피드백을 보내주셨어요. 감사합니다!';
+
+  @override
+  String get cryFeedbackQuestion => '분석 결과가 맞나요?';
+
+  @override
+  String get cryFeedbackCorrect => '맞아요';
+
+  @override
+  String get cryFeedbackIncorrect => '아니에요';
+
+  @override
+  String get cryErrorUnknown => '알 수 없는 오류가 발생했어요.';
+
+  @override
+  String get buttonRetry => '다시 시도';
+
+  @override
+  String cryRemainingCount(int count) {
+    return '오늘 남은 분석: $count회';
+  }
+
+  @override
+  String get buttonUpgrade => '업그레이드';
+
+  @override
+  String get cryDisclaimer =>
+      '이 분석 결과는 참고용이며, 의료적 조언을 대체하지 않습니다. 걱정되시면 담당 의료진과 상담하세요.';
+
+  @override
+  String get cryDisclaimerWithPreterm =>
+      '이 분석 결과는 참고용이며, 의료적 조언을 대체하지 않습니다. 조산아의 울음 패턴은 개인차가 크므로, 걱정되시면 담당 의료진과 상담하세요.';
+
+  @override
+  String get cryEmptyBabyInfo => '아기 정보를 먼저 등록해주세요';
+
+  @override
+  String get csvHeaderDate => '날짜';
+
+  @override
+  String get csvHeaderTime => '시간';
+
+  @override
+  String get csvHeaderEndTime => '종료시간';
+
+  @override
+  String get csvHeaderBaby => '아기';
+
+  @override
+  String get csvHeaderType => '유형';
+
+  @override
+  String get csvHeaderDetail => '상세';
+
+  @override
+  String get csvHeaderAmountDuration => '양/시간';
+
+  @override
+  String get csvHeaderNotes => '메모';
+
+  @override
+  String get unknownBaby => '알 수 없음';
+
+  @override
+  String get sleepOrAddNewRecord => '또는 새 기록 추가';
+
+  @override
+  String sleepOngoingStatus(String babyName, String sleepType) {
+    return '$babyName $sleepType 중';
+  }
+
+  @override
+  String get sleepCancelConfirmBody => '진행 중인 수면 기록이 삭제됩니다.';
+
+  @override
+  String get sleepModeAddRecord => '기록 추가';
+
+  @override
+  String get sleepStartNow => '지금 수면 시작';
+
+  @override
+  String get sleepStartNowHint =>
+      '저장하면 수면이 시작됩니다.\n아기가 깨면 홈 화면에서 종료 버튼을 눌러주세요.';
+
+  @override
+  String get sleepTotalDuration => '총 수면 시간: ';
+
+  @override
+  String get hintSleepNotes => '수면 상태, 특이사항 등';
+
+  @override
+  String sleepStartedMessage(String name) {
+    return '$name 수면 시작! 홈에서 종료할 수 있어요';
+  }
+
+  @override
+  String get labelTimeSelect => '시간 선택';
+
+  @override
+  String editActivityTitleWithType(String title) {
+    return '$title 수정';
+  }
+
+  @override
+  String get labelTime => '시간';
+
+  @override
+  String get labelStart => '시작';
+
+  @override
+  String get labelEnd => '종료';
+
+  @override
+  String get labelNotSet => '설정 안 함';
+
+  @override
+  String get labelType => '종류';
+
+  @override
+  String get feedingInfo => '수유 정보';
+
+  @override
+  String get feedingAmount => '수유량';
+
+  @override
+  String get diaperInfo => '기저귀 정보';
+
+  @override
+  String get playInfo => '놀이 정보';
+
+  @override
+  String get healthInfo => '건강 정보';
+
+  @override
+  String get labelNotes => '메모';
+
+  @override
+  String get hintNotes => '메모를 입력하세요';
+
+  @override
+  String get labelStartTime => '시작 시간';
+
+  @override
+  String get labelEndTime => '종료 시간';
+
+  @override
+  String errorSaveFailed(String error) {
+    return '저장 실패: $error';
+  }
+
+  @override
+  String get activityHealth => '건강';
+
+  @override
+  String get labelOther => '기타';
+
+  @override
+  String get healthTypeSelectLabel => '기록 유형 선택';
+
+  @override
+  String get healthSymptomSelectLabel => '증상 선택 (복수 선택 가능)';
+
+  @override
+  String get symptomOther => '기타';
+
+  @override
+  String get healthMedicationInfo => '투약 정보';
+
+  @override
+  String get hintMedication => '약 이름, 용량, 복용 방법 등';
+
+  @override
+  String get healthHospitalInfo => '병원 방문 정보';
+
+  @override
+  String get hintHospital => '병원명, 진료 내용, 처방 등';
+
+  @override
+  String get hintAdditionalNotes => '추가 메모';
+
+  @override
+  String get medicalDisclaimer =>
+      '이 기록은 참고용이며 의료 진단을 대체하지 않습니다.\n이상 증상이 있으면 소아과 전문의와 상담하세요.';
+
+  @override
+  String get labelRecordTime => '기록 시간';
 }

@@ -679,5 +679,422 @@
       "endMonth": {"type": "String", "example": "2"},
       "endDay": {"type": "String", "example": "8"}
     }
-  }
+  },
+
+  "sleepModeNow": "Sleep Mode - Now",
+  "sleepCancelConfirmTitle": "Cancel sleep record?",
+  "sleepCancelConfirmMessage": "The current sleep record will be deleted.",
+  "sleepSessionCanceled": "Sleep record canceled",
+
+  "quickRecordSameAsLast": "Same as last",
+  "quickRecordFormulaWithAmount": "Formula {amount}ml",
+  "@quickRecordFormulaWithAmount": {
+    "description": "Quick record - formula with amount",
+    "placeholders": {
+      "amount": {"type": "int", "example": "120"}
+    }
+  },
+  "quickRecordBreastWithDuration": "Breast milk {duration}min",
+  "@quickRecordBreastWithDuration": {
+    "description": "Quick record - breast milk with duration",
+    "placeholders": {
+      "duration": {"type": "int", "example": "15"}
+    }
+  },
+  "quickRecordBreastWithSide": "Breast milk {side}",
+  "@quickRecordBreastWithSide": {
+    "description": "Quick record - breast milk with side",
+    "placeholders": {
+      "side": {"type": "String", "example": "left"}
+    }
+  },
+  "quickRecordSolidFood": "Solid food",
+
+  "sleepTypeLabel": "Sleep Type",
+  "sleepTimeLabel": "Sleep Time",
+  "sleepNotesHint": "Enter any notes",
+  "sleepStartTimeLabel": "Start Time",
+  "sleepEndTimeLabel": "End Time",
+  "sleepSuggestNap": "Based on current time, nap seems appropriate",
+  "sleepSuggestNight": "Based on current time, night sleep seems appropriate",
+  "sleepOngoing": "In Progress",
+
+  "exportColumnDate": "Date",
+  "exportColumnTime": "Time",
+  "exportColumnType": "Type",
+  "exportColumnDetail": "Detail",
+  "exportColumnDuration": "Duration",
+  "exportColumnNotes": "Notes",
+  "exportDateFormat": "{year}/{month}/{day}",
+  "@exportDateFormat": {
+    "description": "CSV export date format",
+    "placeholders": {
+      "year": {"type": "String", "example": "2026"},
+      "month": {"type": "String", "example": "2"},
+      "day": {"type": "String", "example": "8"}
+    }
+  },
+  "exportSleptMinutes": "{minutes}min sleep",
+  "@exportSleptMinutes": {
+    "description": "CSV export - sleep duration in minutes",
+    "placeholders": {
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "exportSleptHoursMinutes": "{hours}h {minutes}min sleep",
+  "@exportSleptHoursMinutes": {
+    "description": "CSV export - sleep duration in hours and minutes",
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"},
+      "minutes": {"type": "int", "example": "30"}
+    }
+  },
+  "exportBreastSide": "{side} {duration}min",
+  "@exportBreastSide": {
+    "description": "CSV export - breast feeding side and duration",
+    "placeholders": {
+      "side": {"type": "String", "example": "Left"},
+      "duration": {"type": "int", "example": "15"}
+    }
+  },
+  "exportFormulaAmount": "Formula {amount}ml",
+  "@exportFormulaAmount": {
+    "description": "CSV export - formula amount",
+    "placeholders": {
+      "amount": {"type": "String", "example": "120"}
+    }
+  },
+  "exportSolidFoodDetail": "Solid food: {name}",
+  "@exportSolidFoodDetail": {
+    "description": "CSV export - solid food detail",
+    "placeholders": {
+      "name": {"type": "String", "example": "rice porridge"}
+    }
+  },
+  "exportTemperature": "Temperature {temp}°C",
+  "@exportTemperature": {
+    "description": "CSV export - temperature",
+    "placeholders": {
+      "temp": {"type": "String", "example": "37.5"}
+    }
+  },
+  "exportMedication": "Medication: {name}",
+  "@exportMedication": {
+    "description": "CSV export - medication",
+    "placeholders": {
+      "name": {"type": "String", "example": "Tylenol"}
+    }
+  },
+  "exportHospitalVisit": "Hospital: {name}",
+  "@exportHospitalVisit": {
+    "description": "CSV export - hospital visit",
+    "placeholders": {
+      "name": {"type": "String", "example": "Pediatrics"}
+    }
+  },
+  "exportSymptom": "Symptom: {name}",
+  "@exportSymptom": {
+    "description": "CSV export - symptom",
+    "placeholders": {
+      "name": {"type": "String", "example": "cough"}
+    }
+  },
+
+  "editActivityTitle": "Edit Record",
+  "editActivityTypeLabel": "Record Type",
+  "editStartTimeLabel": "Start Time",
+  "editEndTimeLabel": "End Time",
+  "editAmountLabel": "Amount (ml)",
+  "editMemoLabel": "Notes",
+  "editMemoHint": "Enter notes",
+  "editSaveSuccess": "Record updated",
+  "editSaveFailed": "Update failed: {error}",
+  "@editSaveFailed": {
+    "description": "Edit record save failed message",
+    "placeholders": {
+      "error": {"type": "String", "example": "Network error"}
+    }
+  },
+  "editDeleteConfirmTitle": "Delete this record?",
+  "editDeleteConfirmMessage": "Are you sure you want to delete this record?",
+  "editDeleteSuccess": "Record deleted",
+  "editUndoDelete": "Undo delete",
+
+  "settingsDangerZone": "Danger Zone",
+  "settingsDeleteAccount": "Delete Account",
+  "settingsDeleteAccountDesc": "All data will be permanently deleted",
+  "settingsDeleteAccountConfirm": "Are you sure you want to delete your account?",
+  "settingsLogout": "Log out",
+  "settingsLogoutConfirm": "Log out?",
+  "settingsNotLoggedIn": "Not logged in",
+
+  "cryIdleTitle": "Is your baby crying?",
+  "cryIdleSubtitle": "Press the button below to analyze",
+  "cryRecordingTitle": "Listening to the cry",
+  "cryRecordingSubtitle": "Analysis is more accurate near the baby",
+  "cryAnalyzingTitle": "Analyzing cry pattern",
+  "cryAnalyzingSubtitle": "Please wait a moment",
+  "cryResultTitle": "Analysis Result",
+  "cryStartButton": "Start Analysis",
+  "cryStopButton": "Stop Analysis",
+  "cryReanalyzeButton": "Analyze Again",
+  "cryConfidence": "Confidence {percent}%",
+  "@cryConfidence": {
+    "description": "Cry analysis confidence display",
+    "placeholders": {
+      "percent": {"type": "int", "example": "85"}
+    }
+  },
+  "cryRecordSaved": "Cry analysis saved",
+  "cryPrivacyNote": "All audio is processed on-device and never stored",
+  "cryAnalysisStart": "Start Analysis",
+  "cryModelLoadFailed": "Failed to load cry analysis model",
+  "cryModelLoading": "Loading cry analysis model...",
+  "cryResultSavePrompt": "Save the result?",
+  "cryRecordButton": "Record",
+  "cryActionSuggestion": "Try this",
+  "cryDunstanLabel": "Dunstan Baby Language",
+
+  "healthRecordTimeLabel": "Record Time",
+  "healthSelectType": "Select record type",
+  "healthNotesHint": "Enter additional notes",
+  "healthTempInput": "Enter temperature",
+  "healthSymptomSelect": "Select symptoms",
+  "healthMedNameHint": "Medication name",
+  "healthMedDoseHint": "Dosage",
+  "healthHospitalNameHint": "Hospital name",
+  "healthMedicalDisclaimer": "This information is for reference only and is not medical advice",
+  "healthTempWarningLow": "Temperature is low. Keep baby warm.",
+  "healthTempWarningMild": "Mild fever detected. Monitor closely.",
+  "healthTempWarningHigh": "Fever detected. A doctor visit is recommended.",
+  "healthTempNormal": "Normal temperature.",
+  "notesOptionalLabel": "Notes (optional)",
+
+  "yesterday": "Yesterday",
+  "growthOverview": "Growth Overview",
+  "growthMeasuredAt": "Measured on {date} ({relative})",
+  "@growthMeasuredAt": {
+    "description": "Growth measurement date display",
+    "placeholders": {
+      "date": {"type": "String", "example": "2/8"},
+      "relative": {"type": "String", "example": "yesterday"}
+    }
+  },
+  "growthWeight": "Weight",
+  "growthLength": "Height",
+  "growthHeadCircumference": "Head circumference",
+  "notMeasured": "Not measured",
+  "growthChartApplied": "{chartType} applied",
+  "@growthChartApplied": {
+    "description": "Growth card - applied chart type",
+    "placeholders": {
+      "chartType": {"type": "String", "example": "WHO"}
+    }
+  },
+  "growthCorrectedAge": "Corrected age {age}",
+  "@growthCorrectedAge": {
+    "description": "Growth card - corrected age display",
+    "placeholders": {
+      "age": {"type": "String", "example": "3 months"}
+    }
+  },
+  "tapToViewGrowthChart": "Tap to view growth chart",
+  "daysAgoCount": "{count}d ago",
+  "@daysAgoCount": {
+    "description": "Days ago count display",
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+
+  "onboardingBabyInfoTitle": "Enter {label}'s\ninformation",
+  "@onboardingBabyInfoTitle": {
+    "description": "Onboarding baby info input title",
+    "placeholders": {
+      "label": {"type": "String", "example": "Baby"}
+    }
+  },
+  "labelBirthDateShort": "Birth date",
+  "hintSelectBirthDate": "Select birth date",
+  "labelBirthWeightRequired": "Birth weight (required)",
+  "hintBirthWeight": "e.g. 3200",
+  "birthWeightHelperText": "Used for growth tracking",
+  "questionIsPretermFull": "Was your baby born prematurely?",
+  "prematureAgeInfo": "If born before 37 weeks, development is tracked using corrected age",
+
+  "emptyBabyInfoTitle": "No baby information",
+  "emptyBabyInfoHint": "Please complete onboarding",
+  "defaultBabyName": "Baby",
+  "unitMinutes": "{count}min",
+  "@unitMinutes": {
+    "description": "Unit - N minutes",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "diaperChange": "Diaper Change",
+  "feedingBreastfeeding": "Breastfeeding",
+  "feedingBottleFeeding": "Bottle Feeding",
+  "quickRecordTooltip": "Tap to save with\nthe same as before!",
+  "quickRecordRepeatWithName": "Repeat {name}'s last record",
+  "@quickRecordRepeatWithName": {
+    "description": "Quick record - repeat last record with baby name",
+    "placeholders": {
+      "name": {"type": "String", "example": "Baby"}
+    }
+  },
+  "timeAgoJustNow": "Just now",
+  "timeAgoMinutes": "{count}m ago",
+  "@timeAgoMinutes": {
+    "description": "Time ago - N minutes ago",
+    "placeholders": {
+      "count": {"type": "int", "example": "5"}
+    }
+  },
+  "timeAgoHours": "{count}h ago",
+  "@timeAgoHours": {
+    "description": "Time ago - N hours ago",
+    "placeholders": {
+      "count": {"type": "int", "example": "2"}
+    }
+  },
+  "labelRecord": "Record",
+  "healthTempValue": "Temp {temp}°C",
+  "@healthTempValue": {
+    "description": "Health - temperature value display",
+    "placeholders": {
+      "temp": {"type": "String", "example": "36.5"}
+    }
+  },
+
+  "sectionDangerZone": "Danger Zone",
+  "statusPreterm": "Preterm",
+  "statusFullTerm": "Full Term",
+  "addBabyMaxHint": "Up to 4 babies allowed",
+  "familyInviteHint": "Invite family members",
+  "importRecordsTitle": "Import Records",
+  "importRecordsHint": "Bring records from other apps",
+  "exportCSVTitle": "Export to CSV",
+  "resetDataTitle": "Reset Data",
+  "resetDataHint": "Delete all data and start over",
+  "resetDataConfirm": "Are you sure you want to delete all data?",
+  "resetWarningRecords": "All records will be deleted",
+  "resetWarningBabies": "Baby information will be deleted",
+  "resetWarningIrreversible": "This action cannot be undone",
+  "resetCompleteMessage": "Reset complete! Please restart the app.",
+  "errorResetFailed": "Reset failed: {error}",
+  "@errorResetFailed": {
+    "placeholders": {
+      "error": {"type": "String", "example": "Network error"}
+    }
+  },
+
+  "cryHistoryComingSoon": "History feature coming soon.",
+  "cryIdleHint": "Press the button and let us hear the cry",
+  "cryCorrectedAgeInfo": "Analyzing based on corrected age {weeks} weeks",
+  "@cryCorrectedAgeInfo": {
+    "placeholders": {
+      "weeks": {"type": "int", "example": "34"}
+    }
+  },
+  "cryListeningTitle": "Listening...",
+  "cryListeningHint": "Let us hear the cry for 2-10 seconds",
+  "cryAnalyzingText": "Analyzing...",
+  "cryAnalyzingHint": "AI is analyzing the cry pattern",
+  "cryDetailTitle": "Analysis Details",
+  "cryPretermAdjustInfo": "Confidence adjusted based on corrected age {weeks} weeks.",
+  "@cryPretermAdjustInfo": {
+    "placeholders": {
+      "weeks": {"type": "int", "example": "34"}
+    }
+  },
+  "cryFeedbackThanks": "Thank you for your feedback!",
+  "cryFeedbackQuestion": "Was the analysis correct?",
+  "cryFeedbackCorrect": "Yes",
+  "cryFeedbackIncorrect": "No",
+  "cryErrorUnknown": "An unknown error occurred.",
+  "buttonRetry": "Retry",
+  "cryRemainingCount": "Remaining today: {count}",
+  "@cryRemainingCount": {
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+  "buttonUpgrade": "Upgrade",
+  "cryDisclaimer": "This analysis is for reference only and does not replace medical advice. Consult your doctor if concerned.",
+  "cryDisclaimerWithPreterm": "This analysis is for reference only and does not replace medical advice. Preterm babies may have varying cry patterns, so consult your doctor if concerned.",
+  "cryEmptyBabyInfo": "Please register baby information first",
+
+  "csvHeaderDate": "Date",
+  "csvHeaderTime": "Time",
+  "csvHeaderEndTime": "End Time",
+  "csvHeaderBaby": "Baby",
+  "csvHeaderType": "Type",
+  "csvHeaderDetail": "Detail",
+  "csvHeaderAmountDuration": "Amount/Duration",
+  "csvHeaderNotes": "Notes",
+  "unknownBaby": "Unknown",
+
+  "sleepOrAddNewRecord": "or add new record",
+  "sleepOngoingStatus": "{babyName} {sleepType} in progress",
+  "@sleepOngoingStatus": {
+    "placeholders": {
+      "babyName": {"type": "String", "example": "Emma"},
+      "sleepType": {"type": "String", "example": "nap"}
+    }
+  },
+  "sleepCancelConfirmBody": "The ongoing sleep record will be deleted.",
+  "sleepModeNow": "Sleep Now",
+  "sleepModeAddRecord": "Add Record",
+  "sleepStartNow": "Start Sleep Now",
+  "sleepStartNowHint": "Sleep will start when you save.\nPress the end button on the home screen when baby wakes up.",
+  "sleepTotalDuration": "Total sleep: ",
+  "hintSleepNotes": "Sleep quality, notes, etc.",
+  "sleepStartedMessage": "{name} sleep started! End it from the home screen",
+  "@sleepStartedMessage": {
+    "placeholders": {
+      "name": {"type": "String", "example": "Emma"}
+    }
+  },
+  "labelTimeSelect": "Select time",
+
+  "editActivityTitleWithType": "Edit {title}",
+  "@editActivityTitleWithType": {
+    "placeholders": {
+      "title": {"type": "String", "example": "Feeding"}
+    }
+  },
+  "labelTime": "Time",
+  "labelStart": "Start",
+  "labelEnd": "End",
+  "labelNotSet": "Not set",
+  "labelType": "Type",
+  "feedingInfo": "Feeding Info",
+  "feedingAmount": "Amount",
+  "diaperInfo": "Diaper Info",
+  "playInfo": "Play Info",
+  "healthInfo": "Health Info",
+  "labelNotes": "Notes",
+  "hintNotes": "Enter notes",
+  "labelStartTime": "Start Time",
+  "labelEndTime": "End Time",
+  "errorSaveFailed": "Save failed: {error}",
+  "@errorSaveFailed": {
+    "placeholders": {
+      "error": {"type": "String", "example": "Network error"}
+    }
+  },
+  "activityHealth": "Health",
+  "labelOther": "Other",
+
+  "healthTypeSelectLabel": "Select record type",
+  "healthSymptomSelectLabel": "Select symptoms (multiple)",
+  "symptomOther": "Other",
+  "healthMedicationInfo": "Medication Info",
+  "hintMedication": "Medication name, dosage, method, etc.",
+  "healthHospitalInfo": "Hospital Visit Info",
+  "hintHospital": "Hospital name, treatment, prescription, etc.",
+  "hintAdditionalNotes": "Additional notes",
+  "medicalDisclaimer": "This record is for reference only and does not replace medical diagnosis.\nConsult a pediatrician if you notice any unusual symptoms.",
+  "labelRecordTime": "Record Time"
 }

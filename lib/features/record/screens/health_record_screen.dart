@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/generated/app_localizations.dart' show S;
+
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_shadows.dart';
@@ -80,7 +82,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          '건강 기록',
+          S.of(context)!.recordTitleHealth,
           style: LuluTextStyles.titleMedium.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -135,7 +137,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
 
                       // 시간 선택
                       RecordTimePicker(
-                        label: '기록 시간',
+                        label: S.of(context)!.labelRecordTime,
                         time: provider.recordTime,
                         onTimeChanged: provider.setRecordTime,
                       ),
@@ -233,11 +235,12 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
   }
 
   Widget _buildHealthTypeSelector(RecordProvider provider) {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '기록 유형 선택',
+          l10n.healthTypeSelectLabel,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -249,7 +252,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
             Expanded(
               child: _HealthTypeButton(
                 type: 'temperature',
-                label: '체온',
+                label: l10n.healthTypeTemperature,
                 icon: LuluIcons.temperature,
                 isSelected: provider.healthType == 'temperature',
                 onTap: () => provider.setHealthType('temperature'),
@@ -259,7 +262,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
             Expanded(
               child: _HealthTypeButton(
                 type: 'symptom',
-                label: '증상',
+                label: l10n.healthTypeSymptom,
                 icon: LuluIcons.symptom,
                 isSelected: provider.healthType == 'symptom',
                 onTap: () => provider.setHealthType('symptom'),
@@ -273,7 +276,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
             Expanded(
               child: _HealthTypeButton(
                 type: 'medication',
-                label: '투약',
+                label: l10n.healthTypeMedication,
                 icon: LuluIcons.medication,
                 isSelected: provider.healthType == 'medication',
                 onTap: () => provider.setHealthType('medication'),
@@ -283,7 +286,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
             Expanded(
               child: _HealthTypeButton(
                 type: 'hospital',
-                label: '병원방문',
+                label: l10n.healthTypeHospital,
                 icon: LuluIcons.hospital,
                 isSelected: provider.healthType == 'hospital',
                 onTap: () => provider.setHealthType('hospital'),
@@ -321,21 +324,22 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
   }
 
   Widget _buildSymptomSelector(RecordProvider provider) {
+    final l10n = S.of(context)!;
     final symptoms = [
-      ('cough', '기침', LuluIcons.cough),
-      ('runny_nose', '콧물', LuluIcons.runnyNose),
-      ('fever', '발열', LuluIcons.fever),
-      ('vomiting', '구토', LuluIcons.vomiting),
-      ('diarrhea', '설사', LuluIcons.diarrhea),
-      ('rash', '발진', LuluIcons.rash),
-      ('other', '기타', LuluIcons.other),
+      ('cough', l10n.symptomCough, LuluIcons.cough),
+      ('runny_nose', l10n.symptomRunnyNose, LuluIcons.runnyNose),
+      ('fever', l10n.symptomFever, LuluIcons.fever),
+      ('vomiting', l10n.symptomVomiting, LuluIcons.vomiting),
+      ('diarrhea', l10n.symptomDiarrhea, LuluIcons.diarrhea),
+      ('rash', l10n.symptomRash, LuluIcons.rash),
+      ('other', l10n.symptomOther, LuluIcons.other),
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '증상 선택 (복수 선택 가능)',
+          l10n.healthSymptomSelectLabel,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -399,11 +403,12 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
   }
 
   Widget _buildMedicationInput(RecordProvider provider) {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '투약 정보',
+          l10n.healthMedicationInfo,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -423,7 +428,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '약 이름, 용량, 복용 방법 등',
+              hintText: l10n.hintMedication,
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -441,11 +446,12 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
   }
 
   Widget _buildHospitalInput(RecordProvider provider) {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '병원 방문 정보',
+          l10n.healthHospitalInfo,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -465,7 +471,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '병원명, 진료 내용, 처방 등',
+              hintText: l10n.hintHospital,
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -483,11 +489,12 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
   }
 
   Widget _buildNotesInput() {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '메모 (선택)',
+          l10n.notesOptionalLabel,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -507,7 +514,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '추가 메모',
+              hintText: l10n.hintAdditionalNotes,
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -546,7 +553,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
           const SizedBox(width: LuluSpacing.sm),
           Expanded(
             child: Text(
-              '이 기록은 참고용이며 의료 진단을 대체하지 않습니다.\n이상 증상이 있으면 소아과 전문의와 상담하세요.',
+              S.of(context)!.medicalDisclaimer,
               style: LuluTextStyles.caption.copyWith(
                 color: LuluStatusColors.warning,
                 fontWeight: FontWeight.w500,
@@ -587,7 +594,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
                 ),
               )
             : Text(
-                '저장하기',
+                S.of(context)!.buttonSave,
                 style: LuluTextStyles.labelLarge.copyWith(
                   color: Colors.white,
                 ),

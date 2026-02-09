@@ -291,7 +291,7 @@ class SEn extends S {
   String get labelBirthDate => 'Birth Date';
 
   @override
-  String get labelBirthDateShort => 'DOB';
+  String get labelBirthDateShort => 'Birth date';
 
   @override
   String get labelGender => 'Gender';
@@ -1427,4 +1427,690 @@ class SEn extends S {
   ) {
     return '$startMonth/$startDay ~ $endMonth/$endDay';
   }
+
+  @override
+  String get sleepModeNow => 'Sleep Now';
+
+  @override
+  String get sleepCancelConfirmTitle => 'Cancel sleep record?';
+
+  @override
+  String get sleepCancelConfirmMessage =>
+      'The current sleep record will be deleted.';
+
+  @override
+  String get sleepSessionCanceled => 'Sleep record canceled';
+
+  @override
+  String get quickRecordSameAsLast => 'Same as last';
+
+  @override
+  String quickRecordFormulaWithAmount(int amount) {
+    return 'Formula ${amount}ml';
+  }
+
+  @override
+  String quickRecordBreastWithDuration(int duration) {
+    return 'Breast milk ${duration}min';
+  }
+
+  @override
+  String quickRecordBreastWithSide(String side) {
+    return 'Breast milk $side';
+  }
+
+  @override
+  String get quickRecordSolidFood => 'Solid food';
+
+  @override
+  String get sleepTypeLabel => 'Sleep Type';
+
+  @override
+  String get sleepTimeLabel => 'Sleep Time';
+
+  @override
+  String get sleepNotesHint => 'Enter any notes';
+
+  @override
+  String get sleepStartTimeLabel => 'Start Time';
+
+  @override
+  String get sleepEndTimeLabel => 'End Time';
+
+  @override
+  String get sleepSuggestNap => 'Based on current time, nap seems appropriate';
+
+  @override
+  String get sleepSuggestNight =>
+      'Based on current time, night sleep seems appropriate';
+
+  @override
+  String get sleepOngoing => 'In Progress';
+
+  @override
+  String get exportColumnDate => 'Date';
+
+  @override
+  String get exportColumnTime => 'Time';
+
+  @override
+  String get exportColumnType => 'Type';
+
+  @override
+  String get exportColumnDetail => 'Detail';
+
+  @override
+  String get exportColumnDuration => 'Duration';
+
+  @override
+  String get exportColumnNotes => 'Notes';
+
+  @override
+  String exportDateFormat(String year, String month, String day) {
+    return '$year/$month/$day';
+  }
+
+  @override
+  String exportSleptMinutes(int minutes) {
+    return '${minutes}min sleep';
+  }
+
+  @override
+  String exportSleptHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}min sleep';
+  }
+
+  @override
+  String exportBreastSide(String side, int duration) {
+    return '$side ${duration}min';
+  }
+
+  @override
+  String exportFormulaAmount(String amount) {
+    return 'Formula ${amount}ml';
+  }
+
+  @override
+  String exportSolidFoodDetail(String name) {
+    return 'Solid food: $name';
+  }
+
+  @override
+  String exportTemperature(String temp) {
+    return 'Temperature $temp°C';
+  }
+
+  @override
+  String exportMedication(String name) {
+    return 'Medication: $name';
+  }
+
+  @override
+  String exportHospitalVisit(String name) {
+    return 'Hospital: $name';
+  }
+
+  @override
+  String exportSymptom(String name) {
+    return 'Symptom: $name';
+  }
+
+  @override
+  String get editActivityTitle => 'Edit Record';
+
+  @override
+  String get editActivityTypeLabel => 'Record Type';
+
+  @override
+  String get editStartTimeLabel => 'Start Time';
+
+  @override
+  String get editEndTimeLabel => 'End Time';
+
+  @override
+  String get editAmountLabel => 'Amount (ml)';
+
+  @override
+  String get editMemoLabel => 'Notes';
+
+  @override
+  String get editMemoHint => 'Enter notes';
+
+  @override
+  String get editSaveSuccess => 'Record updated';
+
+  @override
+  String editSaveFailed(String error) {
+    return 'Update failed: $error';
+  }
+
+  @override
+  String get editDeleteConfirmTitle => 'Delete this record?';
+
+  @override
+  String get editDeleteConfirmMessage =>
+      'Are you sure you want to delete this record?';
+
+  @override
+  String get editDeleteSuccess => 'Record deleted';
+
+  @override
+  String get editUndoDelete => 'Undo delete';
+
+  @override
+  String get settingsDangerZone => 'Danger Zone';
+
+  @override
+  String get settingsDeleteAccount => 'Delete Account';
+
+  @override
+  String get settingsDeleteAccountDesc =>
+      'All data will be permanently deleted';
+
+  @override
+  String get settingsDeleteAccountConfirm =>
+      'Are you sure you want to delete your account?';
+
+  @override
+  String get settingsLogout => 'Log out';
+
+  @override
+  String get settingsLogoutConfirm => 'Log out?';
+
+  @override
+  String get settingsNotLoggedIn => 'Not logged in';
+
+  @override
+  String get cryIdleTitle => 'Is your baby crying?';
+
+  @override
+  String get cryIdleSubtitle => 'Press the button below to analyze';
+
+  @override
+  String get cryRecordingTitle => 'Listening to the cry';
+
+  @override
+  String get cryRecordingSubtitle => 'Analysis is more accurate near the baby';
+
+  @override
+  String get cryAnalyzingTitle => 'Analyzing cry pattern';
+
+  @override
+  String get cryAnalyzingSubtitle => 'Please wait a moment';
+
+  @override
+  String get cryResultTitle => 'Analysis Result';
+
+  @override
+  String get cryStartButton => 'Start Analysis';
+
+  @override
+  String get cryStopButton => 'Stop Analysis';
+
+  @override
+  String get cryReanalyzeButton => 'Analyze Again';
+
+  @override
+  String cryConfidence(int percent) {
+    return 'Confidence $percent%';
+  }
+
+  @override
+  String get cryRecordSaved => 'Cry analysis saved';
+
+  @override
+  String get cryPrivacyNote =>
+      'All audio is processed on-device and never stored';
+
+  @override
+  String get cryAnalysisStart => 'Start Analysis';
+
+  @override
+  String get cryModelLoadFailed => 'Failed to load cry analysis model';
+
+  @override
+  String get cryModelLoading => 'Loading cry analysis model...';
+
+  @override
+  String get cryResultSavePrompt => 'Save the result?';
+
+  @override
+  String get cryRecordButton => 'Record';
+
+  @override
+  String get cryActionSuggestion => 'Try this';
+
+  @override
+  String get cryDunstanLabel => 'Dunstan Baby Language';
+
+  @override
+  String get healthRecordTimeLabel => 'Record Time';
+
+  @override
+  String get healthSelectType => 'Select record type';
+
+  @override
+  String get healthNotesHint => 'Enter additional notes';
+
+  @override
+  String get healthTempInput => 'Enter temperature';
+
+  @override
+  String get healthSymptomSelect => 'Select symptoms';
+
+  @override
+  String get healthMedNameHint => 'Medication name';
+
+  @override
+  String get healthMedDoseHint => 'Dosage';
+
+  @override
+  String get healthHospitalNameHint => 'Hospital name';
+
+  @override
+  String get healthMedicalDisclaimer =>
+      'This information is for reference only and is not medical advice';
+
+  @override
+  String get healthTempWarningLow => 'Temperature is low. Keep baby warm.';
+
+  @override
+  String get healthTempWarningMild => 'Mild fever detected. Monitor closely.';
+
+  @override
+  String get healthTempWarningHigh =>
+      'Fever detected. A doctor visit is recommended.';
+
+  @override
+  String get healthTempNormal => 'Normal temperature.';
+
+  @override
+  String get notesOptionalLabel => 'Notes (optional)';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get growthOverview => 'Growth Overview';
+
+  @override
+  String growthMeasuredAt(String date, String relative) {
+    return 'Measured on $date ($relative)';
+  }
+
+  @override
+  String get growthWeight => 'Weight';
+
+  @override
+  String get growthLength => 'Height';
+
+  @override
+  String get growthHeadCircumference => 'Head circumference';
+
+  @override
+  String get notMeasured => 'Not measured';
+
+  @override
+  String growthChartApplied(String chartType) {
+    return '$chartType applied';
+  }
+
+  @override
+  String growthCorrectedAge(String age) {
+    return 'Corrected age $age';
+  }
+
+  @override
+  String get tapToViewGrowthChart => 'Tap to view growth chart';
+
+  @override
+  String daysAgoCount(int count) {
+    return '${count}d ago';
+  }
+
+  @override
+  String onboardingBabyInfoTitle(String label) {
+    return 'Enter $label\'s\ninformation';
+  }
+
+  @override
+  String get hintSelectBirthDate => 'Select birth date';
+
+  @override
+  String get labelBirthWeightRequired => 'Birth weight (required)';
+
+  @override
+  String get hintBirthWeight => 'e.g. 3200';
+
+  @override
+  String get birthWeightHelperText => 'Used for growth tracking';
+
+  @override
+  String get questionIsPretermFull => 'Was your baby born prematurely?';
+
+  @override
+  String get prematureAgeInfo =>
+      'If born before 37 weeks, development is tracked using corrected age';
+
+  @override
+  String get emptyBabyInfoTitle => 'No baby information';
+
+  @override
+  String get emptyBabyInfoHint => 'Please complete onboarding';
+
+  @override
+  String get defaultBabyName => 'Baby';
+
+  @override
+  String unitMinutes(int count) {
+    return '${count}min';
+  }
+
+  @override
+  String get diaperChange => 'Diaper Change';
+
+  @override
+  String get feedingBreastfeeding => 'Breastfeeding';
+
+  @override
+  String get feedingBottleFeeding => 'Bottle Feeding';
+
+  @override
+  String get quickRecordTooltip => 'Tap to save with\nthe same as before!';
+
+  @override
+  String quickRecordRepeatWithName(String name) {
+    return 'Repeat $name\'s last record';
+  }
+
+  @override
+  String get timeAgoJustNow => 'Just now';
+
+  @override
+  String timeAgoMinutes(int count) {
+    return '${count}m ago';
+  }
+
+  @override
+  String timeAgoHours(int count) {
+    return '${count}h ago';
+  }
+
+  @override
+  String get labelRecord => 'Record';
+
+  @override
+  String healthTempValue(String temp) {
+    return 'Temp $temp°C';
+  }
+
+  @override
+  String get sectionDangerZone => 'Danger Zone';
+
+  @override
+  String get statusPreterm => 'Preterm';
+
+  @override
+  String get statusFullTerm => 'Full Term';
+
+  @override
+  String get addBabyMaxHint => 'Up to 4 babies allowed';
+
+  @override
+  String get familyInviteHint => 'Invite family members';
+
+  @override
+  String get importRecordsTitle => 'Import Records';
+
+  @override
+  String get importRecordsHint => 'Bring records from other apps';
+
+  @override
+  String get exportCSVTitle => 'Export to CSV';
+
+  @override
+  String get resetDataTitle => 'Reset Data';
+
+  @override
+  String get resetDataHint => 'Delete all data and start over';
+
+  @override
+  String get resetDataConfirm => 'Are you sure you want to delete all data?';
+
+  @override
+  String get resetWarningRecords => 'All records will be deleted';
+
+  @override
+  String get resetWarningBabies => 'Baby information will be deleted';
+
+  @override
+  String get resetWarningIrreversible => 'This action cannot be undone';
+
+  @override
+  String get resetCompleteMessage => 'Reset complete! Please restart the app.';
+
+  @override
+  String errorResetFailed(String error) {
+    return 'Reset failed: $error';
+  }
+
+  @override
+  String get cryHistoryComingSoon => 'History feature coming soon.';
+
+  @override
+  String get cryIdleHint => 'Press the button and let us hear the cry';
+
+  @override
+  String cryCorrectedAgeInfo(int weeks) {
+    return 'Analyzing based on corrected age $weeks weeks';
+  }
+
+  @override
+  String get cryListeningTitle => 'Listening...';
+
+  @override
+  String get cryListeningHint => 'Let us hear the cry for 2-10 seconds';
+
+  @override
+  String get cryAnalyzingText => 'Analyzing...';
+
+  @override
+  String get cryAnalyzingHint => 'AI is analyzing the cry pattern';
+
+  @override
+  String get cryDetailTitle => 'Analysis Details';
+
+  @override
+  String cryPretermAdjustInfo(int weeks) {
+    return 'Confidence adjusted based on corrected age $weeks weeks.';
+  }
+
+  @override
+  String get cryFeedbackThanks => 'Thank you for your feedback!';
+
+  @override
+  String get cryFeedbackQuestion => 'Was the analysis correct?';
+
+  @override
+  String get cryFeedbackCorrect => 'Yes';
+
+  @override
+  String get cryFeedbackIncorrect => 'No';
+
+  @override
+  String get cryErrorUnknown => 'An unknown error occurred.';
+
+  @override
+  String get buttonRetry => 'Retry';
+
+  @override
+  String cryRemainingCount(int count) {
+    return 'Remaining today: $count';
+  }
+
+  @override
+  String get buttonUpgrade => 'Upgrade';
+
+  @override
+  String get cryDisclaimer =>
+      'This analysis is for reference only and does not replace medical advice. Consult your doctor if concerned.';
+
+  @override
+  String get cryDisclaimerWithPreterm =>
+      'This analysis is for reference only and does not replace medical advice. Preterm babies may have varying cry patterns, so consult your doctor if concerned.';
+
+  @override
+  String get cryEmptyBabyInfo => 'Please register baby information first';
+
+  @override
+  String get csvHeaderDate => 'Date';
+
+  @override
+  String get csvHeaderTime => 'Time';
+
+  @override
+  String get csvHeaderEndTime => 'End Time';
+
+  @override
+  String get csvHeaderBaby => 'Baby';
+
+  @override
+  String get csvHeaderType => 'Type';
+
+  @override
+  String get csvHeaderDetail => 'Detail';
+
+  @override
+  String get csvHeaderAmountDuration => 'Amount/Duration';
+
+  @override
+  String get csvHeaderNotes => 'Notes';
+
+  @override
+  String get unknownBaby => 'Unknown';
+
+  @override
+  String get sleepOrAddNewRecord => 'or add new record';
+
+  @override
+  String sleepOngoingStatus(String babyName, String sleepType) {
+    return '$babyName $sleepType in progress';
+  }
+
+  @override
+  String get sleepCancelConfirmBody =>
+      'The ongoing sleep record will be deleted.';
+
+  @override
+  String get sleepModeAddRecord => 'Add Record';
+
+  @override
+  String get sleepStartNow => 'Start Sleep Now';
+
+  @override
+  String get sleepStartNowHint =>
+      'Sleep will start when you save.\nPress the end button on the home screen when baby wakes up.';
+
+  @override
+  String get sleepTotalDuration => 'Total sleep: ';
+
+  @override
+  String get hintSleepNotes => 'Sleep quality, notes, etc.';
+
+  @override
+  String sleepStartedMessage(String name) {
+    return '$name sleep started! End it from the home screen';
+  }
+
+  @override
+  String get labelTimeSelect => 'Select time';
+
+  @override
+  String editActivityTitleWithType(String title) {
+    return 'Edit $title';
+  }
+
+  @override
+  String get labelTime => 'Time';
+
+  @override
+  String get labelStart => 'Start';
+
+  @override
+  String get labelEnd => 'End';
+
+  @override
+  String get labelNotSet => 'Not set';
+
+  @override
+  String get labelType => 'Type';
+
+  @override
+  String get feedingInfo => 'Feeding Info';
+
+  @override
+  String get feedingAmount => 'Amount';
+
+  @override
+  String get diaperInfo => 'Diaper Info';
+
+  @override
+  String get playInfo => 'Play Info';
+
+  @override
+  String get healthInfo => 'Health Info';
+
+  @override
+  String get labelNotes => 'Notes';
+
+  @override
+  String get hintNotes => 'Enter notes';
+
+  @override
+  String get labelStartTime => 'Start Time';
+
+  @override
+  String get labelEndTime => 'End Time';
+
+  @override
+  String errorSaveFailed(String error) {
+    return 'Save failed: $error';
+  }
+
+  @override
+  String get activityHealth => 'Health';
+
+  @override
+  String get labelOther => 'Other';
+
+  @override
+  String get healthTypeSelectLabel => 'Select record type';
+
+  @override
+  String get healthSymptomSelectLabel => 'Select symptoms (multiple)';
+
+  @override
+  String get symptomOther => 'Other';
+
+  @override
+  String get healthMedicationInfo => 'Medication Info';
+
+  @override
+  String get hintMedication => 'Medication name, dosage, method, etc.';
+
+  @override
+  String get healthHospitalInfo => 'Hospital Visit Info';
+
+  @override
+  String get hintHospital => 'Hospital name, treatment, prescription, etc.';
+
+  @override
+  String get hintAdditionalNotes => 'Additional notes';
+
+  @override
+  String get medicalDisclaimer =>
+      'This record is for reference only and does not replace medical diagnosis.\nConsult a pediatrician if you notice any unusual symptoms.';
+
+  @override
+  String get labelRecordTime => 'Record Time';
 }
