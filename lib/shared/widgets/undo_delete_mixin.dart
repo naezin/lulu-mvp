@@ -26,6 +26,10 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
     // 1. Undo용 백업
     _pendingDelete = activity;
 
+    // Sprint 20 HF #1: ScaffoldMessenger를 미리 캡처하여 context 무효화 방지
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = S.of(context);
+
     // 2. 즉시 삭제 (DB + 로컬 상태)
     try {
       await _activityRepository.deleteActivity(activity.id);
@@ -33,7 +37,7 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
     } catch (e) {
       _pendingDelete = null;
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           SnackBar(content: Text('Delete failed: $e')),
         );
       }
@@ -41,27 +45,26 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
     }
 
     // 3. Undo 토스트 표시 (5초)
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(LuluIcons.checkCircleOutline, color: Colors.white, size: 20),
-              SizedBox(width: 8),
-              Text(S.of(context)?.recordDeleted ?? 'Record deleted'),
-            ],
-          ),
-          duration: const Duration(seconds: 5),
-          behavior: SnackBarBehavior.floating,
-          action: SnackBarAction(
-            label: S.of(context)?.undoAction ?? 'Undo',
-            textColor: Colors.white,
-            onPressed: () => _undoDelete(homeProvider, context),
-          ),
+    // Sprint 20 HF #1: 캡처된 messenger 사용 → 탭 전환 후에도 정상 dismiss
+    messenger.clearSnackBars();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(LuluIcons.checkCircleOutline, color: Colors.white, size: 20),
+            const SizedBox(width: 8),
+            Text(l10n?.recordDeleted ?? 'Record deleted'),
+          ],
         ),
-      );
-    }
+        duration: const Duration(seconds: 5),
+        behavior: SnackBarBehavior.floating,
+        action: SnackBarAction(
+          label: l10n?.undoAction ?? 'Undo',
+          textColor: Colors.white,
+          onPressed: () => _undoDelete(homeProvider, messenger),
+        ),
+      ),
+    );
 
     // 4. 5초 후 백업 삭제
     Future.delayed(const Duration(seconds: 6), () {
@@ -71,7 +74,8 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
 
   /// 삭제 취소 (재생성)
   /// 🔴 중요: 새 ID로 생성해야 DB 충돌 방지
-  Future<void> _undoDelete(HomeProvider homeProvider, BuildContext context) async {
+  /// Sprint 20 HF #1: ScaffoldMessengerState 직접 전달 → context 무효화 방지
+  Future<void> _undoDelete(HomeProvider homeProvider, ScaffoldMessengerState messenger) async {
     if (_pendingDelete == null) return;
 
     try {
@@ -87,10 +91,12 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
       // 🔧 Sprint 19 G-F1: 복구 성공 토스트 제거 → 햅틱 대체
       HapticFeedback.mediumImpact();
     } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+      try {
+        messenger.showSnackBar(
           SnackBar(content: Text('Restore failed: $e')),
         );
+      } catch (_) {
+        // messenger가 이미 dispose된 경우 무시
       }
     } finally {
       _pendingDelete = null;

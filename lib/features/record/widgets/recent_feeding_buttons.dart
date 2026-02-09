@@ -192,10 +192,15 @@ class RecentFeedingButtons extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    // 저장 성공 콜백
-    onSaveSuccess?.call();
+    // Sprint 20 HF #10/#11: onSaveSuccess가 화면을 닫는 경우
+    // SnackBar를 표시하지 않고 햅틱 피드백만 제공 (화면 닫힌 후 SnackBar orphan 방지)
+    if (onSaveSuccess != null) {
+      HapticFeedback.mediumImpact();
+      onSaveSuccess?.call();
+      return;
+    }
 
-    // 저장 토스트 + 취소 — K2: clearSnackBars + duration 3초
+    // onSaveSuccess 없는 경우: 토스트 + 취소 표시 (화면이 안 닫힘)
     ScaffoldMessenger.of(context)
       ..clearSnackBars()
       ..showSnackBar(
@@ -216,7 +221,6 @@ class RecentFeedingButtons extends StatelessWidget {
           textColor: Colors.white,
           onPressed: () async {
             final success = await provider.undoLastSave();
-            // 🔧 Sprint 19 G-F2: 취소 성공 토스트 제거 → 햅틱 대체
             if (context.mounted && success) {
               HapticFeedback.mediumImpact();
             }

@@ -133,11 +133,14 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // HOTFIX v1.2: 최근 3개 빠른 수유 버튼
+                      // Sprint 20 HF #10/#11: onSaveSuccess에서 화면 닫기 + SnackBar 정리
                       RecentFeedingButtons(
                         babyId: provider.selectedBabyId ?? widget.babies.first.id,
                         onEditRequest: _handleEditRequest,
                         onSaveSuccess: () {
-                          // 저장 성공 시 화면 닫기 (선택적)
+                          if (mounted) {
+                            Navigator.of(context).pop();
+                          }
                         },
                       ),
 
