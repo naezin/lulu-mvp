@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/services/supabase_service.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../models/family_invite_model.dart';
 import '../providers/family_provider.dart';
@@ -70,8 +71,8 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: LuluTextColors.primary.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(2),
+              color: LuluTextColors.primaryHint,
+              borderRadius: BorderRadius.circular(LuluRadius.xxs),
             ),
           ),
           const SizedBox(height: 24),
@@ -79,7 +80,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
           // 헤더
           Row(
             children: [
-              const Text('👨‍👩‍👧', style: TextStyle(fontSize: 28)),
+              const Icon(LuluIcons.people, color: LuluColors.lavenderMist, size: 28),
               const SizedBox(width: 12),
               Text(
                 l10n.inviteFamily,
@@ -103,8 +104,8 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: LuluColors.deepIndigo.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(12),
+                color: LuluColors.deepIndigoMedium,
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Column(
                 children: [
@@ -121,7 +122,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
                   Text(
                     l10n.inviteValidDays(_invite!.daysLeft.toString()),
                     style: TextStyle(
-                      color: LuluTextColors.primary.withOpacity(0.6),
+                      color: LuluTextColors.primarySoft,
                       fontSize: 14,
                     ),
                   ),
@@ -138,12 +139,12 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
               decoration: InputDecoration(
                 labelText: l10n.inviteByEmail,
                 labelStyle: TextStyle(
-                  color: LuluTextColors.primary.withOpacity(0.6),
+                  color: LuluTextColors.primarySoft,
                 ),
                 filled: true,
-                fillColor: LuluColors.deepIndigo.withOpacity(0.3),
+                fillColor: LuluColors.deepIndigoBorder,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                   borderSide: BorderSide.none,
                 ),
                 suffixIcon: IconButton(
@@ -157,7 +158,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
                             color: LuluColors.lavenderMist,
                           ),
                         )
-                      : const Icon(Icons.send, color: LuluColors.lavenderMist),
+                      : const Icon(LuluIcons.send, color: LuluColors.lavenderMist),
                 ),
               ),
             ),
@@ -170,7 +171,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
                   child: OutlinedButton.icon(
                     onPressed: _shareKakao,
                     icon:
-                        const Icon(Icons.chat_bubble, color: LuluColors.lavenderMist),
+                        const Icon(LuluIcons.chat, color: LuluColors.lavenderMist),
                     label: Text(
                       l10n.shareKakao,
                       style: const TextStyle(color: LuluColors.lavenderMist),
@@ -185,7 +186,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: _copyCode,
-                    icon: const Icon(Icons.copy, color: LuluColors.lavenderMist),
+                    icon: const Icon(LuluIcons.copy, color: LuluColors.lavenderMist),
                     label: Text(
                       l10n.copyCode,
                       style: const TextStyle(color: LuluColors.lavenderMist),
@@ -246,7 +247,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
     if (_invite == null) return;
 
     final userName =
-        Supabase.instance.client.auth.currentUser?.userMetadata?['name'];
+        SupabaseService.currentUser?.userMetadata?['name'];
 
     await _inviteService.shareInvite(_invite!.inviteCode, userName as String?);
   }

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../core/config/feature_flags.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/services/supabase_service.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/last_activity_row.dart';
 import '../../../shared/widgets/sweet_spot_card.dart';
@@ -64,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: Padding(
                     padding: const EdgeInsets.only(left: LuluSpacing.lg),
                     child: Icon(
-                      Icons.menu,
+                      LuluIcons.menuIcon,
                       color: LuluTextColors.secondary,
                     ),
                   ),
@@ -80,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(right: LuluSpacing.lg),
                       child: Icon(
-                        Icons.settings_outlined,
+                        LuluIcons.settingsOutlined,
                         color: LuluTextColors.secondary,
                       ),
                     ),
@@ -110,10 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       // 아기가 없으면 빈 상태
                       if (homeProvider.babies.isEmpty)
                         _buildEmptyBabiesState()
-                      // 아기는 있지만 활동이 없으면 빈 활동 상태 (BUG-002 FIX: 필터링된 활동 사용)
-                      else if (homeProvider.filteredTodayActivities.isEmpty)
+                      // Sprint 19 수정 2: 신규 유저(전체 기록 0)만 Empty State 표시
+                      // 기존 유저는 오늘 기록 없어도 Normal Content 표시
+                      else if (homeProvider.filteredTodayActivities.isEmpty &&
+                          !homeProvider.hasAnyRecordsEver)
                         _buildEmptyActivitiesState(context, homeProvider)
-                      // 정상 상태: 모든 카드 표시
+                      // 정상 상태: 모든 카드 표시 (오늘 활동 없어도)
                       else
                         _buildNormalContent(context, homeProvider),
 
@@ -144,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: LuluSpacing.lg),
           Text(
-            '아기 정보가 없습니다',
+            S.of(context)!.emptyBabiesTitle,
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.bold,
@@ -152,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: LuluSpacing.sm),
           Text(
-            '온보딩을 완료해주세요',
+            S.of(context)!.emptyBabiesHint,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -223,9 +228,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildNormalContent(BuildContext context, HomeProvider homeProvider) {
     // Sweet Spot Empty State 판단: 수면 기록 없음
     final hasSleepRecord = homeProvider.lastSleep != null;
-    // 🆕 HOTFIX: 수유/기저귀만 있고 수면 없는 경우 안내 메시지 표시
-    final hasOtherActivitiesOnly = !hasSleepRecord &&
-        (homeProvider.lastFeeding != null || homeProvider.lastDiaper != null);
 
     return Consumer<OngoingSleepProvider>(
       builder: (context, sleepProvider, _) {
@@ -248,8 +250,9 @@ class _HomeScreenState extends State<HomeScreen> {
             SweetSpotCard(
               // 기존 props
               state: homeProvider.sweetSpotState,
-              // 🆕 HOTFIX: isEmpty는 수면 중이 아니고 수면 기록도 없고 다른 활동도 없을 때만 true
-              isEmpty: !isSleeping && !hasSleepRecord && !hasOtherActivitiesOnly,
+              // 🔧 Sprint 19 FIX: isEmpty는 신규 유저(전체 기록 0건)일 때만 true
+              // 기존 유저는 오늘 수면 없어도 Normal State 또는 NoSleepGuide 표시
+              isEmpty: !isSleeping && !homeProvider.hasAnyRecordsEver,
               estimatedTime: _getEstimatedTimeText(homeProvider),
               onRecordSleep: () => _navigateToRecord(context, 'sleep'),
               // 🆕 수면 중 props (Sprint 7 Day 2)
@@ -263,8 +266,10 @@ class _HomeScreenState extends State<HomeScreen> {
               progress: homeProvider.sweetSpotProgress,
               recommendedTime: homeProvider.recommendedSleepTime,
               isNightTime: homeProvider.isNightTime,
-              // 🆕 HOTFIX: 수면 기록 없지만 다른 활동 있을 때 안내 메시지
-              hasOtherActivitiesOnly: hasOtherActivitiesOnly,
+              // 🔧 Sprint 19 FIX: 기존 유저 + 오늘 수면 없음 → NoSleepGuide 표시
+              hasOtherActivitiesOnly: homeProvider.hasAnyRecordsEver && !hasSleepRecord,
+              // 🆕 Sprint 19: 신규 유저 여부 (전체 기록 0건)
+              isNewUser: !homeProvider.hasAnyRecordsEver,
             ),
 
             // 🆕 울음 분석 카드 (Feature Flag로 제어)
@@ -285,18 +290,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Sweet Spot 예상 시간 텍스트
   String? _getEstimatedTimeText(HomeProvider homeProvider) {
+    final l10n = S.of(context)!;
     final minutes = homeProvider.minutesUntilSweetSpot;
     if (minutes <= 0) return null;
 
     if (minutes < 60) {
-      return '약 $minutes분 후';
+      return l10n.sweetSpotEstimateMinutes(minutes);
     } else {
       final hours = minutes ~/ 60;
       final mins = minutes % 60;
       if (mins == 0) {
-        return '약 $hours시간 후';
+        return l10n.sweetSpotEstimateHours(hours);
       }
-      return '약 $hours시간 $mins분 후';
+      return l10n.sweetSpotEstimateHoursMinutes(hours, mins);
     }
   }
 
@@ -384,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
     BuildContext context,
     OngoingSleepProvider sleepProvider,
   ) {
-    final babyName = sleepProvider.ongoingSleep?.babyName ?? '아기';
+    final babyName = sleepProvider.ongoingSleep?.babyName ?? S.of(context)!.babyDefault;
     final startTime = sleepProvider.sleepStartTime;
 
     if (startTime == null) return;
@@ -394,10 +400,10 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (dialogContext) => AlertDialog(
         backgroundColor: LuluColors.surfaceCard,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
         ),
         title: Text(
-          '수면을 종료할까요?',
+          S.of(context)!.sleepEndConfirmTitle,
           style: LuluTextStyles.titleMedium.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -406,35 +412,35 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDialogInfoRow('아기', babyName),
+            _buildDialogInfoRow(S.of(context)!.babyDefault, babyName),
             const SizedBox(height: 8),
             _buildDialogInfoRow(
-              '시작',
-              DateFormat('a h:mm', 'ko').format(startTime),
+              S.of(context)!.labelStart,
+              DateFormat.jm(Localizations.localeOf(context).toString()).format(startTime),
             ),
             const SizedBox(height: 8),
             _buildDialogInfoRow(
-              '종료',
-              DateFormat('a h:mm', 'ko').format(DateTime.now()),
+              S.of(context)!.labelEnd,
+              DateFormat.jm(Localizations.localeOf(context).toString()).format(DateTime.now()),
             ),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: LuluActivityColors.sleepBg,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(
-                    Icons.timer_outlined,
+                    LuluIcons.timerOutlined,
                     color: LuluActivityColors.sleep,
                     size: 24,
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '총 수면: ${sleepProvider.formattedElapsedTime}',
+                    '${S.of(context)!.sleepTotalDuration}${sleepProvider.formattedElapsedTime}',
                     style: LuluTextStyles.titleMedium.copyWith(
                       color: LuluActivityColors.sleep,
                       fontWeight: FontWeight.bold,
@@ -449,7 +455,7 @@ class _HomeScreenState extends State<HomeScreen> {
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: Text(
-              '취소',
+              S.of(context)!.buttonCancel,
               style: LuluTextStyles.labelLarge.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -468,36 +474,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 homeProvider.addActivity(savedActivity);
               }
 
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Row(
-                    children: [
-                      const Icon(LuluIcons.sleep, size: 18, color: Colors.white),
-                      const SizedBox(width: 8),
-                      Text(
-                        '수면 기록이 저장되었어요',
-                        style: LuluTextStyles.bodyMedium.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: LuluActivityColors.sleep,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              );
+              // 🔧 Sprint 19 G-R2: 토스트 제거 → 햅틱 대체
+              HapticFeedback.mediumImpact();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: LuluActivityColors.sleep,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
             ),
-            child: const Text('종료'),
+            child: Text(S.of(context)!.buttonEnd),
           ),
         ],
       ),

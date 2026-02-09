@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
+import '../../core/design_system/lulu_shadows.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_typography.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 
 /// 라벨이 있는 확장 FAB (시안 B-4)
 ///
@@ -64,27 +67,21 @@ class _LabeledFabState extends State<LabeledFab>
               color: _isOpen
                   ? LuluColors.surfaceElevated
                   : LuluColors.lavenderMist,
-              borderRadius: BorderRadius.circular(_isOpen ? 28 : 24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              borderRadius: BorderRadius.circular(_isOpen ? LuluRadius.xxl : LuluRadius.xl),
+              boxShadow: LuluShadows.elevated,
             ),
             child: _isOpen
-                ? const Icon(Icons.close, color: LuluTextColors.primary)
+                ? const Icon(LuluIcons.close, color: LuluTextColors.primary)
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(
-                        Icons.add,
+                        LuluIcons.add,
                         color: LuluColors.midnightNavy,
                         size: 20,
                       ),
                       Text(
-                        '기록',
+                        S.of(context)!.navRecord,
                         style: LuluTextStyles.caption.copyWith(
                           color: LuluColors.midnightNavy,
                           fontWeight: FontWeight.bold,
@@ -100,12 +97,13 @@ class _LabeledFabState extends State<LabeledFab>
   }
 
   List<Widget> _buildExpandedActions() {
+    final l10n = S.of(context)!;
     final actions = [
-      _FabAction(icon: LuluIcons.sleep, label: '수면', color: LuluActivityColors.sleep, onTap: () => _onRecord('sleep')),
-      _FabAction(icon: LuluIcons.feeding, label: '수유', color: LuluActivityColors.feeding, onTap: () => _onRecord('feeding')),
-      _FabAction(icon: LuluIcons.diaper, label: '기저귀', color: LuluActivityColors.diaper, onTap: () => _onRecord('diaper')),
-      _FabAction(icon: LuluIcons.play, label: '놀이', color: LuluActivityColors.play, onTap: () => _onRecord('play')),
-      _FabAction(icon: LuluIcons.health, label: '건강', color: LuluActivityColors.health, onTap: () => _onRecord('health')),
+      _FabAction(icon: LuluIcons.sleep, label: l10n.activityTypeSleep, color: LuluActivityColors.sleep, onTap: () => _onRecord('sleep')),
+      _FabAction(icon: LuluIcons.feeding, label: l10n.activityTypeFeeding, color: LuluActivityColors.feeding, onTap: () => _onRecord('feeding')),
+      _FabAction(icon: LuluIcons.diaper, label: l10n.activityTypeDiaper, color: LuluActivityColors.diaper, onTap: () => _onRecord('diaper')),
+      _FabAction(icon: LuluIcons.play, label: l10n.activityTypePlay, color: LuluActivityColors.play, onTap: () => _onRecord('play')),
+      _FabAction(icon: LuluIcons.health, label: l10n.activityTypeHealth, color: LuluActivityColors.health, onTap: () => _onRecord('health')),
     ];
 
     return actions.reversed.map((action) {
@@ -143,11 +141,11 @@ class _FabAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: LuluColors.surfaceElevated,
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(LuluRadius.xl),
       elevation: 4,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(LuluRadius.xl),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Row(

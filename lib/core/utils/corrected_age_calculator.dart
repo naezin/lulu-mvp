@@ -1,4 +1,5 @@
 import '../../data/models/baby_type.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 
 /// 교정연령 계산기 - Neonatology Specialist 검증 필수
 ///
@@ -146,34 +147,38 @@ class CorrectedAgeCalculator {
   /// 교정연령 문자열 포맷
   /// 예: "3개월 2주" 또는 "교정 3개월 2주"
   static String formatCorrectedAge({
+    required S l10n,
     required int correctedAgeInWeeks,
     bool includePrefix = true,
   }) {
     final months = correctedAgeInWeeks ~/ 4;
     final weeks = correctedAgeInWeeks % 4;
 
-    final prefix = includePrefix ? '교정 ' : '';
+    final prefix = includePrefix ? l10n.correctedAgeFormatPrefix : '';
 
     if (months == 0) {
-      return '$prefix$weeks주';
+      return l10n.correctedAgeFormatWeeksOnly(prefix, weeks);
     } else if (weeks == 0) {
-      return '$prefix$months개월';
+      return l10n.correctedAgeFormatMonthsOnly(prefix, months);
     } else {
-      return '$prefix$months개월 $weeks주';
+      return l10n.correctedAgeFormatMonthsWeeks(prefix, months, weeks);
     }
   }
 
   /// 실제연령 문자열 포맷
-  static String formatActualAge(int actualAgeInWeeks) {
+  static String formatActualAge({
+    required S l10n,
+    required int actualAgeInWeeks,
+  }) {
     final months = actualAgeInWeeks ~/ 4;
     final weeks = actualAgeInWeeks % 4;
 
     if (months == 0) {
-      return '$weeks주';
+      return l10n.actualAgeFormatWeeksOnly(weeks);
     } else if (weeks == 0) {
-      return '$months개월';
+      return l10n.actualAgeFormatMonthsOnly(months);
     } else {
-      return '$months개월 $weeks주';
+      return l10n.actualAgeFormatMonthsWeeks(months, weeks);
     }
   }
 }

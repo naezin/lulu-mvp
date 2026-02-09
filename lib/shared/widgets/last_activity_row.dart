@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 
 /// 마지막 활동 Row 위젯
 ///
@@ -25,11 +27,13 @@ class LastActivityRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(color: LuluColors.glassBorder),
       ),
       child: Row(
@@ -37,7 +41,7 @@ class LastActivityRow extends StatelessWidget {
           Expanded(
             child: _ActivityItem(
               icon: LuluIcons.sleep,
-              label: _formatTimeAgo(lastSleep),
+              label: _formatTimeAgo(lastSleep, l10n),
               color: LuluActivityColors.sleep,
             ),
           ),
@@ -45,7 +49,7 @@ class LastActivityRow extends StatelessWidget {
           Expanded(
             child: _ActivityItem(
               icon: LuluIcons.feeding,
-              label: _formatTimeAgo(lastFeeding),
+              label: _formatTimeAgo(lastFeeding, l10n),
               color: LuluActivityColors.feeding,
             ),
           ),
@@ -53,7 +57,7 @@ class LastActivityRow extends StatelessWidget {
           Expanded(
             child: _ActivityItem(
               icon: LuluIcons.diaper,
-              label: _formatTimeAgo(lastDiaper),
+              label: _formatTimeAgo(lastDiaper, l10n),
               color: LuluActivityColors.diaper,
             ),
           ),
@@ -63,20 +67,20 @@ class LastActivityRow extends StatelessWidget {
   }
 
   /// 시간을 상대적 표현으로 변환
-  String _formatTimeAgo(DateTime? time) {
+  String _formatTimeAgo(DateTime? time, S? l10n) {
     if (time == null) return '-';
 
     final now = DateTime.now();
     final diff = now.difference(time);
 
     if (diff.inMinutes < 1) {
-      return '방금';
+      return l10n?.timeAgoJustNow ?? 'Just now';
     } else if (diff.inMinutes < 60) {
-      return '${diff.inMinutes}분 전';
+      return l10n?.timeAgoMinutes(diff.inMinutes) ?? '${diff.inMinutes}m ago';
     } else if (diff.inHours < 24) {
-      return '${diff.inHours}시간 전';
+      return l10n?.timeAgoHours(diff.inHours) ?? '${diff.inHours}h ago';
     } else {
-      return '${diff.inDays}일 전';
+      return l10n?.daysAgoCount(diff.inDays) ?? '${diff.inDays}d ago';
     }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../models/insight_data.dart';
 
@@ -30,7 +32,7 @@ class InsightCard extends StatelessWidget {
       padding: EdgeInsets.all(compact ? 8 : 12),
       decoration: BoxDecoration(
         color: _getBackgroundColor(),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
         border: Border.all(
           color: _getBorderColor(),
           width: 1,
@@ -61,11 +63,11 @@ class InsightCard extends StatelessWidget {
   IconData _getIcon() {
     switch (insight.type) {
       case InsightType.positive:
-        return Icons.lightbulb_outline;
+        return LuluIcons.tip;
       case InsightType.neutral:
-        return Icons.info_outline;
+        return LuluIcons.infoOutline;
       case InsightType.attention:
-        return Icons.trending_flat;
+        return LuluIcons.trendingFlat;
     }
   }
 

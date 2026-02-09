@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
@@ -57,7 +58,7 @@ class ActivityListItem extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.edit_rounded, size: 20),
+                  const Icon(LuluIcons.edit, size: 20),
                   const SizedBox(height: 2),
                   Text(
                     l10n?.actionEdit ?? 'Edit',
@@ -83,7 +84,7 @@ class ActivityListItem extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.delete_rounded, size: 20),
+                  const Icon(LuluIcons.delete, size: 20),
                   const SizedBox(height: 2),
                   Text(
                     l10n?.buttonDelete ?? 'Delete',
@@ -104,8 +105,8 @@ class ActivityListItem extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: LuluColors.deepIndigo.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(12),
+                  color: LuluColors.deepIndigoMedium,
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
                 child: Row(
                   children: [
@@ -113,8 +114,8 @@ class ActivityListItem extends StatelessWidget {
                     const SizedBox(width: 16),
                     Expanded(child: _buildContent(l10n)),
                     Icon(
-                      Icons.chevron_left_rounded,
-                      color: LuluTextColors.tertiary.withValues(alpha: 0.5),
+                      LuluIcons.chevronLeft,
+                      color: LuluTextColors.tertiaryMedium,
                       size: 20,
                     ),
                   ],
@@ -132,12 +133,12 @@ class ActivityListItem extends StatelessWidget {
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: LuluColors.lavenderMist,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(LuluRadius.sm),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.swipe_left_rounded,
+                          const Icon(LuluIcons.chevronLeft,
                               size: 14, color: Colors.white),
                           const SizedBox(width: 4),
                           Text(

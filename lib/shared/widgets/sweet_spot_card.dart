@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
@@ -70,6 +71,10 @@ class SweetSpotCard extends StatefulWidget {
   /// 수면 기록 없지만 다른 활동(수유/기저귀)은 있음
   final bool hasOtherActivitiesOnly;
 
+  // 🆕 Sprint 19: 신규 유저 여부 (전체 기록 0건)
+  /// true면 "첫 기록을 시작해보세요" 표시, false면 "오늘 수면 기록이 없어요" 표시
+  final bool isNewUser;
+
   const SweetSpotCard({
     super.key,
     required this.state,
@@ -89,6 +94,7 @@ class SweetSpotCard extends StatefulWidget {
     this.recommendedTime,
     this.isNightTime = false,
     this.hasOtherActivitiesOnly = false,
+    this.isNewUser = true, // 기본값 true (하위 호환)
   });
 
   @override
@@ -154,8 +160,9 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
   /// 🆕 수면 진행 중 카드 (OngoingSleepCard 대체)
   Widget _buildSleepingCard(BuildContext context) {
-    final sleepTypeText = widget.sleepType == 'night' ? '밤잠' : '낮잠';
-    final babyName = widget.babyName ?? '아기';
+    final l10n = S.of(context)!;
+    final sleepTypeText = widget.sleepType == 'night' ? l10n.sleepTypeNight : l10n.sleepTypeNap;
+    final babyName = widget.babyName ?? l10n.babyDefault;
     final elapsed = DateTime.now().difference(widget.sleepStartTime!);
 
     return Container(
@@ -165,11 +172,11 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            LuluActivityColors.sleep.withValues(alpha: 0.15),
-            LuluActivityColors.sleep.withValues(alpha: 0.08),
+            LuluActivityColors.sleepLight,
+            LuluActivityColors.sleepSubtle,
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
           color: LuluActivityColors.sleep.withValues(alpha: 0.4),
           width: 2,
@@ -185,7 +192,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: LuluActivityColors.sleep.withValues(alpha: 0.2),
+                  color: LuluActivityColors.sleepSelected,
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
@@ -202,7 +209,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$babyName $sleepTypeText 중',
+                      l10n.sleepOngoingStatus(babyName, sleepTypeText),
                       style: LuluTextStyles.titleSmall.copyWith(
                         color: LuluTextColors.primary,
                         fontWeight: FontWeight.w600,
@@ -226,7 +233,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
           // 시작 시간
           _buildInfoRow(
-            '시작',
+            l10n.sweetSpotSleepStart,
             DateFormat('a h:mm', 'ko').format(widget.sleepStartTime!),
           ),
 
@@ -242,7 +249,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
               ),
               child: Row(
@@ -251,7 +258,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                   const Icon(LuluIcons.sleep, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    '탭하여 수면 종료',
+                    l10n.sweetSpotTapToEndSleep,
                     style: LuluTextStyles.labelLarge.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -268,12 +275,13 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
   /// Duration 포맷팅
   String _formatDuration(Duration duration) {
+    final l10n = S.of(context)!;
     final hours = duration.inHours;
     final minutes = duration.inMinutes.remainder(60);
     if (hours > 0) {
-      return '$hours시간 $minutes분';
+      return l10n.durationHoursMinutes(hours, minutes);
     }
-    return '$minutes분';
+    return l10n.durationMinutes(minutes);
   }
 
   /// 정보 Row
@@ -307,7 +315,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
           color: LuluColors.glassBorder,
           width: 1,
@@ -318,17 +326,19 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         children: [
           // 헤더 아이콘
           Icon(
-            Icons.celebration_rounded,
+            LuluIcons.celebration,
             size: 48,
             color: LuluColors.champagneGold,
           ),
           const SizedBox(height: LuluSpacing.md),
 
-          // 타이틀
+          // 타이틀 - Sprint 19: 신규 유저 vs 기존 유저 분기
           Text(
-            babyName != null
-                ? l10n.sweetSpotEmptyTitleWithName(babyName)
-                : l10n.sweetSpotEmptyTitleDefault,
+            widget.isNewUser
+                ? (babyName != null
+                    ? l10n.sweetSpotEmptyTitleWithName(babyName)
+                    : l10n.sweetSpotEmptyTitleDefault)
+                : l10n.sweetSpotNoSleepTitle,
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.bold,
@@ -337,9 +347,11 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           ),
           const SizedBox(height: LuluSpacing.sm),
 
-          // 액션 힌트
+          // 액션 힌트 - Sprint 19: 신규 유저 vs 기존 유저 분기
           Text(
-            l10n.sweetSpotEmptyActionHint,
+            widget.isNewUser
+                ? l10n.sweetSpotEmptyActionHint
+                : l10n.sweetSpotNoSleepHint,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -378,7 +390,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.lightbulb_outline_rounded,
+                LuluIcons.tip,
                 size: 16,
                 color: LuluColors.champagneGold,
               ),
@@ -412,7 +424,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
             color: color.withValues(alpha: 0.3),
             width: 1,
@@ -446,7 +458,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(color: LuluColors.glassBorder),
       ),
       child: Column(
@@ -520,7 +532,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(color: LuluColors.glassBorder),
       ),
       child: Column(
@@ -563,11 +575,11 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
               style: OutlinedButton.styleFrom(
                 foregroundColor: LuluActivityColors.sleep,
                 side: BorderSide(
-                  color: LuluActivityColors.sleep.withValues(alpha: 0.5),
+                  color: LuluActivityColors.sleepMedium,
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
               ),
             ),
@@ -582,9 +594,9 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     final sleepType = widget.isNightTime ? l10n.sleepTypeNight : l10n.sleepTypeNap;
 
     if (widget.babyName != null) {
-      return '${widget.babyName}의 다음 $sleepType';
+      return l10n.sweetSpotTitleWithName(widget.babyName!, sleepType);
     }
-    return '다음 $sleepType';
+    return l10n.sweetSpotNextSleepType(sleepType);
   }
 
   /// 시간 텍스트: "약 오후 2:30 (45분 후)"
@@ -592,7 +604,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     if (widget.recommendedTime != null) {
       final formattedTime = DateFormat('a h:mm', 'ko').format(widget.recommendedTime!);
       final minutesUntil = widget.recommendedTime!.difference(DateTime.now()).inMinutes.clamp(0, 999);
-      return '약 $formattedTime ($minutesUntil분 후)';
+      return l10n.sweetSpotTimeEstimate(formattedTime, minutesUntil);
     }
     return widget.estimatedTime ?? '';
   }
@@ -614,7 +626,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       margin: const EdgeInsets.only(top: LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(LuluRadius.indicator),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -631,7 +643,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                       _getProgressColor(progressValue),
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(LuluRadius.indicator),
                 ),
               ),
               // Sweet Spot 마커 (80% 위치)
@@ -644,7 +656,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
                   width: 3,
                   decoration: BoxDecoration(
                     color: LuluColors.champagneGold,
-                    borderRadius: BorderRadius.circular(1.5),
+                    borderRadius: BorderRadius.circular(1.5), // special: design system outer
                   ),
                 ),
               ),

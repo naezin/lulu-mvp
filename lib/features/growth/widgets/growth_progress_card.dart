@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/constants/animation_constants.dart';
 import '../providers/growth_provider.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 성장 진행률 카드
 ///
@@ -21,11 +23,13 @@ class GrowthProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
           color: LuluColors.surfaceElevated,
         ),
@@ -39,7 +43,7 @@ class GrowthProgressCard extends StatelessWidget {
               Icon(LuluIcons.growth, size: 20, color: LuluColors.lavenderMist),
               const SizedBox(width: LuluSpacing.sm),
               Text(
-                '성장 백분위',
+                l10n.growthPercentileTitle,
                 style: LuluTextStyles.titleSmall.copyWith(
                   color: LuluTextColors.primary,
                 ),
@@ -51,7 +55,7 @@ class GrowthProgressCard extends StatelessWidget {
 
           // 체중 진행률
           _PercentileBar(
-            label: '체중',
+            label: l10n.growthWeight,
             icon: LuluIcons.weight,
             percentile: percentiles?.weight,
           ),
@@ -60,7 +64,7 @@ class GrowthProgressCard extends StatelessWidget {
 
           // 신장 진행률
           _PercentileBar(
-            label: '신장',
+            label: l10n.growthLength,
             icon: LuluIcons.ruler,
             percentile: percentiles?.length,
           ),
@@ -69,7 +73,7 @@ class GrowthProgressCard extends StatelessWidget {
 
           // 두위 진행률
           _PercentileBar(
-            label: '두위',
+            label: l10n.growthHeadCircumference,
             icon: LuluIcons.head,
             percentile: percentiles?.headCircumference,
           ),
@@ -178,7 +182,7 @@ class _PercentileBarState extends State<_PercentileBar>
             ),
             const Spacer(),
             Text(
-              percentile != null ? '${percentile.round()}%' : '측정 필요',
+              percentile != null ? '${percentile.round()}%' : (S.of(context)?.percentileMeasureNeeded ?? 'N/A'),
               style: LuluTextStyles.bodySmall.copyWith(
                 color: percentile != null
                     ? _getPercentileColor(percentile)
@@ -190,7 +194,7 @@ class _PercentileBarState extends State<_PercentileBar>
         ),
         const SizedBox(height: LuluSpacing.xs),
         ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(LuluRadius.indicator),
           child: SizedBox(
             height: 8,
             child: Stack(
@@ -199,7 +203,7 @@ class _PercentileBarState extends State<_PercentileBar>
                 Container(
                   decoration: BoxDecoration(
                     color: LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(LuluRadius.indicator),
                   ),
                 ),
                 // 진행 바
@@ -212,7 +216,7 @@ class _PercentileBarState extends State<_PercentileBar>
                         child: Container(
                           decoration: BoxDecoration(
                             color: _getPercentileColor(percentile),
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(LuluRadius.indicator),
                           ),
                         ),
                       );
@@ -276,7 +280,7 @@ class _LegendItem extends StatelessWidget {
           height: 8,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(LuluRadius.xxs),
           ),
         ),
         const SizedBox(width: 4),

@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
@@ -64,18 +66,18 @@ class RecentFeedingButtons extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  Icons.bolt,
+                  LuluIcons.bolt,
                   size: 18,
                   color: LuluColors.lavenderMist,
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  l10n?.quickFeedingTitle ?? '빠른 기록',
+                  l10n?.quickFeedingTitle ?? '',
                   style: LuluTextStyles.titleSmall,
                 ),
                 const Spacer(),
                 Text(
-                  l10n?.quickFeedingHint ?? '탭: 저장 / 길게: 수정',
+                  l10n?.quickFeedingHint ?? '',
                   style: LuluTextStyles.caption.copyWith(
                     color: LuluTextColors.tertiary,
                   ),
@@ -114,7 +116,7 @@ class RecentFeedingButtons extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
-                    l10n?.orNewEntry ?? '또는 새로 입력',
+                    l10n?.orNewEntry ?? '',
                     style: LuluTextStyles.caption.copyWith(
                       color: LuluTextColors.tertiary,
                     ),
@@ -137,13 +139,13 @@ class RecentFeedingButtons extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(color: LuluColors.glassBorder),
       ),
       child: Row(
         children: [
           Icon(
-            Icons.edit_note_rounded,
+            LuluIcons.memo,
             size: 32,
             color: LuluTextColors.tertiary,
           ),
@@ -153,15 +155,14 @@ class RecentFeedingButtons extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n?.quickFeedingEmpty ?? '아직 기록이 없어요',
+                  l10n?.quickFeedingEmpty ?? '',
                   style: LuluTextStyles.bodyMedium.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  l10n?.quickFeedingEmptyDesc ??
-                      '첫 수유를 기록하면 빠른 버튼이 나타나요!',
+                  l10n?.quickFeedingEmptyDesc ?? '',
                   style: LuluTextStyles.caption.copyWith(
                     color: LuluTextColors.secondary,
                   ),
@@ -194,34 +195,30 @@ class RecentFeedingButtons extends StatelessWidget {
     // 저장 성공 콜백
     onSaveSuccess?.call();
 
-    // 저장 토스트 + 취소
-    ScaffoldMessenger.of(context).showSnackBar(
+    // 저장 토스트 + 취소 — K2: clearSnackBars + duration 3초
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.check_circle, color: Colors.white, size: 20),
+            const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                l10n?.quickFeedingSaved(_getSummary(record, l10n)) ??
-                    '${_getSummary(record, l10n)} saved',
+                l10n?.quickFeedingSaved(_getSummary(record, l10n)) ?? '',
               ),
             ),
           ],
         ),
         action: SnackBarAction(
-          label: l10n?.quickFeedingUndo ?? '취소',
+          label: l10n?.quickFeedingUndo ?? '',
           textColor: Colors.white,
           onPressed: () async {
             final success = await provider.undoLastSave();
+            // 🔧 Sprint 19 G-F2: 취소 성공 토스트 제거 → 햅틱 대체
             if (context.mounted && success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n?.quickFeedingUndone ?? '취소됨'),
-                  duration: const Duration(seconds: 1),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              HapticFeedback.mediumImpact();
             }
           },
         ),
@@ -234,7 +231,7 @@ class RecentFeedingButtons extends StatelessWidget {
 
   String _getSummary(ActivityModel record, S? l10n) {
     final data = record.data;
-    if (data == null) return '수유';
+    if (data == null) return l10n?.activityTypeFeeding ?? '';
 
     final type = data['feeding_type'] as String? ?? 'bottle';
     final side = data['breast_side'] as String?;
@@ -245,26 +242,27 @@ class RecentFeedingButtons extends StatelessWidget {
     switch (type) {
       case 'breast':
         final sideLabel = side == 'left'
-            ? '좌측'
+            ? (l10n?.feedingSideLeft ?? '')
             : side == 'right'
-                ? '우측'
-                : '양쪽';
-        typeLabel = '모유 $sideLabel';
+                ? (l10n?.feedingSideRight ?? '')
+                : (l10n?.feedingSideBoth ?? '');
+        typeLabel =
+            '${l10n?.feedingTypeBreast ?? ''} $sideLabel';
         break;
       case 'formula':
       case 'bottle':
-        typeLabel = '분유';
+        typeLabel = l10n?.feedingTypeFormula ?? '';
         break;
       case 'solid':
-        typeLabel = '이유식';
+        typeLabel = l10n?.feedingTypeSolid ?? '';
         break;
       default:
-        typeLabel = '수유';
+        typeLabel = l10n?.activityTypeFeeding ?? '';
     }
 
     String amountLabel = '';
     if (type == 'breast' && durationMinutes != null) {
-      amountLabel = '$durationMinutes분';
+      amountLabel = l10n?.unitMinutes(durationMinutes as int) ?? '';
     } else if (amountMl != null) {
       amountLabel = '${(amountMl as num).toInt()}ml';
     }

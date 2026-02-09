@@ -1,19 +1,20 @@
 import 'package:intl/intl.dart';
 
+import '../../constants/import_strings.dart';
 import 'parsed_activity.dart';
 
-/// 베이비타임 activity TXT 파일 파서
+/// BabyTime activity TXT file parser
 ///
-/// 베이비타임 앱에서 내보낸 activity_*.txt 파일을 파싱합니다.
+/// Parses activity_*.txt files exported from BabyTime app.
 ///
-/// 지원하는 기록 종류:
-/// - 분유, 모유, 유축수유 → feeding
-/// - 낮잠, 밤잠 → sleep
-/// - 기저귀 → diaper
-/// - 놀이, 터미타임 → play
-/// - 목욕 → health
+/// Supported record types:
+/// - formula, breast milk, pumped → feeding
+/// - nap, night sleep → sleep
+/// - diaper → diaper
+/// - play, tummy time, bath, outing → play
+/// - temperature, medication → health
 ///
-/// 파일 형식 예시:
+/// File format example:
 /// ```
 /// 2026-01-06 06:14 AM
 /// 기록 종류: 분유
@@ -21,35 +22,35 @@ import 'parsed_activity.dart';
 /// ====================
 /// ```
 class BabytimeParser {
-  // 블록 구분자 (=====)
+  // Block separator (=====)
   static final _blockSeparator = RegExp(r'={10,}');
 
-  // 시간 범위 패턴 (수면 등)
-  // 예: 2026-01-06 01:40 AM ~ 2026-01-06 06:14 AM
+  // Time range pattern (sleep etc.)
+  // e.g.: 2026-01-06 01:40 AM ~ 2026-01-06 06:14 AM
   static final _timeRangePattern = RegExp(
     r'(\d{4}-\d{2}-\d{2}\s+\d{1,2}:\d{2}\s*[AP]M)\s*~\s*(\d{4}-\d{2}-\d{2}\s+\d{1,2}:\d{2}\s*[AP]M)',
     caseSensitive: false,
   );
 
-  // 단일 시간 패턴
-  // 예: 2026-01-06 06:14 AM
+  // Single time pattern
+  // e.g.: 2026-01-06 06:14 AM
   static final _singleTimePattern = RegExp(
     r'^(\d{4}-\d{2}-\d{2}\s+\d{1,2}:\d{2}\s*[AP]M)\s*$',
     caseSensitive: false,
   );
 
-  // 날짜 형식 (AM/PM)
+  // Date formats (AM/PM)
   static final _dateFormat = DateFormat('yyyy-MM-dd hh:mm a');
   static final _dateFormatNoSpace = DateFormat('yyyy-MM-dd h:mm a');
 
-  /// TXT 파일 내용 파싱
+  /// Parse TXT file content
   ///
-  /// [content] TXT 파일 내용
-  /// Returns 파싱된 활동 목록
+  /// [content] TXT file content
+  /// Returns list of parsed activities
   Future<List<ParsedActivity>> parse(String content) async {
     final activities = <ParsedActivity>[];
 
-    // 블록 단위로 분리
+    // Split by blocks
     final blocks = content.split(_blockSeparator);
 
     for (final block in blocks) {
@@ -62,7 +63,7 @@ class BabytimeParser {
           activities.add(activity);
         }
       } catch (e) {
-        // 파싱 실패한 블록은 건너뜀
+        // Skip failed blocks
         continue;
       }
     }
@@ -70,25 +71,25 @@ class BabytimeParser {
     return activities;
   }
 
-  /// 단일 블록 파싱
+  /// Parse single block
   ParsedActivity? _parseBlock(String block) {
     final lines =
         block.split('\n').map((l) => l.trim()).where((l) => l.isNotEmpty).toList();
     if (lines.isEmpty) return null;
 
-    // 1. 시간 파싱 (첫 줄)
+    // 1. Parse time (first line)
     DateTime? startTime;
     DateTime? endTime;
 
     final firstLine = lines[0];
 
-    // 시간 범위 체크 (수면 등)
+    // Check time range (sleep etc.)
     final timeRangeMatch = _timeRangePattern.firstMatch(firstLine);
     if (timeRangeMatch != null) {
       startTime = _parseTime(timeRangeMatch.group(1)!);
       endTime = _parseTime(timeRangeMatch.group(2)!);
     } else {
-      // 단일 시간 체크
+      // Check single time
       final singleTimeMatch = _singleTimePattern.firstMatch(firstLine);
       if (singleTimeMatch != null) {
         startTime = _parseTime(singleTimeMatch.group(1)!);
@@ -97,28 +98,30 @@ class BabytimeParser {
 
     if (startTime == null) return null;
 
-    // 2. 기록 종류 파싱
+    // 2. Parse record type
     String? recordType;
     for (final line in lines) {
-      if (line.startsWith('기록 종류:') || line.startsWith('기록종류:')) {
-        recordType = line.replaceFirst(RegExp(r'기록\s*종류:'), '').trim();
+      if (line.startsWith(ImportStrings.recordTypePrefix) ||
+          line.startsWith(ImportStrings.recordTypePrefixNoSpace)) {
+        recordType = line.replaceFirst(ImportStrings.recordTypeRegex, '').trim();
         break;
       }
     }
 
     if (recordType == null) return null;
 
-    // 3. LULU ActivityType 매핑
-    final activityType = _mapActivityType(recordType);
+    // 3. Map to LULU ActivityType
+    final activityType = ImportStrings.mapActivityType(recordType);
     if (activityType == null) return null;
 
-    // 4. 상세 정보 파싱
+    // 4. Parse details
     final data = <String, dynamic>{};
     String? notes;
 
     for (final line in lines) {
-      // 분유 양
-      if (line.contains('분유') && line.contains('ml')) {
+      // Formula amount
+      if (line.contains(ImportStrings.formula) &&
+          line.contains(ImportStrings.unitMl)) {
         final match = RegExp(r'(\d+)').firstMatch(line);
         if (match != null) {
           data['amount_ml'] = int.parse(match.group(1)!);
@@ -126,17 +129,19 @@ class BabytimeParser {
           data['formulaType'] = 'formula';
         }
       }
-      // 모유 시간
-      else if (line.contains('모유') &&
-          (line.contains('시간') || line.contains('분'))) {
+      // Breast milk duration
+      else if (line.contains(ImportStrings.breastMilk) &&
+          (line.contains(ImportStrings.unitHours) ||
+              line.contains(ImportStrings.unitMinutes))) {
         final match = RegExp(r'(\d+)').firstMatch(line);
         if (match != null) {
           data['duration_minutes'] = int.parse(match.group(1)!);
           data['feedingType'] = 'breast';
         }
       }
-      // 유축 양
-      else if (line.contains('유축') && line.contains('ml')) {
+      // Pumped amount
+      else if (line.contains(ImportStrings.pumped) &&
+          line.contains(ImportStrings.unitMl)) {
         final match = RegExp(r'(\d+)').firstMatch(line);
         if (match != null) {
           data['amount_ml'] = int.parse(match.group(1)!);
@@ -144,52 +149,48 @@ class BabytimeParser {
           data['formulaType'] = 'pumped';
         }
       }
-      // 배변 형태
-      else if (line.startsWith('배변 형태:') || line.startsWith('배변형태:')) {
-        final type = line.replaceFirst(RegExp(r'배변\s*형태:'), '').trim();
-        data['wet'] = type.contains('소변');
-        data['dirty'] = type.contains('대변');
+      // Bowel type
+      else if (line.startsWith(ImportStrings.bowelTypePrefix) ||
+          line.startsWith(ImportStrings.bowelTypePrefixNoSpace)) {
+        final type = line.replaceFirst(ImportStrings.bowelTypeRegex, '').trim();
+        data['wet'] = type.contains(ImportStrings.wet);
+        data['dirty'] = type.contains(ImportStrings.dirty);
       }
-      // 배변색 (HEX 코드)
-      else if (line.startsWith('배변색:')) {
-        final color = line.replaceFirst('배변색:', '').trim();
+      // Stool color (HEX code)
+      else if (line.startsWith(ImportStrings.stoolColorPrefix)) {
+        final color = line.replaceFirst(ImportStrings.stoolColorPrefix, '').trim();
         if (color.isNotEmpty) {
           data['stoolColor'] = color;
         }
       }
-      // 소요시간 (수면)
-      else if (line.startsWith('소요시간:') || line.contains('소요시간')) {
+      // Duration (sleep)
+      else if (line.startsWith(ImportStrings.durationPrefix) ||
+          line.contains(ImportStrings.durationKeyword)) {
         final match = RegExp(r'(\d+)').firstMatch(line);
         if (match != null) {
           data['duration_minutes'] = int.parse(match.group(1)!);
         }
       }
-      // 메모
-      else if (line.startsWith('메모:')) {
-        notes = line.replaceFirst('메모:', '').trim();
+      // Memo
+      else if (line.startsWith(ImportStrings.memoPrefix)) {
+        notes = line.replaceFirst(ImportStrings.memoPrefix, '').trim();
         if (notes.isEmpty) notes = null;
       }
     }
 
-    // 5. 수면 타입 결정 (낮잠/밤잠)
+    // 5. Determine sleep type (nap/night)
     if (activityType == 'sleep') {
-      data['sleepType'] = recordType == '밤잠' ? 'night' : 'nap';
+      data['sleepType'] = ImportStrings.getSleepType(recordType);
     }
 
-    // 6. 놀이 타입 결정
+    // 6. Determine play type
     if (activityType == 'play') {
-      if (recordType == '터미타임') {
-        data['playType'] = 'tummyTime';
-      } else {
-        data['playType'] = 'play';
-      }
+      data['playType'] = ImportStrings.getPlayType(recordType);
     }
 
-    // 7. 건강 타입 결정
+    // 7. Determine health type
     if (activityType == 'health') {
-      if (recordType == '목욕') {
-        data['healthType'] = 'bath';
-      }
+      // temperature/medication etc.
     }
 
     return ParsedActivity(
@@ -202,56 +203,26 @@ class BabytimeParser {
     );
   }
 
-  /// 시간 문자열 파싱
+  /// Parse time string
   DateTime? _parseTime(String timeStr) {
     try {
-      // 공백 정규화
+      // Normalize whitespace
       final normalized = timeStr.replaceAll(RegExp(r'\s+'), ' ').trim();
 
-      // AM/PM 형식 파싱 시도
+      // Try AM/PM format
       try {
         return _dateFormat.parse(normalized);
       } catch (_) {}
 
-      // 다른 형식 시도
+      // Try alternative format
       try {
         return _dateFormatNoSpace.parse(normalized);
       } catch (_) {}
 
-      // ISO 형식 시도
+      // Try ISO format
       return DateTime.tryParse(normalized);
     } catch (e) {
       return null;
-    }
-  }
-
-  /// 기록 종류 → LULU ActivityType 매핑
-  String? _mapActivityType(String recordType) {
-    switch (recordType) {
-      case '분유':
-      case '모유':
-      case '유축수유':
-      case '유축':
-      case '수유':
-        return 'feeding';
-      case '낮잠':
-      case '밤잠':
-      case '수면':
-        return 'sleep';
-      case '기저귀':
-      case '배변':
-        return 'diaper';
-      case '놀이':
-      case '터미타임':
-      case '외출':
-        return 'play';
-      case '목욕':
-      case '체온':
-      case '투약':
-        return 'health';
-      default:
-        // 기록A, 기록B 등 커스텀 기록은 건너뜀
-        return null;
     }
   }
 }

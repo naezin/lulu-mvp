@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../core/services/profile_service.dart';
 import '../../../data/models/profile_model.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 인증 상태
 enum AuthStatus {
@@ -282,26 +283,40 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Supabase 에러 메시지 한글화
+  /// Supabase 에러 메시지 변환 (error key pattern)
   String _translateAuthError(String message) {
     if (message.contains('Invalid login credentials')) {
-      return '이메일 또는 비밀번호가 올바르지 않습니다.';
+      return 'auth_error_invalid_credentials';
     }
     if (message.contains('Email not confirmed')) {
-      return '이메일 인증이 필요합니다. 메일함을 확인해주세요.';
+      return 'auth_error_email_not_confirmed';
     }
     if (message.contains('User already registered')) {
-      return '이미 가입된 이메일입니다.';
+      return 'auth_error_user_already_registered';
     }
     if (message.contains('Password should be at least')) {
-      return '비밀번호는 최소 6자 이상이어야 합니다.';
+      return 'auth_error_password_too_short';
     }
     if (message.contains('Unable to validate email')) {
-      return '유효한 이메일 주소를 입력해주세요.';
+      return 'auth_error_invalid_email';
     }
-    if (message.contains('취소')) {
+    if (message.contains('cancel')) {
       return message;
     }
-    return '오류가 발생했습니다. 다시 시도해주세요.';
+    return 'auth_error_generic';
+  }
+
+  /// 에러 키를 l10n으로 해석 (UI에서 호출)
+  static String resolveErrorMessage(S l10n, String? errorKey) {
+    if (errorKey == null) return '';
+    return switch (errorKey) {
+      'auth_error_invalid_credentials' => l10n.authErrorInvalidCredentials,
+      'auth_error_email_not_confirmed' => l10n.authErrorEmailNotConfirmed,
+      'auth_error_user_already_registered' => l10n.authErrorUserAlreadyRegistered,
+      'auth_error_password_too_short' => l10n.authErrorPasswordTooShort,
+      'auth_error_invalid_email' => l10n.authErrorInvalidEmail,
+      'auth_error_generic' => l10n.authErrorGeneric,
+      _ => errorKey,
+    };
   }
 }

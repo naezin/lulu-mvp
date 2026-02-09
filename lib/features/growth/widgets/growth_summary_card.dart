@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/constants/animation_constants.dart';
 import '../../../data/models/growth_measurement_model.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../data/growth_data_cache.dart';
 import '../providers/growth_provider.dart';
 
@@ -79,9 +81,9 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
             padding: const EdgeInsets.all(LuluSpacing.lg),
             decoration: BoxDecoration(
               color: LuluColors.deepBlue,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
-                color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+                color: LuluColors.lavenderSelected,
               ),
             ),
             child: Column(
@@ -113,13 +115,15 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
   }
 
   Widget _buildHeader() {
-    final formatter = DateFormat('M월 d일', 'ko_KR');
+    final l10n = S.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
+    final formatter = DateFormat.MMMd(locale);
     final daysAgo = DateTime.now().difference(widget.measurement.measuredAt).inDays;
     final dateText = daysAgo == 0
-        ? '오늘'
+        ? l10n.today
         : daysAgo == 1
-            ? '어제'
-            : '$daysAgo일 전';
+            ? l10n.yesterday
+            : l10n.daysAgoCount(daysAgo);
 
     return Row(
       children: [
@@ -129,13 +133,16 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '성장 현황',
+              l10n.growthOverview,
               style: LuluTextStyles.titleMedium.copyWith(
                 color: LuluTextColors.primary,
               ),
             ),
             Text(
-              '${formatter.format(widget.measurement.measuredAt)} 측정 ($dateText)',
+              l10n.growthMeasuredAt(
+                formatter.format(widget.measurement.measuredAt),
+                dateText,
+              ),
               style: LuluTextStyles.caption.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -145,7 +152,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
         const Spacer(),
         if (widget.onTap != null)
           Icon(
-            Icons.chevron_right,
+            LuluIcons.chevronRight,
             color: LuluTextColors.tertiary,
           ),
       ],
@@ -153,13 +160,14 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
   }
 
   Widget _buildMeasurementGrid() {
+    final l10n = S.of(context)!;
     return Row(
       children: [
         // 체중
         Expanded(
           child: _MeasurementItem(
             icon: LuluIcons.weight,
-            label: '체중',
+            label: l10n.growthWeight,
             value: '${widget.measurement.weightKg.toStringAsFixed(2)} kg',
             percentile: widget.percentiles?.weight,
             change: widget.previousMeasurement != null
@@ -174,10 +182,10 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
         Expanded(
           child: _MeasurementItem(
             icon: LuluIcons.ruler,
-            label: '신장',
+            label: l10n.growthLength,
             value: widget.measurement.lengthCm != null
                 ? '${widget.measurement.lengthCm!.toStringAsFixed(1)} cm'
-                : '미측정',
+                : l10n.notMeasured,
             percentile: widget.percentiles?.length,
             change: widget.previousMeasurement?.lengthCm != null &&
                     widget.measurement.lengthCm != null
@@ -192,10 +200,10 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
         Expanded(
           child: _MeasurementItem(
             icon: LuluIcons.head,
-            label: '두위',
+            label: l10n.growthHeadCircumference,
             value: widget.measurement.headCircumferenceCm != null
                 ? '${widget.measurement.headCircumferenceCm!.toStringAsFixed(1)} cm'
-                : '미측정',
+                : l10n.notMeasured,
             percentile: widget.percentiles?.headCircumference,
             change: widget.previousMeasurement?.headCircumferenceCm != null &&
                     widget.measurement.headCircumferenceCm != null
@@ -210,9 +218,10 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
   }
 
   Widget _buildChartInfo() {
+    final l10n = S.of(context)!;
     final ageText = widget.chartType == GrowthChartType.fenton
-        ? '${widget.correctedWeeks}주'
-        : '${widget.correctedMonths}개월';
+        ? l10n.weekUnit(widget.correctedWeeks ?? 0)
+        : l10n.ageMonths(widget.correctedMonths);
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -221,7 +230,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
       ),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -235,7 +244,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
           ),
           const SizedBox(width: LuluSpacing.xs),
           Text(
-            '${widget.chartType.label} 적용',
+            l10n.growthChartApplied(widget.chartType.label),
             style: LuluTextStyles.caption.copyWith(
               color: LuluColors.lavenderMist,
             ),
@@ -247,7 +256,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
             color: LuluTextColors.tertiary,
           ),
           Text(
-            '교정연령 $ageText',
+            l10n.growthCorrectedAge(ageText),
             style: LuluTextStyles.caption.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -260,7 +269,7 @@ class _GrowthSummaryCardState extends State<GrowthSummaryCard>
   Widget _buildDetailHint() {
     return Center(
       child: Text(
-        '탭하여 성장 차트 보기',
+        S.of(context)!.tapToViewGrowthChart,
         style: LuluTextStyles.caption.copyWith(
           color: LuluTextColors.tertiary,
         ),
@@ -292,7 +301,7 @@ class _MeasurementItem extends StatelessWidget {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

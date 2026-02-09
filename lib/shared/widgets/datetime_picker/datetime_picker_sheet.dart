@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import 'lulu_datetime_picker.dart';
@@ -96,7 +97,7 @@ class _DateTimePickerSheetState extends State<_DateTimePickerSheet> {
               height: 4,
               decoration: BoxDecoration(
                 color: LuluColors.glassBorder,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(LuluRadius.xxs),
               ),
             ),
 
@@ -109,20 +110,20 @@ class _DateTimePickerSheetState extends State<_DateTimePickerSheet> {
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
-                      l10n?.dateTimeCancel ?? '취소',
+                      l10n?.dateTimeCancel ?? 'Cancel',
                       style: LuluTextStyles.labelMedium.copyWith(
                         color: LuluTextColors.secondary,
                       ),
                     ),
                   ),
                   Text(
-                    widget.title ?? l10n?.dateTimePickerTitle ?? '시간 선택',
+                    widget.title ?? l10n?.dateTimePickerTitle ?? 'Select Time',
                     style: LuluTextStyles.titleSmall,
                   ),
                   TextButton(
                     onPressed: () => Navigator.pop(context, _selectedDateTime),
                     child: Text(
-                      l10n?.dateTimeConfirm ?? '확인',
+                      l10n?.dateTimeConfirm ?? 'Confirm',
                       style: LuluTextStyles.labelMedium.copyWith(
                         color: LuluColors.lavenderMist,
                         fontWeight: FontWeight.w600,

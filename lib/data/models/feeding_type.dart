@@ -5,7 +5,9 @@
 // - 이유식 상세 기록 (SolidFoodUnit, BabyReaction)
 // - 기존 데이터 하위 호환성 유지
 
-import 'package:flutter/material.dart' show Color, IconData, Icons;
+import 'package:flutter/material.dart' show Color, IconData;
+import '../../core/design_system/lulu_icons.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 
 /// 수유 내용물 타입 (What)
 enum FeedingContentType {
@@ -50,7 +52,7 @@ enum BabyReaction {
 
 /// FeedingContentType 확장
 extension FeedingContentTypeExtension on FeedingContentType {
-  /// 표시용 라벨
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   String get label {
     switch (this) {
       case FeedingContentType.breastMilk:
@@ -62,11 +64,23 @@ extension FeedingContentTypeExtension on FeedingContentType {
     }
   }
 
-  /// 서브 라벨 (모유만)
-  String? get subLabel {
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) {
     switch (this) {
       case FeedingContentType.breastMilk:
-        return '(직접/유축)';
+        return l10n.feedingContentBreastMilk;
+      case FeedingContentType.formula:
+        return l10n.feedingContentFormula;
+      case FeedingContentType.solid:
+        return l10n.feedingContentSolid;
+    }
+  }
+
+  /// 서브 라벨 (모유만, i18n)
+  String? localizedSubLabel(S l10n) {
+    switch (this) {
+      case FeedingContentType.breastMilk:
+        return l10n.feedingContentBreastMilkSub;
       case FeedingContentType.formula:
       case FeedingContentType.solid:
         return null;
@@ -88,7 +102,7 @@ extension FeedingContentTypeExtension on FeedingContentType {
 
 /// FeedingMethodType 확장
 extension FeedingMethodTypeExtension on FeedingMethodType {
-  /// 표시용 라벨
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   String get label {
     switch (this) {
       case FeedingMethodType.direct:
@@ -97,11 +111,21 @@ extension FeedingMethodTypeExtension on FeedingMethodType {
         return '유축 젖병';
     }
   }
+
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) {
+    switch (this) {
+      case FeedingMethodType.direct:
+        return l10n.feedingMethodDirect;
+      case FeedingMethodType.expressed:
+        return l10n.feedingMethodExpressedBottle;
+    }
+  }
 }
 
 /// BreastSide 확장
 extension BreastSideExtension on BreastSide {
-  /// 표시용 라벨
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   String get label {
     switch (this) {
       case BreastSide.left:
@@ -113,7 +137,31 @@ extension BreastSideExtension on BreastSide {
     }
   }
 
-  /// 짧은 라벨
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) {
+    switch (this) {
+      case BreastSide.left:
+        return l10n.breastSideLeft;
+      case BreastSide.right:
+        return l10n.breastSideRight;
+      case BreastSide.both:
+        return l10n.breastSideBoth;
+    }
+  }
+
+  /// 짧은 라벨 (i18n)
+  String localizedShortLabel(S l10n) {
+    switch (this) {
+      case BreastSide.left:
+        return l10n.feedingSideLeftShort;
+      case BreastSide.right:
+        return l10n.feedingSideRightShort;
+      case BreastSide.both:
+        return l10n.feedingSideBothShort;
+    }
+  }
+
+  /// 짧은 라벨 (기존 - 추후 localizedShortLabel로 교체)
   String get shortLabel {
     switch (this) {
       case BreastSide.left:
@@ -186,7 +234,7 @@ extension FeedingTypeMigration on String {
 
 /// SolidFoodUnit 확장
 extension SolidFoodUnitExtension on SolidFoodUnit {
-  /// 표시용 라벨 (한국어)
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   String get label {
     switch (this) {
       case SolidFoodUnit.gram:
@@ -198,15 +246,15 @@ extension SolidFoodUnitExtension on SolidFoodUnit {
     }
   }
 
-  /// 표시용 라벨 (영어)
-  String get labelEn {
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) {
     switch (this) {
       case SolidFoodUnit.gram:
-        return 'g';
+        return l10n.solidFoodUnitGram;
       case SolidFoodUnit.spoon:
-        return 'spoon';
+        return l10n.solidFoodUnitSpoon;
       case SolidFoodUnit.bowl:
-        return 'bowl';
+        return l10n.solidFoodUnitBowl;
     }
   }
 
@@ -243,7 +291,7 @@ extension SolidFoodUnitExtension on SolidFoodUnit {
 
 /// BabyReaction 확장
 extension BabyReactionExtension on BabyReaction {
-  /// 표시용 라벨 (한국어)
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   String get label {
     switch (this) {
       case BabyReaction.liked:
@@ -255,15 +303,15 @@ extension BabyReactionExtension on BabyReaction {
     }
   }
 
-  /// 표시용 라벨 (영어)
-  String get labelEn {
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) {
     switch (this) {
       case BabyReaction.liked:
-        return 'Liked';
+        return l10n.babyReactionLiked;
       case BabyReaction.neutral:
-        return 'Neutral';
+        return l10n.babyReactionNeutral;
       case BabyReaction.rejected:
-        return 'Rejected';
+        return l10n.babyReactionRejected;
     }
   }
 
@@ -271,11 +319,11 @@ extension BabyReactionExtension on BabyReaction {
   IconData get icon {
     switch (this) {
       case BabyReaction.liked:
-        return Icons.sentiment_very_satisfied;
+        return LuluIcons.sentimentHappy;
       case BabyReaction.neutral:
-        return Icons.sentiment_neutral;
+        return LuluIcons.sentimentNeutral;
       case BabyReaction.rejected:
-        return Icons.sentiment_dissatisfied;
+        return LuluIcons.sentimentSad;
     }
   }
 

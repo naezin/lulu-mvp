@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../models/models.dart';
 
 /// 확률 바 위젯
@@ -40,7 +42,7 @@ class ProbabilityBar extends StatelessWidget {
         SizedBox(
           width: 72,
           child: Text(
-            cryType.label,
+            cryType.localizedLabel(S.of(context)),
             style: LuluTextStyles.caption.copyWith(
               color: isHighlighted ? LuluTextColors.primary : LuluTextColors.secondary,
               fontWeight: isHighlighted ? FontWeight.w600 : FontWeight.normal,
@@ -55,7 +57,7 @@ class ProbabilityBar extends StatelessWidget {
             height: 8,
             decoration: BoxDecoration(
               color: LuluColors.midnightNavy,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(LuluRadius.indicator),
             ),
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,
@@ -63,7 +65,7 @@ class ProbabilityBar extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: color,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(LuluRadius.indicator),
                 ),
               ),
             ),

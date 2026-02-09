@@ -11,6 +11,9 @@ class WeeklyStatistics {
   /// 기저귀 통계
   final DiaperStatistics diaper;
 
+  /// 놀이 통계
+  final PlayStatistics? play;
+
   /// 울음 통계
   final CryingStatistics? crying;
 
@@ -24,6 +27,7 @@ class WeeklyStatistics {
     required this.sleep,
     required this.feeding,
     required this.diaper,
+    this.play,
     this.crying,
     required this.startDate,
     required this.endDate,
@@ -37,6 +41,7 @@ class WeeklyStatistics {
       sleep: SleepStatistics.empty(),
       feeding: FeedingStatistics.empty(),
       diaper: DiaperStatistics.empty(),
+      play: PlayStatistics.empty(),
       crying: null,
       startDate: weekAgo,
       endDate: now,
@@ -97,8 +102,14 @@ class FeedingStatistics {
   /// 일 평균 수유 횟수
   final double dailyAverageCount;
 
+  /// 🔧 Sprint 19 E: 일 평균 수유량 (ml)
+  final double dailyAverageMl;
+
   /// 지난주 대비 변화 (횟수, 양수=증가, 음수=감소)
   final int changeCount;
+
+  /// 🔧 Sprint 19 v4: 지난주 대비 수유량 변화 (ml, 양수=증가, 음수=감소)
+  final int changeMl;
 
   /// 요일별 수유 횟수 (월~일)
   final List<int> dailyCounts;
@@ -114,7 +125,9 @@ class FeedingStatistics {
 
   const FeedingStatistics({
     required this.dailyAverageCount,
+    this.dailyAverageMl = 0,
     required this.changeCount,
+    this.changeMl = 0,
     required this.dailyCounts,
     required this.breastMilkRatio,
     required this.formulaRatio,
@@ -124,7 +137,9 @@ class FeedingStatistics {
   factory FeedingStatistics.empty() {
     return const FeedingStatistics(
       dailyAverageCount: 0,
+      dailyAverageMl: 0,
       changeCount: 0,
+      changeMl: 0,
       dailyCounts: [0, 0, 0, 0, 0, 0, 0],
       breastMilkRatio: 0,
       formulaRatio: 0,
@@ -236,6 +251,39 @@ class CryingStatistics {
       discomfortRatio: 0,
       otherRatio: 0,
     );
+  }
+}
+
+/// 놀이 통계
+class PlayStatistics {
+  /// 일 평균 놀이 시간 (분 단위)
+  final double dailyAverageMinutes;
+
+  /// 지난주 대비 변화 (분 단위, 양수=증가, 음수=감소)
+  final int changeMinutes;
+
+  /// 요일별 놀이 시간 (월~일, 분 단위)
+  final List<int> dailyMinutes;
+
+  const PlayStatistics({
+    required this.dailyAverageMinutes,
+    required this.changeMinutes,
+    required this.dailyMinutes,
+  });
+
+  factory PlayStatistics.empty() {
+    return const PlayStatistics(
+      dailyAverageMinutes: 0,
+      changeMinutes: 0,
+      dailyMinutes: [0, 0, 0, 0, 0, 0, 0],
+    );
+  }
+
+  /// 변화 유형 반환
+  ChangeType get changeType {
+    if (changeMinutes > 0) return ChangeType.increase;
+    if (changeMinutes < 0) return ChangeType.decrease;
+    return ChangeType.neutral;
   }
 }
 

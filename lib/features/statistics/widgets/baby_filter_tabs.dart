@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 아기 필터 탭 위젯
 ///
@@ -31,6 +33,7 @@ class BabyFilterTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
     return Container(
       height: 48,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -41,7 +44,7 @@ class BabyFilterTabs extends StatelessWidget {
           _buildTab(
             context: context,
             index: 0,
-            label: '전체',
+            label: l10n.filterAll,
             isSelected: selectedIndex == 0,
           ),
 
@@ -54,7 +57,7 @@ class BabyFilterTabs extends StatelessWidget {
 
             String label = baby.name;
             if (showCorrectedAge && baby.correctedAgeDays != null) {
-              label += ' 교정${baby.correctedAgeDays}일';
+              label += ' ${l10n.filterCorrectedAgeDays(baby.correctedAgeDays!)}';
             }
 
             return Padding(
@@ -73,7 +76,7 @@ class BabyFilterTabs extends StatelessWidget {
             _buildTab(
               context: context,
               index: -1,
-              label: '함께 보기',
+              label: l10n.filterViewTogether,
               isSelected: selectedIndex == -1,
             ),
         ],
@@ -96,7 +99,7 @@ class BabyFilterTabs extends StatelessWidget {
           color: isSelected
               ? LuluColors.lavenderMist
               : LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
           border: Border.all(
             color: isSelected
                 ? LuluColors.lavenderMist

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 체온 슬라이더 위젯 (UX-03)
 ///
@@ -28,14 +31,15 @@ class TemperatureSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = _getTemperatureStatus(value);
+    final l10n = S.of(context)!;
+    final status = _getTemperatureStatus(value, l10n);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 라벨
         Text(
-          '체온',
+          l10n.temperature,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -52,7 +56,7 @@ class TemperatureSlider extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: status.color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
                 color: status.color.withValues(alpha: 0.3),
                 width: 2,
@@ -166,7 +170,7 @@ class TemperatureSlider extends StatelessWidget {
           padding: const EdgeInsets.all(LuluSpacing.md),
           decoration: BoxDecoration(
             color: status.color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
             border: Border.all(
               color: status.color.withValues(alpha: 0.2),
             ),
@@ -233,34 +237,34 @@ class TemperatureSlider extends StatelessWidget {
     return _TempRange.high;
   }
 
-  _TemperatureStatus _getTemperatureStatus(double temp) {
+  _TemperatureStatus _getTemperatureStatus(double temp, S l10n) {
     if (temp < 36.5) {
       return _TemperatureStatus(
         color: const Color(0xFF64B5F6), // 파란색
-        label: '체온이 낮아요',
-        message: '보온에 신경써주세요.',
-        icon: Icons.ac_unit_rounded,
+        label: l10n.tempSliderLowLabel,
+        message: l10n.tempSliderLowMessage,
+        icon: LuluIcons.snowflake,
       );
     } else if (temp < 37.5) {
       return _TemperatureStatus(
         color: const Color(0xFF81C784), // 초록색
-        label: '정상 체온이에요',
-        message: '체온이 정상 범위입니다.',
-        icon: Icons.check_circle_rounded,
+        label: l10n.tempSliderNormalLabel,
+        message: l10n.tempSliderNormalMessage,
+        icon: LuluIcons.checkCircle,
       );
     } else if (temp < 38.0) {
       return _TemperatureStatus(
         color: const Color(0xFFFFB74D), // 주황색
-        label: '체온이 조금 높아요',
-        message: '지켜봐주세요.',
-        icon: Icons.thermostat_rounded,
+        label: l10n.tempSliderMildLabel,
+        message: l10n.tempSliderMildMessage,
+        icon: LuluIcons.temperature,
       );
     } else {
       return _TemperatureStatus(
         color: const Color(0xFFE57373), // 빨간색
-        label: '열이 있어요',
-        message: '병원 방문을 고려해주세요.',
-        icon: Icons.warning_rounded,
+        label: l10n.tempSliderHighLabel,
+        message: l10n.tempSliderHighMessage,
+        icon: LuluIcons.warning,
       );
     }
   }
@@ -319,7 +323,7 @@ class _QuickTempButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
           decoration: BoxDecoration(
             color: isSelected ? color.withValues(alpha: 0.2) : LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
             border: Border.all(
               color: isSelected ? color : Colors.transparent,
               width: 2,

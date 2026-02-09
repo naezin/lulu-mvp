@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../data/models/models.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../data/fenton_data.dart';
 import '../data/growth_data_cache.dart' hide Gender, GrowthChartType;
 
@@ -149,7 +150,7 @@ class GrowthProvider extends ChangeNotifier {
   }
 
   /// 측정 기록 로드
-  Future<void> loadMeasurements() async {
+  Future<void> loadMeasurements({S? l10n}) async {
     _state = GrowthScreenState.loading;
     _errorMessage = null;
     notifyListeners();
@@ -169,7 +170,7 @@ class GrowthProvider extends ChangeNotifier {
       _retryCount = 0;
     } catch (e) {
       _retryCount++;
-      _errorMessage = _getErrorMessage(e);
+      _errorMessage = _getErrorMessage(e, l10n: l10n);
       _state = GrowthScreenState.error;
     }
 
@@ -177,13 +178,13 @@ class GrowthProvider extends ChangeNotifier {
   }
 
   /// 재시도
-  Future<void> retry() async {
+  Future<void> retry({S? l10n}) async {
     if (_retryCount >= 3) {
-      _errorMessage = '잠시 후 다시 시도해주세요';
+      _errorMessage = l10n?.errorRetryLater ?? 'Please try again later';
       notifyListeners();
       return;
     }
-    await loadMeasurements();
+    await loadMeasurements(l10n: l10n);
   }
 
   /// 측정 기록 추가
@@ -206,16 +207,16 @@ class GrowthProvider extends ChangeNotifier {
     // TODO: 로컬 삭제 + 동기화
   }
 
-  String _getErrorMessage(Object error) {
+  String _getErrorMessage(Object error, {S? l10n}) {
     // 에러 유형별 메시지
     final errorString = error.toString().toLowerCase();
     if (errorString.contains('network') || errorString.contains('socket')) {
-      return '인터넷 연결을 확인해주세요';
+      return l10n?.errorNetworkCheck ?? 'Please check your internet connection';
     }
     if (errorString.contains('timeout')) {
-      return '연결이 느려요. 다시 시도할까요?';
+      return l10n?.errorConnectionSlow ?? 'Connection is slow. Try again?';
     }
-    return '데이터를 불러오지 못했어요';
+    return l10n?.errorDataLoadFailed ?? 'Failed to load data';
   }
 
 }
@@ -241,13 +242,17 @@ class GrowthPercentiles {
   });
 
   /// 백분위수 해석
-  String interpretPercentile(double? percentile) {
-    if (percentile == null) return '측정 필요';
-    if (percentile < 3) return '3% 미만';
+  String interpretPercentile(double? percentile, {S? l10n}) {
+    if (percentile == null) {
+      return l10n?.percentileMeasureNeeded ?? 'Measurement needed';
+    }
+    if (percentile < 3) {
+      return l10n?.percentileBelow3 ?? 'Below 3%';
+    }
     if (percentile < 10) return '${percentile.round()}%';
     if (percentile <= 90) return '${percentile.round()}%';
     if (percentile <= 97) return '${percentile.round()}%';
-    return '97% 초과';
+    return l10n?.percentileAbove97 ?? 'Above 97%';
   }
 
   /// 상태 색상 결정
@@ -269,10 +274,19 @@ enum PercentileStatus {
 /// 작업 지시서 v1.2: Huckleberry 스타일 문구
 /// "정상/비정상", "양호/관찰/주의" → 부드러운 확률적 표현
 extension PercentileStatusExtension on PercentileStatus {
+  /// 다국어 지원 라벨 (S 파라미터 필수)
+  String localizedLabel(S l10n) => switch (this) {
+        PercentileStatus.normal => l10n.percentileGrowingWell,
+        PercentileStatus.watch => l10n.percentileWatchNeeded,
+        PercentileStatus.caution => l10n.percentileDoctorConsult,
+        PercentileStatus.unknown => l10n.percentileMeasurementNeeded,
+      };
+
+  /// 영문 폴백 라벨 (BuildContext 없는 곳에서 사용)
   String get label => switch (this) {
-        PercentileStatus.normal => '잘 자라고 있어요',
-        PercentileStatus.watch => '지켜봐 주세요',
-        PercentileStatus.caution => '소아과 상담을 고려해주세요',
-        PercentileStatus.unknown => '측정이 필요해요',
+        PercentileStatus.normal => 'Growing well',
+        PercentileStatus.watch => 'Keep an eye on it',
+        PercentileStatus.caution => 'Consider consulting a pediatrician',
+        PercentileStatus.unknown => 'Measurement is needed',
       };
 }

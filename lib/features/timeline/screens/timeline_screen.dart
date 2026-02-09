@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -34,7 +35,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         title: Text(
-          '기록 히스토리',
+          S.of(context)!.screenTitleTimeline,
           style: LuluTextStyles.titleLarge.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -43,7 +44,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.calendar_today,
+              LuluIcons.calendar,
               color: LuluColors.lavenderMist,
             ),
             onPressed: _selectDate,
@@ -127,6 +128,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
 
   /// 아기 정보 없음 상태
   Widget _buildEmptyBabiesState() {
+    final l10n = S.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -138,7 +140,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
           ),
           const SizedBox(height: LuluSpacing.lg),
           Text(
-            '아기 정보가 없습니다',
+            l10n.emptyBabyInfoTitle,
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.bold,
@@ -146,7 +148,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
           ),
           const SizedBox(height: LuluSpacing.sm),
           Text(
-            '온보딩을 완료해주세요',
+            l10n.emptyBabyInfoHint,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -159,9 +161,9 @@ class _TimelineScreenState extends State<TimelineScreen> {
   /// 활동 없음 상태
   Widget _buildEmptyActivitiesState(HomeProvider homeProvider) {
     final l10n = S.of(context)!;
-    final dateStr = DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDate);
+    final dateStr = DateFormat.MMMEd(Localizations.localeOf(context).languageCode).format(_selectedDate);
     final isToday = _isToday(_selectedDate);
-    final babyName = homeProvider.selectedBaby?.name ?? '아기';
+    final babyName = homeProvider.selectedBaby?.name ?? l10n.defaultBabyName;
 
     return Center(
       child: Column(
@@ -172,11 +174,11 @@ class _TimelineScreenState extends State<TimelineScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+              color: LuluColors.lavenderSelected,
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.edit_calendar,
+              LuluIcons.editCalendar,
               size: 40,
               color: LuluColors.lavenderMist,
             ),
@@ -210,7 +212,8 @@ class _TimelineScreenState extends State<TimelineScreen> {
     List<ActivityModel> activities,
     HomeProvider homeProvider,
   ) {
-    final dateStr = DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDate);
+    final l10n = S.of(context)!;
+    final dateStr = DateFormat.MMMEd(Localizations.localeOf(context).languageCode).format(_selectedDate);
 
     return Column(
       children: [
@@ -221,7 +224,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
           child: Row(
             children: [
               Text(
-                _isToday(_selectedDate) ? '오늘' : dateStr,
+                _isToday(_selectedDate) ? l10n.today : dateStr,
                 style: LuluTextStyles.titleSmall.copyWith(
                   color: LuluTextColors.primary,
                   fontWeight: FontWeight.bold,
@@ -229,7 +232,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
               ),
               const Spacer(),
               Text(
-                '${activities.length}개 기록',
+                l10n.recordCount(activities.length),
                 style: LuluTextStyles.bodySmall.copyWith(
                   color: LuluTextColors.secondary,
                 ),
@@ -275,7 +278,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
@@ -285,7 +288,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
             height: 48,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Center(
               child: Icon(
@@ -322,8 +325,8 @@ class _TimelineScreenState extends State<TimelineScreen> {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: LuluColors.lavenderMist.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(4),
+                          color: LuluColors.lavenderSelected,
+                          borderRadius: BorderRadius.circular(LuluRadius.indicator),
                         ),
                         child: Text(
                           babyName,
@@ -349,7 +352,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
                   Row(
                     children: [
                       Icon(
-                        Icons.notes_rounded,
+                        LuluIcons.note,
                         size: 12,
                         color: LuluTextColors.tertiary,
                       ),
@@ -409,38 +412,41 @@ class _TimelineScreenState extends State<TimelineScreen> {
 
   /// 활동 제목
   String _getActivityTitle(ActivityModel activity) {
+    final l10n = S.of(context)!;
     final data = activity.data;
 
     return switch (activity.type) {
       ActivityType.feeding => _getFeedingTitle(data),
       ActivityType.sleep => _getSleepTitle(data),
-      ActivityType.diaper => '기저귀 교체',
-      ActivityType.play => '놀이',
-      ActivityType.health => '건강',
+      ActivityType.diaper => l10n.diaperChange,
+      ActivityType.play => l10n.activityPlay,
+      ActivityType.health => l10n.activityTypeHealth,
     };
   }
 
   String _getFeedingTitle(Map<String, dynamic>? data) {
-    if (data == null) return '수유';
+    final l10n = S.of(context)!;
+    if (data == null) return l10n.activityTypeFeeding;
 
     final feedingType = data['feeding_type'] as String? ?? '';
     return switch (feedingType) {
-      'breast' => '모유 수유',
-      'bottle' => '젖병 수유',
-      'formula' => '분유',
-      'solid' => '이유식',
-      _ => '수유',
+      'breast' => l10n.feedingBreastfeeding,
+      'bottle' => l10n.feedingBottleFeeding,
+      'formula' => l10n.feedingTypeFormula,
+      'solid' => l10n.feedingTypeSolid,
+      _ => l10n.activityTypeFeeding,
     };
   }
 
   String _getSleepTitle(Map<String, dynamic>? data) {
-    if (data == null) return '수면';
+    final l10n = S.of(context)!;
+    if (data == null) return l10n.activityTypeSleep;
 
     final sleepType = data['sleep_type'] as String? ?? '';
     return switch (sleepType) {
-      'nap' => '낮잠',
-      'night' => '밤잠',
-      _ => '수면',
+      'nap' => l10n.sleepTypeNap,
+      'night' => l10n.sleepTypeNight,
+      _ => l10n.activityTypeSleep,
     };
   }
 
@@ -460,6 +466,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
   String _getFeedingDetail(Map<String, dynamic>? data) {
     if (data == null) return '';
 
+    final l10n = S.of(context)!;
     final feedingType = data['feeding_type'] as String? ?? '';
 
     // 모유 수유인 경우
@@ -467,12 +474,14 @@ class _TimelineScreenState extends State<TimelineScreen> {
       final duration = data['duration_minutes'] as int? ?? 0;
       final side = data['breast_side'] as String? ?? '';
       final sideStr = switch (side) {
-        'left' => '왼쪽',
-        'right' => '오른쪽',
-        'both' => '양쪽',
+        'left' => l10n.breastSideLeft,
+        'right' => l10n.breastSideRight,
+        'both' => l10n.breastSideBoth,
         _ => '',
       };
-      return sideStr.isNotEmpty ? '$sideStr $duration분' : '$duration분';
+      return sideStr.isNotEmpty
+          ? '$sideStr ${l10n.unitMinutes(duration)}'
+          : l10n.unitMinutes(duration);
     }
 
     // 젖병/분유/이유식인 경우
@@ -482,7 +491,8 @@ class _TimelineScreenState extends State<TimelineScreen> {
 
   /// 수면 시간 표시 (자정 넘김 처리 포함 - QA-01)
   String _getSleepDetail(ActivityModel activity) {
-    if (activity.endTime == null) return '진행 중';
+    final l10n = S.of(context)!;
+    if (activity.endTime == null) return l10n.statusOngoing;
 
     // durationMinutes getter 사용 (자정 넘김 처리 포함)
     final totalMins = activity.durationMinutes ?? 0;
@@ -490,33 +500,35 @@ class _TimelineScreenState extends State<TimelineScreen> {
     final mins = totalMins % 60;
 
     if (hours > 0 && mins > 0) {
-      return '$hours시간 $mins분';
+      return l10n.durationHoursMinutes(hours, mins);
     } else if (hours > 0) {
-      return '$hours시간';
+      return '$hours${l10n.unitHours}';
     } else {
-      return '$mins분';
+      return l10n.unitMinutes(mins);
     }
   }
 
   String _getDiaperDetail(Map<String, dynamic>? data) {
     if (data == null) return '';
 
+    final l10n = S.of(context)!;
     final diaperType = data['diaper_type'] as String? ?? '';
     return switch (diaperType) {
-      'wet' => '소변',
-      'dirty' => '대변',
-      'both' => '소변+대변',
-      'dry' => '건조',
+      'wet' => l10n.diaperTypeWet,
+      'dirty' => l10n.diaperTypeDirty,
+      'both' => l10n.diaperTypeBothDetail,
+      'dry' => l10n.diaperTypeDry,
       _ => '',
     };
   }
 
   /// 놀이 시간 표시 (자정 넘김 처리 포함 - QA-01)
   String _getPlayDetail(ActivityModel activity) {
-    if (activity.endTime == null) return '진행 중';
+    final l10n = S.of(context)!;
+    if (activity.endTime == null) return l10n.statusOngoing;
 
     // durationMinutes getter 사용 (자정 넘김 처리 포함)
     final mins = activity.durationMinutes ?? 0;
-    return '$mins분';
+    return l10n.unitMinutes(mins);
   }
 }

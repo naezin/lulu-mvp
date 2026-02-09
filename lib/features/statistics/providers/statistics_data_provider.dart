@@ -194,23 +194,23 @@ class StatisticsDataProvider extends ChangeNotifier {
       }
     }
 
-    final dayNames = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+    final dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     // 인사이트 메시지 생성
     String message;
     InsightType type;
 
     if (sleep.changeMinutes > 30) {
-      message = '수면 시간이 지난주보다 증가했어요';
+      message = 'insight_sleep_increased';
       type = InsightType.positive;
     } else if (sleep.changeMinutes < -30) {
-      message = '수면 시간이 지난주보다 감소했어요';
+      message = 'insight_sleep_decreased';
       type = InsightType.attention;
     } else if (maxHours > 0) {
-      message = '${dayNames[maxDayIndex]}에 수면이 가장 많았어요';
+      message = 'insight_most_sleep_day:${dayNames[maxDayIndex]}';
       type = InsightType.neutral;
     } else {
-      message = '이번 주 기록을 시작해보세요';
+      message = 'insight_start_recording';
       type = InsightType.neutral;
     }
 
@@ -339,6 +339,7 @@ class StatisticsDataProvider extends ChangeNotifier {
   }
 
   /// 수유 통계 계산
+  /// 🔧 Sprint 19 E: ml 통계 추가
   FeedingStatistics _calculateFeedingStatistics(
     List<ActivityModel> activities,
     List<ActivityModel> lastWeekActivities,
@@ -357,9 +358,18 @@ class StatisticsDataProvider extends ChangeNotifier {
     int formulaCount = 0;
     int solidCount = 0;
 
+    // 🔧 Sprint 19 E: ml 합계 계산
+    double totalMl = 0;
+
     for (final activity in feedingActivities) {
       final dayIndex = (activity.startTime.weekday - 1) % 7;
       dailyCounts[dayIndex]++;
+
+      // 🔧 Sprint 19 E: ml 데이터 합산
+      final ml = activity.feedingAmountMl;
+      if (ml != null && ml > 0) {
+        totalMl += ml;
+      }
 
       // 수유 타입별 카운트
       final contentType = activity.feedingContentType;
@@ -389,12 +399,16 @@ class StatisticsDataProvider extends ChangeNotifier {
     final dayCount = dateRange.dayCount > 0 ? dateRange.dayCount : 1;
     final dailyAverage = totalCount / dayCount;
 
+    // 🔧 Sprint 19 E: 일평균 ml 계산
+    final dailyAverageMl = totalMl / dayCount;
+
     // 지난 주 대비 변화
     final lastWeekDailyAverage = lastWeekFeeding.length / 7;
     final changeCount = (dailyAverage - lastWeekDailyAverage).round();
 
     return FeedingStatistics(
       dailyAverageCount: dailyAverage,
+      dailyAverageMl: dailyAverageMl,
       changeCount: changeCount,
       dailyCounts: dailyCounts,
       breastMilkRatio: totalCount > 0 ? breastCount / totalCount : 0,

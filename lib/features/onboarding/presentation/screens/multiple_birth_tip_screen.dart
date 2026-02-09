@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/design_system/lulu_radius.dart';
+import '../../../../core/design_system/lulu_icons.dart';
+import '../../../../l10n/generated/app_localizations.dart' show S;
 import '../providers/onboarding_provider.dart';
 
 /// Step 5 (다태아 전용): 다둥이 기록 팁 안내
@@ -12,6 +15,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<OnboardingProvider>();
+    final l10n = S.of(context)!;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -21,7 +25,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
 
           // 제목
           Text(
-            '다둥이 기록 팁',
+            l10n.multipleBirthTipTitle,
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
@@ -31,7 +35,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
           const SizedBox(height: 12),
 
           Text(
-            '더 쉽게 기록할 수 있어요',
+            l10n.multipleBirthTipSubtitle,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppTheme.textSecondary,
                 ),
@@ -41,9 +45,9 @@ class MultipleBirthTipScreen extends StatelessWidget {
 
           // 팁 1: 탭으로 빠른 전환
           _TipCard(
-            icon: Icons.swap_horiz_rounded,
-            title: '탭으로 빠른 전환',
-            description: '상단 탭을 눌러 아기별 기록을\n빠르게 확인하고 전환해요 (1초 이내!)',
+            icon: LuluIcons.swapHoriz,
+            title: l10n.multipleBirthTipQuickSwitchTitle,
+            description: l10n.multipleBirthTipQuickSwitchDesc,
             color: AppTheme.lavenderMist,
           ),
 
@@ -51,9 +55,9 @@ class MultipleBirthTipScreen extends StatelessWidget {
 
           // 팁 2: 개별 통계
           _TipCard(
-            icon: Icons.bar_chart_rounded,
-            title: '개별 통계',
-            description: '각 아기의 수유, 수면, 기저귀 패턴을\n개별로 분석해드려요',
+            icon: LuluIcons.barChart,
+            title: l10n.multipleBirthTipIndividualStatsTitle,
+            description: l10n.multipleBirthTipIndividualStatsDesc,
             color: AppTheme.babyAvatarColors[0],
           ),
 
@@ -61,9 +65,9 @@ class MultipleBirthTipScreen extends StatelessWidget {
 
           // 팁 3: 개별 알림
           _TipCard(
-            icon: Icons.notifications_active_rounded,
-            title: '개별 알림',
-            description: '각 아기 맞춤 수유/수면 시간을\n따로 알려드려요',
+            icon: LuluIcons.notificationActive,
+            title: l10n.multipleBirthTipIndividualAlertTitle,
+            description: l10n.multipleBirthTipIndividualAlertDesc,
             color: AppTheme.babyAvatarColors[1],
           ),
 
@@ -71,9 +75,9 @@ class MultipleBirthTipScreen extends StatelessWidget {
 
           // 팁 4: 색상으로 구분
           _TipCard(
-            icon: Icons.palette_rounded,
-            title: '색상으로 구분',
-            description: '각 아기만의 색상으로\n한눈에 구분할 수 있어요',
+            icon: LuluIcons.indoorPlay,
+            title: l10n.multipleBirthTipColorCodeTitle,
+            description: l10n.multipleBirthTipColorCodeDesc,
             color: AppTheme.babyAvatarColors[2],
             showBabyColors: true,
             babyCount: provider.babyCount,
@@ -91,12 +95,12 @@ class MultipleBirthTipScreen extends StatelessWidget {
                 backgroundColor: AppTheme.lavenderMist,
                 foregroundColor: AppTheme.midnightNavy,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
-              child: const Text(
-                '알겠어요',
-                style: TextStyle(
+              child: Text(
+                l10n.buttonOk,
+                style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
                 ),
@@ -134,7 +138,7 @@ class _TipCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,7 +148,7 @@ class _TipCard extends StatelessWidget {
             height: 48,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14), // special: design system outer
             ),
             child: Icon(
               icon,

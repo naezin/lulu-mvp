@@ -172,10 +172,12 @@ class ActivityRepository {
   }
 
   /// 활동 종료 (endTime 설정)
+  /// 🔧 Sprint 19 FIX: Local → UTC 변환 추가
   Future<ActivityModel> finishActivity(String activityId, [DateTime? endTime]) async {
     try {
+      final endTimeUtc = (endTime ?? DateTime.now()).toUtc();  // 🔧 toUtc() 추가
       final response = await SupabaseService.activities
-          .update({'end_time': (endTime ?? DateTime.now()).toIso8601String()})
+          .update({'end_time': endTimeUtc.toIso8601String()})
           .eq('id', activityId)
           .select()
           .single();
@@ -215,6 +217,24 @@ class ActivityRepository {
     } catch (e) {
       debugPrint('❌ [ActivityRepository] Error getting ongoing activities: $e');
       rethrow;
+    }
+  }
+
+  /// Sprint 19: 전체 기록 존재 여부 확인 (신규 유저 판별)
+  Future<bool> hasAnyActivities(String familyId) async {
+    try {
+      final response = await SupabaseService.activities
+          .select('id')
+          .eq('family_id', familyId)
+          .limit(1);
+
+      final hasAny = (response as List).isNotEmpty;
+      debugPrint('[DEBUG] [ActivityRepository] hasAnyActivities($familyId): $hasAny');
+      return hasAny;
+    } catch (e) {
+      debugPrint('❌ [ActivityRepository] Error checking hasAnyActivities: $e');
+      // 에러 시 true 반환 (신규 유저 Empty State 표시 방지)
+      return true;
     }
   }
 
@@ -284,34 +304,41 @@ class ActivityRepository {
   // ========================================
 
   /// Supabase 응답 -> ActivityModel 변환
+  /// 🔧 Sprint 19 H-UTC: UTC → Local 변환 추가 (조회 시)
   ActivityModel _mapToActivityModel(Map<String, dynamic> data) {
     return ActivityModel(
       id: data['id'],
       familyId: data['family_id'],
       babyIds: List<String>.from(data['baby_ids'] as List),
       type: ActivityType.fromValue(data['type']),
-      startTime: DateTime.parse(data['start_time']),
+      // UTC → Local 변환
+      startTime: DateTime.parse(data['start_time']).toLocal(),
       endTime: data['end_time'] != null
-          ? DateTime.parse(data['end_time'])
+          ? DateTime.parse(data['end_time']).toLocal()
           : null,
       data: data['data'] as Map<String, dynamic>?,
       notes: data['notes'] as String?,
-      createdAt: DateTime.parse(data['created_at']),
+      createdAt: DateTime.parse(data['created_at']).toLocal(),
       updatedAt: data['updated_at'] != null
-          ? DateTime.parse(data['updated_at'])
+          ? DateTime.parse(data['updated_at']).toLocal()
           : null,
     );
   }
 
   /// ActivityModel -> Supabase 데이터 변환
+  /// 🔧 Sprint 19 FIX: Local → UTC 변환 추가 (저장 시)
   Map<String, dynamic> _mapToSupabaseData(ActivityModel activity) {
+    // 디버그 로그 (UTC 변환 확인)
+    debugPrint('[UTC-DEBUG] startTime: ${activity.startTime}, isUtc=${activity.startTime.isUtc}');
+    debugPrint('[UTC-DEBUG] toUtc(): ${activity.startTime.toUtc()}');
+
     return {
       'id': activity.id,
       'family_id': activity.familyId,
       'baby_ids': activity.babyIds,
       'type': activity.type.value,
-      'start_time': activity.startTime.toIso8601String(),
-      if (activity.endTime != null) 'end_time': activity.endTime!.toIso8601String(),
+      'start_time': activity.startTime.toUtc().toIso8601String(),  // 🔧 toUtc() 추가
+      if (activity.endTime != null) 'end_time': activity.endTime!.toUtc().toIso8601String(),  // 🔧 toUtc() 추가
       if (activity.data != null) 'data': activity.data,
       if (activity.notes != null) 'notes': activity.notes,
     };

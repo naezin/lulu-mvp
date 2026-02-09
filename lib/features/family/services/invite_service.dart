@@ -69,7 +69,7 @@ class InviteService {
       return InviteInfoModel.fromJson(response as Map<String, dynamic>);
     } catch (e) {
       debugPrint('❌ [InviteService] getInviteInfo error: $e');
-      return InviteInfoModel.invalid('초대 코드를 확인할 수 없어요');
+      return InviteInfoModel.invalid('Could not verify invite code');
     }
   }
 
@@ -153,7 +153,7 @@ class InviteService {
     });
 
     if (response['success'] != true) {
-      throw Exception('소유권 이전에 실패했어요');
+      throw Exception('Ownership transfer failed');
     }
 
     debugPrint('✅ [InviteService] Ownership transferred to: $newOwnerId');
@@ -177,10 +177,10 @@ class InviteService {
         code.length == 6 ? '${code.substring(0, 3)}-${code.substring(3)}' : code;
 
     final message = senderName != null
-        ? '$senderName님이 LULU 가족에 초대했어요!\n\n초대 코드: $formattedCode\n\n앱에서 "가족 참여"를 눌러 코드를 입력해주세요.'
-        : 'LULU 가족에 초대받았어요!\n\n초대 코드: $formattedCode\n\n앱에서 "가족 참여"를 눌러 코드를 입력해주세요.';
+        ? '$senderName invited you to LULU family!\n\nInvite code: $formattedCode\n\nOpen the app and tap "Join Family" to enter the code.'
+        : 'You are invited to a LULU family!\n\nInvite code: $formattedCode\n\nOpen the app and tap "Join Family" to enter the code.';
 
-    await Share.share(message, subject: 'LULU 가족 초대');
+    await Share.share(message, subject: 'LULU Family Invite');
   }
 
   /// 초대 코드 클립보드 복사

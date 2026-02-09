@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/models.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
 import '../providers/growth_provider.dart';
 import '../widgets/growth_loading_state.dart';
@@ -86,7 +88,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
                   backgroundColor: LuluColors.midnightNavy,
                   elevation: 0,
                   title: Text(
-                    '성장',
+                    S.of(context)!.screenTitleGrowth,
                     style: LuluTextStyles.titleLarge.copyWith(
                       color: LuluTextColors.primary,
                     ),
@@ -95,7 +97,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
                   actions: [
                     IconButton(
                       icon: Icon(
-                        Icons.add_circle_outline,
+                        LuluIcons.addCircleOutline,
                         color: LuluColors.lavenderMist,
                       ),
                       onPressed: () => _navigateToInput(context, provider),
@@ -127,13 +129,15 @@ class _GrowthScreenState extends State<GrowthScreen> {
 
   /// 아기 정보 없음 상태
   Widget _buildEmptyBabiesState() {
+    final l10n = S.of(context)!;
+
     return Scaffold(
       backgroundColor: LuluColors.midnightNavy,
       appBar: AppBar(
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         title: Text(
-          '성장',
+          l10n.screenTitleGrowth,
           style: LuluTextStyles.titleLarge.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -151,7 +155,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: LuluColors.lavenderMist.withValues(alpha: 0.15),
+                  color: LuluColors.lavenderLight,
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -163,7 +167,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
 
               // 메시지
               Text(
-                '아기 정보가 없습니다',
+                l10n.emptyBabyInfoTitle,
                 style: LuluTextStyles.titleMedium.copyWith(
                   color: LuluTextColors.primary,
                 ),
@@ -173,7 +177,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
               const SizedBox(height: LuluSpacing.md),
 
               Text(
-                '온보딩을 완료해주세요',
+                l10n.emptyBabyInfoHint,
                 style: LuluTextStyles.bodyMedium.copyWith(
                   color: LuluTextColors.secondary,
                 ),
@@ -194,7 +198,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
           onAddRecord: () => _navigateToInput(context, provider),
         ),
       GrowthScreenState.error => GrowthErrorState(
-          message: provider.errorMessage ?? '알 수 없는 오류',
+          message: provider.errorMessage ?? S.of(context)!.growthErrorUnknown,
           onRetry: provider.retry,
         ),
       GrowthScreenState.loaded => _buildLoadedContent(context, provider),
@@ -263,7 +267,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
           side: BorderSide(color: LuluColors.lavenderMist),
           padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: Row(
@@ -272,7 +276,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
             Icon(LuluIcons.memo, size: 18, color: LuluColors.lavenderMist),
             const SizedBox(width: LuluSpacing.sm),
             Text(
-              '측정 기록 추가',
+              S.of(context)!.growthAddMeasurement,
               style: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluColors.lavenderMist,
                 fontWeight: FontWeight.w600,
@@ -292,7 +296,7 @@ class _GrowthScreenState extends State<GrowthScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '최근 기록',
+          S.of(context)!.sectionRecentRecords,
           style: LuluTextStyles.titleSmall.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -304,19 +308,20 @@ class _GrowthScreenState extends State<GrowthScreen> {
   }
 
   Widget _buildRecordItem(GrowthMeasurementModel record) {
+    final l10n = S.of(context)!;
     final daysAgo = DateTime.now().difference(record.measuredAt).inDays;
     final dateText = daysAgo == 0
-        ? '오늘'
+        ? l10n.growthRecordToday
         : daysAgo == 1
-            ? '어제'
-            : '$daysAgo일 전';
+            ? l10n.growthRecordYesterday
+            : l10n.growthRecordDaysAgo(daysAgo);
 
     return Container(
       margin: const EdgeInsets.only(bottom: LuluSpacing.sm),
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [

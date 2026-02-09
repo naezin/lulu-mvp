@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
 import '../providers/import_provider.dart';
+
+part 'import_widgets.dart';
 
 /// 데이터 가져오기 화면
 ///
@@ -45,7 +49,7 @@ class _ImportScreenState extends State<ImportScreen> {
           backgroundColor: LuluColors.midnightNavy,
           title: Text(l10n.importTitle),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(LuluIcons.back),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
@@ -92,10 +96,10 @@ class _ImportScreenState extends State<ImportScreen> {
             height: 80,
             decoration: BoxDecoration(
               color: LuluColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
             ),
             child: const Icon(
-              Icons.folder_open,
+              LuluIcons.folderOpen,
               size: 40,
               color: LuluColors.lavenderMist,
             ),
@@ -117,7 +121,7 @@ class _ImportScreenState extends State<ImportScreen> {
 
           // TXT 파일 옵션
           _FileTypeCard(
-            icon: Icons.description,
+            icon: LuluIcons.description,
             title: l10n.importTxtOption,
             subtitle: l10n.importTxtDesc,
             onTap: () => provider.pickTxtFile(),
@@ -127,7 +131,7 @@ class _ImportScreenState extends State<ImportScreen> {
 
           // CSV 파일 옵션
           _FileTypeCard(
-            icon: Icons.table_chart,
+            icon: LuluIcons.tableChart,
             title: l10n.importCsvOption,
             subtitle: l10n.importCsvDesc,
             onTap: () => provider.pickCsvFile(),
@@ -140,12 +144,12 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: LuluColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
               children: [
                 const Icon(
-                  Icons.lightbulb_outline,
+                  LuluIcons.tip,
                   color: LuluColors.champagneGold,
                   size: 20,
                 ),
@@ -208,7 +212,7 @@ class _ImportScreenState extends State<ImportScreen> {
           Row(
             children: [
               const Icon(
-                Icons.check_circle,
+                LuluIcons.checkCircle,
                 color: LuluStatusColors.success,
                 size: 24,
               ),
@@ -231,26 +235,26 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: LuluColors.surfaceCard,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(LuluRadius.md),
             ),
             child: Column(
               children: [
                 _PreviewRow(
-                  icon: Icons.local_cafe,
+                  icon: LuluIcons.cafe,
                   iconColor: LuluActivityColors.feeding,
                   label: l10n.importFeedingCount,
                   count: preview.feedingCount,
                 ),
                 const Divider(height: 24, color: LuluColors.surfaceElevated),
                 _PreviewRow(
-                  icon: Icons.bedtime,
+                  icon: LuluIcons.sleep,
                   iconColor: LuluActivityColors.sleep,
                   label: l10n.importSleepCount,
                   count: preview.sleepCount,
                 ),
                 const Divider(height: 24, color: LuluColors.surfaceElevated),
                 _PreviewRow(
-                  icon: Icons.baby_changing_station,
+                  icon: LuluIcons.diaper,
                   iconColor: LuluActivityColors.diaper,
                   label: l10n.importDiaperCount,
                   count: preview.diaperCount,
@@ -258,7 +262,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 if (preview.playCount > 0) ...[
                   const Divider(height: 24, color: LuluColors.surfaceElevated),
                   _PreviewRow(
-                    icon: Icons.sports_esports,
+                    icon: LuluIcons.sportsEsports,
                     iconColor: LuluActivityColors.play,
                     label: l10n.importPlayCount,
                     count: preview.playCount,
@@ -266,7 +270,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 ],
                 const Divider(height: 24, color: LuluColors.surfaceElevated),
                 _PreviewRow(
-                  icon: Icons.summarize,
+                  icon: LuluIcons.summarize,
                   iconColor: LuluColors.lavenderMist,
                   label: l10n.importTotal,
                   count: preview.totalCount,
@@ -303,16 +307,16 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               color: LuluColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value: _selectedBabyId,
                 isExpanded: true,
                 dropdownColor: LuluColors.surfaceElevated,
-                hint: const Text(
-                  '아기 선택',
-                  style: TextStyle(color: LuluTextColors.secondary),
+                hint: Text(
+                  l10n.importBabySelectHint,
+                  style: const TextStyle(color: LuluTextColors.secondary),
                 ),
                 items: babies.map((baby) {
                   return DropdownMenuItem<String>(
@@ -357,15 +361,15 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: LuluStatusColors.warning.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
               border: Border.all(
-                color: LuluStatusColors.warning.withValues(alpha: 0.3),
+                color: LuluStatusColors.warningBorder,
               ),
             ),
             child: Row(
               children: [
                 const Icon(
-                  Icons.info_outline,
+                  LuluIcons.infoOutline,
                   color: LuluStatusColors.warning,
                   size: 20,
                 ),
@@ -400,7 +404,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 disabledBackgroundColor: LuluColors.surfaceElevated,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
               ),
               child: Text(
@@ -488,7 +492,7 @@ class _ImportScreenState extends State<ImportScreen> {
               shape: BoxShape.circle,
             ),
             child: const Icon(
-              Icons.celebration,
+              LuluIcons.celebration,
               size: 40,
               color: LuluStatusColors.success,
             ),
@@ -513,12 +517,12 @@ class _ImportScreenState extends State<ImportScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: LuluColors.surfaceCard,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(LuluRadius.md),
             ),
             child: Column(
               children: [
                 _ResultRow(
-                  icon: Icons.check_circle,
+                  icon: LuluIcons.checkCircle,
                   iconColor: LuluStatusColors.success,
                   label: l10n.importSuccess,
                   count: result.successCount,
@@ -526,7 +530,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 if (result.skipCount > 0) ...[
                   const SizedBox(height: 16),
                   _ResultRow(
-                    icon: Icons.skip_next,
+                    icon: LuluIcons.skipNext,
                     iconColor: LuluStatusColors.warning,
                     label: l10n.importSkipped,
                     count: result.skipCount,
@@ -538,11 +542,11 @@ class _ImportScreenState extends State<ImportScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: LuluStatusColors.error.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
+                      color: LuluStatusColors.errorBg,
+                      borderRadius: BorderRadius.circular(LuluRadius.xs),
                     ),
                     child: Text(
-                      '에러: ${result.errors.first}',
+                      l10n.importErrorPrefix(result.errors.first),
                       style: const TextStyle(
                         fontSize: 12,
                         color: LuluStatusColors.error,
@@ -574,7 +578,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 backgroundColor: LuluColors.lavenderMist,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
               ),
               child: Text(
@@ -608,11 +612,11 @@ class _ImportScreenState extends State<ImportScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: LuluStatusColors.error.withValues(alpha: 0.1),
+              color: LuluStatusColors.errorBg,
               shape: BoxShape.circle,
             ),
             child: const Icon(
-              Icons.error_outline,
+              LuluIcons.errorOutline,
               size: 40,
               color: LuluStatusColors.error,
             ),
@@ -622,7 +626,7 @@ class _ImportScreenState extends State<ImportScreen> {
 
           // 에러 메시지
           Text(
-            provider.errorMessage ?? '알 수 없는 오류가 발생했습니다.',
+            provider.errorMessage ?? l10n.errorUnknown,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
@@ -639,12 +643,12 @@ class _ImportScreenState extends State<ImportScreen> {
               side: const BorderSide(color: LuluColors.lavenderMist),
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
             ),
-            child: const Text(
-              '다시 시도',
-              style: TextStyle(
+            child: Text(
+              l10n.buttonRetry,
+              style: const TextStyle(
                 color: LuluColors.lavenderMist,
               ),
             ),
@@ -655,163 +659,5 @@ class _ImportScreenState extends State<ImportScreen> {
   }
 }
 
-/// 파일 유형 선택 카드
-class _FileTypeCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  const _FileTypeCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: LuluColors.glassBorder),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: LuluColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                icon,
-                color: LuluColors.lavenderMist,
-                size: 24,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: LuluTextColors.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: LuluTextColors.secondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(
-              Icons.chevron_right,
-              color: LuluTextColors.secondary,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// 미리보기 행
-class _PreviewRow extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
-  final String label;
-  final int count;
-  final bool isBold;
-
-  const _PreviewRow({
-    required this.icon,
-    required this.iconColor,
-    required this.label,
-    required this.count,
-    this.isBold = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, color: iconColor, size: 20),
-        const SizedBox(width: 12),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
-            color: LuluTextColors.primary,
-          ),
-        ),
-        const Spacer(),
-        Text(
-          '$count개',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
-            color: LuluTextColors.primary,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// 결과 행
-class _ResultRow extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
-  final String label;
-  final int count;
-
-  const _ResultRow({
-    required this.icon,
-    required this.iconColor,
-    required this.label,
-    required this.count,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, color: iconColor, size: 24),
-        const SizedBox(width: 12),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            color: LuluTextColors.primary,
-          ),
-        ),
-        const Spacer(),
-        Text(
-          '$count개',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: LuluTextColors.primary,
-          ),
-        ),
-      ],
-    );
-  }
-}
+// Private widgets (_FileTypeCard, _PreviewRow, _ResultRow)
+// → import_widgets.dart (part file)

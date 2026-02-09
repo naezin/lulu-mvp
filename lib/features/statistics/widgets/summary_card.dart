@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../models/weekly_statistics.dart';
 
 /// 요약 카드 위젯
@@ -43,12 +46,12 @@ class SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: '$label $value $subLabel, 지난주 대비 $change',
+      label: S.of(context)!.summaryCardAccessibility(label, value, subLabel, change),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: LuluColors.surfaceCard,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(color: LuluColors.glassBorder),
         ),
         child: Column(
@@ -110,10 +113,10 @@ class SummaryCard extends StatelessWidget {
     switch (changeType) {
       case ChangeType.increase:
         color = LuluStatisticsColors.increase;
-        changeIcon = Icons.arrow_upward;
+        changeIcon = LuluIcons.arrowUp;
       case ChangeType.decrease:
         color = LuluStatisticsColors.decrease;
-        changeIcon = Icons.arrow_downward;
+        changeIcon = LuluIcons.arrowDown;
       case ChangeType.neutral:
         color = LuluStatisticsColors.neutral;
         changeIcon = null;

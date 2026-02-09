@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 통계 스켈레톤 로딩 위젯
 ///
@@ -57,7 +60,7 @@ class StatisticsSkeleton extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
       ),
     );
   }
@@ -85,7 +88,7 @@ class DashboardSummarySkeleton extends StatelessWidget {
       height: 100,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
     );
   }
@@ -106,7 +109,7 @@ class ChartSkeleton extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
     );
   }
@@ -123,19 +126,21 @@ class OfflineBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: const Color(0xFFFBBF24).withValues(alpha: 0.1),
       child: Row(
         children: [
           const Icon(
-            Icons.cloud_off,
+            LuluIcons.cloudOff,
             size: 16,
             color: Color(0xFFFBBF24),
           ),
           const SizedBox(width: 8),
           Text(
-            '오프라인 모드 - 마지막 동기화: ${_formatTime(lastSyncTime)}',
+            l10n.offlineModeLastSync(_formatTime(lastSyncTime, l10n)),
             style: const TextStyle(
               fontSize: 12,
               color: Color(0xFFFBBF24),
@@ -146,16 +151,16 @@ class OfflineBanner extends StatelessWidget {
     );
   }
 
-  String _formatTime(DateTime? time) {
-    if (time == null) return '알 수 없음';
+  String _formatTime(DateTime? time, S l10n) {
+    if (time == null) return l10n.timeUnknown;
 
     final now = DateTime.now();
     final diff = now.difference(time);
 
-    if (diff.inMinutes < 1) return '방금';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}분 전';
-    if (diff.inHours < 24) return '${diff.inHours}시간 전';
-    return '${diff.inDays}일 전';
+    if (diff.inMinutes < 1) return l10n.timeJustNow;
+    if (diff.inMinutes < 60) return l10n.timeMinutesAgo(diff.inMinutes);
+    if (diff.inHours < 24) return l10n.timeHoursAgo(diff.inHours);
+    return l10n.timeDaysAgo(diff.inDays);
   }
 }
 
@@ -179,7 +184,7 @@ class StatisticsErrorView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.cloud_off,
+              LuluIcons.cloudOff,
               size: 48,
               color: LuluTextColors.tertiary,
             ),
@@ -195,8 +200,8 @@ class StatisticsErrorView extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
-              label: const Text('다시 시도'),
+              icon: const Icon(LuluIcons.refresh),
+              label: Text(S.of(context)!.retry),
               style: ElevatedButton.styleFrom(
                 backgroundColor: LuluColors.lavenderMist,
                 foregroundColor: LuluColors.midnightNavy,
@@ -220,6 +225,8 @@ class StatisticsEmptyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -227,14 +234,14 @@ class StatisticsEmptyView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.insert_chart_outlined,
+              LuluIcons.insertChart,
               size: 64,
               color: LuluColors.glassBorder,
             ),
             const SizedBox(height: 16),
-            const Text(
-              '아직 기록이 없어요',
-              style: TextStyle(
+            Text(
+              l10n.statisticsEmptyTitle,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: LuluTextColors.primary,
@@ -242,7 +249,7 @@ class StatisticsEmptyView extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '첫 기록을 시작해보세요!',
+              l10n.statisticsEmptyStartHint,
               style: TextStyle(
                 fontSize: 14,
                 color: LuluTextColors.secondary,
@@ -252,8 +259,8 @@ class StatisticsEmptyView extends StatelessWidget {
               const SizedBox(height: 24),
               OutlinedButton.icon(
                 onPressed: onStartRecording,
-                icon: const Icon(Icons.add),
-                label: const Text('기록 시작하기'),
+                icon: const Icon(LuluIcons.add),
+                label: Text(l10n.statisticsStartRecording),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: LuluColors.lavenderMist,
                   side: BorderSide(color: LuluColors.lavenderMist),

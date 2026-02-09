@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/growth_measurement_model.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 성장 측정값 숫자 입력 컴포넌트
 ///
@@ -69,7 +72,7 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
           color: _getBorderColor(),
           width: _isFocused ? 2 : 1,
@@ -100,7 +103,7 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
                 ),
               const Spacer(),
               Text(
-                widget.required ? '필수' : '선택',
+                widget.required ? S.of(context)!.labelRequired : S.of(context)!.labelOptional,
                 style: LuluTextStyles.caption.copyWith(
                   color: LuluTextColors.tertiary,
                 ),
@@ -158,7 +161,7 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
             Row(
               children: [
                 Icon(
-                  Icons.warning_amber_rounded,
+                  LuluIcons.statusWarn,
                   size: 14,
                   color: LuluStatusColors.error,
                 ),
@@ -202,20 +205,23 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
       ),
       decoration: BoxDecoration(
         color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '이전: ${widget.previousValue!.toStringAsFixed(widget.decimalPlaces)}${widget.unit}',
+            S.of(context)!.growthPreviousValue(
+              widget.previousValue!.toStringAsFixed(widget.decimalPlaces),
+              widget.unit,
+            ),
             style: LuluTextStyles.caption.copyWith(
               color: LuluTextColors.secondary,
             ),
           ),
           if (daysAgo != null) ...[
             Text(
-              ' ($daysAgo일 전)',
+              ' ${S.of(context)!.growthPreviousDaysAgo(daysAgo)}',
               style: LuluTextStyles.caption.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -249,6 +255,8 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
   }
 
   void _onTextChanged(String text) {
+    final l10n = S.of(context)!;
+
     if (text.isEmpty) {
       setState(() => _errorMessage = null);
       widget.onChanged(null);
@@ -257,17 +265,25 @@ class _GrowthNumberInputState extends State<GrowthNumberInput> {
 
     final value = double.tryParse(text);
     if (value == null) {
-      setState(() => _errorMessage = '올바른 숫자를 입력해주세요');
+      setState(() => _errorMessage = l10n.errorInvalidNumber);
       return;
     }
 
     // 범위 검사
     if (value < widget.min) {
-      setState(() => _errorMessage = '${widget.label}이(가) 너무 작습니다 (최소 ${widget.min}${widget.unit})');
+      setState(() => _errorMessage = l10n.errorValueTooLow(
+        widget.label,
+        widget.min.toString(),
+        widget.unit,
+      ));
       return;
     }
     if (value > widget.max) {
-      setState(() => _errorMessage = '${widget.label}이(가) 너무 큽니다 (최대 ${widget.max}${widget.unit})');
+      setState(() => _errorMessage = l10n.errorValueTooHigh(
+        widget.label,
+        widget.max.toString(),
+        widget.unit,
+      ));
       return;
     }
 

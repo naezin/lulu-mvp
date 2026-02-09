@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 오늘 요약 카드
 ///
@@ -21,11 +23,12 @@ class TodaySummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,13 +37,13 @@ class TodaySummaryCard extends StatelessWidget {
           Row(
             children: [
               Icon(
-                Icons.bar_chart_rounded,
+                LuluIcons.barChart,
                 size: 20,
                 color: LuluColors.lavenderMist,
               ),
               const SizedBox(width: LuluSpacing.sm),
               Text(
-                '오늘 요약',
+                l10n.todaySummaryTitle,
                 style: LuluTextStyles.titleMedium.copyWith(
                   color: LuluTextColors.primary,
                 ),
@@ -56,15 +59,15 @@ class TodaySummaryCard extends StatelessWidget {
               Expanded(
                 child: _SummaryItem(
                   icon: LuluIcons.feeding,
-                  label: '수유',
-                  value: '$feedingCount회',
+                  label: l10n.activityTypeFeeding,
+                  value: l10n.countTimes(feedingCount),
                   color: LuluActivityColors.feeding,
                 ),
               ),
               Expanded(
                 child: _SummaryItem(
                   icon: LuluIcons.sleep,
-                  label: '수면',
+                  label: l10n.activityTypeSleep,
                   value: sleepDuration,
                   color: LuluActivityColors.sleep,
                 ),
@@ -72,8 +75,8 @@ class TodaySummaryCard extends StatelessWidget {
               Expanded(
                 child: _SummaryItem(
                   icon: LuluIcons.diaper,
-                  label: '기저귀',
-                  value: '$diaperCount회',
+                  label: l10n.activityTypeDiaper,
+                  value: l10n.countTimes(diaperCount),
                   color: LuluActivityColors.diaper,
                 ),
               ),

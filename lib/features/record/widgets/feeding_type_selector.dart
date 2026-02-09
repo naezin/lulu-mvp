@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/feeding_type.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 수유 종류 선택 위젯 v2.0
 ///
@@ -27,11 +29,13 @@ class FeedingTypeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '어떤 수유인가요?',
+          l10n.feedingQuestionContent,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -45,8 +49,8 @@ class FeedingTypeSelector extends StatelessWidget {
               Expanded(
                 child: _ContentTypeButton(
                   icon: LuluIcons.feedingBreast,
-                  label: '모유',
-                  subLabel: '(직접/유축)',
+                  label: l10n.feedingTypeBreast,
+                  subLabel: l10n.feedingBreastMilkSubLabel,
                   isSelected: selectedType == FeedingContentType.breastMilk,
                   onTap: () => onTypeChanged(FeedingContentType.breastMilk),
                 ),
@@ -55,7 +59,7 @@ class FeedingTypeSelector extends StatelessWidget {
               Expanded(
                 child: _ContentTypeButton(
                   icon: LuluIcons.feedingBottle,
-                  label: '분유',
+                  label: l10n.feedingTypeFormula,
                   subLabel: null,
                   isSelected: selectedType == FeedingContentType.formula,
                   onTap: () => onTypeChanged(FeedingContentType.formula),
@@ -65,7 +69,7 @@ class FeedingTypeSelector extends StatelessWidget {
               Expanded(
                 child: _ContentTypeButton(
                   icon: LuluIcons.feedingSolid,
-                  label: '이유식',
+                  label: l10n.feedingTypeSolid,
                   subLabel: null,
                   isSelected: selectedType == FeedingContentType.solid,
                   onTap: () => onTypeChanged(FeedingContentType.solid),
@@ -108,7 +112,7 @@ class _ContentTypeButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color:
                 isSelected ? LuluActivityColors.feeding : Colors.transparent,

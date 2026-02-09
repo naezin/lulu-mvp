@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../l10n/generated/app_localizations.dart' show S;
+
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -141,8 +144,8 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         width: 40,
         height: 4,
         decoration: BoxDecoration(
-          color: LuluTextColors.tertiary.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(2),
+          color: LuluTextColors.tertiaryMedium,
+          borderRadius: BorderRadius.circular(LuluRadius.xxs),
         ),
       ),
     );
@@ -163,7 +166,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
           Icon(icon, size: 24, color: color),
           const SizedBox(width: LuluSpacing.sm),
           Text(
-            '$title 수정',
+            S.of(context)!.editActivityTitleWithType(title),
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.w600,
@@ -172,7 +175,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
           const Spacer(),
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.close, color: LuluTextColors.secondary),
+            icon: const Icon(LuluIcons.close, color: LuluTextColors.secondary),
           ),
         ],
       ),
@@ -180,11 +183,12 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
   }
 
   Widget _buildTimeSection() {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '시간',
+          l10n.labelTime,
           style: LuluTextStyles.labelLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -194,7 +198,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
 
         // 시작 시간
         _buildTimeButton(
-          label: '시작',
+          label: l10n.labelStart,
           time: _startTime,
           onTap: () => _selectTime(isStart: true),
         ),
@@ -203,7 +207,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         if (widget.activity.type == ActivityType.sleep) ...[
           const SizedBox(height: LuluSpacing.sm),
           _buildTimeButton(
-            label: '종료',
+            label: l10n.labelEnd,
             time: _endTime,
             onTap: () => _selectTime(isStart: false),
           ),
@@ -218,8 +222,8 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
     required VoidCallback onTap,
   }) {
     final displayText = time != null
-        ? DateFormat('M월 d일 (E)  a h:mm', 'ko_KR').format(time)
-        : '설정 안 함';
+        ? DateFormat('MMM d (E) a h:mm', Localizations.localeOf(context).languageCode).format(time)
+        : S.of(context)!.labelNotSet;
 
     return GestureDetector(
       onTap: onTap,
@@ -227,7 +231,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         padding: const EdgeInsets.all(LuluSpacing.md),
         decoration: BoxDecoration(
           color: LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(color: LuluColors.glassBorder),
         ),
         child: Row(
@@ -250,7 +254,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
             ),
             const SizedBox(width: LuluSpacing.sm),
             Icon(
-              Icons.keyboard_arrow_down_rounded,
+              LuluIcons.chevronDown,
               color: LuluTextColors.tertiary,
               size: 20,
             ),
@@ -276,6 +280,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
   }
 
   Widget _buildFeedingSection() {
+    final l10n = S.of(context)!;
     final amountMl = (_data['amount_ml'] as num?)?.toDouble() ?? 0;
     final feedingType = _data['feeding_type'] as String? ?? 'bottle';
 
@@ -283,7 +288,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '수유 정보',
+          l10n.feedingInfo,
           style: LuluTextStyles.labelLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -293,9 +298,9 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
 
         // 수유 타입
         _buildChipSelector(
-          label: '종류',
+          label: l10n.labelType,
           options: const ['breast', 'formula', 'bottle'],
-          displayLabels: const ['모유', '분유', '젖병'],
+          displayLabels: [l10n.feedingTypeBreast, l10n.feedingTypeFormula, l10n.feedingTypeBottle],
           selectedValue: feedingType,
           onChanged: (value) => setState(() => _data['feeding_type'] = value),
         ),
@@ -305,7 +310,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         // 수유량 (분유/젖병인 경우)
         if (feedingType != 'breast') ...[
           _buildAmountInput(
-            label: '수유량',
+            label: l10n.feedingAmount,
             value: amountMl,
             unit: 'ml',
             presets: const [60, 90, 120, 150],
@@ -317,13 +322,14 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
   }
 
   Widget _buildDiaperSection() {
+    final l10n = S.of(context)!;
     final diaperType = _data['diaper_type'] as String? ?? 'wet';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '기저귀 정보',
+          l10n.diaperInfo,
           style: LuluTextStyles.labelLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -332,9 +338,9 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         const SizedBox(height: LuluSpacing.md),
 
         _buildChipSelector(
-          label: '종류',
+          label: l10n.labelType,
           options: const ['wet', 'dirty', 'both', 'dry'],
-          displayLabels: const ['소변', '대변', '소변+대변', '건조'],
+          displayLabels: [l10n.diaperTypeWet, l10n.diaperTypeDirty, l10n.diaperTypeBothDetail, l10n.diaperTypeDry],
           selectedValue: diaperType,
           onChanged: (value) => setState(() => _data['diaper_type'] = value),
         ),
@@ -343,13 +349,14 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
   }
 
   Widget _buildPlaySection() {
+    final l10n = S.of(context)!;
     final playType = _data['play_type'] as String? ?? '놀이';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '놀이 정보',
+          l10n.playInfo,
           style: LuluTextStyles.labelLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -357,10 +364,11 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         ),
         const SizedBox(height: LuluSpacing.md),
 
+        // Note: Play type values stored as Korean in DB - not i18n converted
         _buildChipSelector(
-          label: '종류',
+          label: l10n.labelType,
           options: const ['터미타임', '목욕', '외출', '놀이', '독서', '기타'],
-          displayLabels: const ['터미타임', '목욕', '외출', '놀이', '독서', '기타'],
+          displayLabels: [l10n.playTypeTummyTime, l10n.playTypeBath, l10n.playTypeOutdoor, l10n.activityPlay, l10n.playTypeReading, l10n.playTypeOther],
           selectedValue: playType,
           onChanged: (value) => setState(() => _data['play_type'] = value),
         ),
@@ -369,13 +377,14 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
   }
 
   Widget _buildHealthSection() {
+    final l10n = S.of(context)!;
     final temperature = (_data['temperature'] as num?)?.toDouble() ?? 36.5;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '건강 정보',
+          l10n.healthInfo,
           style: LuluTextStyles.labelLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -384,7 +393,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         const SizedBox(height: LuluSpacing.md),
 
         _buildAmountInput(
-          label: '체온',
+          label: l10n.healthTypeTemperature,
           value: temperature,
           unit: '°C',
           presets: const [],
@@ -418,9 +427,9 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
               ),
               decoration: BoxDecoration(
                 color: selectedValue == options[i]
-                    ? LuluColors.lavenderMist.withValues(alpha: 0.2)
+                    ? LuluColors.lavenderSelected
                     : LuluColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(LuluRadius.lg),
                 border: Border.all(
                   color: selectedValue == options[i]
                       ? LuluColors.lavenderMist
@@ -479,9 +488,9 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
                         color: value.toInt() == presets[i]
-                            ? LuluColors.lavenderMist.withValues(alpha: 0.2)
+                            ? LuluColors.lavenderSelected
                             : LuluColors.surfaceElevated,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(LuluRadius.xs),
                         border: Border.all(
                           color: value.toInt() == presets[i]
                               ? LuluColors.lavenderMist
@@ -520,11 +529,11 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                 padding: const EdgeInsets.all(LuluSpacing.sm),
                 decoration: BoxDecoration(
                   color: LuluColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(LuluRadius.xs),
                   border: Border.all(color: LuluColors.glassBorder),
                 ),
                 child: Icon(
-                  Icons.remove,
+                  LuluIcons.remove,
                   color: LuluTextColors.secondary,
                   size: 20,
                 ),
@@ -540,7 +549,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                 ),
                 decoration: BoxDecoration(
                   color: LuluColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(LuluRadius.xs),
                 ),
                 child: Text(
                   step < 1
@@ -565,11 +574,11 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                 padding: const EdgeInsets.all(LuluSpacing.sm),
                 decoration: BoxDecoration(
                   color: LuluColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(LuluRadius.xs),
                   border: Border.all(color: LuluColors.glassBorder),
                 ),
                 child: Icon(
-                  Icons.add,
+                  LuluIcons.add,
                   color: LuluTextColors.secondary,
                   size: 20,
                 ),
@@ -582,11 +591,12 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
   }
 
   Widget _buildNotesSection() {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '메모',
+          l10n.labelNotes,
           style: LuluTextStyles.labelLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -597,7 +607,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _notesController,
@@ -606,7 +616,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '메모를 입력하세요',
+              hintText: l10n.hintNotes,
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -625,12 +635,12 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluStatusColors.errorSoft,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
           Icon(
-            Icons.error_outline,
+            LuluIcons.error,
             color: LuluStatusColors.error,
             size: 20,
           ),
@@ -660,7 +670,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
           disabledForegroundColor: LuluTextColors.disabled,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: _isLoading
@@ -673,7 +683,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
                 ),
               )
             : Text(
-                '저장하기',
+                S.of(context)!.buttonSave,
                 style: LuluTextStyles.labelLarge.copyWith(
                   color: LuluColors.midnightNavy,
                   fontWeight: FontWeight.w600,
@@ -691,7 +701,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       initialDateTime: currentTime,
       minimumDate: DateTime.now().subtract(const Duration(days: 7)),
       maximumDate: DateTime.now(),
-      title: isStart ? '시작 시간' : '종료 시간',
+      title: isStart ? S.of(context)!.labelStartTime : S.of(context)!.labelEndTime,
     );
 
     if (result != null) {
@@ -727,7 +737,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = '저장 실패: $e';
+        _errorMessage = S.of(context)!.errorSaveFailed(e.toString());
         _isLoading = false;
       });
     }
@@ -764,17 +774,18 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
   }
 
   String _getActivityTitle(ActivityType type) {
+    final l10n = S.of(context)!;
     switch (type) {
       case ActivityType.feeding:
-        return '수유';
+        return l10n.activityFeeding;
       case ActivityType.sleep:
-        return '수면';
+        return l10n.activitySleep;
       case ActivityType.diaper:
-        return '기저귀';
+        return l10n.activityDiaper;
       case ActivityType.play:
-        return '놀이';
+        return l10n.activityPlay;
       case ActivityType.health:
-        return '건강';
+        return l10n.activityHealth;
     }
   }
 }

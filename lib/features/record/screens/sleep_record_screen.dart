@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+import '../../../l10n/generated/app_localizations.dart' show S;
+
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
@@ -14,6 +19,8 @@ import '../../../shared/widgets/datetime_picker/datetime_picker_sheet.dart';
 import '../../../shared/widgets/quick_record_button.dart';
 import '../providers/record_provider.dart';
 import '../providers/ongoing_sleep_provider.dart';
+
+part 'sleep_record_widgets.dart';
 
 /// 수면 기록 화면 (v5.0)
 ///
@@ -69,11 +76,11 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: LuluTextColors.primary),
+          icon: const Icon(LuluIcons.close, color: LuluTextColors.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          '수면 기록',
+          S.of(context)!.recordTitleSleep,
           style: LuluTextStyles.titleMedium.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -115,7 +122,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                         const Divider(color: LuluColors.surfaceElevated),
                         const SizedBox(height: LuluSpacing.lg),
                         Text(
-                          '또는 새 기록 추가',
+                          S.of(context)!.sleepOrAddNewRecord,
                           style: LuluTextStyles.bodySmall.copyWith(
                             color: LuluTextColors.tertiary,
                           ),
@@ -160,7 +167,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                       // 에러 메시지
                       if (provider.errorMessage != null) ...[
                         const SizedBox(height: LuluSpacing.md),
-                        _buildErrorMessage(provider.errorMessage!),
+                        _buildErrorMessage(_localizeError(provider.errorMessage!)),
                       ],
 
                       const SizedBox(height: LuluSpacing.xxl),
@@ -176,13 +183,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                   padding: const EdgeInsets.all(LuluSpacing.lg),
                   decoration: BoxDecoration(
                     color: LuluColors.midnightNavy,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
+                    boxShadow: LuluShadows.topBar,
                   ),
                   child: _buildSaveButton(provider),
                 ),
@@ -232,8 +233,9 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
 
   /// QA-03: 진행 중인 수면 종료 섹션
   Widget _buildOngoingSleepSection(OngoingSleepProvider provider) {
-    final babyName = provider.ongoingSleep?.babyName ?? '아기';
-    final sleepType = provider.ongoingSleep?.sleepType == 'night' ? '밤잠' : '낮잠';
+    final l10n = S.of(context)!;
+    final babyName = provider.ongoingSleep?.babyName ?? l10n.babyDefault;
+    final sleepType = provider.ongoingSleep?.sleepType == 'night' ? l10n.sleepTypeNight : l10n.sleepTypeNap;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -242,13 +244,13 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            LuluActivityColors.sleep.withValues(alpha: 0.15),
-            LuluActivityColors.sleep.withValues(alpha: 0.08),
+            LuluActivityColors.sleepLight,
+            LuluActivityColors.sleepSubtle,
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
-          color: LuluActivityColors.sleep.withValues(alpha: 0.5),
+          color: LuluActivityColors.sleepMedium,
           width: 2,
         ),
       ),
@@ -261,7 +263,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: LuluActivityColors.sleep.withValues(alpha: 0.2),
+                  color: LuluActivityColors.sleepSelected,
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
@@ -274,7 +276,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$babyName $sleepType 중',
+                      l10n.sleepOngoingStatus(babyName, sleepType),
                       style: LuluTextStyles.titleSmall.copyWith(
                         color: LuluTextColors.primary,
                         fontWeight: FontWeight.w600,
@@ -303,14 +305,14 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                 flex: 2,
                 child: ElevatedButton.icon(
                   onPressed: () => _endSleep(provider),
-                  icon: const Icon(Icons.bedtime_rounded),
-                  label: const Text('수면 종료'),
+                  icon: const Icon(LuluIcons.sleep),
+                  label: Text(l10n.sleepEnd),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: LuluActivityColors.sleep,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(LuluRadius.sm),
                     ),
                   ),
                 ),
@@ -318,8 +320,8 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
               const SizedBox(width: LuluSpacing.md),
               TextButton.icon(
                 onPressed: () => _cancelSleep(provider),
-                icon: const Icon(Icons.close, size: 18),
-                label: const Text('취소'),
+                icon: const Icon(LuluIcons.close, size: 18),
+                label: Text(l10n.buttonCancel),
                 style: TextButton.styleFrom(
                   foregroundColor: LuluTextColors.secondary,
                 ),
@@ -334,29 +336,8 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   Future<void> _endSleep(OngoingSleepProvider provider) async {
     final activity = await provider.endSleep();
     if (activity != null && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(LuluIcons.sleep, size: 18, color: Colors.white),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  '수면 기록이 저장되었어요',
-                  style: LuluTextStyles.bodyMedium.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: LuluActivityColors.sleep,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      );
+      // 🔧 Sprint 19 G-R7: 토스트 제거 → 햅틱 대체
+      HapticFeedback.mediumImpact();
       Navigator.of(context).pop(activity);
     }
   }
@@ -364,34 +345,37 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   Future<void> _cancelSleep(OngoingSleepProvider provider) async {
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: LuluColors.surfaceCard,
-        title: Text(
-          '수면을 취소할까요?',
-          style: LuluTextStyles.titleMedium.copyWith(
-            color: LuluTextColors.primary,
-          ),
-        ),
-        content: Text(
-          '진행 중인 수면 기록이 삭제됩니다.',
-          style: LuluTextStyles.bodyMedium.copyWith(
-            color: LuluTextColors.secondary,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('아니오'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: LuluStatusColors.error,
+      builder: (dialogContext) {
+        final l10n = S.of(dialogContext)!;
+        return AlertDialog(
+          backgroundColor: LuluColors.surfaceCard,
+          title: Text(
+            l10n.sleepCancelConfirmTitle,
+            style: LuluTextStyles.titleMedium.copyWith(
+              color: LuluTextColors.primary,
             ),
-            child: const Text('취소'),
           ),
-        ],
-      ),
+          content: Text(
+            l10n.sleepCancelConfirmBody,
+            style: LuluTextStyles.bodyMedium.copyWith(
+              color: LuluTextColors.secondary,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(l10n.buttonNo),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: LuluStatusColors.error,
+              ),
+              child: Text(l10n.buttonCancel),
+            ),
+          ],
+        );
+      },
     );
 
     if (confirm == true) {
@@ -403,11 +387,12 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 
   Widget _buildModeSelector() {
+    final l10n = S.of(context)!;
     return Row(
       children: [
         Expanded(
           child: _ModeButton(
-            label: '지금 재우기',
+            label: l10n.sleepModeNow,
             icon: LuluIcons.moon,
             isSelected: _isSleepNow,
             onTap: () => setState(() => _isSleepNow = true),
@@ -416,7 +401,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         const SizedBox(width: LuluSpacing.sm),
         Expanded(
           child: _ModeButton(
-            label: '기록 추가',
+            label: l10n.sleepModeAddRecord,
             icon: LuluIcons.note,
             isSelected: !_isSleepNow,
             onTap: () => setState(() => _isSleepNow = false),
@@ -427,11 +412,12 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 
   Widget _buildSleepTypeSelector(RecordProvider provider) {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '수면 종류',
+          l10n.sleepTypeLabel,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -442,7 +428,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           children: [
             Expanded(
               child: _SleepTypeButton(
-                label: '낮잠',
+                label: l10n.sleepTypeNap,
                 icon: LuluIcons.sun,
                 isSelected: provider.sleepType == 'nap',
                 onTap: () => provider.setSleepType('nap'),
@@ -451,7 +437,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
             const SizedBox(width: LuluSpacing.sm),
             Expanded(
               child: _SleepTypeButton(
-                label: '밤잠',
+                label: l10n.sleepTypeNight,
                 icon: LuluIcons.moon,
                 isSelected: provider.sleepType == 'night',
                 onTap: () => provider.setSleepType('night'),
@@ -472,7 +458,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           padding: LuluSpacing.cardPadding,
           decoration: BoxDecoration(
             color: LuluActivityColors.sleepBg,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
             border: Border.all(
               color: LuluActivityColors.sleep.withValues(alpha: 0.3),
             ),
@@ -483,7 +469,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: LuluActivityColors.sleep.withValues(alpha: 0.2),
+                  color: LuluActivityColors.sleepSelected,
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
@@ -496,14 +482,14 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '지금 수면 시작',
+                      S.of(context)!.sleepStartNow,
                       style: LuluTextStyles.titleSmall.copyWith(
                         color: LuluTextColors.primary,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '저장하면 수면이 시작됩니다.\n아기가 깨면 홈 화면에서 종료 버튼을 눌러주세요.',
+                      S.of(context)!.sleepStartNowHint,
                       style: LuluTextStyles.caption.copyWith(
                         color: LuluTextColors.secondary,
                       ),
@@ -519,7 +505,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
 
         // 시작 시간
         _buildTimeSection(
-          label: '수면 시작',
+          label: S.of(context)!.sleepStart,
           time: provider.sleepStartTime,
           onTimeChanged: provider.setSleepStartTime,
         ),
@@ -528,12 +514,13 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 
   Widget _buildAddRecordSection(RecordProvider provider) {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 시작 시간
         _buildTimeSection(
-          label: '수면 시작',
+          label: l10n.sleepStart,
           time: provider.sleepStartTime,
           onTimeChanged: provider.setSleepStartTime,
         ),
@@ -542,7 +529,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
 
         // 종료 시간
         _buildTimeSection(
-          label: '수면 종료',
+          label: l10n.sleepEnd,
           time: provider.sleepEndTime ?? DateTime.now(),
           onTimeChanged: provider.setSleepEndTime,
         ),
@@ -607,32 +594,33 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     final hours = duration ~/ 60;
     final minutes = duration % 60;
 
+    final l10n = S.of(context)!;
     String durationText;
     if (hours == 0) {
-      durationText = '$minutes분';
+      durationText = l10n.durationMinutes(minutes);
     } else if (minutes == 0) {
-      durationText = '$hours시간';
+      durationText = l10n.durationHours(hours);
     } else {
-      durationText = '$hours시간 $minutes분';
+      durationText = l10n.durationHoursMinutes(hours, minutes);
     }
 
     return Container(
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(
-            Icons.timer_outlined,
+            LuluIcons.timerOutlined,
             color: LuluActivityColors.sleep,
             size: 20,
           ),
           const SizedBox(width: LuluSpacing.sm),
           Text(
-            '총 수면 시간: ',
+            l10n.sleepTotalDuration,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -649,11 +637,12 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 
   Widget _buildNotesInput() {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '메모 (선택)',
+          l10n.notesOptionalLabel,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -664,7 +653,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _notesController,
@@ -673,7 +662,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '수면 상태, 특이사항 등',
+              hintText: l10n.hintSleepNotes,
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -691,8 +680,9 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 
   Widget _buildSaveButton(RecordProvider provider) {
+    final l10n = S.of(context)!;
     final isValid = provider.isSelectionValid;
-    final buttonText = _isSleepNow ? '수면 시작' : '저장하기';
+    final buttonText = _isSleepNow ? l10n.sleepStart : l10n.buttonSave;
 
     return SizedBox(
       width: double.infinity,
@@ -707,7 +697,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           disabledForegroundColor: LuluTextColors.disabled,
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: provider.isLoading
@@ -743,12 +733,12 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluStatusColors.errorSoft,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
           Icon(
-            Icons.error_outline,
+            LuluIcons.errorOutline,
             color: LuluStatusColors.error,
             size: 20,
           ),
@@ -764,6 +754,19 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         ],
       ),
     );
+  }
+
+  String _localizeError(String errorKey) {
+    final l10n = S.of(context);
+    if (errorKey == 'errorSelectBaby') {
+      return l10n?.errorSelectBaby ?? 'Please select a baby';
+    } else if (errorKey == 'errorNoFamily') {
+      return l10n?.errorNoFamily ?? 'No family information';
+    } else if (errorKey.startsWith('errorSaveFailed:')) {
+      final detail = errorKey.substring('errorSaveFailed:'.length);
+      return l10n?.errorSaveFailed(detail) ?? 'Save failed: $detail';
+    }
+    return errorKey;
   }
 
   Future<void> _handleSave(RecordProvider provider) async {
@@ -791,7 +794,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
                 Icon(LuluIcons.sleep, size: 18, color: Colors.white),
                 const SizedBox(width: 8),
                 Text(
-                  '${selectedBaby.name} 수면 시작! 홈에서 종료할 수 있어요',
+                  S.of(context)!.sleepStartedMessage(selectedBaby.name),
                   style: LuluTextStyles.bodyMedium.copyWith(
                     color: Colors.white,
                   ),
@@ -801,7 +804,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
             backgroundColor: LuluActivityColors.sleep,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             duration: const Duration(seconds: 3),
           ),
@@ -818,174 +821,5 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 }
 
-class _ModeButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _ModeButton({
-    required this.label,
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? LuluActivityColors.sleepBg
-              : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected
-                ? LuluActivityColors.sleep
-                : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 18,
-              color: isSelected
-                  ? LuluActivityColors.sleep
-                  : LuluTextColors.secondary,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: LuluTextStyles.labelMedium.copyWith(
-                color: isSelected
-                    ? LuluActivityColors.sleep
-                    : LuluTextColors.secondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// HOTFIX v1.1: 통합 날짜/시간 버튼
-class _IntegratedTimeButton extends StatelessWidget {
-  final DateTime time;
-  final VoidCallback onTap;
-
-  const _IntegratedTimeButton({
-    required this.time,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: '시간 선택',
-      child: Material(
-        color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: LuluSpacing.lg,
-              vertical: LuluSpacing.md,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.access_time_rounded,
-                  size: 20,
-                  color: LuluActivityColors.sleep,
-                ),
-                const SizedBox(width: LuluSpacing.sm),
-                Text(
-                  DateFormat('M월 d일 (E) a h:mm', 'ko').format(time),
-                  style: LuluTextStyles.bodyMedium.copyWith(
-                    color: LuluTextColors.primary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(width: LuluSpacing.sm),
-                Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  size: 20,
-                  color: LuluTextColors.tertiary,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SleepTypeButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _SleepTypeButton({
-    required this.label,
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? LuluActivityColors.sleepBg
-              : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected
-                ? LuluActivityColors.sleep
-                : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isSelected
-                  ? LuluActivityColors.sleep
-                  : LuluTextColors.secondary,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: LuluTextStyles.labelMedium.copyWith(
-                color: isSelected
-                    ? LuluActivityColors.sleep
-                    : LuluTextColors.secondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// Private widgets (_ModeButton, _IntegratedTimeButton, _SleepTypeButton)
+// → sleep_record_widgets.dart (part file)

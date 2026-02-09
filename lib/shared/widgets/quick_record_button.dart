@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
+import '../../core/design_system/lulu_shadows.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../data/models/activity_model.dart';
 import '../../data/models/baby_type.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 
 /// MB-03: 첫 사용 여부 키
 const String _kQuickRecordTooltipShownKey = 'quick_record_tooltip_shown';
@@ -119,14 +122,8 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
               ),
               decoration: BoxDecoration(
                 color: LuluColors.surfaceCard,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(LuluRadius.xs),
+                boxShadow: LuluShadows.button,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -142,7 +139,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
                       const SizedBox(width: 4),
                       Flexible(
                         child: Text(
-                          '탭하면 이전과 같은 내용으로\n바로 저장돼요!',
+                          S.of(context)!.quickRecordTooltip,
                           style: LuluTextStyles.bodySmall.copyWith(
                             color: LuluTextColors.primary,
                           ),
@@ -222,7 +219,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
           padding: const EdgeInsets.all(LuluSpacing.lg),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
             border: Border.all(
               color: color.withValues(alpha: 0.3),
               width: 1,
@@ -236,7 +233,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
                 height: 48,
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
                 ),
                 child: Center(
                   child: widget.isLoading
@@ -280,7 +277,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '탭하여 저장',
+                      S.of(context)!.quickRecordTapToSave,
                       style: LuluTextStyles.caption.copyWith(
                         color: LuluTextColors.tertiary,
                       ),
@@ -290,7 +287,7 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
               ),
               // 화살표
               Icon(
-                Icons.chevron_right,
+                LuluIcons.chevronRight,
                 color: color,
               ),
             ],
@@ -322,10 +319,11 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
 
   /// MB-03: 라벨 텍스트 (아기 이름 포함)
   String _getLabelText() {
+    final l10n = S.of(context)!;
     if (widget.babyName != null && widget.babyName!.isNotEmpty) {
-      return '${widget.babyName}의 마지막 기록 반복';
+      return l10n.quickRecordRepeatWithName(widget.babyName!);
     }
-    return '마지막 기록 반복';
+    return l10n.quickRecordRepeat;
   }
 
   /// MB-03: 요약 + 시간 (예: "모유 120ml (5분 전)")
@@ -342,24 +340,26 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
   String _getTimeAgo() {
     if (widget.lastRecord == null) return '';
 
+    final l10n = S.of(context)!;
     final now = DateTime.now();
     final recordTime = widget.lastRecord!.startTime;
     final diff = now.difference(recordTime);
 
     if (diff.inMinutes < 1) {
-      return '방금';
+      return l10n.timeAgoJustNow;
     } else if (diff.inMinutes < 60) {
-      return '${diff.inMinutes}분 전';
+      return l10n.timeAgoMinutes(diff.inMinutes);
     } else if (diff.inHours < 24) {
-      return '${diff.inHours}시간 전';
+      return l10n.timeAgoHours(diff.inHours);
     } else {
-      return '${diff.inDays}일 전';
+      return l10n.daysAgoCount(diff.inDays);
     }
   }
 
   String _getRecordSummary() {
+    final l10n = S.of(context)!;
     final data = widget.lastRecord?.data;
-    if (data == null) return '기록';
+    if (data == null) return l10n.labelRecord;
 
     switch (widget.activityType) {
       case ActivityType.feeding:
@@ -368,48 +368,48 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
         final duration = data['duration_minutes'] as int?;
 
         final typeStr = switch (feedingType) {
-          'breast' => '모유',
-          'bottle' => '젖병',
-          'formula' => '분유',
-          'solid' => '이유식',
-          _ => '수유',
+          'breast' => l10n.feedingTypeBreast,
+          'bottle' => l10n.feedingTypeBottle,
+          'formula' => l10n.feedingTypeFormula,
+          'solid' => l10n.feedingTypeSolid,
+          _ => l10n.activityTypeFeeding,
         };
 
         if (amount != null && amount > 0) {
           return '$typeStr ${amount.toInt()}ml';
         }
         if (duration != null && duration > 0) {
-          return '$typeStr $duration분';
+          return '$typeStr ${l10n.unitMinutes(duration)}';
         }
         return typeStr;
 
       case ActivityType.sleep:
         final sleepType = data['sleep_type'] as String?;
-        return sleepType == 'nap' ? '낮잠' : '밤잠';
+        return sleepType == 'nap' ? l10n.sleepTypeNap : l10n.sleepTypeNight;
 
       case ActivityType.diaper:
         final diaperType = data['diaper_type'] as String?;
         return switch (diaperType) {
-          'wet' => '소변',
-          'dirty' => '대변',
-          'both' => '혼합',
-          'dry' => '건조',
-          _ => '기저귀',
+          'wet' => l10n.diaperTypeWet,
+          'dirty' => l10n.diaperTypeDirty,
+          'both' => l10n.diaperTypeBoth,
+          'dry' => l10n.diaperTypeDry,
+          _ => l10n.activityTypeDiaper,
         };
 
       case ActivityType.play:
         final playType = data['play_type'] as String?;
         final duration = data['duration_minutes'] as int?;
         final typeStr = switch (playType) {
-          'tummy_time' => '터미타임',
-          'bath' => '목욕',
-          'outdoor' => '외출',
-          'play' => '실내놀이',
-          'reading' => '독서',
-          _ => '놀이',
+          'tummy_time' => l10n.playTypeTummyTime,
+          'bath' => l10n.playTypeBath,
+          'outdoor' => l10n.playTypeOutdoor,
+          'play' => l10n.playTypeIndoor,
+          'reading' => l10n.playTypeReading,
+          _ => l10n.activityPlay,
         };
         if (duration != null && duration > 0) {
-          return '$typeStr $duration분';
+          return '$typeStr ${l10n.unitMinutes(duration)}';
         }
         return typeStr;
 
@@ -417,14 +417,14 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
         final healthType = data['health_type'] as String?;
         final temp = data['temperature'] as num?;
         if (temp != null) {
-          return '체온 ${temp.toStringAsFixed(1)}°C';
+          return l10n.healthTempValue(temp.toStringAsFixed(1));
         }
         return switch (healthType) {
-          'temperature' => '체온 측정',
-          'symptom' => '증상 기록',
-          'medication' => '투약',
-          'hospital' => '병원 방문',
-          _ => '건강',
+          'temperature' => l10n.healthTypeTemperature,
+          'symptom' => l10n.healthTypeSymptom,
+          'medication' => l10n.healthTypeMedicationShort,
+          'hospital' => l10n.healthTypeHospital,
+          _ => l10n.activityTypeHealth,
         };
     }
   }

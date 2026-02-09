@@ -93,7 +93,7 @@ class FamilyModel {
   /// 아기 추가 (불변성 유지)
   FamilyModel addBaby(String babyId) {
     if (babyIds.length >= 4) {
-      throw StateError('가족당 최대 4명의 아기만 등록 가능합니다.');
+      throw StateError('Maximum 4 babies per family.');
     }
     return copyWith(
       babyIds: [...babyIds, babyId],
@@ -104,7 +104,7 @@ class FamilyModel {
   /// 아기 제거 (불변성 유지)
   FamilyModel removeBaby(String babyId) {
     if (babyIds.length <= 1) {
-      throw StateError('가족에는 최소 1명의 아기가 필요합니다.');
+      throw StateError('Family must have at least 1 baby.');
     }
     return copyWith(
       babyIds: babyIds.where((id) => id != babyId).toList(),

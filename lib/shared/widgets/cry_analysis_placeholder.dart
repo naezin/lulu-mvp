@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
+import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 
 /// Phase 2 울음 분석 예약 영역 (Sprint 6 Day 2)
 ///
@@ -29,9 +32,9 @@ class CryAnalysisPlaceholder extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: LuluColors.lavenderMist.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
-            color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+            color: LuluColors.lavenderSelected,
             width: 1,
           ),
         ),
@@ -42,12 +45,12 @@ class CryAnalysisPlaceholder extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: LuluColors.lavenderMist.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
+                color: LuluColors.lavenderLight,
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Center(
                 child: Icon(
-                  Icons.graphic_eq_rounded,
+                  LuluIcons.soundWave,
                   size: 24,
                   color: LuluColors.lavenderMist,
                 ),
@@ -61,7 +64,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '울음 분석 기능 준비 중',
+                    S.of(context)!.cryAnalysisPreparing,
                     style: LuluTextStyles.bodyMedium.copyWith(
                       color: LuluTextColors.primary,
                       fontWeight: FontWeight.w500,
@@ -69,7 +72,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Phase 2에서 만나요!',
+                    S.of(context)!.cryAnalysisComingSoon,
                     style: LuluTextStyles.caption.copyWith(
                       color: LuluTextColors.tertiary,
                     ),
@@ -84,11 +87,11 @@ class CryAnalysisPlaceholder extends StatelessWidget {
                 vertical: LuluSpacing.xs,
               ),
               decoration: BoxDecoration(
-                color: LuluColors.lavenderMist.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(8),
+                color: LuluColors.lavenderSelected,
+                borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Text(
-                'Coming Soon',
+                S.of(context)!.comingSoonBadge,
                 style: LuluTextStyles.caption.copyWith(
                   color: LuluColors.lavenderMist,
                   fontWeight: FontWeight.w600,
@@ -108,14 +111,14 @@ class CryAnalysisPlaceholder extends StatelessWidget {
       builder: (context) => AlertDialog(
         backgroundColor: LuluColors.deepBlue,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
         ),
         title: Row(
           children: [
-            Icon(Icons.graphic_eq_rounded, size: 28, color: LuluColors.lavenderMist),
+            Icon(LuluIcons.soundWave, size: 28, color: LuluColors.lavenderMist),
             const SizedBox(width: LuluSpacing.sm),
             Text(
-              '울음 분석',
+              S.of(context)!.cryAnalysisTitle,
               style: LuluTextStyles.titleMedium.copyWith(
                 color: LuluTextColors.primary,
               ),
@@ -123,7 +126,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
           ],
         ),
         content: Text(
-          'AI 기반 울음 분석 기능이\nPhase 2에서 출시됩니다.\n\n아기의 울음 패턴을 분석하여\n배고픔, 졸림, 불편함 등을\n구분해드릴게요.',
+          S.of(context)!.cryAnalysisDetailedDescription,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -132,7 +135,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              '확인',
+              S.of(context)!.buttonConfirm,
               style: LuluTextStyles.labelMedium.copyWith(
                 color: LuluColors.lavenderMist,
               ),

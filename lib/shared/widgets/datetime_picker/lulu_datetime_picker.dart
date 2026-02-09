@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import 'quick_time_buttons.dart';
 
 /// iOS 15+ 스타일 통합 날짜/시간 피커
@@ -109,7 +110,7 @@ class _LuluDateTimePickerState extends State<LuluDateTimePicker> {
           height: 200,
           decoration: BoxDecoration(
             color: LuluColors.surfaceCard,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: CupertinoTheme(
             data: CupertinoThemeData(

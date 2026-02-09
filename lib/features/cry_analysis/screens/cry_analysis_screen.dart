@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/baby_model.dart';
@@ -116,11 +119,11 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       backgroundColor: LuluColors.midnightNavy,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        icon: const Icon(LuluIcons.backIos),
         onPressed: () => Navigator.of(context).pop(),
       ),
       title: Text(
-        '울음 분석',
+        S.of(context)!.cryAnalysisTitle,
         style: LuluTextStyles.titleMedium.copyWith(
           color: LuluTextColors.primary,
         ),
@@ -129,11 +132,11 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       actions: [
         // 히스토리 버튼
         IconButton(
-          icon: const Icon(Icons.history_rounded),
+          icon: const Icon(LuluIcons.history),
           onPressed: () {
             // TODO: 히스토리 화면 이동
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('히스토리 기능은 곧 추가됩니다.')),
+              SnackBar(content: Text(S.of(context)!.cryHistoryComingSoon)),
             );
           },
         ),
@@ -214,6 +217,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
   }
 
   Widget _buildIdleState(BabyModel baby) {
+    final l10n = S.of(context)!;
     return Column(
       children: [
         // 아이콘
@@ -221,25 +225,25 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           width: 120,
           height: 120,
           decoration: BoxDecoration(
-            color: LuluColors.lavenderMist.withValues(alpha: 0.1),
+            color: LuluColors.lavenderBg,
             shape: BoxShape.circle,
           ),
           child: Icon(
-            Icons.graphic_eq_rounded,
+            LuluIcons.soundWave,
             size: 56,
             color: LuluColors.lavenderMist,
           ),
         ),
         const SizedBox(height: LuluSpacing.xl),
         Text(
-          '아기가 울고 있나요?',
+          l10n.cryIdleTitle,
           style: LuluTextStyles.titleLarge.copyWith(
             color: LuluTextColors.primary,
           ),
         ),
         const SizedBox(height: LuluSpacing.sm),
         Text(
-          '버튼을 누르고 울음 소리를 들려주세요',
+          l10n.cryIdleHint,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -253,20 +257,20 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
               vertical: LuluSpacing.sm,
             ),
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+              color: LuluColors.lavenderBg,
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  Icons.info_outline_rounded,
+                  LuluIcons.infoOutline,
                   size: 16,
                   color: LuluColors.lavenderMist,
                 ),
                 const SizedBox(width: LuluSpacing.xs),
                 Text(
-                  '교정연령 ${baby.correctedAgeInWeeks ?? 0}주 기준으로 분석해요',
+                  l10n.cryCorrectedAgeInfo(baby.correctedAgeInWeeks ?? 0),
                   style: LuluTextStyles.caption.copyWith(
                     color: LuluColors.lavenderMist,
                   ),
@@ -300,7 +304,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
                   ),
                 ),
                 child: Icon(
-                  Icons.mic_rounded,
+                  LuluIcons.microphone,
                   size: 56,
                   color: LuluStatusColors.error,
                 ),
@@ -308,14 +312,14 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
             ),
             const SizedBox(height: LuluSpacing.xl),
             Text(
-              '듣고 있어요...',
+              S.of(context)!.cryListeningTitle,
               style: LuluTextStyles.titleLarge.copyWith(
                 color: LuluTextColors.primary,
               ),
             ),
             const SizedBox(height: LuluSpacing.sm),
             Text(
-              '2-10초 동안 울음 소리를 들려주세요',
+              S.of(context)!.cryListeningHint,
               style: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -341,14 +345,14 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
         ),
         const SizedBox(height: LuluSpacing.xl),
         Text(
-          '분석 중...',
+          S.of(context)!.cryAnalyzingText,
           style: LuluTextStyles.titleLarge.copyWith(
             color: LuluTextColors.primary,
           ),
         ),
         const SizedBox(height: LuluSpacing.sm),
         Text(
-          'AI가 울음 패턴을 분석하고 있어요',
+          S.of(context)!.cryAnalyzingHint,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -378,13 +382,13 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           padding: LuluSpacing.cardPadding,
           decoration: BoxDecoration(
             color: LuluColors.deepBlue,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '분석 상세',
+                S.of(context)!.cryDetailTitle,
                 style: LuluTextStyles.titleSmall.copyWith(
                   color: LuluTextColors.primary,
                 ),
@@ -411,21 +415,20 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           Container(
             padding: const EdgeInsets.all(LuluSpacing.md),
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+              color: LuluColors.lavenderBg,
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
             ),
             child: Row(
               children: [
                 Icon(
-                  Icons.info_outline_rounded,
+                  LuluIcons.infoOutline,
                   size: 20,
                   color: LuluColors.lavenderMist,
                 ),
                 const SizedBox(width: LuluSpacing.sm),
                 Expanded(
                   child: Text(
-                    '교정연령 ${result.correctedAgeWeeks ?? 0}주 기준으로 '
-                    '신뢰도를 보정했어요.',
+                    S.of(context)!.cryPretermAdjustInfo(result.correctedAgeWeeks ?? 0),
                     style: LuluTextStyles.caption.copyWith(
                       color: LuluTextColors.secondary,
                     ),
@@ -451,7 +454,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
     final latestRecord = records.first;
     if (latestRecord.hasFeedback) {
       return Text(
-        '피드백을 보내주셨어요. 감사합니다!',
+        S.of(context)!.cryFeedbackThanks,
         style: LuluTextStyles.caption.copyWith(
           color: LuluTextColors.tertiary,
         ),
@@ -461,7 +464,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
     return Column(
       children: [
         Text(
-          '분석 결과가 맞나요?',
+          S.of(context)!.cryFeedbackQuestion,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -471,8 +474,8 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildFeedbackButton(
-              label: '맞아요',
-              icon: Icons.thumb_up_outlined,
+              label: S.of(context)!.cryFeedbackCorrect,
+              icon: LuluIcons.thumbUp,
               color: LuluStatusColors.success,
               onTap: () {
                 provider.addFeedback(latestRecord.id, CryFeedback.accurate);
@@ -480,8 +483,8 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
             ),
             const SizedBox(width: LuluSpacing.md),
             _buildFeedbackButton(
-              label: '아니에요',
-              icon: Icons.thumb_down_outlined,
+              label: S.of(context)!.cryFeedbackIncorrect,
+              icon: LuluIcons.thumbDown,
               color: LuluStatusColors.error,
               onTap: () {
                 provider.addFeedback(latestRecord.id, CryFeedback.inaccurate);
@@ -508,7 +511,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
         ),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
           border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
         child: Row(
@@ -530,22 +533,22 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
     return Container(
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
-        color: LuluStatusColors.error.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
+        color: LuluStatusColors.errorBg,
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
-          color: LuluStatusColors.error.withValues(alpha: 0.3),
+          color: LuluStatusColors.errorBorder,
         ),
       ),
       child: Column(
         children: [
           Icon(
-            Icons.error_outline_rounded,
+            LuluIcons.errorOutline,
             size: 48,
             color: LuluStatusColors.error,
           ),
           const SizedBox(height: LuluSpacing.md),
           Text(
-            provider.errorMessage ?? '알 수 없는 오류가 발생했어요.',
+            provider.errorMessage ?? S.of(context)!.cryErrorUnknown,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.primary,
             ),
@@ -555,7 +558,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           TextButton(
             onPressed: () => provider.clearError(),
             child: Text(
-              '다시 시도',
+              S.of(context)!.buttonRetry,
               style: LuluTextStyles.labelMedium.copyWith(
                 color: LuluColors.lavenderMist,
               ),
@@ -576,19 +579,19 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       ),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            Icons.analytics_outlined,
+            LuluIcons.analyticsOutlined,
             size: 16,
             color: remaining > 0 ? LuluTextColors.secondary : LuluStatusColors.warning,
           ),
           const SizedBox(width: LuluSpacing.xs),
           Text(
-            '오늘 남은 분석: $remaining회',
+            S.of(context)!.cryRemainingCount(remaining),
             style: LuluTextStyles.caption.copyWith(
               color: remaining > 0 ? LuluTextColors.secondary : LuluStatusColors.warning,
             ),
@@ -600,7 +603,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
                 // TODO: 프리미엄 업그레이드 화면
               },
               child: Text(
-                '업그레이드',
+                S.of(context)!.buttonUpgrade,
                 style: LuluTextStyles.caption.copyWith(
                   color: LuluColors.lavenderMist,
                   fontWeight: FontWeight.w600,
@@ -618,22 +621,22 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            Icons.info_outline_rounded,
+            LuluIcons.infoOutline,
             size: 16,
             color: LuluTextColors.tertiary,
           ),
           const SizedBox(width: LuluSpacing.sm),
           Expanded(
             child: Text(
-              '이 분석 결과는 참고용이며, 의료적 조언을 대체하지 않습니다. '
-              '${baby.isPreterm ? "조산아의 울음 패턴은 개인차가 크므로, " : ""}'
-              '걱정되시면 담당 의료진과 상담하세요.',
+              baby.isPreterm
+                  ? S.of(context)!.cryDisclaimerWithPreterm
+                  : S.of(context)!.cryDisclaimer,
               style: LuluTextStyles.caption.copyWith(
                 color: LuluTextColors.tertiary,
                 height: 1.4,
@@ -651,13 +654,13 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.child_care_rounded,
+            LuluIcons.baby,
             size: 64,
             color: LuluTextColors.tertiary,
           ),
           const SizedBox(height: LuluSpacing.md),
           Text(
-            '아기 정보를 먼저 등록해주세요',
+            S.of(context)!.cryEmptyBabyInfo,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),

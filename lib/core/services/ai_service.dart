@@ -34,7 +34,7 @@ class AIService {
   }) async {
     // AI 초기화 확인
     if (!isAvailable) {
-      return AIRequestResult.error('AI 기능이 비활성화되어 있습니다.');
+      return AIRequestResult.error('AI feature is not available.');
     }
 
     // 사용량 확인
@@ -59,12 +59,12 @@ class AIService {
         return AIRequestResult.success(response.content!, usage: usage);
       } else {
         return AIRequestResult.error(
-          response.errorMessage ?? 'AI 조언을 가져오는데 실패했습니다.',
+          response.errorMessage ?? 'Failed to get AI advice.',
         );
       }
     } catch (e) {
       debugPrint('❌ [AIService] Error: $e');
-      return AIRequestResult.error('오류가 발생했습니다: $e');
+      return AIRequestResult.error('An error occurred: $e');
     }
   }
 
@@ -80,7 +80,7 @@ class AIService {
     bool isPreterm = false,
   }) async {
     if (!isAvailable) {
-      return AIRequestResult.error('AI 기능이 비활성화되어 있습니다.');
+      return AIRequestResult.error('AI feature is not available.');
     }
 
     if (!await _usageManager.canMakeRequest()) {
@@ -104,12 +104,12 @@ class AIService {
         return AIRequestResult.success(response.content!, usage: usage);
       } else {
         return AIRequestResult.error(
-          response.errorMessage ?? 'Sweet Spot 해석에 실패했습니다.',
+          response.errorMessage ?? 'Failed to interpret Sweet Spot.',
         );
       }
     } catch (e) {
       debugPrint('❌ [AIService] Error: $e');
-      return AIRequestResult.error('오류가 발생했습니다: $e');
+      return AIRequestResult.error('An error occurred: $e');
     }
   }
 
@@ -124,7 +124,7 @@ class AIService {
     List<String>? babyNames,
   }) async {
     if (!isAvailable) {
-      return AIRequestResult.error('AI 기능이 비활성화되어 있습니다.');
+      return AIRequestResult.error('AI feature is not available.');
     }
 
     if (!await _usageManager.canMakeRequest()) {
@@ -147,12 +147,12 @@ class AIService {
         return AIRequestResult.success(response.content!, usage: usage);
       } else {
         return AIRequestResult.error(
-          response.errorMessage ?? '다태아 팁을 가져오는데 실패했습니다.',
+          response.errorMessage ?? 'Failed to get multiple births tip.',
         );
       }
     } catch (e) {
       debugPrint('❌ [AIService] Error: $e');
-      return AIRequestResult.error('오류가 발생했습니다: $e');
+      return AIRequestResult.error('An error occurred: $e');
     }
   }
 

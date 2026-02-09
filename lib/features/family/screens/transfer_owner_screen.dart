@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/services/supabase_service.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/family_provider.dart';
 
@@ -32,7 +34,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
       ),
       body: Consumer<FamilyProvider>(
         builder: (context, provider, _) {
-          final currentUserId = Supabase.instance.client.auth.currentUser?.id;
+          final currentUserId = SupabaseService.currentUserId;
           final others =
               provider.members.where((m) => m.userId != currentUserId).toList();
 
@@ -55,7 +57,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
                   l10n.transferOwnershipDesc,
                   style: TextStyle(
                     fontSize: 14,
-                    color: LuluTextColors.primary.withOpacity(0.7),
+                    color: LuluTextColors.primaryStrong,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -76,7 +78,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
                       disabledBackgroundColor: LuluColors.deepIndigo,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(LuluRadius.sm),
                       ),
                     ),
                     child: _isLoading
@@ -115,13 +117,13 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? LuluColors.lavenderMist.withOpacity(0.2)
-              : LuluColors.deepIndigo.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(12),
+              ? LuluColors.lavenderSelected
+              : LuluColors.deepIndigoBorder,
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: isSelected
                 ? LuluColors.lavenderMist
-                : LuluColors.deepIndigo.withOpacity(0.5),
+                : LuluColors.deepIndigoMedium,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -136,14 +138,14 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
                 border: Border.all(
                   color: isSelected
                       ? LuluColors.lavenderMist
-                      : LuluColors.lavenderMist.withOpacity(0.5),
+                      : LuluColors.lavenderMedium,
                   width: 2,
                 ),
               ),
               child: isSelected
                   ? const Center(
                       child: Icon(
-                        Icons.check,
+                        LuluIcons.save,
                         size: 16,
                         color: LuluColors.lavenderMist,
                       ),
@@ -169,7 +171,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
                     Text(
                       member.userEmail!,
                       style: TextStyle(
-                        color: LuluTextColors.primary.withOpacity(0.6),
+                        color: LuluTextColors.primarySoft,
                         fontSize: 14,
                       ),
                     ),
@@ -196,13 +198,13 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
             style: const TextStyle(color: LuluTextColors.primary)),
         content: Text(
           l10n.confirmTransferDesc,
-          style: TextStyle(color: LuluTextColors.primary.withOpacity(0.8)),
+          style: TextStyle(color: LuluTextColors.primaryBold),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child:
-                Text(l10n.cancel, style: const TextStyle(color: Colors.grey)),
+                Text(l10n.cancel, style: const TextStyle(color: LuluTextColors.tertiary)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -222,10 +224,9 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
     try {
       await context.read<FamilyProvider>().transferOwnership(_selectedId!);
 
+      // 🔧 Sprint 19 G-R6: 토스트 제거 → 햅틱 대체
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.ownershipTransferred)),
-        );
+        HapticFeedback.mediumImpact();
         Navigator.pop(context);
       }
     } catch (e) {

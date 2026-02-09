@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../shared/widgets/expandable_fab.dart';
@@ -10,6 +12,7 @@ import '../../features/timeline/screens/record_history_screen.dart';
 import '../../features/growth/screens/growth_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
 import '../../features/record/record.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 
 /// 메인 네비게이션 (2단계 UT 검증 완료: 시안 B-4)
 ///
@@ -73,33 +76,33 @@ class _MainNavigationState extends State<MainNavigation> {
       notchMargin: 8,
       height: 68,
       elevation: 8,
-      shadowColor: Colors.black.withValues(alpha: 0.3),
+      shadowColor: LuluColors.shadowBlack,
       padding: EdgeInsets.zero,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _NavItem(
             icon: LuluIcons.home,
-            label: '홈',
+            label: S.of(context)?.navHome ?? 'Home',
             isSelected: _currentIndex == 0,
             onTap: () => _onTabTapped(0),
           ),
           _NavItem(
             icon: LuluIcons.records,
-            label: '기록',
+            label: S.of(context)?.navRecords ?? 'Records',
             isSelected: _currentIndex == 1,
             onTap: () => _onTabTapped(1),
           ),
           const SizedBox(width: 80), // FAB 공간
           _NavItem(
             icon: LuluIcons.growth,
-            label: '성장',
+            label: S.of(context)?.navGrowth ?? 'Growth',
             isSelected: _currentIndex == 2,
             onTap: () => _onTabTapped(2),
           ),
           _NavItem(
             icon: LuluIcons.settings,
-            label: '설정',
+            label: S.of(context)?.navSettings ?? 'Settings',
             isSelected: _currentIndex == 3,
             onTap: () => _onTabTapped(3),
           ),
@@ -128,11 +131,11 @@ class _MainNavigationState extends State<MainNavigation> {
       // 아기 정보가 없으면 안내 메시지
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('아기 정보를 먼저 등록해주세요'),
+          content: Text(S.of(context)?.registerBabyFirst ?? 'Please register baby info first'),
           backgroundColor: LuluColors.surfaceElevated,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
         ),
       );
@@ -187,18 +190,10 @@ class _MainNavigationState extends State<MainNavigation> {
         ),
       ).then((result) {
         // 기록 저장 후 홈 화면 새로고침
+        // 🔧 Sprint 19 G-R1: 토스트 제거 → 햅틱 대체
         if (result != null && mounted) {
           homeProvider.addActivity(result);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('기록이 저장되었습니다'),
-              backgroundColor: LuluStatusColors.success,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          );
+          HapticFeedback.mediumImpact();
         }
       });
     }

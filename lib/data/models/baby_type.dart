@@ -1,3 +1,5 @@
+import '../../l10n/generated/app_localizations.dart' show S;
+
 /// 아기 출생 유형
 enum BabyType {
   singleton('singleton', '단태아'),
@@ -8,7 +10,17 @@ enum BabyType {
   const BabyType(this.value, this.label);
 
   final String value;
+
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   final String label;
+
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) => switch (this) {
+        BabyType.singleton => l10n.babyTypeSingleton,
+        BabyType.twin => l10n.babyTypeTwin,
+        BabyType.triplet => l10n.babyTypeTriplet,
+        BabyType.quadruplet => l10n.babyTypeQuadruplet,
+      };
 
   static BabyType fromValue(String value) {
     return BabyType.values.firstWhere(
@@ -43,7 +55,16 @@ enum Zygosity {
   const Zygosity(this.value, this.label);
 
   final String value;
+
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   final String label;
+
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) => switch (this) {
+        Zygosity.identical => l10n.zygosityIdentical,
+        Zygosity.fraternal => l10n.zygosityFraternal,
+        Zygosity.unknown => l10n.zygosityUnknown,
+      };
 
   static Zygosity fromValue(String value) {
     return Zygosity.values.firstWhere(
@@ -73,7 +94,16 @@ enum Gender {
   const Gender(this.value, this.label);
 
   final String value;
+
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   final String label;
+
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) => switch (this) {
+        Gender.male => l10n.genderMale,
+        Gender.female => l10n.genderFemale,
+        Gender.unknown => l10n.genderUnknown,
+      };
 
   static Gender fromValue(String value) {
     return Gender.values.firstWhere(
@@ -94,7 +124,18 @@ enum ActivityType {
   const ActivityType(this.value, this.label);
 
   final String value;
+
+  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
   final String label;
+
+  /// 표시용 라벨 (i18n)
+  String localizedLabel(S l10n) => switch (this) {
+        ActivityType.sleep => l10n.activityTypeSleep,
+        ActivityType.feeding => l10n.activityTypeFeeding,
+        ActivityType.diaper => l10n.activityTypeDiaper,
+        ActivityType.play => l10n.activityTypePlay,
+        ActivityType.health => l10n.activityTypeHealth,
+      };
 
   static ActivityType fromValue(String value) {
     return ActivityType.values.firstWhere(

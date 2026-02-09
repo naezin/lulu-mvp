@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/feeding_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../providers/record_provider.dart';
 import '../widgets/record_time_picker.dart';
 import '../widgets/feeding_type_selector.dart';
@@ -91,11 +95,11 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
         backgroundColor: LuluColors.midnightNavy,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: LuluTextColors.primary),
+          icon: const Icon(LuluIcons.close, color: LuluTextColors.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          '수유 기록',
+          S.of(context)!.recordTitleFeeding,
           style: LuluTextStyles.titleMedium.copyWith(
             color: LuluTextColors.primary,
           ),
@@ -153,7 +157,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
 
                       // 시간 선택
                       RecordTimePicker(
-                        label: '수유 시간',
+                        label: S.of(context)!.feedingTimeLabel,
                         time: provider.recordTime,
                         onTimeChanged: provider.setRecordTime,
                       ),
@@ -243,7 +247,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                       // 에러 메시지
                       if (provider.errorMessage != null) ...[
                         const SizedBox(height: LuluSpacing.md),
-                        _buildErrorMessage(provider.errorMessage!),
+                        _buildErrorMessage(_localizeError(provider.errorMessage!)),
                       ],
 
                       const SizedBox(height: LuluSpacing.xxl),
@@ -259,13 +263,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                   padding: const EdgeInsets.all(LuluSpacing.lg),
                   decoration: BoxDecoration(
                     color: LuluColors.midnightNavy,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
+                    boxShadow: LuluShadows.topBar,
                   ),
                   child: _buildSaveButton(provider),
                 ),
@@ -331,7 +329,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '수유량',
+          S.of(context)!.feedingAmount,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -353,7 +351,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '메모 (선택)',
+          S.of(context)!.notesOptionalLabel,
           style: LuluTextStyles.bodyLarge.copyWith(
             color: LuluTextColors.primary,
             fontWeight: FontWeight.w600,
@@ -364,7 +362,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
           padding: LuluSpacing.inputPadding,
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _notesController,
@@ -373,7 +371,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '특이사항을 기록하세요',
+              hintText: S.of(context)!.notesPlaceholder,
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -406,7 +404,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
           disabledForegroundColor: LuluTextColors.disabled,
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
         ),
         child: provider.isLoading
@@ -419,7 +417,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                 ),
               )
             : Text(
-                '저장하기',
+                S.of(context)!.buttonSave,
                 style: LuluTextStyles.labelLarge.copyWith(
                   color: LuluColors.midnightNavy,
                 ),
@@ -433,12 +431,12 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
       padding: LuluSpacing.cardPadding,
       decoration: BoxDecoration(
         color: LuluStatusColors.errorSoft,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(
         children: [
           Icon(
-            Icons.error_outline,
+            LuluIcons.errorOutline,
             color: LuluStatusColors.error,
             size: 20,
           ),
@@ -454,6 +452,19 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
         ],
       ),
     );
+  }
+
+  String _localizeError(String errorKey) {
+    final l10n = S.of(context);
+    if (errorKey == 'errorSelectBaby') {
+      return l10n?.errorSelectBaby ?? 'Please select a baby';
+    } else if (errorKey == 'errorNoFamily') {
+      return l10n?.errorNoFamily ?? 'No family information';
+    } else if (errorKey.startsWith('errorSaveFailed:')) {
+      final detail = errorKey.substring('errorSaveFailed:'.length);
+      return l10n?.errorSaveFailed(detail) ?? 'Save failed: $detail';
+    }
+    return errorKey;
   }
 
   Future<void> _handleSave(RecordProvider provider) async {

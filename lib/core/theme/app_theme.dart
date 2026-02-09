@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_radius.dart';
 
 /// Lulu Theme - MVP-F (다태아 중심)
 /// Midnight Blue theme optimized for late-night feeding & low-light usage
@@ -119,14 +121,14 @@ class AppTheme {
         elevation: 0,
         shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(LuluRadius.xl),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: deepBlue,
-        indicatorColor: lavenderMist.withValues(alpha: 0.2),
+        indicatorColor: LuluColors.lavenderSelected,
         elevation: 8,
-        shadowColor: Colors.black.withValues(alpha: 0.3),
+        shadowColor: LuluColors.shadowBlack,
         height: 72,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
@@ -158,7 +160,7 @@ class AppTheme {
         foregroundColor: midnightNavy,
         elevation: 8,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(LuluRadius.lg),
         ),
         extendedSizeConstraints: const BoxConstraints.tightFor(height: 56),
       ),
@@ -169,7 +171,7 @@ class AppTheme {
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
           textStyle: const TextStyle(
             fontSize: 17,
@@ -184,7 +186,7 @@ class AppTheme {
           foregroundColor: lavenderGlow,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
         ),
       ),
@@ -192,15 +194,15 @@ class AppTheme {
         filled: true,
         fillColor: surfaceElevated,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           borderSide: const BorderSide(color: lavenderMist, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

@@ -4,6 +4,9 @@ import 'package:uuid/uuid.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
 
+part 'record_form_helpers.dart';
+part 'record_quick_actions.dart';
+
 /// 기록 화면 상태 관리 Provider
 ///
 /// MVP-F: 단일 아기 선택만 지원 (동시 기록 제거)
@@ -172,19 +175,37 @@ class RecordProvider extends ChangeNotifier {
   // ========================================
 
   /// 아기별 수유 데이터 캐시
-  final Map<String, _FeedingCache> _feedingCache = {};
+  final Map<String, RecordFeedingCache> _feedingCache = {};
 
   /// 아기별 수면 데이터 캐시
-  final Map<String, _SleepCache> _sleepCache = {};
+  final Map<String, RecordSleepCache> _sleepCache = {};
 
   /// 아기별 기저귀 데이터 캐시
-  final Map<String, _DiaperCache> _diaperCache = {};
+  final Map<String, RecordDiaperCache> _diaperCache = {};
 
   /// 아기별 놀이 데이터 캐시
-  final Map<String, _PlayCache> _playCache = {};
+  final Map<String, RecordPlayCache> _playCache = {};
 
   /// 아기별 건강 데이터 캐시
-  final Map<String, _HealthCache> _healthCache = {};
+  final Map<String, RecordHealthCache> _healthCache = {};
+
+  // ========================================
+  // HOTFIX v1.2: Quick feeding state
+  // (methods → record_quick_actions.dart)
+  // ========================================
+
+  /// 최근 수유 기록 (중복 제거된 3개)
+  List<ActivityModel> _recentFeedings = [];
+  List<ActivityModel> get recentFeedings => List.unmodifiable(_recentFeedings);
+
+  /// 현재 로딩 중인 babyId (race condition 방지)
+  String? _currentFeedingBabyId;
+
+  /// 마지막 저장 ID (취소용)
+  String? _lastSavedId;
+
+  /// 연타 방지 타임스탬프
+  DateTime? _lastQuickSaveTime;
 
   // ========================================
   // 초기화 메서드
@@ -275,7 +296,7 @@ class RecordProvider extends ChangeNotifier {
   /// MB-02: 현재 아기 데이터를 캐시에 저장
   void _saveCacheForBaby(String babyId) {
     // 수유 캐시
-    _feedingCache[babyId] = _FeedingCache(
+    _feedingCache[babyId] = RecordFeedingCache(
       type: _feedingType,
       amount: _feedingAmount,
       duration: _feedingDuration,
@@ -283,26 +304,26 @@ class RecordProvider extends ChangeNotifier {
     );
 
     // 수면 캐시
-    _sleepCache[babyId] = _SleepCache(
+    _sleepCache[babyId] = RecordSleepCache(
       startTime: _sleepStartTime,
       endTime: _sleepEndTime,
       sleepType: _sleepType,
     );
 
     // 기저귀 캐시
-    _diaperCache[babyId] = _DiaperCache(
+    _diaperCache[babyId] = RecordDiaperCache(
       type: _diaperType,
       stoolColor: _stoolColor,
     );
 
     // 놀이 캐시
-    _playCache[babyId] = _PlayCache(
+    _playCache[babyId] = RecordPlayCache(
       type: _playType,
       duration: _playDuration,
     );
 
     // 건강 캐시
-    _healthCache[babyId] = _HealthCache(
+    _healthCache[babyId] = RecordHealthCache(
       type: _healthType,
       temperature: _temperature,
       symptoms: List.from(_symptoms),
@@ -369,86 +390,7 @@ class RecordProvider extends ChangeNotifier {
   /// 선택 유효성 검사
   bool get isSelectionValid => _selectedBabyIds.isNotEmpty;
 
-  // ========================================
-  // 수유 기록 메서드
-  // ========================================
-
-  /// 수유 종류 변경
-  void setFeedingType(String type) {
-    _feedingType = type;
-    notifyListeners();
-  }
-
-  /// 수유량 변경 (공통)
-  void setFeedingAmount(double amount) {
-    _feedingAmount = amount;
-    notifyListeners();
-  }
-
-  /// 아기별 수유량 변경
-  void setFeedingAmountForBaby(String babyId, double amount) {
-    _feedingAmountByBaby = Map.from(_feedingAmountByBaby);
-    _feedingAmountByBaby[babyId] = amount;
-    notifyListeners();
-  }
-
-  /// 개별 입력 모드 토글
-  void toggleIndividualAmount() {
-    _isIndividualAmount = !_isIndividualAmount;
-    if (_isIndividualAmount) {
-      // 공통 양을 각 아기에게 복사
-      for (final babyId in _selectedBabyIds) {
-        _feedingAmountByBaby[babyId] = _feedingAmount;
-      }
-    }
-    notifyListeners();
-  }
-
-  /// 수유 시간 변경 (분)
-  void setFeedingDuration(int minutes) {
-    _feedingDuration = minutes;
-    notifyListeners();
-  }
-
-  /// 모유 수유 좌/우 변경
-  void setBreastSide(String side) {
-    _breastSide = side;
-    notifyListeners();
-  }
-
-  // ========================================
-  // 이유식 기록 메서드 (Sprint 8)
-  // ========================================
-
-  /// 음식 이름 변경
-  void setSolidFoodName(String name) {
-    _solidFoodName = name;
-    notifyListeners();
-  }
-
-  /// 처음 먹이는 음식 체크 변경
-  void setSolidIsFirstTry(bool isFirstTry) {
-    _solidIsFirstTry = isFirstTry;
-    notifyListeners();
-  }
-
-  /// 양 단위 변경
-  void setSolidUnit(String unit) {
-    _solidUnit = unit;
-    notifyListeners();
-  }
-
-  /// 양 변경
-  void setSolidAmount(double amount) {
-    _solidAmount = amount;
-    notifyListeners();
-  }
-
-  /// 아기 반응 변경
-  void setSolidReaction(String? reaction) {
-    _solidReaction = reaction;
-    notifyListeners();
-  }
+  // Feeding/Solid setters → record_form_helpers.dart (extension)
 
   /// 이유식 데이터 구성 (saveFeeding에서 호출)
   Map<String, dynamic> _buildSolidFoodData() {
@@ -465,13 +407,13 @@ class RecordProvider extends ChangeNotifier {
   /// 수유 기록 저장
   Future<ActivityModel?> saveFeeding() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -528,7 +470,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Feeding saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving feeding: $e');
       return null;
     } finally {
@@ -537,27 +479,7 @@ class RecordProvider extends ChangeNotifier {
     }
   }
 
-  // ========================================
-  // 수면 기록 메서드
-  // ========================================
-
-  /// 수면 시작 시간 변경
-  void setSleepStartTime(DateTime time) {
-    _sleepStartTime = time;
-    notifyListeners();
-  }
-
-  /// 수면 종료 시간 변경
-  void setSleepEndTime(DateTime? time) {
-    _sleepEndTime = time;
-    notifyListeners();
-  }
-
-  /// 수면 타입 변경
-  void setSleepType(String type) {
-    _sleepType = type;
-    notifyListeners();
-  }
+  // Sleep setters → record_form_helpers.dart (extension)
 
   /// 수면 시간 (분)
   /// 자정을 넘기는 경우도 정확히 계산 (QA-01 수정)
@@ -579,13 +501,13 @@ class RecordProvider extends ChangeNotifier {
   /// 수면 기록 저장
   Future<ActivityModel?> saveSleep() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -612,7 +534,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Sleep saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving sleep: $e');
       return null;
     } finally {
@@ -621,52 +543,18 @@ class RecordProvider extends ChangeNotifier {
     }
   }
 
-  // ========================================
-  // 기저귀 기록 메서드
-  // ========================================
-
-  /// 기저귀 종류 변경
-  void setDiaperType(String type) {
-    _diaperType = type;
-    // 소변이나 건조 선택 시 색상 초기화
-    if (type == 'wet' || type == 'dry') {
-      _stoolColor = null;
-    }
-    notifyListeners();
-  }
-
-  /// 대변 색상 변경
-  void setStoolColor(String? color) {
-    _stoolColor = color;
-    notifyListeners();
-  }
-
-  // ========================================
-  // 놀이 기록 메서드
-  // ========================================
-
-  /// 놀이 종류 변경
-  void setPlayType(String type) {
-    _playType = type;
-    notifyListeners();
-  }
-
-  /// 놀이 시간 변경 (분)
-  void setPlayDuration(int? minutes) {
-    _playDuration = minutes;
-    notifyListeners();
-  }
+  // Diaper/Play setters → record_form_helpers.dart (extension)
 
   /// 놀이 기록 저장
   Future<ActivityModel?> savePlay() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -703,7 +591,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Play saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving play: $e');
       return null;
     } finally {
@@ -712,55 +600,18 @@ class RecordProvider extends ChangeNotifier {
     }
   }
 
-  // ========================================
-  // 건강 기록 메서드
-  // ========================================
-
-  /// 건강 기록 종류 변경
-  void setHealthType(String type) {
-    _healthType = type;
-    notifyListeners();
-  }
-
-  /// 체온 변경
-  void setTemperature(double? temp) {
-    _temperature = temp;
-    notifyListeners();
-  }
-
-  /// 증상 토글
-  void toggleSymptom(String symptom) {
-    _symptoms = List.from(_symptoms);
-    if (_symptoms.contains(symptom)) {
-      _symptoms.remove(symptom);
-    } else {
-      _symptoms.add(symptom);
-    }
-    notifyListeners();
-  }
-
-  /// 투약 정보 변경
-  void setMedication(String? medication) {
-    _medication = medication?.trim().isEmpty == true ? null : medication?.trim();
-    notifyListeners();
-  }
-
-  /// 병원 방문 정보 변경
-  void setHospitalVisit(String? visit) {
-    _hospitalVisit = visit?.trim().isEmpty == true ? null : visit?.trim();
-    notifyListeners();
-  }
+  // Health setters → record_form_helpers.dart (extension)
 
   /// 건강 기록 저장
   Future<ActivityModel?> saveHealth() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -814,7 +665,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Health saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving health: $e');
       return null;
     } finally {
@@ -826,13 +677,13 @@ class RecordProvider extends ChangeNotifier {
   /// 기저귀 기록 저장
   Future<ActivityModel?> saveDiaper() async {
     if (!isSelectionValid) {
-      _errorMessage = '아기를 선택해주세요';
+      _errorMessage = 'errorSelectBaby';
       notifyListeners();
       return null;
     }
 
     if (_familyId == null) {
-      _errorMessage = '가족 정보가 없습니다';
+      _errorMessage = 'errorNoFamily';
       notifyListeners();
       return null;
     }
@@ -868,7 +719,7 @@ class RecordProvider extends ChangeNotifier {
       debugPrint('[OK] [RecordProvider] Diaper saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
+      _errorMessage = 'errorSaveFailed:$e';
       debugPrint('❌ [RecordProvider] Error saving diaper: $e');
       return null;
     } finally {
@@ -934,255 +785,8 @@ class RecordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ========================================
-  // HOTFIX v1.2: 빠른 수유 기록 (최근 3개 버튼)
-  // ========================================
-
-  /// 최근 수유 기록 (중복 제거된 3개)
-  List<ActivityModel> _recentFeedings = [];
-  List<ActivityModel> get recentFeedings => List.unmodifiable(_recentFeedings);
-
-  /// 현재 로딩 중인 babyId (race condition 방지)
-  String? _currentFeedingBabyId;
-
-  /// 마지막 저장 ID (취소용)
-  String? _lastSavedId;
-
-  /// 연타 방지 타임스탬프
-  DateTime? _lastQuickSaveTime;
-
-  /// 최근 수유 기록 로드
-  /// 아기별로 최근 수유 기록에서 중복 제거 후 3개 반환
-  ///
-  /// BUGFIX v5.3: 아기 탭 전환 시 이전 데이터 노출 버그 수정
-  /// - 로딩 시작 시 즉시 클리어하여 이전 아기 데이터 노출 방지
-  /// - _currentFeedingBabyId로 race condition 방지
-  Future<void> loadRecentFeedings(String babyId) async {
-    // 🔴 수정 1: 로딩 시작 전 즉시 클리어 + babyId 저장
-    _currentFeedingBabyId = babyId;
-    _recentFeedings = [];
-    notifyListeners(); // 빈 상태로 즉시 UI 업데이트
-
-    debugPrint('🔄 loadRecentFeedings started for babyId: $babyId');
-
-    try {
-      // BUG-DATA-01 FIX: Supabase에서만 조회 (로컬 저장소 제거)
-      List<ActivityModel> activities = [];
-      try {
-        activities = await _activityRepository.getActivitiesByBabyId(
-          babyId,
-          limit: 20,
-        );
-        debugPrint('☁️ Supabase activities for babyId $babyId: ${activities.length}');
-      } catch (e) {
-        debugPrint('⚠️ Supabase fetch failed: $e');
-      }
-
-      // 🔴 babyId 변경 확인 (race condition 방지)
-      if (_currentFeedingBabyId != babyId) {
-        debugPrint('⚠️ babyId changed during loading, discarding results');
-        return; // 사용자가 다른 아기로 전환함 → 결과 무시
-      }
-
-      final allActivities = activities
-        ..sort((a, b) => b.startTime.compareTo(a.startTime));
-
-      debugPrint('📊 Activities for babyId $babyId: ${allActivities.length}');
-
-      // 4. 엄격한 필터링 (단일 아기만)
-      final strictFiltered = allActivities.where((a) {
-        final isSingleBabyMatch = a.babyIds.length == 1 && a.babyIds[0] == babyId;
-        return isSingleBabyMatch;
-      }).toList();
-      debugPrint('🔍 Strict filtered for $babyId: ${strictFiltered.length}');
-
-      // 5. 수유 기록만 필터링
-      final feedingActivities = strictFiltered
-          .where((a) => a.type == ActivityType.feeding)
-          .toList();
-      debugPrint('[Feeding] activities count: ${feedingActivities.length}');
-
-      // 6. 중복 제거 (feeding_type + breast_side + amount_ml 조합)
-      final seen = <String>{};
-      final unique = <ActivityModel>[];
-
-      for (final activity in feedingActivities) {
-        final key = _buildFeedingKey(activity);
-        if (!seen.contains(key)) {
-          seen.add(key);
-          unique.add(activity);
-        }
-        if (unique.length >= 3) break;
-      }
-
-      // 🔴 수정 3: 최종 babyId 확인 후 상태 업데이트
-      if (_currentFeedingBabyId == babyId) {
-        _recentFeedings = unique;
-        debugPrint('✅ Updated _recentFeedings: ${_recentFeedings.length} items');
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint('❌ Error loading recent feedings: $e');
-      // 에러 시에도 빈 상태 유지 (이미 클리어됨)
-    }
-  }
-
-  /// 최근 수유 기록 클리어 (아기 전환 시 명시적 호출용)
-  void clearRecentFeedings() {
-    _recentFeedings = [];
-    _currentFeedingBabyId = null;
-    notifyListeners();
-  }
-
-  /// 수유 기록 고유 키 생성 (중복 판별용)
-  String _buildFeedingKey(ActivityModel activity) {
-    final data = activity.data;
-    if (data == null) return activity.id;
-
-    final type = data['feeding_type'] as String? ?? 'bottle';
-    final side = data['breast_side'] as String? ?? '';
-    final amount = data['amount_ml']?.toString() ?? '';
-    final duration = data['duration_minutes']?.toString() ?? '';
-
-    return '$type|$side|$amount|$duration';
-  }
-
-  /// 빠른 수유 저장
-  /// 템플릿 기반으로 현재 시간에 저장
-  /// 연타 방지: 1초 이내 중복 저장 차단
-  Future<String?> quickSaveFeeding(ActivityModel template) async {
-    // 연타 방지 (1초 이내)
-    final now = DateTime.now();
-    if (_lastQuickSaveTime != null &&
-        now.difference(_lastQuickSaveTime!).inMilliseconds < 1000) {
-      debugPrint('⚠️ [RecordProvider] Quick save blocked (double tap)');
-      return null;
-    }
-    _lastQuickSaveTime = now;
-
-    if (_familyId == null || selectedBabyId == null) {
-      _errorMessage = '아기를 선택해주세요';
-      notifyListeners();
-      return null;
-    }
-
-    try {
-      // 새 ID와 현재 시간으로 복사
-      final newActivity = template.copyWith(
-        id: _uuid.v4(),
-        babyIds: [selectedBabyId!],
-        startTime: now,
-        endTime: now,
-        createdAt: now,
-      );
-
-      final saved = await _activityRepository.createActivity(newActivity);
-      _lastSavedId = saved.id;
-
-      debugPrint('[OK] [RecordProvider] Quick feeding saved to Supabase: ${saved.id}');
-
-      // 최근 기록 새로고침
-      await loadRecentFeedings(selectedBabyId!);
-
-      return saved.id;
-    } catch (e) {
-      _errorMessage = '저장에 실패했습니다: $e';
-      debugPrint('❌ [RecordProvider] Error quick save feeding: $e');
-      notifyListeners();
-      return null;
-    }
-  }
-
-  /// 마지막 저장 취소
-  Future<bool> undoLastSave() async {
-    if (_lastSavedId == null) return false;
-
-    try {
-      await _activityRepository.deleteActivity(_lastSavedId!);
-      debugPrint('[OK] [RecordProvider] Undo from Supabase: $_lastSavedId');
-
-      _lastSavedId = null;
-
-      // 최근 기록 새로고침
-      if (selectedBabyId != null) {
-        await loadRecentFeedings(selectedBabyId!);
-      }
-
-      return true;
-    } catch (e) {
-      debugPrint('❌ [RecordProvider] Error undo: $e');
-      return false;
-    }
-  }
-}
-
-// ========================================
-// MB-02: 아기별 데이터 캐시 클래스들
-// ========================================
-
-/// 수유 데이터 캐시
-class _FeedingCache {
-  final String type;
-  final double amount;
-  final int duration;
-  final String breastSide;
-
-  _FeedingCache({
-    required this.type,
-    required this.amount,
-    required this.duration,
-    required this.breastSide,
-  });
-}
-
-/// 수면 데이터 캐시
-class _SleepCache {
-  final DateTime startTime;
-  final DateTime? endTime;
-  final String sleepType;
-
-  _SleepCache({
-    required this.startTime,
-    this.endTime,
-    required this.sleepType,
-  });
-}
-
-/// 기저귀 데이터 캐시
-class _DiaperCache {
-  final String type;
-  final String? stoolColor;
-
-  _DiaperCache({
-    required this.type,
-    this.stoolColor,
-  });
-}
-
-/// 놀이 데이터 캐시
-class _PlayCache {
-  final String type;
-  final int? duration;
-
-  _PlayCache({
-    required this.type,
-    this.duration,
-  });
-}
-
-/// 건강 데이터 캐시
-class _HealthCache {
-  final String type;
-  final double? temperature;
-  final List<String> symptoms;
-  final String? medication;
-  final String? hospitalVisit;
-
-  _HealthCache({
-    required this.type,
-    this.temperature,
-    required this.symptoms,
-    this.medication,
-    this.hospitalVisit,
-  });
+  // Quick actions (loadRecentFeedings, quickSaveFeeding, undoLastSave)
+  // → record_quick_actions.dart (extension)
+  // Cache classes (RecordFeedingCache, etc.)
+  // → record_quick_actions.dart
 }

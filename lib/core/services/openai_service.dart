@@ -3,35 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../data/models/baby_model.dart';
+import '../constants/ai_prompts.dart';
 
-/// OpenAI API 서비스
-/// 조산아/다태아 전문 AI 육아 도우미
+/// OpenAI API service
+/// Preterm/multiple births specialized AI parenting assistant
 class OpenAIService {
   static bool _initialized = false;
 
-  /// 시스템 프롬프트 (한국어)
-  static const String _systemPrompt = '''
-당신은 조산아와 다태아 전문 AI 육아 도우미입니다.
-
-## 역할
-- 신생아와 영아의 수면, 수유, 발달에 대한 조언 제공
-- 조산아의 교정연령 기준 발달 조언
-- 다태아 가정의 특수한 상황 이해와 맞춤 조언
-
-## 원칙
-1. **교정연령 기준**: 조산아는 항상 교정연령 기준으로 발달을 평가합니다
-2. **비교 금지**: 쌍둥이나 다태아 간 비교하지 않습니다. "우열", "더 빠른/느린" 표현을 사용하지 않습니다
-3. **의료 진단 금지**: 의학적 진단이나 처방을 하지 않습니다. 걱정되는 증상은 의료진 상담을 권유합니다
-4. **공감과 격려**: 부모의 노력을 인정하고, 따뜻하고 공감하는 톤으로 대화합니다
-5. **실용적 조언**: 구체적이고 바로 실행 가능한 팁을 제공합니다
-
-## 응답 형식
-- 간결하고 명확하게 (200자 이내 권장)
-- 이모지 적절히 사용
-- 필요시 단계별 목록 제공
-''';
-
-  /// OpenAI 초기화
+  /// Initialize OpenAI
   static Future<void> initialize() async {
     if (_initialized) {
       debugPrint('[WARN] OpenAI already initialized');
@@ -50,20 +29,20 @@ class OpenAIService {
     debugPrint('[OK] OpenAI initialized successfully');
   }
 
-  /// 초기화 여부 확인
+  /// Check initialization status
   static bool get isInitialized => _initialized;
 
   // ========================================
-  // 1. AI 육아 조언
+  // 1. AI Baby Advice
   // ========================================
 
-  /// 아기 정보 기반 맞춤 육아 조언
+  /// Baby info based personalized parenting advice
   static Future<OpenAIResponse> getBabyAdvice({
     required BabyModel baby,
     required String question,
   }) async {
     if (!_initialized) {
-      return OpenAIResponse.error('AI 기능이 비활성화되어 있습니다.');
+      return OpenAIResponse.error(AiPrompts.errorAiDisabled);
     }
 
     try {
@@ -75,14 +54,19 @@ class OpenAIService {
           OpenAIChatCompletionChoiceMessageModel(
             role: OpenAIChatMessageRole.system,
             content: [
-              OpenAIChatCompletionChoiceMessageContentItemModel.text(_systemPrompt),
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                AiPrompts.systemPrompt,
+              ),
             ],
           ),
           OpenAIChatCompletionChoiceMessageModel(
             role: OpenAIChatMessageRole.user,
             content: [
               OpenAIChatCompletionChoiceMessageContentItemModel.text(
-                '아기 정보:\n$babyContext\n\n질문: $question',
+                AiPrompts.buildBabyQuestionPrompt(
+                  babyContext: babyContext,
+                  question: question,
+                ),
               ),
             ],
           ),
@@ -101,44 +85,41 @@ class OpenAIService {
         tokensUsed: tokens,
       );
     } catch (e) {
-      debugPrint('❌ [OpenAI] Error getting advice: $e');
-      return OpenAIResponse.error('AI 조언을 가져오는데 실패했습니다: $e');
+      debugPrint('[OpenAI] Error getting advice: $e');
+      return OpenAIResponse.error('${AiPrompts.errorAdviceFailed}: $e');
     }
   }
 
   // ========================================
-  // 2. Sweet Spot 해석
+  // 2. Sweet Spot Interpretation
   // ========================================
 
-  /// Sweet Spot 상태를 부모에게 쉽게 설명
+  /// Explain Sweet Spot status to parents
   static Future<OpenAIResponse> interpretSweetSpot({
-    required String currentState, // 'too_early', 'approaching', 'optimal', 'overtired'
+    required String currentState,
     required int minutesUntilSweetSpot,
     required int babyAgeMonths,
     bool isPreterm = false,
   }) async {
     if (!_initialized) {
-      return OpenAIResponse.error('AI 기능이 비활성화되어 있습니다.');
+      return OpenAIResponse.error(AiPrompts.errorAiDisabled);
     }
 
     try {
       final stateDescription = switch (currentState) {
-        'too_early' => '아직 피곤하지 않은 상태',
-        'approaching' => '곧 적정 수면 시간에 접근',
-        'optimal' => '지금이 재우기 최적의 시간',
-        'overtired' => '과로 상태 - 즉시 재우기 필요',
-        _ => '상태 확인 중',
+        'too_early' => AiPrompts.sweetSpotTooEarly,
+        'approaching' => AiPrompts.sweetSpotApproaching,
+        'optimal' => AiPrompts.sweetSpotOptimal,
+        'overtired' => AiPrompts.sweetSpotOvertired,
+        _ => AiPrompts.sweetSpotUnknown,
       };
 
-      final prompt = '''
-아기 정보:
-- 나이: $babyAgeMonths개월${isPreterm ? ' (교정연령)' : ''}
-- 현재 상태: $stateDescription
-- Sweet Spot까지: $minutesUntilSweetSpot분
-
-부모에게 현재 상황을 간단히 설명하고, 어떻게 해야 하는지 조언해주세요.
-2-3문장으로 짧게 답변해주세요.
-''';
+      final prompt = AiPrompts.buildSweetSpotPrompt(
+        babyAgeMonths: babyAgeMonths,
+        isPreterm: isPreterm,
+        stateDescription: stateDescription,
+        minutesUntilSweetSpot: minutesUntilSweetSpot,
+      );
 
       final response = await OpenAI.instance.chat.create(
         model: 'gpt-4o-mini',
@@ -146,7 +127,9 @@ class OpenAIService {
           OpenAIChatCompletionChoiceMessageModel(
             role: OpenAIChatMessageRole.system,
             content: [
-              OpenAIChatCompletionChoiceMessageContentItemModel.text(_systemPrompt),
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                AiPrompts.systemPrompt,
+              ),
             ],
           ),
           OpenAIChatCompletionChoiceMessageModel(
@@ -168,48 +151,34 @@ class OpenAIService {
         tokensUsed: tokens,
       );
     } catch (e) {
-      debugPrint('❌ [OpenAI] Error interpreting sweet spot: $e');
-      return OpenAIResponse.error('Sweet Spot 해석에 실패했습니다.');
+      debugPrint('[OpenAI] Error interpreting sweet spot: $e');
+      return OpenAIResponse.error(AiPrompts.errorSweetSpotFailed);
     }
   }
 
   // ========================================
-  // 3. 다태아 맞춤 팁
+  // 3. Multiple Births Tips
   // ========================================
 
-  /// 다태아 가정 맞춤 팁 제공
+  /// Provide tips for multiple births families
   static Future<OpenAIResponse> getMultipleBirthsTip({
     required int babyCount,
-    required String situation, // 'feeding', 'sleep', 'diaper', 'general'
+    required String situation,
     List<String>? babyNames,
   }) async {
     if (!_initialized) {
-      return OpenAIResponse.error('AI 기능이 비활성화되어 있습니다.');
+      return OpenAIResponse.error(AiPrompts.errorAiDisabled);
     }
 
     try {
-      final babyType = switch (babyCount) {
-        2 => '쌍둥이',
-        3 => '세쌍둥이',
-        4 => '네쌍둥이',
-        _ => '다태아',
-      };
+      final babyType = AiPrompts.getMultipleBirthLabel(babyCount);
+      final situationText = AiPrompts.getSituationLabel(situation);
 
-      final situationText = switch (situation) {
-        'feeding' => '수유',
-        'sleep' => '수면/재우기',
-        'diaper' => '기저귀 교체',
-        _ => '전반적인 육아',
-      };
-
-      final prompt = '''
-$babyType 가정의 $situationText에 대한 실용적인 팁을 알려주세요.
-${babyNames != null ? '아기 이름: ${babyNames.join(", ")}' : ''}
-
-- 구체적이고 바로 실행 가능한 팁 2-3개
-- 동시에 처리하는 방법 위주
-- 부모의 체력 관리도 고려
-''';
+      final prompt = AiPrompts.buildMultipleBirthsTipPrompt(
+        babyType: babyType,
+        situationText: situationText,
+        babyNames: babyNames,
+      );
 
       final response = await OpenAI.instance.chat.create(
         model: 'gpt-4o-mini',
@@ -217,7 +186,9 @@ ${babyNames != null ? '아기 이름: ${babyNames.join(", ")}' : ''}
           OpenAIChatCompletionChoiceMessageModel(
             role: OpenAIChatMessageRole.system,
             content: [
-              OpenAIChatCompletionChoiceMessageContentItemModel.text(_systemPrompt),
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                AiPrompts.systemPrompt,
+              ),
             ],
           ),
           OpenAIChatCompletionChoiceMessageModel(
@@ -239,8 +210,8 @@ ${babyNames != null ? '아기 이름: ${babyNames.join(", ")}' : ''}
         tokensUsed: tokens,
       );
     } catch (e) {
-      debugPrint('❌ [OpenAI] Error getting multiples tip: $e');
-      return OpenAIResponse.error('다태아 팁을 가져오는데 실패했습니다.');
+      debugPrint('[OpenAI] Error getting multiples tip: $e');
+      return OpenAIResponse.error(AiPrompts.errorMultiplesTipFailed);
     }
   }
 
@@ -248,24 +219,43 @@ ${babyNames != null ? '아기 이름: ${babyNames.join(", ")}' : ''}
   // Private Helpers
   // ========================================
 
-  /// 아기 정보를 컨텍스트 문자열로 변환
+  /// Convert baby info to context string
   static String _buildBabyContext(BabyModel baby) {
     final buffer = StringBuffer();
 
-    buffer.writeln('- 이름: ${baby.name}');
+    buffer.writeln('- ${AiPrompts.labelName}: ${baby.name}');
 
     if (baby.isPreterm && baby.correctedAgeInMonths != null) {
-      buffer.writeln('- 교정연령: ${baby.correctedAgeInMonths}개월');
-      buffer.writeln('- 실제연령: ${baby.actualAgeInMonths}개월');
-      buffer.writeln('- 출생주수: ${baby.gestationalWeeksAtBirth}주 (조산아)');
+      buffer.writeln(
+        '- ${AiPrompts.labelCorrectedAge}: '
+        '${baby.correctedAgeInMonths}${AiPrompts.unitMonths}',
+      );
+      buffer.writeln(
+        '- ${AiPrompts.labelActualAge}: '
+        '${baby.actualAgeInMonths}${AiPrompts.unitMonths}',
+      );
+      buffer.writeln(
+        '- ${AiPrompts.labelGestationalWeeks}: '
+        '${baby.gestationalWeeksAtBirth}${AiPrompts.unitWeeks} '
+        '(${AiPrompts.labelPretermSuffix})',
+      );
     } else {
-      buffer.writeln('- 나이: ${baby.actualAgeInMonths}개월');
+      buffer.writeln(
+        '- ${AiPrompts.labelAge}: '
+        '${baby.actualAgeInMonths}${AiPrompts.unitMonths}',
+      );
     }
 
     if (baby.isMultipleBirth) {
-      buffer.writeln('- 다태아: ${baby.multipleBirthType?.label ?? ""}');
+      buffer.writeln(
+        '- ${AiPrompts.labelMultipleBirth}: '
+        '${baby.multipleBirthType?.label ?? ""}',
+      );
       if (baby.birthOrder != null) {
-        buffer.writeln('- 출생순서: ${baby.birthOrder}번째');
+        buffer.writeln(
+          '- ${AiPrompts.labelBirthOrder}: '
+          '${baby.birthOrder}${AiPrompts.unitOrdinalSuffix}',
+        );
       }
     }
 
@@ -273,7 +263,7 @@ ${babyNames != null ? '아기 이름: ${babyNames.join(", ")}' : ''}
   }
 }
 
-/// OpenAI 응답 래퍼
+/// OpenAI response wrapper
 class OpenAIResponse {
   final bool isSuccess;
   final String? content;

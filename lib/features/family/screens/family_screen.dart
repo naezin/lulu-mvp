@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/services/supabase_service.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/family_provider.dart';
 import '../widgets/invite_bottom_sheet.dart';
@@ -83,17 +84,19 @@ class _FamilyScreenState extends State<FamilyScreen> {
   }
 
   Widget _buildFamilyHeader(BuildContext context, FamilyProvider provider) {
+    final l10n = S.of(context)!;
+
     return Row(
       children: [
         Container(
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: LuluColors.lavenderMist.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(12),
+            color: LuluColors.lavenderSelected,
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: const Center(
-            child: Text('👨‍👩‍👧', style: TextStyle(fontSize: 24)),
+            child: Icon(LuluIcons.people, color: LuluColors.lavenderMist, size: 24),
           ),
         ),
         const SizedBox(width: 12),
@@ -102,7 +105,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                provider.familyDisplayName ?? '우리 가족',
+                provider.familyDisplayName ?? S.of(context)!.defaultFamilyName,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -110,10 +113,10 @@ class _FamilyScreenState extends State<FamilyScreen> {
                 ),
               ),
               Text(
-                '${provider.memberCount}명의 가족',
+                l10n.memberCount('${provider.memberCount}'),
                 style: TextStyle(
                   fontSize: 14,
-                  color: LuluTextColors.primary.withOpacity(0.7),
+                  color: LuluTextColors.primaryStrong,
                 ),
               ),
             ],
@@ -128,7 +131,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
     FamilyProvider provider,
     S l10n,
   ) {
-    final currentUserId = Supabase.instance.client.auth.currentUser?.id;
+    final currentUserId = SupabaseService.currentUserId;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,12 +174,12 @@ class _FamilyScreenState extends State<FamilyScreen> {
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: LuluColors.deepIndigo.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(12),
+                color: LuluColors.deepIndigoBorder,
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.mail_outline,
+                  const Icon(LuluIcons.mailOutline,
                       color: LuluColors.lavenderMist, size: 20),
                   const SizedBox(width: 12),
                   Expanded(
@@ -191,10 +194,10 @@ class _FamilyScreenState extends State<FamilyScreen> {
                           ),
                         ),
                         Text(
-                          '${invite.daysLeft}일 남음',
+                          l10n.inviteDaysRemaining(invite.daysLeft),
                           style: TextStyle(
                             fontSize: 12,
-                            color: LuluTextColors.primary.withOpacity(0.6),
+                            color: LuluTextColors.primarySoft,
                           ),
                         ),
                       ],
@@ -204,7 +207,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                     onPressed: () => provider.cancelInvite(invite.id),
                     child: Text(
                       l10n.cancel,
-                      style: TextStyle(color: Colors.red[300]),
+                      style: TextStyle(color: LuluStatusColors.error),
                     ),
                   ),
                 ],
@@ -228,7 +231,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
           child: const InviteBottomSheet(),
         ),
       ),
-      icon: const Icon(Icons.person_add, color: LuluColors.lavenderMist),
+      icon: const Icon(LuluIcons.personAdd, color: LuluColors.lavenderMist),
       label: Text(
         l10n.inviteFamily,
         style: const TextStyle(color: LuluColors.lavenderMist),
@@ -261,7 +264,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
         // 관리자 넘기기 (owner이고 다른 멤버가 있을 때만)
         if (provider.isOwner && provider.memberCount > 1)
           _buildSettingTile(
-            icon: Icons.swap_horiz,
+            icon: LuluIcons.swapHoriz,
             title: l10n.transferOwnership,
             onTap: () => Navigator.push(
               context,
@@ -271,16 +274,16 @@ class _FamilyScreenState extends State<FamilyScreen> {
 
         // 다른 가족 참여
         _buildSettingTile(
-          icon: Icons.group_add,
+          icon: LuluIcons.groupAdd,
           title: l10n.joinOtherFamily,
           onTap: () => _showJoinOtherDialog(context, l10n),
         ),
 
         // 가족 나가기
         _buildSettingTile(
-          icon: Icons.exit_to_app,
+          icon: LuluIcons.exitToApp,
           title: l10n.leaveFamily,
-          color: Colors.red[300],
+          color: LuluStatusColors.error,
           onTap: () => _showLeaveDialog(context, provider, l10n),
         ),
       ],
@@ -300,8 +303,8 @@ class _FamilyScreenState extends State<FamilyScreen> {
         style: TextStyle(color: color ?? LuluTextColors.primary),
       ),
       trailing: Icon(
-        Icons.chevron_right,
-        color: color ?? LuluTextColors.primary.withOpacity(0.5),
+        LuluIcons.chevronRight,
+        color: color ?? LuluTextColors.primaryMedium,
       ),
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
@@ -317,13 +320,13 @@ class _FamilyScreenState extends State<FamilyScreen> {
             style: const TextStyle(color: LuluTextColors.primary)),
         content: Text(
           l10n.joinOtherFamilyDesc,
-          style: TextStyle(color: LuluTextColors.primary.withOpacity(0.8)),
+          style: TextStyle(color: LuluTextColors.primaryBold),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child:
-                Text(l10n.cancel, style: const TextStyle(color: Colors.grey)),
+                Text(l10n.cancel, style: const TextStyle(color: LuluTextColors.tertiary)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -355,7 +358,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
               style: const TextStyle(color: LuluTextColors.primary)),
           content: Text(
             l10n.transferOwnershipFirst,
-            style: TextStyle(color: LuluTextColors.primary.withOpacity(0.8)),
+            style: TextStyle(color: LuluTextColors.primaryBold),
           ),
           actions: [
             TextButton(
@@ -381,13 +384,13 @@ class _FamilyScreenState extends State<FamilyScreen> {
         ),
         content: Text(
           isLastMember ? l10n.deleteFamilyDesc : l10n.leaveFamilyDesc,
-          style: TextStyle(color: LuluTextColors.primary.withOpacity(0.8)),
+          style: TextStyle(color: LuluTextColors.primaryBold),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child:
-                Text(l10n.cancel, style: const TextStyle(color: Colors.grey)),
+                Text(l10n.cancel, style: const TextStyle(color: LuluTextColors.tertiary)),
           ),
           TextButton(
             onPressed: () async {
@@ -398,7 +401,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                     context, '/home', (r) => false);
               }
             },
-            child: Text(l10n.leave, style: TextStyle(color: Colors.red[300])),
+            child: Text(l10n.leave, style: TextStyle(color: LuluStatusColors.error)),
           ),
         ],
       ),

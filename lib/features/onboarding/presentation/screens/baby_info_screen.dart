@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/design_system/lulu_colors.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../data/models/baby_type.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../providers/onboarding_provider.dart';
+import '../../../../core/design_system/lulu_radius.dart';
+import '../../../../core/design_system/lulu_icons.dart';
+import 'package:intl/intl.dart';
 
 /// Step 3: 아기 정보 입력
 /// 이름, 출생일, "조산아인가요?"
@@ -81,7 +86,8 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<OnboardingProvider>();
-    final babyLabel = provider.currentBabyLabel;
+    final l10n = S.of(context)!;
+    final babyLabel = provider.currentBabyLabel(l10n);
 
     // UX-04: 스크롤 시 키보드 자동 내림 + 탭하면 키보드 내림
     return GestureDetector(
@@ -97,7 +103,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
 
           // 질문 텍스트
           Text(
-            '$babyLabel 정보를\n입력해 주세요',
+            l10n.onboardingBabyInfoTitle(babyLabel),
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
@@ -119,7 +125,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
 
           // 이름 입력
           Text(
-            '이름',
+            l10n.labelName,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: AppTheme.textSecondary,
                 ),
@@ -141,18 +147,18 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               fontSize: 17,
             ),
             decoration: InputDecoration(
-              hintText: '아기 이름을 입력하세요',
+              hintText: l10n.hintEnterBabyName,
               hintStyle: const TextStyle(
                 color: AppTheme.textTertiary,
               ),
               filled: true,
               fillColor: AppTheme.surfaceElevated,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
                 borderSide: const BorderSide(
                   color: AppTheme.lavenderMist,
                   width: 2,
@@ -165,7 +171,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
 
           // 출생일 선택
           Text(
-            '출생일',
+            l10n.labelBirthDateShort,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: AppTheme.textSecondary,
                 ),
@@ -178,15 +184,15 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               decoration: BoxDecoration(
                 color: AppTheme.surfaceElevated,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
               ),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
                       provider.currentBaby.birthDate != null
-                          ? _formatDate(provider.currentBaby.birthDate!)
-                          : '출생일을 선택해주세요',
+                          ? DateFormat.yMMMd(Localizations.localeOf(context).languageCode).format(provider.currentBaby.birthDate!)
+                          : l10n.hintSelectBirthDate,
                       style: TextStyle(
                         color: provider.currentBaby.birthDate != null
                             ? AppTheme.textPrimary
@@ -196,7 +202,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                     ),
                   ),
                   const Icon(
-                    Icons.calendar_today,
+                    LuluIcons.calendar,
                     color: AppTheme.textSecondary,
                     size: 20,
                   ),
@@ -209,7 +215,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
 
           // 성별 선택
           Text(
-            '성별',
+            l10n.labelGender,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: AppTheme.textSecondary,
                 ),
@@ -219,8 +225,8 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
             children: [
               Expanded(
                 child: _GenderButton(
-                  label: '남아',
-                  icon: Icons.male,
+                  label: l10n.genderMale,
+                  icon: LuluIcons.male,
                   isSelected: provider.currentBaby.gender == Gender.male,
                   onTap: () => provider.updateBabyGender(Gender.male),
                 ),
@@ -228,8 +234,8 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: _GenderButton(
-                  label: '여아',
-                  icon: Icons.female,
+                  label: l10n.genderFemale,
+                  icon: LuluIcons.female,
                   isSelected: provider.currentBaby.gender == Gender.female,
                   onTap: () => provider.updateBabyGender(Gender.female),
                 ),
@@ -241,7 +247,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
 
           // SGA-01: 출생체중 입력 (필수)
           Text(
-            '출생체중',
+            l10n.labelBirthWeightRequired,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: AppTheme.textSecondary,
                 ),
@@ -266,7 +272,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               fontSize: 17,
             ),
             decoration: InputDecoration(
-              hintText: '예: 3200',
+              hintText: l10n.hintBirthWeight,
               hintStyle: const TextStyle(
                 color: AppTheme.textTertiary,
               ),
@@ -278,11 +284,11 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               filled: true,
               fillColor: AppTheme.surfaceElevated,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(LuluRadius.md),
                 borderSide: const BorderSide(
                   color: AppTheme.lavenderMist,
                   width: 2,
@@ -292,7 +298,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            '성장 추적 기능에 활용돼요',
+            l10n.birthWeightHelperText,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: AppTheme.textTertiary,
                 ),
@@ -305,7 +311,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppTheme.surfaceCard,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
                 color: provider.currentBaby.isPreterm
                     ? AppTheme.lavenderMist.withValues(alpha: 0.5)
@@ -319,7 +325,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        '조산아인가요?',
+                        l10n.questionIsPretermFull,
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               color: AppTheme.textPrimary,
                             ),
@@ -345,7 +351,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '37주 미만 출생 시 교정연령으로 발달을 확인해요',
+                  l10n.prematureAgeInfo,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppTheme.textTertiary,
                       ),
@@ -368,11 +374,11 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                 disabledBackgroundColor: AppTheme.surfaceElevated,
                 disabledForegroundColor: AppTheme.textTertiary,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
-              child: const Text(
-                '다음',
+              child: Text(
+                l10n.buttonNext,
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
@@ -388,9 +394,6 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
     );
   }
 
-  String _formatDate(DateTime date) {
-    return '${date.year}년 ${date.month}월 ${date.day}일';
-  }
 }
 
 class _GenderButton extends StatelessWidget {
@@ -415,9 +418,9 @@ class _GenderButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppTheme.lavenderMist.withValues(alpha: 0.15)
+              ? LuluColors.lavenderLight
               : AppTheme.surfaceElevated,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
             color: isSelected ? AppTheme.lavenderMist : Colors.transparent,
             width: 2,

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/feeding_type.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 이유식 상세 폼
 ///
@@ -59,13 +62,14 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
-        color: LuluColors.surfaceElevated.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(16),
+        color: LuluColors.surfaceElevatedMedium,
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
-          color: LuluActivityColors.feeding.withValues(alpha: 0.2),
+          color: LuluActivityColors.feedingSelected,
         ),
       ),
       child: Column(
@@ -75,13 +79,13 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
           Row(
             children: [
               Icon(
-                Icons.restaurant,
+                LuluIcons.feedingSolid,
                 size: 20,
                 color: LuluActivityColors.feeding,
               ),
               const SizedBox(width: LuluSpacing.sm),
               Text(
-                '이유식',
+                l10n.solidFoodTitle,
                 style: LuluTextStyles.bodyLarge.copyWith(
                   color: LuluTextColors.primary,
                   fontWeight: FontWeight.w600,
@@ -111,11 +115,12 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
   }
 
   Widget _buildFoodNameInput() {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '음식 이름',
+          l10n.solidFoodNameLabel,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -124,7 +129,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
         Container(
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
           ),
           child: TextField(
             controller: _foodNameController,
@@ -132,7 +137,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
               color: LuluTextColors.primary,
             ),
             decoration: InputDecoration(
-              hintText: '예: 당근 퓨레, 쌀미음',
+              hintText: l10n.solidFoodNameHint,
               hintStyle: LuluTextStyles.bodyMedium.copyWith(
                 color: LuluTextColors.tertiary,
               ),
@@ -161,7 +166,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
               color: widget.isFirstTry
                   ? LuluActivityColors.feeding
                   : LuluColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(6), // special: design system outer
               border: Border.all(
                 color: widget.isFirstTry
                     ? LuluActivityColors.feeding
@@ -171,7 +176,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
             ),
             child: widget.isFirstTry
                 ? const Icon(
-                    Icons.check,
+                    LuluIcons.save,
                     size: 16,
                     color: LuluColors.midnightNavy,
                   )
@@ -179,14 +184,14 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
           ),
           const SizedBox(width: LuluSpacing.sm),
           Text(
-            '처음 먹이는 음식이에요',
+            S.of(context)!.solidFoodFirstTry,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.primary,
             ),
           ),
           const SizedBox(width: LuluSpacing.xs),
           Icon(
-            Icons.new_releases_outlined,
+            LuluIcons.newRelease,
             size: 16,
             color: LuluColors.champagneGold,
           ),
@@ -196,11 +201,12 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
   }
 
   Widget _buildAmountInput() {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '양',
+          l10n.solidFoodAmountLabel,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -227,7 +233,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
                     color: isSelected
                         ? LuluActivityColors.feedingBg
                         : LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(LuluRadius.xs),
                     border: Border.all(
                       color: isSelected
                           ? LuluActivityColors.feeding
@@ -237,7 +243,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
                   ),
                   child: Center(
                     child: Text(
-                      unit.label,
+                      unit.localizedLabel(l10n),
                       style: LuluTextStyles.bodySmall.copyWith(
                         color: isSelected
                             ? LuluTextColors.primary
@@ -259,7 +265,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _AdjustButton(
-              icon: Icons.remove,
+              icon: LuluIcons.remove,
               onTap: () {
                 final step = widget.unit.step;
                 final newAmount = (widget.amount - step).clamp(0.0, 1000.0);
@@ -272,11 +278,11 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
               padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
               decoration: BoxDecoration(
                 color: LuluColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Center(
                 child: Text(
-                  '${widget.amount.toInt()}${widget.unit.label}',
+                  '${widget.amount.toInt()}${widget.unit.localizedLabel(l10n)}',
                   style: LuluTextStyles.titleLarge.copyWith(
                     color: LuluTextColors.primary,
                     fontWeight: FontWeight.w600,
@@ -286,7 +292,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
             ),
             const SizedBox(width: LuluSpacing.lg),
             _AdjustButton(
-              icon: Icons.add,
+              icon: LuluIcons.add,
               onTap: () {
                 final step = widget.unit.step;
                 final newAmount = (widget.amount + step).clamp(0.0, 1000.0);
@@ -304,6 +310,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
   }
 
   Widget _buildPresetButtons() {
+    final l10n = S.of(context)!;
     List<int> presets;
     switch (widget.unit) {
       case SolidFoodUnit.gram:
@@ -332,7 +339,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
                 color: isSelected
                     ? LuluActivityColors.feedingBg
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(LuluRadius.xs),
                 border: Border.all(
                   color: isSelected
                       ? LuluActivityColors.feeding
@@ -341,7 +348,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
               ),
               child: Center(
                 child: Text(
-                  '$preset${widget.unit.label}',
+                  '$preset${widget.unit.localizedLabel(l10n)}',
                   style: LuluTextStyles.bodySmall.copyWith(
                     color: isSelected
                         ? LuluTextColors.primary
@@ -357,11 +364,12 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
   }
 
   Widget _buildReactionSelector() {
+    final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '아기 반응',
+          l10n.solidFoodReactionLabel,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -387,7 +395,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
                     color: isSelected
                         ? reaction.color.withValues(alpha: 0.15)
                         : LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(LuluRadius.sm),
                     border: Border.all(
                       color: isSelected ? reaction.color : Colors.transparent,
                       width: 2,
@@ -404,7 +412,7 @@ class _SolidFoodFormState extends State<SolidFoodForm> {
                       ),
                       const SizedBox(height: LuluSpacing.xs),
                       Text(
-                        reaction.label,
+                        reaction.localizedLabel(l10n),
                         style: LuluTextStyles.bodySmall.copyWith(
                           color: isSelected
                               ? LuluTextColors.primary
@@ -443,7 +451,7 @@ class _AdjustButton extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           color: LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
         ),
         child: Center(
           child: Icon(

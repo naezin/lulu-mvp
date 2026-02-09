@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 이메일 로그인/회원가입 화면
 class EmailLoginScreen extends StatefulWidget {
@@ -35,17 +39,20 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
     return Scaffold(
       backgroundColor: const Color(0xFF0D1B2A),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(LuluIcons.backIos, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          _isSignUp ? '회원가입' : '이메일 로그인',
+          _isSignUp
+              ? (l10n?.authSignupTitle ?? '')
+              : (l10n?.authEmailLoginTitle ?? ''),
           style: const TextStyle(color: Colors.white),
         ),
       ),
@@ -98,16 +105,16 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.red.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
+                            color: LuluColors.redBg,
+                            borderRadius: BorderRadius.circular(LuluRadius.xs),
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.error_outline, color: Colors.red, size: 20),
+                              const Icon(LuluIcons.errorOutline, color: Colors.red, size: 20),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  authProvider.errorMessage!,
+                                  AuthProvider.resolveErrorMessage(S.of(context)!, authProvider.errorMessage),
                                   style: const TextStyle(color: Colors.red, fontSize: 14),
                                 ),
                               ),
@@ -128,38 +135,39 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 
   Widget _buildEmailField() {
+    final l10n = S.of(context);
     return TextFormField(
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       autocorrect: false,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
-        labelText: '이메일',
+        labelText: l10n?.authEmailLabel ?? '',
         labelStyle: TextStyle(color: Colors.grey[400]),
-        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey[400]),
+        prefixIcon: Icon(LuluIcons.emailOutlined, color: Colors.grey[400]),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: BorderSide(color: Colors.grey[600]!),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Color(0xFF9D8CD6)),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Colors.red),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Colors.red),
         ),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return '이메일을 입력해주세요';
+          return l10n?.authEmailRequired ?? '';
         }
         if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-          return '유효한 이메일 주소를 입력해주세요';
+          return l10n?.authEmailInvalid ?? '';
         }
         return null;
       },
@@ -167,44 +175,45 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 
   Widget _buildPasswordField() {
+    final l10n = S.of(context);
     return TextFormField(
       controller: _passwordController,
       obscureText: _obscurePassword,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
-        labelText: '비밀번호',
+        labelText: l10n?.authPasswordLabel ?? '',
         labelStyle: TextStyle(color: Colors.grey[400]),
-        prefixIcon: Icon(Icons.lock_outlined, color: Colors.grey[400]),
+        prefixIcon: Icon(LuluIcons.lockOutlined, color: Colors.grey[400]),
         suffixIcon: IconButton(
           icon: Icon(
-            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+            _obscurePassword ? LuluIcons.visibilityOff : LuluIcons.visibility,
             color: Colors.grey[400],
           ),
           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: BorderSide(color: Colors.grey[600]!),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Color(0xFF9D8CD6)),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Colors.red),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Colors.red),
         ),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return '비밀번호를 입력해주세요';
+          return l10n?.authPasswordRequired ?? '';
         }
         if (_isSignUp && value.length < 6) {
-          return '비밀번호는 최소 6자 이상이어야 합니다';
+          return l10n?.authPasswordMinLength ?? '';
         }
         return null;
       },
@@ -212,19 +221,20 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 
   Widget _buildNicknameField() {
+    final l10n = S.of(context);
     return TextFormField(
       controller: _nicknameController,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
-        labelText: '닉네임 (선택)',
+        labelText: l10n?.authNicknameLabel ?? '',
         labelStyle: TextStyle(color: Colors.grey[400]),
-        prefixIcon: Icon(Icons.person_outlined, color: Colors.grey[400]),
+        prefixIcon: Icon(LuluIcons.personOutlined, color: Colors.grey[400]),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: BorderSide(color: Colors.grey[600]!),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           borderSide: const BorderSide(color: Color(0xFF9D8CD6)),
         ),
       ),
@@ -232,6 +242,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 
   Widget _buildSubmitButton() {
+    final l10n = S.of(context);
     return Consumer<AuthProvider>(
       builder: (context, authProvider, _) {
         return SizedBox(
@@ -242,9 +253,9 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
               backgroundColor: const Color(0xFF9D8CD6),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
-              disabledBackgroundColor: const Color(0xFF9D8CD6).withValues(alpha: 0.5),
+              disabledBackgroundColor: LuluColors.lavenderMedium,
             ),
             child: authProvider.isLoading
                 ? const SizedBox(
@@ -256,7 +267,9 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                     ),
                   )
                 : Text(
-                    _isSignUp ? '회원가입' : '로그인',
+                    _isSignUp
+                        ? (l10n?.authSignupButton ?? '')
+                        : (l10n?.authLoginButton ?? ''),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -269,13 +282,16 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 
   Widget _buildToggleButton() {
+    final l10n = S.of(context);
     return TextButton(
       onPressed: () {
         setState(() => _isSignUp = !_isSignUp);
         context.read<AuthProvider>().clearError();
       },
       child: Text(
-        _isSignUp ? '이미 계정이 있으신가요? 로그인' : '계정이 없으신가요? 회원가입',
+        _isSignUp
+            ? (l10n?.authToggleToLogin ?? '')
+            : (l10n?.authToggleToSignup ?? ''),
         style: TextStyle(
           color: Colors.grey[400],
           fontSize: 14,
@@ -285,10 +301,11 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 
   Widget _buildForgotPasswordButton() {
+    final l10n = S.of(context);
     return TextButton(
       onPressed: _handleForgotPassword,
       child: Text(
-        '비밀번호를 잊으셨나요?',
+        l10n?.authForgotPassword ?? '',
         style: TextStyle(
           color: Colors.grey[500],
           fontSize: 14,
@@ -325,12 +342,13 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 
   Future<void> _handleForgotPassword() async {
+    final l10n = S.of(context);
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('이메일을 입력해주세요'),
+        SnackBar(
+          content: Text(l10n?.authEmailRequired ?? ''),
           backgroundColor: Colors.orange,
         ),
       );
@@ -341,12 +359,13 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final success = await authProvider.sendPasswordResetEmail(email);
 
     if (mounted) {
+      final resetL10n = S.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
             success
-                ? '비밀번호 재설정 이메일을 발송했습니다'
-                : '이메일 발송에 실패했습니다',
+                ? (resetL10n?.authPasswordResetSent ?? '')
+                : (resetL10n?.authPasswordResetFailed ?? ''),
           ),
           backgroundColor: success ? Colors.green : Colors.red,
         ),

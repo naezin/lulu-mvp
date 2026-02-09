@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
+import '../../../../core/design_system/lulu_colors.dart';
+import '../../../../core/design_system/lulu_radius.dart';
+import '../../../../core/design_system/lulu_icons.dart';
+import '../../../../l10n/generated/app_localizations.dart' show S;
 
 /// Step 4: 조산아 정보 입력 (조건부)
 /// 출생주수만 입력 (출생체중은 baby_info_screen에서 이미 필수로 입력받음)
@@ -31,7 +35,8 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<OnboardingProvider>();
-    final babyLabel = provider.currentBabyLabel;
+    final l10n = S.of(context)!;
+    final babyLabel = provider.currentBabyLabel(l10n);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -42,7 +47,7 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
 
           // 질문 텍스트
           Text(
-            '$babyLabel의 출생 정보를\n입력해 주세요',
+            l10n.pretermInfoTitle(babyLabel),
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
@@ -53,7 +58,7 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
           const SizedBox(height: 12),
 
           Text(
-            '교정연령 계산에 사용돼요',
+            l10n.pretermInfoSubtitle,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppTheme.textSecondary,
                 ),
@@ -63,7 +68,7 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
 
           // 출생 주수 선택
           Text(
-            '출생 주수',
+            l10n.pretermGestationalWeeksLabel,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: AppTheme.textSecondary,
                 ),
@@ -84,7 +89,7 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppTheme.infoSoft.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
                 color: AppTheme.infoSoft.withValues(alpha: 0.3),
               ),
@@ -93,7 +98,7 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Icon(
-                  Icons.info_outline,
+                  LuluIcons.infoOutline,
                   color: AppTheme.infoSoft,
                   size: 24,
                 ),
@@ -103,14 +108,14 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '교정연령이란?',
+                        l10n.pretermCorrectedAgeTitle,
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               color: AppTheme.textPrimary,
                             ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '만삭 예정일을 기준으로 계산한 나이예요. 조산아의 발달을 더 정확하게 평가할 수 있어요.',
+                        l10n.pretermCorrectedAgeDesc,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: AppTheme.textSecondary,
                               height: 1.5,
@@ -137,12 +142,12 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
                 disabledBackgroundColor: AppTheme.surfaceElevated,
                 disabledForegroundColor: AppTheme.textTertiary,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
-              child: const Text(
-                '다음',
-                style: TextStyle(
+              child: Text(
+                l10n.buttonNext,
+                style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
                 ),
@@ -168,6 +173,8 @@ class _WeeksSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Column(
       children: [
         // 현재 선택된 주수 표시
@@ -175,7 +182,7 @@ class _WeeksSelector extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           decoration: BoxDecoration(
             color: AppTheme.surfaceCard,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(LuluRadius.md),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -189,7 +196,7 @@ class _WeeksSelector extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                '주',
+                l10n.pretermWeeksUnit,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: AppTheme.textSecondary,
                     ),
@@ -206,7 +213,7 @@ class _WeeksSelector extends StatelessWidget {
             activeTrackColor: AppTheme.lavenderMist,
             inactiveTrackColor: AppTheme.surfaceElevated,
             thumbColor: AppTheme.lavenderMist,
-            overlayColor: AppTheme.lavenderMist.withValues(alpha: 0.2),
+            overlayColor: LuluColors.lavenderSelected,
             trackHeight: 8,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
           ),
@@ -226,19 +233,19 @@ class _WeeksSelector extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '22주',
+                l10n.pretermWeeksMin,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppTheme.textTertiary,
                     ),
               ),
               Text(
-                '37주 미만 = 조산',
+                l10n.pretermWeeksPreterm,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppTheme.warningSoft,
                     ),
               ),
               Text(
-                '42주',
+                l10n.pretermWeeksMax,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppTheme.textTertiary,
                     ),

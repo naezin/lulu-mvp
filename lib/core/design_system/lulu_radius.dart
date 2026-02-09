@@ -5,8 +5,20 @@ import 'package:flutter/material.dart';
 /// 일관된 라운드 코너 시스템
 
 class LuluRadius {
+  /// 2px - 타임바, 차트 미니 바
+  static const double xxs = 2;
+
+  /// 3px - 차트 bar radius
+  static const double bar = 3;
+
+  /// 4px - 프로그레스바, 인디케이터
+  static const double indicator = 4;
+
   /// 8px - 작은 버튼, 칩
   static const double xs = 8;
+
+  /// 10px - 설정 화면 섹션 카드
+  static const double section = 10;
 
   /// 12px - 입력 필드
   static const double sm = 12;

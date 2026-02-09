@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/constants/animation_constants.dart';
 import '../../../data/models/growth_measurement_model.dart';
 import '../data/fenton_data.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../data/growth_data_cache.dart';
 
 /// 통합 성장 차트 위젯
@@ -79,7 +81,7 @@ class _GrowthChartState extends State<GrowthChart>
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
         color: LuluColors.deepBlue,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,13 +132,13 @@ class _GrowthChartState extends State<GrowthChart>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${widget.metric.label} 성장 차트',
+              S.of(context)!.growthChartTitleWithMetric(widget.metric.localizedLabel(S.of(context)!)),
               style: LuluTextStyles.titleSmall.copyWith(
                 color: LuluTextColors.primary,
               ),
             ),
             Text(
-              widget.chartType.description,
+              widget.chartType.localizedDescription(S.of(context)!),
               style: LuluTextStyles.caption.copyWith(
                 color: LuluTextColors.secondary,
               ),
@@ -152,23 +154,23 @@ class _GrowthChartState extends State<GrowthChart>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _LegendItem(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.3),
+          color: LuluColors.lavenderBorder,
           label: '3-97%',
         ),
         const SizedBox(width: LuluSpacing.lg),
         _LegendItem(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.5),
+          color: LuluColors.lavenderMedium,
           label: '10-90%',
         ),
         const SizedBox(width: LuluSpacing.lg),
         _LegendItem(
           color: LuluColors.champagneGold,
-          label: '50% (중앙값)',
+          label: S.of(context)!.growthChartLegendMedian,
         ),
         const SizedBox(width: LuluSpacing.lg),
         _LegendItem(
           color: LuluColors.lavenderMist,
-          label: '측정값',
+          label: S.of(context)!.growthChartLegendMeasured,
           isPoint: true,
         ),
       ],
@@ -465,7 +467,7 @@ class _LegendItem extends StatelessWidget {
             height: 8,
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(LuluRadius.xxs),
             ),
           ),
         const SizedBox(width: 4),

@@ -62,6 +62,6 @@ class BabyStatisticsSummary {
   /// 교정연령 문자열 (예: "교정 42일")
   String? get correctedAgeLabel {
     if (correctedAgeDays == null) return null;
-    return '교정 $correctedAgeDays일';
+    return 'Corrected ${correctedAgeDays}d';
   }
 }

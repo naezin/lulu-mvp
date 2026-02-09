@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
@@ -26,25 +28,25 @@ class QuickTimeButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _QuickButton(
-          label: l10n?.dateTimeNow ?? '지금',
-          icon: Icons.access_time,
+          label: l10n?.dateTimeNow ?? 'Now',
+          icon: LuluIcons.time,
           onTap: () => onTimeSelected(DateTime.now()),
           isPrimary: true,
         ),
         _QuickButton(
-          label: l10n?.dateTime5MinAgo ?? '-5분',
+          label: l10n?.dateTime5MinAgo ?? '-5min',
           onTap: () => onTimeSelected(
             DateTime.now().subtract(const Duration(minutes: 5)),
           ),
         ),
         _QuickButton(
-          label: l10n?.dateTime15MinAgo ?? '-15분',
+          label: l10n?.dateTime15MinAgo ?? '-15min',
           onTap: () => onTimeSelected(
             DateTime.now().subtract(const Duration(minutes: 15)),
           ),
         ),
         _QuickButton(
-          label: l10n?.dateTime30MinAgo ?? '-30분',
+          label: l10n?.dateTime30MinAgo ?? '-30min',
           onTap: () => onTimeSelected(
             DateTime.now().subtract(const Duration(minutes: 30)),
           ),
@@ -75,12 +77,12 @@ class _QuickButton extends StatelessWidget {
       label: label,
       child: Material(
         color: isPrimary
-            ? LuluColors.lavenderMist.withValues(alpha: 0.15)
+            ? LuluColors.lavenderLight
             : LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(LuluRadius.xs),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             constraints: const BoxConstraints(minWidth: 44, minHeight: 44),

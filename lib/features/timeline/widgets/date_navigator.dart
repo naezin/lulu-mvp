@@ -2,29 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
+
+/// DateNavigator scope: daily or weekly
+enum DateNavigatorScope { daily, weekly }
 
 /// 날짜 좌우 탐색 위젯
 ///
-/// 작업 지시서 v1.1: 과거 기록 접근용 (< 3초)
-/// ◀ 어제 │ 오늘 │ 내일 ▶
+/// daily: ◀ │ 2/8 (일) 📅 │ ▶
+/// weekly: ◀ │ 2/2 ~ 2/8 📅 │ ▶
 class DateNavigator extends StatelessWidget {
   final DateTime selectedDate;
   final ValueChanged<DateTime> onDateChanged;
   final VoidCallback? onCalendarTap;
+
+  /// daily (default) or weekly
+  final DateNavigatorScope scope;
+
+  /// Weekly mode: whether next week button is enabled
+  final bool canGoNext;
 
   const DateNavigator({
     super.key,
     required this.selectedDate,
     required this.onDateChanged,
     this.onCalendarTap,
+    this.scope = DateNavigatorScope.daily,
+    this.canGoNext = true,
   });
-
-  bool get _isToday {
-    final now = DateTime.now();
-    return selectedDate.year == now.year &&
-        selectedDate.month == now.month &&
-        selectedDate.day == now.day;
-  }
 
   bool get _isFuture {
     final now = DateTime.now();
@@ -34,8 +40,28 @@ class DateNavigator extends StatelessWidget {
     return selected.isAfter(today);
   }
 
+  /// Weekly: check if the selected week contains today
+  bool get _isCurrentWeek {
+    final now = DateTime.now();
+    final weekEnd = selectedDate.add(const Duration(days: 6));
+    final today = DateTime(now.year, now.month, now.day);
+    final weekStartNorm = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    return !today.isBefore(weekStartNorm) && !today.isAfter(weekEnd);
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (scope == DateNavigatorScope.weekly) {
+      return _buildWeeklyNavigator(context);
+    }
+    return _buildDailyNavigator(context);
+  }
+
+  Widget _buildDailyNavigator(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
+    final l10n = S.of(context);
+    final nextEnabled = !_isFuture;
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
@@ -44,69 +70,126 @@ class DateNavigator extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 이전 날짜
           _NavButton(
-            icon: Icons.chevron_left_rounded,
-            label: _formatShortDate(
-                selectedDate.subtract(const Duration(days: 1))),
+            icon: LuluIcons.chevronLeft,
+            label: '',
             onTap: () =>
                 onDateChanged(selectedDate.subtract(const Duration(days: 1))),
           ),
-
-          // 현재 날짜
           GestureDetector(
             onTap: onCalendarTap,
-            child: Column(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  _formatDate(selectedDate),
+                  _formatDate(selectedDate, locale, l10n),
                   style: const TextStyle(
                     color: LuluTextColors.primary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (_isToday)
-                  const Text(
-                    '오늘',
-                    style: TextStyle(
-                      color: LuluColors.lavenderMist,
-                      fontSize: 12,
-                    ),
-                  ),
-                const SizedBox(height: 2),
+                const SizedBox(width: 6),
                 Icon(
-                  Icons.calendar_today_rounded,
+                  LuluIcons.calendar,
                   size: 16,
                   color: LuluTextColors.secondary,
                 ),
               ],
             ),
           ),
-
-          // 다음 날짜
           _NavButton(
-            icon: Icons.chevron_right_rounded,
-            label: _isFuture
-                ? ''
-                : _formatShortDate(selectedDate.add(const Duration(days: 1))),
-            onTap: _isFuture
-                ? null
-                : () => onDateChanged(selectedDate.add(const Duration(days: 1))),
-            enabled: !_isFuture,
+            icon: LuluIcons.chevronRight,
+            label: '',
+            onTap: nextEnabled
+                ? () => onDateChanged(selectedDate.add(const Duration(days: 1)))
+                : null,
+            enabled: nextEnabled,
           ),
         ],
       ),
     );
   }
 
-  String _formatDate(DateTime date) {
-    return DateFormat('M월 d일 (E)', 'ko_KR').format(date);
+  Widget _buildWeeklyNavigator(BuildContext context) {
+    final weekEnd = selectedDate.add(const Duration(days: 6));
+    final l10n = S.of(context);
+    final dateRangeText = _formatWeekRange(selectedDate, weekEnd, l10n);
+    final nextEnabled = canGoNext && !_isCurrentWeek;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _NavButton(
+            icon: LuluIcons.chevronLeft,
+            label: '',
+            onTap: () =>
+                onDateChanged(selectedDate.subtract(const Duration(days: 7))),
+          ),
+          GestureDetector(
+            onTap: onCalendarTap,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  dateRangeText,
+                  style: const TextStyle(
+                    color: LuluTextColors.primary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Icon(
+                  LuluIcons.calendar,
+                  size: 16,
+                  color: LuluTextColors.secondary,
+                ),
+              ],
+            ),
+          ),
+          _NavButton(
+            icon: LuluIcons.chevronRight,
+            label: '',
+            onTap: nextEnabled
+                ? () => onDateChanged(selectedDate.add(const Duration(days: 7)))
+                : null,
+            enabled: nextEnabled,
+          ),
+        ],
+      ),
+    );
   }
 
-  String _formatShortDate(DateTime date) {
-    return DateFormat('M/d', 'ko_KR').format(date);
+  /// daily: M/d (E) → 2/8 (일) or 2/8 (Sun)
+  String _formatDate(DateTime date, String locale, S? l10n) {
+    final weekday = DateFormat.E(locale).format(date);
+    if (l10n != null) {
+      return l10n.dateFormatDaily(
+        '${date.month}',
+        '${date.day}',
+        weekday,
+      );
+    }
+    return '${date.month}/${date.day} ($weekday)';
+  }
+
+  /// weekly: M/d ~ M/d → 2/2 ~ 2/8
+  String _formatWeekRange(DateTime start, DateTime end, S? l10n) {
+    if (l10n != null) {
+      return l10n.dateFormatWeeklyRange(
+        '${start.month}',
+        '${start.day}',
+        '${end.month}',
+        '${end.day}',
+      );
+    }
+    return '${start.month}/${start.day} ~ ${end.month}/${end.day}';
   }
 }
 

@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../home/providers/home_provider.dart';
 import '../models/invite_info_model.dart';
@@ -75,7 +77,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
                 l10n.enterInviteCodeDesc,
                 style: TextStyle(
                   fontSize: 14,
-                  color: LuluTextColors.primary.withOpacity(0.7),
+                  color: LuluTextColors.primaryStrong,
                 ),
               ),
               const SizedBox(height: 32),
@@ -88,7 +90,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
                 const SizedBox(height: 12),
                 Text(
                   _error!,
-                  style: TextStyle(color: Colors.red[300], fontSize: 14),
+                  style: TextStyle(color: LuluStatusColors.error, fontSize: 14),
                 ),
               ],
 
@@ -110,7 +112,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
                     disabledBackgroundColor: LuluColors.deepIndigo,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(LuluRadius.sm),
                     ),
                   ),
                   child: _isLoading
@@ -141,8 +143,8 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
   Widget _buildCodeInput(S l10n) {
     return Container(
       decoration: BoxDecoration(
-        color: LuluColors.deepIndigo.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(12),
+        color: LuluColors.deepIndigoMedium,
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: TextField(
         controller: _codeController,
@@ -161,7 +163,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
         decoration: InputDecoration(
           hintText: 'ABC-123',
           hintStyle: TextStyle(
-            color: LuluTextColors.primary.withOpacity(0.3),
+            color: LuluTextColors.primaryHint,
             letterSpacing: 4,
           ),
           border: InputBorder.none,
@@ -177,7 +179,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
                       color: LuluColors.lavenderMist,
                     ),
                   )
-                : const Icon(Icons.search, color: LuluColors.lavenderMist),
+                : const Icon(LuluIcons.search, color: LuluColors.lavenderMist),
           ),
         ),
         onChanged: (value) {
@@ -208,16 +210,16 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: LuluColors.lavenderMist.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: LuluColors.lavenderMist.withOpacity(0.3)),
+        color: LuluColors.lavenderBg,
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
+        border: Border.all(color: LuluColors.lavenderBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.check_circle,
+              const Icon(LuluIcons.checkCircle,
                   color: LuluColors.lavenderMist, size: 20),
               const SizedBox(width: 8),
               Text(
@@ -231,11 +233,11 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
           ),
           const SizedBox(height: 12),
           _buildInfoRow(
-              Icons.people, l10n.memberCount(info.memberCount.toString())),
+              LuluIcons.people, l10n.memberCount(info.memberCount.toString())),
           if (info.babies.isNotEmpty)
-            _buildInfoRow(Icons.child_care,
+            _buildInfoRow(LuluIcons.baby,
                 l10n.babyNames(info.babies.map((b) => b.name).join(', '))),
-          _buildInfoRow(Icons.timer, l10n.expiresIn(info.daysLeft.toString())),
+          _buildInfoRow(LuluIcons.timer, l10n.expiresIn(info.daysLeft.toString())),
         ],
       ),
     );
@@ -246,12 +248,12 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
       padding: const EdgeInsets.only(top: 8),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: LuluTextColors.primary.withOpacity(0.6)),
+          Icon(icon, size: 16, color: LuluTextColors.primarySoft),
           const SizedBox(width: 8),
           Text(
             text,
             style: TextStyle(
-              color: LuluTextColors.primary.withOpacity(0.8),
+              color: LuluTextColors.primaryBold,
               fontSize: 14,
             ),
           ),
@@ -282,7 +284,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
       });
     } catch (e) {
       setState(() {
-        _error = '초대 코드를 확인할 수 없어요';
+        _error = S.of(context)!.inviteCodeVerifyError;
       });
     } finally {
       setState(() => _isLoading = false);

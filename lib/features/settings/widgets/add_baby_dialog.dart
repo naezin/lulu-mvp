@@ -3,11 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/baby_repository.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 /// 아기 추가 다이얼로그
 ///
@@ -48,10 +51,11 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
     return Dialog(
       backgroundColor: LuluColors.surfaceCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(LuluSpacing.lg),
@@ -68,18 +72,18 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: LuluColors.lavenderMist.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(10),
+                      color: LuluColors.lavenderLight,
+                      borderRadius: BorderRadius.circular(LuluRadius.section),
                     ),
                     child: const Icon(
-                      Icons.child_care_rounded,
+                      LuluIcons.baby,
                       color: LuluColors.lavenderMist,
                       size: 22,
                     ),
                   ),
                   const SizedBox(width: LuluSpacing.md),
                   Text(
-                    '아기 추가',
+                    l10n.addBabyTitle,
                     style: LuluTextStyles.titleMedium.copyWith(
                       color: LuluTextColors.primary,
                       fontWeight: FontWeight.bold,
@@ -90,17 +94,17 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
               const SizedBox(height: LuluSpacing.lg),
 
               // 이름 입력
-              _buildLabel('이름'),
+              _buildLabel(l10n.labelName),
               const SizedBox(height: LuluSpacing.xs),
               TextFormField(
                 controller: _nameController,
                 style: LuluTextStyles.bodyLarge.copyWith(
                   color: LuluTextColors.primary,
                 ),
-                decoration: _inputDecoration('아기 이름을 입력하세요'),
+                decoration: _inputDecoration(l10n.hintEnterBabyName),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return '이름을 입력해주세요';
+                    return l10n.errorEnterName;
                   }
                   return null;
                 },
@@ -108,11 +112,11 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
               const SizedBox(height: LuluSpacing.md),
 
               // 생년월일
-              _buildLabel('생년월일'),
+              _buildLabel(l10n.labelBirthDate),
               const SizedBox(height: LuluSpacing.xs),
               InkWell(
                 onTap: _selectBirthDate,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: LuluSpacing.md,
@@ -120,18 +124,18 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                   ),
                   decoration: BoxDecoration(
                     color: LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(LuluRadius.sm),
                   ),
                   child: Row(
                     children: [
                       Icon(
-                        Icons.calendar_today_rounded,
+                        LuluIcons.calendar,
                         color: LuluTextColors.secondary,
                         size: 20,
                       ),
                       const SizedBox(width: LuluSpacing.sm),
                       Text(
-                        DateFormat('yyyy년 M월 d일').format(_birthDate),
+                        DateFormat.yMMMd(Localizations.localeOf(context).languageCode).format(_birthDate),
                         style: LuluTextStyles.bodyLarge.copyWith(
                           color: LuluTextColors.primary,
                         ),
@@ -143,21 +147,21 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
               const SizedBox(height: LuluSpacing.md),
 
               // 성별
-              _buildLabel('성별'),
+              _buildLabel(l10n.labelGender),
               const SizedBox(height: LuluSpacing.xs),
               Row(
                 children: [
-                  _buildGenderChip('남아', Gender.male),
+                  _buildGenderChip(l10n.genderMale, Gender.male),
                   const SizedBox(width: LuluSpacing.sm),
-                  _buildGenderChip('여아', Gender.female),
+                  _buildGenderChip(l10n.genderFemale, Gender.female),
                   const SizedBox(width: LuluSpacing.sm),
-                  _buildGenderChip('미정', Gender.unknown),
+                  _buildGenderChip(l10n.genderUnknown, Gender.unknown),
                 ],
               ),
               const SizedBox(height: LuluSpacing.md),
 
               // 조산아 여부
-              _buildLabel('조산아 여부'),
+              _buildLabel(l10n.labelIsPreterm),
               const SizedBox(height: LuluSpacing.xs),
               SwitchListTile(
                 value: _isPreterm,
@@ -166,12 +170,12 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                   if (!value) _gestationalWeeks = null;
                 }),
                 title: Text(
-                  '37주 이전에 태어났나요?',
+                  l10n.questionIsPreterm,
                   style: LuluTextStyles.bodyMedium.copyWith(
                     color: LuluTextColors.primary,
                   ),
                 ),
-                activeTrackColor: LuluColors.lavenderMist.withValues(alpha: 0.5),
+                activeTrackColor: LuluColors.lavenderMedium,
                 activeThumbColor: LuluColors.lavenderMist,
                 contentPadding: EdgeInsets.zero,
               ),
@@ -179,20 +183,20 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
               // 재태주수 (조산아인 경우)
               if (_isPreterm) ...[
                 const SizedBox(height: LuluSpacing.sm),
-                _buildLabel('재태주수'),
+                _buildLabel(l10n.labelGestationalWeeks),
                 const SizedBox(height: LuluSpacing.xs),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: LuluSpacing.md),
                   decoration: BoxDecoration(
                     color: LuluColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(LuluRadius.sm),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<int>(
                       value: _gestationalWeeks,
                       isExpanded: true,
                       hint: Text(
-                        '주수를 선택하세요',
+                        l10n.hintSelectWeeks,
                         style: LuluTextStyles.bodyMedium.copyWith(
                           color: LuluTextColors.tertiary,
                         ),
@@ -204,7 +208,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                       items: List.generate(15, (i) => 23 + i)
                           .map((week) => DropdownMenuItem(
                                 value: week,
-                                child: Text('$week주'),
+                                child: Text(l10n.weekUnit(week)),
                               ))
                           .toList(),
                       onChanged: (value) => setState(() => _gestationalWeeks = value),
@@ -215,7 +219,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
               const SizedBox(height: LuluSpacing.md),
 
               // 출생 체중 (선택)
-              _buildLabel('출생 체중 (선택)'),
+              _buildLabel(l10n.labelBirthWeightOptional),
               const SizedBox(height: LuluSpacing.xs),
               TextFormField(
                 controller: _weightController,
@@ -223,7 +227,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                 style: LuluTextStyles.bodyLarge.copyWith(
                   color: LuluTextColors.primary,
                 ),
-                decoration: _inputDecoration('그램 단위 (예: 2500)'),
+                decoration: _inputDecoration(l10n.hintGrams),
               ),
               const SizedBox(height: LuluSpacing.xl),
 
@@ -234,7 +238,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                     child: TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: Text(
-                        '취소',
+                        l10n.buttonCancel,
                         style: LuluTextStyles.labelLarge.copyWith(
                           color: LuluTextColors.secondary,
                         ),
@@ -250,7 +254,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                         foregroundColor: LuluColors.midnightNavy,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(LuluRadius.sm),
                         ),
                       ),
                       child: _isLoading
@@ -263,7 +267,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
                               ),
                             )
                           : Text(
-                              '추가',
+                              l10n.buttonAdd,
                               style: LuluTextStyles.labelLarge.copyWith(
                                 color: LuluColors.midnightNavy,
                                 fontWeight: FontWeight.bold,
@@ -317,7 +321,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
       filled: true,
       fillColor: LuluColors.surfaceElevated,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         borderSide: BorderSide.none,
       ),
       contentPadding: const EdgeInsets.symmetric(
@@ -360,7 +364,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
 
     if (_isPreterm && _gestationalWeeks == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('재태주수를 선택해주세요')),
+        SnackBar(content: Text(S.of(context)!.errorSelectWeeks)),
       );
       return;
     }
@@ -408,7 +412,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('추가 실패: $e')),
+          SnackBar(content: Text(S.of(context)!.errorAddFailed(e.toString()))),
         );
       }
     } finally {

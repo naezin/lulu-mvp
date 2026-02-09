@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../providers/onboarding_provider.dart';
+import '../../../../core/design_system/lulu_radius.dart';
+import '../../../../core/design_system/lulu_icons.dart';
+import '../../../../l10n/generated/app_localizations.dart' show S;
 
 /// Step 1: 환영 화면
 /// "Lulu에 오신 것을 환영해요!"
@@ -27,7 +30,7 @@ class WelcomeScreen extends StatelessWidget {
             errorBuilder: (context, error, stackTrace) {
               // 이미지 로드 실패 시 fallback 아이콘
               return const Icon(
-                Icons.nightlight_round,
+                LuluIcons.moon,
                 size: 60,
                 color: AppTheme.lavenderMist,
               );
@@ -38,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
 
           // 환영 메시지
           Text(
-            'Lulu에 오신 것을\n환영해요!',
+            S.of(context)!.welcomeTitle,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.displayMedium?.copyWith(
                   color: AppTheme.textPrimary,
@@ -51,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
 
           // 설명 텍스트
           Text(
-            '아기의 수면, 수유, 기저귀를\n쉽고 빠르게 기록해 보세요',
+            S.of(context)!.welcomeSubtitle,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppTheme.textSecondary,
@@ -73,11 +76,11 @@ class WelcomeScreen extends StatelessWidget {
                 backgroundColor: AppTheme.lavenderMist,
                 foregroundColor: AppTheme.midnightNavy,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(LuluRadius.md),
                 ),
               ),
-              child: const Text(
-                '시작하기',
+              child: Text(
+                S.of(context)!.buttonStart,
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,

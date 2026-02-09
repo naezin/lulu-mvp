@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
-import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import '../models/together_data.dart';
 import 'pie_chart_widget.dart';
 
@@ -21,12 +23,12 @@ class TogetherView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = S.of(context);
+    final l10n = S.of(context)!;
 
     if (!data.hasMultipleBabies) {
       return Center(
         child: Text(
-          '아기 2명 이상일 때 함께 보기가 가능해요',
+          l10n.togetherViewNeedMultipleBabies,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -41,7 +43,7 @@ class TogetherView extends StatelessWidget {
         children: [
           // 제목
           Text(
-            l10n?.statisticsTogetherViewTitle ?? 'Together View',
+            l10n.statisticsTogetherViewTitle,
             style: LuluTextStyles.titleMedium,
           ),
 
@@ -65,6 +67,8 @@ class TogetherView extends StatelessWidget {
   }
 
   Widget _buildSummaryComparison(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: data.babies.map((baby) {
@@ -76,7 +80,7 @@ class TogetherView extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: LuluColors.surfaceCard,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(LuluRadius.sm),
               border: Border.all(color: LuluColors.glassBorder),
             ),
             child: Column(
@@ -89,9 +93,9 @@ class TogetherView extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                if (baby.correctedAgeLabel != null)
+                if (baby.correctedAgeDays != null)
                   Text(
-                    baby.correctedAgeLabel!,
+                    S.of(context)!.statisticsCorrectedAge(baby.correctedAgeDays!),
                     style: LuluTextStyles.caption.copyWith(
                       color: LuluTextColors.secondary,
                     ),
@@ -101,7 +105,7 @@ class TogetherView extends StatelessWidget {
 
                 // 수면
                 _buildStatRow(
-                  icon: Icons.bedtime_outlined,
+                  icon: LuluIcons.sleepOutlined,
                   color: LuluStatisticsColors.sleep,
                   value: '${baby.statistics.sleep.dailyAverageHours.toStringAsFixed(1)}h',
                 ),
@@ -110,18 +114,18 @@ class TogetherView extends StatelessWidget {
 
                 // 수유
                 _buildStatRow(
-                  icon: Icons.local_drink_outlined,
+                  icon: LuluIcons.feedingOutlined,
                   color: LuluStatisticsColors.feeding,
-                  value: '${baby.statistics.feeding.dailyAverageCount.toStringAsFixed(1)}회',
+                  value: '${baby.statistics.feeding.dailyAverageCount.toStringAsFixed(1)}${l10n.unitTimes}',
                 ),
 
                 const SizedBox(height: 8),
 
                 // 기저귀
                 _buildStatRow(
-                  icon: Icons.baby_changing_station_outlined,
+                  icon: LuluIcons.diaperOutlined,
                   color: LuluStatisticsColors.diaper,
-                  value: '${baby.statistics.diaper.dailyAverageCount.toStringAsFixed(1)}회',
+                  value: '${baby.statistics.diaper.dailyAverageCount.toStringAsFixed(1)}${l10n.unitTimes}',
                 ),
               ],
             ),
@@ -152,6 +156,8 @@ class TogetherView extends StatelessWidget {
   }
 
   Widget _buildSleepPatternSection(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -159,13 +165,13 @@ class TogetherView extends StatelessWidget {
         Row(
           children: [
             Icon(
-              Icons.bedtime_outlined,
+              LuluIcons.sleepOutlined,
               size: 20,
               color: LuluStatisticsColors.sleep,
             ),
             const SizedBox(width: 8),
             Text(
-              '수면 패턴',
+              l10n.sleepPattern,
               style: LuluTextStyles.titleSmall,
             ),
           ],
@@ -194,6 +200,8 @@ class TogetherView extends StatelessWidget {
                   Center(
                     child: PieChartWidget.fromSleepStats(
                       stats: baby.statistics.sleep,
+                      napLabel: l10n.sleepTypeNap,
+                      nightLabel: l10n.sleepTypeNight,
                       size: 100,
                     ),
                   ),
@@ -202,11 +210,11 @@ class TogetherView extends StatelessWidget {
 
                   // 비율 텍스트
                   Text(
-                    '낮잠 ${(baby.statistics.sleep.napRatio * 100).toInt()}%',
+                    l10n.napRatioPercent((baby.statistics.sleep.napRatio * 100).toInt()),
                     style: LuluTextStyles.caption,
                   ),
                   Text(
-                    '밤잠 ${(baby.statistics.sleep.nightRatio * 100).toInt()}%',
+                    l10n.nightRatioPercent((baby.statistics.sleep.nightRatio * 100).toInt()),
                     style: LuluTextStyles.caption,
                   ),
                 ],
@@ -221,30 +229,24 @@ class TogetherView extends StatelessWidget {
   Widget _buildInsight(BuildContext context) {
     if (data.babies.length < 2) return const SizedBox.shrink();
 
+    final l10n = S.of(context)!;
     final baby1 = data.babies[0];
     final baby2 = data.babies[1];
 
     // ⚠️ "더 높다/낮다" 표현 금지, "패턴이 달라요" 표현 사용
-    String insight1;
-    String insight2;
+    final insight1 = baby1.statistics.sleep.napRatio > 0.3
+        ? l10n.insightNapRatioHigh
+        : l10n.insightNightRatioHigh;
 
-    if (baby1.statistics.sleep.napRatio > 0.3) {
-      insight1 = '낮잠 비율이 높아요';
-    } else {
-      insight1 = '밤잠 비율이 높아요';
-    }
-
-    if (baby2.statistics.sleep.napRatio > 0.3) {
-      insight2 = '낮잠 비율이 높아요';
-    } else {
-      insight2 = '밤잠 비율이 높아요';
-    }
+    final insight2 = baby2.statistics.sleep.napRatio > 0.3
+        ? l10n.insightNapRatioHigh
+        : l10n.insightNightRatioHigh;
 
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: const Color(0xFFFBBF24).withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(LuluRadius.xs),
         border: Border.all(
           color: const Color(0xFFFBBF24).withValues(alpha: 0.3),
         ),
@@ -252,14 +254,19 @@ class TogetherView extends StatelessWidget {
       child: Row(
         children: [
           const Icon(
-            Icons.lightbulb_outline,
+            LuluIcons.tip,
             size: 20,
             color: Color(0xFFFBBF24),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              '${baby1.babyName}은 $insight1,\n${baby2.babyName}이는 $insight2\n(패턴이 달라요)',
+              l10n.insightPatternDifference(
+                baby1.babyName,
+                insight1,
+                baby2.babyName,
+                insight2,
+              ),
               style: LuluTextStyles.bodySmall.copyWith(
                 color: LuluTextColors.primary,
               ),

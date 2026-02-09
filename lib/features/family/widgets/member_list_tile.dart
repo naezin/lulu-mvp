@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../models/family_member_model.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 멤버 목록 타일
 ///
@@ -23,11 +25,11 @@ class MemberListTile extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isMe
-            ? LuluColors.lavenderMist.withOpacity(0.15)
-            : LuluColors.deepIndigo.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
+            ? LuluColors.lavenderLight
+            : LuluColors.deepIndigoBorder,
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: isMe
-            ? Border.all(color: LuluColors.lavenderMist.withOpacity(0.3))
+            ? Border.all(color: LuluColors.lavenderBorder)
             : null,
       ),
       child: Row(
@@ -38,9 +40,9 @@ class MemberListTile extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: member.isOwner
-                  ? Colors.amber.withOpacity(0.2)
-                  : LuluColors.lavenderMist.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(10),
+                  ? Colors.amber.withValues(alpha: 0.2)
+                  : LuluColors.lavenderSelected,
+              borderRadius: BorderRadius.circular(LuluRadius.section),
             ),
             child: Center(
               child: Text(
@@ -74,11 +76,11 @@ class MemberListTile extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: LuluColors.lavenderMist,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(LuluRadius.indicator),
                         ),
-                        child: const Text(
-                          '나',
-                          style: TextStyle(
+                        child: Text(
+                          S.of(context)!.memberBadgeMe,
+                          style: const TextStyle(
                             color: LuluColors.midnightNavy,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
@@ -91,10 +93,10 @@ class MemberListTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   member.isOwner
-                      ? '관리자'
-                      : '${member.joinedAt.month}월 ${member.joinedAt.day}일 참여',
+                      ? S.of(context)!.memberRoleOwner
+                      : S.of(context)!.memberJoinedDate(member.joinedAt.month, member.joinedAt.day),
                   style: TextStyle(
-                    color: LuluTextColors.primary.withOpacity(0.6),
+                    color: LuluTextColors.primarySoft,
                     fontSize: 12,
                   ),
                 ),

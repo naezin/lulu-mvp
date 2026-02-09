@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/feeding_type.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import 'amount_input.dart';
 
 /// 모유 수유 상세 폼
@@ -42,10 +44,10 @@ class BreastFeedingForm extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.lg),
       decoration: BoxDecoration(
-        color: LuluColors.surfaceElevated.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(16),
+        color: LuluColors.surfaceElevatedMedium,
+        borderRadius: BorderRadius.circular(LuluRadius.md),
         border: Border.all(
-          color: LuluActivityColors.feeding.withValues(alpha: 0.2),
+          color: LuluActivityColors.feedingSelected,
         ),
       ),
       child: Column(
@@ -61,7 +63,7 @@ class BreastFeedingForm extends StatelessWidget {
               ),
               const SizedBox(width: LuluSpacing.sm),
               Text(
-                '모유 수유',
+                S.of(context)!.feedingBreastfeeding,
                 style: LuluTextStyles.bodyLarge.copyWith(
                   color: LuluTextColors.primary,
                   fontWeight: FontWeight.w600,
@@ -73,7 +75,7 @@ class BreastFeedingForm extends StatelessWidget {
 
           // 방법 선택: 직접 / 유축
           Text(
-            '방법 선택',
+            S.of(context)!.feedingQuestionMethod,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -83,7 +85,7 @@ class BreastFeedingForm extends StatelessWidget {
             children: [
               Expanded(
                 child: _MethodButton(
-                  label: '직접 수유',
+                  label: S.of(context)!.feedingMethodDirect,
                   isSelected: methodType == FeedingMethodType.direct,
                   onTap: () => onMethodChanged(FeedingMethodType.direct),
                 ),
@@ -91,7 +93,7 @@ class BreastFeedingForm extends StatelessWidget {
               const SizedBox(width: LuluSpacing.sm),
               Expanded(
                 child: _MethodButton(
-                  label: '유축 젖병',
+                  label: S.of(context)!.feedingMethodExpressed,
                   isSelected: methodType == FeedingMethodType.expressed,
                   onTap: () => onMethodChanged(FeedingMethodType.expressed),
                 ),
@@ -142,7 +144,7 @@ class _MethodButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color:
                 isSelected ? LuluActivityColors.feeding : Colors.transparent,
@@ -185,7 +187,7 @@ class _DirectDetails extends StatelessWidget {
       children: [
         // 좌/우 선택
         Text(
-          '어느 쪽?',
+          S.of(context)!.feedingQuestionSide,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -197,8 +199,8 @@ class _DirectDetails extends StatelessWidget {
             children: [
               Expanded(
                 child: _SideButton(
-                  label: 'L',
-                  subLabel: '왼쪽',
+                  label: S.of(context)!.feedingSideLeftShort,
+                  subLabel: S.of(context)!.feedingSideLeft,
                   isSelected: breastSide == BreastSide.left,
                   onTap: () => onSideChanged(BreastSide.left),
                 ),
@@ -206,8 +208,8 @@ class _DirectDetails extends StatelessWidget {
               const SizedBox(width: LuluSpacing.sm),
               Expanded(
                 child: _SideButton(
-                  label: 'R',
-                  subLabel: '오른쪽',
+                  label: S.of(context)!.feedingSideRightShort,
+                  subLabel: S.of(context)!.feedingSideRight,
                   isSelected: breastSide == BreastSide.right,
                   onTap: () => onSideChanged(BreastSide.right),
                 ),
@@ -215,7 +217,7 @@ class _DirectDetails extends StatelessWidget {
               const SizedBox(width: LuluSpacing.sm),
               Expanded(
                 child: _SideButton(
-                  label: '양쪽',
+                  label: S.of(context)!.feedingSideBoth,
                   subLabel: null,
                   isSelected: breastSide == BreastSide.both,
                   onTap: () => onSideChanged(BreastSide.both),
@@ -228,7 +230,7 @@ class _DirectDetails extends StatelessWidget {
 
         // 시간 입력
         Text(
-          '수유 시간',
+          S.of(context)!.feedingQuestionDuration,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -267,7 +269,7 @@ class _SideButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color:
                 isSelected ? LuluActivityColors.feeding : Colors.transparent,
@@ -317,7 +319,7 @@ class _DurationInput extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _AdjustButton(
-              icon: Icons.remove,
+              icon: LuluIcons.remove,
               onTap: () => onDurationChanged((duration - 5).clamp(0, 60)),
             ),
             const SizedBox(width: LuluSpacing.lg),
@@ -326,11 +328,11 @@ class _DurationInput extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: LuluSpacing.md),
               decoration: BoxDecoration(
                 color: LuluColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(LuluRadius.sm),
               ),
               child: Center(
                 child: Text(
-                  '$duration분',
+                  S.of(context)!.durationMinutes(duration),
                   style: LuluTextStyles.titleLarge.copyWith(
                     color: LuluTextColors.primary,
                     fontWeight: FontWeight.w600,
@@ -340,7 +342,7 @@ class _DurationInput extends StatelessWidget {
             ),
             const SizedBox(width: LuluSpacing.lg),
             _AdjustButton(
-              icon: Icons.add,
+              icon: LuluIcons.add,
               onTap: () => onDurationChanged((duration + 5).clamp(0, 60)),
             ),
           ],
@@ -354,7 +356,7 @@ class _DurationInput extends StatelessWidget {
               if (preset != 5) const SizedBox(width: LuluSpacing.sm),
               Expanded(
                 child: _PresetButton(
-                  label: '$preset분',
+                  label: S.of(context)!.durationMinutes(preset),
                   isSelected: duration == preset,
                   onTap: () => onDurationChanged(preset),
                 ),
@@ -384,7 +386,7 @@ class _ExpressedDetails extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '수유량',
+          S.of(context)!.labelFeedingAmount,
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -419,7 +421,7 @@ class _AdjustButton extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           color: LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(LuluRadius.sm),
         ),
         child: Center(
           child: Icon(
@@ -454,7 +456,7 @@ class _PresetButton extends StatelessWidget {
           color: isSelected
               ? LuluActivityColors.feedingBg
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(LuluRadius.xs),
           border: Border.all(
             color: isSelected
                 ? LuluActivityColors.feeding

@@ -10,7 +10,7 @@ class SupabaseService {
   static SupabaseClient get client {
     if (_client == null) {
       throw StateError(
-        'Supabase가 초기화되지 않았습니다. SupabaseService.initialize()를 먼저 호출하세요.',
+        'Supabase not initialized. Call SupabaseService.initialize() first.',
       );
     }
     return _client!;
@@ -31,11 +31,11 @@ class SupabaseService {
     final anonKey = dotenv.env['SUPABASE_ANON_KEY'];
 
     if (url == null || url.isEmpty) {
-      throw StateError('SUPABASE_URL이 .env 파일에 설정되지 않았습니다.');
+      throw StateError('SUPABASE_URL is not set in .env file.');
     }
 
     if (anonKey == null || anonKey.isEmpty) {
-      throw StateError('SUPABASE_ANON_KEY가 .env 파일에 설정되지 않았습니다.');
+      throw StateError('SUPABASE_ANON_KEY is not set in .env file.');
     }
 
     await Supabase.initialize(
@@ -49,9 +49,9 @@ class SupabaseService {
 
     // 기존 세션 확인
     if (_client?.auth.currentUser != null) {
-      debugPrint('[INFO] 기존 세션 존재: ${_client!.auth.currentUser!.id}');
+      debugPrint('[INFO] Existing session found: ${_client!.auth.currentUser!.id}');
     } else {
-      debugPrint('[INFO] 세션 없음 - 로그인 필요');
+      debugPrint('[INFO] No session - login required');
     }
   }
 

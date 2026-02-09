@@ -1,3 +1,4 @@
+import '../../../l10n/generated/app_localizations.dart' show S;
 import 'cry_type.dart';
 
 /// 울음 분석 결과 모델
@@ -49,11 +50,13 @@ class CryAnalysisResult {
   bool get isLowConfidence => confidence < 0.50;
 
   /// 신뢰도 레벨 텍스트
-  String get confidenceLevel {
-    if (isHighConfidence) return '높음';
-    if (isMediumConfidence) return '보통';
-    return '낮음';
+  String localizedConfidenceLevel(S? l10n) {
+    if (isHighConfidence) return l10n?.confidenceLevelHigh ?? 'High';
+    if (isMediumConfidence) return l10n?.confidenceLevelMedium ?? 'Medium';
+    return l10n?.confidenceLevelLow ?? 'Low';
   }
+
+  String get confidenceLevel => localizedConfidenceLevel(null);
 
   /// 신뢰도 레벨 텍스트 (영어)
   String get confidenceLevelEn {

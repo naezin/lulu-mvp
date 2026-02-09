@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../data/models/models.dart';
@@ -10,20 +13,19 @@ import '../../../data/repositories/activity_repository.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/undo_delete_mixin.dart';
 import '../../home/providers/home_provider.dart';
+import '../providers/pattern_data_provider.dart';
 import 'date_navigator.dart';
 import 'timeline_filter_chips.dart';
-import 'mini_time_bar.dart';
-import 'context_ribbon.dart';
+import 'daily_grid.dart';
 import 'activity_list_item.dart';
 import 'edit_activity_sheet.dart';
 
 /// 일간 뷰 (DailyView)
 ///
-/// HF2-3: DailySummaryBanner 제거 (ContextRibbon만 사용)
+/// Sprint 19: MiniTimeBar + ContextRibbon → DailyGrid (2x2) 교체
 /// - DateNavigator: 날짜 좌우 탐색
 /// - TimelineFilterChips: 활동 유형 필터
-/// - MiniTimeBar: 24h 패턴 시각화 (5종 활동 모두)
-/// - ContextRibbon: 한 줄 요약
+/// - DailyGrid: 2x2 요약 그리드 (수면/수유/기저귀/놀이)
 /// - ActivityListItem: 스와이프 수정/삭제
 class DailyView extends StatefulWidget {
   const DailyView({super.key});
@@ -52,6 +54,16 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
 
   /// 초기 로드 완료 여부
   bool _initialLoadDone = false;
+
+  /// Sprint 19: DayTimeline 생성용 Provider
+  final PatternDataProvider _patternProvider = PatternDataProvider();
+
+  /// 수정 D: HomeProvider 변경 감지용
+  int _lastActivitiesLength = 0;
+
+  /// Sprint 19 수정 1: 전체 기록 존재 여부 (신규 유저 판별)
+  bool _hasAnyRecordsEver = true; // 기본 true로 설정 (깜빡임 방지)
+  bool _hasCheckedRecords = false;
 
   @override
   void initState() {
@@ -99,6 +111,14 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
           DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
       final endOfDay = startOfDay.add(const Duration(days: 1));
 
+      // Sprint 19 수정 1: 전체 기록 존재 여부 체크 (최초 1회)
+      if (!_hasCheckedRecords) {
+        final hasAny = await activityRepo.hasAnyActivities(familyId);
+        _hasAnyRecordsEver = hasAny;
+        _hasCheckedRecords = true;
+        debugPrint('[DEBUG] [DailyView] hasAnyRecordsEver: $hasAny');
+      }
+
       final allActivities = await activityRepo.getActivitiesByDateRange(
         familyId,
         startDate: startOfDay,
@@ -131,33 +151,20 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     _loadActivitiesForDate();
   }
 
-  /// 날짜 선택 (DatePicker)
-  Future<void> _selectDate() async {
-    final picked = await showDatePicker(
+  /// 날짜 선택 (커스텀 바텀시트)
+  void _selectDate() {
+    showModalBottomSheet<DateTime>(
       context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.dark(
-              primary: LuluColors.lavenderMist,
-              surface: LuluColors.deepBlue,
-              onSurface: LuluTextColors.primary,
-            ),
-            dialogTheme: const DialogThemeData(
-              backgroundColor: LuluColors.midnightNavy,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (picked != null && picked != _selectedDate) {
-      _onDateChanged(picked);
-    }
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (sheetContext) => _DayCalendarPickerSheet(
+        selectedDate: _selectedDate,
+      ),
+    ).then((picked) {
+      if (picked != null && picked != _selectedDate) {
+        _onDateChanged(picked);
+      }
+    });
   }
 
   /// 기록 수정
@@ -180,9 +187,9 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
       context.read<HomeProvider>().updateActivity(result);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('기록이 수정되었어요'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(S.of(context)!.recordUpdated),
+          duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -210,6 +217,20 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(
       builder: (context, homeProvider, child) {
+        // 수정 D: HomeProvider에서 새 기록 추가 감지 (오늘 날짜일 때만)
+        if (_isToday(_selectedDate)) {
+          final currentLength = homeProvider.todayActivities.length;
+          if (currentLength != _lastActivitiesLength && _lastActivitiesLength > 0) {
+            // 활동이 추가/삭제되었으면 리로드
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                _loadActivitiesForDate();
+              }
+            });
+          }
+          _lastActivitiesLength = currentLength;
+        }
+
         // 로딩 중
         if (_isLoading) {
           return const Center(
@@ -225,8 +246,8 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.error_outline,
-                    size: 48, color: Colors.red.withValues(alpha: 0.7)),
+                Icon(LuluIcons.errorOutline,
+                    size: 48, color: const Color(0xB3FF0000)),
                 const SizedBox(height: 16),
                 Text(_errorMessage!,
                     style: LuluTextStyles.bodyMedium
@@ -234,7 +255,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _loadActivitiesForDate,
-                  child: const Text('다시 시도'),
+                  child: Text(S.of(context)!.retry),
                 ),
               ],
             ),
@@ -270,31 +291,45 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 ),
               ),
 
-              // MiniTimeBar (활동이 있을 때만)
-              if (activities.isNotEmpty)
-                SliverToBoxAdapter(
-                  child: MiniTimeBar(
-                    key: ValueKey(
-                        'minibar_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
-                    activities: activities,
-                    date: _selectedDate,
-                  ),
+              // Sprint 19: DailyGrid (2x2) - MiniTimeBar + ContextRibbon 대체
+              SliverToBoxAdapter(
+                child: Builder(
+                  builder: (context) {
+                    final filteredActivities = _filterActivitiesByBaby(
+                        _dateActivities, homeProvider.selectedBabyId);
+                    final timeline = _patternProvider.buildDayTimeline(
+                        _selectedDate, filteredActivities);
+                    // 수정 A 디버그: 데이터 흐름 확인
+                    debugPrint(
+                        '[DEBUG] [DailyView→DailyGrid] _dateActivities=${_dateActivities.length}, '
+                        'filtered=${filteredActivities.length}, '
+                        'babyId=${homeProvider.selectedBabyId}, '
+                        'timeline.durationBlocks=${timeline.durationBlocks.length}, '
+                        'timeline.instantMarkers=${timeline.instantMarkers.length}');
+                    return DailyGrid(
+                      key: ValueKey(
+                          'dailygrid_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
+                      timeline: timeline,
+                      isToday: _isToday(_selectedDate),
+                    );
+                  },
                 ),
-
-              // ContextRibbon (한 줄 요약)
-              if (activities.isNotEmpty)
-                SliverToBoxAdapter(
-                  child: ContextRibbon(
-                    activities: _dateActivities, // 필터 전 전체 데이터 사용
-                  ),
-                ),
-
-              // HF2-3: DailySummaryBanner 제거 (ContextRibbon과 중복)
+              ),
 
               // 활동 목록 또는 빈 상태
-              if (activities.isEmpty)
-                SliverFillRemaining(
-                  child: _buildEmptyActivitiesState(homeProvider),
+              // Sprint 19 수정 1: 신규 유저만 "첫 기록" Empty State 표시
+              // 기존 유저는 오늘 기록 없어도 DailyGrid만 표시 (Empty State 없음)
+              if (activities.isEmpty && !_hasAnyRecordsEver)
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 300, // Empty State 고정 높이
+                    child: _buildNewUserEmptyState(homeProvider),
+                  ),
+                )
+              else if (activities.isEmpty)
+                // 기존 유저, 오늘 기록 없음 → 간단 안내 텍스트만
+                SliverToBoxAdapter(
+                  child: _buildNoRecordsTodayHint(),
                 )
               else
                 SliverList(
@@ -331,6 +366,13 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     );
   }
 
+  /// 아기 ID로만 필터링 (DailyGrid용)
+  List<ActivityModel> _filterActivitiesByBaby(
+      List<ActivityModel> activities, String? babyId) {
+    if (babyId == null) return activities;
+    return activities.where((a) => a.babyIds.contains(babyId)).toList();
+  }
+
   /// 아기 ID + 활동 유형으로 필터링
   List<ActivityModel> _filterActivities(
       List<ActivityModel> activities, String? babyId, String? typeFilter) {
@@ -352,12 +394,10 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     return filtered;
   }
 
-  /// 활동 없음 상태
-  Widget _buildEmptyActivitiesState(HomeProvider homeProvider) {
+  /// 신규 유저용 Empty State (전체 기록 0건)
+  Widget _buildNewUserEmptyState(HomeProvider homeProvider) {
     final l10n = S.of(context)!;
-    final dateStr = DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDate);
-    final isToday = _isToday(_selectedDate);
-    final babyName = homeProvider.selectedBaby?.name ?? '아기';
+    final babyName = homeProvider.selectedBaby?.name ?? l10n.babyDefault;
 
     return Center(
       child: Column(
@@ -368,20 +408,18 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.2),
+              color: const Color(0x33B8A9E8), // LuluColors.lavenderMist 20% alpha
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.edit_calendar,
+              LuluIcons.editCalendar,
               size: 40,
               color: LuluColors.lavenderMist,
             ),
           ),
           const SizedBox(height: LuluSpacing.xl),
           Text(
-            isToday
-                ? l10n.timelineEmptyTodayTitle(babyName)
-                : l10n.timelineEmptyPastTitle(dateStr),
+            l10n.timelineEmptyTodayTitle(babyName),
             style: LuluTextStyles.titleMedium.copyWith(
               color: LuluTextColors.primary,
               fontWeight: FontWeight.bold,
@@ -390,7 +428,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
           ),
           const SizedBox(height: LuluSpacing.sm),
           Text(
-            isToday ? l10n.timelineEmptyTodayHint : l10n.timelineEmptyPastHint,
+            l10n.timelineEmptyTodayHint,
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -401,11 +439,347 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     );
   }
 
+  /// 기존 유저용 간단 안내 (오늘 기록 없음)
+  Widget _buildNoRecordsTodayHint() {
+    final l10n = S.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
+    final dateStr = DateFormat.MMMEd(locale).format(_selectedDate);
+    final isToday = _isToday(_selectedDate);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: LuluSpacing.lg,
+        vertical: LuluSpacing.xl,
+      ),
+      child: Center(
+        child: Text(
+          isToday
+              ? l10n.dailyViewNoRecordsToday
+              : l10n.dailyViewNoRecordsDate(dateStr),
+          style: LuluTextStyles.bodyMedium.copyWith(
+            color: LuluTextColors.tertiary,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
   /// 오늘인지 확인
   bool _isToday(DateTime date) {
     final now = DateTime.now();
     return date.year == now.year &&
         date.month == now.month &&
         date.day == now.day;
+  }
+}
+
+/// 일간 캘린더 피커 (BottomSheet)
+///
+/// Sprint 19 Phase 5: 주간 피커(_WeekCalendarPickerSheet)와 통일된 스타일.
+/// 월간 달력에서 개별 날짜를 탭하면 해당 날짜 반환.
+/// 미래 날짜는 선택 불가. 월요일 시작.
+class _DayCalendarPickerSheet extends StatefulWidget {
+  final DateTime selectedDate;
+
+  const _DayCalendarPickerSheet({
+    required this.selectedDate,
+  });
+
+  @override
+  State<_DayCalendarPickerSheet> createState() =>
+      _DayCalendarPickerSheetState();
+}
+
+class _DayCalendarPickerSheetState extends State<_DayCalendarPickerSheet> {
+  late DateTime _displayMonth;
+
+  @override
+  void initState() {
+    super.initState();
+    _displayMonth = DateTime(
+      widget.selectedDate.year,
+      widget.selectedDate.month,
+    );
+  }
+
+  /// Navigate months
+  void _goToPreviousMonth() {
+    setState(() {
+      _displayMonth = DateTime(_displayMonth.year, _displayMonth.month - 1);
+    });
+  }
+
+  void _goToNextMonth() {
+    final now = DateTime.now();
+    final nextMonth = DateTime(_displayMonth.year, _displayMonth.month + 1);
+    if (nextMonth.isAfter(DateTime(now.year, now.month + 1))) return;
+    setState(() {
+      _displayMonth = nextMonth;
+    });
+  }
+
+  /// Jump to today
+  void _goToToday() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    Navigator.of(context).pop(today);
+  }
+
+  /// Build the calendar grid weeks
+  List<List<DateTime>> _buildCalendarWeeks() {
+    final firstDayOfMonth = DateTime(_displayMonth.year, _displayMonth.month);
+    final lastDayOfMonth =
+        DateTime(_displayMonth.year, _displayMonth.month + 1, 0);
+
+    // Start from the Monday on or before the 1st
+    final calendarStart =
+        firstDayOfMonth.subtract(Duration(days: firstDayOfMonth.weekday - 1));
+
+    final weeks = <List<DateTime>>[];
+    var current = calendarStart;
+
+    while (current.isBefore(lastDayOfMonth) ||
+        current.month == _displayMonth.month ||
+        weeks.length < 5) {
+      final week = List.generate(7, (i) => current.add(Duration(days: i)));
+      weeks.add(week);
+      current = current.add(const Duration(days: 7));
+      if (weeks.length >= 6) break;
+    }
+
+    return weeks;
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  bool _isDayToday(DateTime date) {
+    final now = DateTime.now();
+    return _isSameDay(date, now);
+  }
+
+  bool _isFutureDay(DateTime date) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final target = DateTime(date.year, date.month, date.day);
+    return target.isAfter(today);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = S.of(context);
+    final weeks = _buildCalendarWeeks();
+
+    return Container(
+      decoration: const BoxDecoration(
+        color: LuluColors.surfaceCard,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: LuluSpacing.lg,
+        vertical: LuluSpacing.md,
+      ),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle bar
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: LuluSpacing.md),
+              decoration: BoxDecoration(
+                color: LuluColors.glassBorder,
+                borderRadius: BorderRadius.circular(LuluRadius.xxs),
+              ),
+            ),
+
+            // Title + Today button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n?.dayPickerTitle ?? 'Select Date',
+                  style: LuluTextStyles.titleSmall.copyWith(
+                    color: LuluTextColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _goToToday,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: LuluSpacing.sm,
+                      vertical: LuluSpacing.xs,
+                    ),
+                    decoration: BoxDecoration(
+                      color: LuluColors.navButtonBg,
+                      borderRadius: BorderRadius.circular(LuluRadius.xs),
+                    ),
+                    child: Text(
+                      l10n?.dayPickerToday ?? 'Today',
+                      style: LuluTextStyles.caption.copyWith(
+                        color: LuluColors.lavenderMist,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: LuluSpacing.md),
+
+            // Month navigator
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: _goToPreviousMonth,
+                  child: Padding(
+                    padding: const EdgeInsets.all(LuluSpacing.xs),
+                    child: Icon(
+                      LuluIcons.chevronLeft,
+                      size: 20,
+                      color: LuluTextColors.primary,
+                    ),
+                  ),
+                ),
+                Text(
+                  _formatMonthYear(_displayMonth),
+                  style: LuluTextStyles.bodyMedium.copyWith(
+                    color: LuluTextColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _goToNextMonth,
+                  child: Padding(
+                    padding: const EdgeInsets.all(LuluSpacing.xs),
+                    child: Icon(
+                      LuluIcons.chevronRight,
+                      size: 20,
+                      color: LuluTextColors.primary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: LuluSpacing.sm),
+
+            // Weekday headers (Mon ~ Sun)
+            _buildWeekdayHeaders(l10n),
+
+            const SizedBox(height: LuluSpacing.xs),
+
+            // Calendar weeks (tappable individual days)
+            ...weeks.map((week) => _buildWeekRow(week)),
+
+            const SizedBox(height: LuluSpacing.md),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWeekdayHeaders(S? l10n) {
+    final headers = [
+      l10n?.weekdayMon ?? 'Mon',
+      l10n?.weekdayTue ?? 'Tue',
+      l10n?.weekdayWed ?? 'Wed',
+      l10n?.weekdayThu ?? 'Thu',
+      l10n?.weekdayFri ?? 'Fri',
+      l10n?.weekdaySat ?? 'Sat',
+      l10n?.weekdaySun ?? 'Sun',
+    ];
+
+    return Row(
+      children: headers
+          .map(
+            (h) => Expanded(
+              child: Center(
+                child: Text(
+                  h,
+                  style: LuluTextStyles.caption.copyWith(
+                    color: LuluTextColors.tertiary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  Widget _buildWeekRow(List<DateTime> week) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 1),
+      child: Row(
+        children: week.map((date) {
+          final isCurrentMonth = date.month == _displayMonth.month;
+          final today = _isDayToday(date);
+          final isFuture = _isFutureDay(date);
+          final isSelected = _isSameDay(date, widget.selectedDate);
+
+          return Expanded(
+            child: GestureDetector(
+              onTap: isFuture
+                  ? null
+                  : () {
+                      HapticFeedback.selectionClick();
+                      Navigator.of(context).pop(date);
+                    },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: LuluSpacing.sm),
+                child: Center(
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: today
+                        ? BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: LuluColors.lavenderMist,
+                          )
+                        : isSelected
+                            ? BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: LuluColors.weekPickerSelected,
+                              )
+                            : null,
+                    alignment: Alignment.center,
+                    child: Text(
+                      '${date.day}',
+                      style: LuluTextStyles.bodySmall.copyWith(
+                        color: isFuture
+                            ? LuluTextColors.tertiary
+                            : today
+                                ? LuluColors.midnightNavy
+                                : isCurrentMonth
+                                    ? LuluTextColors.primary
+                                    : LuluTextColors.tertiary,
+                        fontWeight:
+                            (today || isSelected) ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  String _formatMonthYear(DateTime date) {
+    final locale = Localizations.localeOf(context).languageCode;
+    if (locale == 'ko') {
+      return '${date.year}.${date.month}';
+    }
+    return DateFormat.yMMMM(locale).format(date);
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../shared/widgets/datetime_picker/datetime_picker_sheet.dart';
@@ -96,13 +99,15 @@ class _IntegratedTimeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 날짜 + 시간 표시 형식
-    final dateText = DateFormat('M월 d일 (E)', 'ko').format(time);
-    final timeText = DateFormat('a h:mm', 'ko').format(time);
+    final l10n = S.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
+    final dateText = DateFormat(l10n.dateFormatMonthDay, locale).format(time);
+    final timeText = DateFormat('a h:mm', locale).format(time);
     final displayText = showDate ? '$dateText  $timeText' : timeText;
 
     return Semantics(
       button: true,
-      label: '시간 선택: $displayText',
+      label: S.of(context)!.semanticsTimeSelect(displayText),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
@@ -113,7 +118,7 @@ class _IntegratedTimeButton extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: LuluColors.surfaceElevated,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
             border: Border.all(
               color: LuluColors.glassBorder,
               width: 1,
@@ -124,7 +129,7 @@ class _IntegratedTimeButton extends StatelessWidget {
               // 날짜 아이콘 + 텍스트
               if (showDate) ...[
                 Icon(
-                  Icons.calendar_today_rounded,
+                  LuluIcons.calendar,
                   size: 18,
                   color: LuluColors.lavenderMist,
                 ),
@@ -140,7 +145,7 @@ class _IntegratedTimeButton extends StatelessWidget {
 
               // 시간 아이콘 + 텍스트
               Icon(
-                Icons.access_time_rounded,
+                LuluIcons.time,
                 size: 18,
                 color: LuluColors.lavenderMist,
               ),
@@ -156,7 +161,7 @@ class _IntegratedTimeButton extends StatelessWidget {
 
               // 화살표 아이콘
               Icon(
-                Icons.keyboard_arrow_down_rounded,
+                LuluIcons.chevronDown,
                 size: 24,
                 color: LuluTextColors.secondary,
               ),

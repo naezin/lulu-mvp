@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../models/daily_pattern.dart';
+import '../models/day_timeline.dart';
 
 /// 주간 패턴 데이터 Provider
 ///
@@ -22,6 +24,10 @@ class PatternDataProvider extends ChangeNotifier {
   String? _errorMessage;
   DateTime _weekStartDate = _getWeekStart(DateTime.now());
   bool _togetherViewEnabled = false;
+
+  // Sprint 19 v5: DayTimeline 기반 데이터 (세로 스택 렌더링용)
+  List<DayTimeline> _weekTimelines = [];
+  List<List<DayTimeline>> _multipleWeekTimelines = []; // 다태아용
 
   // v4.1: 멀티 필터 상태 (Set 방식)
   Set<PatternActivityType> _activeFilters = {
@@ -44,6 +50,10 @@ class PatternDataProvider extends ChangeNotifier {
   DateTime get weekStartDate => _weekStartDate;
   bool get togetherViewEnabled => _togetherViewEnabled;
 
+  // Sprint 19 v5: DayTimeline Getters
+  List<DayTimeline> get weekTimelines => _weekTimelines;
+  List<List<DayTimeline>> get multipleWeekTimelines => _multipleWeekTimelines;
+
   /// 주간 패턴 로드
   Future<void> loadWeeklyPattern({
     required String familyId,
@@ -52,15 +62,8 @@ class PatternDataProvider extends ChangeNotifier {
     DateTime? weekStart,
   }) async {
     final targetWeekStart = weekStart ?? _weekStartDate;
-    final cacheKey = '$babyId-${targetWeekStart.toIso8601String()}';
-
-    // 캐시 확인
-    if (_cache.containsKey(cacheKey)) {
-      _weeklyPattern = _cache[cacheKey];
-      _weekStartDate = targetWeekStart;
-      notifyListeners();
-      return;
-    }
+    // Sprint 19: 캐시 비활성화 - 밤잠 자정 넘김 수정 반영 위해
+    // final cacheKey = '$babyId-${targetWeekStart.toIso8601String()}';
 
     _isLoading = true;
     _errorMessage = null;
@@ -69,9 +72,12 @@ class PatternDataProvider extends ChangeNotifier {
     try {
       final weekEnd = targetWeekStart.add(const Duration(days: 7));
 
+      // 전날 밤잠이 자정을 넘어 이어질 수 있으므로, 하루 전부터 조회
+      final queryStart = targetWeekStart.subtract(const Duration(days: 1));
+
       final activities = await _activityRepository.getActivitiesByDateRange(
         familyId,
-        startDate: targetWeekStart,
+        startDate: queryStart,
         endDate: weekEnd,
       );
 
@@ -80,7 +86,7 @@ class PatternDataProvider extends ChangeNotifier {
           .where((a) => a.babyIds.contains(babyId))
           .toList();
 
-      // WeeklyPattern 생성
+      // WeeklyPattern 생성 (레거시 48-slot)
       final days = List.generate(7, (i) {
         final date = targetWeekStart.add(Duration(days: i));
         return _buildDailyPattern(date, babyActivities);
@@ -92,28 +98,35 @@ class PatternDataProvider extends ChangeNotifier {
         babyName: babyName,
       );
 
+      // Sprint 19 v5: DayTimeline 생성 (세로 스택 렌더링용)
+      _weekTimelines = List.generate(7, (i) {
+        final date = targetWeekStart.add(Duration(days: i));
+        return _buildDayTimeline(date, babyActivities);
+      });
+
       _weekStartDate = targetWeekStart;
 
-      // 캐시 저장
-      _cache[cacheKey] = _weeklyPattern!;
+      // Sprint 19: 캐시 비활성화 (밤잠 자정 넘김 수정 테스트)
+      // _cache[cacheKey] = _weeklyPattern!;
 
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      _errorMessage = '패턴 데이터 로드 실패: $e';
+      debugPrint('[PatternDataProvider] loadWeeklyPattern error: $e');
+      _errorMessage = e.toString();
       _isLoading = false;
       notifyListeners();
     }
   }
 
   /// 이전 주로 이동
-  void goToPreviousWeek({
+  Future<void> goToPreviousWeek({
     required String familyId,
     required String babyId,
     required String babyName,
-  }) {
+  }) async {
     final newWeekStart = _weekStartDate.subtract(const Duration(days: 7));
-    loadWeeklyPattern(
+    await loadWeeklyPattern(
       familyId: familyId,
       babyId: babyId,
       babyName: babyName,
@@ -122,16 +135,16 @@ class PatternDataProvider extends ChangeNotifier {
   }
 
   /// 다음 주로 이동
-  void goToNextWeek({
+  Future<void> goToNextWeek({
     required String familyId,
     required String babyId,
     required String babyName,
-  }) {
+  }) async {
     final newWeekStart = _weekStartDate.add(const Duration(days: 7));
     // 미래 주는 로드하지 않음
     if (newWeekStart.isAfter(DateTime.now())) return;
 
-    loadWeeklyPattern(
+    await loadWeeklyPattern(
       familyId: familyId,
       babyId: babyId,
       babyName: babyName,
@@ -182,6 +195,64 @@ class PatternDataProvider extends ChangeNotifier {
   /// 캐시 초기화
   void clearCache() {
     _cache.clear();
+  }
+
+  /// Sprint 19 v5: DayTimeline 리스트 로드 (외부 호출용)
+  Future<List<DayTimeline>> getWeekTimelines({
+    required String familyId,
+    required String babyId,
+    DateTime? weekStart,
+  }) async {
+    final targetWeekStart = weekStart ?? _weekStartDate;
+    final weekEnd = targetWeekStart.add(const Duration(days: 7));
+
+    // 전날 밤잠이 자정을 넘어 이어질 수 있으므로, 하루 전부터 조회
+    final queryStart = targetWeekStart.subtract(const Duration(days: 1));
+
+    final activities = await _activityRepository.getActivitiesByDateRange(
+      familyId,
+      startDate: queryStart,
+      endDate: weekEnd,
+    );
+
+    // 아기 ID로 필터링
+    final babyActivities = activities
+        .where((a) => a.babyIds.contains(babyId))
+        .toList();
+
+    // DayTimeline 생성
+    return List.generate(7, (i) {
+      final date = targetWeekStart.add(Duration(days: i));
+      return _buildDayTimeline(date, babyActivities);
+    });
+  }
+
+  /// Sprint 19 v5: 단일 날짜 DayTimeline 빌드 (비동기 - DB 호출)
+  Future<DayTimeline> buildDayTimelineAsync({
+    required String familyId,
+    required String babyId,
+    required DateTime date,
+  }) async {
+    final dayStart = DateTime(date.year, date.month, date.day);
+    final dayEnd = dayStart.add(const Duration(days: 1));
+
+    final activities = await _activityRepository.getActivitiesByDateRange(
+      familyId,
+      startDate: dayStart,
+      endDate: dayEnd,
+    );
+
+    // 아기 ID로 필터링
+    final babyActivities = activities
+        .where((a) => a.babyIds.contains(babyId))
+        .toList();
+
+    return _buildDayTimeline(date, babyActivities);
+  }
+
+  /// Sprint 19 v5: 단일 날짜 DayTimeline 빌드 (동기 - 활동 리스트 전달)
+  DayTimeline buildDayTimeline(DateTime date, List<ActivityModel> activities) {
+    return _buildDayTimeline(date, activities);
   }
 
   /// 다태아 함께보기 토글
@@ -282,7 +353,8 @@ class PatternDataProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      _errorMessage = '패턴 데이터 로드 실패: $e';
+      debugPrint('[PatternDataProvider] loadMultiplePatterns error: $e');
+      _errorMessage = e.toString();
       _isLoading = false;
       notifyListeners();
     }
@@ -378,5 +450,99 @@ class PatternDataProvider extends ChangeNotifier {
     final daysFromMonday = date.weekday - 1;
     return DateTime(date.year, date.month, date.day)
         .subtract(Duration(days: daysFromMonday));
+  }
+
+  /// Sprint 19 v5: ActivityModel 리스트에서 DayTimeline 생성
+  ///
+  /// 모든 활동 → allBlocks에 추가 (세로 스택 렌더링용)
+  /// Duration/Instant 구분 없이 전부 DurationBlock으로 변환
+  DayTimeline _buildDayTimeline(DateTime date, List<ActivityModel> activities) {
+    final dayStart = DateTime(date.year, date.month, date.day);
+    final dayEnd = dayStart.add(const Duration(days: 1));
+
+    // 해당 날짜에 걸쳐있는 활동 필터링 (자정 넘김 포함)
+    // 조건: (시작 < 날짜끝) AND (끝 > 날짜시작)
+    final dayActivities = activities.where((a) {
+      final localStart = a.startTime.toLocal();
+      final localEnd = a.endTime?.toLocal() ?? localStart.add(const Duration(minutes: 5));
+      // 활동이 해당 날짜와 겹치는지 확인
+      return localStart.isBefore(dayEnd) && localEnd.isAfter(dayStart);
+    }).toList();
+
+    // allBlocks: 모든 활동을 DurationBlock으로 변환
+    final allBlocks = <DurationBlock>[];
+    // 레거시 분리 (통계 계산용)
+    final durationBlocks = <DurationBlock>[];
+    final instantMarkers = <InstantMarker>[];
+
+    for (final activity in dayActivities) {
+      final type = activity.type.name;
+      final localStart = activity.startTime.toLocal();
+
+      // endTime 결정
+      DateTime localEnd;
+      if (activity.endTime != null) {
+        localEnd = activity.endTime!.toLocal();
+      } else {
+        // endTime 없으면 duration_minutes 사용, 없으면 기본 5분
+        final durationMin = activity.data?['duration_minutes'] as int? ?? 5;
+        localEnd = localStart.add(Duration(minutes: durationMin));
+      }
+
+      // subType 결정 (수면: night/nap, 놀이: play_type 등)
+      String? subType;
+      if (type == 'sleep') {
+        // DB에서 sleep_type 읽기 (snake_case 또는 camelCase)
+        subType = activity.data?['sleep_type'] as String? ??
+            activity.data?['sleepType'] as String?;
+        // 없으면 시간 기준 판별
+        if (subType == null) {
+          subType = SleepTimeConfig.isNightTime(localStart.hour) ? 'night' : 'nap';
+        }
+      } else if (type == 'play') {
+        subType = activity.data?['play_type'] as String? ??
+            activity.data?['playType'] as String?;
+      }
+
+      // DurationBlock 생성 (하루 경계로 클램핑)
+      final block = DurationBlock(
+        type: type,
+        subType: subType,
+        startTime: localStart,
+        endTime: localEnd,
+        activityId: activity.id,
+      ).clampToDay(dayStart, dayEnd);
+
+      // 디버그: 밤잠 자정 넘김 확인
+      if (type == 'sleep' && localStart.day != date.day) {
+        debugPrint('[DEBUG] 자정 넘김 수면: 원본 $localStart~$localEnd → clamp ${block.startTime}~${block.endTime} (date: $date)');
+      }
+
+      allBlocks.add(block);
+
+      // 레거시 분리: 기저귀/건강 → InstantMarker, 나머지 → DurationBlock
+      if (type == 'diaper' || type == 'health') {
+        instantMarkers.add(InstantMarker(
+          type: type,
+          time: localStart,
+          data: activity.data,
+          activityId: activity.id,
+        ));
+      } else {
+        durationBlocks.add(block);
+      }
+    }
+
+    // 시작 시간순 정렬
+    allBlocks.sort((a, b) => a.startTime.compareTo(b.startTime));
+    durationBlocks.sort((a, b) => a.startTime.compareTo(b.startTime));
+    instantMarkers.sort((a, b) => a.time.compareTo(b.time));
+
+    return DayTimeline(
+      date: date,
+      allBlocks: allBlocks,
+      durationBlocks: durationBlocks,
+      instantMarkers: instantMarkers,
+    );
   }
 }

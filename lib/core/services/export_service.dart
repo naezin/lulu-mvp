@@ -6,16 +6,24 @@ import 'package:intl/intl.dart';
 
 import '../../data/models/models.dart';
 import '../../data/repositories/activity_repository.dart';
+import '../../l10n/generated/app_localizations.dart' show S;
 
 /// 내보내기 기간 옵션
 enum ExportPeriod {
-  today('오늘'),
-  week('최근 7일'),
-  month('최근 30일'),
-  all('전체');
+  today,
+  week,
+  month,
+  all;
 
-  final String label;
-  const ExportPeriod(this.label);
+  /// i18n 기반 로컬라이즈된 라벨 반환
+  String localizedLabel(S l10n) {
+    return switch (this) {
+      ExportPeriod.today => l10n.exportPeriodToday,
+      ExportPeriod.week => l10n.exportPeriodWeek,
+      ExportPeriod.month => l10n.exportPeriodMonth,
+      ExportPeriod.all => l10n.exportPeriodAll,
+    };
+  }
 
   /// 기간에 해당하는 DateTimeRange 반환
   DateTimeRange? get dateRange {
@@ -61,11 +69,13 @@ class ExportService {
   /// [familyId] 가족 ID
   /// [babies] 아기 정보 (이름 표시용)
   /// [period] 내보내기 기간
+  /// [l10n] 로컬라이제이션 객체
   /// [babyId] 특정 아기만 내보내기 (null이면 전체)
   Future<int> exportByPeriod({
     required String familyId,
     required List<BabyModel> babies,
     required ExportPeriod period,
+    required S l10n,
     String? babyId,
   }) async {
     try {
@@ -106,6 +116,7 @@ class ExportService {
         activities: activities,
         babies: babies,
         dateRange: period.dateRange,
+        l10n: l10n,
       );
 
       return activities.length;
@@ -120,20 +131,22 @@ class ExportService {
   /// [activities] 내보낼 활동 목록
   /// [babies] 아기 정보 (이름 표시용)
   /// [dateRange] 날짜 범위 (파일명용)
+  /// [l10n] 로컬라이제이션 객체
   Future<void> exportToCSV({
     required List<ActivityModel> activities,
     required List<BabyModel> babies,
+    required S l10n,
     DateTimeRange? dateRange,
   }) async {
     try {
-      final csv = _generateCSV(activities, babies);
+      final csv = _generateCSV(activities, babies, l10n);
       final fileName = _generateFileName(dateRange);
       final file = await _saveToFile(csv, fileName);
 
       await Share.shareXFiles(
         [XFile(file.path)],
-        subject: 'LULU 육아 기록',
-        text: '육아 기록 데이터입니다.',
+        subject: l10n.exportEmailSubject,
+        text: l10n.exportEmailBody,
       );
 
       debugPrint('CSV exported: ${file.path}');
@@ -144,7 +157,11 @@ class ExportService {
   }
 
   /// CSV 문자열 생성
-  String _generateCSV(List<ActivityModel> activities, List<BabyModel> babies) {
+  String _generateCSV(
+    List<ActivityModel> activities,
+    List<BabyModel> babies,
+    S l10n,
+  ) {
     final buffer = StringBuffer();
     final dateFormat = DateFormat('yyyy-MM-dd');
     final timeFormat = DateFormat('HH:mm');
@@ -153,7 +170,11 @@ class ExportService {
     final babyNames = {for (final baby in babies) baby.id: baby.name};
 
     // 헤더
-    buffer.writeln('날짜,시간,종료시간,아기,유형,상세,양/시간,메모');
+    buffer.writeln(
+      '${l10n.csvHeaderDate},${l10n.csvHeaderTime},${l10n.csvHeaderEndTime},'
+      '${l10n.csvHeaderBaby},${l10n.csvHeaderType},${l10n.csvHeaderDetail},'
+      '${l10n.csvHeaderAmountDuration},${l10n.csvHeaderNotes}',
+    );
 
     // 데이터 행
     for (final activity in activities) {
@@ -165,17 +186,17 @@ class ExportService {
 
       // 아기 이름들
       final babyNameList = activity.babyIds
-          .map((id) => babyNames[id] ?? '알 수 없음')
+          .map((id) => babyNames[id] ?? l10n.unknownBaby)
           .join(', ');
 
       // 유형
-      final type = _getActivityTypeLabel(activity.type);
+      final type = _getActivityTypeLabel(activity.type, l10n);
 
       // 상세 정보
-      final detail = _getActivityDetail(activity);
+      final detail = _getActivityDetail(activity, l10n);
 
       // 양 또는 시간
-      final amount = _getActivityAmount(activity);
+      final amount = _getActivityAmount(activity, l10n);
 
       // 메모 (CSV 이스케이프)
       final notes = _escapeCSV(activity.notes ?? '');
@@ -186,36 +207,36 @@ class ExportService {
     return buffer.toString();
   }
 
-  String _getActivityTypeLabel(ActivityType type) {
+  String _getActivityTypeLabel(ActivityType type, S l10n) {
     return switch (type) {
-      ActivityType.feeding => '수유',
-      ActivityType.sleep => '수면',
-      ActivityType.diaper => '기저귀',
-      ActivityType.play => '놀이',
-      ActivityType.health => '건강',
+      ActivityType.feeding => l10n.activityTypeFeeding,
+      ActivityType.sleep => l10n.activityTypeSleep,
+      ActivityType.diaper => l10n.activityTypeDiaper,
+      ActivityType.play => l10n.activityTypePlay,
+      ActivityType.health => l10n.activityTypeHealth,
     };
   }
 
-  String _getActivityDetail(ActivityModel activity) {
+  String _getActivityDetail(ActivityModel activity, S l10n) {
     final data = activity.data;
 
     return switch (activity.type) {
-      ActivityType.feeding => _getFeedingDetail(data),
-      ActivityType.sleep => _getSleepDetail(data),
-      ActivityType.diaper => _getDiaperDetail(data),
+      ActivityType.feeding => _getFeedingDetail(data, l10n),
+      ActivityType.sleep => _getSleepDetail(data, l10n),
+      ActivityType.diaper => _getDiaperDetail(data, l10n),
       _ => '',
     };
   }
 
-  String _getFeedingDetail(Map<String, dynamic>? data) {
+  String _getFeedingDetail(Map<String, dynamic>? data, S l10n) {
     if (data == null) return '';
 
     final type = data['feeding_type'] as String? ?? '';
     final typeLabel = switch (type) {
-      'breast' => '모유',
-      'bottle' => '젖병',
-      'formula' => '분유',
-      'solid' => '이유식',
+      'breast' => l10n.feedingTypeBreast,
+      'bottle' => l10n.feedingTypeBottle,
+      'formula' => l10n.feedingTypeFormula,
+      'solid' => l10n.feedingTypeSolid,
       _ => type,
     };
 
@@ -223,9 +244,9 @@ class ExportService {
     final side = data['breast_side'] as String?;
     if (side != null && type == 'breast') {
       final sideLabel = switch (side) {
-        'left' => '왼쪽',
-        'right' => '오른쪽',
-        'both' => '양쪽',
+        'left' => l10n.breastSideLeft,
+        'right' => l10n.breastSideRight,
+        'both' => l10n.breastSideBoth,
         _ => side,
       };
       return '$typeLabel ($sideLabel)';
@@ -234,47 +255,47 @@ class ExportService {
     return typeLabel;
   }
 
-  String _getSleepDetail(Map<String, dynamic>? data) {
+  String _getSleepDetail(Map<String, dynamic>? data, S l10n) {
     if (data == null) return '';
 
     final type = data['sleep_type'] as String? ?? '';
     return switch (type) {
-      'nap' => '낮잠',
-      'night' => '밤잠',
+      'nap' => l10n.sleepTypeNap,
+      'night' => l10n.sleepTypeNight,
       _ => type,
     };
   }
 
-  String _getDiaperDetail(Map<String, dynamic>? data) {
+  String _getDiaperDetail(Map<String, dynamic>? data, S l10n) {
     if (data == null) return '';
 
     final type = data['diaper_type'] as String? ?? '';
     return switch (type) {
-      'wet' => '소변',
-      'dirty' => '대변',
-      'both' => '소변+대변',
-      'dry' => '깨끗함',
+      'wet' => l10n.diaperTypeWet,
+      'dirty' => l10n.diaperTypeDirty,
+      'both' => l10n.diaperTypeBothDetail,
+      'dry' => l10n.diaperTypeClean,
       _ => type,
     };
   }
 
-  String _getActivityAmount(ActivityModel activity) {
+  String _getActivityAmount(ActivityModel activity, S l10n) {
     final data = activity.data;
 
     return switch (activity.type) {
-      ActivityType.feeding => _getFeedingAmount(data),
-      ActivityType.sleep => _getSleepDuration(activity),
+      ActivityType.feeding => _getFeedingAmount(data, l10n),
+      ActivityType.sleep => _getSleepDuration(activity, l10n),
       _ => '',
     };
   }
 
-  String _getFeedingAmount(Map<String, dynamic>? data) {
+  String _getFeedingAmount(Map<String, dynamic>? data, S l10n) {
     if (data == null) return '';
 
     // 모유 수유 시간
     final duration = data['duration_minutes'] as int?;
     if (duration != null && duration > 0) {
-      return '$duration분';
+      return l10n.durationMinutes(duration);
     }
 
     // 수유량
@@ -287,17 +308,17 @@ class ExportService {
   }
 
   /// 수면 시간 (자정 넘김 처리 포함 - QA-01)
-  String _getSleepDuration(ActivityModel activity) {
-    if (activity.endTime == null) return '진행중';
+  String _getSleepDuration(ActivityModel activity, S l10n) {
+    if (activity.endTime == null) return l10n.statusInProgress;
 
     // durationMinutes getter 사용 (자정 넘김 처리 포함)
     final totalMins = activity.durationMinutes ?? 0;
     final hours = totalMins ~/ 60;
     final minutes = totalMins % 60;
 
-    if (hours == 0) return '$minutes분';
-    if (minutes == 0) return '$hours시간';
-    return '$hours시간 $minutes분';
+    if (hours == 0) return l10n.durationMinutes(minutes);
+    if (minutes == 0) return l10n.durationHours(hours);
+    return l10n.durationHoursMinutes(hours, minutes);
   }
 
   String _escapeCSV(String value) {

@@ -4,8 +4,11 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/onboarding_data_service.dart';
 import '../../../../core/utils/sga_calculator.dart';
+import '../../../../l10n/generated/app_localizations.dart' show S;
 import '../providers/onboarding_provider.dart';
 import 'onboarding_screen.dart' show OnboardingCompleteCallback;
+import '../../../../core/design_system/lulu_radius.dart';
+import '../../../../core/design_system/lulu_icons.dart';
 
 /// Step 6: 온보딩 완료
 /// 환영 메시지 + 홈으로 이동
@@ -63,6 +66,7 @@ class _CompletionScreenState extends State<CompletionScreen>
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<OnboardingProvider>();
+    final l10n = S.of(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -89,7 +93,7 @@ class _CompletionScreenState extends State<CompletionScreen>
                 ),
               ),
               child: const Icon(
-                Icons.check_rounded,
+                LuluIcons.save,
                 size: 60,
                 color: Colors.white,
               ),
@@ -104,7 +108,7 @@ class _CompletionScreenState extends State<CompletionScreen>
             child: Column(
               children: [
                 Text(
-                  '준비 완료!',
+                  l10n?.onboardingCompletionTitle ?? '',
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                         color: AppTheme.textPrimary,
                         fontWeight: FontWeight.bold,
@@ -112,7 +116,7 @@ class _CompletionScreenState extends State<CompletionScreen>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  _getCompletionMessage(provider),
+                  _getCompletionMessage(provider, l10n),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: AppTheme.textSecondary,
@@ -148,7 +152,7 @@ class _CompletionScreenState extends State<CompletionScreen>
                   foregroundColor: AppTheme.midnightNavy,
                   disabledBackgroundColor: AppTheme.surfaceElevated,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(LuluRadius.md),
                   ),
                 ),
                 child: provider.isLoading
@@ -160,9 +164,9 @@ class _CompletionScreenState extends State<CompletionScreen>
                           color: AppTheme.midnightNavy,
                         ),
                       )
-                    : const Text(
-                        '시작하기',
-                        style: TextStyle(
+                    : Text(
+                        l10n?.buttonStart ?? '',
+                        style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w600,
                         ),
@@ -177,7 +181,7 @@ class _CompletionScreenState extends State<CompletionScreen>
     );
   }
 
-  String _getCompletionMessage(OnboardingProvider provider) {
+  String _getCompletionMessage(OnboardingProvider provider, S? l10n) {
     // SGA-01: 출생 유형별 맞춤 메시지
     final babies = provider.babies;
 
@@ -196,20 +200,20 @@ class _CompletionScreenState extends State<CompletionScreen>
       final babyName = babies.first.name;
 
       if (hasPreterm) {
-        return '$babyName의 교정연령에 맞춰\n발달을 꼼꼼히 기록해드릴게요';
+        return l10n?.onboardingCompletionPreterm(babyName) ?? '';
       } else if (hasSGA) {
-        return '$babyName의 성장을 세심하게\n추적해드릴게요';
+        return l10n?.onboardingCompletionSGA(babyName) ?? '';
       }
-      return '$babyName의 육아 기록을\n시작할 준비가 되었어요';
+      return l10n?.onboardingCompletionReady(babyName) ?? '';
     } else {
       final names = babies.map((b) => b.name).join(', ');
 
       if (hasPreterm) {
-        return '$names의 교정연령에 맞춰\n발달을 꼼꼼히 기록해드릴게요';
+        return l10n?.onboardingCompletionPreterm(names) ?? '';
       } else if (hasSGA) {
-        return '$names의 성장을 세심하게\n추적해드릴게요';
+        return l10n?.onboardingCompletionSGA(names) ?? '';
       }
-      return '$names의 육아 기록을\n시작할 준비가 되었어요';
+      return l10n?.onboardingCompletionReady(names) ?? '';
     }
   }
 
@@ -243,9 +247,10 @@ class _CompletionScreenState extends State<CompletionScreen>
     } catch (e) {
       if (!context.mounted) return;
 
+      final errorL10n = S.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('오류가 발생했습니다: $e'),
+          content: Text(errorL10n?.onboardingCompletionError('$e') ?? ''),
           backgroundColor: AppTheme.errorSoft,
         ),
       );
@@ -264,7 +269,7 @@ class _BabySummaryCard extends StatelessWidget {
       constraints: const BoxConstraints(maxHeight: 280),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
       ),
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -304,6 +309,7 @@ class _BabyRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
     final color = AppTheme.babyAvatarColors[index % AppTheme.babyAvatarColors.length];
     final classification = _birthClassification;
 
@@ -342,7 +348,7 @@ class _BabyRow extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                _getBabyInfo(),
+                _getBabyInfo(l10n),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppTheme.textTertiary,
                     ),
@@ -358,16 +364,17 @@ class _BabyRow extends StatelessWidget {
 
   /// SGA-01: 상태 배지 위젯
   Widget _buildStatusBadge(BuildContext context, BirthClassification classification) {
+    final l10n = S.of(context);
     switch (classification) {
       case BirthClassification.preterm:
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             color: AppTheme.warningSoft.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(LuluRadius.xs),
           ),
           child: Text(
-            '${baby.gestationalWeeks}주',
+            l10n?.gestationalWeeksShort(baby.gestationalWeeks ?? 0) ?? '',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: AppTheme.warningSoft,
                   fontWeight: FontWeight.w600,
@@ -380,19 +387,19 @@ class _BabyRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             color: const Color(0xFF00897B).withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(LuluRadius.xs),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                Icons.trending_up_rounded,
+                LuluIcons.growth,
                 size: 12,
                 color: Color(0xFF00897B),
               ),
               const SizedBox(width: 4),
               Text(
-                '성장 추적',
+                l10n?.growthTracking ?? '',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: const Color(0xFF00897B),
                       fontWeight: FontWeight.w600,
@@ -407,7 +414,7 @@ class _BabyRow extends StatelessWidget {
     }
   }
 
-  String _getBabyInfo() {
+  String _getBabyInfo(S? l10n) {
     if (baby.birthDate == null) return '';
 
     final now = DateTime.now();
@@ -415,15 +422,15 @@ class _BabyRow extends StatelessWidget {
     final days = diff.inDays;
 
     if (days < 30) {
-      return '$days일';
+      return l10n?.ageInfoDays(days) ?? '';
     } else if (days < 365) {
       final months = days ~/ 30;
-      return '$months개월';
+      return l10n?.ageInfoMonths(months) ?? '';
     } else {
       final years = days ~/ 365;
       final months = (days % 365) ~/ 30;
-      if (months == 0) return '$years살';
-      return '$years살 $months개월';
+      if (months == 0) return l10n?.ageInfoYears(years) ?? '';
+      return l10n?.ageInfoYearsMonths(years, months) ?? '';
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/activity_repository.dart';
+import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 진행 중인 수면 기록 관리 Provider
 ///
@@ -42,14 +43,20 @@ class OngoingSleepProvider extends ChangeNotifier {
     return DateTime.now().difference(_ongoingSleep!.startTime);
   }
 
-  /// 포맷된 경과 시간 문자열
-  String get formattedElapsedTime {
+  /// 포맷된 경과 시간 문자열 (i18n 지원)
+  String localizedElapsedTime(S? l10n) {
     final d = elapsedTime;
     if (d.inHours > 0) {
-      return '${d.inHours}시간 ${d.inMinutes.remainder(60)}분';
+      return l10n?.ongoingSleepElapsedHoursMinutes(
+            d.inHours, d.inMinutes.remainder(60)) ??
+          '${d.inHours}h ${d.inMinutes.remainder(60)}m';
     }
-    return '${d.inMinutes}분';
+    return l10n?.ongoingSleepElapsedMinutes(d.inMinutes) ??
+        '${d.inMinutes}m';
   }
+
+  /// 포맷된 경과 시간 문자열
+  String get formattedElapsedTime => localizedElapsedTime(null);
 
   /// 초기화 - 앱 시작 시 호출
   Future<void> init() async {
@@ -219,7 +226,8 @@ class OngoingSleepRecord {
       familyId: json['family_id'] as String,
       babyName: json['baby_name'] as String?,
       sleepType: json['sleep_type'] as String? ?? 'nap',
-      startTime: DateTime.parse(json['start_time'] as String),
+      // 🔧 Sprint 19 H-UTC1: .toLocal() 추가
+      startTime: DateTime.parse(json['start_time'] as String).toLocal(),
     );
   }
 

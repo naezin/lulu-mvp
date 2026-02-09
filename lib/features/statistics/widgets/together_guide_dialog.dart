@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
@@ -18,7 +20,7 @@ class TogetherGuideDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: LuluColors.surfaceCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(LuluRadius.md),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -28,12 +30,12 @@ class TogetherGuideDialog extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: LuluColors.lavenderMist.withValues(alpha: 0.3),
+              color: LuluColors.lavenderBorder,
               shape: BoxShape.circle,
             ),
             child: Center(
               child: Icon(
-                Icons.favorite_rounded,
+                LuluIcons.heart,
                 size: 32,
                 color: LuluColors.lavenderMist,
               ),
@@ -54,7 +56,7 @@ class TogetherGuideDialog extends StatelessWidget {
           const SizedBox(height: 8),
 
           Text(
-            '서로 다른 패턴도 모두 정상이에요',
+            l10n?.togetherDifferentPatternsNormal ?? 'Different patterns are all normal',
             style: LuluTextStyles.bodySmall.copyWith(
               color: LuluTextColors.secondary,
             ),
@@ -71,7 +73,7 @@ class TogetherGuideDialog extends StatelessWidget {
               foregroundColor: LuluColors.lavenderMist,
               padding: const EdgeInsets.symmetric(vertical: 12),
             ),
-            child: const Text('알겠어요'),
+            child: Text(l10n?.buttonOk ?? 'OK'),
           ),
         ),
       ],
