@@ -24,6 +24,7 @@ import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../widgets/cry_analysis_card.dart';
 import '../../cry_analysis/screens/cry_analysis_screen.dart';
+import '../../timeline/screens/record_history_screen.dart';
 
 /// 홈 화면 (시안 B-4 기반)
 ///
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: 디버깅용 - 현재 사용자 ID 출력 (나중에 삭제)
     final userId = SupabaseService.currentUserId;
     debugPrint('========================================');
-    debugPrint('🔑 현재 사용자 ID: $userId');
+    debugPrint('[INFO] [HomeScreen] Current user ID: $userId');
     debugPrint('========================================');
   }
 
@@ -367,6 +368,39 @@ class _HomeScreenState extends State<HomeScreen> {
       // 저장된 활동이 있으면 HomeProvider에 추가
       if (savedActivity != null) {
         homeProvider.addActivity(savedActivity);
+
+        // Sprint 20 HF U1: 저장 확인 토스트 (2초) + "기록 보기" 액션
+        if (mounted) {
+          final l10n = S.of(context);
+          ScaffoldMessenger.of(context)
+            ..clearSnackBars()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(l10n?.successRecordSaved ?? 'Record saved'),
+                    ),
+                  ],
+                ),
+                action: SnackBarAction(
+                  label: l10n?.viewRecord ?? 'View Records',
+                  textColor: Colors.white,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const RecordHistoryScreen(),
+                      ),
+                    );
+                  },
+                ),
+                duration: const Duration(seconds: 2),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+        }
       }
     });
   }
@@ -465,7 +499,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () async {
               Navigator.pop(dialogContext);
               final homeProvider = context.read<HomeProvider>();
-              final messenger = ScaffoldMessenger.of(context);
 
               final savedActivity = await sleepProvider.endSleep();
 

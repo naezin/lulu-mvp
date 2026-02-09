@@ -71,12 +71,14 @@ class ExportService {
   /// [period] 내보내기 기간
   /// [l10n] 로컬라이제이션 객체
   /// [babyId] 특정 아기만 내보내기 (null이면 전체)
+  /// [sharePositionOrigin] iPad 공유 시트 위치 (Sprint 20 HF #5)
   Future<int> exportByPeriod({
     required String familyId,
     required List<BabyModel> babies,
     required ExportPeriod period,
     required S l10n,
     String? babyId,
+    Rect? sharePositionOrigin,
   }) async {
     try {
       List<ActivityModel> activities;
@@ -117,6 +119,7 @@ class ExportService {
         babies: babies,
         dateRange: period.dateRange,
         l10n: l10n,
+        sharePositionOrigin: sharePositionOrigin,
       );
 
       return activities.length;
@@ -132,21 +135,25 @@ class ExportService {
   /// [babies] 아기 정보 (이름 표시용)
   /// [dateRange] 날짜 범위 (파일명용)
   /// [l10n] 로컬라이제이션 객체
+  /// [sharePositionOrigin] iPad 공유 시트 위치 (Sprint 20 HF #5)
   Future<void> exportToCSV({
     required List<ActivityModel> activities,
     required List<BabyModel> babies,
     required S l10n,
     DateTimeRange? dateRange,
+    Rect? sharePositionOrigin,
   }) async {
     try {
       final csv = _generateCSV(activities, babies, l10n);
       final fileName = _generateFileName(dateRange);
       final file = await _saveToFile(csv, fileName);
 
+      // Sprint 20 HF #5: iPad sharePositionOrigin 추가
       await Share.shareXFiles(
         [XFile(file.path)],
         subject: l10n.exportEmailSubject,
         text: l10n.exportEmailBody,
+        sharePositionOrigin: sharePositionOrigin,
       );
 
       debugPrint('CSV exported: ${file.path}');

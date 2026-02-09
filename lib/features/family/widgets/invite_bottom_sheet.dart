@@ -249,7 +249,12 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
     final userName =
         SupabaseService.currentUser?.userMetadata?['name'];
 
-    await _inviteService.shareInvite(_invite!.inviteCode, userName as String?);
+    // Sprint 20 HF #5: iPad sharePositionOrigin
+    final box = context.findRenderObject() as RenderBox?;
+    final shareOrigin = box != null
+        ? box.localToGlobal(Offset.zero) & box.size
+        : null;
+    await _inviteService.shareInvite(_invite!.inviteCode, userName as String?, sharePositionOrigin: shareOrigin);
   }
 
   Future<void> _copyCode() async {

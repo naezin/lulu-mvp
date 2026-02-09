@@ -50,6 +50,10 @@ class RecordProvider extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  /// Sprint 20 HF #9-C: 수면 겹침 경고 플래그
+  bool _sleepOverlapWarning = false;
+  bool get sleepOverlapWarning => _sleepOverlapWarning;
+
   // ========================================
   // 수유 기록 상태
   // ========================================
@@ -471,7 +475,7 @@ class RecordProvider extends ChangeNotifier {
       return savedActivity;
     } catch (e) {
       _errorMessage = 'errorSaveFailed:$e';
-      debugPrint('❌ [RecordProvider] Error saving feeding: $e');
+      debugPrint('[ERR] [RecordProvider] Error saving feeding: $e');
       return null;
     } finally {
       _isLoading = false;
@@ -499,6 +503,7 @@ class RecordProvider extends ChangeNotifier {
   }
 
   /// 수면 기록 저장
+  /// Sprint 20 HF #9-C: 과거 수면 추가 시 같은 아기 겹침 체크
   Future<ActivityModel?> saveSleep() async {
     if (!isSelectionValid) {
       _errorMessage = 'errorSelectBaby';
@@ -514,9 +519,38 @@ class RecordProvider extends ChangeNotifier {
 
     _isLoading = true;
     _errorMessage = null;
+    _sleepOverlapWarning = false;
     notifyListeners();
 
     try {
+      // Sprint 20 HF #9-C: 겹침 체크 (시작/종료가 모두 있는 과거 기록만)
+      if (_sleepEndTime != null && _selectedBabyIds.isNotEmpty) {
+        try {
+          final existingActivities = await _activityRepository
+              .getActivitiesByDateRange(
+            _familyId!,
+            startDate: _sleepStartTime.subtract(const Duration(hours: 24)),
+            endDate: _sleepEndTime!.add(const Duration(hours: 24)),
+            babyId: _selectedBabyIds.first,
+          );
+
+          final overlapping = existingActivities.where((a) {
+            if (a.type != ActivityType.sleep) return false;
+            if (a.endTime == null) return false;
+            // 시간 겹침: A.start < B.end && A.end > B.start
+            return a.startTime.isBefore(_sleepEndTime!) &&
+                a.endTime!.isAfter(_sleepStartTime);
+          });
+
+          if (overlapping.isNotEmpty) {
+            _sleepOverlapWarning = true;
+          }
+        } catch (e) {
+          debugPrint('[WARN] [RecordProvider] Overlap check failed: $e');
+          // 겹침 체크 실패해도 저장은 진행
+        }
+      }
+
       final activity = ActivityModel(
         id: _uuid.v4(),
         familyId: _familyId!,
@@ -535,7 +569,7 @@ class RecordProvider extends ChangeNotifier {
       return savedActivity;
     } catch (e) {
       _errorMessage = 'errorSaveFailed:$e';
-      debugPrint('❌ [RecordProvider] Error saving sleep: $e');
+      debugPrint('[ERR] [RecordProvider] Error saving sleep: $e');
       return null;
     } finally {
       _isLoading = false;
@@ -592,7 +626,7 @@ class RecordProvider extends ChangeNotifier {
       return savedActivity;
     } catch (e) {
       _errorMessage = 'errorSaveFailed:$e';
-      debugPrint('❌ [RecordProvider] Error saving play: $e');
+      debugPrint('[ERR] [RecordProvider] Error saving play: $e');
       return null;
     } finally {
       _isLoading = false;
@@ -666,7 +700,7 @@ class RecordProvider extends ChangeNotifier {
       return savedActivity;
     } catch (e) {
       _errorMessage = 'errorSaveFailed:$e';
-      debugPrint('❌ [RecordProvider] Error saving health: $e');
+      debugPrint('[ERR] [RecordProvider] Error saving health: $e');
       return null;
     } finally {
       _isLoading = false;
@@ -720,7 +754,7 @@ class RecordProvider extends ChangeNotifier {
       return savedActivity;
     } catch (e) {
       _errorMessage = 'errorSaveFailed:$e';
-      debugPrint('❌ [RecordProvider] Error saving diaper: $e');
+      debugPrint('[ERR] [RecordProvider] Error saving diaper: $e');
       return null;
     } finally {
       _isLoading = false;

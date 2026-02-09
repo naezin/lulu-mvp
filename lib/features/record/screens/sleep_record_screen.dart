@@ -779,12 +779,26 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         orElse: () => widget.babies.first,
       );
 
-      await ongoingSleepProvider.startSleep(
-        babyId: selectedBaby.id,
-        familyId: widget.familyId,
-        sleepType: provider.sleepType,
-        babyName: selectedBaby.name,
-      );
+      // Sprint 20 HF #9-B: 같은 아기 수면 진행 중이면 확인 다이얼로그
+      if (ongoingSleepProvider.hasSleepInProgress) {
+        final confirmed = await _showSleepInProgressDialog(ongoingSleepProvider);
+        if (confirmed != true || !mounted) return;
+
+        // 이전 수면 종료 + 새 수면 시작
+        await ongoingSleepProvider.endAndStartSleep(
+          babyId: selectedBaby.id,
+          familyId: widget.familyId,
+          sleepType: provider.sleepType,
+          babyName: selectedBaby.name,
+        );
+      } else {
+        await ongoingSleepProvider.startSleep(
+          babyId: selectedBaby.id,
+          familyId: widget.familyId,
+          sleepType: provider.sleepType,
+          babyName: selectedBaby.name,
+        );
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -815,9 +829,120 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
       // "기록 추가" 모드: 시작/종료 시간 함께 저장
       final activity = await provider.saveSleep();
       if (activity != null && mounted) {
+        // Sprint 20 HF #9-C: 겹침 경고 토스트
+        if (provider.sleepOverlapWarning) {
+          ScaffoldMessenger.of(context)
+            ..clearSnackBars()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    Icon(LuluIcons.infoOutline, size: 18, color: Colors.white),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        S.of(context)!.sleepOverlapWarning,
+                        style: LuluTextStyles.bodyMedium.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                backgroundColor: LuluPatternColors.editAction,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
+                ),
+                duration: const Duration(seconds: 3),
+              ),
+            );
+        }
         Navigator.of(context).pop(activity);
       }
     }
+  }
+
+  /// Sprint 20 HF #9-B: 수면 진행 중 확인 다이얼로그
+  Future<bool?> _showSleepInProgressDialog(
+    OngoingSleepProvider ongoingSleepProvider,
+  ) {
+    final l10n = S.of(context)!;
+    final babyName = ongoingSleepProvider.ongoingSleep?.babyName ?? l10n.babyDefault;
+    final elapsed = ongoingSleepProvider.elapsedTime;
+    final hours = elapsed.inHours;
+    final minutes = elapsed.inMinutes.remainder(60);
+
+    return showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        final dialogL10n = S.of(dialogContext)!;
+        return AlertDialog(
+          backgroundColor: LuluColors.surfaceCard,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(LuluRadius.lg),
+          ),
+          title: Text(
+            dialogL10n.sleepInProgressTitle(babyName),
+            style: LuluTextStyles.titleMedium.copyWith(
+              color: LuluTextColors.primary,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: LuluActivityColors.sleepBg,
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      LuluIcons.timerOutlined,
+                      color: LuluActivityColors.sleep,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      dialogL10n.sleepInProgressDuration(hours, minutes),
+                      style: LuluTextStyles.titleSmall.copyWith(
+                        color: LuluActivityColors.sleep,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(
+                dialogL10n.buttonCancel,
+                style: LuluTextStyles.labelLarge.copyWith(
+                  color: LuluTextColors.secondary,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: LuluActivityColors.sleep,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
+                ),
+              ),
+              child: Text(dialogL10n.sleepEndAndStart),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

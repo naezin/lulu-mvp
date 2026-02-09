@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
@@ -49,8 +50,10 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   /// 이전 family_id (변경 감지용)
   String? _previousFamilyId;
 
-  /// 스와이프 힌트 표시 여부 (첫 번째 아이템만)
-  bool _showSwipeHint = true;
+  /// Sprint 20 HF U2: 스와이프 힌트 3회만 표시 (SharedPreferences 기반)
+  static const String _swipeHintCountKey = 'swipe_hint_shown_count';
+  static const int _maxSwipeHintCount = 3;
+  bool _showSwipeHint = false;
 
   /// 초기 로드 완료 여부
   bool _initialLoadDone = false;
@@ -71,6 +74,34 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     // FIX-B: 시간 정보 제거한 오늘 날짜
     final now = DateTime.now();
     _selectedDate = DateTime(now.year, now.month, now.day);
+    // Sprint 20 HF U2: 스와이프 힌트 카운트 로드
+    _loadSwipeHintCount();
+  }
+
+  /// Sprint 20 HF U2: SharedPreferences에서 힌트 표시 횟수 로드
+  Future<void> _loadSwipeHintCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final count = prefs.getInt(_swipeHintCountKey) ?? 0;
+      if (count < _maxSwipeHintCount && mounted) {
+        setState(() => _showSwipeHint = true);
+      }
+    } catch (e) {
+      debugPrint('[WARN] [DailyView] Failed to load swipe hint count: $e');
+    }
+  }
+
+  /// Sprint 20 HF U2: 힌트 숨김 + 카운트 증가
+  Future<void> _dismissSwipeHint() async {
+    if (!_showSwipeHint) return;
+    setState(() => _showSwipeHint = false);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final count = prefs.getInt(_swipeHintCountKey) ?? 0;
+      await prefs.setInt(_swipeHintCountKey, count + 1);
+    } catch (e) {
+      debugPrint('[WARN] [DailyView] Failed to save swipe hint count: $e');
+    }
   }
 
   @override
@@ -349,10 +380,8 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                         onDelete: () => _onDeleteActivity(activity),
                         showSwipeHint: _showSwipeHint && index == 0,
                         onTap: () {
-                          // 스와이프 힌트 숨기기
-                          if (_showSwipeHint) {
-                            setState(() => _showSwipeHint = false);
-                          }
+                          // Sprint 20 HF U2: 스와이프 힌트 숨기기 + 카운트 증가
+                          _dismissSwipeHint();
                           // 탭 시 수정 시트 열기
                           _onEditActivity(activity);
                         },

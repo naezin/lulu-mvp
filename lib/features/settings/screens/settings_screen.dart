@@ -666,11 +666,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _isExporting = true);
 
     try {
+      // Sprint 20 HF #5: iPad 공유 시트 위치 (화면 중앙 기준)
+      final box = context.findRenderObject() as RenderBox?;
+      final shareOrigin = box != null
+          ? box.localToGlobal(Offset.zero) & box.size
+          : null;
+
       final count = await ExportService.instance.exportByPeriod(
         familyId: family.id,
         babies: babies,
         period: _selectedPeriod,
         l10n: l10n,
+        sharePositionOrigin: shareOrigin,
       );
 
       if (count == 0) {
