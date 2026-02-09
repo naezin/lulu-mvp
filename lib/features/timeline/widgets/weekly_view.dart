@@ -46,6 +46,9 @@ class _WeeklyViewState extends State<WeeklyView> {
   bool _isLoading = true;
   String? _errorMessage;
 
+  /// Sprint 20 HF #8: 이전 babyId 추적 (변경 감지용)
+  String? _previousBabyId;
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +57,8 @@ class _WeeklyViewState extends State<WeeklyView> {
     _patternProvider = PatternDataProvider();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final homeProvider = context.read<HomeProvider>();
+      _previousBabyId = homeProvider.selectedBabyId ?? homeProvider.babies.firstOrNull?.id;
       _loadData();
     });
   }
@@ -264,6 +269,16 @@ class _WeeklyViewState extends State<WeeklyView> {
   Widget build(BuildContext context) {
     final l10n = S.of(context);
 
+    // Sprint 20 HF #8: 아기 전환 감지 → 데이터 리로드
+    final homeProvider = context.watch<HomeProvider>();
+    final currentBabyId = homeProvider.selectedBabyId ?? homeProvider.babies.firstOrNull?.id;
+    if (currentBabyId != null && currentBabyId != _previousBabyId && !_isLoading) {
+      _previousBabyId = currentBabyId;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _loadData();
+      });
+    }
+
     if (_isLoading) {
       return _buildLoadingState();
     }
@@ -282,7 +297,6 @@ class _WeeklyViewState extends State<WeeklyView> {
     // null이 아님이 보장됨
     final stats = statistics!;
 
-    final homeProvider = context.watch<HomeProvider>();
     final selectedBaby = homeProvider.selectedBaby;
     final correctedAgeDays = selectedBaby?.correctedAgeInDays;
 

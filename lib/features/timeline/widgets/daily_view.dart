@@ -90,6 +90,24 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     }
   }
 
+  /// Sprint 20 HF #15: 탭 복귀 시 데이터 갱신
+  /// RecordHistoryScreen이 Consumer로 rebuild되면
+  /// DailyView도 rebuild됨. 오늘 날짜이고 HomeProvider의 활동 수가
+  /// 로컬 캐시와 다르면 리로드.
+  void _checkAndReloadIfStale(HomeProvider homeProvider) {
+    if (!_isToday(_selectedDate) || _isLoading) return;
+
+    final currentLength = homeProvider.todayActivities.length;
+    if (currentLength != _lastActivitiesLength && _lastActivitiesLength > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _loadActivitiesForDate();
+        }
+      });
+    }
+    _lastActivitiesLength = currentLength;
+  }
+
   /// 선택된 날짜의 활동 로드 (Supabase에서)
   Future<void> _loadActivitiesForDate() async {
     final homeProvider = context.read<HomeProvider>();
@@ -217,19 +235,8 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(
       builder: (context, homeProvider, child) {
-        // 수정 D: HomeProvider에서 새 기록 추가 감지 (오늘 날짜일 때만)
-        if (_isToday(_selectedDate)) {
-          final currentLength = homeProvider.todayActivities.length;
-          if (currentLength != _lastActivitiesLength && _lastActivitiesLength > 0) {
-            // 활동이 추가/삭제되었으면 리로드
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) {
-                _loadActivitiesForDate();
-              }
-            });
-          }
-          _lastActivitiesLength = currentLength;
-        }
+        // Sprint 20 HF #4/#15: HomeProvider 변경 감지 → 자동 리로드
+        _checkAndReloadIfStale(homeProvider);
 
         // 로딩 중
         if (_isLoading) {
