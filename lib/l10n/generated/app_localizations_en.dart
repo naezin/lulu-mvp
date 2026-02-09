@@ -931,69 +931,71 @@ class SEn extends S {
   String get importSelectFile => 'Select File';
 
   @override
-  String get importTxtOption => '텍스트 파일 (.txt)';
+  String get importTxtOption => 'Text file (.txt)';
 
   @override
-  String get importTxtDesc => '베이비타임 등';
+  String get importTxtDesc => 'Babytime, etc.';
 
   @override
-  String get importCsvOption => 'CSV 파일 (.csv)';
+  String get importCsvOption => 'CSV file (.csv)';
 
   @override
-  String get importCsvDesc => 'Huckleberry 등';
+  String get importCsvDesc => 'Huckleberry, etc.';
 
   @override
-  String get importHint => '대부분의 육아 앱 설정에서 데이터 내보내기를 지원해요';
+  String get importHint =>
+      'Most baby apps support data export in their settings';
 
   @override
   String get importAnalyzing => 'Analyzing file...';
 
   @override
-  String get importAnalyzed => '파일 분석 완료';
+  String get importAnalyzed => 'File analysis complete';
 
   @override
-  String get importFeedingCount => '수유';
+  String get importFeedingCount => 'Feeding';
 
   @override
-  String get importSleepCount => '수면';
+  String get importSleepCount => 'Sleep';
 
   @override
-  String get importDiaperCount => '기저귀';
+  String get importDiaperCount => 'Diaper';
 
   @override
-  String get importPlayCount => '놀이';
+  String get importPlayCount => 'Play';
 
   @override
-  String get importTotal => '총';
+  String get importTotal => 'Total';
 
   @override
-  String get importBabyConnect => '아기 연결';
+  String get importBabyConnect => 'Connect Baby';
 
   @override
-  String get importBabyConnectDesc => '이 기록을 어떤 아기에게 연결할까요?';
+  String get importBabyConnectDesc =>
+      'Which baby should these records be linked to?';
 
   @override
-  String get importDuplicateWarning => '기존 기록과 중복되면 건너뜁니다';
+  String get importDuplicateWarning => 'Duplicate records will be skipped';
 
   @override
   String importButton(int count) {
-    return '$count개 기록 가져오기';
+    return 'Import $count records';
   }
 
   @override
   String get importProgress => 'null% complete';
 
   @override
-  String get importComplete => '기록을 가져왔어요!';
+  String get importComplete => 'Records imported!';
 
   @override
-  String get importSuccess => '성공';
+  String get importSuccess => 'Success';
 
   @override
-  String get importSkipped => '건너뜀 (중복)';
+  String get importSkipped => 'Skipped (duplicate)';
 
   @override
-  String get importGoHome => '홈으로 돌아가기';
+  String get importGoHome => 'Go to Home';
 
   @override
   String get familyManagement => 'Family Management';

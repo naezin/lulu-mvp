@@ -314,80 +314,8 @@
   "quickFeedingUndone": "Undone",
   "orNewEntry": "or enter new",
   "importTitle": "Import Data",
-  "importSubtitle": "Bring records from other apps",
-  "importSelectFormat": "Select App Format",
-  "importBabytimeTitle": "Babytime",
-  "importBabytimeDesc": "TXT file (activity_*.txt)",
-  "importHuckleberryTitle": "Huckleberry",
-  "importHuckleberryDesc": "CSV file export",
   "importSelectFile": "Select File",
   "importAnalyzing": "Analyzing file...",
-  "importAnalyzingDesc": "Reading records from file",
-  "importPreviewTitle": "Preview",
-  "importPreviewDesc": "{count} records found",
-  "@importPreviewDesc": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "importPreviewPeriod": "Period: {start} ~ {end}",
-  "@importPreviewPeriod": {
-    "placeholders": {
-      "start": {
-        "type": "String"
-      },
-      "end": {
-        "type": "String"
-      }
-    }
-  },
-  "importPreviewFeeding": "Feeding {count}",
-  "@importPreviewFeeding": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "importPreviewSleep": "Sleep {count}",
-  "@importPreviewSleep": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "importPreviewDiaper": "Diaper {count}",
-  "@importPreviewDiaper": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "importPreviewPlay": "Play {count}",
-  "@importPreviewPlay": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "importPreviewHealth": "Health {count}",
-  "@importPreviewHealth": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "importSelectBaby": "Select Baby",
-  "importSelectBabyDesc": "Which baby are these records for?",
-  "importStartButton": "Start Import",
-  "importImporting": "Importing...",
-  "importImportingDesc": "Adding records to LULU",
   "importProgress": "{percent}% complete",
   "@importProgress": {
     "placeholders": {
@@ -396,29 +324,6 @@
       }
     }
   },
-  "importCompleteTitle": "Import Complete!",
-  "importCompleteSuccess": "{count} records imported",
-  "@importCompleteSuccess": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "importCompleteSkipped": "{count} duplicates skipped",
-  "@importCompleteSkipped": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "importErrorTitle": "Import Failed",
-  "importErrorRetry": "Retry",
-  "importErrorBack": "Go Back",
-  "importDone": "Done",
-  "importNewImport": "Import Another File",
-  "importDuplicateNote": "Duplicate records (same type and time) are automatically skipped",
   "familyManagement": "Family Management",
   "familyMembers": "Family Members",
   "pendingInvites": "Pending Invites",
@@ -2111,7 +2016,15 @@
   },
   "defaultFamilyName": "My Family",
   "inviteDaysRemaining": "{days} days left",
-  "@inviteDaysRemaining": {"description":"x","placeholders":{"days":{"type":"int","example":"5"}}},
+  "@inviteDaysRemaining": {
+    "description": "x",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
   "togetherDifferentPatternsNormal": "Different patterns are all normal",
   "cryReanalyzeShort": "Reanalyze",
   "confidenceLevelHigh": "High",
@@ -2124,16 +2037,60 @@
   "directionStable": "Stable",
   "directionDecreasing": "Decreasing",
   "sgaCorrectedAgeDMinus": "Corrected age D{days}",
-  "@sgaCorrectedAgeDMinus": {"description":"x","placeholders":{"days":{"type":"int","example":"-14"}}},
+  "@sgaCorrectedAgeDMinus": {
+    "description": "x",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "-14"
+      }
+    }
+  },
   "sgaCorrectedAgeDPlus": "Corrected age D+{days}",
-  "@sgaCorrectedAgeDPlus": {"description":"x","placeholders":{"days":{"type":"int","example":"30"}}},
+  "@sgaCorrectedAgeDPlus": {
+    "description": "x",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "30"
+      }
+    }
+  },
   "sgaGrowthTrackingMode": "Growth tracking mode",
   "semanticsTimeSelect": "Select time: {time}",
-  "@semanticsTimeSelect": {"description":"x","placeholders":{"time":{"type":"String","example":"3:30"}}},
+  "@semanticsTimeSelect": {
+    "description": "x",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "3:30"
+      }
+    }
+  },
   "ongoingSleepElapsedHoursMinutes": "{hours}h {minutes}m",
-  "@ongoingSleepElapsedHoursMinutes": {"description":"x","placeholders":{"hours":{"type":"int","example":"2"},"minutes":{"type":"int","example":"30"}}},
+  "@ongoingSleepElapsedHoursMinutes": {
+    "description": "x",
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "example": "2"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
+    }
+  },
   "ongoingSleepElapsedMinutes": "{minutes}m",
-  "@ongoingSleepElapsedMinutes": {"description":"x","placeholders":{"minutes":{"type":"int","example":"45"}}},
+  "@ongoingSleepElapsedMinutes": {
+    "description": "x",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "45"
+      }
+    }
+  },
   "togetherOkButton": "Got it",
   "cryAnalysisCardTitle": "Cry Analysis",
   "cryAnalysisStartButtonHome": "Start Analysis",
@@ -2141,19 +2098,87 @@
   "cryCancelButton": "Cancel",
   "familyDefaultName": "My Family",
   "familyMemberCount": "{count} members",
-  "@familyMemberCount": {"description":"x","placeholders":{"count":{"type":"int","example":"3"}}},
+  "@familyMemberCount": {
+    "description": "x",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
   "familyInviteDaysLeft": "{days} days left",
-  "@familyInviteDaysLeft": {"description":"x","placeholders":{"days":{"type":"int","example":"5"}}},
+  "@familyInviteDaysLeft": {
+    "description": "x",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
   "growthErrorTitle": "Failed to load data",
   "growthErrorRetry": "Retry",
   "growthChartLegend50": "50% (median)",
   "welcomeStartButton": "Get Started",
   "importCannotSelectFile": "Cannot select file: {error}",
-  "@importCannotSelectFile": {"description":"x","placeholders":{"error":{"type":"String","example":"Permission denied"}}},
+  "@importCannotSelectFile": {
+    "description": "x",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Permission denied"
+      }
+    }
+  },
   "importNoFamilyInfo": "No family info found. Please complete onboarding.",
   "importFailed": "Import failed: {error}",
-  "@importFailed": {"description":"x","placeholders":{"error":{"type":"String","example":"Network error"}}},
+  "@importFailed": {
+    "description": "x",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
   "dateFormatMonthDay": "MMM d (E)",
   "growthMetricChartTitle": "{metric} Growth Chart",
-  "@growthMetricChartTitle": {"description":"x","placeholders":{"metric":{"type":"String","example":"Weight"}}}
+  "@growthMetricChartTitle": {
+    "description": "x",
+    "placeholders": {
+      "metric": {
+        "type": "String",
+        "example": "Weight"
+      }
+    }
+  },
+  "importAnalyzed": "File analysis complete",
+  "importBabyConnect": "Connect Baby",
+  "importBabyConnectDesc": "Which baby should these records be linked to?",
+  "importButton": "Import {count} records",
+  "@importButton": {
+    "description": "Import button",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "147"
+      }
+    }
+  },
+  "importComplete": "Records imported!",
+  "importCsvDesc": "Huckleberry, etc.",
+  "importCsvOption": "CSV file (.csv)",
+  "importDiaperCount": "Diaper",
+  "importDuplicateWarning": "Duplicate records will be skipped",
+  "importFeedingCount": "Feeding",
+  "importGoHome": "Go to Home",
+  "importHint": "Most baby apps support data export in their settings",
+  "importPlayCount": "Play",
+  "importSkipped": "Skipped (duplicate)",
+  "importSleepCount": "Sleep",
+  "importSuccess": "Success",
+  "importTotal": "Total",
+  "importTxtDesc": "Babytime, etc.",
+  "importTxtOption": "Text file (.txt)"
 }
