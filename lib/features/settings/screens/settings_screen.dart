@@ -20,6 +20,7 @@ import '../providers/settings_provider.dart';
 import '../widgets/add_baby_dialog.dart';
 import '../widgets/delete_baby_dialog.dart';
 import 'import_screen.dart';
+import 'legal_screen.dart';
 import 'settings_account_section.dart';
 import 'settings_reset_section.dart';
 
@@ -95,8 +96,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // 앱 정보 섹션
                 _buildSectionHeader(l10n.sectionAppInfo),
                 const SizedBox(height: LuluSpacing.md),
-                _buildInfoTile(l10n.infoVersion, '2.2.2'),
+                _buildInfoTile(l10n.infoVersion, '2.4.1'),
                 _buildInfoTile(l10n.infoDeveloper, l10n.infoTeamName),
+                const SizedBox(height: LuluSpacing.sm),
+                _buildLegalSection(),
 
                 const SizedBox(height: LuluSpacing.xxxl),
 
@@ -652,6 +655,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
             color: LuluTextColors.secondary,
           ),
         ),
+      ),
+    );
+  }
+
+  // ========================================
+  // 법적 문서 섹션
+  // ========================================
+
+  Widget _buildLegalSection() {
+    final l10n = S.of(context)!;
+    return Container(
+      decoration: BoxDecoration(
+        color: LuluColors.surfaceCard,
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              l10n.authPrivacyPolicy,
+              style: LuluTextStyles.bodyLarge.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+            trailing: const Icon(
+              LuluIcons.chevronRight,
+              color: LuluTextColors.secondary,
+            ),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    const LegalScreen(docType: LegalDocType.privacyPolicy),
+              ),
+            ),
+          ),
+          Divider(height: 1, color: LuluColors.glassBorder),
+          ListTile(
+            title: Text(
+              l10n.authTermsOfService,
+              style: LuluTextStyles.bodyLarge.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+            trailing: const Icon(
+              LuluIcons.chevronRight,
+              color: LuluTextColors.secondary,
+            ),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    const LegalScreen(docType: LegalDocType.termsOfService),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
