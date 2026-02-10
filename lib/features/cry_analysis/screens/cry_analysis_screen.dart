@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
@@ -135,9 +136,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           icon: const Icon(LuluIcons.history),
           onPressed: () {
             // TODO: 히스토리 화면 이동
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context)!.cryHistoryComingSoon)),
-            );
+            AppToast.showText(S.of(context)!.cryHistoryComingSoon);
           },
         ),
       ],

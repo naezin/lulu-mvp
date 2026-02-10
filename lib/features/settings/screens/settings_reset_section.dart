@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/services/supabase_service.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/repositories/family_repository.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
@@ -220,15 +221,6 @@ class SettingsResetSection extends StatelessWidget {
   }
 
   void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: LuluColors.surfaceElevated,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(LuluRadius.sm),
-        ),
-      ),
-    );
+    AppToast.showText(message);
   }
 }

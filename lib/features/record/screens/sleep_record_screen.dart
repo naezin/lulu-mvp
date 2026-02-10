@@ -11,6 +11,7 @@ import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
@@ -790,6 +791,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           familyId: widget.familyId,
           sleepType: provider.sleepType,
           babyName: selectedBaby.name,
+          startTime: provider.sleepStartTime,
         );
       } else {
         await ongoingSleepProvider.startSleep(
@@ -797,11 +799,12 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
           familyId: widget.familyId,
           sleepType: provider.sleepType,
           babyName: selectedBaby.name,
+          startTime: provider.sleepStartTime,
         );
       }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(
           SnackBar(
             content: Row(
               children: [
@@ -831,9 +834,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
       if (activity != null && mounted) {
         // Sprint 20 HF #9-C: 겹침 경고 토스트
         if (provider.sleepOverlapWarning) {
-          ScaffoldMessenger.of(context)
-            ..clearSnackBars()
-            ..showSnackBar(
+          AppToast.show(
               SnackBar(
                 content: Row(
                   children: [

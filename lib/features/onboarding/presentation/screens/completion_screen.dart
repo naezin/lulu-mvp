@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/onboarding_data_service.dart';
+import '../../../../core/utils/app_toast.dart';
 import '../../../../core/utils/sga_calculator.dart';
 import '../../../../l10n/generated/app_localizations.dart' show S;
 import '../providers/onboarding_provider.dart';
@@ -248,12 +249,7 @@ class _CompletionScreenState extends State<CompletionScreen>
       if (!context.mounted) return;
 
       final errorL10n = S.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorL10n?.onboardingCompletionError('$e') ?? ''),
-          backgroundColor: AppTheme.errorSoft,
-        ),
-      );
+      AppToast.showText(errorL10n?.onboardingCompletionError('$e') ?? '');
     }
   }
 }

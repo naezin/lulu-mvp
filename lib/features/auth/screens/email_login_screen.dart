@@ -5,6 +5,7 @@ import '../providers/auth_provider.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// 이메일 로그인/회원가입 화면
@@ -346,12 +347,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n?.authEmailRequired ?? ''),
-          backgroundColor: Colors.orange,
-        ),
-      );
+      AppToast.showText(l10n?.authEmailRequired ?? '');
       return;
     }
 
@@ -360,15 +356,10 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
     if (mounted) {
       final resetL10n = S.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            success
-                ? (resetL10n?.authPasswordResetSent ?? '')
-                : (resetL10n?.authPasswordResetFailed ?? ''),
-          ),
-          backgroundColor: success ? Colors.green : Colors.red,
-        ),
+      AppToast.showText(
+        success
+            ? (resetL10n?.authPasswordResetSent ?? '')
+            : (resetL10n?.authPasswordResetFailed ?? ''),
       );
     }
   }

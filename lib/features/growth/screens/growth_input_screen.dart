@@ -6,6 +6,7 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/models/models.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/baby_tab_bar.dart';
@@ -418,27 +419,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
       }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(LuluIcons.checkCircle, size: 16, color: Colors.white),
-                const SizedBox(width: 8),
-                Text(
-                  S.of(context)!.successGrowthRecordSaved,
-                  style: LuluTextStyles.bodyMedium.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            backgroundColor: LuluStatusColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(LuluRadius.sm),
-            ),
-          ),
-        );
+        AppToast.showText(S.of(context)!.successGrowthRecordSaved);
         Navigator.pop(context);
       }
     } finally {

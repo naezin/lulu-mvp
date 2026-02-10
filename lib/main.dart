@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/utils/app_toast.dart';
 import 'core/services/supabase_service.dart';
 import 'core/services/openai_service.dart';
 import 'core/services/onboarding_data_service.dart';
@@ -123,6 +124,7 @@ class LuluApp extends StatelessWidget {
           return MaterialApp(
             title: 'Lulu',
             debugShowCheckedModeBanner: false,
+            scaffoldMessengerKey: appScaffoldMessengerKey,
             theme: AppTheme.darkTheme,
             // Localization
             localizationsDelegates: const [

@@ -5,6 +5,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/services/supabase_service.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../models/family_member_model.dart';
 import '../providers/family_provider.dart';
@@ -191,7 +192,6 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
     // Sprint 21 Phase 3: capture context-dependent refs before async gap
     final l10n = S.of(context)!;
     final familyProvider = context.read<FamilyProvider>();
-    final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
     // 확인 다이얼로그
@@ -236,9 +236,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
       }
     } catch (e) {
       if (mounted) {
-        messenger.showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        AppToast.showText(e.toString());
       }
     } finally {
       if (mounted) {

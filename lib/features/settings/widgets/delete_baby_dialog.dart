@@ -5,6 +5,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 
@@ -152,9 +153,7 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context)!.errorDeleteFailed(e.toString()))),
-        );
+        AppToast.showText(S.of(context)!.errorDeleteFailed(e.toString()));
         setState(() => _isDeleting = false);
       }
     }

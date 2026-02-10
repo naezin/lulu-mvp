@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/baby_repository.dart';
@@ -363,9 +364,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_isPreterm && _gestationalWeeks == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)!.errorSelectWeeks)),
-      );
+      AppToast.showText(S.of(context)!.errorSelectWeeks);
       return;
     }
 
@@ -411,9 +410,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context)!.errorAddFailed(e.toString()))),
-        );
+        AppToast.showText(S.of(context)!.errorAddFailed(e.toString()));
       }
     } finally {
       if (mounted) {

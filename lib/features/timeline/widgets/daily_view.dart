@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/utils/app_toast.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
@@ -247,13 +248,8 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
       // HomeProvider 동기화
       context.read<HomeProvider>().updateActivity(result);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context)!.recordUpdated),
-          duration: const Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      // Sprint 21 Phase 3-1: AppToast for cross-tab reliability
+      AppToast.showText(S.of(context)!.recordUpdated);
     }
   }
 

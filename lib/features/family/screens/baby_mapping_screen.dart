@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../home/providers/home_provider.dart';
@@ -255,7 +256,6 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
     // Sprint 21 Phase 3: capture context-dependent refs before async gap
     final familyProvider = context.read<FamilyProvider>();
     final homeProvider = context.read<HomeProvider>();
-    final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
     setState(() => _isLoading = true);
@@ -272,9 +272,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
       }
     } catch (e) {
       if (mounted) {
-        messenger.showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        AppToast.showText(e.toString());
       }
     } finally {
       if (mounted) {
@@ -299,7 +297,6 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
     // Sprint 21 Phase 3: capture context-dependent refs before async gap
     final familyProvider = context.read<FamilyProvider>();
     final homeProvider = context.read<HomeProvider>();
-    final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     final l10n = S.of(context)!;
 
@@ -313,17 +310,13 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
         await familyProvider.onJoinedFamily(result.familyId);
         await homeProvider.onFamilyChanged(result.familyId);
 
-        messenger.showSnackBar(
-          SnackBar(content: Text(l10n.recordsImported(result.migratedCount))),
-        );
+        AppToast.showText(l10n.recordsImported(result.migratedCount));
 
         navigator.pushNamedAndRemoveUntil('/home', (r) => false);
       }
     } catch (e) {
       if (mounted) {
-        messenger.showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        AppToast.showText(e.toString());
       }
     } finally {
       if (mounted) {

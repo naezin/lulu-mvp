@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
@@ -200,10 +201,8 @@ class RecentFeedingButtons extends StatelessWidget {
       return;
     }
 
-    // onSaveSuccess 없는 경우: 토스트 + 취소 표시 (화면이 안 닫힘)
-    ScaffoldMessenger.of(context)
-      ..clearSnackBars()
-      ..showSnackBar(
+    // Sprint 21 Phase 3-1: AppToast for cross-tab reliability
+    AppToast.show(
       SnackBar(
         content: Row(
           children: [

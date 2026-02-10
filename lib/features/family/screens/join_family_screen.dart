@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../home/providers/home_provider.dart';
 import '../models/invite_info_model.dart';
@@ -314,7 +315,6 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
     // Sprint 21 Phase 3: capture context-dependent refs before async gap
     final familyProvider = context.read<FamilyProvider>();
     final homeProvider = context.read<HomeProvider>();
-    final messenger = ScaffoldMessenger.of(context);
     final l10n = S.of(context)!;
     final navigator = Navigator.of(context);
 
@@ -328,9 +328,7 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
         await familyProvider.onJoinedFamily(result.familyId);
         await homeProvider.onFamilyChanged(result.familyId);
 
-        messenger.showSnackBar(
-          SnackBar(content: Text(l10n.joinedFamily)),
-        );
+        AppToast.showText(l10n.joinedFamily);
 
         navigator.pushNamedAndRemoveUntil('/home', (r) => false);
       }

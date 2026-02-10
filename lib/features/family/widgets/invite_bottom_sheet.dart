@@ -5,6 +5,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/services/supabase_service.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../models/family_invite_model.dart';
 import '../providers/family_provider.dart';
@@ -50,9 +51,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        AppToast.showText(e.toString());
       }
     }
   }
@@ -213,9 +212,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
 
     // 간단한 이메일 검증
     if (!email.contains('@')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)!.invalidEmail)),
-      );
+      AppToast.showText(S.of(context)!.invalidEmail);
       return;
     }
 
@@ -226,15 +223,11 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
       _emailController.clear();
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context)!.inviteEmailSent)),
-        );
+        AppToast.showText(S.of(context)!.inviteEmailSent);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        AppToast.showText(e.toString());
       }
     } finally {
       if (mounted) {
@@ -263,9 +256,7 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
     await Clipboard.setData(ClipboardData(text: _invite!.formattedCode));
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)!.codeCopied)),
-      );
+      AppToast.showText(S.of(context)!.codeCopied);
     }
   }
 }

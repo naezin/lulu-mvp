@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../core/config/feature_flags.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
@@ -352,9 +353,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _ => throw ArgumentError('Unknown record type: $type'),
     };
 
-    // Sprint 21 HF U1: ScaffoldMessenger + l10n을 push 전에 캡처
-    // .then() 콜백에서 context가 무효화될 수 있으므로 미리 저장
-    final messenger = ScaffoldMessenger.of(context);
+    // Sprint 21 Phase 3-1: capture l10n + navigator before async gap
     final l10n = S.of(context);
     final navigator = Navigator.of(context);
 
@@ -366,37 +365,33 @@ class _HomeScreenState extends State<HomeScreen> {
       if (savedActivity != null) {
         homeProvider.addActivity(savedActivity);
 
-        // Sprint 21 HF U1: 캡처된 messenger로 토스트 표시
-        if (mounted) {
-          messenger
-            ..clearSnackBars()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(l10n?.successRecordSaved ?? 'Record saved'),
-                    ),
-                  ],
+        // Sprint 21 Phase 3-1: AppToast (global ScaffoldMessenger)
+        AppToast.show(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(l10n?.successRecordSaved ?? 'Record saved'),
                 ),
-                action: SnackBarAction(
-                  label: l10n?.viewRecord ?? 'View Records',
-                  textColor: Colors.white,
-                  onPressed: () {
-                    navigator.push(
-                      MaterialPageRoute(
-                        builder: (_) => const RecordHistoryScreen(),
-                      ),
-                    );
-                  },
-                ),
-                duration: const Duration(seconds: 2),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-        }
+              ],
+            ),
+            action: SnackBarAction(
+              label: l10n?.viewRecord ?? 'View Records',
+              textColor: Colors.white,
+              onPressed: () {
+                navigator.push(
+                  MaterialPageRoute(
+                    builder: (_) => const RecordHistoryScreen(),
+                  ),
+                );
+              },
+            ),
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     });
   }

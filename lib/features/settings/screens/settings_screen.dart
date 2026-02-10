@@ -8,6 +8,7 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/services/export_service.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/repositories/baby_repository.dart';
 import '../../../data/repositories/activity_repository.dart';
@@ -762,16 +763,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: LuluColors.surfaceElevated,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(LuluRadius.sm),
-        ),
-      ),
-    );
+    AppToast.showText(message);
   }
 
   // Reset section → settings_reset_section.dart (SettingsResetSection)

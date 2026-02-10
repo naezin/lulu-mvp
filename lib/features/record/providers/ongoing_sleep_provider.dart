@@ -86,6 +86,7 @@ class OngoingSleepProvider extends ChangeNotifier {
     required String familyId,
     String sleepType = 'nap',
     String? babyName,
+    DateTime? startTime,
   }) async {
     // 이미 진행 중인 수면이 있으면 UI에서 처리해야 함
     if (_ongoingSleep != null) {
@@ -99,7 +100,7 @@ class OngoingSleepProvider extends ChangeNotifier {
       familyId: familyId,
       babyName: babyName,
       sleepType: sleepType,
-      startTime: DateTime.now(),
+      startTime: startTime ?? DateTime.now(),
     );
 
     await _saveToLocal();
@@ -154,6 +155,7 @@ class OngoingSleepProvider extends ChangeNotifier {
     required String familyId,
     String sleepType = 'nap',
     String? babyName,
+    DateTime? startTime,
   }) async {
     ActivityModel? endedActivity;
 
@@ -175,6 +177,7 @@ class OngoingSleepProvider extends ChangeNotifier {
       familyId: familyId,
       sleepType: sleepType,
       babyName: babyName,
+      startTime: startTime,
     );
 
     return endedActivity;

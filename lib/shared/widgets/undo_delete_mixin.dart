@@ -6,48 +6,42 @@ import '../../data/repositories/activity_repository.dart';
 import '../../features/home/providers/home_provider.dart';
 import '../../l10n/generated/app_localizations.dart' show S;
 import '../../core/design_system/lulu_icons.dart';
+import '../../core/utils/app_toast.dart';
 
-/// Undo 삭제 기능을 제공하는 Mixin
+/// Undo delete mixin
 ///
-/// 작업 지시서 v1.1: Hard Delete + Undo 토스트 (5초)
-/// - 삭제 전 ActivityModel을 메모리에 보관
-/// - 5초 Undo 토스트 표시
-/// - Undo 시 새 UUID로 재생성 (duplicate key 방지)
+/// Sprint 21 Phase 3-1: GlobalKey ScaffoldMessenger for cross-tab toast.
+/// - Stores ActivityModel in memory before delete
+/// - Shows 5-second Undo toast via AppToast (global)
+/// - Undo creates new UUID to avoid DB duplicate key
 mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
   final ActivityRepository _activityRepository = ActivityRepository();
   ActivityModel? _pendingDelete;
 
-  /// 삭제 실행 + Undo 토스트 표시
+  /// Delete activity + show Undo toast
   Future<void> deleteActivityWithUndo({
     required ActivityModel activity,
     required HomeProvider homeProvider,
     required BuildContext context,
   }) async {
-    // 1. Undo용 백업
+    // 1. Backup for undo
     _pendingDelete = activity;
 
-    // Sprint 20 HF #1: ScaffoldMessenger를 미리 캡처하여 context 무효화 방지
-    final messenger = ScaffoldMessenger.of(context);
+    // Sprint 21 Phase 3-1: capture l10n before async gap
     final l10n = S.of(context);
 
-    // 2. 즉시 삭제 (DB + 로컬 상태)
+    // 2. Delete immediately (DB + local state)
     try {
       await _activityRepository.deleteActivity(activity.id);
       homeProvider.removeActivity(activity.id);
     } catch (e) {
       _pendingDelete = null;
-      if (context.mounted) {
-        messenger.showSnackBar(
-          SnackBar(content: Text('Delete failed: $e')),
-        );
-      }
+      AppToast.showText('Delete failed: $e');
       return;
     }
 
-    // 3. Undo 토스트 표시 (5초)
-    // Sprint 20 HF #1: 캡처된 messenger 사용 → 탭 전환 후에도 정상 dismiss
-    messenger.clearSnackBars();
-    messenger.showSnackBar(
+    // 3. Undo toast (5 seconds) via global ScaffoldMessenger
+    AppToast.show(
       SnackBar(
         content: Row(
           children: [
@@ -61,25 +55,23 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
         action: SnackBarAction(
           label: l10n?.undoAction ?? 'Undo',
           textColor: Colors.white,
-          onPressed: () => _undoDelete(homeProvider, messenger),
+          onPressed: () => _undoDelete(homeProvider),
         ),
       ),
     );
 
-    // 4. 5초 후 백업 삭제
+    // 4. Clear backup after 6 seconds
     Future.delayed(const Duration(seconds: 6), () {
       _pendingDelete = null;
     });
   }
 
-  /// 삭제 취소 (재생성)
-  /// 🔴 중요: 새 ID로 생성해야 DB 충돌 방지
-  /// Sprint 20 HF #1: ScaffoldMessengerState 직접 전달 → context 무효화 방지
-  Future<void> _undoDelete(HomeProvider homeProvider, ScaffoldMessengerState messenger) async {
+  /// Undo delete (re-create with new ID)
+  Future<void> _undoDelete(HomeProvider homeProvider) async {
     if (_pendingDelete == null) return;
 
     try {
-      // 🔴 중요: 새 UUID 생성하여 ID 충돌 방지
+      // New UUID to avoid DB duplicate key
       final restoredActivity = _pendingDelete!.copyWith(
         id: const Uuid().v4(),
         createdAt: DateTime.now(),
@@ -88,16 +80,10 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
       final created = await _activityRepository.createActivity(restoredActivity);
       homeProvider.addActivity(created);
 
-      // 🔧 Sprint 19 G-F1: 복구 성공 토스트 제거 → 햅틱 대체
+      // Sprint 19 G-F1: haptic instead of toast on restore
       HapticFeedback.mediumImpact();
     } catch (e) {
-      try {
-        messenger.showSnackBar(
-          SnackBar(content: Text('Restore failed: $e')),
-        );
-      } catch (_) {
-        // messenger가 이미 dispose된 경우 무시
-      }
+      AppToast.showText('Restore failed: $e');
     } finally {
       _pendingDelete = null;
     }
