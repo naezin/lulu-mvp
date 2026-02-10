@@ -4,47 +4,76 @@ import '../../core/services/supabase_service.dart';
 import '../models/family_model.dart';
 
 /// Family 데이터 저장소
-/// Supabase families 테이블과 연동
+/// family_members 경로 우선, families.user_id 레거시 폴백
 class FamilyRepository {
   /// 현재 사용자의 가족 조회
+  /// family_members 경로 우선 → 레거시 폴백
   Future<FamilyModel?> getCurrentFamily() async {
     try {
       final userId = SupabaseService.currentUserId;
       if (userId == null) {
-        debugPrint('❌ [FamilyRepository] No authenticated user');
+        debugPrint('[ERR] [FamilyRepository] No authenticated user');
         return null;
       }
 
-      final response = await SupabaseService.families
-          .select()
+      // 1. family_members 경로 (v2 방식)
+      final memberResult = await SupabaseService.client
+          .from('family_members')
+          .select('family_id')
           .eq('user_id', userId)
           .maybeSingle();
 
-      if (response == null) {
-        debugPrint('📭 [FamilyRepository] No family found for user');
+      String? familyId;
+
+      if (memberResult != null) {
+        familyId = memberResult['family_id'] as String;
+      } else {
+        // 2. 레거시 폴백: families.user_id
+        debugPrint('[WARN] [FamilyRepository] legacy fallback used - getCurrentFamily');
+        final response = await SupabaseService.families
+            .select('id')
+            .eq('user_id', userId)
+            .maybeSingle();
+
+        if (response == null) {
+          debugPrint('[INFO] [FamilyRepository] No family found for user');
+          return null;
+        }
+
+        familyId = response['id'] as String;
+      }
+
+      // families 테이블에서 상세 조회
+      final familyResponse = await SupabaseService.families
+          .select()
+          .eq('id', familyId)
+          .maybeSingle();
+
+      if (familyResponse == null) {
+        debugPrint('[WARN] [FamilyRepository] Family not found by id: $familyId');
         return null;
       }
 
       // babies 테이블에서 가족의 아기 ID들 조회
       final babiesResponse = await SupabaseService.babies
           .select('id')
-          .eq('family_id', response['id']);
+          .eq('family_id', familyId);
 
       final babyIds = (babiesResponse as List)
           .map((b) => b['id'] as String)
           .toList();
 
       return FamilyModel(
-        id: response['id'],
-        userId: response['user_id'],
+        id: familyResponse['id'],
+        userId: familyResponse['user_id'],
         babyIds: babyIds,
-        createdAt: DateTime.parse(response['created_at']),
-        updatedAt: response['updated_at'] != null
-            ? DateTime.parse(response['updated_at'])
+        createdAt: DateTime.parse(familyResponse['created_at']),
+        updatedAt: familyResponse['updated_at'] != null
+            ? DateTime.parse(familyResponse['updated_at'])
             : null,
       );
     } catch (e) {
-      debugPrint('❌ [FamilyRepository] Error getting family: $e');
+      debugPrint('[ERR] [FamilyRepository] Error getting family: $e');
       rethrow;
     }
   }
@@ -70,7 +99,7 @@ class FamilyRepository {
       final familyId = response['id'] as String;
       debugPrint('[OK] [FamilyRepository] Family created: $familyId');
 
-      // 2. family_members에 owner로 INSERT (Family Sharing v3.2)
+      // 2. family_members에 owner로 INSERT (RLS 필수)
       try {
         await SupabaseService.client.from('family_members').insert({
           'family_id': familyId,
@@ -80,7 +109,7 @@ class FamilyRepository {
         debugPrint('[OK] [FamilyRepository] Family member (owner) created');
       } catch (e) {
         debugPrint('[WARN] [FamilyRepository] family_members insert failed: $e');
-        // 실패해도 계속 진행 (레거시 호환)
+        // DB 트리거가 INSERT 시 자동 생성하지만, 실패 로그는 남김
       }
 
       return FamilyModel(
@@ -90,7 +119,7 @@ class FamilyRepository {
         createdAt: DateTime.parse(response['created_at']),
       );
     } catch (e) {
-      debugPrint('❌ [FamilyRepository] Error creating family: $e');
+      debugPrint('[ERR] [FamilyRepository] Error creating family: $e');
       rethrow;
     }
   }
@@ -104,17 +133,29 @@ class FamilyRepository {
 
       debugPrint('[OK] [FamilyRepository] Family deleted: $familyId');
     } catch (e) {
-      debugPrint('❌ [FamilyRepository] Error deleting family: $e');
+      debugPrint('[ERR] [FamilyRepository] Error deleting family: $e');
       rethrow;
     }
   }
 
   /// 가족 존재 여부 확인
+  /// family_members 경로 우선 → 레거시 폴백
   Future<bool> hasFamily() async {
     try {
       final userId = SupabaseService.currentUserId;
       if (userId == null) return false;
 
+      // 1. family_members 경로 (v2 방식)
+      final memberResult = await SupabaseService.client
+          .from('family_members')
+          .select('id')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      if (memberResult != null) return true;
+
+      // 2. 레거시 폴백
+      debugPrint('[WARN] [FamilyRepository] legacy fallback used - hasFamily');
       final response = await SupabaseService.families
           .select('id')
           .eq('user_id', userId)
@@ -122,7 +163,7 @@ class FamilyRepository {
 
       return response != null;
     } catch (e) {
-      debugPrint('❌ [FamilyRepository] Error checking family: $e');
+      debugPrint('[ERR] [FamilyRepository] Error checking family: $e');
       return false;
     }
   }
@@ -156,13 +197,13 @@ class FamilyRepository {
             : null,
       );
     } catch (e) {
-      debugPrint('❌ [FamilyRepository] Error getting family by id: $e');
+      debugPrint('[ERR] [FamilyRepository] Error getting family by id: $e');
       rethrow;
     }
   }
 
   // ========================================
-  // 🆕 HOTFIX: family_members 자동 등록
+  // family_members 자동 등록
   // ========================================
 
   /// family_members 확인 및 자동 등록
@@ -170,7 +211,7 @@ class FamilyRepository {
   Future<void> ensureFamilyMember(String familyId) async {
     final userId = SupabaseService.currentUserId;
     if (userId == null) {
-      debugPrint('❌ [FamilyRepository] No user for ensureFamilyMember');
+      debugPrint('[ERR] [FamilyRepository] No user for ensureFamilyMember');
       return;
     }
 
@@ -190,12 +231,12 @@ class FamilyRepository {
           'user_id': userId,
           'role': 'owner',
         });
-        debugPrint('✅ [FamilyRepository] Auto-registered to family_members');
+        debugPrint('[OK] [FamilyRepository] Auto-registered to family_members');
       } else {
-        debugPrint('✅ [FamilyRepository] Already in family_members');
+        debugPrint('[OK] [FamilyRepository] Already in family_members');
       }
     } catch (e) {
-      debugPrint('❌ [FamilyRepository] ensureFamilyMember error: $e');
+      debugPrint('[ERR] [FamilyRepository] ensureFamilyMember error: $e');
       // UNIQUE constraint 에러면 무시 (이미 있음)
       if (!e.toString().contains('duplicate') &&
           !e.toString().contains('unique') &&
@@ -210,9 +251,9 @@ class FamilyRepository {
             },
             onConflict: 'family_id,user_id',
           );
-          debugPrint('✅ [FamilyRepository] Upsert succeeded');
+          debugPrint('[OK] [FamilyRepository] Upsert succeeded');
         } catch (e2) {
-          debugPrint('❌ [FamilyRepository] Upsert also failed: $e2');
+          debugPrint('[ERR] [FamilyRepository] Upsert also failed: $e2');
         }
       }
     }
@@ -224,7 +265,7 @@ class FamilyRepository {
       final userId = SupabaseService.currentUserId;
       if (userId == null) return null;
 
-      // 방법 1: family_members 통해 조회
+      // family_members 통해 조회
       final memberResponse = await SupabaseService.client
           .from('family_members')
           .select('family_id')
@@ -236,10 +277,11 @@ class FamilyRepository {
         return await getFamilyById(familyId);
       }
 
-      // 방법 2: 레거시 (families.user_id) 체크
+      // 레거시 폴백
+      debugPrint('[WARN] [FamilyRepository] legacy fallback used - getFamilyByMembership');
       return await getCurrentFamily();
     } catch (e) {
-      debugPrint('❌ [FamilyRepository] getFamilyByMembership error: $e');
+      debugPrint('[ERR] [FamilyRepository] getFamilyByMembership error: $e');
       return null;
     }
   }
@@ -271,6 +313,7 @@ class FamilyRepository {
     }
 
     if (familyId == null) {
+      debugPrint('[WARN] [FamilyRepository] legacy fallback used - resetAllData');
       final familyData = await SupabaseService.families
           .select('id')
           .eq('user_id', userId)

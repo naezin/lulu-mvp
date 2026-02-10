@@ -430,7 +430,7 @@ class HomeProvider extends ChangeNotifier {
       BabyModel(
         id: 'baby-1',
         familyId: 'family-1',
-        name: '서준이',
+        name: 'Baby A',
         birthDate: now.subtract(const Duration(days: 60)),
         gender: Gender.male,
         gestationalWeeksAtBirth: 34,
@@ -442,7 +442,7 @@ class HomeProvider extends ChangeNotifier {
       BabyModel(
         id: 'baby-2',
         familyId: 'family-1',
-        name: '서윤이',
+        name: 'Baby B',
         birthDate: now.subtract(const Duration(days: 60)),
         gender: Gender.female,
         gestationalWeeksAtBirth: 34,
@@ -555,16 +555,20 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // TODO: Supabase에서 새 가족 정보 로드
-      // final familyRepo = FamilyRepository();
-      // final family = await familyRepo.getFamily(newFamilyId);
-      // final babies = await familyRepo.getBabies(newFamilyId);
-      // setFamily(family, babies);
+      // Supabase에서 새 가족 정보 로드
+      final familyRepo = FamilyRepository();
+      final family = await familyRepo.getFamilyById(newFamilyId);
+
+      if (family != null) {
+        final babyRepo = BabyRepository();
+        final babies = await babyRepo.getBabiesByFamilyId(newFamilyId);
+        setFamily(family, babies);
+      }
 
       // 활동 데이터 새로 로드
       await refresh();
 
-      debugPrint('[OK] [HomeProvider] Family data reloaded');
+      debugPrint('[OK] [HomeProvider] Family data reloaded for: $newFamilyId');
     } catch (e) {
       _errorMessage = 'Failed to load family data: $e';
       debugPrint('[ERROR] [HomeProvider] Family change error: $e');
@@ -594,17 +598,6 @@ enum SweetSpotState {
 }
 
 extension SweetSpotStateExtension on SweetSpotState {
-  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
-  String get label {
-    return switch (this) {
-      SweetSpotState.unknown => '확인 중',
-      SweetSpotState.tooEarly => '아직 일찍',
-      SweetSpotState.approaching => '곧 수면 시간',
-      SweetSpotState.optimal => '지금이 최적!',
-      SweetSpotState.overtired => '과로 상태',
-    };
-  }
-
   /// 표시용 라벨 (i18n)
   String localizedLabel(S l10n) {
     return switch (this) {

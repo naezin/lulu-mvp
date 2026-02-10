@@ -196,8 +196,8 @@ class BabyModel {
                                json['gestational_age_weeks'] as int?,
       // 🔴 핵심: null이면 3000 (정상 체중 기본값)
       birthWeightGrams: json['birth_weight_grams'] as int?,
-      multipleBirthType: json['multiple_birth_type'] != null
-          ? BabyType.fromValue(json['multiple_birth_type'] as String)
+      multipleBirthType: json['baby_type'] != null
+          ? BabyType.fromValue(json['baby_type'] as String)
           : null,
       zygosity: json['zygosity'] != null
           ? Zygosity.fromValue(json['zygosity'] as String)

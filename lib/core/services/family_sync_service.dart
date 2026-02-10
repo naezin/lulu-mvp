@@ -8,8 +8,8 @@ import 'supabase_service.dart';
 /// Family 동기화 서비스
 /// 로컬 Family와 Supabase Family 동기화
 ///
-/// ⚠️ 중요: family_members 테이블 없이 families 테이블만 사용
-/// families 테이블 구조: id, user_id, created_at, updated_at
+/// families + family_members 테이블 동시 사용 (RLS 필수)
+/// families 생성/복원 시 반드시 family_members에 owner 등록
 class FamilySyncService {
   static final FamilySyncService _instance = FamilySyncService._internal();
   factory FamilySyncService() => _instance;
@@ -29,7 +29,25 @@ class FamilySyncService {
     debugPrint('[INFO] FamilySyncService: Ensuring family exists for user $userId');
 
     try {
-      // 1. Supabase families 테이블에서 사용자의 family 직접 조회
+      // 1. family_members 테이블에서 사용자의 family 조회 (v2 방식)
+      final memberResult = await SupabaseService.client
+          .from('family_members')
+          .select('family_id')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      if (memberResult != null) {
+        final familyId = memberResult['family_id'] as String;
+        debugPrint('[OK] FamilySyncService: Found family via family_members: $familyId');
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('family_id', familyId);
+        await prefs.setString('onboarding_family_id', familyId);
+
+        return familyId;
+      }
+
+      // 2. families.user_id 레거시 폴백
       final result = await SupabaseService.client
           .from('families')
           .select('id')
@@ -38,9 +56,16 @@ class FamilySyncService {
 
       if (result != null) {
         final familyId = result['id'] as String;
-        debugPrint('[OK] FamilySyncService: Found existing family in Supabase: $familyId');
+        debugPrint('[WARN] FamilySyncService: Found family via legacy user_id: $familyId');
 
-        // 로컬에 저장 (두 키 모두)
+        // 레거시 → family_members 자동 등록
+        await SupabaseService.client.from('family_members').upsert({
+          'family_id': familyId,
+          'user_id': userId,
+          'role': 'owner',
+        });
+        debugPrint('[OK] FamilySyncService: Auto-registered legacy user to family_members');
+
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('family_id', familyId);
         await prefs.setString('onboarding_family_id', familyId);
@@ -82,7 +107,7 @@ class FamilySyncService {
   }
 
   /// Supabase에 Family 생성 (로컬 데이터 기반)
-  /// families 테이블만 사용 (family_members 테이블 없음)
+  /// families + family_members 동시 사용 (RLS 필수)
   Future<void> _createFamilyInSupabase(String familyId, String userId) async {
     try {
       // Family 생성 (upsert - 이미 있으면 업데이트)
@@ -92,6 +117,14 @@ class FamilySyncService {
         'created_at': DateTime.now().toIso8601String(),
       });
       debugPrint('[OK] FamilySyncService: Family created/updated in Supabase');
+
+      // family_members에 owner 등록 (RLS 필수 - 트리거 의존 금지)
+      await SupabaseService.client.from('family_members').upsert({
+        'family_id': familyId,
+        'user_id': userId,
+        'role': 'owner',
+      });
+      debugPrint('[OK] FamilySyncService: Family member registered');
 
       // 로컬 babies도 Supabase에 동기화
       await _syncBabiesToSupabase(familyId);
@@ -124,8 +157,9 @@ class FamilySyncService {
           'name': baby['name'],
           'birth_date': baby['birthDate'],
           'gender': baby['gender'],
-          'gestational_weeks': baby['gestationalWeeks'],
+          'gestational_weeks_at_birth': baby['gestationalWeeks'],
           'birth_weight_grams': baby['birthWeightGrams'],
+          'baby_type': baby['multipleBirthType'] ?? 'singleton',
           'birth_order': baby['birthOrder'],
           'created_at': DateTime.now().toIso8601String(),
         });
@@ -161,11 +195,23 @@ class FamilySyncService {
       return localFamilyId;
     }
 
-    // 로컬에 없으면 Supabase families 테이블 직접 확인
+    // 로컬에 없으면 Supabase에서 확인
     final userId = SupabaseService.currentUserId;
     if (userId == null) return null;
 
     try {
+      // family_members 테이블에서 조회 (v2 방식)
+      final memberResult = await SupabaseService.client
+          .from('family_members')
+          .select('family_id')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      if (memberResult != null) {
+        return memberResult['family_id'] as String?;
+      }
+
+      // 레거시 폴백: families.user_id
       final result = await SupabaseService.client
           .from('families')
           .select('id')
