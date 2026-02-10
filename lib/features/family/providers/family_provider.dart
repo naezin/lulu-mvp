@@ -18,6 +18,7 @@ class FamilyProvider extends ChangeNotifier {
   // State
   String? _familyId;
   String? _familyName;
+  String? _legacyOwnerId; // families.user_id (레거시 호환)
   List<FamilyMemberModel> _members = [];
   List<FamilyInviteModel> _pendingInvites = [];
   bool _isLoading = false;
@@ -35,10 +36,14 @@ class FamilyProvider extends ChangeNotifier {
   int get memberCount => _members.length;
 
   /// 현재 사용자가 소유자인지 확인
+  /// 레거시 폴백: _members가 비어있어도 families.user_id == currentUserId이면 owner
   bool get isOwner {
     final userId = SupabaseService.currentUserId;
     if (userId == null) return false;
-    return _members.any((m) => m.userId == userId && m.isOwner);
+    if (_members.any((m) => m.userId == userId && m.isOwner)) return true;
+    // 레거시 폴백: family_members 로드 실패 시 families.user_id로 판별
+    if (_members.isEmpty && _legacyOwnerId == userId) return true;
+    return false;
   }
 
   /// 현재 사용자 멤버 정보
@@ -60,17 +65,19 @@ class FamilyProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // 병렬로 멤버와 초대 로드
+      // 병렬로 멤버, 초대, 레거시 owner 로드
       final results = await Future.wait([
         _inviteService.getFamilyMembers(familyId),
         _inviteService.getPendingInvites(familyId),
+        _inviteService.getFamilyOwnerId(familyId),
       ]);
 
       _members = results[0] as List<FamilyMemberModel>;
       _pendingInvites = results[1] as List<FamilyInviteModel>;
+      _legacyOwnerId = results[2] as String?;
 
       debugPrint(
-          '[OK] [FamilyProvider] Loaded family: ${_members.length} members, ${_pendingInvites.length} pending invites');
+          '[OK] [FamilyProvider] Loaded family: ${_members.length} members, ${_pendingInvites.length} pending invites, legacyOwner=$_legacyOwnerId');
     } catch (e) {
       _error = e.toString();
       debugPrint('[ERR] [FamilyProvider] Load error: $e');
@@ -155,6 +162,7 @@ class FamilyProvider extends ChangeNotifier {
     // 로컬 상태 초기화
     _familyId = null;
     _familyName = null;
+    _legacyOwnerId = null;
     _members = [];
     _pendingInvites = [];
 
@@ -176,6 +184,7 @@ class FamilyProvider extends ChangeNotifier {
   void reset() {
     _familyId = null;
     _familyName = null;
+    _legacyOwnerId = null;
     _members = [];
     _pendingInvites = [];
     _isLoading = false;

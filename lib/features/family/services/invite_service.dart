@@ -145,6 +145,21 @@ class InviteService {
     }).toList();
   }
 
+  /// 레거시 owner ID 조회 (families.user_id)
+  Future<String?> getFamilyOwnerId(String familyId) async {
+    try {
+      final response = await _supabase
+          .from('families')
+          .select('user_id')
+          .eq('id', familyId)
+          .single();
+      return response['user_id'] as String?;
+    } catch (e) {
+      debugPrint('[WARN] [InviteService] getFamilyOwnerId failed: $e');
+      return null;
+    }
+  }
+
   /// 소유권 이전
   Future<void> transferOwnership(String familyId, String newOwnerId) async {
     final response = await _supabase.rpc('transfer_ownership', params: {

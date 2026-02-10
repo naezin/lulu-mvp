@@ -193,10 +193,27 @@ class RecentFeedingButtons extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    // Sprint 20 HF #10/#11: onSaveSuccess가 화면을 닫는 경우
-    // SnackBar를 표시하지 않고 햅틱 피드백만 제공 (화면 닫힌 후 SnackBar orphan 방지)
+    // Sprint 21 HF: AppToast (global) shows before pop, so no orphan issue
     if (onSaveSuccess != null) {
       HapticFeedback.mediumImpact();
+      AppToast.show(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l10n?.quickFeedingSaved(_getSummary(record, l10n)) ?? '',
+                ),
+              ),
+            ],
+          ),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: LuluActivityColors.feeding,
+        ),
+      );
       onSaveSuccess?.call();
       return;
     }
