@@ -5782,6 +5782,66 @@ abstract class S {
   /// **'놀이'**
   String get toastPlaySaved;
 
+  /// 터미타임 저장 토스트 (시간 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'터미타임 {duration}'**
+  String toastTummyTimeDurationSaved(String duration);
+
+  /// 터미타임 저장 토스트 (시간 없음)
+  ///
+  /// In ko, this message translates to:
+  /// **'터미타임'**
+  String get toastTummyTimeSaved;
+
+  /// 목욕 저장 토스트 (시간 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'목욕 {duration}'**
+  String toastBathDurationSaved(String duration);
+
+  /// 목욕 저장 토스트 (시간 없음)
+  ///
+  /// In ko, this message translates to:
+  /// **'목욕'**
+  String get toastBathSaved;
+
+  /// 외출 저장 토스트 (시간 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'외출 {duration}'**
+  String toastOutingDurationSaved(String duration);
+
+  /// 외출 저장 토스트 (시간 없음)
+  ///
+  /// In ko, this message translates to:
+  /// **'외출'**
+  String get toastOutingSaved;
+
+  /// 실내놀이 저장 토스트 (시간 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'실내놀이 {duration}'**
+  String toastIndoorPlayDurationSaved(String duration);
+
+  /// 실내놀이 저장 토스트 (시간 없음)
+  ///
+  /// In ko, this message translates to:
+  /// **'실내놀이'**
+  String get toastIndoorPlaySaved;
+
+  /// 독서 저장 토스트 (시간 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'독서 {duration}'**
+  String toastReadingDurationSaved(String duration);
+
+  /// 독서 저장 토스트 (시간 없음)
+  ///
+  /// In ko, this message translates to:
+  /// **'독서'**
+  String get toastReadingSaved;
+
   /// 체온 저장 토스트
   ///
   /// In ko, this message translates to:

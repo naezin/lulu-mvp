@@ -284,12 +284,37 @@ class _MainNavigationState extends State<MainNavigation> {
   }
 
   String _buildPlaySummary(ActivityModel activity, S? l10n) {
+    final playType = activity.data?['play_type'] as String? ?? 'play';
     final minutes = activity.durationMinutes;
-    if (minutes != null && minutes > 0) {
-      final duration = _formatDuration(minutes, l10n);
-      return l10n?.toastPlayDurationSaved(duration) ?? 'Play $duration';
+    final hasDuration = minutes != null && minutes > 0;
+    final duration = hasDuration ? _formatDuration(minutes, l10n) : '';
+
+    switch (playType) {
+      case 'tummy_time':
+        return hasDuration
+            ? (l10n?.toastTummyTimeDurationSaved(duration) ?? 'Tummy time $duration')
+            : (l10n?.toastTummyTimeSaved ?? 'Tummy time');
+      case 'bath':
+        return hasDuration
+            ? (l10n?.toastBathDurationSaved(duration) ?? 'Bath $duration')
+            : (l10n?.toastBathSaved ?? 'Bath');
+      case 'outdoor':
+        return hasDuration
+            ? (l10n?.toastOutingDurationSaved(duration) ?? 'Outing $duration')
+            : (l10n?.toastOutingSaved ?? 'Outing');
+      case 'play':
+        return hasDuration
+            ? (l10n?.toastIndoorPlayDurationSaved(duration) ?? 'Indoor play $duration')
+            : (l10n?.toastIndoorPlaySaved ?? 'Indoor play');
+      case 'reading':
+        return hasDuration
+            ? (l10n?.toastReadingDurationSaved(duration) ?? 'Reading $duration')
+            : (l10n?.toastReadingSaved ?? 'Reading');
+      default:
+        return hasDuration
+            ? (l10n?.toastPlayDurationSaved(duration) ?? 'Play $duration')
+            : (l10n?.toastPlaySaved ?? 'Play');
     }
-    return l10n?.toastPlaySaved ?? 'Play';
   }
 
   String _buildHealthSummary(Map<String, dynamic>? data, S? l10n) {

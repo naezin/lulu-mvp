@@ -3155,6 +3155,46 @@ class SKo extends S {
   String get toastPlaySaved => '놀이';
 
   @override
+  String toastTummyTimeDurationSaved(String duration) {
+    return '터미타임 $duration';
+  }
+
+  @override
+  String get toastTummyTimeSaved => '터미타임';
+
+  @override
+  String toastBathDurationSaved(String duration) {
+    return '목욕 $duration';
+  }
+
+  @override
+  String get toastBathSaved => '목욕';
+
+  @override
+  String toastOutingDurationSaved(String duration) {
+    return '외출 $duration';
+  }
+
+  @override
+  String get toastOutingSaved => '외출';
+
+  @override
+  String toastIndoorPlayDurationSaved(String duration) {
+    return '실내놀이 $duration';
+  }
+
+  @override
+  String get toastIndoorPlaySaved => '실내놀이';
+
+  @override
+  String toastReadingDurationSaved(String duration) {
+    return '독서 $duration';
+  }
+
+  @override
+  String get toastReadingSaved => '독서';
+
+  @override
   String toastTemperatureSaved(String value) {
     return '체온 $value';
   }

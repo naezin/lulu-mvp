@@ -3211,6 +3211,46 @@ class SEn extends S {
   String get toastPlaySaved => 'Play';
 
   @override
+  String toastTummyTimeDurationSaved(String duration) {
+    return 'Tummy time $duration';
+  }
+
+  @override
+  String get toastTummyTimeSaved => 'Tummy time';
+
+  @override
+  String toastBathDurationSaved(String duration) {
+    return 'Bath $duration';
+  }
+
+  @override
+  String get toastBathSaved => 'Bath';
+
+  @override
+  String toastOutingDurationSaved(String duration) {
+    return 'Outing $duration';
+  }
+
+  @override
+  String get toastOutingSaved => 'Outing';
+
+  @override
+  String toastIndoorPlayDurationSaved(String duration) {
+    return 'Indoor play $duration';
+  }
+
+  @override
+  String get toastIndoorPlaySaved => 'Indoor play';
+
+  @override
+  String toastReadingDurationSaved(String duration) {
+    return 'Reading $duration';
+  }
+
+  @override
+  String get toastReadingSaved => 'Reading';
+
+  @override
   String toastTemperatureSaved(String value) {
     return 'Temperature $value';
   }

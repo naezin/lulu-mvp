@@ -4792,6 +4792,76 @@
   "@toastPlaySaved": {
     "description": "놀이 저장 토스트 (시간 없음)"
   },
+  "toastTummyTimeDurationSaved": "터미타임 {duration}",
+  "@toastTummyTimeDurationSaved": {
+    "description": "터미타임 저장 토스트 (시간 포함)",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "15분"
+      }
+    }
+  },
+  "toastTummyTimeSaved": "터미타임",
+  "@toastTummyTimeSaved": {
+    "description": "터미타임 저장 토스트 (시간 없음)"
+  },
+  "toastBathDurationSaved": "목욕 {duration}",
+  "@toastBathDurationSaved": {
+    "description": "목욕 저장 토스트 (시간 포함)",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "30분"
+      }
+    }
+  },
+  "toastBathSaved": "목욕",
+  "@toastBathSaved": {
+    "description": "목욕 저장 토스트 (시간 없음)"
+  },
+  "toastOutingDurationSaved": "외출 {duration}",
+  "@toastOutingDurationSaved": {
+    "description": "외출 저장 토스트 (시간 포함)",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "1시간"
+      }
+    }
+  },
+  "toastOutingSaved": "외출",
+  "@toastOutingSaved": {
+    "description": "외출 저장 토스트 (시간 없음)"
+  },
+  "toastIndoorPlayDurationSaved": "실내놀이 {duration}",
+  "@toastIndoorPlayDurationSaved": {
+    "description": "실내놀이 저장 토스트 (시간 포함)",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "45분"
+      }
+    }
+  },
+  "toastIndoorPlaySaved": "실내놀이",
+  "@toastIndoorPlaySaved": {
+    "description": "실내놀이 저장 토스트 (시간 없음)"
+  },
+  "toastReadingDurationSaved": "독서 {duration}",
+  "@toastReadingDurationSaved": {
+    "description": "독서 저장 토스트 (시간 포함)",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "20분"
+      }
+    }
+  },
+  "toastReadingSaved": "독서",
+  "@toastReadingSaved": {
+    "description": "독서 저장 토스트 (시간 없음)"
+  },
   "toastTemperatureSaved": "체온 {value}",
   "@toastTemperatureSaved": {
     "description": "체온 저장 토스트",

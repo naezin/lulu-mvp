@@ -2114,6 +2114,76 @@
   "@toastPlaySaved": {
     "description": "Play save toast without duration"
   },
+  "toastTummyTimeDurationSaved": "Tummy time {duration}",
+  "@toastTummyTimeDurationSaved": {
+    "description": "Tummy time save toast with duration",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "15min"
+      }
+    }
+  },
+  "toastTummyTimeSaved": "Tummy time",
+  "@toastTummyTimeSaved": {
+    "description": "Tummy time save toast without duration"
+  },
+  "toastBathDurationSaved": "Bath {duration}",
+  "@toastBathDurationSaved": {
+    "description": "Bath save toast with duration",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "30min"
+      }
+    }
+  },
+  "toastBathSaved": "Bath",
+  "@toastBathSaved": {
+    "description": "Bath save toast without duration"
+  },
+  "toastOutingDurationSaved": "Outing {duration}",
+  "@toastOutingDurationSaved": {
+    "description": "Outing save toast with duration",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "1h"
+      }
+    }
+  },
+  "toastOutingSaved": "Outing",
+  "@toastOutingSaved": {
+    "description": "Outing save toast without duration"
+  },
+  "toastIndoorPlayDurationSaved": "Indoor play {duration}",
+  "@toastIndoorPlayDurationSaved": {
+    "description": "Indoor play save toast with duration",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "45min"
+      }
+    }
+  },
+  "toastIndoorPlaySaved": "Indoor play",
+  "@toastIndoorPlaySaved": {
+    "description": "Indoor play save toast without duration"
+  },
+  "toastReadingDurationSaved": "Reading {duration}",
+  "@toastReadingDurationSaved": {
+    "description": "Reading save toast with duration",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "20min"
+      }
+    }
+  },
+  "toastReadingSaved": "Reading",
+  "@toastReadingSaved": {
+    "description": "Reading save toast without duration"
+  },
   "toastTemperatureSaved": "Temperature {value}",
   "@toastTemperatureSaved": {
     "description": "Temperature save toast",
