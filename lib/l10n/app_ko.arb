@@ -1233,6 +1233,14 @@
   "@statisticsEmptyHint": {
     "description": "통계 빈 상태 힌트"
   },
+  "weeklyEmptyThisWeek": "이번 주 첫 기록을 남겨보세요",
+  "@weeklyEmptyThisWeek": {
+    "description": "주간 뷰 빈 상태 (이번 주)"
+  },
+  "weeklyEmptyPastWeek": "이 주의 기록이 없어요",
+  "@weeklyEmptyPastWeek": {
+    "description": "주간 뷰 빈 상태 (과거 주)"
+  },
   "dateTimePickerTitle": "시간 선택",
   "@dateTimePickerTitle": {
     "description": "날짜/시간 피커 제목"

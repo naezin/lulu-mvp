@@ -1669,6 +1669,18 @@ abstract class S {
   /// **'기록을 쌓으면 통계가 나타나요'**
   String get statisticsEmptyHint;
 
+  /// 주간 뷰 빈 상태 (이번 주)
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 첫 기록을 남겨보세요'**
+  String get weeklyEmptyThisWeek;
+
+  /// 주간 뷰 빈 상태 (과거 주)
+  ///
+  /// In ko, this message translates to:
+  /// **'이 주의 기록이 없어요'**
+  String get weeklyEmptyPastWeek;
+
   /// 날짜/시간 피커 제목
   ///
   /// In ko, this message translates to:

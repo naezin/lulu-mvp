@@ -285,6 +285,14 @@
   "weeklyTrendTitle": "Weekly Sleep Trend",
   "statisticsEmptyTitle": "No statistics yet",
   "statisticsEmptyHint": "Statistics will appear as you add records",
+  "weeklyEmptyThisWeek": "Start your first record this week",
+  "@weeklyEmptyThisWeek": {
+    "description": "Weekly view empty state hint for current week"
+  },
+  "weeklyEmptyPastWeek": "No records for this week",
+  "@weeklyEmptyPastWeek": {
+    "description": "Weekly view empty state hint for past week"
+  },
   "dateTimePickerTitle": "Select Time",
   "dateTimeNow": "Now",
   "dateTime5MinAgo": "-5 min",

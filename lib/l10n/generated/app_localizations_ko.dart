@@ -853,6 +853,12 @@ class SKo extends S {
   String get statisticsEmptyHint => '기록을 쌓으면 통계가 나타나요';
 
   @override
+  String get weeklyEmptyThisWeek => '이번 주 첫 기록을 남겨보세요';
+
+  @override
+  String get weeklyEmptyPastWeek => '이 주의 기록이 없어요';
+
+  @override
   String get dateTimePickerTitle => '시간 선택';
 
   @override

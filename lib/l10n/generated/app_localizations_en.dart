@@ -865,6 +865,12 @@ class SEn extends S {
   String get statisticsEmptyHint => 'Statistics will appear as you add records';
 
   @override
+  String get weeklyEmptyThisWeek => 'Start your first record this week';
+
+  @override
+  String get weeklyEmptyPastWeek => 'No records for this week';
+
+  @override
   String get dateTimePickerTitle => 'Select Time';
 
   @override

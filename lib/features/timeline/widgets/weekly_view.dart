@@ -280,27 +280,7 @@ class _WeeklyViewState extends State<WeeklyView> {
       });
     }
 
-    if (_isLoading) {
-      return _buildLoadingState();
-    }
-
-    if (_errorMessage != null) {
-      return _buildErrorState();
-    }
-
-    final statistics = _dataProvider.currentStatistics;
-
-    // 데이터가 없거나 모든 값이 0이면 빈 상태
-    if (_isStatisticsEmpty(statistics)) {
-      return _buildEmptyState();
-    }
-
-    // null이 아님이 보장됨
-    final stats = statistics!;
-
-    final selectedBaby = context.read<HomeProvider>().selectedBaby;
-    final correctedAgeDays = selectedBaby?.correctedAgeInDays;
-
+    // DateNavigator is always visible (loading/error/empty/normal)
     return RefreshIndicator(
       onRefresh: _loadData,
       color: LuluColors.lavenderMist,
@@ -310,7 +290,7 @@ class _WeeklyViewState extends State<WeeklyView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 주간 DateNavigator (최상단)
+            // 주간 DateNavigator (항상 최상단)
             DateNavigator(
               scope: DateNavigatorScope.weekly,
               selectedDate: _patternProvider.weekStartDate,
@@ -319,11 +299,32 @@ class _WeeklyViewState extends State<WeeklyView> {
               onCalendarTap: () => _showWeekPicker(context),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(LuluSpacing.lg),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            // 상태별 콘텐츠
+            if (_isLoading)
+              _buildLoadingContent()
+            else if (_errorMessage != null)
+              _buildErrorContent()
+            else if (_isStatisticsEmpty(_dataProvider.currentStatistics))
+              _buildEmptyContent()
+            else
+              _buildStatisticsContent(l10n),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 정상 통계 콘텐츠
+  Widget _buildStatisticsContent(S? l10n) {
+    final stats = _dataProvider.currentStatistics!;
+    final selectedBaby = context.read<HomeProvider>().selectedBaby;
+    final correctedAgeDays = selectedBaby?.correctedAgeInDays;
+
+    return Padding(
+      padding: const EdgeInsets.all(LuluSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
             // 요약 카드들 (2×2 GridView)
             GridView.count(
               crossAxisCount: 2,
@@ -454,11 +455,7 @@ class _WeeklyViewState extends State<WeeklyView> {
               ),
             ),
             const SizedBox(height: LuluSpacing.lg),
-                ],
-              ),
-            ), // Padding end
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -469,99 +466,112 @@ class _WeeklyViewState extends State<WeeklyView> {
     return InsightCard(insight: _dataProvider.insight!);
   }
 
-  /// 로딩 상태
-  Widget _buildLoadingState() {
+  /// 로딩 콘텐츠 (DateNavigator 아래에 표시)
+  Widget _buildLoadingContent() {
     final l10n = S.of(context);
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(
-            color: LuluColors.lavenderMist,
-          ),
-          const SizedBox(height: LuluSpacing.md),
-          Text(
-            l10n?.statisticsLoading ?? 'Loading statistics...',
-            style: LuluTextStyles.bodyMedium.copyWith(
-              color: LuluTextColors.secondary,
+    return SizedBox(
+      height: 300,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: LuluColors.lavenderMist,
             ),
-          ),
-        ],
+            const SizedBox(height: LuluSpacing.md),
+            Text(
+              l10n?.statisticsLoading ?? 'Loading statistics...',
+              style: LuluTextStyles.bodyMedium.copyWith(
+                color: LuluTextColors.secondary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  /// 에러 상태
-  Widget _buildErrorState() {
+  /// 에러 콘텐츠 (DateNavigator 아래에 표시)
+  Widget _buildErrorContent() {
     final l10n = S.of(context);
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            LuluIcons.errorOutline,
-            size: 64,
-            color: LuluStatusColors.error,
-          ),
-          const SizedBox(height: LuluSpacing.md),
-          Text(
-            _errorMessage ?? l10n?.errorOccurred ?? 'Something went wrong',
-            style: LuluTextStyles.bodyMedium.copyWith(
-              color: LuluTextColors.primary,
+    return SizedBox(
+      height: 300,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              LuluIcons.errorOutline,
+              size: 64,
+              color: LuluStatusColors.error,
             ),
-          ),
-          const SizedBox(height: LuluSpacing.md),
-          TextButton(
-            onPressed: _loadData,
-            child: Text(
-              l10n?.retry ?? 'Retry',
+            const SizedBox(height: LuluSpacing.md),
+            Text(
+              _errorMessage ?? l10n?.errorOccurred ?? 'Something went wrong',
               style: LuluTextStyles.bodyMedium.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+            const SizedBox(height: LuluSpacing.md),
+            TextButton(
+              onPressed: _loadData,
+              child: Text(
+                l10n?.retry ?? 'Retry',
+                style: LuluTextStyles.bodyMedium.copyWith(
+                  color: LuluColors.lavenderMist,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 빈 상태 콘텐츠 (DateNavigator 아래에 표시)
+  Widget _buildEmptyContent() {
+    final l10n = S.of(context);
+    final isThisWeek = _isCurrentWeek();
+
+    return SizedBox(
+      height: 300,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: LuluColors.lavenderSelected,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                LuluIcons.barChart,
+                size: 40,
                 color: LuluColors.lavenderMist,
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// 빈 상태
-  Widget _buildEmptyState() {
-    final l10n = S.of(context);
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: LuluColors.lavenderSelected,
-              shape: BoxShape.circle,
+            const SizedBox(height: LuluSpacing.xl),
+            Text(
+              l10n?.statisticsEmptyTitle ?? 'No statistics yet',
+              style: LuluTextStyles.titleMedium.copyWith(
+                color: LuluTextColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            child: Icon(
-              LuluIcons.barChart,
-              size: 40,
-              color: LuluColors.lavenderMist,
+            const SizedBox(height: LuluSpacing.sm),
+            Text(
+              isThisWeek
+                  ? (l10n?.weeklyEmptyThisWeek ?? 'Start your first record this week')
+                  : (l10n?.weeklyEmptyPastWeek ?? 'No records for this week'),
+              style: LuluTextStyles.bodyMedium.copyWith(
+                color: LuluTextColors.secondary,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: LuluSpacing.xl),
-          Text(
-            l10n?.statisticsEmptyTitle ?? 'No statistics yet',
-            style: LuluTextStyles.titleMedium.copyWith(
-              color: LuluTextColors.primary,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: LuluSpacing.sm),
-          Text(
-            l10n?.statisticsEmptyHint ?? 'Statistics will appear as you add records',
-            style: LuluTextStyles.bodyMedium.copyWith(
-              color: LuluTextColors.secondary,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
