@@ -15,7 +15,9 @@ class BabyCountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<OnboardingProvider>();
+    // Sprint 21 Phase 2-4: context.select for babyCount + canProceed only
+    final babyCount = context.select<OnboardingProvider, int>((p) => p.babyCount);
+    final canProceed = context.select<OnboardingProvider, bool>((p) => p.canProceed);
     final l10n = S.of(context)!;
 
     return Padding(
@@ -59,29 +61,29 @@ class BabyCountScreen extends StatelessWidget {
                   count: 1,
                   label: l10n.babyCountOne,
                   iconCount: 1,
-                  isSelected: provider.babyCount == 1,
-                  onTap: () => provider.setBabyCount(1),
+                  isSelected: babyCount == 1,
+                  onTap: () => context.read<OnboardingProvider>().setBabyCount(1),
                 ),
                 _BabyCountCard(
                   count: 2,
                   label: l10n.babyTypeTwin,
                   iconCount: 2,
-                  isSelected: provider.babyCount == 2,
-                  onTap: () => provider.setBabyCount(2),
+                  isSelected: babyCount == 2,
+                  onTap: () => context.read<OnboardingProvider>().setBabyCount(2),
                 ),
                 _BabyCountCard(
                   count: 3,
                   label: l10n.babyTypeTriplet,
                   iconCount: 3,
-                  isSelected: provider.babyCount == 3,
-                  onTap: () => provider.setBabyCount(3),
+                  isSelected: babyCount == 3,
+                  onTap: () => context.read<OnboardingProvider>().setBabyCount(3),
                 ),
                 _BabyCountCard(
                   count: 4,
                   label: l10n.babyTypeQuadruplet,
                   iconCount: 4,
-                  isSelected: provider.babyCount == 4,
-                  onTap: () => provider.setBabyCount(4),
+                  isSelected: babyCount == 4,
+                  onTap: () => context.read<OnboardingProvider>().setBabyCount(4),
                 ),
               ],
             ),
@@ -91,7 +93,7 @@ class BabyCountScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: provider.canProceed ? () => provider.nextStep() : null,
+              onPressed: canProceed ? () => context.read<OnboardingProvider>().nextStep() : null,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 backgroundColor: AppTheme.lavenderMist,

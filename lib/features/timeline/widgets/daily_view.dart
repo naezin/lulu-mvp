@@ -130,10 +130,11 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   /// 삭제 시 연쇄 rebuild → SnackBar 무한 재생성 → 토스트 안 사라짐 문제 해결
   bool _reloadScheduled = false;
 
-  void _checkAndReloadIfStale(HomeProvider homeProvider) {
+  /// Sprint 21 Phase 2-4: decoupled from HomeProvider reference
+  void _checkAndReloadIfStale(int todayActivitiesCount) {
     if (!_isToday(_selectedDate) || _isLoading || _reloadScheduled) return;
 
-    final currentLength = homeProvider.todayActivities.length;
+    final currentLength = todayActivitiesCount;
     // Sprint 21 HF #14: _lastActivitiesLength > 0 조건 제거
     // QuickRecord/FAB 후 Records 탭에서도 갱신되도록
     if (currentLength != _lastActivitiesLength && _initialLoadDone) {
@@ -275,10 +276,12 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeProvider>(
-      builder: (context, homeProvider, child) {
+    // Sprint 21 Phase 2-4: Selector for selectedBabyId + todayActivities count
+    return Selector<HomeProvider, ({String? selectedBabyId, int todayActivitiesCount})>(
+      selector: (_, p) => (selectedBabyId: p.selectedBabyId, todayActivitiesCount: p.todayActivities.length),
+      builder: (context, data, child) {
         // Sprint 20 HF #4/#15: HomeProvider 변경 감지 → 자동 리로드
-        _checkAndReloadIfStale(homeProvider);
+        _checkAndReloadIfStale(data.todayActivitiesCount);
 
         // 로딩 중
         if (_isLoading) {
@@ -313,7 +316,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
 
         // 선택된 아기 + 활동 유형으로 필터링
         final activities = _filterActivities(
-            _dateActivities, homeProvider.selectedBabyId, _activeFilter);
+            _dateActivities, data.selectedBabyId, _activeFilter);
 
         return RefreshIndicator(
           onRefresh: _loadActivitiesForDate,
@@ -345,19 +348,19 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 child: Builder(
                   builder: (context) {
                     final filteredActivities = _filterActivitiesByBaby(
-                        _dateActivities, homeProvider.selectedBabyId);
+                        _dateActivities, data.selectedBabyId);
                     final timeline = _patternProvider.buildDayTimeline(
                         _selectedDate, filteredActivities);
                     // 수정 A 디버그: 데이터 흐름 확인
                     debugPrint(
                         '[DEBUG] [DailyView→DailyGrid] _dateActivities=${_dateActivities.length}, '
                         'filtered=${filteredActivities.length}, '
-                        'babyId=${homeProvider.selectedBabyId}, '
+                        'babyId=${data.selectedBabyId}, '
                         'timeline.durationBlocks=${timeline.durationBlocks.length}, '
                         'timeline.instantMarkers=${timeline.instantMarkers.length}');
                     return DailyGrid(
                       key: ValueKey(
-                          'dailygrid_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
+                          'dailygrid_${_selectedDate.toIso8601String()}_${data.selectedBabyId}'),
                       timeline: timeline,
                       isToday: _isToday(_selectedDate),
                     );
@@ -372,7 +375,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: 300, // Empty State 고정 높이
-                    child: _buildNewUserEmptyState(homeProvider),
+                    child: _buildNewUserEmptyState(context.read<HomeProvider>()),
                   ),
                 )
               else if (activities.isEmpty)

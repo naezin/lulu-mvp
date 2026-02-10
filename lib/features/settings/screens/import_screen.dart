@@ -5,6 +5,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
+import '../../../data/models/baby_model.dart';
 import '../../home/providers/home_provider.dart';
 import '../providers/import_provider.dart';
 
@@ -200,7 +201,7 @@ class _ImportScreenState extends State<ImportScreen> {
     S l10n,
   ) {
     final preview = provider.preview!;
-    final babies = context.watch<HomeProvider>().babies;
+    final babies = context.select<HomeProvider, List<BabyModel>>((p) => p.babies);
     final familyId = context.read<HomeProvider>().family?.id ?? '';
 
     return SingleChildScrollView(

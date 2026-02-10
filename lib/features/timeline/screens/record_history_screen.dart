@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../data/models/baby_model.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../home/providers/home_provider.dart';
@@ -46,27 +47,29 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen> {
         centerTitle: true,
         // FIX-A: TabBar 완전 제거 - bottom 속성 삭제
       ),
-      body: Consumer<HomeProvider>(
-        builder: (context, homeProvider, child) {
+      // Sprint 21 Phase 2-4: Selector for babies + selectedBabyId only
+      body: Selector<HomeProvider, ({List<BabyModel> babies, String? selectedBabyId})>(
+        selector: (_, p) => (babies: p.babies, selectedBabyId: p.selectedBabyId),
+        builder: (context, data, child) {
           // 아기 정보가 없으면 빈 상태
-          if (homeProvider.babies.isEmpty) {
+          if (data.babies.isEmpty) {
             return _buildEmptyBabiesState();
           }
 
           return Column(
             children: [
               // BabyTabBar (아기 2명 이상일 때만 표시)
-              if (homeProvider.babies.length > 1)
+              if (data.babies.length > 1)
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
                   ),
                   child: BabyTabBar(
-                    babies: homeProvider.babies,
-                    selectedBabyId: homeProvider.selectedBabyId,
+                    babies: data.babies,
+                    selectedBabyId: data.selectedBabyId,
                     onBabyChanged: (babyId) {
-                      homeProvider.selectBaby(babyId);
+                      context.read<HomeProvider>().selectBaby(babyId);
                     },
                   ),
                 ),

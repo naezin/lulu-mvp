@@ -14,7 +14,8 @@ class MultipleBirthTipScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<OnboardingProvider>();
+    // Sprint 21 Phase 2-4: context.select for babyCount only
+    final babyCount = context.select<OnboardingProvider, int>((p) => p.babyCount);
     final l10n = S.of(context)!;
 
     return SingleChildScrollView(
@@ -80,7 +81,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
             description: l10n.multipleBirthTipColorCodeDesc,
             color: AppTheme.babyAvatarColors[2],
             showBabyColors: true,
-            babyCount: provider.babyCount,
+            babyCount: babyCount,
           ),
 
           const SizedBox(height: 32),
@@ -89,7 +90,7 @@ class MultipleBirthTipScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => provider.nextStep(),
+              onPressed: () => context.read<OnboardingProvider>().nextStep(),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 backgroundColor: AppTheme.lavenderMist,
