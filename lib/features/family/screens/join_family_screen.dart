@@ -311,6 +311,13 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
       return;
     }
 
+    // Sprint 21 Phase 3: capture context-dependent refs before async gap
+    final familyProvider = context.read<FamilyProvider>();
+    final homeProvider = context.read<HomeProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = S.of(context)!;
+    final navigator = Navigator.of(context);
+
     // 바로 참여
     setState(() => _isLoading = true);
 
@@ -318,14 +325,14 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
       final result = await _inviteService.acceptInvite(code, null);
 
       if (mounted) {
-        await context.read<FamilyProvider>().onJoinedFamily(result.familyId);
-        await context.read<HomeProvider>().onFamilyChanged(result.familyId);
+        await familyProvider.onJoinedFamily(result.familyId);
+        await homeProvider.onFamilyChanged(result.familyId);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context)!.joinedFamily)),
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.joinedFamily)),
         );
 
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+        navigator.pushNamedAndRemoveUntil('/home', (r) => false);
       }
     } catch (e) {
       setState(() {
