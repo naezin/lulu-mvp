@@ -17,7 +17,7 @@ import '../../../data/models/baby_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/datetime_picker/datetime_picker_sheet.dart';
 import '../../../shared/widgets/quick_record_button.dart';
-import '../providers/record_provider.dart';
+import '../providers/sleep_record_provider.dart';
 import '../providers/ongoing_sleep_provider.dart';
 
 part 'sleep_record_widgets.dart';
@@ -54,7 +54,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<RecordProvider>().initialize(
+      context.read<SleepRecordProvider>().initialize(
             familyId: widget.familyId,
             babies: widget.babies,
             preselectedBabyId: widget.preselectedBabyId,
@@ -87,7 +87,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         ),
         centerTitle: true,
       ),
-      body: Consumer2<RecordProvider, OngoingSleepProvider>(
+      body: Consumer2<SleepRecordProvider, OngoingSleepProvider>(
         builder: (context, provider, ongoingSleepProvider, _) {
           // 현재 선택된 아기의 진행 중 수면 확인
           final hasOngoingSleep = ongoingSleepProvider.hasSleepInProgress &&
@@ -196,14 +196,14 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 
   /// MB-03: 현재 선택된 아기 이름 반환
-  String? _getSelectedBabyName(RecordProvider provider) {
+  String? _getSelectedBabyName(SleepRecordProvider provider) {
     if (provider.selectedBabyIds.isEmpty) return null;
     final selectedId = provider.selectedBabyIds.first;
     final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
     return baby?.name;
   }
 
-  Future<void> _handleQuickSave(RecordProvider provider) async {
+  Future<void> _handleQuickSave(SleepRecordProvider provider) async {
     if (_isQuickSaving || widget.lastSleepRecord == null) return;
 
     setState(() => _isQuickSaving = true);
@@ -411,7 +411,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Widget _buildSleepTypeSelector(RecordProvider provider) {
+  Widget _buildSleepTypeSelector(SleepRecordProvider provider) {
     final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,7 +449,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Widget _buildSleepNowSection(RecordProvider provider) {
+  Widget _buildSleepNowSection(SleepRecordProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -513,7 +513,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Widget _buildAddRecordSection(RecordProvider provider) {
+  Widget _buildAddRecordSection(SleepRecordProvider provider) {
     final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -589,7 +589,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     }
   }
 
-  Widget _buildDurationDisplay(RecordProvider provider) {
+  Widget _buildDurationDisplay(SleepRecordProvider provider) {
     final duration = provider.sleepDurationMinutes;
     final hours = duration ~/ 60;
     final minutes = duration % 60;
@@ -671,7 +671,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
               contentPadding: EdgeInsets.zero,
             ),
             onChanged: (value) {
-              context.read<RecordProvider>().setNotes(value);
+              context.read<SleepRecordProvider>().setNotes(value);
             },
           ),
         ),
@@ -679,7 +679,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Widget _buildSaveButton(RecordProvider provider) {
+  Widget _buildSaveButton(SleepRecordProvider provider) {
     final l10n = S.of(context)!;
     final isValid = provider.isSelectionValid;
     final buttonText = _isSleepNow ? l10n.sleepStart : l10n.buttonSave;
@@ -769,7 +769,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     return errorKey;
   }
 
-  Future<void> _handleSave(RecordProvider provider) async {
+  Future<void> _handleSave(SleepRecordProvider provider) async {
     // "지금 재우기" 모드면 OngoingSleepProvider 사용
     if (_isSleepNow) {
       final ongoingSleepProvider = context.read<OngoingSleepProvider>();

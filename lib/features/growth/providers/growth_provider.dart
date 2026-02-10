@@ -145,6 +145,7 @@ class GrowthProvider extends ChangeNotifier {
 
   /// 아기 선택
   void selectBaby(String? babyId) {
+    if (_selectedBabyId == babyId) return;
     _selectedBabyId = babyId;
     notifyListeners();
   }

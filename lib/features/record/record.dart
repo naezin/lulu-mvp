@@ -6,7 +6,12 @@
 // - 5종 기록: 수유, 수면, 기저귀, 놀이, 건강
 
 // Providers
-export 'providers/record_provider.dart';
+export 'providers/record_base_provider.dart';
+export 'providers/feeding_record_provider.dart';
+export 'providers/sleep_record_provider.dart';
+export 'providers/diaper_record_provider.dart';
+export 'providers/play_record_provider.dart';
+export 'providers/health_record_provider.dart';
 
 // Screens
 export 'screens/feeding_record_screen.dart';

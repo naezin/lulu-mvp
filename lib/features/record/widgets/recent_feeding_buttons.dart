@@ -11,7 +11,7 @@ import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../providers/record_provider.dart';
+import '../providers/feeding_record_provider.dart';
 import 'recent_feeding_button.dart';
 
 /// 최근 수유 기록 3개 빠른 버튼
@@ -44,7 +44,7 @@ class RecentFeedingButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = S.of(context);
 
-    return Consumer<RecordProvider>(
+    return Consumer<FeedingRecordProvider>(
       builder: (context, provider, _) {
         // 🔴 BUGFIX v5.3: babyId 검증 - 현재 아기 기록만 표시
         final validFeedings = provider.recentFeedings.where((feeding) {
@@ -177,7 +177,7 @@ class RecentFeedingButtons extends StatelessWidget {
 
   Future<void> _handleQuickSave(
     BuildContext context,
-    RecordProvider provider,
+    FeedingRecordProvider provider,
     ActivityModel record,
   ) async {
     final l10n = S.of(context);

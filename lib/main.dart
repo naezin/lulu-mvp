@@ -17,7 +17,11 @@ import 'core/theme/app_theme.dart';
 import 'features/onboarding/onboarding.dart';
 import 'features/growth/data/growth_data_cache.dart';
 import 'features/home/providers/home_provider.dart';
-import 'features/record/providers/record_provider.dart';
+import 'features/record/providers/feeding_record_provider.dart';
+import 'features/record/providers/sleep_record_provider.dart';
+import 'features/record/providers/diaper_record_provider.dart';
+import 'features/record/providers/play_record_provider.dart';
+import 'features/record/providers/health_record_provider.dart';
 import 'features/record/providers/ongoing_sleep_provider.dart';
 import 'features/settings/providers/settings_provider.dart';
 import 'features/cry_analysis/providers/cry_analysis_provider.dart';
@@ -92,7 +96,11 @@ class LuluApp extends StatelessWidget {
         // Auth Provider (pre-initialized)
         ChangeNotifierProvider.value(value: _authProvider),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => RecordProvider()),
+        ChangeNotifierProvider(create: (_) => FeedingRecordProvider()),
+        ChangeNotifierProvider(create: (_) => SleepRecordProvider()),
+        ChangeNotifierProvider(create: (_) => DiaperRecordProvider()),
+        ChangeNotifierProvider(create: (_) => PlayRecordProvider()),
+        ChangeNotifierProvider(create: (_) => HealthRecordProvider()),
         ChangeNotifierProvider(create: (_) {
           final provider = OngoingSleepProvider();
           provider.init(); // 앱 시작 시 진행 중 수면 복원
@@ -293,7 +301,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
       setState(() => _isLoading = false);
 
     } catch (e) {
-      debugPrint('❌ [OnboardingWrapper] Error checking status: $e');
+      debugPrint('[ERR] [OnboardingWrapper] Error checking status: $e');
       setState(() => _isLoading = false);
     }
   }

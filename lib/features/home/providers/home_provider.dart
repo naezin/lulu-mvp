@@ -251,6 +251,7 @@ class HomeProvider extends ChangeNotifier {
   /// BUG-002 NOTE: 아기 전환 시 filteredTodayActivities가 자동으로
   /// 새로운 selectedBabyId를 기준으로 필터링됨
   void selectBaby(String? babyId) {
+    if (_selectedBabyId == babyId) return;
     _selectedBabyId = babyId;
     _invalidateCache(); // 캐시 무효화
     _calculateSweetSpot();

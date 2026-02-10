@@ -161,6 +161,8 @@ class PatternDataProvider extends ChangeNotifier {
 
   /// v4.1: 멀티 필터 설정
   void setActiveFilters(Set<PatternActivityType> filters) {
+    if (_activeFilters.length == filters.length &&
+        _activeFilters.containsAll(filters)) return;
     _activeFilters = filters;
     notifyListeners();
   }
@@ -515,7 +517,7 @@ class PatternDataProvider extends ChangeNotifier {
 
       // 디버그: 밤잠 자정 넘김 확인
       if (type == 'sleep' && localStart.day != date.day) {
-        debugPrint('[DEBUG] 자정 넘김 수면: 원본 $localStart~$localEnd → clamp ${block.startTime}~${block.endTime} (date: $date)');
+        debugPrint('[DEBUG] midnight-crossing sleep: original $localStart~$localEnd -> clamp ${block.startTime}~${block.endTime} (date: $date)');
       }
 
       allBlocks.add(block);

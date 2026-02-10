@@ -14,7 +14,7 @@ import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/quick_record_button.dart';
-import '../providers/record_provider.dart';
+import '../providers/health_record_provider.dart';
 import '../widgets/record_time_picker.dart';
 import '../widgets/temperature_slider.dart';
 
@@ -51,7 +51,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = context.read<RecordProvider>();
+      final provider = context.read<HealthRecordProvider>();
       provider.initialize(
         familyId: widget.familyId,
         babies: widget.babies,
@@ -89,7 +89,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
         ),
         centerTitle: true,
       ),
-      body: Consumer<RecordProvider>(
+      body: Consumer<HealthRecordProvider>(
         builder: (context, provider, _) {
           return Column(
             children: [
@@ -184,14 +184,14 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
   }
 
   /// MB-03: 현재 선택된 아기 이름 반환
-  String? _getSelectedBabyName(RecordProvider provider) {
+  String? _getSelectedBabyName(HealthRecordProvider provider) {
     if (provider.selectedBabyIds.isEmpty) return null;
     final selectedId = provider.selectedBabyIds.first;
     final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
     return baby?.name;
   }
 
-  Future<void> _handleQuickSave(RecordProvider provider) async {
+  Future<void> _handleQuickSave(HealthRecordProvider provider) async {
     if (_isQuickSaving || widget.lastHealthRecord == null) return;
 
     setState(() => _isQuickSaving = true);
@@ -234,7 +234,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     }
   }
 
-  Widget _buildHealthTypeSelector(RecordProvider provider) {
+  Widget _buildHealthTypeSelector(HealthRecordProvider provider) {
     final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,7 +298,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     );
   }
 
-  Widget _buildHealthTypeContent(RecordProvider provider) {
+  Widget _buildHealthTypeContent(HealthRecordProvider provider) {
     switch (provider.healthType) {
       case 'temperature':
         return _buildTemperatureInput(provider);
@@ -314,7 +314,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
   }
 
   /// UX-03: 체온 슬라이더로 변경 (키보드 제거)
-  Widget _buildTemperatureInput(RecordProvider provider) {
+  Widget _buildTemperatureInput(HealthRecordProvider provider) {
     return TemperatureSlider(
       value: provider.temperature ?? 36.5,
       onChanged: (temp) {
@@ -323,7 +323,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     );
   }
 
-  Widget _buildSymptomSelector(RecordProvider provider) {
+  Widget _buildSymptomSelector(HealthRecordProvider provider) {
     final l10n = S.of(context)!;
     final symptoms = [
       ('cough', l10n.symptomCough, LuluIcons.cough),
@@ -402,7 +402,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     );
   }
 
-  Widget _buildMedicationInput(RecordProvider provider) {
+  Widget _buildMedicationInput(HealthRecordProvider provider) {
     final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -445,7 +445,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     );
   }
 
-  Widget _buildHospitalInput(RecordProvider provider) {
+  Widget _buildHospitalInput(HealthRecordProvider provider) {
     final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -523,7 +523,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
               contentPadding: EdgeInsets.zero,
             ),
             onChanged: (value) {
-              context.read<RecordProvider>().setNotes(value);
+              context.read<HealthRecordProvider>().setNotes(value);
             },
           ),
         ),
@@ -565,7 +565,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     );
   }
 
-  Widget _buildSaveButton(RecordProvider provider) {
+  Widget _buildSaveButton(HealthRecordProvider provider) {
     final isValid = provider.isSelectionValid;
 
     return SizedBox(
@@ -644,7 +644,7 @@ class _HealthRecordScreenState extends State<HealthRecordScreen> {
     return errorKey;
   }
 
-  Future<void> _handleSave(RecordProvider provider) async {
+  Future<void> _handleSave(HealthRecordProvider provider) async {
     final activity = await provider.saveHealth();
     if (activity != null && mounted) {
       Navigator.of(context).pop(activity);

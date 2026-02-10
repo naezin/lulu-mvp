@@ -117,6 +117,7 @@ class OnboardingProvider extends ChangeNotifier {
 
   /// 특정 단계로 이동
   void goToStep(OnboardingStep step) {
+    if (_currentStep == step) return;
     _currentStep = step;
     notifyListeners();
   }
@@ -213,6 +214,7 @@ class OnboardingProvider extends ChangeNotifier {
 
   void setBabyCount(int count) {
     if (count < 1 || count > 4) return;
+    if (_babyCount == count) return;
 
     _babyCount = count;
     _currentBabyIndex = 0;
@@ -235,16 +237,19 @@ class OnboardingProvider extends ChangeNotifier {
   // ========================================
 
   void updateBabyName(String name) {
+    if (currentBaby.name == name) return;
     _babies[_currentBabyIndex] = currentBaby.copyWith(name: name);
     notifyListeners();
   }
 
   void updateBabyBirthDate(DateTime date) {
+    if (currentBaby.birthDate == date) return;
     _babies[_currentBabyIndex] = currentBaby.copyWith(birthDate: date);
     notifyListeners();
   }
 
   void updateBabyGender(Gender gender) {
+    if (currentBaby.gender == gender) return;
     _babies[_currentBabyIndex] = currentBaby.copyWith(gender: gender);
     notifyListeners();
   }
@@ -259,11 +264,13 @@ class OnboardingProvider extends ChangeNotifier {
   }
 
   void updateGestationalWeeks(int weeks) {
+    if (currentBaby.gestationalWeeks == weeks) return;
     _babies[_currentBabyIndex] = currentBaby.copyWith(gestationalWeeks: weeks);
     notifyListeners();
   }
 
   void updateBirthWeight(int grams) {
+    if (currentBaby.birthWeightGrams == grams) return;
     _babies[_currentBabyIndex] = currentBaby.copyWith(birthWeightGrams: grams);
     notifyListeners();
   }
@@ -282,6 +289,7 @@ class OnboardingProvider extends ChangeNotifier {
   }
 
   void updateZygosity(Zygosity zygosity) {
+    if (_zygosity == zygosity) return;
     _zygosity = zygosity;
     notifyListeners();
   }

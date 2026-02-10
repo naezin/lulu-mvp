@@ -67,6 +67,7 @@ class StatisticsUIProvider extends ChangeNotifier {
 
   /// 에러 설정
   void setError(String? message) {
+    if (_errorMessage == message) return;
     _errorMessage = message;
     notifyListeners();
   }
