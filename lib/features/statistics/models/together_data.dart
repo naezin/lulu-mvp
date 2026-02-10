@@ -3,7 +3,7 @@ import 'weekly_statistics.dart';
 /// 함께 보기용 데이터 모델 (다태아)
 ///
 /// 작업 지시서 v1.2.1: 함께 보기 뷰용 데이터
-/// ⚠️ "비교" 대신 "함께 보기" 사용
+/// WARN: Use "together view" not "comparison"
 class TogetherData {
   /// 아기별 통계 리스트
   final List<BabyStatisticsSummary> babies;

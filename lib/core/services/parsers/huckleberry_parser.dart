@@ -156,13 +156,13 @@ class HuckleberryParser {
     // 기본 형식 시도
     try {
       return _dateFormat.parse(timeStr);
-    } catch (_) {}
+    } catch (_) {} // Silent: try next format
 
     // 대체 형식들 시도
     for (final format in _altDateFormats) {
       try {
         return format.parse(timeStr);
-      } catch (_) {}
+      } catch (_) {} // Silent: try next format
     }
 
     // ISO 형식 시도
@@ -178,7 +178,7 @@ class HuckleberryParser {
         final minutes = int.parse(parts[1]);
         return hours * 60 + minutes;
       }
-    } catch (_) {}
+    } catch (_) {} // Silent: invalid duration format
     return null;
   }
 

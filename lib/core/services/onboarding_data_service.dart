@@ -44,7 +44,7 @@ class OnboardingDataService {
       final familyJson = jsonEncode(family.toJson());
       await prefs.setString(_keyFamily, familyJson);
 
-      // ⚠️ 중요: family_id도 별도 저장 (FamilySyncService와 호환성)
+      // IMPORTANT: family_id도 별도 저장 (FamilySyncService와 호환성)
       await prefs.setString('family_id', family.id);
       debugPrint('[INFO] [OnboardingDataService] Saved family_id: ${family.id}');
 
@@ -57,7 +57,7 @@ class OnboardingDataService {
 
       debugPrint('[OK] [OnboardingDataService] Data saved: family=${family.id}, babies=${babies.length}');
     } catch (e) {
-      debugPrint('❌ [OnboardingDataService] Save error: $e');
+      debugPrint('[ERR] [OnboardingDataService] Save error: $e');
       rethrow;
     }
   }
@@ -107,7 +107,7 @@ class OnboardingDataService {
       debugPrint('[OK] [OnboardingDataService] Created ${babies.length} babies in Supabase');
 
     } catch (e) {
-      debugPrint('❌ [OnboardingDataService] Supabase save error: $e');
+      debugPrint('[ERR] [OnboardingDataService] Supabase save error: $e');
       // Supabase 저장 실패해도 로컬 저장은 계속 진행
       // rethrow 하지 않음
     }
@@ -119,7 +119,7 @@ class OnboardingDataService {
       final prefs = await SharedPreferences.getInstance();
       return prefs.getBool(_keyCompleted) ?? false;
     } catch (e) {
-      debugPrint('❌ [OnboardingDataService] Check error: $e');
+      debugPrint('[ERR] [OnboardingDataService] Check error: $e');
       return false;
     }
   }
@@ -158,7 +158,7 @@ class OnboardingDataService {
       debugPrint('[INFO] [OnboardingDataService] Loaded family from local: ${familyMap['id']}');
       return FamilyModel.fromJson(familyMap);
     } catch (e) {
-      debugPrint('❌ [OnboardingDataService] Load family error: $e');
+      debugPrint('[ERR] [OnboardingDataService] Load family error: $e');
       return null;
     }
   }
@@ -198,7 +198,7 @@ class OnboardingDataService {
           .map((json) => BabyModel.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      debugPrint('❌ [OnboardingDataService] Load babies error: $e');
+      debugPrint('[ERR] [OnboardingDataService] Load babies error: $e');
       return [];
     }
   }
@@ -213,7 +213,7 @@ class OnboardingDataService {
 
       debugPrint('[OK] [OnboardingDataService] Data cleared');
     } catch (e) {
-      debugPrint('❌ [OnboardingDataService] Clear error: $e');
+      debugPrint('[ERR] [OnboardingDataService] Clear error: $e');
       rethrow;
     }
   }

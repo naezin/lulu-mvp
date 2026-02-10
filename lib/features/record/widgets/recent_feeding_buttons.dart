@@ -47,7 +47,7 @@ class RecentFeedingButtons extends StatelessWidget {
 
     return Consumer<FeedingRecordProvider>(
       builder: (context, provider, _) {
-        // 🔴 BUGFIX v5.3: babyId 검증 - 현재 아기 기록만 표시
+        // BUGFIX v5.3: babyId filter - show only current baby records
         final validFeedings = provider.recentFeedings.where((feeding) {
           // 단일 아기 기록이고, 현재 선택된 아기와 일치하는지 확인
           return feeding.babyIds.length == 1 && feeding.babyIds[0] == babyId;

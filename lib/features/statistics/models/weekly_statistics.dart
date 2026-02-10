@@ -102,13 +102,13 @@ class FeedingStatistics {
   /// 일 평균 수유 횟수
   final double dailyAverageCount;
 
-  /// 🔧 Sprint 19 E: 일 평균 수유량 (ml)
+  /// FIX: Sprint 19 E: 일 평균 수유량 (ml)
   final double dailyAverageMl;
 
   /// 지난주 대비 변화 (횟수, 양수=증가, 음수=감소)
   final int changeCount;
 
-  /// 🔧 Sprint 19 v4: 지난주 대비 수유량 변화 (ml, 양수=증가, 음수=감소)
+  /// FIX: Sprint 19 v4: 지난주 대비 수유량 변화 (ml, 양수=증가, 음수=감소)
   final int changeMl;
 
   /// 요일별 수유 횟수 (월~일)

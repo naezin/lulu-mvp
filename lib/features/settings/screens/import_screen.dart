@@ -566,7 +566,7 @@ class _ImportScreenState extends State<ImportScreen> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                // ⚠️ BUG-004 FIX: Import 후 HomeProvider 갱신하여 Sweet Spot 업데이트
+                // BUG-004 FIX: Refresh HomeProvider after import for Sweet Spot update
                 final homeProvider = context.read<HomeProvider>();
                 await homeProvider.loadTodayActivities();
 

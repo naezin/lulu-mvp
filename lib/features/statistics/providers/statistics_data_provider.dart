@@ -339,7 +339,7 @@ class StatisticsDataProvider extends ChangeNotifier {
   }
 
   /// 수유 통계 계산
-  /// 🔧 Sprint 19 E: ml 통계 추가
+  /// FIX: Sprint 19 E: ml 통계 추가
   FeedingStatistics _calculateFeedingStatistics(
     List<ActivityModel> activities,
     List<ActivityModel> lastWeekActivities,
@@ -358,14 +358,14 @@ class StatisticsDataProvider extends ChangeNotifier {
     int formulaCount = 0;
     int solidCount = 0;
 
-    // 🔧 Sprint 19 E: ml 합계 계산
+    // FIX: Sprint 19 E: ml 합계 계산
     double totalMl = 0;
 
     for (final activity in feedingActivities) {
       final dayIndex = (activity.startTime.weekday - 1) % 7;
       dailyCounts[dayIndex]++;
 
-      // 🔧 Sprint 19 E: ml 데이터 합산
+      // FIX: Sprint 19 E: ml 데이터 합산
       final ml = activity.feedingAmountMl;
       if (ml != null && ml > 0) {
         totalMl += ml;
@@ -399,7 +399,7 @@ class StatisticsDataProvider extends ChangeNotifier {
     final dayCount = dateRange.dayCount > 0 ? dateRange.dayCount : 1;
     final dailyAverage = totalCount / dayCount;
 
-    // 🔧 Sprint 19 E: 일평균 ml 계산
+    // FIX: Sprint 19 E: 일평균 ml 계산
     final dailyAverageMl = totalMl / dayCount;
 
     // 지난 주 대비 변화

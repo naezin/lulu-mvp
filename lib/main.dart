@@ -207,7 +207,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
 
         String? familyId;
 
-        // ✅ 1. family_members에서 현재 사용자의 가족 확인
+        // [OK] 1. family_members에서 현재 사용자의 가족 확인
         try {
           final memberData = await supabase
               .from('family_members')
@@ -224,7 +224,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
           debugPrint('[WARN] family_members query failed: $e');
         }
 
-        // ✅ 2. fallback: families.user_id로 확인 (레거시 호환)
+        // [OK] 2. fallback: families.user_id로 확인 (레거시 호환)
         if (familyId == null) {
           final familyData = await supabase
               .from('families')
@@ -251,7 +251,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
         }
 
         if (familyId != null) {
-          // ✅ 기존 가족 데이터 로드
+          // [OK] 기존 가족 데이터 로드
           final loaded = await _loadExistingFamilyData(familyId, userId);
           if (loaded) {
             setState(() {
@@ -276,7 +276,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
         if (family != null && babies.isNotEmpty) {
           debugPrint('[OK] [OnboardingWrapper] Restored from local: family=${family.id}, babies=${babies.map((b) => b.name).join(", ")}');
 
-          // ✅ RLS FIX: 로컬 복원 시에도 family_members에 현재 사용자 추가
+          // [OK] RLS FIX: 로컬 복원 시에도 family_members에 현재 사용자 추가
           final currentUserId = Supabase.instance.client.auth.currentUser?.id;
           if (currentUserId != null) {
             try {

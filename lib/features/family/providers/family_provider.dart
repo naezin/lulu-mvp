@@ -70,10 +70,10 @@ class FamilyProvider extends ChangeNotifier {
       _pendingInvites = results[1] as List<FamilyInviteModel>;
 
       debugPrint(
-          '✅ [FamilyProvider] Loaded family: ${_members.length} members, ${_pendingInvites.length} pending invites');
+          '[OK] [FamilyProvider] Loaded family: ${_members.length} members, ${_pendingInvites.length} pending invites');
     } catch (e) {
       _error = e.toString();
-      debugPrint('❌ [FamilyProvider] Load error: $e');
+      debugPrint('[ERR] [FamilyProvider] Load error: $e');
     } finally {
       _isLoading = false;
       notifyListeners();

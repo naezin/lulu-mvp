@@ -191,10 +191,10 @@ class BabyModel {
           ? DateTime.parse(json['birth_date'] as String)
           : DateTime.now(),
       gender: _parseGender(json['gender']),
-      // 🔴 핵심: null이면 40 (만삭 기본값)
+      // NOTE: 핵심: null이면 40 (만삭 기본값)
       gestationalWeeksAtBirth: json['gestational_weeks_at_birth'] as int? ??
                                json['gestational_age_weeks'] as int?,
-      // 🔴 핵심: null이면 3000 (정상 체중 기본값)
+      // NOTE: 핵심: null이면 3000 (정상 체중 기본값)
       birthWeightGrams: json['birth_weight_grams'] as int?,
       multipleBirthType: json['baby_type'] != null
           ? BabyType.fromValue(json['baby_type'] as String)

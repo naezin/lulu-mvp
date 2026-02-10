@@ -38,23 +38,23 @@ class DeepLinkService {
         _handleUri(initialUri);
       }
     } catch (e) {
-      debugPrint('⚠️ [DeepLinkService] Initial link error: $e');
+      debugPrint('[WARN] [DeepLinkService] Initial link error: $e');
     }
 
     // 앱 실행 중 링크 리스닝
     _linkSubscription = _appLinks.uriLinkStream.listen(
       _handleUri,
       onError: (e) {
-        debugPrint('❌ [DeepLinkService] Link stream error: $e');
+        debugPrint('[ERR] [DeepLinkService] Link stream error: $e');
       },
     );
 
-    debugPrint('✅ [DeepLinkService] Initialized');
+    debugPrint('[OK] [DeepLinkService] Initialized');
   }
 
   /// URI 처리
   void _handleUri(Uri uri) {
-    debugPrint('🔗 [DeepLinkService] Received URI: $uri');
+    debugPrint('[INFO] [DeepLinkService] Received URI: $uri');
 
     // 초대 링크 확인
     // 지원 형식:
@@ -65,7 +65,7 @@ class DeepLinkService {
       final code = uri.pathSegments.length > 1 ? uri.pathSegments[1] : null;
 
       if (code != null && code.isNotEmpty) {
-        debugPrint('📨 [DeepLinkService] Invite code detected: $code');
+        debugPrint('[INFO] [DeepLinkService] Invite code detected: $code');
         _linkController.add(DeepLinkEvent.invite(code));
       }
     }
@@ -76,7 +76,7 @@ class DeepLinkService {
     _pendingInviteCode = code;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_pendingCodeKey, code);
-    debugPrint('💾 [DeepLinkService] Saved pending invite code: $code');
+    debugPrint('[INFO] [DeepLinkService] Saved pending invite code: $code');
   }
 
   /// Pending 초대 코드 삭제
@@ -84,7 +84,7 @@ class DeepLinkService {
     _pendingInviteCode = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_pendingCodeKey);
-    debugPrint('🗑️ [DeepLinkService] Cleared pending invite code');
+    debugPrint('[INFO] [DeepLinkService] Cleared pending invite code');
   }
 
   /// 초대 링크 생성

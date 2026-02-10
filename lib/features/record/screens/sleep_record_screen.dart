@@ -337,7 +337,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   Future<void> _endSleep(OngoingSleepProvider provider) async {
     final activity = await provider.endSleep();
     if (activity != null && mounted) {
-      // 🔧 Sprint 19 G-R7: 토스트 제거 → 햅틱 대체
+      // FIX: Sprint 19 G-R7: toast removed, haptic instead
       HapticFeedback.mediumImpact();
       Navigator.of(context).pop(activity);
     }

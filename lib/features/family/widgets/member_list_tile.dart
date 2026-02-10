@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../models/family_member_model.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
@@ -45,9 +46,10 @@ class MemberListTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(LuluRadius.section),
             ),
             child: Center(
-              child: Text(
-                member.isOwner ? '👑' : '👤',
-                style: const TextStyle(fontSize: 20),
+              child: Icon(
+                member.isOwner ? LuluIcons.star : LuluIcons.personOutlined,
+                size: 20,
+                color: LuluColors.lavenderMist,
               ),
             ),
           ),

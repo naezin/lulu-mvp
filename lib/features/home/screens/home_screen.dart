@@ -9,7 +9,6 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
-import '../../../core/services/supabase_service.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/last_activity_row.dart';
@@ -46,11 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO: 디버깅용 - 현재 사용자 ID 출력 (나중에 삭제)
-    final userId = SupabaseService.currentUserId;
-    debugPrint('========================================');
-    debugPrint('[INFO] [HomeScreen] Current user ID: $userId');
-    debugPrint('========================================');
   }
 
   @override
@@ -498,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 homeProvider.addActivity(savedActivity);
               }
 
-              // 🔧 Sprint 19 G-R2: 토스트 제거 → 햅틱 대체
+              // FIX: Sprint 19 G-R2: toast removed, haptic instead
               HapticFeedback.mediumImpact();
             },
             style: ElevatedButton.styleFrom(

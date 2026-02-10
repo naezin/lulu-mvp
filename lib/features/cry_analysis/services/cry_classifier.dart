@@ -82,7 +82,7 @@ class CryClassifier {
 
       if (!modelExists) {
         debugPrint(
-            '[CryClassifier] ⚠️ Model file not found, using Mock mode');
+            '[CryClassifier] [WARN] Model file not found, using Mock mode');
         _isMockMode = true;
         _isModelLoaded = true;
         _modelVersion = '1.0.0-mock';
@@ -104,7 +104,7 @@ class CryClassifier {
 
       return true;
     } catch (e) {
-      debugPrint('[CryClassifier] ⚠️ Model load failed: $e');
+      debugPrint('[CryClassifier] [WARN] Model load failed: $e');
       debugPrint('[CryClassifier] Falling back to Mock mode');
       _isMockMode = true;
       _isModelLoaded = true;

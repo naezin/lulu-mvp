@@ -22,7 +22,7 @@ enum StatType {
 /// - 수치 + 단위
 /// - 변화량 표시
 /// - 권장 범위 뱃지
-/// 🔧 Sprint 19 E: 수유 카드에 ml 표시 추가
+/// FIX: Sprint 19 E: 수유 카드에 ml 표시 추가
 class StatSummaryCard extends StatelessWidget {
   final StatType type;
   final double value;
@@ -30,7 +30,7 @@ class StatSummaryCard extends StatelessWidget {
   final double change;
   final int? correctedAgeDays;
 
-  /// 🔧 Sprint 19 E: 수유 ml 표시용
+  /// FIX: Sprint 19 E: 수유 ml 표시용
   final double? feedingMl;
   final double? feedingCount;
 
@@ -97,7 +97,7 @@ class StatSummaryCard extends StatelessWidget {
 
           const SizedBox(height: LuluSpacing.sm),
 
-          // 수치 - 🔧 Sprint 19 E: 수유 ml 표시
+          // 수치 - FIX: Sprint 19 E: 수유 ml 표시
           _buildValueDisplay(),
 
           const SizedBox(height: LuluSpacing.xs),
@@ -115,7 +115,7 @@ class StatSummaryCard extends StatelessWidget {
     );
   }
 
-  /// 🔧 Sprint 19 E: 수치 표시 (수유는 ml + 회수)
+  /// FIX: Sprint 19 E: 수치 표시 (수유는 ml + 회수)
   Widget _buildValueDisplay() {
     // 수유이고 ml 데이터가 있으면 "685 ml (8.3회)" 형식
     if (type == StatType.feeding && feedingMl != null && feedingMl! > 0) {

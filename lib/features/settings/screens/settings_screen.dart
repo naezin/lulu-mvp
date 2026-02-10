@@ -708,7 +708,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               updatedBabies,
             );
           }
-          // 🔧 Sprint 19 G-R4: 토스트 제거 → 햅틱 대체
+          // FIX: Sprint 19 G-R4: 토스트 제거 → 햅틱 대체
           HapticFeedback.mediumImpact();
         },
       ),
@@ -748,7 +748,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               );
             }
 
-            // 🔧 Sprint 19 G-R5: 토스트 제거 → 햅틱 대체
+            // FIX: Sprint 19 G-R5: 토스트 제거 → 햅틱 대체
             if (mounted) {
               HapticFeedback.mediumImpact();
             }

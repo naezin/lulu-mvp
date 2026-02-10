@@ -63,7 +63,7 @@ class AIService {
         );
       }
     } catch (e) {
-      debugPrint('❌ [AIService] Error: $e');
+      debugPrint('[ERR] [AIService] Error: $e');
       return AIRequestResult.error('An error occurred: $e');
     }
   }
@@ -108,7 +108,7 @@ class AIService {
         );
       }
     } catch (e) {
-      debugPrint('❌ [AIService] Error: $e');
+      debugPrint('[ERR] [AIService] Error: $e');
       return AIRequestResult.error('An error occurred: $e');
     }
   }
@@ -151,7 +151,7 @@ class AIService {
         );
       }
     } catch (e) {
-      debugPrint('❌ [AIService] Error: $e');
+      debugPrint('[ERR] [AIService] Error: $e');
       return AIRequestResult.error('An error occurred: $e');
     }
   }

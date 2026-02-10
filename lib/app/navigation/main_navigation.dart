@@ -181,7 +181,7 @@ class _MainNavigationState extends State<MainNavigation> {
         ),
       ).then((result) {
         // 기록 저장 후 홈 화면 새로고침
-        // 🔧 Sprint 19 G-R1: 토스트 제거 → 햅틱 대체
+        // FIX: Sprint 19 G-R1: toast removed, haptic instead
         if (result != null && mounted) {
           homeProvider.addActivity(result);
           HapticFeedback.mediumImpact();
