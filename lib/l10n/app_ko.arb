@@ -4680,6 +4680,14 @@
   "@registerBabyFirst": {
     "description": "아기 정보 미등록 안내"
   },
+  "confirmDeleteRecord": "이 기록을 삭제할까요?",
+  "@confirmDeleteRecord": {
+    "description": "기록 삭제 확인 다이얼로그 제목"
+  },
+  "deleteButton": "삭제",
+  "@deleteButton": {
+    "description": "삭제 버튼 레이블"
+  },
   "recordDeleted": "기록이 삭제되었어요",
   "@recordDeleted": {
     "description": "기록 삭제 완료 메시지"
@@ -4687,6 +4695,128 @@
   "undoAction": "실행취소",
   "@undoAction": {
     "description": "실행취소 버튼 레이블"
+  },
+  "toastActivitySaved": "{summary} 저장됨",
+  "@toastActivitySaved": {
+    "description": "활동 저장 토스트 (요약 포함)",
+    "placeholders": {
+      "summary": {
+        "type": "String",
+        "example": "분유 120ml"
+      }
+    }
+  },
+  "toastBreastMilkSaved": "모유 ({side}) {detail}",
+  "@toastBreastMilkSaved": {
+    "description": "모유 수유 저장 토스트",
+    "placeholders": {
+      "side": {
+        "type": "String",
+        "example": "왼쪽"
+      },
+      "detail": {
+        "type": "String",
+        "example": "15분"
+      }
+    }
+  },
+  "toastFormulaSaved": "분유 {amount}ml",
+  "@toastFormulaSaved": {
+    "description": "분유 저장 토스트",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "120"
+      }
+    }
+  },
+  "toastSolidFoodSaved": "이유식",
+  "@toastSolidFoodSaved": {
+    "description": "이유식 저장 토스트"
+  },
+  "toastMixedFeedingSaved": "혼합수유",
+  "@toastMixedFeedingSaved": {
+    "description": "혼합수유 저장 토스트"
+  },
+  "toastSleepDurationSaved": "수면 {duration}",
+  "@toastSleepDurationSaved": {
+    "description": "수면 저장 토스트 (시간 포함)",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "2시간 30분"
+      }
+    }
+  },
+  "toastNapDurationSaved": "낮잠 {duration}",
+  "@toastNapDurationSaved": {
+    "description": "낮잠 저장 토스트 (시간 포함)",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "45분"
+      }
+    }
+  },
+  "toastSleepSaved": "수면",
+  "@toastSleepSaved": {
+    "description": "수면 저장 토스트 (시간 없음)"
+  },
+  "toastWetDiaperSaved": "소변 기저귀",
+  "@toastWetDiaperSaved": {
+    "description": "소변 기저귀 저장 토스트"
+  },
+  "toastDirtyDiaperSaved": "대변 기저귀",
+  "@toastDirtyDiaperSaved": {
+    "description": "대변 기저귀 저장 토스트"
+  },
+  "toastMixedDiaperSaved": "혼합 기저귀",
+  "@toastMixedDiaperSaved": {
+    "description": "혼합 기저귀 저장 토스트"
+  },
+  "toastDryDiaperSaved": "건조 기저귀",
+  "@toastDryDiaperSaved": {
+    "description": "건조 기저귀 저장 토스트"
+  },
+  "toastPlayDurationSaved": "놀이 {duration}",
+  "@toastPlayDurationSaved": {
+    "description": "놀이 저장 토스트 (시간 포함)",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "45분"
+      }
+    }
+  },
+  "toastPlaySaved": "놀이",
+  "@toastPlaySaved": {
+    "description": "놀이 저장 토스트 (시간 없음)"
+  },
+  "toastTemperatureSaved": "체온 {value}",
+  "@toastTemperatureSaved": {
+    "description": "체온 저장 토스트",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "37.2°C"
+      }
+    }
+  },
+  "toastMedicationSaved": "투약 기록",
+  "@toastMedicationSaved": {
+    "description": "투약 저장 토스트"
+  },
+  "toastHospitalVisitSaved": "병원 방문",
+  "@toastHospitalVisitSaved": {
+    "description": "병원 방문 저장 토스트"
+  },
+  "toastSymptomsSaved": "증상 기록",
+  "@toastSymptomsSaved": {
+    "description": "증상 저장 토스트"
+  },
+  "toastHealthSaved": "건강 기록",
+  "@toastHealthSaved": {
+    "description": "건강 저장 토스트 (기본)"
   },
   "statisticsCountUnit": "{count}회",
   "@statisticsCountUnit": {

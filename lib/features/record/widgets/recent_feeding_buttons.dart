@@ -11,6 +11,7 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
+import '../../../data/models/baby_type.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/feeding_record_provider.dart';
 import 'recent_feeding_button.dart';
@@ -193,60 +194,15 @@ class RecentFeedingButtons extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    // Sprint 21 HF: AppToast (global) shows before pop, so no orphan issue
-    if (onSaveSuccess != null) {
-      HapticFeedback.mediumImpact();
-      AppToast.show(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  l10n?.quickFeedingSaved(_getSummary(record, l10n)) ?? '',
-                ),
-              ),
-            ],
-          ),
-          duration: const Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: LuluActivityColors.feeding,
-        ),
-      );
-      onSaveSuccess?.call();
-      return;
-    }
-
-    // Sprint 21 Phase 3-1: AppToast for cross-tab reliability
-    AppToast.show(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                l10n?.quickFeedingSaved(_getSummary(record, l10n)) ?? '',
-              ),
-            ),
-          ],
-        ),
-        action: SnackBarAction(
-          label: l10n?.quickFeedingUndo ?? '',
-          textColor: Colors.white,
-          onPressed: () async {
-            final success = await provider.undoLastSave();
-            if (context.mounted && success) {
-              HapticFeedback.mediumImpact();
-            }
-          },
-        ),
-        duration: const Duration(seconds: 3),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: LuluActivityColors.feeding,
-      ),
+    // Unified toast: activity-specific with feeding color
+    HapticFeedback.mediumImpact();
+    final summary = _getSummary(record, l10n);
+    AppToast.showActivity(
+      ActivityType.feeding,
+      l10n?.toastActivitySaved(summary) ?? '$summary saved',
     );
+
+    onSaveSuccess?.call();
   }
 
   String _getSummary(ActivityModel record, S? l10n) {

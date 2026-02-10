@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../core/design_system/lulu_colors.dart';
+import '../../core/design_system/lulu_icons.dart';
+import '../../data/models/baby_type.dart';
+
 /// Global ScaffoldMessenger key for cross-tab toast display
 ///
 /// Sprint 21 Phase 3-1: Resolves toast not showing/hiding across tab navigation.
@@ -39,6 +43,43 @@ class AppToast {
           : null,
     );
     show(snackBar);
+  }
+
+  /// Show activity-specific toast with type color and checkCircle icon
+  ///
+  /// [type] determines background color (LuluActivityColors)
+  /// [summary] is the pre-formatted message (e.g., "분유 120ml 저장됨")
+  static void showActivity(ActivityType type, String summary) {
+    show(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
+            const SizedBox(width: 8),
+            Expanded(child: Text(summary)),
+          ],
+        ),
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: _activityColor(type),
+      ),
+    );
+  }
+
+  /// Map ActivityType to LuluActivityColors
+  static Color _activityColor(ActivityType type) {
+    switch (type) {
+      case ActivityType.feeding:
+        return LuluActivityColors.feeding;
+      case ActivityType.sleep:
+        return LuluActivityColors.sleep;
+      case ActivityType.diaper:
+        return LuluActivityColors.diaper;
+      case ActivityType.play:
+        return LuluActivityColors.play;
+      case ActivityType.health:
+        return LuluActivityColors.health;
+    }
   }
 
   /// Clear all currently showing SnackBars

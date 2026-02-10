@@ -3145,10 +3145,87 @@ class SEn extends S {
   String get registerBabyFirst => 'Please register baby info first';
 
   @override
+  String get confirmDeleteRecord => 'Delete this record?';
+
+  @override
+  String get deleteButton => 'Delete';
+
+  @override
   String get recordDeleted => 'Record deleted';
 
   @override
   String get undoAction => 'Undo';
+
+  @override
+  String toastActivitySaved(String summary) {
+    return '$summary saved';
+  }
+
+  @override
+  String toastBreastMilkSaved(String side, String detail) {
+    return 'Breast milk ($side) $detail';
+  }
+
+  @override
+  String toastFormulaSaved(String amount) {
+    return 'Formula ${amount}ml';
+  }
+
+  @override
+  String get toastSolidFoodSaved => 'Solid food';
+
+  @override
+  String get toastMixedFeedingSaved => 'Mixed feeding';
+
+  @override
+  String toastSleepDurationSaved(String duration) {
+    return 'Sleep $duration';
+  }
+
+  @override
+  String toastNapDurationSaved(String duration) {
+    return 'Nap $duration';
+  }
+
+  @override
+  String get toastSleepSaved => 'Sleep';
+
+  @override
+  String get toastWetDiaperSaved => 'Wet diaper';
+
+  @override
+  String get toastDirtyDiaperSaved => 'Dirty diaper';
+
+  @override
+  String get toastMixedDiaperSaved => 'Mixed diaper';
+
+  @override
+  String get toastDryDiaperSaved => 'Dry diaper';
+
+  @override
+  String toastPlayDurationSaved(String duration) {
+    return 'Play $duration';
+  }
+
+  @override
+  String get toastPlaySaved => 'Play';
+
+  @override
+  String toastTemperatureSaved(String value) {
+    return 'Temperature $value';
+  }
+
+  @override
+  String get toastMedicationSaved => 'Medication';
+
+  @override
+  String get toastHospitalVisitSaved => 'Hospital visit';
+
+  @override
+  String get toastSymptomsSaved => 'Symptoms';
+
+  @override
+  String get toastHealthSaved => 'Health record';
 
   @override
   String statisticsCountUnit(String count) {

@@ -5674,6 +5674,18 @@ abstract class S {
   /// **'아기 정보를 먼저 등록해주세요'**
   String get registerBabyFirst;
 
+  /// 기록 삭제 확인 다이얼로그 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'이 기록을 삭제할까요?'**
+  String get confirmDeleteRecord;
+
+  /// 삭제 버튼 레이블
+  ///
+  /// In ko, this message translates to:
+  /// **'삭제'**
+  String get deleteButton;
+
   /// 기록 삭제 완료 메시지
   ///
   /// In ko, this message translates to:
@@ -5685,6 +5697,120 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'실행취소'**
   String get undoAction;
+
+  /// 활동 저장 토스트 (요약 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'{summary} 저장됨'**
+  String toastActivitySaved(String summary);
+
+  /// 모유 수유 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'모유 ({side}) {detail}'**
+  String toastBreastMilkSaved(String side, String detail);
+
+  /// 분유 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'분유 {amount}ml'**
+  String toastFormulaSaved(String amount);
+
+  /// 이유식 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'이유식'**
+  String get toastSolidFoodSaved;
+
+  /// 혼합수유 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'혼합수유'**
+  String get toastMixedFeedingSaved;
+
+  /// 수면 저장 토스트 (시간 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 {duration}'**
+  String toastSleepDurationSaved(String duration);
+
+  /// 낮잠 저장 토스트 (시간 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'낮잠 {duration}'**
+  String toastNapDurationSaved(String duration);
+
+  /// 수면 저장 토스트 (시간 없음)
+  ///
+  /// In ko, this message translates to:
+  /// **'수면'**
+  String get toastSleepSaved;
+
+  /// 소변 기저귀 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'소변 기저귀'**
+  String get toastWetDiaperSaved;
+
+  /// 대변 기저귀 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'대변 기저귀'**
+  String get toastDirtyDiaperSaved;
+
+  /// 혼합 기저귀 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'혼합 기저귀'**
+  String get toastMixedDiaperSaved;
+
+  /// 건조 기저귀 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'건조 기저귀'**
+  String get toastDryDiaperSaved;
+
+  /// 놀이 저장 토스트 (시간 포함)
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이 {duration}'**
+  String toastPlayDurationSaved(String duration);
+
+  /// 놀이 저장 토스트 (시간 없음)
+  ///
+  /// In ko, this message translates to:
+  /// **'놀이'**
+  String get toastPlaySaved;
+
+  /// 체온 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'체온 {value}'**
+  String toastTemperatureSaved(String value);
+
+  /// 투약 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'투약 기록'**
+  String get toastMedicationSaved;
+
+  /// 병원 방문 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'병원 방문'**
+  String get toastHospitalVisitSaved;
+
+  /// 증상 저장 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'증상 기록'**
+  String get toastSymptomsSaved;
+
+  /// 건강 저장 토스트 (기본)
+  ///
+  /// In ko, this message translates to:
+  /// **'건강 기록'**
+  String get toastHealthSaved;
 
   /// 통계 - 회수 단위
   ///

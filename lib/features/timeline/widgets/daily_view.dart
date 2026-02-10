@@ -131,19 +131,9 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   /// 삭제 시 연쇄 rebuild → SnackBar 무한 재생성 → 토스트 안 사라짐 문제 해결
   bool _reloadScheduled = false;
 
-  /// Sprint 21 HF #2: 삭제 직후 reload skip (토스트 duration 보호)
-  /// removeActivity → notifyListeners → rebuild 시 count 불일치로 reload 트리거 방지
-  bool _skipNextReload = false;
-
   /// Sprint 21 Phase 2-4: decoupled from HomeProvider reference
   void _checkAndReloadIfStale(int todayActivitiesCount) {
     if (!_isToday(_selectedDate) || _isLoading || _reloadScheduled) return;
-
-    if (_skipNextReload) {
-      _skipNextReload = false;
-      _lastActivitiesLength = todayActivitiesCount;
-      return;
-    }
 
     final currentLength = todayActivitiesCount;
     // Sprint 21 HF #14: _lastActivitiesLength > 0 조건 제거
@@ -263,25 +253,22 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     }
   }
 
-  /// 기록 삭제
+  /// 기록 삭제 (확인 다이얼로그 → 삭제 → 토스트)
   Future<void> _onDeleteActivity(ActivityModel activity) async {
     final homeProvider = context.read<HomeProvider>();
 
-    // Sprint 21 HF #2: removeActivity → notifyListeners 전에 플래그 설정
-    _skipNextReload = true;
-
-    // Undo 토스트와 함께 삭제
-    await deleteActivityWithUndo(
+    final deleted = await deleteActivityWithConfirm(
       activity: activity,
       homeProvider: homeProvider,
       context: context,
     );
 
-    // 로컬 상태에서도 제거
-    _lastActivitiesLength = homeProvider.todayActivities.length;
-    setState(() {
-      _dateActivities.removeWhere((a) => a.id == activity.id);
-    });
+    if (deleted && mounted) {
+      _lastActivitiesLength = homeProvider.todayActivities.length;
+      setState(() {
+        _dateActivities.removeWhere((a) => a.id == activity.id);
+      });
+    }
   }
 
   @override

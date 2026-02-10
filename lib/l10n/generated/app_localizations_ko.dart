@@ -3089,10 +3089,87 @@ class SKo extends S {
   String get registerBabyFirst => '아기 정보를 먼저 등록해주세요';
 
   @override
+  String get confirmDeleteRecord => '이 기록을 삭제할까요?';
+
+  @override
+  String get deleteButton => '삭제';
+
+  @override
   String get recordDeleted => '기록이 삭제되었어요';
 
   @override
   String get undoAction => '실행취소';
+
+  @override
+  String toastActivitySaved(String summary) {
+    return '$summary 저장됨';
+  }
+
+  @override
+  String toastBreastMilkSaved(String side, String detail) {
+    return '모유 ($side) $detail';
+  }
+
+  @override
+  String toastFormulaSaved(String amount) {
+    return '분유 ${amount}ml';
+  }
+
+  @override
+  String get toastSolidFoodSaved => '이유식';
+
+  @override
+  String get toastMixedFeedingSaved => '혼합수유';
+
+  @override
+  String toastSleepDurationSaved(String duration) {
+    return '수면 $duration';
+  }
+
+  @override
+  String toastNapDurationSaved(String duration) {
+    return '낮잠 $duration';
+  }
+
+  @override
+  String get toastSleepSaved => '수면';
+
+  @override
+  String get toastWetDiaperSaved => '소변 기저귀';
+
+  @override
+  String get toastDirtyDiaperSaved => '대변 기저귀';
+
+  @override
+  String get toastMixedDiaperSaved => '혼합 기저귀';
+
+  @override
+  String get toastDryDiaperSaved => '건조 기저귀';
+
+  @override
+  String toastPlayDurationSaved(String duration) {
+    return '놀이 $duration';
+  }
+
+  @override
+  String get toastPlaySaved => '놀이';
+
+  @override
+  String toastTemperatureSaved(String value) {
+    return '체온 $value';
+  }
+
+  @override
+  String get toastMedicationSaved => '투약 기록';
+
+  @override
+  String get toastHospitalVisitSaved => '병원 방문';
+
+  @override
+  String get toastSymptomsSaved => '증상 기록';
+
+  @override
+  String get toastHealthSaved => '건강 기록';
 
   @override
   String statisticsCountUnit(String count) {

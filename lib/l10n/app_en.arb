@@ -2002,6 +2002,14 @@
   "@registerBabyFirst": {
     "description": "No baby registered prompt"
   },
+  "confirmDeleteRecord": "Delete this record?",
+  "@confirmDeleteRecord": {
+    "description": "Confirm dialog title before deleting a record"
+  },
+  "deleteButton": "Delete",
+  "@deleteButton": {
+    "description": "Delete button label in confirm dialog"
+  },
   "recordDeleted": "Record deleted",
   "@recordDeleted": {
     "description": "Record deleted snackbar message"
@@ -2009,6 +2017,128 @@
   "undoAction": "Undo",
   "@undoAction": {
     "description": "Undo button label"
+  },
+  "toastActivitySaved": "{summary} saved",
+  "@toastActivitySaved": {
+    "description": "Activity save toast with summary",
+    "placeholders": {
+      "summary": {
+        "type": "String",
+        "example": "Formula 120ml"
+      }
+    }
+  },
+  "toastBreastMilkSaved": "Breast milk ({side}) {detail}",
+  "@toastBreastMilkSaved": {
+    "description": "Breast milk save toast",
+    "placeholders": {
+      "side": {
+        "type": "String",
+        "example": "left"
+      },
+      "detail": {
+        "type": "String",
+        "example": "15min"
+      }
+    }
+  },
+  "toastFormulaSaved": "Formula {amount}ml",
+  "@toastFormulaSaved": {
+    "description": "Formula save toast",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "120"
+      }
+    }
+  },
+  "toastSolidFoodSaved": "Solid food",
+  "@toastSolidFoodSaved": {
+    "description": "Solid food save toast"
+  },
+  "toastMixedFeedingSaved": "Mixed feeding",
+  "@toastMixedFeedingSaved": {
+    "description": "Mixed feeding save toast"
+  },
+  "toastSleepDurationSaved": "Sleep {duration}",
+  "@toastSleepDurationSaved": {
+    "description": "Sleep save toast with duration",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "2h 30min"
+      }
+    }
+  },
+  "toastNapDurationSaved": "Nap {duration}",
+  "@toastNapDurationSaved": {
+    "description": "Nap save toast with duration",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "45min"
+      }
+    }
+  },
+  "toastSleepSaved": "Sleep",
+  "@toastSleepSaved": {
+    "description": "Sleep save toast without duration"
+  },
+  "toastWetDiaperSaved": "Wet diaper",
+  "@toastWetDiaperSaved": {
+    "description": "Wet diaper save toast"
+  },
+  "toastDirtyDiaperSaved": "Dirty diaper",
+  "@toastDirtyDiaperSaved": {
+    "description": "Dirty diaper save toast"
+  },
+  "toastMixedDiaperSaved": "Mixed diaper",
+  "@toastMixedDiaperSaved": {
+    "description": "Mixed diaper save toast"
+  },
+  "toastDryDiaperSaved": "Dry diaper",
+  "@toastDryDiaperSaved": {
+    "description": "Dry diaper save toast"
+  },
+  "toastPlayDurationSaved": "Play {duration}",
+  "@toastPlayDurationSaved": {
+    "description": "Play save toast with duration",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "45min"
+      }
+    }
+  },
+  "toastPlaySaved": "Play",
+  "@toastPlaySaved": {
+    "description": "Play save toast without duration"
+  },
+  "toastTemperatureSaved": "Temperature {value}",
+  "@toastTemperatureSaved": {
+    "description": "Temperature save toast",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "37.2°C"
+      }
+    }
+  },
+  "toastMedicationSaved": "Medication",
+  "@toastMedicationSaved": {
+    "description": "Medication save toast"
+  },
+  "toastHospitalVisitSaved": "Hospital visit",
+  "@toastHospitalVisitSaved": {
+    "description": "Hospital visit save toast"
+  },
+  "toastSymptomsSaved": "Symptoms",
+  "@toastSymptomsSaved": {
+    "description": "Symptoms save toast"
+  },
+  "toastHealthSaved": "Health record",
+  "@toastHealthSaved": {
+    "description": "Generic health save toast"
   },
   "statisticsCountUnit": "{count}x",
   "@statisticsCountUnit": {
