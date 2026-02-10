@@ -809,6 +809,13 @@
   "settingsLogout": "Log out",
   "settingsLogoutConfirm": "Log out?",
   "settingsNotLoggedIn": "Not logged in",
+  "sectionAccount": "Account",
+  "deleteAccountWarningData": "All records, baby info, and family data will be deleted",
+  "deleteAccountWarningAuth": "Your login account will be permanently removed",
+  "deleteAccountFailed": "Account deletion failed. Please try again.",
+  "deleteAccountSuccess": "Account deleted successfully.",
+  "privacyPolicyFullText": "Privacy Policy\n\nLast updated: February 2026\n\n1. Information We Collect\n- Email address (for account creation)\n- Baby information: name, date of birth, gender, gestational age at birth\n- Care records: feeding, sleep, diaper, play, health\n- Growth data: weight, height, head circumference\n\n2. Cry Analysis\n- All cry analysis is performed 100% on-device\n- Audio is NEVER sent to our servers\n- Audio is NEVER stored on the device\n- The AI model runs locally using TensorFlow Lite\n\n3. Data Storage\n- Your data is stored securely on Supabase (AWS Seoul Region)\n- Data is protected by Row-Level Security (RLS) policies\n- Only you and your family members can access your data\n\n4. Data Sharing\n- We do NOT sell your data to third parties\n- We do NOT use your data for advertising\n- Family sharing: only invited members can access shared data\n\n5. Data Deletion\n- You can delete your account at any time from Settings\n- Account deletion permanently removes ALL your data\n- This action cannot be undone\n\n6. Children's Privacy\n- This app records information about children for parenting purposes\n- We comply with applicable children's privacy laws\n- No data is used for marketing or profiling\n\n7. Contact\n- For privacy inquiries: lululabs.app@gmail.com",
+  "termsOfServiceFullText": "Terms of Service\n\nLast updated: February 2026\n\n1. Service Description\nLulu is a smart parenting app designed for high-risk newborns including preterm babies, multiples, and SGA (Small for Gestational Age) babies.\n\n2. Medical Disclaimer\n- This app is NOT a medical device\n- Information provided is for reference only and does NOT constitute medical advice\n- Always consult your healthcare provider for medical decisions\n- Cry analysis results are AI-generated estimates and should not replace professional assessment\n\n3. User Responsibilities\n- You are responsible for the accuracy of information you enter\n- Do not rely solely on this app for medical decisions\n- Keep your account credentials secure\n\n4. Data Ownership\n- You retain ownership of all data you create\n- You can export your data at any time (CSV format)\n- You can delete your account and all data at any time\n\n5. Service Availability\n- We strive to maintain service availability but do not guarantee uninterrupted access\n- We may update the app to improve features and fix issues\n\n6. Limitation of Liability\n- The app is provided as-is without warranties\n- We are not liable for decisions made based on app information\n- Maximum liability is limited to the amount paid for premium features\n\n7. Contact\n- For service inquiries: lululabs.app@gmail.com",
   "cryIdleTitle": "Is your baby crying?",
   "cryIdleSubtitle": "Press the button below to analyze",
   "cryRecordingTitle": "Listening to the cry",
@@ -978,7 +985,10 @@
       }
     }
   },
-  "sectionDangerZone": "Danger Zone",
+  "settingsDataManagement": "Data Management",
+  "settingsAccountDeletion": "Account Deletion",
+  "settingsResetDescription": "Clear all records and start fresh",
+  "settingsDeleteDescription": "Your account and all data will be permanently deleted",
   "statusPreterm": "Preterm",
   "statusFullTerm": "Full Term",
   "addBabyMaxHint": "Up to 4 babies allowed",
@@ -1300,10 +1310,34 @@
       }
     }
   },
+  "insightSleepIncreased": "Sleep time increased compared to last week",
+  "@insightSleepIncreased": {
+    "description": "Insight - sleep time increased"
+  },
+  "insightSleepDecreased": "Sleep time decreased compared to last week",
+  "@insightSleepDecreased": {
+    "description": "Insight - sleep time decreased"
+  },
+  "insightMostSleepDay": "Slept the most on {dayName}",
+  "@insightMostSleepDay": {
+    "description": "Insight - day with most sleep",
+    "placeholders": {
+      "dayName": {
+        "type": "String",
+        "example": "Monday"
+      }
+    }
+  },
+  "insightStartRecording": "Start recording to see insights",
+  "@insightStartRecording": {
+    "description": "Insight - no records yet"
+  },
   "errorRetryLater": "Please try again later",
   "errorNetworkCheck": "Please check your internet connection",
   "errorConnectionSlow": "Connection is slow. Try again?",
   "errorDataLoadFailed": "Failed to load data",
+  "errorUnexpectedDescription": "An unexpected error occurred.\nPlease restart the app.",
+  "errorRestartApp": "Restart App",
   "percentileMeasureNeeded": "Measurement needed",
   "percentileBelow3": "Below 3%",
   "percentileAbove97": "Above 97%",
@@ -2180,5 +2214,41 @@
   "importSuccess": "Success",
   "importTotal": "Total",
   "importTxtDesc": "Babytime, etc.",
-  "importTxtOption": "Text file (.txt)"
+  "importTxtOption": "Text file (.txt)",
+  "sleepInProgressTitle": "{babyName} is currently sleeping",
+  "@sleepInProgressTitle": {
+    "description": "Sleep in progress dialog title",
+    "placeholders": {
+      "babyName": {
+        "type": "String",
+        "example": "Emma"
+      }
+    }
+  },
+  "sleepInProgressDuration": "Started {hours}h {minutes}m ago",
+  "@sleepInProgressDuration": {
+    "description": "Sleep in progress duration display",
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "example": "2"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
+    }
+  },
+  "sleepEndAndStart": "End current and start new sleep",
+  "@sleepEndAndStart": {
+    "description": "Button to end current sleep and start new one"
+  },
+  "sleepOverlapWarning": "This sleep record overlaps with an existing record",
+  "@sleepOverlapWarning": {
+    "description": "Warning toast for overlapping sleep records"
+  },
+  "viewRecord": "View Records",
+  "@viewRecord": {
+    "description": "SnackBar action to navigate to records tab"
+  }
 }

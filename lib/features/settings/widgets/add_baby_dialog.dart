@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/baby_repository.dart';
@@ -37,7 +38,8 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
   final _weightController = TextEditingController();
 
   DateTime _birthDate = DateTime.now();
-  Gender _gender = Gender.unknown;
+  // Sprint 21 HF #16: 기본값 male (unknown 옵션 UI에서 제거)
+  Gender _gender = Gender.male;
   int? _gestationalWeeks;
   bool _isPreterm = false;
   bool _isLoading = false;
@@ -149,13 +151,12 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
               // 성별
               _buildLabel(l10n.labelGender),
               const SizedBox(height: LuluSpacing.xs),
+              // Sprint 21 HF #16: 미정(unknown) 옵션 제거 - 가입 플로우와 일치
               Row(
                 children: [
                   _buildGenderChip(l10n.genderMale, Gender.male),
                   const SizedBox(width: LuluSpacing.sm),
                   _buildGenderChip(l10n.genderFemale, Gender.female),
-                  const SizedBox(width: LuluSpacing.sm),
-                  _buildGenderChip(l10n.genderUnknown, Gender.unknown),
                 ],
               ),
               const SizedBox(height: LuluSpacing.md),
@@ -363,9 +364,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_isPreterm && _gestationalWeeks == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)!.errorSelectWeeks)),
-      );
+      AppToast.showText(S.of(context)!.errorSelectWeeks);
       return;
     }
 
@@ -411,9 +410,7 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context)!.errorAddFailed(e.toString()))),
-        );
+        AppToast.showText(S.of(context)!.errorAddFailed(e.toString()));
       }
     } finally {
       if (mounted) {

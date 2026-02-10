@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/utils/app_toast.dart';
+import '../../../data/models/baby_model.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../home/providers/home_provider.dart';
 import '../models/invite_info_model.dart';
@@ -150,7 +152,7 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
     );
   }
 
-  Widget _buildMappingRow(myBaby, S l10n) {
+  Widget _buildMappingRow(BabyModel myBaby, S l10n) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -251,6 +253,11 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
   }
 
   Future<void> _skipMapping() async {
+    // Sprint 21 Phase 3: capture context-dependent refs before async gap
+    final familyProvider = context.read<FamilyProvider>();
+    final homeProvider = context.read<HomeProvider>();
+    final navigator = Navigator.of(context);
+
     setState(() => _isLoading = true);
 
     try {
@@ -258,16 +265,14 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
           await _inviteService.acceptInvite(widget.inviteCode, null);
 
       if (mounted) {
-        await context.read<FamilyProvider>().onJoinedFamily(result.familyId);
-        await context.read<HomeProvider>().onFamilyChanged(result.familyId);
+        await familyProvider.onJoinedFamily(result.familyId);
+        await homeProvider.onFamilyChanged(result.familyId);
 
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+        navigator.pushNamedAndRemoveUntil('/home', (r) => false);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        AppToast.showText(e.toString());
       }
     } finally {
       if (mounted) {
@@ -289,6 +294,12 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
       return;
     }
 
+    // Sprint 21 Phase 3: capture context-dependent refs before async gap
+    final familyProvider = context.read<FamilyProvider>();
+    final homeProvider = context.read<HomeProvider>();
+    final navigator = Navigator.of(context);
+    final l10n = S.of(context)!;
+
     setState(() => _isLoading = true);
 
     try {
@@ -296,21 +307,16 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
           await _inviteService.acceptInvite(widget.inviteCode, mappings);
 
       if (mounted) {
-        await context.read<FamilyProvider>().onJoinedFamily(result.familyId);
-        await context.read<HomeProvider>().onFamilyChanged(result.familyId);
+        await familyProvider.onJoinedFamily(result.familyId);
+        await homeProvider.onFamilyChanged(result.familyId);
 
-        final l10n = S.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.recordsImported(result.migratedCount))),
-        );
+        AppToast.showText(l10n.recordsImported(result.migratedCount));
 
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+        navigator.pushNamedAndRemoveUntil('/home', (r) => false);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        AppToast.showText(e.toString());
       }
     } finally {
       if (mounted) {

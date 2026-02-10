@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// Lulu Design System - Icons
 ///
@@ -99,7 +100,7 @@ class LuluIcons {
   static const IconData sun = Icons.wb_sunny_rounded;
   static const IconData star = Icons.star_rounded;
   static const IconData heart = Icons.favorite_rounded;
-  static const IconData note = Icons.note_outlined;
+  static const IconData note = Icons.note_alt_rounded;
   static const IconData tips = Icons.tips_and_updates_rounded;
   static const IconData celebration = Icons.celebration_rounded;
 
@@ -217,7 +218,7 @@ class LuluIcons {
   static const IconData expandLess = Icons.expand_less_rounded;
   static const IconData menuIcon = Icons.menu_rounded;
   static const IconData history = Icons.history_rounded;
-  static const IconData settingsOutlined = Icons.settings_outlined;
+  static const IconData settingsOutlined = Icons.settings_rounded;
 
   // ========================================
   // 액션 확장 (Actions Extended)
@@ -235,6 +236,7 @@ class LuluIcons {
   static const IconData stop = Icons.stop_rounded;
   static const IconData helpOutline = Icons.help_outline_rounded;
   static const IconData exitToApp = Icons.exit_to_app_rounded;
+  static const IconData logout = Icons.logout_rounded;
   static const IconData compareArrows = Icons.compare_arrows_rounded;
   static const IconData swapHoriz = Icons.swap_horiz_rounded;
 
@@ -245,14 +247,14 @@ class LuluIcons {
   static const IconData checkCircleOutline = Icons.check_circle_outline_rounded;
   static const IconData infoOutline = Icons.info_outline_rounded;
   static const IconData notificationActive = Icons.notifications_active_rounded;
-  static const IconData newRelease = Icons.new_releases_outlined;
+  static const IconData newRelease = Icons.new_releases_rounded;
   static const IconData cloudOff = Icons.cloud_off_rounded;
 
   // ========================================
   // 사용자/가족 (User/Family)
   // ========================================
 
-  static const IconData personOutlined = Icons.person_outlined;
+  static const IconData personOutlined = Icons.person_outline_rounded;
   static const IconData personAdd = Icons.person_add_rounded;
   static const IconData people = Icons.people_rounded;
   static const IconData groupAdd = Icons.group_add_rounded;
@@ -264,8 +266,8 @@ class LuluIcons {
   // ========================================
 
   static const IconData apple = Icons.apple;
-  static const IconData emailOutlined = Icons.email_outlined;
-  static const IconData lockOutlined = Icons.lock_outlined;
+  static const IconData emailOutlined = Icons.email_rounded;
+  static const IconData lockOutlined = Icons.lock_outline_rounded;
   static const IconData mailOutline = Icons.mail_outline_rounded;
   static const IconData visibility = Icons.visibility_rounded;
   static const IconData visibilityOff = Icons.visibility_off_rounded;
@@ -274,8 +276,8 @@ class LuluIcons {
   // 데이터/파일 (Data/File)
   // ========================================
 
-  static const IconData fileDownload = Icons.file_download_outlined;
-  static const IconData fileUpload = Icons.file_upload_outlined;
+  static const IconData fileDownload = Icons.file_download_rounded;
+  static const IconData fileUpload = Icons.file_upload_rounded;
   static const IconData folderOpen = Icons.folder_open_rounded;
   static const IconData description = Icons.description_rounded;
   static const IconData summarize = Icons.summarize_rounded;
@@ -286,21 +288,21 @@ class LuluIcons {
   // 수유 확장 (Feeding Extended)
   // ========================================
 
-  static const IconData feedingOutlined = Icons.local_drink_outlined;
-  static const IconData restaurantOutlined = Icons.restaurant_outlined;
+  static const IconData feedingOutlined = Icons.local_drink_rounded;
+  static const IconData restaurantOutlined = Icons.restaurant_rounded;
   static const IconData cafe = Icons.local_cafe_rounded;
 
   // ========================================
   // 기저귀 확장 (Diaper Extended)
   // ========================================
 
-  static const IconData diaperOutlined = Icons.baby_changing_station_outlined;
+  static const IconData diaperOutlined = Icons.baby_changing_station_rounded;
 
   // ========================================
   // 수면 확장 (Sleep Extended)
   // ========================================
 
-  static const IconData sleepOutlined = Icons.bedtime_outlined;
+  static const IconData sleepOutlined = Icons.bedtime_rounded;
 
   // ========================================
   // 감정 표현 (Sentiment)
@@ -309,16 +311,16 @@ class LuluIcons {
   static const IconData sentimentHappy = Icons.sentiment_very_satisfied_rounded;
   static const IconData sentimentNeutral = Icons.sentiment_neutral_rounded;
   static const IconData sentimentSad = Icons.sentiment_dissatisfied_rounded;
-  static const IconData sentimentSadOutlined = Icons.sentiment_dissatisfied_outlined;
-  static const IconData thumbUp = Icons.thumb_up_outlined;
-  static const IconData thumbDown = Icons.thumb_down_outlined;
+  static const IconData sentimentSadOutlined = Icons.sentiment_dissatisfied_rounded;
+  static const IconData thumbUp = Icons.thumb_up_rounded;
+  static const IconData thumbDown = Icons.thumb_down_rounded;
 
   // ========================================
   // 차트/분석 (Charts/Analytics)
   // ========================================
 
-  static const IconData analyticsOutlined = Icons.analytics_outlined;
-  static const IconData bubbleChart = Icons.bubble_chart_outlined;
+  static const IconData analyticsOutlined = Icons.analytics_rounded;
+  static const IconData bubbleChart = Icons.bubble_chart_rounded;
   static const IconData trendingFlat = Icons.trending_flat_rounded;
 
   // ========================================
@@ -327,11 +329,11 @@ class LuluIcons {
 
   static const IconData language = Icons.language_rounded;
   static const IconData timer = Icons.timer_rounded;
-  static const IconData timerOutlined = Icons.timer_outlined;
+  static const IconData timerOutlined = Icons.timer_rounded;
   static const IconData sportsEsports = Icons.sports_esports_rounded;
   static const IconData snowflake = Icons.ac_unit_rounded;
   static const IconData bolt = Icons.bolt_rounded;
-  static const IconData micOutlined = Icons.mic_outlined;
+  static const IconData micOutlined = Icons.mic_rounded;
 
   // ========================================
   // 아이콘 크기 (Icon Sizes)
@@ -342,6 +344,27 @@ class LuluIcons {
   static const double sizeMD = 24;
   static const double sizeLG = 32;
   static const double sizeXL = 48;
+
+  // ========================================
+  // SVG Icons (Widget-based)
+  // ========================================
+
+  /// SVG poop icon for dirty diaper
+  /// Optical size correction: solid SVG appears visually heavier than
+  /// outlined Material Icons at the same px size. 3px padding compensates.
+  static Widget poopIcon({double size = 24, Color? color}) {
+    return Padding(
+      padding: const EdgeInsets.all(3),
+      child: SvgPicture.asset(
+        'assets/icons/poop.svg',
+        width: size - 6,
+        height: size - 6,
+        colorFilter: color != null
+            ? ColorFilter.mode(color, BlendMode.srcIn)
+            : null,
+      ),
+    );
+  }
 
   // ========================================
   // 헬퍼 메서드 (Helper Methods)

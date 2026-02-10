@@ -212,12 +212,12 @@ class BabytimeParser {
       // Try AM/PM format
       try {
         return _dateFormat.parse(normalized);
-      } catch (_) {}
+      } catch (_) {} // Silent: try next format
 
       // Try alternative format
       try {
         return _dateFormatNoSpace.parse(normalized);
-      } catch (_) {}
+      } catch (_) {} // Silent: try next format
 
       // Try ISO format
       return DateTime.tryParse(normalized);

@@ -5,6 +5,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
+import '../../../data/models/baby_model.dart';
 import '../../home/providers/home_provider.dart';
 import '../providers/import_provider.dart';
 
@@ -200,7 +201,7 @@ class _ImportScreenState extends State<ImportScreen> {
     S l10n,
   ) {
     final preview = provider.preview!;
-    final babies = context.watch<HomeProvider>().babies;
+    final babies = context.select<HomeProvider, List<BabyModel>>((p) => p.babies);
     final familyId = context.read<HomeProvider>().family?.id ?? '';
 
     return SingleChildScrollView(
@@ -360,7 +361,7 @@ class _ImportScreenState extends State<ImportScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: LuluStatusColors.warning.withValues(alpha: 0.1),
+              color: LuluStatusColors.warningBg,
               borderRadius: BorderRadius.circular(LuluRadius.sm),
               border: Border.all(
                 color: LuluStatusColors.warningBorder,
@@ -488,7 +489,7 @@ class _ImportScreenState extends State<ImportScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: LuluStatusColors.success.withValues(alpha: 0.1),
+              color: LuluStatusColors.successBg,
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -565,7 +566,7 @@ class _ImportScreenState extends State<ImportScreen> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                // ⚠️ BUG-004 FIX: Import 후 HomeProvider 갱신하여 Sweet Spot 업데이트
+                // BUG-004 FIX: Refresh HomeProvider after import for Sweet Spot update
                 final homeProvider = context.read<HomeProvider>();
                 await homeProvider.loadTodayActivities();
 

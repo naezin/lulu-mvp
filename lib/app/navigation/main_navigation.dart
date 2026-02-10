@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/design_system/lulu_colors.dart';
-import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_typography.dart';
+import '../../core/utils/app_toast.dart';
 import '../../shared/widgets/expandable_fab.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/home/providers/home_provider.dart';
@@ -129,16 +129,7 @@ class _MainNavigationState extends State<MainNavigation> {
 
     if (babies.isEmpty) {
       // 아기 정보가 없으면 안내 메시지
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context)?.registerBabyFirst ?? 'Please register baby info first'),
-          backgroundColor: LuluColors.surfaceElevated,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(LuluRadius.sm),
-          ),
-        ),
-      );
+      AppToast.showText(S.of(context)?.registerBabyFirst ?? 'Please register baby info first');
       return;
     }
 
@@ -189,11 +180,26 @@ class _MainNavigationState extends State<MainNavigation> {
           fullscreenDialog: true,
         ),
       ).then((result) {
-        // 기록 저장 후 홈 화면 새로고침
-        // 🔧 Sprint 19 G-R1: 토스트 제거 → 햅틱 대체
         if (result != null && mounted) {
           homeProvider.addActivity(result);
           HapticFeedback.mediumImpact();
+
+          final l10n = S.of(context);
+          AppToast.show(
+            SnackBar(
+              content: Row(
+                children: [
+                  const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(l10n?.successRecordSaved ?? 'Record saved'),
+                  ),
+                ],
+              ),
+              duration: const Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
         }
       });
     }

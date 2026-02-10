@@ -1623,6 +1623,32 @@ class SEn extends S {
   String get settingsNotLoggedIn => 'Not logged in';
 
   @override
+  String get sectionAccount => 'Account';
+
+  @override
+  String get deleteAccountWarningData =>
+      'All records, baby info, and family data will be deleted';
+
+  @override
+  String get deleteAccountWarningAuth =>
+      'Your login account will be permanently removed';
+
+  @override
+  String get deleteAccountFailed =>
+      'Account deletion failed. Please try again.';
+
+  @override
+  String get deleteAccountSuccess => 'Account deleted successfully.';
+
+  @override
+  String get privacyPolicyFullText =>
+      'Privacy Policy\n\nLast updated: February 2026\n\n1. Information We Collect\n- Email address (for account creation)\n- Baby information: name, date of birth, gender, gestational age at birth\n- Care records: feeding, sleep, diaper, play, health\n- Growth data: weight, height, head circumference\n\n2. Cry Analysis\n- All cry analysis is performed 100% on-device\n- Audio is NEVER sent to our servers\n- Audio is NEVER stored on the device\n- The AI model runs locally using TensorFlow Lite\n\n3. Data Storage\n- Your data is stored securely on Supabase (AWS Seoul Region)\n- Data is protected by Row-Level Security (RLS) policies\n- Only you and your family members can access your data\n\n4. Data Sharing\n- We do NOT sell your data to third parties\n- We do NOT use your data for advertising\n- Family sharing: only invited members can access shared data\n\n5. Data Deletion\n- You can delete your account at any time from Settings\n- Account deletion permanently removes ALL your data\n- This action cannot be undone\n\n6. Children\'s Privacy\n- This app records information about children for parenting purposes\n- We comply with applicable children\'s privacy laws\n- No data is used for marketing or profiling\n\n7. Contact\n- For privacy inquiries: lululabs.app@gmail.com';
+
+  @override
+  String get termsOfServiceFullText =>
+      'Terms of Service\n\nLast updated: February 2026\n\n1. Service Description\nLulu is a smart parenting app designed for high-risk newborns including preterm babies, multiples, and SGA (Small for Gestational Age) babies.\n\n2. Medical Disclaimer\n- This app is NOT a medical device\n- Information provided is for reference only and does NOT constitute medical advice\n- Always consult your healthcare provider for medical decisions\n- Cry analysis results are AI-generated estimates and should not replace professional assessment\n\n3. User Responsibilities\n- You are responsible for the accuracy of information you enter\n- Do not rely solely on this app for medical decisions\n- Keep your account credentials secure\n\n4. Data Ownership\n- You retain ownership of all data you create\n- You can export your data at any time (CSV format)\n- You can delete your account and all data at any time\n\n5. Service Availability\n- We strive to maintain service availability but do not guarantee uninterrupted access\n- We may update the app to improve features and fix issues\n\n6. Limitation of Liability\n- The app is provided as-is without warranties\n- We are not liable for decisions made based on app information\n- Maximum liability is limited to the amount paid for premium features\n\n7. Contact\n- For service inquiries: lululabs.app@gmail.com';
+
+  @override
   String get cryIdleTitle => 'Is your baby crying?';
 
   @override
@@ -1847,7 +1873,17 @@ class SEn extends S {
   }
 
   @override
-  String get sectionDangerZone => 'Danger Zone';
+  String get settingsDataManagement => 'Data Management';
+
+  @override
+  String get settingsAccountDeletion => 'Account Deletion';
+
+  @override
+  String get settingsResetDescription => 'Clear all records and start fresh';
+
+  @override
+  String get settingsDeleteDescription =>
+      'Your account and all data will be permanently deleted';
 
   @override
   String get statusPreterm => 'Preterm';
@@ -2381,6 +2417,42 @@ class SEn extends S {
   }
 
   @override
+  String get insightSleepIncreased =>
+      'Sleep time increased compared to last week';
+
+  @override
+  String get insightSleepDecreased =>
+      'Sleep time decreased compared to last week';
+
+  @override
+  String insightMostSleepDay(String dayName) {
+    return 'Slept the most on $dayName';
+  }
+
+  @override
+  String get insightStartRecording => 'Start recording to see insights';
+
+  @override
+  String sleepInProgressTitle(String babyName) {
+    return '$babyName is currently sleeping';
+  }
+
+  @override
+  String sleepInProgressDuration(int hours, int minutes) {
+    return 'Started ${hours}h ${minutes}m ago';
+  }
+
+  @override
+  String get sleepEndAndStart => 'End current and start new sleep';
+
+  @override
+  String get sleepOverlapWarning =>
+      'This sleep record overlaps with an existing record';
+
+  @override
+  String get viewRecord => 'View Records';
+
+  @override
   String get errorRetryLater => 'Please try again later';
 
   @override
@@ -2391,6 +2463,13 @@ class SEn extends S {
 
   @override
   String get errorDataLoadFailed => 'Failed to load data';
+
+  @override
+  String get errorUnexpectedDescription =>
+      'An unexpected error occurred.\nPlease restart the app.';
+
+  @override
+  String get errorRestartApp => 'Restart App';
 
   @override
   String get percentileMeasureNeeded => 'Measurement needed';

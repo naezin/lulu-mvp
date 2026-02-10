@@ -71,7 +71,7 @@ class OngoingSleepProvider extends ChangeNotifier {
         debugPrint('[OK] [OngoingSleepProvider] Restored ongoing sleep: ${_ongoingSleep?.babyId}');
       }
     } catch (e) {
-      debugPrint('❌ [OngoingSleepProvider] Init error: $e');
+      debugPrint('[ERR] [OngoingSleepProvider] Init error: $e');
       // 오류 시 상태 초기화
       _ongoingSleep = null;
     }
@@ -79,15 +79,18 @@ class OngoingSleepProvider extends ChangeNotifier {
   }
 
   /// 수면 시작
+  /// Sprint 20 HF #9: hasSleepInProgress 확인은 UI에서 처리 (확인 다이얼로그)
+  /// 같은 아기 수면 중복 시 UI에서 endAndStartSleep() 호출
   Future<void> startSleep({
     required String babyId,
     required String familyId,
     String sleepType = 'nap',
     String? babyName,
+    DateTime? startTime,
   }) async {
-    // 이미 진행 중인 수면이 있으면 무시
+    // 이미 진행 중인 수면이 있으면 UI에서 처리해야 함
     if (_ongoingSleep != null) {
-      debugPrint('[WARN] [OngoingSleepProvider] Sleep already in progress');
+      debugPrint('[WARN] [OngoingSleepProvider] Sleep already in progress. Use endAndStartSleep() instead.');
       return;
     }
 
@@ -97,7 +100,7 @@ class OngoingSleepProvider extends ChangeNotifier {
       familyId: familyId,
       babyName: babyName,
       sleepType: sleepType,
-      startTime: DateTime.now(),
+      startTime: startTime ?? DateTime.now(),
     );
 
     await _saveToLocal();
@@ -140,9 +143,44 @@ class OngoingSleepProvider extends ChangeNotifier {
       debugPrint('[OK] [OngoingSleepProvider] Sleep ended and saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      debugPrint('❌ [OngoingSleepProvider] Error ending sleep: $e');
+      debugPrint('[ERR] [OngoingSleepProvider] Error ending sleep: $e');
       rethrow;
     }
+  }
+
+  /// Sprint 20 HF #9-B: 이전 수면 종료 + 새 수면 시작 (확인 다이얼로그 후 호출)
+  /// 반환값: 종료된 이전 수면 ActivityModel (HomeProvider 갱신용)
+  Future<ActivityModel?> endAndStartSleep({
+    required String babyId,
+    required String familyId,
+    String sleepType = 'nap',
+    String? babyName,
+    DateTime? startTime,
+  }) async {
+    ActivityModel? endedActivity;
+
+    // 1. 이전 수면 종료
+    if (_ongoingSleep != null) {
+      try {
+        endedActivity = await endSleep();
+      } catch (e) {
+        debugPrint('[WARN] [OngoingSleepProvider] endAndStartSleep - end failed: $e');
+        _ongoingSleep = null;
+        _stopTimer();
+        await _clearLocal();
+      }
+    }
+
+    // 2. 새 수면 시작
+    await startSleep(
+      babyId: babyId,
+      familyId: familyId,
+      sleepType: sleepType,
+      babyName: babyName,
+      startTime: startTime,
+    );
+
+    return endedActivity;
   }
 
   /// 수면 취소 (저장하지 않고 삭제)
@@ -180,7 +218,7 @@ class OngoingSleepProvider extends ChangeNotifier {
       final jsonString = jsonEncode(_ongoingSleep!.toJson());
       await prefs.setString(_storageKey, jsonString);
     } catch (e) {
-      debugPrint('❌ [OngoingSleepProvider] Save error: $e');
+      debugPrint('[ERR] [OngoingSleepProvider] Save error: $e');
     }
   }
 
@@ -190,7 +228,7 @@ class OngoingSleepProvider extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_storageKey);
     } catch (e) {
-      debugPrint('❌ [OngoingSleepProvider] Clear error: $e');
+      debugPrint('[ERR] [OngoingSleepProvider] Clear error: $e');
     }
   }
 
@@ -226,7 +264,7 @@ class OngoingSleepRecord {
       familyId: json['family_id'] as String,
       babyName: json['baby_name'] as String?,
       sleepType: json['sleep_type'] as String? ?? 'nap',
-      // 🔧 Sprint 19 H-UTC1: .toLocal() 추가
+      // FIX: Sprint 19 H-UTC1: .toLocal() added
       startTime: DateTime.parse(json['start_time'] as String).toLocal(),
     );
   }

@@ -13,7 +13,7 @@ import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/quick_record_button.dart';
-import '../providers/record_provider.dart';
+import '../providers/diaper_record_provider.dart';
 import '../widgets/record_time_picker.dart';
 
 /// 기저귀 기록 화면 (v5.0)
@@ -47,7 +47,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<RecordProvider>().initialize(
+      context.read<DiaperRecordProvider>().initialize(
             familyId: widget.familyId,
             babies: widget.babies,
             preselectedBabyId: widget.preselectedBabyId,
@@ -80,7 +80,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
         ),
         centerTitle: true,
       ),
-      body: Consumer<RecordProvider>(
+      body: Consumer<DiaperRecordProvider>(
         builder: (context, provider, _) {
           return Column(
             children: [
@@ -172,14 +172,14 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
   }
 
   /// MB-03: 현재 선택된 아기 이름 반환
-  String? _getSelectedBabyName(RecordProvider provider) {
+  String? _getSelectedBabyName(DiaperRecordProvider provider) {
     if (provider.selectedBabyIds.isEmpty) return null;
     final selectedId = provider.selectedBabyIds.first;
     final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
     return baby?.name;
   }
 
-  Future<void> _handleQuickSave(RecordProvider provider) async {
+  Future<void> _handleQuickSave(DiaperRecordProvider provider) async {
     if (_isQuickSaving || widget.lastDiaperRecord == null) return;
 
     setState(() => _isQuickSaving = true);
@@ -209,7 +209,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
     }
   }
 
-  Widget _buildDiaperTypeSelector(RecordProvider provider) {
+  Widget _buildDiaperTypeSelector(DiaperRecordProvider provider) {
     final l10n = S.of(context);
 
     return Column(
@@ -239,7 +239,12 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
               child: _DiaperTypeButton(
                 type: 'dirty',
                 label: l10n?.diaperTypeDirty ?? 'Dirty',
-                icon: LuluIcons.diaperDirty,
+                iconWidget: LuluIcons.poopIcon(
+                  size: 32,
+                  color: provider.diaperType == 'dirty'
+                      ? LuluActivityColors.diaper
+                      : LuluTextColors.secondary,
+                ),
                 isSelected: provider.diaperType == 'dirty',
                 onTap: () => provider.setDiaperType('dirty'),
               ),
@@ -274,7 +279,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
     );
   }
 
-  Widget _buildStoolColorSelector(RecordProvider provider) {
+  Widget _buildStoolColorSelector(DiaperRecordProvider provider) {
     final l10n = S.of(context);
 
     return Column(
@@ -429,7 +434,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
               contentPadding: EdgeInsets.zero,
             ),
             onChanged: (value) {
-              context.read<RecordProvider>().setNotes(value);
+              context.read<DiaperRecordProvider>().setNotes(value);
             },
           ),
         ),
@@ -437,7 +442,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
     );
   }
 
-  Widget _buildSaveButton(RecordProvider provider) {
+  Widget _buildSaveButton(DiaperRecordProvider provider) {
     final isValid = provider.isSelectionValid;
 
     return SizedBox(
@@ -516,7 +521,7 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
     return errorKey;
   }
 
-  Future<void> _handleSave(RecordProvider provider) async {
+  Future<void> _handleSave(DiaperRecordProvider provider) async {
     final activity = await provider.saveDiaper();
     if (activity != null && mounted) {
       Navigator.of(context).pop(activity);
@@ -527,17 +532,19 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
 class _DiaperTypeButton extends StatelessWidget {
   final String type;
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final Widget? iconWidget;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _DiaperTypeButton({
     required this.type,
     required this.label,
-    required this.icon,
+    this.icon,
+    this.iconWidget,
     required this.isSelected,
     required this.onTap,
-  });
+  }) : assert(icon != null || iconWidget != null);
 
   @override
   Widget build(BuildContext context) {
@@ -562,13 +569,16 @@ class _DiaperTypeButton extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Icon(
-              icon,
-              size: 32,
-              color: isSelected
-                  ? LuluActivityColors.diaper
-                  : LuluTextColors.secondary,
-            ),
+            if (iconWidget != null)
+              SizedBox(width: 32, height: 32, child: iconWidget!)
+            else
+              Icon(
+                icon,
+                size: 32,
+                color: isSelected
+                    ? LuluActivityColors.diaper
+                    : LuluTextColors.secondary,
+              ),
             const SizedBox(height: LuluSpacing.sm),
             Text(
               label,

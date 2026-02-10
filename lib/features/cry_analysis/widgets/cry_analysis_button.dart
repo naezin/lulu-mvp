@@ -61,7 +61,7 @@ class CryAnalysisButton extends StatelessWidget {
               ? null
               : LinearGradient(
                   colors: isRecording
-                      ? [LuluStatusColors.error, LuluStatusColors.error.withValues(alpha: 0.8)]
+                      ? [LuluStatusColors.error, LuluStatusColors.errorBold]
                       : [LuluColors.lavenderMist, LuluColors.lavenderGlow],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,

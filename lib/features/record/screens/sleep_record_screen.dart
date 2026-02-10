@@ -11,13 +11,14 @@ import '../../../core/design_system/lulu_shadows.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/datetime_picker/datetime_picker_sheet.dart';
 import '../../../shared/widgets/quick_record_button.dart';
-import '../providers/record_provider.dart';
+import '../providers/sleep_record_provider.dart';
 import '../providers/ongoing_sleep_provider.dart';
 
 part 'sleep_record_widgets.dart';
@@ -54,7 +55,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<RecordProvider>().initialize(
+      context.read<SleepRecordProvider>().initialize(
             familyId: widget.familyId,
             babies: widget.babies,
             preselectedBabyId: widget.preselectedBabyId,
@@ -87,7 +88,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         ),
         centerTitle: true,
       ),
-      body: Consumer2<RecordProvider, OngoingSleepProvider>(
+      body: Consumer2<SleepRecordProvider, OngoingSleepProvider>(
         builder: (context, provider, ongoingSleepProvider, _) {
           // 현재 선택된 아기의 진행 중 수면 확인
           final hasOngoingSleep = ongoingSleepProvider.hasSleepInProgress &&
@@ -196,14 +197,14 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 
   /// MB-03: 현재 선택된 아기 이름 반환
-  String? _getSelectedBabyName(RecordProvider provider) {
+  String? _getSelectedBabyName(SleepRecordProvider provider) {
     if (provider.selectedBabyIds.isEmpty) return null;
     final selectedId = provider.selectedBabyIds.first;
     final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
     return baby?.name;
   }
 
-  Future<void> _handleQuickSave(RecordProvider provider) async {
+  Future<void> _handleQuickSave(SleepRecordProvider provider) async {
     if (_isQuickSaving || widget.lastSleepRecord == null) return;
 
     setState(() => _isQuickSaving = true);
@@ -336,7 +337,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   Future<void> _endSleep(OngoingSleepProvider provider) async {
     final activity = await provider.endSleep();
     if (activity != null && mounted) {
-      // 🔧 Sprint 19 G-R7: 토스트 제거 → 햅틱 대체
+      // FIX: Sprint 19 G-R7: toast removed, haptic instead
       HapticFeedback.mediumImpact();
       Navigator.of(context).pop(activity);
     }
@@ -411,7 +412,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Widget _buildSleepTypeSelector(RecordProvider provider) {
+  Widget _buildSleepTypeSelector(SleepRecordProvider provider) {
     final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,7 +450,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Widget _buildSleepNowSection(RecordProvider provider) {
+  Widget _buildSleepNowSection(SleepRecordProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -460,7 +461,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
             color: LuluActivityColors.sleepBg,
             borderRadius: BorderRadius.circular(LuluRadius.md),
             border: Border.all(
-              color: LuluActivityColors.sleep.withValues(alpha: 0.3),
+              color: LuluActivityColors.sleepBorder,
             ),
           ),
           child: Row(
@@ -513,7 +514,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Widget _buildAddRecordSection(RecordProvider provider) {
+  Widget _buildAddRecordSection(SleepRecordProvider provider) {
     final l10n = S.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -589,7 +590,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     }
   }
 
-  Widget _buildDurationDisplay(RecordProvider provider) {
+  Widget _buildDurationDisplay(SleepRecordProvider provider) {
     final duration = provider.sleepDurationMinutes;
     final hours = duration ~/ 60;
     final minutes = duration % 60;
@@ -671,7 +672,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
               contentPadding: EdgeInsets.zero,
             ),
             onChanged: (value) {
-              context.read<RecordProvider>().setNotes(value);
+              context.read<SleepRecordProvider>().setNotes(value);
             },
           ),
         ),
@@ -679,7 +680,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Widget _buildSaveButton(RecordProvider provider) {
+  Widget _buildSaveButton(SleepRecordProvider provider) {
     final l10n = S.of(context)!;
     final isValid = provider.isSelectionValid;
     final buttonText = _isSleepNow ? l10n.sleepStart : l10n.buttonSave;
@@ -769,7 +770,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     return errorKey;
   }
 
-  Future<void> _handleSave(RecordProvider provider) async {
+  Future<void> _handleSave(SleepRecordProvider provider) async {
     // "지금 재우기" 모드면 OngoingSleepProvider 사용
     if (_isSleepNow) {
       final ongoingSleepProvider = context.read<OngoingSleepProvider>();
@@ -779,15 +780,31 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         orElse: () => widget.babies.first,
       );
 
-      await ongoingSleepProvider.startSleep(
-        babyId: selectedBaby.id,
-        familyId: widget.familyId,
-        sleepType: provider.sleepType,
-        babyName: selectedBaby.name,
-      );
+      // Sprint 20 HF #9-B: 같은 아기 수면 진행 중이면 확인 다이얼로그
+      if (ongoingSleepProvider.hasSleepInProgress) {
+        final confirmed = await _showSleepInProgressDialog(ongoingSleepProvider);
+        if (confirmed != true || !mounted) return;
+
+        // 이전 수면 종료 + 새 수면 시작
+        await ongoingSleepProvider.endAndStartSleep(
+          babyId: selectedBaby.id,
+          familyId: widget.familyId,
+          sleepType: provider.sleepType,
+          babyName: selectedBaby.name,
+          startTime: provider.sleepStartTime,
+        );
+      } else {
+        await ongoingSleepProvider.startSleep(
+          babyId: selectedBaby.id,
+          familyId: widget.familyId,
+          sleepType: provider.sleepType,
+          babyName: selectedBaby.name,
+          startTime: provider.sleepStartTime,
+        );
+      }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(
           SnackBar(
             content: Row(
               children: [
@@ -815,9 +832,118 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
       // "기록 추가" 모드: 시작/종료 시간 함께 저장
       final activity = await provider.saveSleep();
       if (activity != null && mounted) {
+        // Sprint 20 HF #9-C: 겹침 경고 토스트
+        if (provider.sleepOverlapWarning) {
+          AppToast.show(
+              SnackBar(
+                content: Row(
+                  children: [
+                    Icon(LuluIcons.infoOutline, size: 18, color: Colors.white),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        S.of(context)!.sleepOverlapWarning,
+                        style: LuluTextStyles.bodyMedium.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                backgroundColor: LuluPatternColors.editAction,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
+                ),
+                duration: const Duration(seconds: 3),
+              ),
+            );
+        }
         Navigator.of(context).pop(activity);
       }
     }
+  }
+
+  /// Sprint 20 HF #9-B: 수면 진행 중 확인 다이얼로그
+  Future<bool?> _showSleepInProgressDialog(
+    OngoingSleepProvider ongoingSleepProvider,
+  ) {
+    final l10n = S.of(context)!;
+    final babyName = ongoingSleepProvider.ongoingSleep?.babyName ?? l10n.babyDefault;
+    final elapsed = ongoingSleepProvider.elapsedTime;
+    final hours = elapsed.inHours;
+    final minutes = elapsed.inMinutes.remainder(60);
+
+    return showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        final dialogL10n = S.of(dialogContext)!;
+        return AlertDialog(
+          backgroundColor: LuluColors.surfaceCard,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(LuluRadius.lg),
+          ),
+          title: Text(
+            dialogL10n.sleepInProgressTitle(babyName),
+            style: LuluTextStyles.titleMedium.copyWith(
+              color: LuluTextColors.primary,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: LuluActivityColors.sleepBg,
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      LuluIcons.timerOutlined,
+                      color: LuluActivityColors.sleep,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      dialogL10n.sleepInProgressDuration(hours, minutes),
+                      style: LuluTextStyles.titleSmall.copyWith(
+                        color: LuluActivityColors.sleep,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(
+                dialogL10n.buttonCancel,
+                style: LuluTextStyles.labelLarge.copyWith(
+                  color: LuluTextColors.secondary,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: LuluActivityColors.sleep,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(LuluRadius.sm),
+                ),
+              ),
+              child: Text(dialogL10n.sleepEndAndStart),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

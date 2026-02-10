@@ -50,7 +50,7 @@ class InviteService {
       'expires_at': expiresAt.toIso8601String(),
     }).select().single();
 
-    debugPrint('✅ [InviteService] Created invite: $inviteCode');
+    debugPrint('[OK] [InviteService] Created invite: $inviteCode');
     return FamilyInviteModel.fromJson(response);
   }
 
@@ -68,7 +68,7 @@ class InviteService {
 
       return InviteInfoModel.fromJson(response as Map<String, dynamic>);
     } catch (e) {
-      debugPrint('❌ [InviteService] getInviteInfo error: $e');
+      debugPrint('[ERR] [InviteService] getInviteInfo error: $e');
       return InviteInfoModel.invalid('Could not verify invite code');
     }
   }
@@ -95,10 +95,10 @@ class InviteService {
 
       final response = await _supabase.rpc('accept_invite', params: params);
 
-      debugPrint('✅ [InviteService] Invite accepted: $response');
+      debugPrint('[OK] [InviteService] Invite accepted: $response');
       return AcceptInviteResult.fromJson(response as Map<String, dynamic>);
     } catch (e) {
-      debugPrint('❌ [InviteService] acceptInvite error: $e');
+      debugPrint('[ERR] [InviteService] acceptInvite error: $e');
       rethrow;
     }
   }
@@ -106,7 +106,7 @@ class InviteService {
   /// 초대 취소
   Future<void> cancelInvite(String inviteId) async {
     await _supabase.from('family_invites').delete().eq('id', inviteId);
-    debugPrint('✅ [InviteService] Invite cancelled: $inviteId');
+    debugPrint('[OK] [InviteService] Invite cancelled: $inviteId');
   }
 
   /// 대기 중인 초대 목록 조회
@@ -125,24 +125,32 @@ class InviteService {
   }
 
   /// 가족 멤버 목록 조회
+  /// auth.users 조인 제거: PostgREST에서 auth schema 직접 조인 불가
   Future<List<FamilyMemberModel>> getFamilyMembers(String familyId) async {
-    // auth.users 정보와 조인하여 조회
-    final response = await _supabase.from('family_members').select('''
-          *,
-          user:auth.users(email, raw_user_meta_data)
-        ''').eq('family_id', familyId).order('joined_at', ascending: true);
+    final response = await _supabase
+        .from('family_members')
+        .select()
+        .eq('family_id', familyId)
+        .order('joined_at', ascending: true);
 
-    return (response as List).map((e) {
-      final json = e as Map<String, dynamic>;
-      final user = json['user'] as Map<String, dynamic>?;
+    return (response as List)
+        .map((e) => FamilyMemberModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
 
-      return FamilyMemberModel.fromJson({
-        ...json,
-        'user_email': user?['email'],
-        'user_name': (user?['raw_user_meta_data']
-            as Map<String, dynamic>?)?['name'],
-      });
-    }).toList();
+  /// 레거시 owner ID 조회 (families.user_id)
+  Future<String?> getFamilyOwnerId(String familyId) async {
+    try {
+      final response = await _supabase
+          .from('families')
+          .select('user_id')
+          .eq('id', familyId)
+          .single();
+      return response['user_id'] as String?;
+    } catch (e) {
+      debugPrint('[WARN] [InviteService] getFamilyOwnerId failed: $e');
+      return null;
+    }
   }
 
   /// 소유권 이전
@@ -156,7 +164,7 @@ class InviteService {
       throw Exception('Ownership transfer failed');
     }
 
-    debugPrint('✅ [InviteService] Ownership transferred to: $newOwnerId');
+    debugPrint('[OK] [InviteService] Ownership transferred to: $newOwnerId');
   }
 
   /// 가족 나가기
@@ -167,12 +175,13 @@ class InviteService {
 
     final familyDeleted = response['familyDeleted'] as bool? ?? false;
     debugPrint(
-        '✅ [InviteService] Left family: $familyId (deleted: $familyDeleted)');
+        '[OK] [InviteService] Left family: $familyId (deleted: $familyDeleted)');
     return familyDeleted;
   }
 
   /// 초대 링크 공유
-  Future<void> shareInvite(String code, String? senderName) async {
+  /// [sharePositionOrigin] iPad 공유 시트 위치 (Sprint 20 HF #5)
+  Future<void> shareInvite(String code, String? senderName, {Rect? sharePositionOrigin}) async {
     final formattedCode =
         code.length == 6 ? '${code.substring(0, 3)}-${code.substring(3)}' : code;
 
@@ -180,7 +189,8 @@ class InviteService {
         ? '$senderName invited you to LULU family!\n\nInvite code: $formattedCode\n\nOpen the app and tap "Join Family" to enter the code.'
         : 'You are invited to a LULU family!\n\nInvite code: $formattedCode\n\nOpen the app and tap "Join Family" to enter the code.';
 
-    await Share.share(message, subject: 'LULU Family Invite');
+    // Sprint 20 HF #5: iPad sharePositionOrigin 추가
+    await Share.share(message, subject: 'LULU Family Invite', sharePositionOrigin: sharePositionOrigin);
   }
 
   /// 초대 코드 클립보드 복사

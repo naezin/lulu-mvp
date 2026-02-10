@@ -8,6 +8,7 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/services/export_service.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/repositories/baby_repository.dart';
 import '../../../data/repositories/activity_repository.dart';
@@ -19,6 +20,8 @@ import '../providers/settings_provider.dart';
 import '../widgets/add_baby_dialog.dart';
 import '../widgets/delete_baby_dialog.dart';
 import 'import_screen.dart';
+import 'legal_screen.dart';
+import 'settings_account_section.dart';
 import 'settings_reset_section.dart';
 
 /// 설정 화면
@@ -93,15 +96,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // 앱 정보 섹션
                 _buildSectionHeader(l10n.sectionAppInfo),
                 const SizedBox(height: LuluSpacing.md),
-                _buildInfoTile(l10n.infoVersion, '2.2.2'),
+                _buildInfoTile(l10n.infoVersion, '2.5.0'),
                 _buildInfoTile(l10n.infoDeveloper, l10n.infoTeamName),
+                const SizedBox(height: LuluSpacing.sm),
+                _buildLegalSection(),
 
                 const SizedBox(height: LuluSpacing.xxxl),
 
-                // 위험 영역 섹션
-                _buildSectionHeader(l10n.sectionDangerZone),
+                // 계정 섹션 (로그아웃)
+                _buildSectionHeader(l10n.sectionAccount),
+                const SizedBox(height: LuluSpacing.md),
+                const SettingsAccountSection(),
+
+                const SizedBox(height: LuluSpacing.xxxl),
+
+                // 데이터 관리 섹션
+                _buildSectionHeader(l10n.settingsDataManagement),
                 const SizedBox(height: LuluSpacing.md),
                 const SettingsResetSection(),
+
+                const SizedBox(height: LuluSpacing.xxxl),
+
+                // 계정 탈퇴 섹션
+                _buildSectionHeader(l10n.settingsAccountDeletion),
+                const SizedBox(height: LuluSpacing.md),
+                const SettingsDeleteAccountSection(),
               ],
             ),
           );
@@ -648,6 +667,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   // ========================================
+  // 법적 문서 섹션
+  // ========================================
+
+  Widget _buildLegalSection() {
+    final l10n = S.of(context)!;
+    return Container(
+      decoration: BoxDecoration(
+        color: LuluColors.surfaceCard,
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              l10n.authPrivacyPolicy,
+              style: LuluTextStyles.bodyLarge.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+            trailing: const Icon(
+              LuluIcons.chevronRight,
+              color: LuluTextColors.secondary,
+            ),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    const LegalScreen(docType: LegalDocType.privacyPolicy),
+              ),
+            ),
+          ),
+          Divider(height: 1, color: LuluColors.glassBorder),
+          ListTile(
+            title: Text(
+              l10n.authTermsOfService,
+              style: LuluTextStyles.bodyLarge.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+            trailing: const Icon(
+              LuluIcons.chevronRight,
+              color: LuluTextColors.secondary,
+            ),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    const LegalScreen(docType: LegalDocType.termsOfService),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ========================================
   // 액션 핸들러
   // ========================================
 
@@ -666,11 +742,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _isExporting = true);
 
     try {
+      // Sprint 20 HF #5: iPad 공유 시트 위치 (화면 중앙 기준)
+      final box = context.findRenderObject() as RenderBox?;
+      final shareOrigin = box != null
+          ? box.localToGlobal(Offset.zero) & box.size
+          : null;
+
       final count = await ExportService.instance.exportByPeriod(
         familyId: family.id,
         babies: babies,
         period: _selectedPeriod,
         l10n: l10n,
+        sharePositionOrigin: shareOrigin,
       );
 
       if (count == 0) {
@@ -700,7 +783,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               updatedBabies,
             );
           }
-          // 🔧 Sprint 19 G-R4: 토스트 제거 → 햅틱 대체
+          // FIX: Sprint 19 G-R4: 토스트 제거 → 햅틱 대체
           HapticFeedback.mediumImpact();
         },
       ),
@@ -740,7 +823,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               );
             }
 
-            // 🔧 Sprint 19 G-R5: 토스트 제거 → 햅틱 대체
+            // FIX: Sprint 19 G-R5: 토스트 제거 → 햅틱 대체
             if (mounted) {
               HapticFeedback.mediumImpact();
             }
@@ -755,16 +838,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: LuluColors.surfaceElevated,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(LuluRadius.sm),
-        ),
-      ),
-    );
+    AppToast.showText(message);
   }
 
   // Reset section → settings_reset_section.dart (SettingsResetSection)

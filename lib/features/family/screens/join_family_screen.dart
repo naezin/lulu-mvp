@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../home/providers/home_provider.dart';
 import '../models/invite_info_model.dart';
@@ -311,6 +312,12 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
       return;
     }
 
+    // Sprint 21 Phase 3: capture context-dependent refs before async gap
+    final familyProvider = context.read<FamilyProvider>();
+    final homeProvider = context.read<HomeProvider>();
+    final l10n = S.of(context)!;
+    final navigator = Navigator.of(context);
+
     // 바로 참여
     setState(() => _isLoading = true);
 
@@ -318,14 +325,12 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
       final result = await _inviteService.acceptInvite(code, null);
 
       if (mounted) {
-        await context.read<FamilyProvider>().onJoinedFamily(result.familyId);
-        await context.read<HomeProvider>().onFamilyChanged(result.familyId);
+        await familyProvider.onJoinedFamily(result.familyId);
+        await homeProvider.onFamilyChanged(result.familyId);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context)!.joinedFamily)),
-        );
+        AppToast.showText(l10n.joinedFamily);
 
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+        navigator.pushNamedAndRemoveUntil('/home', (r) => false);
       }
     } catch (e) {
       setState(() {

@@ -6,7 +6,7 @@ import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
-import '../../features/home/providers/home_provider.dart';
+import '../../features/home/providers/sweet_spot_provider.dart';
 import '../../l10n/generated/app_localizations.dart' show S;
 
 /// Sweet Spot 카드 위젯
@@ -178,7 +178,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         ),
         borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
-          color: LuluActivityColors.sleep.withValues(alpha: 0.4),
+          color: LuluActivityColors.sleepCardBorder,
           width: 2,
         ),
       ),
@@ -232,9 +232,10 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           const SizedBox(height: LuluSpacing.md),
 
           // 시작 시간
+          // Sprint 21 HF #4: locale 하드코딩 제거 → 실제 locale 사용
           _buildInfoRow(
             l10n.sweetSpotSleepStart,
-            DateFormat('a h:mm', 'ko').format(widget.sleepStartTime!),
+            DateFormat('a h:mm', Localizations.localeOf(context).toString()).format(widget.sleepStartTime!),
           ),
 
           const SizedBox(height: LuluSpacing.lg),
@@ -542,7 +543,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           Icon(
             LuluIcons.sleep,
             size: 40,
-            color: LuluActivityColors.sleep.withValues(alpha: 0.6),
+            color: LuluActivityColors.sleepStrong,
           ),
           const SizedBox(height: LuluSpacing.md),
 
@@ -602,7 +603,8 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
   /// 시간 텍스트: "약 오후 2:30 (45분 후)"
   String _getTimeText(S l10n) {
     if (widget.recommendedTime != null) {
-      final formattedTime = DateFormat('a h:mm', 'ko').format(widget.recommendedTime!);
+      // Sprint 21 HF #4: locale 하드코딩 제거 → 실제 locale 사용
+      final formattedTime = DateFormat('a h:mm', Localizations.localeOf(context).toString()).format(widget.recommendedTime!);
       final minutesUntil = widget.recommendedTime!.difference(DateTime.now()).inMinutes.clamp(0, 999);
       return l10n.sweetSpotTimeEstimate(formattedTime, minutesUntil);
     }

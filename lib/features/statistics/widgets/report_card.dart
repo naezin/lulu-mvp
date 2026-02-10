@@ -235,17 +235,17 @@ class ReportCard extends StatelessWidget {
               PieSection(
                 value: statistics.crying!.tiredRatio,
                 label: l10n.cryTypeTiredLabel,
-                color: LuluStatisticsColors.crying.withValues(alpha: 0.8),
+                color: LuluStatisticsColors.cryingTired,
               ),
               PieSection(
                 value: statistics.crying!.gasRatio,
                 label: l10n.cryTypeGasLabel,
-                color: LuluStatisticsColors.crying.withValues(alpha: 0.6),
+                color: LuluStatisticsColors.cryingGas,
               ),
               PieSection(
                 value: statistics.crying!.discomfortRatio,
                 label: l10n.cryTypeDiscomfortLabel,
-                color: LuluStatisticsColors.crying.withValues(alpha: 0.4),
+                color: LuluStatisticsColors.cryingDiscomfort,
               ),
             ],
           );

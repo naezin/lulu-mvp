@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/utils/app_toast.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
@@ -49,8 +51,10 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   /// 이전 family_id (변경 감지용)
   String? _previousFamilyId;
 
-  /// 스와이프 힌트 표시 여부 (첫 번째 아이템만)
-  bool _showSwipeHint = true;
+  /// Sprint 20 HF U2: 스와이프 힌트 3회만 표시 (SharedPreferences 기반)
+  static const String _swipeHintCountKey = 'swipe_hint_shown_count';
+  static const int _maxSwipeHintCount = 3;
+  bool _showSwipeHint = false;
 
   /// 초기 로드 완료 여부
   bool _initialLoadDone = false;
@@ -71,6 +75,34 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     // FIX-B: 시간 정보 제거한 오늘 날짜
     final now = DateTime.now();
     _selectedDate = DateTime(now.year, now.month, now.day);
+    // Sprint 20 HF U2: 스와이프 힌트 카운트 로드
+    _loadSwipeHintCount();
+  }
+
+  /// Sprint 20 HF U2: SharedPreferences에서 힌트 표시 횟수 로드
+  Future<void> _loadSwipeHintCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final count = prefs.getInt(_swipeHintCountKey) ?? 0;
+      if (count < _maxSwipeHintCount && mounted) {
+        setState(() => _showSwipeHint = true);
+      }
+    } catch (e) {
+      debugPrint('[WARN] [DailyView] Failed to load swipe hint count: $e');
+    }
+  }
+
+  /// Sprint 20 HF U2: 힌트 숨김 + 카운트 증가
+  Future<void> _dismissSwipeHint() async {
+    if (!_showSwipeHint) return;
+    setState(() => _showSwipeHint = false);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final count = prefs.getInt(_swipeHintCountKey) ?? 0;
+      await prefs.setInt(_swipeHintCountKey, count + 1);
+    } catch (e) {
+      debugPrint('[WARN] [DailyView] Failed to save swipe hint count: $e');
+    }
   }
 
   @override
@@ -87,6 +119,46 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
         _initialLoadDone = true;
         _loadActivitiesForDate();
       }
+    }
+  }
+
+  /// Sprint 20 HF #15: 탭 복귀 시 데이터 갱신
+  /// RecordHistoryScreen이 Consumer로 rebuild되면
+  /// DailyView도 rebuild됨. 오늘 날짜이고 HomeProvider의 활동 수가
+  /// 로컬 캐시와 다르면 리로드.
+  ///
+  /// Sprint 21 HF #1: _reloadScheduled 플래그로 중복 리로드 방지
+  /// 삭제 시 연쇄 rebuild → SnackBar 무한 재생성 → 토스트 안 사라짐 문제 해결
+  bool _reloadScheduled = false;
+
+  /// Sprint 21 HF #2: 삭제 직후 reload skip (토스트 duration 보호)
+  /// removeActivity → notifyListeners → rebuild 시 count 불일치로 reload 트리거 방지
+  bool _skipNextReload = false;
+
+  /// Sprint 21 Phase 2-4: decoupled from HomeProvider reference
+  void _checkAndReloadIfStale(int todayActivitiesCount) {
+    if (!_isToday(_selectedDate) || _isLoading || _reloadScheduled) return;
+
+    if (_skipNextReload) {
+      _skipNextReload = false;
+      _lastActivitiesLength = todayActivitiesCount;
+      return;
+    }
+
+    final currentLength = todayActivitiesCount;
+    // Sprint 21 HF #14: _lastActivitiesLength > 0 조건 제거
+    // QuickRecord/FAB 후 Records 탭에서도 갱신되도록
+    if (currentLength != _lastActivitiesLength && _initialLoadDone) {
+      _reloadScheduled = true;
+      _lastActivitiesLength = currentLength;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _reloadScheduled = false;
+        if (mounted) {
+          _loadActivitiesForDate();
+        }
+      });
+    } else {
+      _lastActivitiesLength = currentLength;
     }
   }
 
@@ -186,19 +258,17 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
       // HomeProvider 동기화
       context.read<HomeProvider>().updateActivity(result);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context)!.recordUpdated),
-          duration: const Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      // Sprint 21 Phase 3-1: AppToast for cross-tab reliability
+      AppToast.showText(S.of(context)!.recordUpdated);
     }
   }
 
   /// 기록 삭제
   Future<void> _onDeleteActivity(ActivityModel activity) async {
     final homeProvider = context.read<HomeProvider>();
+
+    // Sprint 21 HF #2: removeActivity → notifyListeners 전에 플래그 설정
+    _skipNextReload = true;
 
     // Undo 토스트와 함께 삭제
     await deleteActivityWithUndo(
@@ -208,6 +278,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     );
 
     // 로컬 상태에서도 제거
+    _lastActivitiesLength = homeProvider.todayActivities.length;
     setState(() {
       _dateActivities.removeWhere((a) => a.id == activity.id);
     });
@@ -215,21 +286,12 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeProvider>(
-      builder: (context, homeProvider, child) {
-        // 수정 D: HomeProvider에서 새 기록 추가 감지 (오늘 날짜일 때만)
-        if (_isToday(_selectedDate)) {
-          final currentLength = homeProvider.todayActivities.length;
-          if (currentLength != _lastActivitiesLength && _lastActivitiesLength > 0) {
-            // 활동이 추가/삭제되었으면 리로드
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) {
-                _loadActivitiesForDate();
-              }
-            });
-          }
-          _lastActivitiesLength = currentLength;
-        }
+    // Sprint 21 Phase 2-4: Selector for selectedBabyId + todayActivities count
+    return Selector<HomeProvider, ({String? selectedBabyId, int todayActivitiesCount})>(
+      selector: (_, p) => (selectedBabyId: p.selectedBabyId, todayActivitiesCount: p.todayActivities.length),
+      builder: (context, data, child) {
+        // Sprint 20 HF #4/#15: HomeProvider 변경 감지 → 자동 리로드
+        _checkAndReloadIfStale(data.todayActivitiesCount);
 
         // 로딩 중
         if (_isLoading) {
@@ -264,7 +326,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
 
         // 선택된 아기 + 활동 유형으로 필터링
         final activities = _filterActivities(
-            _dateActivities, homeProvider.selectedBabyId, _activeFilter);
+            _dateActivities, data.selectedBabyId, _activeFilter);
 
         return RefreshIndicator(
           onRefresh: _loadActivitiesForDate,
@@ -296,19 +358,19 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 child: Builder(
                   builder: (context) {
                     final filteredActivities = _filterActivitiesByBaby(
-                        _dateActivities, homeProvider.selectedBabyId);
+                        _dateActivities, data.selectedBabyId);
                     final timeline = _patternProvider.buildDayTimeline(
                         _selectedDate, filteredActivities);
                     // 수정 A 디버그: 데이터 흐름 확인
                     debugPrint(
                         '[DEBUG] [DailyView→DailyGrid] _dateActivities=${_dateActivities.length}, '
                         'filtered=${filteredActivities.length}, '
-                        'babyId=${homeProvider.selectedBabyId}, '
+                        'babyId=${data.selectedBabyId}, '
                         'timeline.durationBlocks=${timeline.durationBlocks.length}, '
                         'timeline.instantMarkers=${timeline.instantMarkers.length}');
                     return DailyGrid(
                       key: ValueKey(
-                          'dailygrid_${_selectedDate.toIso8601String()}_${homeProvider.selectedBabyId}'),
+                          'dailygrid_${_selectedDate.toIso8601String()}_${data.selectedBabyId}'),
                       timeline: timeline,
                       isToday: _isToday(_selectedDate),
                     );
@@ -323,7 +385,7 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: 300, // Empty State 고정 높이
-                    child: _buildNewUserEmptyState(homeProvider),
+                    child: _buildNewUserEmptyState(context.read<HomeProvider>()),
                   ),
                 )
               else if (activities.isEmpty)
@@ -342,10 +404,8 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                         onDelete: () => _onDeleteActivity(activity),
                         showSwipeHint: _showSwipeHint && index == 0,
                         onTap: () {
-                          // 스와이프 힌트 숨기기
-                          if (_showSwipeHint) {
-                            setState(() => _showSwipeHint = false);
-                          }
+                          // Sprint 20 HF U2: 스와이프 힌트 숨기기 + 카운트 증가
+                          _dismissSwipeHint();
                           // 탭 시 수정 시트 열기
                           _onEditActivity(activity);
                         },

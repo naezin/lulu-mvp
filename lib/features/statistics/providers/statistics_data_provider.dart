@@ -90,7 +90,7 @@ class StatisticsDataProvider extends ChangeNotifier {
       _generateInsight();
       notifyListeners();
     } catch (e) {
-      debugPrint('❌ [StatisticsDataProvider] Load error: $e');
+      debugPrint('[ERR] [StatisticsDataProvider] Load error: $e');
       // 오프라인이거나 에러 발생 시 캐시 데이터 사용
       if (_cache.containsKey(cacheKey)) {
         _currentStatistics = _cache[cacheKey]!.data;
@@ -135,7 +135,7 @@ class StatisticsDataProvider extends ChangeNotifier {
       _isOffline = false;
       notifyListeners();
     } catch (e) {
-      debugPrint('❌ [StatisticsDataProvider] Together data error: $e');
+      debugPrint('[ERR] [StatisticsDataProvider] Together data error: $e');
       rethrow;
     }
   }
@@ -194,9 +194,8 @@ class StatisticsDataProvider extends ChangeNotifier {
       }
     }
 
-    final dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-    // 인사이트 메시지 생성
+    // Sprint 20 HF #13: i18n 키 기반 인사이트 메시지
+    // Provider에는 BuildContext가 없으므로 키만 전달, UI에서 i18n 변환
     String message;
     InsightType type;
 
@@ -207,7 +206,8 @@ class StatisticsDataProvider extends ChangeNotifier {
       message = 'insight_sleep_decreased';
       type = InsightType.attention;
     } else if (maxHours > 0) {
-      message = 'insight_most_sleep_day:${dayNames[maxDayIndex]}';
+      // 요일 인덱스(0=월~6=일)를 전달, UI에서 i18n 요일명으로 변환
+      message = 'insight_most_sleep_day:$maxDayIndex';
       type = InsightType.neutral;
     } else {
       message = 'insight_start_recording';
@@ -339,7 +339,7 @@ class StatisticsDataProvider extends ChangeNotifier {
   }
 
   /// 수유 통계 계산
-  /// 🔧 Sprint 19 E: ml 통계 추가
+  /// FIX: Sprint 19 E: ml 통계 추가
   FeedingStatistics _calculateFeedingStatistics(
     List<ActivityModel> activities,
     List<ActivityModel> lastWeekActivities,
@@ -358,14 +358,14 @@ class StatisticsDataProvider extends ChangeNotifier {
     int formulaCount = 0;
     int solidCount = 0;
 
-    // 🔧 Sprint 19 E: ml 합계 계산
+    // FIX: Sprint 19 E: ml 합계 계산
     double totalMl = 0;
 
     for (final activity in feedingActivities) {
       final dayIndex = (activity.startTime.weekday - 1) % 7;
       dailyCounts[dayIndex]++;
 
-      // 🔧 Sprint 19 E: ml 데이터 합산
+      // FIX: Sprint 19 E: ml 데이터 합산
       final ml = activity.feedingAmountMl;
       if (ml != null && ml > 0) {
         totalMl += ml;
@@ -399,7 +399,7 @@ class StatisticsDataProvider extends ChangeNotifier {
     final dayCount = dateRange.dayCount > 0 ? dateRange.dayCount : 1;
     final dailyAverage = totalCount / dayCount;
 
-    // 🔧 Sprint 19 E: 일평균 ml 계산
+    // FIX: Sprint 19 E: 일평균 ml 계산
     final dailyAverageMl = totalMl / dayCount;
 
     // 지난 주 대비 변화

@@ -3,17 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../core/config/feature_flags.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
-import '../../../core/services/supabase_service.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/last_activity_row.dart';
 import '../../../shared/widgets/sweet_spot_card.dart';
 import '../providers/home_provider.dart';
+import '../providers/sweet_spot_provider.dart';
 import '../../record/providers/ongoing_sleep_provider.dart';
 import '../../record/screens/feeding_record_screen.dart';
 import '../../record/screens/sleep_record_screen.dart';
@@ -24,6 +25,7 @@ import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../widgets/cry_analysis_card.dart';
 import '../../cry_analysis/screens/cry_analysis_screen.dart';
+import '../../timeline/screens/record_history_screen.dart';
 
 /// 홈 화면 (시안 B-4 기반)
 ///
@@ -43,11 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO: 디버깅용 - 현재 사용자 ID 출력 (나중에 삭제)
-    final userId = SupabaseService.currentUserId;
-    debugPrint('========================================');
-    debugPrint('🔑 현재 사용자 ID: $userId');
-    debugPrint('========================================');
   }
 
   @override
@@ -226,18 +223,18 @@ class _HomeScreenState extends State<HomeScreen> {
   /// 1. LastActivityRow (수면/수유/기저귀 시간)
   /// 2. SweetSpotCard (수면 중 상태 + Sweet Spot 예측)
   Widget _buildNormalContent(BuildContext context, HomeProvider homeProvider) {
-    // Sweet Spot Empty State 판단: 수면 기록 없음
+    // Sweet Spot Empty State: no sleep record today
     final hasSleepRecord = homeProvider.lastSleep != null;
 
-    return Consumer<OngoingSleepProvider>(
-      builder: (context, sleepProvider, _) {
-        // 현재 선택된 아기가 수면 중인지 확인
+    return Consumer2<OngoingSleepProvider, SweetSpotProvider>(
+      builder: (context, sleepProvider, sweetSpotProvider, _) {
+        // Check if selected baby is sleeping
         final isSleeping = sleepProvider.hasSleepInProgress &&
             sleepProvider.currentBabyId == homeProvider.selectedBabyId;
 
         return Column(
           children: [
-            // 1. 마지막 활동 Row (수면/수유/기저귀)
+            // 1. Last activity Row (sleep/feeding/diaper)
             LastActivityRow(
               lastSleep: homeProvider.lastSleepTime,
               lastFeeding: homeProvider.lastFeedingTime,
@@ -246,33 +243,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: LuluSpacing.lg),
 
-            // 2. Sweet Spot 카드 (수면 중 상태 통합)
+            // 2. Sweet Spot card (ongoing sleep + prediction)
             SweetSpotCard(
-              // 기존 props
-              state: homeProvider.sweetSpotState,
-              // 🔧 Sprint 19 FIX: isEmpty는 신규 유저(전체 기록 0건)일 때만 true
-              // 기존 유저는 오늘 수면 없어도 Normal State 또는 NoSleepGuide 표시
+              state: sweetSpotProvider.sweetSpotState,
               isEmpty: !isSleeping && !homeProvider.hasAnyRecordsEver,
-              estimatedTime: _getEstimatedTimeText(homeProvider),
+              estimatedTime: _getEstimatedTimeText(sweetSpotProvider),
               onRecordSleep: () => _navigateToRecord(context, 'sleep'),
-              // 🆕 수면 중 props (Sprint 7 Day 2)
               isSleeping: isSleeping,
               sleepStartTime: sleepProvider.sleepStartTime,
               sleepType: sleepProvider.ongoingSleep?.sleepType,
               babyName: sleepProvider.ongoingSleep?.babyName ??
                   homeProvider.selectedBaby?.name,
               onEndSleep: () => _showEndSleepDialog(context, sleepProvider),
-              // 🆕 Normal State 개선 props (v3)
-              progress: homeProvider.sweetSpotProgress,
-              recommendedTime: homeProvider.recommendedSleepTime,
-              isNightTime: homeProvider.isNightTime,
-              // 🔧 Sprint 19 FIX: 기존 유저 + 오늘 수면 없음 → NoSleepGuide 표시
+              progress: sweetSpotProvider.sweetSpotProgress,
+              recommendedTime: sweetSpotProvider.recommendedSleepTime,
+              isNightTime: sweetSpotProvider.isNightTime,
               hasOtherActivitiesOnly: homeProvider.hasAnyRecordsEver && !hasSleepRecord,
-              // 🆕 Sprint 19: 신규 유저 여부 (전체 기록 0건)
               isNewUser: !homeProvider.hasAnyRecordsEver,
             ),
 
-            // 🆕 울음 분석 카드 (Feature Flag로 제어)
             if (FeatureFlags.enableCryAnalysis) ...[
               const SizedBox(height: LuluSpacing.md),
               CryAnalysisCard(
@@ -280,18 +269,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 showNewBadge: true,
               ),
             ],
-
-            // QuickActionGrid 제거됨 (FAB로 대체) - Sprint 7 Day 2
           ],
         );
       },
     );
   }
 
-  /// Sweet Spot 예상 시간 텍스트
-  String? _getEstimatedTimeText(HomeProvider homeProvider) {
+  /// Sweet Spot estimated time text
+  String? _getEstimatedTimeText(SweetSpotProvider sweetSpotProvider) {
     final l10n = S.of(context)!;
-    final minutes = homeProvider.minutesUntilSweetSpot;
+    final minutes = sweetSpotProvider.minutesUntilSweetSpot;
     if (minutes <= 0) return null;
 
     if (minutes < 60) {
@@ -360,6 +347,10 @@ class _HomeScreenState extends State<HomeScreen> {
       _ => throw ArgumentError('Unknown record type: $type'),
     };
 
+    // Sprint 21 Phase 3-1: capture l10n + navigator before async gap
+    final l10n = S.of(context);
+    final navigator = Navigator.of(context);
+
     Navigator.push<ActivityModel>(
       context,
       MaterialPageRoute(builder: (_) => screen),
@@ -367,6 +358,34 @@ class _HomeScreenState extends State<HomeScreen> {
       // 저장된 활동이 있으면 HomeProvider에 추가
       if (savedActivity != null) {
         homeProvider.addActivity(savedActivity);
+
+        // Sprint 21 Phase 3-1: AppToast (global ScaffoldMessenger)
+        AppToast.show(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(l10n?.successRecordSaved ?? 'Record saved'),
+                ),
+              ],
+            ),
+            action: SnackBarAction(
+              label: l10n?.viewRecord ?? 'View Records',
+              textColor: Colors.white,
+              onPressed: () {
+                navigator.push(
+                  MaterialPageRoute(
+                    builder: (_) => const RecordHistoryScreen(),
+                  ),
+                );
+              },
+            ),
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     });
   }
@@ -465,7 +484,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () async {
               Navigator.pop(dialogContext);
               final homeProvider = context.read<HomeProvider>();
-              final messenger = ScaffoldMessenger.of(context);
 
               final savedActivity = await sleepProvider.endSleep();
 
@@ -474,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 homeProvider.addActivity(savedActivity);
               }
 
-              // 🔧 Sprint 19 G-R2: 토스트 제거 → 햅틱 대체
+              // FIX: Sprint 19 G-R2: toast removed, haptic instead
               HapticFeedback.mediumImpact();
             },
             style: ElevatedButton.styleFrom(

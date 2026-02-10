@@ -1,12 +1,85 @@
-# LULU App - CLAUDE.md v7.2
+# LULU App - CLAUDE.md v7.4
 
-> **Version**: 7.2 (v7.1 + v6.1 병합 통합)
-> **Updated**: 2026-02-08
-> **App**: v2.3.3+28 | **Commit**: `a2f1ca2` (롤백 완료)
-> **Branch**: `sprint-19` (작업) → `main` (보호)
-> **Sprint**: 19 재작업 (차트 재설계)
+> **Version**: 7.4 (v7.3 + Confidence Score + Scope Declaration + Learned Corrections)
+> **Updated**: 2026-02-10
+> **App**: v2.4.1+31 | **Branch**: `sprint-20-hotfix`
+> **Sprint**: 20 Hotfix 완료, TestFlight 배포 완료
 > **Target Release**: 2026.02 베타 → 2026.03 정식
 > **Bundle ID**: com.lululabs.lulu
+
+---
+
+## 프로젝트 상수 (컨텍스트 유실 방지)
+
+> **사유**: 세션 전환 시 반복 참조 값을 매번 찾느라 시간 낭비 + 잘못된 값 사용 사고 발생.
+> 이 테이블의 값은 **복사-붙여넣기로 사용**. 절대 기억에 의존하지 말 것.
+
+| 항목 | 값 | 비고 |
+|------|-----|------|
+| Bundle ID | `com.lululabs.lulu` | Xcode + pubspec |
+| Team ID | `F3GQ59884R` | Apple Developer |
+| API Key (App Store Connect) | `FHY33UJUU2` | TestFlight 업로드용 |
+| Issuer ID | `69a6de8c-25c7-47e3-e053-5b8c7c11a4d1` | `de8c` 주의 (`de96` 아님!) |
+| P8 Key 경로 | `~/private_keys/AuthKey_FHY33UJUU2.p8` | altool 인증용 |
+| IPA 빌드 경로 | `/Users/naezin/Desktop/LULU ver2/build/ios/ipa/Lulu.ipa` | 빌드 후 생성 |
+| 메인 브랜치 | `main` (보호) | 직접 커밋 금지 |
+| 작업 브랜치 패턴 | `sprint-XX` 또는 `sprint-XX-hotfix` | |
+| debugPrint 태그 | `[OK]`, `[ERR]`, `[WARN]`, `[INFO]` | 이모지 대신 사용 |
+| 앱스토어 이름 | 루루 | |
+
+---
+
+## 운영 매뉴얼 (복붙용 명령어)
+
+> **사유**: 매 세션마다 명령어를 재구성하다 Issuer ID 오타 등 사고 발생.
+> 아래 명령어를 **그대로 복사**해서 실행. 파라미터 수정 금지.
+
+### TestFlight 업로드 (전체 플로우)
+
+```bash
+# 1. 버전 범프 (pubspec.yaml 수동 수정 후)
+# version: X.Y.Z+BUILD_NUMBER
+
+# 2. IPA 빌드
+cd "/Users/naezin/Desktop/LULU ver2" && flutter build ipa --release
+
+# 3. 업로드 (이 명령어 그대로 실행, 절대 변경 금지)
+xcrun altool --upload-app --type ios \
+  -f "/Users/naezin/Desktop/LULU ver2/build/ios/ipa/Lulu.ipa" \
+  --apiKey FHY33UJUU2 \
+  --apiIssuer 69a6de8c-25c7-47e3-e053-5b8c7c11a4d1
+```
+
+### Pre-commit Gate 에러 수정 패턴
+
+```bash
+# Gate 1 (한글): debugPrint 안의 한글 -> 영문으로
+# Gate 2 (이모지): 아래 태그로 교체
+#   [OK]  <- 성공 표시
+#   [ERR] <- 에러 표시
+#   [WARN] <- 경고 표시
+#   [INFO] <- 정보 표시
+#   [KEY] <- 키/인증 표시
+# Gate 3 (Icons.): LuluIcons.xxx 로 교체
+# Gate 4 (analyze): flutter analyze 에러 수정
+# Gate 5 (print): print( -> debugPrint(
+# Gate 6 (withOpacity): LuluColors에 솔리드 컬러 정의
+```
+
+### 커밋 명령어
+
+```bash
+# 작업 브랜치 확인
+git branch --show-current
+
+# 커밋 (HEREDOC 형식)
+git commit -m "$(cat <<'EOF'
+<type>(<scope>): <description>
+
+<body>
+EOF
+)"
+```
 
 ---
 
@@ -512,6 +585,41 @@ lib/
 
 **`--no-verify`로 우회 절대 금지.**
 
+---
+
+## Confidence Score (v7.4 신설)
+
+모든 보고(Phase 완료, 버그 수정, 상태 확인)에 Confidence Score를 포함한다.
+
+형식: N/10 [근거]
+
+| 점수 | 의미 | 근거 예시 |
+|------|------|-----------|
+| 10/10 | 실행 확인 완료 | [시뮬레이터 실행 + 스크린샷] |
+| 9/10 | 코드 실행 확인 | [flutter run 성공 + 해당 화면 진입] |
+| 8/10 | 코드 확인 완료 | [파일 열어서 변경 확인 + analyze 통과] |
+| 7/10 | 코드 리뷰 기반 | [코드 읽었으나 실행 미확인] |
+| 6/10 | 패턴 기반 추론 | [유사 코드 패턴 확인, 해당 파일 미확인] |
+| 5/10 이하 | 추측 | [코드 미확인, 구조 기반 추론] |
+
+승인 기준:
+- TestFlight 배포 전: 9/10 이상
+- Phase 완료 보고: 8/10 이상
+- 분석/제안: 6/10 이상
+
+---
+
+## Scope Declaration (v7.4 신설)
+
+모든 작업지시서 및 Round 수정 보고 시 Scope Declaration을 포함한다.
+
+형식:
+- 수정 대상: 파일 경로 + 라인 범위
+- 제외 (건드리지 않음): 파일 경로 + 이유
+- 나중에 (발견했지만 지금 안 함): 이슈 설명 + 처리 시점
+
+---
+
 ### 커밋/버전 규칙
 
 ```
@@ -780,6 +888,60 @@ LuluColors.daySleep,                       // 솔리드 컬러
 debugPrint('debug');                       // debugPrint
 ```
 
+### 작업지시서 템플릿 v2.1 (v7.4 신설)
+
+#### 블록 1: 안전 체크
+
+작업 시작 전 반드시 확인:
+- 현재 브랜치 확인 (`git branch --show-current`)
+- 마지막 커밋 확인 (`git log --oneline -3`)
+- 작업 대상 파일 백업 커밋 존재 여부
+
+**Slop Detection 테이블**:
+
+| 패턴 | 대응 |
+|------|------|
+| "수정했습니다" (스크린샷 없음) | Confidence Score 요구 |
+| "문제없을 것 같습니다" | 실행 확인 요구 |
+| "이전과 동일하게 처리했습니다" | 해당 파일 실제 확인 요구 |
+| "완료입니다" (체크리스트 없음) | Verification Loop 요구 |
+
+#### 블록 2: 작업 실행
+
+작업지시서의 각 Step을 순서대로 100% 완료 후 다음 Step 진행.
+
+#### 블록 3: 딥다이브
+
+```
+1단계: 현상 파악 (무엇이 잘못되었나)
+2단계: 근본 원인 분석 (왜 발생했나)
+3단계: Scope Declaration
+   - 수정 대상: 파일 경로 + 라인 범위
+   - 제외 (건드리지 않음): 파일 경로 + 이유
+   - 나중에 (발견했지만 지금 안 함): 이슈 설명 + 처리 시점
+4단계: 제안 (어떻게 고칠 것인가)
+5단계: 승인 대기 (임의 수정 금지)
+```
+
+#### 블록 4: Verification Loop (v2.1 신설)
+
+Phase/Group/FIX 완료 시 아래 체크리스트를 보고에 포함:
+
+```
+Verification Loop
+-----------------
+[ ] flutter analyze: 에러 0개
+[ ] Pre-commit Gate: 6 Gate 통과
+[ ] 변경 파일 목록: [나열]
+[ ] 하드코딩 한글: 0건
+[ ] Icons. 직접 사용: 0건
+[ ] 이모지: 0건
+[ ] print문: 0건
+[ ] Confidence Score: N/10 [근거]
+```
+
+**규칙**: 전항목 PASS + Confidence 8/10 이상이어야 다음 Phase 승인 요청 가능.
+
 ---
 
 ## 금지 사항 (종합)
@@ -829,9 +991,27 @@ debugPrint('debug');                       // debugPrint
 ## TestFlight 빌드 가이드
 
 1. **Info.plist 수출규정 면제** (필수): `ITSAppUsesNonExemptEncryption` = `false`
-2. **빌드**: `flutter build ipa` 또는 Xcode Archive (`flutter build ios --release` → Xcode Product → Archive)
-3. **업로드**: Xcode Organizer → Distribute App → App Store Connect (또는 Transporter)
+2. **빌드**: `flutter build ipa --release`
+3. **업로드** (아래 명령어 그대로 실행, 절대 변경 금지):
+
+```bash
+xcrun altool --upload-app --type ios \
+  -f "/Users/naezin/Desktop/LULU ver2/build/ios/ipa/Lulu.ipa" \
+  --apiKey FHY33UJUU2 \
+  --apiIssuer 69a6de8c-25c7-47e3-e053-5b8c7c11a4d1
+```
+
 4. **버전**: `pubspec.yaml`의 `version: X.Y.Z+BUILD_NUMBER` 업데이트 필수
+
+### App Store Connect 인증 (절대 잊지 말 것)
+
+| 항목 | 값 |
+|------|-----|
+| API Key | `FHY33UJUU2` |
+| Issuer ID | `69a6de8c-25c7-47e3-e053-5b8c7c11a4d1` |
+| Key 파일 | `~/private_keys/AuthKey_FHY33UJUU2.p8` |
+| Bundle ID | `com.lululabs.lulu` |
+| Team ID | `F3GQ59884R` |
 
 ---
 
@@ -862,8 +1042,9 @@ debugPrint('debug');                       // debugPrint
 | 18 | Timeline 위젯 재작성 시도 | 🔴 사고 → 복원 |
 | 18-UX | 기록탭 UX 프로세스 (디자인/프로토타입) | ✅ |
 | 18-R | 기록탭 재건 + HF | 🔴 **롤백 (규칙 위반)** |
-| **19** | **차트 재설계 (재작업)** | **진행 중** |
-| 20 | 홈 화면 UX (노티센터/격려/알림) | 대기 |
+| **19** | **차트 재설계 (재작업)** | ✅ |
+| **20-HF** | **Hotfix 14건 (5그룹 A-E) + TestFlight v2.4.1+31** | ✅ |
+| 21 | 홈 화면 UX (노티센터/격려/알림) | 대기 |
 
 ### 2026-02-06 롤백 기록
 
@@ -912,13 +1093,47 @@ debugPrint('debug');                       // debugPrint
 
 ---
 
-## 문서 체계
+## 문서 체계 (v7.3 강화)
 
-| 문서 | 역할 | 변경 빈도 |
-|------|------|-----------|
-| **RULES.md** | 절대 규칙 | 거의 안 바뀜 |
-| **CLAUDE.md** | 기술 스펙, 아키텍처, 품질 게이트 | 스프린트마다 |
-| **handoff.md** | 현재 상태, 다음 작업 | 매 세션 |
-| **CHANGELOG.md** | 변경 이력 | 매 배포 |
-| **Quality_Gate_System.md** | Pre-commit hook 설치/상세 | 필요 시 |
-| **Chart_Postmortem.md** | 차트 사고 회고 + Claude Code 교육 | 참고용 |
+> **사유**: 세션 전환 시 컨텍스트 유실로 같은 실수 반복.
+> handoff.md를 세션 종료 시 반드시 업데이트하여 다음 세션이 즉시 작업 가능하게 한다.
+
+| 문서 | 역할 | 변경 빈도 | 필수 업데이트 시점 |
+|------|------|-----------|-------------------|
+| **RULES.md** | 절대 규칙 | 거의 안 바뀜 | 규칙 추가 시 |
+| **CLAUDE.md** | 기술 스펙, 아키텍처, 품질 게이트, 운영 매뉴얼 | 스프린트마다 | Sprint 완료 시 |
+| **handoff.md** | 현재 상태, 다음 작업, 세션 간 인수인계 | **매 세션** | **세션 종료 시 필수** |
+| **CHANGELOG.md** | 변경 이력 | 매 배포 | TestFlight 업로드 후 |
+| **Quality_Gate_System.md** | Pre-commit hook 설치/상세 | 필요 시 | Gate 규칙 변경 시 |
+| **Chart_Postmortem.md** | 차트 사고 회고 + Claude Code 교육 | 참고용 | - |
+
+### handoff.md 필수 기록 항목 (세션 종료 시)
+
+```
+1. 현재 상태: 브랜치, 버전, 마지막 커밋, TestFlight 상태
+2. 이번 세션에서 한 것: 구체적 변경 목록
+3. 다음 세션에서 할 것: 명확한 다음 작업
+4. 주의사항: 이번 세션에서 발견한 이슈/함정
+5. 자주 쓴 명령어/값: 반복 참조한 데이터 (CLAUDE.md에 없으면 추가)
+```
+
+### 새 데이터 발견 시 문서화 규칙 (v7.3)
+
+```
+1. 세션 중 반복 참조한 값 → CLAUDE.md "프로젝트 상수" 테이블에 추가
+2. 세션 중 새로 알게 된 명령어 → CLAUDE.md "운영 매뉴얼"에 추가
+3. 세션 중 발생한 사고 → CLAUDE.md 해당 섹션에 교훈 추가
+4. "다음에도 필요할 것 같다" → 무조건 문서화 (기억에 의존 금지)
+```
+
+---
+
+## Learned Corrections (v7.4 신설)
+
+| ID | 교훈 | 날짜 | 규칙 |
+|----|------|------|------|
+| LC-1 | 코드 존재 =/= 코드 작동 | 2026-02-06 | 모든 수정은 실행 기반 검증 필수. Confidence 8/10 이상만 완료 보고 가능. |
+| LC-2 | 롤백 안전선 부재 | 2026-02-06 | main 보호, feature branch에서만 작업, 안전 기준선 커밋 항상 명시. |
+| LC-3 | 차트 오판 - 코드 문제 vs 데이터 문제 | 2026-02-07 | 차트/통계 이상 시 데이터 먼저 확인 (MCP 쿼리) -> 코드 수정은 그 다음. |
+| LC-4 | Supabase 쿼리 미대조 | 2026-02-08 | Supabase 쿼리 작성/수정 시 반드시 MCP로 실제 스키마 대조. |
+| LC-5 | UTC 누락 | 2026-02-07 | 시간 관련 코드 수정 시 항상 UTC<->Local 변환 확인. .toLocal() 필수 체크. |

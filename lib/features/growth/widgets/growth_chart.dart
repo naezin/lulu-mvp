@@ -223,7 +223,7 @@ class _GrowthChartPainter extends CustomPainter {
 
   void _drawGrid(Canvas canvas, Rect rect) {
     final paint = Paint()
-      ..color = LuluColors.surfaceElevated.withValues(alpha: 0.3)
+      ..color = LuluColors.surfaceElevatedBorder
       ..strokeWidth = 1;
 
     // 수평선

@@ -33,7 +33,7 @@ class LocalActivityService {
       debugPrint('[OK] [LocalActivityService] Activity saved: ${activity.id}');
       return activity;
     } catch (e) {
-      debugPrint('❌ [LocalActivityService] Save error: $e');
+      debugPrint('[ERR] [LocalActivityService] Save error: $e');
       rethrow;
     }
   }
@@ -53,7 +53,7 @@ class LocalActivityService {
           .map((json) => ActivityModel.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      debugPrint('❌ [LocalActivityService] Load error: $e');
+      debugPrint('[ERR] [LocalActivityService] Load error: $e');
       return [];
     }
   }
@@ -105,7 +105,7 @@ class LocalActivityService {
 
       debugPrint('[OK] [LocalActivityService] Activity deleted: $activityId');
     } catch (e) {
-      debugPrint('❌ [LocalActivityService] Delete error: $e');
+      debugPrint('[ERR] [LocalActivityService] Delete error: $e');
       rethrow;
     }
   }
@@ -130,7 +130,7 @@ class LocalActivityService {
       debugPrint('[OK] [LocalActivityService] Activity updated: ${activity.id}');
       return activity;
     } catch (e) {
-      debugPrint('❌ [LocalActivityService] Update error: $e');
+      debugPrint('[ERR] [LocalActivityService] Update error: $e');
       rethrow;
     }
   }
@@ -142,7 +142,7 @@ class LocalActivityService {
       await prefs.remove(_keyActivities);
       debugPrint('[OK] [LocalActivityService] All activities cleared');
     } catch (e) {
-      debugPrint('❌ [LocalActivityService] Clear error: $e');
+      debugPrint('[ERR] [LocalActivityService] Clear error: $e');
       rethrow;
     }
   }

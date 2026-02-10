@@ -9,7 +9,7 @@ import '../../../l10n/generated/app_localizations.dart';
 /// 함께 보기 안내 다이얼로그
 ///
 /// 작업 지시서 v1.2.1: 함께 보기 최초 진입 시 안내
-/// "각 아기는 고유한 패턴을 가지고 있어요 💜"
+/// "Each baby has their own unique pattern"
 class TogetherGuideDialog extends StatelessWidget {
   const TogetherGuideDialog({super.key});
 

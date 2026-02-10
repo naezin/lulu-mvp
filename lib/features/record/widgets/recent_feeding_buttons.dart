@@ -5,13 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/design_system/lulu_colors.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_spacing.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../providers/record_provider.dart';
+import '../providers/feeding_record_provider.dart';
 import 'recent_feeding_button.dart';
 
 /// 최근 수유 기록 3개 빠른 버튼
@@ -44,9 +45,9 @@ class RecentFeedingButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = S.of(context);
 
-    return Consumer<RecordProvider>(
+    return Consumer<FeedingRecordProvider>(
       builder: (context, provider, _) {
-        // 🔴 BUGFIX v5.3: babyId 검증 - 현재 아기 기록만 표시
+        // BUGFIX v5.3: babyId filter - show only current baby records
         final validFeedings = provider.recentFeedings.where((feeding) {
           // 단일 아기 기록이고, 현재 선택된 아기와 일치하는지 확인
           return feeding.babyIds.length == 1 && feeding.babyIds[0] == babyId;
@@ -177,7 +178,7 @@ class RecentFeedingButtons extends StatelessWidget {
 
   Future<void> _handleQuickSave(
     BuildContext context,
-    RecordProvider provider,
+    FeedingRecordProvider provider,
     ActivityModel record,
   ) async {
     final l10n = S.of(context);
@@ -192,13 +193,33 @@ class RecentFeedingButtons extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    // 저장 성공 콜백
-    onSaveSuccess?.call();
+    // Sprint 21 HF: AppToast (global) shows before pop, so no orphan issue
+    if (onSaveSuccess != null) {
+      HapticFeedback.mediumImpact();
+      AppToast.show(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l10n?.quickFeedingSaved(_getSummary(record, l10n)) ?? '',
+                ),
+              ),
+            ],
+          ),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: LuluActivityColors.feeding,
+        ),
+      );
+      onSaveSuccess?.call();
+      return;
+    }
 
-    // 저장 토스트 + 취소 — K2: clearSnackBars + duration 3초
-    ScaffoldMessenger.of(context)
-      ..clearSnackBars()
-      ..showSnackBar(
+    // Sprint 21 Phase 3-1: AppToast for cross-tab reliability
+    AppToast.show(
       SnackBar(
         content: Row(
           children: [
@@ -216,7 +237,6 @@ class RecentFeedingButtons extends StatelessWidget {
           textColor: Colors.white,
           onPressed: () async {
             final success = await provider.undoLastSave();
-            // 🔧 Sprint 19 G-F2: 취소 성공 토스트 제거 → 햅틱 대체
             if (context.mounted && success) {
               HapticFeedback.mediumImpact();
             }

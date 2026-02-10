@@ -5,7 +5,9 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/services/supabase_service.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../models/family_member_model.dart';
 import '../providers/family_provider.dart';
 
 /// 관리자 넘기기 화면
@@ -107,7 +109,7 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
     );
   }
 
-  Widget _buildMemberTile(member) {
+  Widget _buildMemberTile(FamilyMemberModel member) {
     final isSelected = _selectedId == member.userId;
 
     return GestureDetector(
@@ -187,7 +189,10 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
   Future<void> _transfer() async {
     if (_selectedId == null) return;
 
+    // Sprint 21 Phase 3: capture context-dependent refs before async gap
     final l10n = S.of(context)!;
+    final familyProvider = context.read<FamilyProvider>();
+    final navigator = Navigator.of(context);
 
     // 확인 다이얼로그
     final confirmed = await showDialog<bool>(
@@ -222,18 +227,16 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
     setState(() => _isLoading = true);
 
     try {
-      await context.read<FamilyProvider>().transferOwnership(_selectedId!);
+      await familyProvider.transferOwnership(_selectedId!);
 
-      // 🔧 Sprint 19 G-R6: 토스트 제거 → 햅틱 대체
+      // Sprint 19 G-R6: haptic instead of toast
       if (mounted) {
         HapticFeedback.mediumImpact();
-        Navigator.pop(context);
+        navigator.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        AppToast.showText(e.toString());
       }
     } finally {
       if (mounted) {

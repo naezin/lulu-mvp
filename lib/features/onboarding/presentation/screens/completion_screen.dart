@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/design_system/lulu_colors.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/onboarding_data_service.dart';
+import '../../../../core/utils/app_toast.dart';
 import '../../../../core/utils/sga_calculator.dart';
 import '../../../../l10n/generated/app_localizations.dart' show S;
 import '../providers/onboarding_provider.dart';
@@ -88,7 +90,7 @@ class _CompletionScreenState extends State<CompletionScreen>
                   end: Alignment.bottomRight,
                   colors: [
                     AppTheme.successSoft,
-                    AppTheme.successSoft.withValues(alpha: 0.8),
+                    const Color(0xCC5FB37B), // successSoft 80%
                   ],
                 ),
               ),
@@ -248,12 +250,7 @@ class _CompletionScreenState extends State<CompletionScreen>
       if (!context.mounted) return;
 
       final errorL10n = S.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorL10n?.onboardingCompletionError('$e') ?? ''),
-          backgroundColor: AppTheme.errorSoft,
-        ),
-      );
+      AppToast.showText(errorL10n?.onboardingCompletionError('$e') ?? '');
     }
   }
 }
@@ -370,7 +367,7 @@ class _BabyRow extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: AppTheme.warningSoft.withValues(alpha: 0.15),
+            color: LuluStatusColors.warningLight,
             borderRadius: BorderRadius.circular(LuluRadius.xs),
           ),
           child: Text(
@@ -386,7 +383,7 @@ class _BabyRow extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: const Color(0xFF00897B).withValues(alpha: 0.15),
+            color: LuluColors.tealLight,
             borderRadius: BorderRadius.circular(LuluRadius.xs),
           ),
           child: Row(

@@ -2,17 +2,14 @@ import '../../l10n/generated/app_localizations.dart' show S;
 
 /// 아기 출생 유형
 enum BabyType {
-  singleton('singleton', '단태아'),
-  twin('twin', '쌍둥이'),
-  triplet('triplet', '세쌍둥이'),
-  quadruplet('quadruplet', '네쌍둥이');
+  singleton('singleton'),
+  twin('twin'),
+  triplet('triplet'),
+  quadruplet('quadruplet');
 
-  const BabyType(this.value, this.label);
+  const BabyType(this.value);
 
   final String value;
-
-  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
-  final String label;
 
   /// 표시용 라벨 (i18n)
   String localizedLabel(S l10n) => switch (this) {
@@ -48,16 +45,13 @@ enum BabyType {
 
 /// 동일란/이란 구분
 enum Zygosity {
-  identical('identical', '일란성'),
-  fraternal('fraternal', '이란성'),
-  unknown('unknown', '모름');
+  identical('identical'),
+  fraternal('fraternal'),
+  unknown('unknown');
 
-  const Zygosity(this.value, this.label);
+  const Zygosity(this.value);
 
   final String value;
-
-  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
-  final String label;
 
   /// 표시용 라벨 (i18n)
   String localizedLabel(S l10n) => switch (this) {
@@ -87,16 +81,13 @@ enum GrowthChartType {
 
 /// 성별
 enum Gender {
-  male('male', '남아'),
-  female('female', '여아'),
-  unknown('unknown', '미정');
+  male('male'),
+  female('female'),
+  unknown('unknown');
 
-  const Gender(this.value, this.label);
+  const Gender(this.value);
 
   final String value;
-
-  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
-  final String label;
 
   /// 표시용 라벨 (i18n)
   String localizedLabel(S l10n) => switch (this) {
@@ -115,18 +106,15 @@ enum Gender {
 
 /// 활동 유형
 enum ActivityType {
-  sleep('sleep', '수면'),
-  feeding('feeding', '수유'),
-  diaper('diaper', '기저귀'),
-  play('play', '놀이'),
-  health('health', '건강');
+  sleep('sleep'),
+  feeding('feeding'),
+  diaper('diaper'),
+  play('play'),
+  health('health');
 
-  const ActivityType(this.value, this.label);
+  const ActivityType(this.value);
 
   final String value;
-
-  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
-  final String label;
 
   /// 표시용 라벨 (i18n)
   String localizedLabel(S l10n) => switch (this) {

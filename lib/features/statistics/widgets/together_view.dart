@@ -11,7 +11,7 @@ import 'pie_chart_widget.dart';
 /// 함께 보기 뷰 위젯
 ///
 /// 작업 지시서 v1.2.1: 다태아 함께 보기 (비교 X)
-/// ⚠️ "더 높다/낮다" 표현 금지, "패턴이 달라요" 표현 사용
+/// WARN: Never use "higher/lower" expression, use "different pattern" instead
 class TogetherView extends StatelessWidget {
   /// 함께 보기 데이터
   final TogetherData data;
@@ -233,7 +233,7 @@ class TogetherView extends StatelessWidget {
     final baby1 = data.babies[0];
     final baby2 = data.babies[1];
 
-    // ⚠️ "더 높다/낮다" 표현 금지, "패턴이 달라요" 표현 사용
+    // WARN: Never use "higher/lower", use "different pattern" instead
     final insight1 = baby1.statistics.sleep.napRatio > 0.3
         ? l10n.insightNapRatioHigh
         : l10n.insightNightRatioHigh;
@@ -245,10 +245,10 @@ class TogetherView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFBBF24).withValues(alpha: 0.1),
+        color: LuluColors.amberGoldBg,
         borderRadius: BorderRadius.circular(LuluRadius.xs),
         border: Border.all(
-          color: const Color(0xFFFBBF24).withValues(alpha: 0.3),
+          color: LuluColors.amberGoldBorder,
         ),
       ),
       child: Row(
@@ -256,7 +256,7 @@ class TogetherView extends StatelessWidget {
           const Icon(
             LuluIcons.tip,
             size: 20,
-            color: Color(0xFFFBBF24),
+            color: LuluColors.amberGold,
           ),
           const SizedBox(width: 8),
           Expanded(

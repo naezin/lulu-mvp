@@ -12,7 +12,7 @@ import '../../../data/models/baby_model.dart';
 import '../../../data/models/feeding_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
-import '../providers/record_provider.dart';
+import '../providers/feeding_record_provider.dart';
 import '../widgets/record_time_picker.dart';
 import '../widgets/feeding_type_selector.dart';
 import '../widgets/breast_feeding_form.dart';
@@ -69,7 +69,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = context.read<RecordProvider>();
+      final provider = context.read<FeedingRecordProvider>();
       provider.initialize(
         familyId: widget.familyId,
         babies: widget.babies,
@@ -106,7 +106,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
         ),
         centerTitle: true,
       ),
-      body: Consumer<RecordProvider>(
+      body: Consumer<FeedingRecordProvider>(
         builder: (context, provider, _) {
           return Column(
             children: [
@@ -133,11 +133,14 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // HOTFIX v1.2: 최근 3개 빠른 수유 버튼
+                      // Sprint 20 HF #10/#11: onSaveSuccess에서 화면 닫기 + SnackBar 정리
                       RecentFeedingButtons(
                         babyId: provider.selectedBabyId ?? widget.babies.first.id,
                         onEditRequest: _handleEditRequest,
                         onSaveSuccess: () {
-                          // 저장 성공 시 화면 닫기 (선택적)
+                          if (mounted) {
+                            Navigator.of(context).pop();
+                          }
                         },
                       ),
 
@@ -148,7 +151,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
                           setState(() {
                             _contentType = type;
                           });
-                          // RecordProvider와 동기화 (legacy)
+                          // FeedingRecordProvider와 동기화 (legacy)
                           provider.setFeedingType(type.legacyValue);
                         },
                       ),
@@ -278,11 +281,11 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
   /// HOTFIX v1.2: 롱프레스 시 수정 모드 진입
   /// 템플릿 기록을 기반으로 폼을 채움
   void _handleEditRequest(ActivityModel record) {
-    final provider = context.read<RecordProvider>();
+    final provider = context.read<FeedingRecordProvider>();
     final data = record.data;
     if (data == null) return;
 
-    // RecordProvider 상태를 템플릿으로 설정
+    // FeedingRecordProvider 상태를 템플릿으로 설정
     final feedingType = data['feeding_type'] as String? ?? 'bottle';
     provider.setFeedingType(feedingType);
 
@@ -324,7 +327,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
   // v6.0: _buildBreastSideSelector, _buildDurationInput 제거됨
   // BreastFeedingForm으로 통합
 
-  Widget _buildAmountInput(RecordProvider provider) {
+  Widget _buildAmountInput(FeedingRecordProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -380,7 +383,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
               contentPadding: EdgeInsets.zero,
             ),
             onChanged: (value) {
-              context.read<RecordProvider>().setNotes(value);
+              context.read<FeedingRecordProvider>().setNotes(value);
             },
           ),
         ),
@@ -388,7 +391,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
     );
   }
 
-  Widget _buildSaveButton(RecordProvider provider) {
+  Widget _buildSaveButton(FeedingRecordProvider provider) {
     final isValid = provider.isSelectionValid;
 
     return SizedBox(
@@ -467,7 +470,7 @@ class _FeedingRecordScreenState extends State<FeedingRecordScreen> {
     return errorKey;
   }
 
-  Future<void> _handleSave(RecordProvider provider) async {
+  Future<void> _handleSave(FeedingRecordProvider provider) async {
     final activity = await provider.saveFeeding();
     if (activity != null && mounted) {
       Navigator.of(context).pop(activity);

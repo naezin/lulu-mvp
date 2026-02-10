@@ -249,7 +249,7 @@ class OpenAIService {
     if (baby.isMultipleBirth) {
       buffer.writeln(
         '- ${AiPrompts.labelMultipleBirth}: '
-        '${baby.multipleBirthType?.label ?? ""}',
+        '${baby.multipleBirthType?.value ?? ""}',
       );
       if (baby.birthOrder != null) {
         buffer.writeln(

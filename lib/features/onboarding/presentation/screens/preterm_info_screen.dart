@@ -88,10 +88,10 @@ class _PretermInfoScreenState extends State<PretermInfoScreen> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppTheme.infoSoft.withValues(alpha: 0.1),
+              color: LuluStatusColors.infoBg,
               borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
-                color: AppTheme.infoSoft.withValues(alpha: 0.3),
+                color: LuluStatusColors.infoBorder,
               ),
             ),
             child: Row(

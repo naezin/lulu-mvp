@@ -13,7 +13,7 @@ import '../../../data/models/baby_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/quick_record_button.dart';
-import '../providers/record_provider.dart';
+import '../providers/play_record_provider.dart';
 import '../widgets/record_time_picker.dart';
 import '../widgets/tummy_time_timer.dart';
 
@@ -49,7 +49,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<RecordProvider>().initialize(
+      context.read<PlayRecordProvider>().initialize(
             familyId: widget.familyId,
             babies: widget.babies,
             preselectedBabyId: widget.preselectedBabyId,
@@ -83,7 +83,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
         ),
         centerTitle: true,
       ),
-      body: Consumer<RecordProvider>(
+      body: Consumer<PlayRecordProvider>(
         builder: (context, provider, _) {
           return Column(
             children: [
@@ -197,14 +197,14 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
   }
 
   /// MB-03: 현재 선택된 아기 이름 반환
-  String? _getSelectedBabyName(RecordProvider provider) {
+  String? _getSelectedBabyName(PlayRecordProvider provider) {
     if (provider.selectedBabyIds.isEmpty) return null;
     final selectedId = provider.selectedBabyIds.first;
     final baby = widget.babies.where((b) => b.id == selectedId).firstOrNull;
     return baby?.name;
   }
 
-  Future<void> _handleQuickSave(RecordProvider provider) async {
+  Future<void> _handleQuickSave(PlayRecordProvider provider) async {
     if (_isQuickSaving || widget.lastPlayRecord == null) return;
 
     setState(() => _isQuickSaving = true);
@@ -232,7 +232,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
     }
   }
 
-  Widget _buildPlayTypeSelector(RecordProvider provider) {
+  Widget _buildPlayTypeSelector(PlayRecordProvider provider) {
     final l10n = S.of(context);
 
     // UX-01: 활동 유형 2x3 그리드 레이아웃
@@ -321,7 +321,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
     );
   }
 
-  Widget _buildDurationInput(RecordProvider provider) {
+  Widget _buildDurationInput(PlayRecordProvider provider) {
     final l10n = S.of(context);
 
     // UX-01: 시간 선택 강화 - 터미타임은 짧은 시간, 외출은 긴 시간
@@ -443,7 +443,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
               contentPadding: EdgeInsets.zero,
             ),
             onChanged: (value) {
-              context.read<RecordProvider>().setNotes(value);
+              context.read<PlayRecordProvider>().setNotes(value);
             },
           ),
         ),
@@ -451,7 +451,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
     );
   }
 
-  Widget _buildSaveButton(RecordProvider provider) {
+  Widget _buildSaveButton(PlayRecordProvider provider) {
     final isValid = provider.isSelectionValid;
 
     return SizedBox(
@@ -530,7 +530,7 @@ class _PlayRecordScreenState extends State<PlayRecordScreen> {
     return errorKey;
   }
 
-  Future<void> _handleSave(RecordProvider provider) async {
+  Future<void> _handleSave(PlayRecordProvider provider) async {
     final activity = await provider.savePlay();
     if (activity != null && mounted) {
       Navigator.of(context).pop(activity);

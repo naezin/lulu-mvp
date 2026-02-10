@@ -17,7 +17,7 @@ class BabyRepository {
 
       return (response as List).map((data) => _mapToBabyModel(data)).toList();
     } catch (e) {
-      debugPrint('❌ [BabyRepository] Error getting babies: $e');
+      debugPrint('[ERR] [BabyRepository] Error getting babies: $e');
       rethrow;
     }
   }
@@ -33,7 +33,7 @@ class BabyRepository {
       if (response == null) return null;
       return _mapToBabyModel(response);
     } catch (e) {
-      debugPrint('❌ [BabyRepository] Error getting baby by id: $e');
+      debugPrint('[ERR] [BabyRepository] Error getting baby by id: $e');
       rethrow;
     }
   }
@@ -51,7 +51,7 @@ class BabyRepository {
       debugPrint('[OK] [BabyRepository] Baby created: ${response['id']}');
       return _mapToBabyModel(response);
     } catch (e) {
-      debugPrint('❌ [BabyRepository] Error creating baby: $e');
+      debugPrint('[ERR] [BabyRepository] Error creating baby: $e');
       rethrow;
     }
   }
@@ -68,7 +68,7 @@ class BabyRepository {
       debugPrint('[OK] [BabyRepository] ${babies.length} babies created');
       return (response as List).map((data) => _mapToBabyModel(data)).toList();
     } catch (e) {
-      debugPrint('❌ [BabyRepository] Error creating babies: $e');
+      debugPrint('[ERR] [BabyRepository] Error creating babies: $e');
       rethrow;
     }
   }
@@ -89,7 +89,7 @@ class BabyRepository {
       debugPrint('[OK] [BabyRepository] Baby updated: ${baby.id}');
       return _mapToBabyModel(response);
     } catch (e) {
-      debugPrint('❌ [BabyRepository] Error updating baby: $e');
+      debugPrint('[ERR] [BabyRepository] Error updating baby: $e');
       rethrow;
     }
   }
@@ -103,7 +103,7 @@ class BabyRepository {
 
       debugPrint('[OK] [BabyRepository] Baby deleted: $babyId');
     } catch (e) {
-      debugPrint('❌ [BabyRepository] Error deleting baby: $e');
+      debugPrint('[ERR] [BabyRepository] Error deleting baby: $e');
       rethrow;
     }
   }
@@ -117,7 +117,7 @@ class BabyRepository {
 
       return (response as List).length;
     } catch (e) {
-      debugPrint('❌ [BabyRepository] Error getting baby count: $e');
+      debugPrint('[ERR] [BabyRepository] Error getting baby count: $e');
       return 0;
     }
   }

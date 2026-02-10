@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -6,6 +8,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/utils/app_toast.dart';
 import 'core/services/supabase_service.dart';
 import 'core/services/openai_service.dart';
 import 'core/services/onboarding_data_service.dart';
@@ -17,13 +20,19 @@ import 'core/theme/app_theme.dart';
 import 'features/onboarding/onboarding.dart';
 import 'features/growth/data/growth_data_cache.dart';
 import 'features/home/providers/home_provider.dart';
-import 'features/record/providers/record_provider.dart';
+import 'features/home/providers/sweet_spot_provider.dart';
+import 'features/record/providers/feeding_record_provider.dart';
+import 'features/record/providers/sleep_record_provider.dart';
+import 'features/record/providers/diaper_record_provider.dart';
+import 'features/record/providers/play_record_provider.dart';
+import 'features/record/providers/health_record_provider.dart';
 import 'features/record/providers/ongoing_sleep_provider.dart';
 import 'features/settings/providers/settings_provider.dart';
 import 'features/cry_analysis/providers/cry_analysis_provider.dart';
 import 'app/navigation/main_navigation.dart';
 import 'data/models/models.dart';
 import 'l10n/generated/app_localizations.dart';
+import 'shared/widgets/error_fallback_screen.dart';
 
 /// Global SettingsProvider instance for async init
 late SettingsProvider _settingsProvider;
@@ -33,6 +42,28 @@ late AuthProvider _authProvider;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Sprint 21 Phase 5-3: Global error handlers
+
+  // 1. Flutter framework errors (widget build, layout, painting)
+  FlutterError.onError = (FlutterErrorDetails details) {
+    debugPrint('[ERR] FlutterError: ${details.exceptionAsString()}');
+    debugPrint('[ERR] Stack: ${details.stack}');
+    // Show error fallback instead of red screen in release
+    FlutterError.presentError(details);
+  };
+
+  // 2. Platform-level async errors (Dart isolate unhandled)
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    debugPrint('[ERR] PlatformError: $error');
+    debugPrint('[ERR] Stack: $stack');
+    return true; // Prevent app crash
+  };
+
+  // 3. Custom error widget (replaces red screen in release mode)
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return const ErrorFallbackScreen();
+  };
 
   // Status bar style
   SystemChrome.setSystemUIOverlayStyle(
@@ -91,8 +122,17 @@ class LuluApp extends StatelessWidget {
       providers: [
         // Auth Provider (pre-initialized)
         ChangeNotifierProvider.value(value: _authProvider),
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => RecordProvider()),
+        ChangeNotifierProvider(create: (_) => SweetSpotProvider()),
+        ChangeNotifierProvider(create: (context) {
+          final homeProvider = HomeProvider();
+          homeProvider.setSweetSpotProvider(context.read<SweetSpotProvider>());
+          return homeProvider;
+        }),
+        ChangeNotifierProvider(create: (_) => FeedingRecordProvider()),
+        ChangeNotifierProvider(create: (_) => SleepRecordProvider()),
+        ChangeNotifierProvider(create: (_) => DiaperRecordProvider()),
+        ChangeNotifierProvider(create: (_) => PlayRecordProvider()),
+        ChangeNotifierProvider(create: (_) => HealthRecordProvider()),
         ChangeNotifierProvider(create: (_) {
           final provider = OngoingSleepProvider();
           provider.init(); // 앱 시작 시 진행 중 수면 복원
@@ -109,6 +149,7 @@ class LuluApp extends StatelessWidget {
           return MaterialApp(
             title: 'Lulu',
             debugShowCheckedModeBanner: false,
+            scaffoldMessengerKey: appScaffoldMessengerKey,
             theme: AppTheme.darkTheme,
             // Localization
             localizationsDelegates: const [
@@ -191,7 +232,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
 
         String? familyId;
 
-        // ✅ 1. family_members에서 현재 사용자의 가족 확인
+        // [OK] 1. family_members에서 현재 사용자의 가족 확인
         try {
           final memberData = await supabase
               .from('family_members')
@@ -208,7 +249,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
           debugPrint('[WARN] family_members query failed: $e');
         }
 
-        // ✅ 2. fallback: families.user_id로 확인 (레거시 호환)
+        // [OK] 2. fallback: families.user_id로 확인 (레거시 호환)
         if (familyId == null) {
           final familyData = await supabase
               .from('families')
@@ -235,7 +276,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
         }
 
         if (familyId != null) {
-          // ✅ 기존 가족 데이터 로드
+          // [OK] 기존 가족 데이터 로드
           final loaded = await _loadExistingFamilyData(familyId, userId);
           if (loaded) {
             setState(() {
@@ -260,7 +301,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
         if (family != null && babies.isNotEmpty) {
           debugPrint('[OK] [OnboardingWrapper] Restored from local: family=${family.id}, babies=${babies.map((b) => b.name).join(", ")}');
 
-          // ✅ RLS FIX: 로컬 복원 시에도 family_members에 현재 사용자 추가
+          // [OK] RLS FIX: 로컬 복원 시에도 family_members에 현재 사용자 추가
           final currentUserId = Supabase.instance.client.auth.currentUser?.id;
           if (currentUserId != null) {
             try {
@@ -293,7 +334,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
       setState(() => _isLoading = false);
 
     } catch (e) {
-      debugPrint('❌ [OnboardingWrapper] Error checking status: $e');
+      debugPrint('[ERR] [OnboardingWrapper] Error checking status: $e');
       setState(() => _isLoading = false);
     }
   }

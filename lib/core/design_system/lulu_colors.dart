@@ -225,6 +225,9 @@ class LuluColors {
 
   // --- Deep Blue Alpha Variants ---
 
+  /// deepBlue alpha 0 — gradient fade-out
+  static const Color deepBlueTransparent = Color(0x001B263B);
+
   /// deepBlue 80% — 진한 오버레이
   static const Color deepBlueStrong = Color(0xCC1B263B); // 2건 사용
 
@@ -237,6 +240,72 @@ class LuluColors {
 
   /// Colors.red 10% — 에러 입력 배경
   static const Color redBg = Color(0x1AF44336); // 2건 사용
+
+  // ========================================
+  // Sprint 21 Phase 4: 추가 솔리드 토큰
+  // ========================================
+
+  // --- Lavender Mist extended ---
+
+  /// lavenderMist 8% — 플레이스홀더 배경
+  static const Color lavenderSubtle = Color(0x149D8CD6);
+
+  /// lavenderMist 80% — 강한 강조
+  static const Color lavenderStrong = Color(0xCC9D8CD6);
+
+  // --- Deep Blue extended ---
+
+  /// deepBlue 50% — 면책/오버레이 배경
+  static const Color deepBlueMedium = Color(0x801B263B);
+
+  // --- Midnight Navy extended ---
+
+  /// midnightNavy 50% — 진행 마커
+  static const Color midnightNavyMedium = Color(0x800D1B2A);
+
+  // --- Surface Elevated extended ---
+
+  /// surfaceElevated 30% — 그리드 라인
+  static const Color surfaceElevatedBorder = Color(0x4D2A3F5F);
+
+  // --- Champagne Gold extended ---
+
+  /// champagneGold 15% — 뱃지 배경
+  static const Color champagneGoldLight = Color(0x26D4AF6A);
+
+  // --- Insight/Tip Colors ---
+
+  /// amberGold base (0xFFFBBF24)
+  static const Color amberGold = Color(0xFFFBBF24);
+
+  /// amberGold 10% — 인사이트/팁 배경
+  static const Color amberGoldBg = Color(0x1AFBBF24);
+
+  /// amberGold 30% — 인사이트/팁 테두리
+  static const Color amberGoldBorder = Color(0x4DFBBF24);
+
+  /// skyBlue base (0xFF60A5FA)
+  static const Color attentionBlue = Color(0xFF60A5FA);
+
+  /// skyBlue 10% — 주의 인사이트 배경
+  static const Color attentionBlueBg = Color(0x1A60A5FA);
+
+  /// skyBlue 30% — 주의 인사이트 테두리
+  static const Color attentionBlueBorder = Color(0x4D60A5FA);
+
+  /// teal (0xFF00897B)
+  static const Color teal = Color(0xFF00897B);
+
+  /// teal 15% — SGA 뱃지 배경
+  static const Color tealLight = Color(0x2600897B);
+
+  // --- Misc ---
+
+  /// Colors.grey 30% — 디바이더
+  static const Color greyBorder = Color(0x4D9E9E9E);
+
+  /// Colors.amber 20% — 오너 표시 배경
+  static const Color amberSelected = Color(0x33FFC107);
 }
 
 /// Text Colors (텍스트 컬러)
@@ -329,6 +398,44 @@ class LuluActivityColors {
 
   /// feeding 20% — 선택 상태
   static const Color feedingSelected = Color(0x33FFB74D); // 2건 사용
+
+  /// feeding 50% — 중간 강조
+  static const Color feedingMedium = Color(0x80FFB74D);
+
+  // ========================================
+  // Sprint 21 Phase 4: 추가 Activity Alpha 토큰
+  // ========================================
+
+  /// sleep 30% — 수면 보더
+  static const Color sleepBorder = Color(0x4D9575CD);
+
+  /// sleep 40% — 수면 카드 보더
+  static const Color sleepCardBorder = Color(0x669575CD);
+
+  /// sleep 60% — 수면 아이콘 비활성
+  static const Color sleepStrong = Color(0x999575CD);
+
+  /// play 30% — 놀이 보더
+  static const Color playBorder = Color(0x4D81C784);
+
+  // ========================================
+  // Sprint 21 Phase 4: Statistics Alpha 토큰
+  // ========================================
+
+  /// sleep 70% — 차트 슬라이스 (낮잠)
+  static const Color sleepSlice = Color(0xB39575CD);
+
+  /// feeding 70% — 차트 슬라이스 (분유)
+  static const Color feedingSlice = Color(0xB3FFB74D);
+
+  /// feeding 50% — 차트 슬라이스 (이유식)
+  static const Color feedingSolidSlice = Color(0x80FFB74D);
+
+  /// diaper 70% — 차트 슬라이스 (대변)
+  static const Color diaperSlice = Color(0xB34FC3F7);
+
+  /// diaper 50% — 차트 슬라이스 (혼합)
+  static const Color diaperMixSlice = Color(0x804FC3F7);
 
   /// 활동 타입으로 색상 가져오기
   static Color forType(String type) {
@@ -424,6 +531,31 @@ class LuluStatusColors {
 
   /// warning 30% — 경고 테두리
   static const Color warningBorder = Color(0x4DE8B87E);
+
+  // ========================================
+  // Sprint 21 Phase 4: 추가 Status Alpha 토큰
+  // ========================================
+
+  /// warning 10% — 경고 배경
+  static const Color warningBg = Color(0x1AE8B87E);
+
+  /// warning 15% — 경고 라이트
+  static const Color warningLight = Color(0x26E8B87E);
+
+  /// success 10% — 성공 배경
+  static const Color successBg = Color(0x1A5FB37B);
+
+  /// error 20% — 에러 선택/원형
+  static const Color errorSelected = Color(0x33E87878);
+
+  /// error 80% — 에러 매우 강조
+  static const Color errorBold = Color(0xCCE87878);
+
+  /// info 10% — 정보 배경
+  static const Color infoBg = Color(0x1A7BB8E8);
+
+  /// info 30% — 정보 테두리
+  static const Color infoBorder = Color(0x4D7BB8E8);
 }
 
 /// Sweet Spot Colors (단일 색상 시스템)
@@ -583,4 +715,17 @@ class LuluStatisticsColors {
 
   /// 혼합 비율 - Teal
   static const Color bothRatio = Color(0xFF80CBC4);
+
+  // ========================================
+  // Sprint 21 Phase 4: Crying Alpha 토큰
+  // ========================================
+
+  /// crying 80% — 차트 슬라이스 (피곤)
+  static const Color cryingTired = Color(0xCCFF7043);
+
+  /// crying 60% — 차트 슬라이스 (가스)
+  static const Color cryingGas = Color(0x99FF7043);
+
+  /// crying 40% — 차트 슬라이스 (불편)
+  static const Color cryingDiscomfort = Color(0x66FF7043);
 }

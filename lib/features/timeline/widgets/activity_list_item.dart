@@ -44,6 +44,7 @@ class ActivityListItem extends StatelessWidget {
           motion: const BehindMotion(),
           extentRatio: 0.4,
           children: [
+            // Sprint 20 HF #12 + U2: 아이콘만 표시 (텍스트 제거 → overflow 방지)
             CustomSlidableAction(
               onPressed: (_) {
                 HapticFeedback.mediumImpact();
@@ -55,20 +56,7 @@ class ActivityListItem extends StatelessWidget {
                 topLeft: Radius.circular(12),
                 bottomLeft: Radius.circular(12),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(LuluIcons.edit, size: 20),
-                  const SizedBox(height: 2),
-                  Text(
-                    l10n?.actionEdit ?? 'Edit',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
-              ),
+              child: const Icon(LuluIcons.edit, size: 22),
             ),
             CustomSlidableAction(
               onPressed: (_) {
@@ -81,20 +69,7 @@ class ActivityListItem extends StatelessWidget {
                 topRight: Radius.circular(12),
                 bottomRight: Radius.circular(12),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(LuluIcons.delete, size: 20),
-                  const SizedBox(height: 2),
-                  Text(
-                    l10n?.buttonDelete ?? 'Delete',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
-              ),
+              child: const Icon(LuluIcons.delete, size: 22),
             ),
           ],
         ),

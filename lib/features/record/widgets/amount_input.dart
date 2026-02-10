@@ -331,7 +331,7 @@ class _AdjustButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(LuluRadius.sm),
           border: Border.all(
             color: enabled
-                ? LuluActivityColors.feeding.withValues(alpha: 0.5)
+                ? LuluActivityColors.feedingMedium
                 : Colors.transparent,
           ),
         ),

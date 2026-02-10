@@ -1596,6 +1596,29 @@ class SKo extends S {
   String get settingsNotLoggedIn => '로그인되지 않았습니다';
 
   @override
+  String get sectionAccount => '계정';
+
+  @override
+  String get deleteAccountWarningData => '모든 기록, 아기 정보, 가족 데이터가 삭제됩니다';
+
+  @override
+  String get deleteAccountWarningAuth => '로그인 계정이 영구적으로 삭제됩니다';
+
+  @override
+  String get deleteAccountFailed => '계정 삭제에 실패했습니다. 다시 시도해주세요.';
+
+  @override
+  String get deleteAccountSuccess => '계정이 삭제되었습니다.';
+
+  @override
+  String get privacyPolicyFullText =>
+      '개인정보처리방침\n\n최종 수정일: 2026년 2월\n\n1. 수집하는 정보\n- 이메일 주소 (계정 생성용)\n- 아기 정보: 이름, 생년월일, 성별, 출생 시 재태주수\n- 돌봄 기록: 수유, 수면, 기저귀, 놀이, 건강\n- 성장 데이터: 체중, 신장, 두위\n\n2. 울음 분석\n- 모든 울음 분석은 100% 기기에서 처리됩니다\n- 오디오는 서버로 절대 전송되지 않습니다\n- 오디오는 기기에 절대 저장되지 않습니다\n- AI 모델은 TensorFlow Lite를 사용하여 로컬에서 실행됩니다\n\n3. 데이터 저장\n- 데이터는 Supabase (AWS 서울 리전)에 안전하게 저장됩니다\n- Row-Level Security (RLS) 정책으로 보호됩니다\n- 본인과 가족 구성원만 데이터에 접근할 수 있습니다\n\n4. 데이터 공유\n- 제3자에게 데이터를 판매하지 않습니다\n- 광고 목적으로 데이터를 사용하지 않습니다\n- 가족 공유: 초대된 구성원만 공유 데이터에 접근 가능합니다\n\n5. 데이터 삭제\n- 설정에서 언제든지 계정을 삭제할 수 있습니다\n- 계정 삭제 시 모든 데이터가 영구적으로 삭제됩니다\n- 이 작업은 되돌릴 수 없습니다\n\n6. 아동 개인정보\n- 이 앱은 육아 목적으로 아동 정보를 기록합니다\n- 관련 아동 개인정보보호법을 준수합니다\n- 마케팅이나 프로파일링에 데이터를 사용하지 않습니다\n\n7. 문의\n- 개인정보 관련 문의: lululabs.app@gmail.com';
+
+  @override
+  String get termsOfServiceFullText =>
+      '서비스 이용약관\n\n최종 수정일: 2026년 2월\n\n1. 서비스 설명\n루루(Lulu)는 조산아, 다태아, SGA(부당경량아) 등 고위험 신생아를 위한 스마트 육아 앱입니다.\n\n2. 의료 면책\n- 이 앱은 의료기기가 아닙니다\n- 제공되는 정보는 참고용이며 의료 조언을 대체하지 않습니다\n- 의료 관련 결정은 반드시 담당 의료진과 상담하세요\n- 울음 분석 결과는 AI 추정치이며 전문가 평가를 대체할 수 없습니다\n\n3. 사용자 책임\n- 입력하는 정보의 정확성은 사용자 책임입니다\n- 의료 결정을 이 앱에만 의존하지 마세요\n- 계정 인증 정보를 안전하게 관리하세요\n\n4. 데이터 소유권\n- 생성한 모든 데이터의 소유권은 사용자에게 있습니다\n- 언제든지 데이터를 내보낼 수 있습니다 (CSV 형식)\n- 언제든지 계정과 모든 데이터를 삭제할 수 있습니다\n\n5. 서비스 가용성\n- 서비스 가용성을 유지하기 위해 노력하지만 중단 없는 접근을 보장하지 않습니다\n- 기능 개선 및 문제 해결을 위해 앱을 업데이트할 수 있습니다\n\n6. 책임 제한\n- 앱은 현 상태 그대로 제공되며 보증하지 않습니다\n- 앱 정보에 기반한 결정에 대해 책임지지 않습니다\n- 최대 책임은 프리미엄 기능에 지불한 금액으로 제한됩니다\n\n7. 문의\n- 서비스 관련 문의: lululabs.app@gmail.com';
+
+  @override
   String get cryIdleTitle => '아기가 울고 있나요?';
 
   @override
@@ -1816,7 +1839,16 @@ class SKo extends S {
   }
 
   @override
-  String get sectionDangerZone => '위험 영역';
+  String get settingsDataManagement => '데이터 관리';
+
+  @override
+  String get settingsAccountDeletion => '계정 탈퇴';
+
+  @override
+  String get settingsResetDescription => '기록을 지우고 처음부터 시작해요';
+
+  @override
+  String get settingsDeleteDescription => '계정과 모든 데이터가 영구적으로 삭제됩니다';
 
   @override
   String get statusPreterm => '조산아';
@@ -2338,6 +2370,39 @@ class SKo extends S {
   }
 
   @override
+  String get insightSleepIncreased => '지난주보다 수면 시간이 늘었어요';
+
+  @override
+  String get insightSleepDecreased => '지난주보다 수면 시간이 줄었어요';
+
+  @override
+  String insightMostSleepDay(String dayName) {
+    return '$dayName에 가장 많이 잤어요';
+  }
+
+  @override
+  String get insightStartRecording => '기록을 시작해보세요';
+
+  @override
+  String sleepInProgressTitle(String babyName) {
+    return '$babyName 수면이 진행 중이에요';
+  }
+
+  @override
+  String sleepInProgressDuration(int hours, int minutes) {
+    return '$hours시간 $minutes분째 수면 중';
+  }
+
+  @override
+  String get sleepEndAndStart => '종료 후 새로 시작';
+
+  @override
+  String get sleepOverlapWarning => '수면 시간이 겹칩니다. 확인해주세요';
+
+  @override
+  String get viewRecord => '기록 보기';
+
+  @override
   String get errorRetryLater => '잠시 후 다시 시도해주세요';
 
   @override
@@ -2348,6 +2413,12 @@ class SKo extends S {
 
   @override
   String get errorDataLoadFailed => '데이터를 불러오지 못했어요';
+
+  @override
+  String get errorUnexpectedDescription => '예상치 못한 오류가 발생했어요.\n앱을 다시 시작해주세요.';
+
+  @override
+  String get errorRestartApp => '앱 다시 시작';
 
   @override
   String get percentileMeasureNeeded => '측정 필요';

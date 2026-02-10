@@ -37,6 +37,9 @@ class _GrowthScreenState extends State<GrowthScreen> {
   late GrowthProvider _provider;
   bool _initialized = false;
 
+  /// Sprint 20 HF #14: HomeProvider 아기 선택 동기화용
+  String? _lastSyncedBabyId;
+
   @override
   void initState() {
     super.initState();
@@ -64,16 +67,32 @@ class _GrowthScreenState extends State<GrowthScreen> {
 
     debugPrint('[OK] [GrowthScreen] Initializing with babies: ${babies.map((b) => b.name).join(", ")}');
     await _provider.initialize(babies);
+    _lastSyncedBabyId = homeProvider.selectedBabyId ?? babies.firstOrNull?.id;
     if (mounted) setState(() {});
+  }
+
+  /// Sprint 20 HF #14: HomeProvider 아기 선택을 GrowthProvider에 동기화
+  /// Sprint 21 Phase 2-4: decoupled from HomeProvider reference
+  void _syncBabySelectionById(String? selectedBabyId, List<BabyModel> babies) {
+    final homeBabyId = selectedBabyId ?? babies.firstOrNull?.id;
+    if (homeBabyId != null && homeBabyId != _lastSyncedBabyId && _initialized) {
+      _lastSyncedBabyId = homeBabyId;
+      _provider.selectBaby(homeBabyId);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // HomeProvider 연동: 아기 데이터 확인
-    return Consumer<HomeProvider>(
-      builder: (context, homeProvider, _) {
+    // Sprint 21 Phase 2-4: Selector for babies + selectedBabyId only
+    return Selector<HomeProvider, ({List<BabyModel> babies, String? selectedBabyId})>(
+      selector: (_, p) => (babies: p.babies, selectedBabyId: p.selectedBabyId),
+      builder: (context, data, _) {
+        // Sprint 20 HF #14: 다른 탭에서 아기 변경 시 GrowthProvider 동기화
+        _syncBabySelectionById(data.selectedBabyId, data.babies);
+
         // 1. 아기 없음 상태
-        if (homeProvider.babies.isEmpty) {
+        if (data.babies.isEmpty) {
           return _buildEmptyBabiesState();
         }
 
@@ -107,10 +126,18 @@ class _GrowthScreenState extends State<GrowthScreen> {
                 body: Column(
                   children: [
                     // 아기 탭바 (Sprint 6 리디자인)
+                    // Sprint 20 HF #14: 양방향 동기화 — GrowthProvider + HomeProvider
                     BabyTabBar(
                       babies: provider.babies,
                       selectedBabyId: provider.selectedBabyId,
-                      onBabyChanged: provider.selectBaby,
+                      onBabyChanged: (babyId) {
+                        provider.selectBaby(babyId);
+                        // HomeProvider에도 동기화
+                        if (babyId != null) {
+                          _lastSyncedBabyId = babyId;
+                          context.read<HomeProvider>().selectBaby(babyId);
+                        }
+                      },
                     ),
 
                     // 콘텐츠

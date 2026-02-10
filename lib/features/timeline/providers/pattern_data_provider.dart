@@ -27,7 +27,7 @@ class PatternDataProvider extends ChangeNotifier {
 
   // Sprint 19 v5: DayTimeline 기반 데이터 (세로 스택 렌더링용)
   List<DayTimeline> _weekTimelines = [];
-  List<List<DayTimeline>> _multipleWeekTimelines = []; // 다태아용
+  final List<List<DayTimeline>> _multipleWeekTimelines = []; // 다태아용
 
   // v4.1: 멀티 필터 상태 (Set 방식)
   Set<PatternActivityType> _activeFilters = {
@@ -161,6 +161,10 @@ class PatternDataProvider extends ChangeNotifier {
 
   /// v4.1: 멀티 필터 설정
   void setActiveFilters(Set<PatternActivityType> filters) {
+    if (_activeFilters.length == filters.length &&
+        _activeFilters.containsAll(filters)) {
+      return;
+    }
     _activeFilters = filters;
     notifyListeners();
   }
@@ -496,9 +500,7 @@ class PatternDataProvider extends ChangeNotifier {
         subType = activity.data?['sleep_type'] as String? ??
             activity.data?['sleepType'] as String?;
         // 없으면 시간 기준 판별
-        if (subType == null) {
-          subType = SleepTimeConfig.isNightTime(localStart.hour) ? 'night' : 'nap';
-        }
+        subType ??= SleepTimeConfig.isNightTime(localStart.hour) ? 'night' : 'nap';
       } else if (type == 'play') {
         subType = activity.data?['play_type'] as String? ??
             activity.data?['playType'] as String?;
@@ -515,7 +517,7 @@ class PatternDataProvider extends ChangeNotifier {
 
       // 디버그: 밤잠 자정 넘김 확인
       if (type == 'sleep' && localStart.day != date.day) {
-        debugPrint('[DEBUG] 자정 넘김 수면: 원본 $localStart~$localEnd → clamp ${block.startTime}~${block.endTime} (date: $date)');
+        debugPrint('[DEBUG] midnight-crossing sleep: original $localStart~$localEnd -> clamp ${block.startTime}~${block.endTime} (date: $date)');
       }
 
       allBlocks.add(block);

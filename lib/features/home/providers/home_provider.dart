@@ -1,37 +1,48 @@
 import 'package:flutter/material.dart';
-import '../../../core/design_system/lulu_icons.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../../data/repositories/baby_repository.dart';
 import '../../../data/repositories/family_repository.dart';
-import '../../../l10n/generated/app_localizations.dart' show S;
+import 'sweet_spot_provider.dart';
 
-/// 홈 화면 상태 관리 Provider
+/// Home screen state management Provider
 ///
-/// 다태아 지원:
-/// - 선택된 아기 관리 (null = 모두)
-/// - Sweet Spot 계산
-/// - 오늘 활동 요약
+/// Sprint 21 Phase 2-3: SweetSpot extracted to SweetSpotProvider
+/// - Family/babies/selection management
+/// - Today's activity CRUD + filtered cache
+/// - Summary counts (feeding, sleep, diaper)
+/// - Single-direction SweetSpot notification via _sweetSpotProvider
 ///
-/// BUG-002 수정: 모든 활동 getter에서 selectedBabyId 필터링 적용
+/// BUG-002 FIX: All activity getters filter by selectedBabyId
 class HomeProvider extends ChangeNotifier {
   // ========================================
-  // 상태
+  // SweetSpotProvider reference (single-direction)
   // ========================================
 
-  /// 현재 가족
+  SweetSpotProvider? _sweetSpotProvider;
+
+  /// Set SweetSpotProvider reference for single-direction notification
+  void setSweetSpotProvider(SweetSpotProvider provider) {
+    _sweetSpotProvider = provider;
+  }
+
+  // ========================================
+  // State
+  // ========================================
+
+  /// Current family
   FamilyModel? _family;
   FamilyModel? get family => _family;
 
-  /// 현재 가족의 아기들
+  /// Current family's babies
   List<BabyModel> _babies = [];
   List<BabyModel> get babies => List.unmodifiable(_babies);
 
-  /// 선택된 아기 ID (null = 모두)
+  /// Selected baby ID (null = all)
   String? _selectedBabyId;
   String? get selectedBabyId => _selectedBabyId;
 
-  /// 선택된 아기 (null이면 첫번째 아기)
+  /// Selected baby (null defaults to first baby)
   BabyModel? get selectedBaby {
     if (_selectedBabyId == null && _babies.isNotEmpty) {
       return _babies.first;
@@ -39,36 +50,34 @@ class HomeProvider extends ChangeNotifier {
     return _babies.where((b) => b.id == _selectedBabyId).firstOrNull;
   }
 
-  /// 모든 아기 선택 여부
+  /// All babies selected flag
   bool get isAllSelected => _selectedBabyId == null;
 
-  /// 오늘 활동들 (전체 - 내부용)
+  /// Today's activities (all - internal)
   List<ActivityModel> _todayActivities = [];
 
-  /// 오늘 활동들 (전체 - 외부 접근용, 하위 호환성)
+  /// Today's activities (all - external access, backward compatibility)
   List<ActivityModel> get todayActivities => List.unmodifiable(_todayActivities);
 
   // ========================================
-  // BUG-002 FIX: 선택된 아기별 필터링된 활동
+  // BUG-002 FIX: Filtered activities by selected baby
   // ========================================
 
-  /// 캐싱된 필터링 활동 (성능 최적화)
+  /// Cached filtered activities (performance optimization)
   List<ActivityModel>? _cachedFilteredActivities;
   String? _cachedFilterBabyId;
 
-  /// 선택된 아기의 오늘 활동만 반환
+  /// Return today's activities filtered by selected baby
   ///
-  /// - selectedBabyId가 null이면 모든 활동 반환
-  /// - selectedBabyId가 있으면 해당 아기의 활동만 필터링
-  /// - 동일한 조건이면 캐시된 결과 반환 (성능 최적화)
+  /// - selectedBabyId null → return all activities
+  /// - selectedBabyId set → filter to that baby only
+  /// - Same condition → return cached result (performance)
   List<ActivityModel> get filteredTodayActivities {
-    // 캐시 유효성 체크
     if (_cachedFilteredActivities != null &&
         _cachedFilterBabyId == _selectedBabyId) {
       return _cachedFilteredActivities!;
     }
 
-    // 새로 필터링
     if (_selectedBabyId == null) {
       _cachedFilteredActivities = List.unmodifiable(_todayActivities);
     } else {
@@ -80,76 +89,37 @@ class HomeProvider extends ChangeNotifier {
     return _cachedFilteredActivities!;
   }
 
-  /// 캐시 무효화
+  /// Invalidate cache
   void _invalidateCache() {
     _cachedFilteredActivities = null;
     _cachedFilterBabyId = null;
   }
 
-  /// 로딩 상태
+  /// Loading state
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  /// 에러 메시지
+  /// Error message
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  /// Sprint 19 수정 2: 전체 기록 존재 여부 (신규 유저 판별)
-  bool _hasAnyRecordsEver = true; // 기본 true (깜빡임 방지)
+  /// Sprint 19: Whether any records exist ever (new user detection)
+  bool _hasAnyRecordsEver = true; // default true (prevent flash)
   bool get hasAnyRecordsEver => _hasAnyRecordsEver;
 
   // ========================================
-  // Sweet Spot 관련
+  // Today summary (BUG-002 FIX: filtered)
   // ========================================
 
-  /// Sweet Spot 상태
-  SweetSpotState _sweetSpotState = SweetSpotState.unknown;
-  SweetSpotState get sweetSpotState => _sweetSpotState;
-
-  /// Sweet Spot까지 남은 분
-  int _minutesUntilSweetSpot = 0;
-  int get minutesUntilSweetSpot => _minutesUntilSweetSpot;
-
-  /// 추천 수면 시간
-  DateTime? _recommendedSleepTime;
-  DateTime? get recommendedSleepTime => _recommendedSleepTime;
-
-  /// Sweet Spot 진행률 (0.0 ~ 1.2)
-  double get sweetSpotProgress {
-    if (_sweetSpotState == SweetSpotState.unknown) return 0.0;
-
-    final lastSleepActivity = lastSleep;
-    if (lastSleepActivity == null) return 0.0;
-
-    final baby = selectedBaby;
-    if (baby == null) return 0.0;
-
-    final lastWakeTime = lastSleepActivity.endTime ?? lastSleepActivity.startTime;
-    final recommendedAwakeTime = _getRecommendedAwakeTime(baby.effectiveAgeInMonths);
-    final elapsedMinutes = DateTime.now().difference(lastWakeTime).inMinutes;
-
-    return (elapsedMinutes / recommendedAwakeTime).clamp(0.0, 1.2);
-  }
-
-  /// 밤잠 여부 (18:00-05:59 → 밤잠)
-  bool get isNightTime {
-    final hour = DateTime.now().hour;
-    return hour >= 18 || hour < 6;
-  }
-
-  // ========================================
-  // 오늘 요약 (BUG-002 FIX: 필터링 적용)
-  // ========================================
-
-  /// 오늘 수유 횟수 (선택된 아기만)
+  /// Today's feeding count (selected baby only)
   int get todayFeedingCount {
     return filteredTodayActivities
         .where((a) => a.type == ActivityType.feeding)
         .length;
   }
 
-  /// 오늘 총 수면 시간 (분) - 선택된 아기만
-  /// 자정을 넘기는 수면도 정확히 계산 (QA-01)
+  /// Today's total sleep minutes (selected baby only)
+  /// Handles midnight-crossing sleep correctly (QA-01)
   int get todaySleepMinutes {
     final sleepActivities = filteredTodayActivities.where(
       (a) => a.type == ActivityType.sleep && a.endTime != null,
@@ -157,13 +127,12 @@ class HomeProvider extends ChangeNotifier {
 
     int totalMinutes = 0;
     for (final activity in sleepActivities) {
-      // durationMinutes getter 사용 (자정 넘김 처리 포함)
       totalMinutes += activity.durationMinutes ?? 0;
     }
     return totalMinutes;
   }
 
-  /// 오늘 수면 시간 문자열 (예: "8h 30m")
+  /// Today's sleep duration string (e.g. "8h 30m")
   String get todaySleepDuration {
     final hours = todaySleepMinutes ~/ 60;
     final minutes = todaySleepMinutes % 60;
@@ -172,14 +141,14 @@ class HomeProvider extends ChangeNotifier {
     return '${hours}h ${minutes}m';
   }
 
-  /// 오늘 기저귀 횟수 (선택된 아기만)
+  /// Today's diaper count (selected baby only)
   int get todayDiaperCount {
     return filteredTodayActivities
         .where((a) => a.type == ActivityType.diaper)
         .length;
   }
 
-  /// 마지막 수유 활동 (선택된 아기만)
+  /// Last feeding activity (selected baby only)
   ActivityModel? get lastFeeding {
     final feedings = filteredTodayActivities
         .where((a) => a.type == ActivityType.feeding)
@@ -188,7 +157,7 @@ class HomeProvider extends ChangeNotifier {
     return feedings.firstOrNull;
   }
 
-  /// 마지막 수면 활동 (선택된 아기만)
+  /// Last sleep activity (selected baby only)
   ActivityModel? get lastSleep {
     final sleeps = filteredTodayActivities
         .where((a) => a.type == ActivityType.sleep)
@@ -197,7 +166,7 @@ class HomeProvider extends ChangeNotifier {
     return sleeps.firstOrNull;
   }
 
-  /// 마지막 기저귀 활동 (선택된 아기만)
+  /// Last diaper activity (selected baby only)
   ActivityModel? get lastDiaper {
     final diapers = filteredTodayActivities
         .where((a) => a.type == ActivityType.diaper)
@@ -207,23 +176,23 @@ class HomeProvider extends ChangeNotifier {
   }
 
   // ========================================
-  // 마지막 활동 시간 (DateTime) - LastActivityRow용
+  // Last activity times (DateTime) - for LastActivityRow
   // ========================================
 
-  /// 마지막 수면 시간 (DateTime)
+  /// Last sleep time (DateTime)
   DateTime? get lastSleepTime => lastSleep?.endTime ?? lastSleep?.startTime;
 
-  /// 마지막 수유 시간 (DateTime)
+  /// Last feeding time (DateTime)
   DateTime? get lastFeedingTime => lastFeeding?.startTime;
 
-  /// 마지막 기저귀 시간 (DateTime)
+  /// Last diaper time (DateTime)
   DateTime? get lastDiaperTime => lastDiaper?.startTime;
 
   // ========================================
-  // 메서드
+  // Methods
   // ========================================
 
-  /// 가족 및 아기 목록 설정 (BUG-001 fix)
+  /// Set family and babies (BUG-001 fix)
   void setFamily(FamilyModel family, List<BabyModel> babies) {
     _family = family;
     _babies = babies;
@@ -237,7 +206,7 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 아기 목록 설정 (하위 호환성)
+  /// Set babies list (backward compatibility)
   void setBabies(List<BabyModel> babies) {
     _babies = babies;
     if (_selectedBabyId != null && !babies.any((b) => b.id == _selectedBabyId)) {
@@ -246,115 +215,71 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 아기 선택
+  /// Select baby
   ///
-  /// BUG-002 NOTE: 아기 전환 시 filteredTodayActivities가 자동으로
-  /// 새로운 selectedBabyId를 기준으로 필터링됨
+  /// BUG-002 NOTE: On baby switch, filteredTodayActivities auto-filters
+  /// by the new selectedBabyId
   void selectBaby(String? babyId) {
+    if (_selectedBabyId == babyId) return;
     _selectedBabyId = babyId;
-    _invalidateCache(); // 캐시 무효화
-    _calculateSweetSpot();
+    _invalidateCache();
+    _notifySweetSpot();
     debugPrint('[OK] [HomeProvider] Baby selected: $babyId, filtered activities: ${filteredTodayActivities.length}');
     notifyListeners();
   }
 
-  /// 오늘 활동 설정
+  /// Set today's activities
   void setTodayActivities(List<ActivityModel> activities) {
     _todayActivities = activities;
-    _invalidateCache(); // 캐시 무효화
-    _calculateSweetSpot();
+    _invalidateCache();
+    _notifySweetSpot();
     debugPrint('[OK] [HomeProvider] Activities set: ${activities.length} total, ${filteredTodayActivities.length} for selected baby');
     notifyListeners();
   }
 
-  /// 활동 추가
+  /// Add activity
   void addActivity(ActivityModel activity) {
     _todayActivities = [..._todayActivities, activity];
-    _invalidateCache(); // 캐시 무효화
-    _calculateSweetSpot();
+    _invalidateCache();
+    _notifySweetSpot();
     debugPrint('[OK] [HomeProvider] Activity added: ${activity.type}, babyIds: ${activity.babyIds}');
     notifyListeners();
   }
 
-  /// 활동 삭제
+  /// Remove activity
   void removeActivity(String activityId) {
     _todayActivities = _todayActivities
         .where((a) => a.id != activityId)
         .toList();
-    _invalidateCache(); // 캐시 무효화
-    _calculateSweetSpot();
+    _invalidateCache();
+    _notifySweetSpot();
     notifyListeners();
   }
 
-  /// 활동 업데이트
+  /// Update activity
   void updateActivity(ActivityModel updatedActivity) {
     _todayActivities = _todayActivities.map((a) {
       return a.id == updatedActivity.id ? updatedActivity : a;
     }).toList();
-    _invalidateCache(); // 캐시 무효화
-    _calculateSweetSpot();
+    _invalidateCache();
+    _notifySweetSpot();
     notifyListeners();
   }
 
-  /// Sweet Spot 계산
-  void _calculateSweetSpot() {
-    final baby = selectedBaby;
-    if (baby == null) {
-      _sweetSpotState = SweetSpotState.unknown;
-      return;
-    }
-
-    // 마지막 수면 시간 확인 (BUG-002 FIX: 필터링된 활동 사용)
+  /// Notify SweetSpotProvider with current data (single-direction flow)
+  void _notifySweetSpot() {
     final lastSleepActivity = lastSleep;
-    if (lastSleepActivity == null) {
-      _sweetSpotState = SweetSpotState.unknown;
-      return;
-    }
+    final baby = selectedBaby;
 
-    // 적용할 연령 (교정연령 또는 실제연령)
-    final ageInMonths = baby.effectiveAgeInMonths;
-
-    // 연령별 권장 활동 시간 (분)
-    final recommendedAwakeTime = _getRecommendedAwakeTime(ageInMonths);
-
-    // 마지막 수면 종료 시간
-    final lastWakeTime = lastSleepActivity.endTime ?? lastSleepActivity.startTime;
-
-    // 경과 시간
-    final elapsedMinutes = DateTime.now().difference(lastWakeTime).inMinutes;
-
-    // Sweet Spot 계산
-    _minutesUntilSweetSpot = recommendedAwakeTime - elapsedMinutes;
-    _recommendedSleepTime = lastWakeTime.add(Duration(minutes: recommendedAwakeTime));
-
-    // 상태 결정
-    if (_minutesUntilSweetSpot > 30) {
-      _sweetSpotState = SweetSpotState.tooEarly;
-    } else if (_minutesUntilSweetSpot > 0) {
-      _sweetSpotState = SweetSpotState.approaching;
-    } else if (_minutesUntilSweetSpot > -15) {
-      _sweetSpotState = SweetSpotState.optimal;
-    } else {
-      _sweetSpotState = SweetSpotState.overtired;
-    }
+    _sweetSpotProvider?.recalculate(
+      lastSleepEndTime: lastSleepActivity?.endTime ?? lastSleepActivity?.startTime,
+      babyAgeInMonths: baby?.effectiveAgeInMonths,
+    );
   }
 
-  /// 연령별 권장 활동 시간 (분)
-  int _getRecommendedAwakeTime(int ageInMonths) {
-    // 연령별 권장 활동 시간 (교정연령 기준)
-    if (ageInMonths < 1) return 45; // 신생아: 45분
-    if (ageInMonths < 2) return 60; // 1개월: 1시간
-    if (ageInMonths < 3) return 75; // 2개월: 1시간 15분
-    if (ageInMonths < 4) return 90; // 3개월: 1시간 30분
-    if (ageInMonths < 6) return 120; // 4-5개월: 2시간
-    if (ageInMonths < 9) return 150; // 6-8개월: 2시간 30분
-    if (ageInMonths < 12) return 180; // 9-11개월: 3시간
-    return 210; // 12개월+: 3시간 30분
-  }
-
-  /// 데이터 새로고침
+  /// Refresh data from Supabase
   ///
-  /// QA FIX: 실제 Supabase 데이터 로딩 구현
+  /// QA FIX: Real Supabase data loading
   Future<void> refresh() async {
     if (_family == null) {
       debugPrint('[WARN] [HomeProvider] Cannot refresh: family not set');
@@ -368,27 +293,25 @@ class HomeProvider extends ChangeNotifier {
     try {
       final activityRepo = ActivityRepository();
 
-      // 오늘 활동 조회
       final activities = await activityRepo.getTodayActivities(_family!.id);
       _todayActivities = activities;
       _invalidateCache();
 
       debugPrint('[OK] [HomeProvider] Refreshed: ${activities.length} activities loaded');
 
-      _calculateSweetSpot();
+      _notifySweetSpot();
     } catch (e) {
       _errorMessage = 'Failed to load data: $e';
-      debugPrint('[ERROR] [HomeProvider] Refresh error: $e');
+      debugPrint('[ERR] [HomeProvider] Refresh error: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  /// 초기 데이터 로드 (가족 설정 후 호출)
+  /// Load today's activities (called after family is set)
   ///
-  /// 가족과 아기 정보가 설정된 후 오늘 활동을 로드합니다.
-  /// Sprint 19: hasAnyRecordsEver도 함께 체크
+  /// Sprint 19: Also checks hasAnyRecordsEver
   Future<void> loadTodayActivities() async {
     if (_family == null) {
       debugPrint('[WARN] [HomeProvider] Cannot load activities: family not set');
@@ -398,7 +321,7 @@ class HomeProvider extends ChangeNotifier {
     try {
       final activityRepo = ActivityRepository();
 
-      // Sprint 19 수정 2: 전체 기록 존재 여부 체크 (병렬 실행)
+      // Sprint 19: Check total records existence in parallel
       final results = await Future.wait([
         activityRepo.getTodayActivities(_family!.id),
         activityRepo.hasAnyActivities(_family!.id),
@@ -410,143 +333,36 @@ class HomeProvider extends ChangeNotifier {
       _todayActivities = activities;
       _hasAnyRecordsEver = hasAny;
       _invalidateCache();
-      _calculateSweetSpot();
+      _notifySweetSpot();
 
       debugPrint('[OK] [HomeProvider] Today activities loaded: ${activities.length}, hasAnyRecordsEver: $hasAny');
       notifyListeners();
     } catch (e) {
-      debugPrint('[ERROR] [HomeProvider] Error loading activities: $e');
+      debugPrint('[ERR] [HomeProvider] Error loading activities: $e');
       _errorMessage = 'Failed to load activity data';
       notifyListeners();
     }
   }
 
-  /// 테스트용 더미 데이터 초기화
-  /// TODO: 실제 구현 시 온보딩 완료 후 Supabase에서 데이터 로드
-  void initializeWithDummyData() {
-    final now = DateTime.now();
-
-    _babies = [
-      BabyModel(
-        id: 'baby-1',
-        familyId: 'family-1',
-        name: '서준이',
-        birthDate: now.subtract(const Duration(days: 60)),
-        gender: Gender.male,
-        gestationalWeeksAtBirth: 34,
-        birthWeightGrams: 2100,
-        multipleBirthType: BabyType.twin,
-        birthOrder: 1,
-        createdAt: now,
-      ),
-      BabyModel(
-        id: 'baby-2',
-        familyId: 'family-1',
-        name: '서윤이',
-        birthDate: now.subtract(const Duration(days: 60)),
-        gender: Gender.female,
-        gestationalWeeksAtBirth: 34,
-        birthWeightGrams: 1950,
-        multipleBirthType: BabyType.twin,
-        birthOrder: 2,
-        createdAt: now,
-      ),
-    ];
-
-    _selectedBabyId = _babies.first.id;
-    notifyListeners();
-  }
-
-  /// 상태 초기화
+  /// Reset all state
   void reset() {
     _family = null;
     _babies = [];
     _selectedBabyId = null;
     _todayActivities = [];
-    _sweetSpotState = SweetSpotState.unknown;
-    _minutesUntilSweetSpot = 0;
-    _recommendedSleepTime = null;
     _isLoading = false;
     _errorMessage = null;
+    _hasAnyRecordsEver = true;
     _invalidateCache();
+    _sweetSpotProvider?.reset();
     debugPrint('[OK] [HomeProvider] Reset complete');
     notifyListeners();
   }
 
-  // ========================================
-  // BUG-009 FIX: 아기 추가 (Supabase + 로컬)
-  // ========================================
-
-  /// 아기 추가 (Repository + 로컬)
+  /// Handle family change (Family Sharing)
   ///
-  /// BUG-009 FIX: family 존재 확인 후 아기 추가
-  Future<void> addBaby(BabyModel baby) async {
-    final babyRepository = BabyRepository();
-    final familyRepository = FamilyRepository();
-    try {
-      // 1. family 존재 확인 + family_members 등록
-      await familyRepository.ensureFamilyMember(baby.familyId);
-
-      // 2. Repository를 통해 저장
-      await babyRepository.createBaby(baby);
-
-      // 3. 로컬 상태 업데이트
-      _babies = [..._babies, baby];
-      if (_selectedBabyId == null) {
-        _selectedBabyId = baby.id;
-      }
-
-      // family의 babyIds도 업데이트
-      if (_family != null) {
-        _family = _family!.copyWith(
-          babyIds: [..._family!.babyIds, baby.id],
-        );
-      }
-
-      _invalidateCache();
-      notifyListeners();
-      debugPrint('[OK] [HomeProvider] Baby added: ${baby.name}');
-    } catch (e) {
-      debugPrint('[ERROR] [HomeProvider] addBaby failed: $e');
-      rethrow;
-    }
-  }
-
-  /// 아기 삭제
-  Future<void> removeBaby(String babyId) async {
-    final babyRepository = BabyRepository();
-    try {
-      // Repository를 통해 삭제
-      await babyRepository.deleteBaby(babyId);
-
-      // 로컬 상태 업데이트
-      _babies = _babies.where((b) => b.id != babyId).toList();
-
-      // 삭제한 아기가 선택되어 있었으면 다른 아기 선택
-      if (_selectedBabyId == babyId) {
-        _selectedBabyId = _babies.isNotEmpty ? _babies.first.id : null;
-      }
-
-      // family의 babyIds도 업데이트
-      if (_family != null) {
-        _family = _family!.copyWith(
-          babyIds: _family!.babyIds.where((id) => id != babyId).toList(),
-        );
-      }
-
-      _invalidateCache();
-      notifyListeners();
-      debugPrint('[OK] [HomeProvider] Baby removed: $babyId');
-    } catch (e) {
-      debugPrint('[ERROR] [HomeProvider] removeBaby failed: $e');
-      rethrow;
-    }
-  }
-
-  /// 가족 변경 시 호출 (Family Sharing)
-  ///
-  /// 새 가족에 참여하거나 가족이 변경되었을 때 호출됩니다.
-  /// 가족 정보와 활동 데이터를 새로 로드합니다.
+  /// Called when joining a new family or family changes.
+  /// Reloads family info and activity data.
   Future<void> onFamilyChanged(String newFamilyId) async {
     debugPrint('[INFO] [HomeProvider] Family changed to: $newFamilyId');
 
@@ -555,74 +371,24 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // TODO: Supabase에서 새 가족 정보 로드
-      // final familyRepo = FamilyRepository();
-      // final family = await familyRepo.getFamily(newFamilyId);
-      // final babies = await familyRepo.getBabies(newFamilyId);
-      // setFamily(family, babies);
+      final familyRepo = FamilyRepository();
+      final family = await familyRepo.getFamilyById(newFamilyId);
 
-      // 활동 데이터 새로 로드
+      if (family != null) {
+        final babyRepo = BabyRepository();
+        final babies = await babyRepo.getBabiesByFamilyId(newFamilyId);
+        setFamily(family, babies);
+      }
+
       await refresh();
 
-      debugPrint('[OK] [HomeProvider] Family data reloaded');
+      debugPrint('[OK] [HomeProvider] Family data reloaded for: $newFamilyId');
     } catch (e) {
       _errorMessage = 'Failed to load family data: $e';
-      debugPrint('[ERROR] [HomeProvider] Family change error: $e');
+      debugPrint('[ERR] [HomeProvider] Family change error: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
     }
-  }
-}
-
-/// Sweet Spot 상태
-enum SweetSpotState {
-  /// 알 수 없음
-  unknown,
-
-  /// 아직 피곤하지 않음
-  tooEarly,
-
-  /// 곧 적정 시간에 접근
-  approaching,
-
-  /// 지금이 최적 시간
-  optimal,
-
-  /// 과로 상태
-  overtired,
-}
-
-extension SweetSpotStateExtension on SweetSpotState {
-  /// 표시용 라벨 (기존 - 추후 localizedLabel로 교체)
-  String get label {
-    return switch (this) {
-      SweetSpotState.unknown => '확인 중',
-      SweetSpotState.tooEarly => '아직 일찍',
-      SweetSpotState.approaching => '곧 수면 시간',
-      SweetSpotState.optimal => '지금이 최적!',
-      SweetSpotState.overtired => '과로 상태',
-    };
-  }
-
-  /// 표시용 라벨 (i18n)
-  String localizedLabel(S l10n) {
-    return switch (this) {
-      SweetSpotState.unknown => l10n.sweetSpotStateLabelUnknown,
-      SweetSpotState.tooEarly => l10n.sweetSpotStateLabelTooEarly,
-      SweetSpotState.approaching => l10n.sweetSpotStateLabelApproaching,
-      SweetSpotState.optimal => l10n.sweetSpotStateLabelOptimal,
-      SweetSpotState.overtired => l10n.sweetSpotStateLabelOvertired,
-    };
-  }
-
-  IconData get icon {
-    return switch (this) {
-      SweetSpotState.unknown => LuluIcons.info,
-      SweetSpotState.tooEarly => LuluIcons.sun,
-      SweetSpotState.approaching => LuluIcons.sleep,
-      SweetSpotState.optimal => LuluIcons.moon,
-      SweetSpotState.overtired => LuluIcons.warning,
-    };
   }
 }

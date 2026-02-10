@@ -23,7 +23,7 @@ class ActivityRepository {
 
       return (response as List).map((data) => _mapToActivityModel(data)).toList();
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error getting activities: $e');
+      debugPrint('[ERR] [ActivityRepository] Error getting activities: $e');
       rethrow;
     }
   }
@@ -43,7 +43,7 @@ class ActivityRepository {
 
       return (response as List).map((data) => _mapToActivityModel(data)).toList();
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error getting baby activities: $e');
+      debugPrint('[ERR] [ActivityRepository] Error getting baby activities: $e');
       rethrow;
     }
   }
@@ -111,7 +111,7 @@ class ActivityRepository {
 
       return (response as List).map((data) => _mapToActivityModel(data)).toList();
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error getting activities by date: $e');
+      debugPrint('[ERR] [ActivityRepository] Error getting activities by date: $e');
       rethrow;
     }
   }
@@ -127,7 +127,7 @@ class ActivityRepository {
       if (response == null) return null;
       return _mapToActivityModel(response);
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error getting activity by id: $e');
+      debugPrint('[ERR] [ActivityRepository] Error getting activity by id: $e');
       rethrow;
     }
   }
@@ -145,7 +145,7 @@ class ActivityRepository {
       debugPrint('[OK] [ActivityRepository] Activity created: ${response['id']}');
       return _mapToActivityModel(response);
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error creating activity: $e');
+      debugPrint('[ERR] [ActivityRepository] Error creating activity: $e');
       rethrow;
     }
   }
@@ -166,16 +166,16 @@ class ActivityRepository {
       debugPrint('[OK] [ActivityRepository] Activity updated: ${activity.id}');
       return _mapToActivityModel(response);
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error updating activity: $e');
+      debugPrint('[ERR] [ActivityRepository] Error updating activity: $e');
       rethrow;
     }
   }
 
   /// 활동 종료 (endTime 설정)
-  /// 🔧 Sprint 19 FIX: Local → UTC 변환 추가
+  /// FIX: Sprint 19 FIX: Local → UTC 변환 추가
   Future<ActivityModel> finishActivity(String activityId, [DateTime? endTime]) async {
     try {
-      final endTimeUtc = (endTime ?? DateTime.now()).toUtc();  // 🔧 toUtc() 추가
+      final endTimeUtc = (endTime ?? DateTime.now()).toUtc();  // FIX: toUtc() 추가
       final response = await SupabaseService.activities
           .update({'end_time': endTimeUtc.toIso8601String()})
           .eq('id', activityId)
@@ -185,7 +185,7 @@ class ActivityRepository {
       debugPrint('[OK] [ActivityRepository] Activity finished: $activityId');
       return _mapToActivityModel(response);
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error finishing activity: $e');
+      debugPrint('[ERR] [ActivityRepository] Error finishing activity: $e');
       rethrow;
     }
   }
@@ -199,7 +199,7 @@ class ActivityRepository {
 
       debugPrint('[OK] [ActivityRepository] Activity deleted: $activityId');
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error deleting activity: $e');
+      debugPrint('[ERR] [ActivityRepository] Error deleting activity: $e');
       rethrow;
     }
   }
@@ -215,7 +215,7 @@ class ActivityRepository {
 
       return (response as List).map((data) => _mapToActivityModel(data)).toList();
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error getting ongoing activities: $e');
+      debugPrint('[ERR] [ActivityRepository] Error getting ongoing activities: $e');
       rethrow;
     }
   }
@@ -232,7 +232,7 @@ class ActivityRepository {
       debugPrint('[DEBUG] [ActivityRepository] hasAnyActivities($familyId): $hasAny');
       return hasAny;
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error checking hasAnyActivities: $e');
+      debugPrint('[ERR] [ActivityRepository] Error checking hasAnyActivities: $e');
       // 에러 시 true 반환 (신규 유저 Empty State 표시 방지)
       return true;
     }
@@ -265,25 +265,25 @@ class ActivityRepository {
       if (response == null) return null;
       return _mapToActivityModel(response);
     } catch (e) {
-      debugPrint('❌ [ActivityRepository] Error getting last activity: $e');
+      debugPrint('[ERR] [ActivityRepository] Error getting last activity: $e');
       rethrow;
     }
   }
 
-  /// 🔍 디버그: 모든 활동 조회 (family_id 검증용)
+  /// DEBUG: 디버그: 모든 활동 조회 (family_id 검증용)
   Future<void> debugCheckActivities(String familyId) async {
     try {
       // 1. 해당 family_id의 활동 개수
       final byFamily = await SupabaseService.activities
           .select()
           .eq('family_id', familyId);
-      debugPrint('🔍 [ActivityRepo] Activities with family_id=$familyId: ${(byFamily as List).length}');
+      debugPrint('[DEBUG] [ActivityRepo] Activities with family_id=$familyId: ${(byFamily as List).length}');
 
       // 2. 전체 활동 개수 (family_id 필터 없이)
       final allActivities = await SupabaseService.activities
           .select()
           .limit(10);
-      debugPrint('🔍 [ActivityRepo] Sample of all activities (limit 10):');
+      debugPrint('[DEBUG] [ActivityRepo] Sample of all activities (limit 10):');
       for (final a in (allActivities as List)) {
         debugPrint('   - id: ${a['id']?.toString().substring(0, 8)}..., family_id: ${a['family_id']}, baby_ids: ${a['baby_ids']}');
       }
@@ -293,9 +293,9 @@ class ActivityRepository {
           .select('family_id')
           .limit(100);
       final familyIds = (uniqueFamilies as List).map((e) => e['family_id']).toSet();
-      debugPrint('🔍 [ActivityRepo] Unique family_ids in activities: $familyIds');
+      debugPrint('[DEBUG] [ActivityRepo] Unique family_ids in activities: $familyIds');
     } catch (e) {
-      debugPrint('❌ [ActivityRepo] Debug check error: $e');
+      debugPrint('[ERR] [ActivityRepo] Debug check error: $e');
     }
   }
 
@@ -304,7 +304,7 @@ class ActivityRepository {
   // ========================================
 
   /// Supabase 응답 -> ActivityModel 변환
-  /// 🔧 Sprint 19 H-UTC: UTC → Local 변환 추가 (조회 시)
+  /// FIX: Sprint 19 H-UTC: UTC → Local 변환 추가 (조회 시)
   ActivityModel _mapToActivityModel(Map<String, dynamic> data) {
     return ActivityModel(
       id: data['id'],
@@ -326,7 +326,7 @@ class ActivityRepository {
   }
 
   /// ActivityModel -> Supabase 데이터 변환
-  /// 🔧 Sprint 19 FIX: Local → UTC 변환 추가 (저장 시)
+  /// FIX: Sprint 19 FIX: Local → UTC 변환 추가 (저장 시)
   Map<String, dynamic> _mapToSupabaseData(ActivityModel activity) {
     // 디버그 로그 (UTC 변환 확인)
     debugPrint('[UTC-DEBUG] startTime: ${activity.startTime}, isUtc=${activity.startTime.isUtc}');
@@ -337,8 +337,8 @@ class ActivityRepository {
       'family_id': activity.familyId,
       'baby_ids': activity.babyIds,
       'type': activity.type.value,
-      'start_time': activity.startTime.toUtc().toIso8601String(),  // 🔧 toUtc() 추가
-      if (activity.endTime != null) 'end_time': activity.endTime!.toUtc().toIso8601String(),  // 🔧 toUtc() 추가
+      'start_time': activity.startTime.toUtc().toIso8601String(),  // FIX: toUtc() 추가
+      if (activity.endTime != null) 'end_time': activity.endTime!.toUtc().toIso8601String(),  // FIX: toUtc() 추가
       if (activity.data != null) 'data': activity.data,
       if (activity.notes != null) 'notes': activity.notes,
     };

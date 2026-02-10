@@ -246,7 +246,7 @@ class _PercentileBarState extends State<_PercentileBar>
             child: Container(
               width: 1,
               height: 8,
-              color: LuluColors.midnightNavy.withValues(alpha: 0.5),
+              color: LuluColors.midnightNavyMedium,
             ),
           ),
         ),

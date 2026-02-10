@@ -139,7 +139,7 @@ class _TummyTimeTimerState extends State<TummyTimeTimer>
         border: Border.all(
           color: _hasReachedGoal
               ? LuluStatusColors.success
-              : LuluActivityColors.play.withValues(alpha: 0.3),
+              : LuluActivityColors.playBorder,
           width: 2,
         ),
       ),

@@ -58,7 +58,9 @@ class _OnboardingContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<OnboardingProvider>();
+    // Sprint 21 Phase 2-4: context.select for currentStep + progress only
+    final currentStep = context.select<OnboardingProvider, OnboardingStep>((p) => p.currentStep);
+    final progress = context.select<OnboardingProvider, double>((p) => p.progress);
 
     return Scaffold(
       backgroundColor: AppTheme.surfaceDark,
@@ -67,9 +69,9 @@ class _OnboardingContent extends StatelessWidget {
           children: [
             // 상단 바 (진행률 + 뒤로가기)
             _OnboardingHeader(
-              showBackButton: provider.currentStep != OnboardingStep.welcome,
-              progress: provider.progress,
-              onBack: () => provider.previousStep(),
+              showBackButton: currentStep != OnboardingStep.welcome,
+              progress: progress,
+              onBack: () => context.read<OnboardingProvider>().previousStep(),
             ),
 
             // 컨텐츠 영역
@@ -88,7 +90,7 @@ class _OnboardingContent extends StatelessWidget {
                     ),
                   );
                 },
-                child: _buildCurrentStep(provider.currentStep),
+                child: _buildCurrentStep(currentStep),
               ),
             ),
           ],

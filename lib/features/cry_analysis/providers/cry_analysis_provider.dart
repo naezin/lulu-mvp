@@ -86,6 +86,7 @@ class CryAnalysisProvider extends ChangeNotifier {
 
   /// 프리미엄 상태 설정
   void setPremium(bool value) {
+    if (_isPremium == value) return;
     _isPremium = value;
     notifyListeners();
   }

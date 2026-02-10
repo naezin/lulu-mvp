@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/services/supabase_service.dart';
+import '../../../core/utils/app_toast.dart';
 import '../../../data/repositories/family_repository.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
@@ -20,43 +21,42 @@ class SettingsResetSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Container(
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
-        border: Border.all(
-          color: LuluStatusColors.errorBorder,
-        ),
       ),
       child: ListTile(
         leading: Container(
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: LuluStatusColors.errorLight,
+            color: LuluColors.lavenderLight,
             borderRadius: BorderRadius.circular(LuluRadius.section),
           ),
-          child: Icon(
+          child: const Icon(
             LuluIcons.deleteForever,
-            color: LuluStatusColors.error,
+            color: LuluTextColors.secondary,
             size: 22,
           ),
         ),
         title: Text(
-          S.of(context)!.resetDataTitle,
+          l10n.resetDataTitle,
           style: LuluTextStyles.bodyLarge.copyWith(
-            color: LuluStatusColors.error,
+            color: LuluTextColors.primary,
           ),
         ),
         subtitle: Text(
-          S.of(context)!.resetDataHint,
+          l10n.settingsResetDescription,
           style: LuluTextStyles.caption.copyWith(
             color: LuluTextColors.secondary,
           ),
         ),
-        trailing: Icon(
+        trailing: const Icon(
           LuluIcons.chevronRight,
-          color: LuluStatusColors.errorStrong,
+          color: LuluTextColors.secondary,
         ),
         onTap: () => _showResetConfirmDialog(context),
       ),
@@ -72,17 +72,11 @@ class SettingsResetSection extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(LuluRadius.md),
         ),
-        title: Row(
-          children: [
-            Icon(LuluIcons.statusWarn, color: LuluStatusColors.error),
-            const SizedBox(width: 8),
-            Text(
-              l10n.resetDataTitle,
-              style: LuluTextStyles.titleMedium.copyWith(
-                color: LuluTextColors.primary,
-              ),
-            ),
-          ],
+        title: Text(
+          l10n.resetDataTitle,
+          style: LuluTextStyles.titleMedium.copyWith(
+            color: LuluTextColors.primary,
+          ),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -98,15 +92,15 @@ class SettingsResetSection extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: LuluStatusColors.errorBg,
+                color: LuluColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildWarningItem(l10n.resetWarningRecords),
-                  _buildWarningItem(l10n.resetWarningBabies),
-                  _buildWarningItem(l10n.resetWarningIrreversible),
+                  _buildInfoItem(l10n.resetWarningRecords),
+                  _buildInfoItem(l10n.resetWarningBabies),
+                  _buildInfoItem(l10n.resetWarningIrreversible),
                 ],
               ),
             ),
@@ -144,21 +138,23 @@ class SettingsResetSection extends StatelessWidget {
     }
   }
 
-  Widget _buildWarningItem(String text) {
+  Widget _buildInfoItem(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
           Icon(
-            LuluIcons.removeCircleOutline,
+            LuluIcons.infoOutline,
             size: 16,
-            color: LuluStatusColors.error,
+            color: LuluTextColors.secondary,
           ),
           const SizedBox(width: 8),
-          Text(
-            text,
-            style: LuluTextStyles.bodySmall.copyWith(
-              color: LuluTextColors.primary,
+          Expanded(
+            child: Text(
+              text,
+              style: LuluTextStyles.bodySmall.copyWith(
+                color: LuluTextColors.secondary,
+              ),
             ),
           ),
         ],
@@ -220,15 +216,6 @@ class SettingsResetSection extends StatelessWidget {
   }
 
   void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: LuluColors.surfaceElevated,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(LuluRadius.sm),
-        ),
-      ),
-    );
+    AppToast.showText(message);
   }
 }

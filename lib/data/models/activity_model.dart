@@ -62,7 +62,7 @@ class ActivityModel {
   // ========================================
 
   /// 수유량 (ml) - feeding 타입용
-  /// 🔧 Sprint 19 E: int/double 모두 처리
+  /// FIX: Sprint 19 E: handles both int/double
   double? get feedingAmountMl {
     final value = data?['amount_ml'];
     if (value == null) return null;

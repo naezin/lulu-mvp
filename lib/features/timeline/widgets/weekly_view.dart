@@ -14,9 +14,9 @@ import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
 import '../../statistics/providers/statistics_data_provider.dart';
 import '../../statistics/providers/statistics_filter_provider.dart';
-import '../../statistics/models/insight_data.dart';
 import '../../statistics/models/weekly_statistics.dart';
 import '../../statistics/widgets/together_guide_dialog.dart';
+import '../../statistics/widgets/insight_card.dart';
 import '../models/daily_pattern.dart' show PatternFilter;
 import '../providers/pattern_data_provider.dart';
 import 'date_navigator.dart';
@@ -46,6 +46,9 @@ class _WeeklyViewState extends State<WeeklyView> {
   bool _isLoading = true;
   String? _errorMessage;
 
+  /// Sprint 20 HF #8: 이전 babyId 추적 (변경 감지용)
+  String? _previousBabyId;
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +57,8 @@ class _WeeklyViewState extends State<WeeklyView> {
     _patternProvider = PatternDataProvider();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final homeProvider = context.read<HomeProvider>();
+      _previousBabyId = homeProvider.selectedBabyId ?? homeProvider.babies.firstOrNull?.id;
       _loadData();
     });
   }
@@ -264,6 +269,17 @@ class _WeeklyViewState extends State<WeeklyView> {
   Widget build(BuildContext context) {
     final l10n = S.of(context);
 
+    // Sprint 20 HF #8: 아기 전환 감지 → 데이터 리로드
+    // Sprint 21 Phase 2-4: context.select for granular rebuild
+    final currentBabyId = context.select<HomeProvider, String?>((p) => p.selectedBabyId)
+        ?? context.select<HomeProvider, String?>((p) => p.babies.firstOrNull?.id);
+    if (currentBabyId != null && currentBabyId != _previousBabyId && !_isLoading) {
+      _previousBabyId = currentBabyId;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _loadData();
+      });
+    }
+
     if (_isLoading) {
       return _buildLoadingState();
     }
@@ -282,8 +298,7 @@ class _WeeklyViewState extends State<WeeklyView> {
     // null이 아님이 보장됨
     final stats = statistics!;
 
-    final homeProvider = context.watch<HomeProvider>();
-    final selectedBaby = homeProvider.selectedBaby;
+    final selectedBaby = context.read<HomeProvider>().selectedBaby;
     final correctedAgeDays = selectedBaby?.correctedAgeInDays;
 
     return RefreshIndicator(
@@ -357,13 +372,13 @@ class _WeeklyViewState extends State<WeeklyView> {
               const SizedBox(height: LuluSpacing.xl),
             ] else if (_patternProvider.weekTimelines.isNotEmpty) ...[
               // 다태아인 경우 함께보기 버튼 표시
-              if (homeProvider.babies.length > 1) ...[
+              if (context.read<HomeProvider>().babies.length > 1) ...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TogetherViewButton(
                       isEnabled: _patternProvider.togetherViewEnabled,
-                      onTap: () => _toggleTogetherView(homeProvider),
+                      onTap: () => _toggleTogetherView(context.read<HomeProvider>()),
                     ),
                   ],
                 ),
@@ -376,8 +391,8 @@ class _WeeklyViewState extends State<WeeklyView> {
                 ..._patternProvider.multipleWeekTimelines.asMap().entries.map((entry) {
                   final index = entry.key;
                   final timelines = entry.value;
-                  final babyName = homeProvider.babies.length > index
-                      ? homeProvider.babies[index].name
+                  final babyName = context.read<HomeProvider>().babies.length > index
+                      ? context.read<HomeProvider>().babies[index].name
                       : '';
                   return Padding(
                     padding: const EdgeInsets.only(bottom: LuluSpacing.md),
@@ -449,43 +464,9 @@ class _WeeklyViewState extends State<WeeklyView> {
   }
 
   /// 인사이트 카드
+  /// Sprint 21 HF #13: InsightCard 위젯 사용 (i18n 키 → 로컬라이즈)
   Widget _buildInsightCard() {
-    final insight = _dataProvider.insight!;
-    final color = switch (insight.type) {
-      InsightType.positive => LuluStatusColors.success,
-      InsightType.attention => LuluStatusColors.warning,
-      InsightType.neutral => LuluColors.lavenderMist,
-    };
-
-    return Container(
-      padding: const EdgeInsets.all(LuluSpacing.md),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(LuluRadius.sm),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            LuluIcons.tip,
-            color: color,
-            size: 24,
-          ),
-          const SizedBox(width: LuluSpacing.sm),
-          Expanded(
-            child: Text(
-              insight.message,
-              style: LuluTextStyles.bodyMedium.copyWith(
-                color: LuluTextColors.primary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return InsightCard(insight: _dataProvider.insight!);
   }
 
   /// 로딩 상태

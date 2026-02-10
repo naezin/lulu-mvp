@@ -350,7 +350,8 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
 
   Widget _buildPlaySection() {
     final l10n = S.of(context)!;
-    final playType = _data['play_type'] as String? ?? '놀이';
+    // DB stores Korean play_type values for backward compatibility
+    final playType = _data['play_type'] as String? ?? '놀이'; // DB default
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -367,7 +368,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
         // Note: Play type values stored as Korean in DB - not i18n converted
         _buildChipSelector(
           label: l10n.labelType,
-          options: const ['터미타임', '목욕', '외출', '놀이', '독서', '기타'],
+          options: const ['터미타임', '목욕', '외출', '놀이', '독서', '기타'], // DB keys
           displayLabels: [l10n.playTypeTummyTime, l10n.playTypeBath, l10n.playTypeOutdoor, l10n.activityPlay, l10n.playTypeReading, l10n.playTypeOther],
           selectedValue: playType,
           onChanged: (value) => setState(() => _data['play_type'] = value),

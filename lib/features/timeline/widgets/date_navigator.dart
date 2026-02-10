@@ -10,8 +10,8 @@ enum DateNavigatorScope { daily, weekly }
 
 /// 날짜 좌우 탐색 위젯
 ///
-/// daily: ◀ │ 2/8 (일) 📅 │ ▶
-/// weekly: ◀ │ 2/2 ~ 2/8 📅 │ ▶
+/// daily: < | 2/8 (Sun) [cal] | >
+/// weekly: < | 2/2 ~ 2/8 [cal] | >
 class DateNavigator extends StatelessWidget {
   final DateTime selectedDate;
   final ValueChanged<DateTime> onDateChanged;
