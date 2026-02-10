@@ -31,7 +31,7 @@ class CryAnalysisPlaceholder extends StatelessWidget {
           vertical: LuluSpacing.md,
         ),
         decoration: BoxDecoration(
-          color: LuluColors.lavenderMist.withValues(alpha: 0.08),
+          color: LuluColors.lavenderSubtle,
           borderRadius: BorderRadius.circular(LuluRadius.md),
           border: Border.all(
             color: LuluColors.lavenderSelected,

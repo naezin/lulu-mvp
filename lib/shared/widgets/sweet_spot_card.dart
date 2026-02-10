@@ -178,7 +178,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         ),
         borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(
-          color: LuluActivityColors.sleep.withValues(alpha: 0.4),
+          color: LuluActivityColors.sleepCardBorder,
           width: 2,
         ),
       ),
@@ -543,7 +543,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           Icon(
             LuluIcons.sleep,
             size: 40,
-            color: LuluActivityColors.sleep.withValues(alpha: 0.6),
+            color: LuluActivityColors.sleepStrong,
           ),
           const SizedBox(height: LuluSpacing.md),
 

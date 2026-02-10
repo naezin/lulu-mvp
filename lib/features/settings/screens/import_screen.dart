@@ -361,7 +361,7 @@ class _ImportScreenState extends State<ImportScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: LuluStatusColors.warning.withValues(alpha: 0.1),
+              color: LuluStatusColors.warningBg,
               borderRadius: BorderRadius.circular(LuluRadius.sm),
               border: Border.all(
                 color: LuluStatusColors.warningBorder,
@@ -489,7 +489,7 @@ class _ImportScreenState extends State<ImportScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: LuluStatusColors.success.withValues(alpha: 0.1),
+              color: LuluStatusColors.successBg,
               shape: BoxShape.circle,
             ),
             child: const Icon(

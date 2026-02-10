@@ -40,7 +40,7 @@ class PieChartWidget extends StatefulWidget {
         PieSection(
           value: stats.napRatio,
           label: napLabel,
-          color: LuluStatisticsColors.sleep.withValues(alpha: 0.7),
+          color: LuluActivityColors.sleepSlice,
         ),
         PieSection(
           value: stats.nightRatio,
@@ -74,13 +74,13 @@ class PieChartWidget extends StatefulWidget {
           PieSection(
             value: stats.formulaRatio,
             label: formulaLabel,
-            color: LuluStatisticsColors.feeding.withValues(alpha: 0.7),
+            color: LuluActivityColors.feedingSlice,
           ),
         if (stats.solidFoodRatio > 0)
           PieSection(
             value: stats.solidFoodRatio,
             label: solidLabel,
-            color: LuluStatisticsColors.feeding.withValues(alpha: 0.5),
+            color: LuluActivityColors.feedingSolidSlice,
           ),
       ],
       size: size,
@@ -109,13 +109,13 @@ class PieChartWidget extends StatefulWidget {
           PieSection(
             value: stats.dirtyRatio,
             label: dirtyLabel,
-            color: LuluStatisticsColors.diaper.withValues(alpha: 0.7),
+            color: LuluActivityColors.diaperSlice,
           ),
         if (stats.bothRatio > 0)
           PieSection(
             value: stats.bothRatio,
             label: bothLabel,
-            color: LuluStatisticsColors.diaper.withValues(alpha: 0.5),
+            color: LuluActivityColors.diaperMixSlice,
           ),
       ],
       size: size,

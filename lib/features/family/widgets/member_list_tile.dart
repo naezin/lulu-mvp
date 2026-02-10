@@ -41,7 +41,7 @@ class MemberListTile extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: member.isOwner
-                  ? Colors.amber.withValues(alpha: 0.2)
+                  ? LuluColors.amberSelected
                   : LuluColors.lavenderSelected,
               borderRadius: BorderRadius.circular(LuluRadius.section),
             ),

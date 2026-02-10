@@ -142,12 +142,6 @@ enum GrowthMetric {
 }
 
 extension GrowthMetricExtension on GrowthMetric {
-  String get label => switch (this) {
-        GrowthMetric.weight => '체중',
-        GrowthMetric.length => '신장',
-        GrowthMetric.headCircumference => '두위',
-      };
-
   String localizedLabel(S l10n) => switch (this) {
         GrowthMetric.weight => l10n.growthMetricWeight,
         GrowthMetric.length => l10n.growthMetricLength,

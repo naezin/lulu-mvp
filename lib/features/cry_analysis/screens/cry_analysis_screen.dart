@@ -295,7 +295,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: LuluStatusColors.error.withValues(alpha: 0.2),
+                  color: LuluStatusColors.errorSelected,
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: LuluStatusColors.error,
@@ -619,7 +619,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
-        color: LuluColors.deepBlue.withValues(alpha: 0.5),
+        color: LuluColors.deepBlueMedium,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
       child: Row(

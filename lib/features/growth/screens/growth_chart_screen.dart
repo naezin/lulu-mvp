@@ -210,7 +210,7 @@ class _GrowthChartScreenState extends State<GrowthChartScreen>
                 vertical: LuluSpacing.xs,
               ),
               decoration: BoxDecoration(
-                color: LuluColors.champagneGold.withValues(alpha: 0.15),
+                color: LuluColors.champagneGoldLight,
                 borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Text(

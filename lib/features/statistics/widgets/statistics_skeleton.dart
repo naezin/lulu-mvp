@@ -130,20 +130,20 @@ class OfflineBanner extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: const Color(0xFFFBBF24).withValues(alpha: 0.1),
+      color: LuluColors.amberGoldBg,
       child: Row(
         children: [
           const Icon(
             LuluIcons.cloudOff,
             size: 16,
-            color: Color(0xFFFBBF24),
+            color: LuluColors.amberGold,
           ),
           const SizedBox(width: 8),
           Text(
             l10n.offlineModeLastSync(_formatTime(lastSyncTime, l10n)),
             style: const TextStyle(
               fontSize: 12,
-              color: Color(0xFFFBBF24),
+              color: LuluColors.amberGold,
             ),
           ),
         ],

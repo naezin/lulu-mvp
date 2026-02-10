@@ -125,33 +125,33 @@ class InsightCard extends StatelessWidget {
   Color _getIconColor() {
     switch (insight.type) {
       case InsightType.positive:
-        return const Color(0xFFFBBF24); // warning yellow
+        return LuluColors.amberGold;
       case InsightType.neutral:
         return LuluTextColors.secondary;
       case InsightType.attention:
-        return const Color(0xFF60A5FA); // info blue
+        return LuluColors.attentionBlue;
     }
   }
 
   Color _getBackgroundColor() {
     switch (insight.type) {
       case InsightType.positive:
-        return const Color(0xFFFBBF24).withValues(alpha: 0.1);
+        return LuluColors.amberGoldBg;
       case InsightType.neutral:
         return LuluColors.surfaceCard;
       case InsightType.attention:
-        return const Color(0xFF60A5FA).withValues(alpha: 0.1);
+        return LuluColors.attentionBlueBg;
     }
   }
 
   Color _getBorderColor() {
     switch (insight.type) {
       case InsightType.positive:
-        return const Color(0xFFFBBF24).withValues(alpha: 0.3);
+        return LuluColors.amberGoldBorder;
       case InsightType.neutral:
         return LuluColors.glassBorder;
       case InsightType.attention:
-        return const Color(0xFF60A5FA).withValues(alpha: 0.3);
+        return LuluColors.attentionBlueBorder;
     }
   }
 }

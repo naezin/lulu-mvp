@@ -461,7 +461,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
             color: LuluActivityColors.sleepBg,
             borderRadius: BorderRadius.circular(LuluRadius.md),
             border: Border.all(
-              color: LuluActivityColors.sleep.withValues(alpha: 0.3),
+              color: LuluActivityColors.sleepBorder,
             ),
           ),
           child: Row(

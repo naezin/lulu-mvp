@@ -299,7 +299,7 @@ class _GrowthInputScreenState extends State<GrowthInputScreen> {
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.md),
       decoration: BoxDecoration(
-        color: LuluStatusColors.warning.withValues(alpha: 0.15),
+        color: LuluStatusColors.warningLight,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
         border: Border.all(
           color: LuluStatusColors.warningBorder,

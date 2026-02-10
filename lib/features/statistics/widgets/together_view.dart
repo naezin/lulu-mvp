@@ -245,10 +245,10 @@ class TogetherView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFBBF24).withValues(alpha: 0.1),
+        color: LuluColors.amberGoldBg,
         borderRadius: BorderRadius.circular(LuluRadius.xs),
         border: Border.all(
-          color: const Color(0xFFFBBF24).withValues(alpha: 0.3),
+          color: LuluColors.amberGoldBorder,
         ),
       ),
       child: Row(
@@ -256,7 +256,7 @@ class TogetherView extends StatelessWidget {
           const Icon(
             LuluIcons.tip,
             size: 20,
-            color: Color(0xFFFBBF24),
+            color: LuluColors.amberGold,
           ),
           const SizedBox(width: 8),
           Expanded(

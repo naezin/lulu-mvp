@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/design_system/lulu_colors.dart';
+
 /// 텍스트가 있는 구분선
 /// "또는" 등의 텍스트를 가운데 두고 양쪽으로 선이 그어짐
 class DividerWithText extends StatelessWidget {
@@ -18,7 +20,7 @@ class DividerWithText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dividerColor = color ?? Colors.grey.withValues(alpha: 0.3);
+    final dividerColor = color ?? LuluColors.greyBorder;
 
     return Row(
       children: [

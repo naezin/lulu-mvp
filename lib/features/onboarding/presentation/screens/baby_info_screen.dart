@@ -314,7 +314,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               borderRadius: BorderRadius.circular(LuluRadius.lg),
               border: Border.all(
                 color: provider.currentBaby.isPreterm
-                    ? AppTheme.lavenderMist.withValues(alpha: 0.5)
+                    ? LuluColors.lavenderMedium
                     : Colors.transparent,
               ),
             ),
@@ -342,7 +342,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                       }),
                       trackColor: WidgetStateProperty.resolveWith((states) {
                         if (states.contains(WidgetState.selected)) {
-                          return AppTheme.lavenderMist.withValues(alpha: 0.3);
+                          return LuluColors.lavenderBorder;
                         }
                         return AppTheme.surfaceElevated;
                       }),
