@@ -27,7 +27,7 @@ class BabyTabBar extends StatelessWidget {
     required this.babies,
     required this.selectedBabyId,
     required this.onBabyChanged,
-    @Deprecated('F-3 확정으로 "둘 다" 옵션 제거됨')
+    @Deprecated('F-3: "all" option removed')
     this.showAllOption = false,
   });
 
@@ -105,7 +105,7 @@ class BabyTabBar extends StatelessWidget {
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    LuluColors.deepBlue.withValues(alpha: 0),
+                    LuluColors.deepBlueTransparent,
                     LuluColors.deepBlueStrong,
                     LuluColors.deepBlue,
                   ],

@@ -225,6 +225,9 @@ class LuluColors {
 
   // --- Deep Blue Alpha Variants ---
 
+  /// deepBlue alpha 0 — gradient fade-out
+  static const Color deepBlueTransparent = Color(0x001B263B);
+
   /// deepBlue 80% — 진한 오버레이
   static const Color deepBlueStrong = Color(0xCC1B263B); // 2건 사용
 
