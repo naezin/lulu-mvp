@@ -17,6 +17,7 @@ import 'core/theme/app_theme.dart';
 import 'features/onboarding/onboarding.dart';
 import 'features/growth/data/growth_data_cache.dart';
 import 'features/home/providers/home_provider.dart';
+import 'features/home/providers/sweet_spot_provider.dart';
 import 'features/record/providers/feeding_record_provider.dart';
 import 'features/record/providers/sleep_record_provider.dart';
 import 'features/record/providers/diaper_record_provider.dart';
@@ -95,7 +96,12 @@ class LuluApp extends StatelessWidget {
       providers: [
         // Auth Provider (pre-initialized)
         ChangeNotifierProvider.value(value: _authProvider),
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => SweetSpotProvider()),
+        ChangeNotifierProvider(create: (context) {
+          final homeProvider = HomeProvider();
+          homeProvider.setSweetSpotProvider(context.read<SweetSpotProvider>());
+          return homeProvider;
+        }),
         ChangeNotifierProvider(create: (_) => FeedingRecordProvider()),
         ChangeNotifierProvider(create: (_) => SleepRecordProvider()),
         ChangeNotifierProvider(create: (_) => DiaperRecordProvider()),

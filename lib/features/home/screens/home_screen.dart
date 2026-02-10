@@ -14,6 +14,7 @@ import '../../../shared/widgets/baby_tab_bar.dart';
 import '../../../shared/widgets/last_activity_row.dart';
 import '../../../shared/widgets/sweet_spot_card.dart';
 import '../providers/home_provider.dart';
+import '../providers/sweet_spot_provider.dart';
 import '../../record/providers/ongoing_sleep_provider.dart';
 import '../../record/screens/feeding_record_screen.dart';
 import '../../record/screens/sleep_record_screen.dart';
@@ -227,18 +228,18 @@ class _HomeScreenState extends State<HomeScreen> {
   /// 1. LastActivityRow (수면/수유/기저귀 시간)
   /// 2. SweetSpotCard (수면 중 상태 + Sweet Spot 예측)
   Widget _buildNormalContent(BuildContext context, HomeProvider homeProvider) {
-    // Sweet Spot Empty State 판단: 수면 기록 없음
+    // Sweet Spot Empty State: no sleep record today
     final hasSleepRecord = homeProvider.lastSleep != null;
 
-    return Consumer<OngoingSleepProvider>(
-      builder: (context, sleepProvider, _) {
-        // 현재 선택된 아기가 수면 중인지 확인
+    return Consumer2<OngoingSleepProvider, SweetSpotProvider>(
+      builder: (context, sleepProvider, sweetSpotProvider, _) {
+        // Check if selected baby is sleeping
         final isSleeping = sleepProvider.hasSleepInProgress &&
             sleepProvider.currentBabyId == homeProvider.selectedBabyId;
 
         return Column(
           children: [
-            // 1. 마지막 활동 Row (수면/수유/기저귀)
+            // 1. Last activity Row (sleep/feeding/diaper)
             LastActivityRow(
               lastSleep: homeProvider.lastSleepTime,
               lastFeeding: homeProvider.lastFeedingTime,
@@ -247,33 +248,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: LuluSpacing.lg),
 
-            // 2. Sweet Spot 카드 (수면 중 상태 통합)
+            // 2. Sweet Spot card (ongoing sleep + prediction)
             SweetSpotCard(
-              // 기존 props
-              state: homeProvider.sweetSpotState,
-              // 🔧 Sprint 19 FIX: isEmpty는 신규 유저(전체 기록 0건)일 때만 true
-              // 기존 유저는 오늘 수면 없어도 Normal State 또는 NoSleepGuide 표시
+              state: sweetSpotProvider.sweetSpotState,
               isEmpty: !isSleeping && !homeProvider.hasAnyRecordsEver,
-              estimatedTime: _getEstimatedTimeText(homeProvider),
+              estimatedTime: _getEstimatedTimeText(sweetSpotProvider),
               onRecordSleep: () => _navigateToRecord(context, 'sleep'),
-              // 🆕 수면 중 props (Sprint 7 Day 2)
               isSleeping: isSleeping,
               sleepStartTime: sleepProvider.sleepStartTime,
               sleepType: sleepProvider.ongoingSleep?.sleepType,
               babyName: sleepProvider.ongoingSleep?.babyName ??
                   homeProvider.selectedBaby?.name,
               onEndSleep: () => _showEndSleepDialog(context, sleepProvider),
-              // 🆕 Normal State 개선 props (v3)
-              progress: homeProvider.sweetSpotProgress,
-              recommendedTime: homeProvider.recommendedSleepTime,
-              isNightTime: homeProvider.isNightTime,
-              // 🔧 Sprint 19 FIX: 기존 유저 + 오늘 수면 없음 → NoSleepGuide 표시
+              progress: sweetSpotProvider.sweetSpotProgress,
+              recommendedTime: sweetSpotProvider.recommendedSleepTime,
+              isNightTime: sweetSpotProvider.isNightTime,
               hasOtherActivitiesOnly: homeProvider.hasAnyRecordsEver && !hasSleepRecord,
-              // 🆕 Sprint 19: 신규 유저 여부 (전체 기록 0건)
               isNewUser: !homeProvider.hasAnyRecordsEver,
             ),
 
-            // 🆕 울음 분석 카드 (Feature Flag로 제어)
             if (FeatureFlags.enableCryAnalysis) ...[
               const SizedBox(height: LuluSpacing.md),
               CryAnalysisCard(
@@ -281,18 +274,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 showNewBadge: true,
               ),
             ],
-
-            // QuickActionGrid 제거됨 (FAB로 대체) - Sprint 7 Day 2
           ],
         );
       },
     );
   }
 
-  /// Sweet Spot 예상 시간 텍스트
-  String? _getEstimatedTimeText(HomeProvider homeProvider) {
+  /// Sweet Spot estimated time text
+  String? _getEstimatedTimeText(SweetSpotProvider sweetSpotProvider) {
     final l10n = S.of(context)!;
-    final minutes = homeProvider.minutesUntilSweetSpot;
+    final minutes = sweetSpotProvider.minutesUntilSweetSpot;
     if (minutes <= 0) return null;
 
     if (minutes < 60) {

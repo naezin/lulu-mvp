@@ -6,7 +6,7 @@ import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
-import '../../features/home/providers/home_provider.dart';
+import '../../features/home/providers/sweet_spot_provider.dart';
 import '../../l10n/generated/app_localizations.dart' show S;
 
 /// Sweet Spot 카드 위젯
