@@ -125,24 +125,17 @@ class InviteService {
   }
 
   /// 가족 멤버 목록 조회
+  /// auth.users 조인 제거: PostgREST에서 auth schema 직접 조인 불가
   Future<List<FamilyMemberModel>> getFamilyMembers(String familyId) async {
-    // auth.users 정보와 조인하여 조회
-    final response = await _supabase.from('family_members').select('''
-          *,
-          user:auth.users(email, raw_user_meta_data)
-        ''').eq('family_id', familyId).order('joined_at', ascending: true);
+    final response = await _supabase
+        .from('family_members')
+        .select()
+        .eq('family_id', familyId)
+        .order('joined_at', ascending: true);
 
-    return (response as List).map((e) {
-      final json = e as Map<String, dynamic>;
-      final user = json['user'] as Map<String, dynamic>?;
-
-      return FamilyMemberModel.fromJson({
-        ...json,
-        'user_email': user?['email'],
-        'user_name': (user?['raw_user_meta_data']
-            as Map<String, dynamic>?)?['name'],
-      });
-    }).toList();
+    return (response as List)
+        .map((e) => FamilyMemberModel.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// 레거시 owner ID 조회 (families.user_id)
