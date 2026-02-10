@@ -232,9 +232,10 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
           const SizedBox(height: LuluSpacing.md),
 
           // 시작 시간
+          // Sprint 21 HF #4: locale 하드코딩 제거 → 실제 locale 사용
           _buildInfoRow(
             l10n.sweetSpotSleepStart,
-            DateFormat('a h:mm', 'ko').format(widget.sleepStartTime!),
+            DateFormat('a h:mm', Localizations.localeOf(context).toString()).format(widget.sleepStartTime!),
           ),
 
           const SizedBox(height: LuluSpacing.lg),
@@ -602,7 +603,8 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
   /// 시간 텍스트: "약 오후 2:30 (45분 후)"
   String _getTimeText(S l10n) {
     if (widget.recommendedTime != null) {
-      final formattedTime = DateFormat('a h:mm', 'ko').format(widget.recommendedTime!);
+      // Sprint 21 HF #4: locale 하드코딩 제거 → 실제 locale 사용
+      final formattedTime = DateFormat('a h:mm', Localizations.localeOf(context).toString()).format(widget.recommendedTime!);
       final minutesUntil = widget.recommendedTime!.difference(DateTime.now()).inMinutes.clamp(0, 999);
       return l10n.sweetSpotTimeEstimate(formattedTime, minutesUntil);
     }

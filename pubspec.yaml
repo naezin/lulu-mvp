@@ -48,6 +48,9 @@ dependencies:
   file_picker: ^6.1.1
   csv: ^5.0.2
 
+  # SVG Icons
+  flutter_svg: ^2.0.10+1
+
   # UI Components
   shimmer: ^3.0.0
   fl_chart: ^0.68.0
@@ -84,3 +87,4 @@ flutter:
     - assets/data/who_girls.json
     - assets/models/
     - assets/icon/
+    - assets/icons/

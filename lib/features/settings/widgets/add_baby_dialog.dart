@@ -37,7 +37,8 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
   final _weightController = TextEditingController();
 
   DateTime _birthDate = DateTime.now();
-  Gender _gender = Gender.unknown;
+  // Sprint 21 HF #16: 기본값 male (unknown 옵션 UI에서 제거)
+  Gender _gender = Gender.male;
   int? _gestationalWeeks;
   bool _isPreterm = false;
   bool _isLoading = false;
@@ -149,13 +150,12 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
               // 성별
               _buildLabel(l10n.labelGender),
               const SizedBox(height: LuluSpacing.xs),
+              // Sprint 21 HF #16: 미정(unknown) 옵션 제거 - 가입 플로우와 일치
               Row(
                 children: [
                   _buildGenderChip(l10n.genderMale, Gender.male),
                   const SizedBox(width: LuluSpacing.sm),
                   _buildGenderChip(l10n.genderFemale, Gender.female),
-                  const SizedBox(width: LuluSpacing.sm),
-                  _buildGenderChip(l10n.genderUnknown, Gender.unknown),
                 ],
               ),
               const SizedBox(height: LuluSpacing.md),

@@ -1,12 +1,85 @@
 # LULU App - CLAUDE.md v7.2
 
-> **Version**: 7.2 (v7.1 + v6.1 병합 통합)
-> **Updated**: 2026-02-08
-> **App**: v2.3.3+28 | **Commit**: `a2f1ca2` (롤백 완료)
-> **Branch**: `sprint-19` (작업) → `main` (보호)
-> **Sprint**: 19 재작업 (차트 재설계)
+> **Version**: 7.3 (v7.2 + 운영 매뉴얼/문서화 보완)
+> **Updated**: 2026-02-10
+> **App**: v2.4.1+31 | **Branch**: `sprint-20-hotfix`
+> **Sprint**: 20 Hotfix 완료, TestFlight 배포 완료
 > **Target Release**: 2026.02 베타 → 2026.03 정식
 > **Bundle ID**: com.lululabs.lulu
+
+---
+
+## 프로젝트 상수 (컨텍스트 유실 방지)
+
+> **사유**: 세션 전환 시 반복 참조 값을 매번 찾느라 시간 낭비 + 잘못된 값 사용 사고 발생.
+> 이 테이블의 값은 **복사-붙여넣기로 사용**. 절대 기억에 의존하지 말 것.
+
+| 항목 | 값 | 비고 |
+|------|-----|------|
+| Bundle ID | `com.lululabs.lulu` | Xcode + pubspec |
+| Team ID | `F3GQ59884R` | Apple Developer |
+| API Key (App Store Connect) | `FHY33UJUU2` | TestFlight 업로드용 |
+| Issuer ID | `69a6de8c-25c7-47e3-e053-5b8c7c11a4d1` | `de8c` 주의 (`de96` 아님!) |
+| P8 Key 경로 | `~/private_keys/AuthKey_FHY33UJUU2.p8` | altool 인증용 |
+| IPA 빌드 경로 | `/Users/naezin/Desktop/LULU ver2/build/ios/ipa/Lulu.ipa` | 빌드 후 생성 |
+| 메인 브랜치 | `main` (보호) | 직접 커밋 금지 |
+| 작업 브랜치 패턴 | `sprint-XX` 또는 `sprint-XX-hotfix` | |
+| debugPrint 태그 | `[OK]`, `[ERR]`, `[WARN]`, `[INFO]` | 이모지 대신 사용 |
+| 앱스토어 이름 | 루루 | |
+
+---
+
+## 운영 매뉴얼 (복붙용 명령어)
+
+> **사유**: 매 세션마다 명령어를 재구성하다 Issuer ID 오타 등 사고 발생.
+> 아래 명령어를 **그대로 복사**해서 실행. 파라미터 수정 금지.
+
+### TestFlight 업로드 (전체 플로우)
+
+```bash
+# 1. 버전 범프 (pubspec.yaml 수동 수정 후)
+# version: X.Y.Z+BUILD_NUMBER
+
+# 2. IPA 빌드
+cd "/Users/naezin/Desktop/LULU ver2" && flutter build ipa --release
+
+# 3. 업로드 (이 명령어 그대로 실행, 절대 변경 금지)
+xcrun altool --upload-app --type ios \
+  -f "/Users/naezin/Desktop/LULU ver2/build/ios/ipa/Lulu.ipa" \
+  --apiKey FHY33UJUU2 \
+  --apiIssuer 69a6de8c-25c7-47e3-e053-5b8c7c11a4d1
+```
+
+### Pre-commit Gate 에러 수정 패턴
+
+```bash
+# Gate 1 (한글): debugPrint 안의 한글 -> 영문으로
+# Gate 2 (이모지): 아래 태그로 교체
+#   [OK]  <- 성공 표시
+#   [ERR] <- 에러 표시
+#   [WARN] <- 경고 표시
+#   [INFO] <- 정보 표시
+#   [KEY] <- 키/인증 표시
+# Gate 3 (Icons.): LuluIcons.xxx 로 교체
+# Gate 4 (analyze): flutter analyze 에러 수정
+# Gate 5 (print): print( -> debugPrint(
+# Gate 6 (withOpacity): LuluColors에 솔리드 컬러 정의
+```
+
+### 커밋 명령어
+
+```bash
+# 작업 브랜치 확인
+git branch --show-current
+
+# 커밋 (HEREDOC 형식)
+git commit -m "$(cat <<'EOF'
+<type>(<scope>): <description>
+
+<body>
+EOF
+)"
+```
 
 ---
 
@@ -880,8 +953,9 @@ xcrun altool --upload-app --type ios \
 | 18 | Timeline 위젯 재작성 시도 | 🔴 사고 → 복원 |
 | 18-UX | 기록탭 UX 프로세스 (디자인/프로토타입) | ✅ |
 | 18-R | 기록탭 재건 + HF | 🔴 **롤백 (규칙 위반)** |
-| **19** | **차트 재설계 (재작업)** | **진행 중** |
-| 20 | 홈 화면 UX (노티센터/격려/알림) | 대기 |
+| **19** | **차트 재설계 (재작업)** | ✅ |
+| **20-HF** | **Hotfix 14건 (5그룹 A-E) + TestFlight v2.4.1+31** | ✅ |
+| 21 | 홈 화면 UX (노티센터/격려/알림) | 대기 |
 
 ### 2026-02-06 롤백 기록
 
@@ -930,13 +1004,35 @@ xcrun altool --upload-app --type ios \
 
 ---
 
-## 문서 체계
+## 문서 체계 (v7.3 강화)
 
-| 문서 | 역할 | 변경 빈도 |
-|------|------|-----------|
-| **RULES.md** | 절대 규칙 | 거의 안 바뀜 |
-| **CLAUDE.md** | 기술 스펙, 아키텍처, 품질 게이트 | 스프린트마다 |
-| **handoff.md** | 현재 상태, 다음 작업 | 매 세션 |
-| **CHANGELOG.md** | 변경 이력 | 매 배포 |
-| **Quality_Gate_System.md** | Pre-commit hook 설치/상세 | 필요 시 |
-| **Chart_Postmortem.md** | 차트 사고 회고 + Claude Code 교육 | 참고용 |
+> **사유**: 세션 전환 시 컨텍스트 유실로 같은 실수 반복.
+> handoff.md를 세션 종료 시 반드시 업데이트하여 다음 세션이 즉시 작업 가능하게 한다.
+
+| 문서 | 역할 | 변경 빈도 | 필수 업데이트 시점 |
+|------|------|-----------|-------------------|
+| **RULES.md** | 절대 규칙 | 거의 안 바뀜 | 규칙 추가 시 |
+| **CLAUDE.md** | 기술 스펙, 아키텍처, 품질 게이트, 운영 매뉴얼 | 스프린트마다 | Sprint 완료 시 |
+| **handoff.md** | 현재 상태, 다음 작업, 세션 간 인수인계 | **매 세션** | **세션 종료 시 필수** |
+| **CHANGELOG.md** | 변경 이력 | 매 배포 | TestFlight 업로드 후 |
+| **Quality_Gate_System.md** | Pre-commit hook 설치/상세 | 필요 시 | Gate 규칙 변경 시 |
+| **Chart_Postmortem.md** | 차트 사고 회고 + Claude Code 교육 | 참고용 | - |
+
+### handoff.md 필수 기록 항목 (세션 종료 시)
+
+```
+1. 현재 상태: 브랜치, 버전, 마지막 커밋, TestFlight 상태
+2. 이번 세션에서 한 것: 구체적 변경 목록
+3. 다음 세션에서 할 것: 명확한 다음 작업
+4. 주의사항: 이번 세션에서 발견한 이슈/함정
+5. 자주 쓴 명령어/값: 반복 참조한 데이터 (CLAUDE.md에 없으면 추가)
+```
+
+### 새 데이터 발견 시 문서화 규칙 (v7.3)
+
+```
+1. 세션 중 반복 참조한 값 → CLAUDE.md "프로젝트 상수" 테이블에 추가
+2. 세션 중 새로 알게 된 명령어 → CLAUDE.md "운영 매뉴얼"에 추가
+3. 세션 중 발생한 사고 → CLAUDE.md 해당 섹션에 교훈 추가
+4. "다음에도 필요할 것 같다" → 무조건 문서화 (기억에 의존 금지)
+```

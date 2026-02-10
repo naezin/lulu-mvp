@@ -239,7 +239,12 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
               child: _DiaperTypeButton(
                 type: 'dirty',
                 label: l10n?.diaperTypeDirty ?? 'Dirty',
-                icon: LuluIcons.diaperDirty,
+                iconWidget: LuluIcons.poopIcon(
+                  size: 32,
+                  color: provider.diaperType == 'dirty'
+                      ? LuluActivityColors.diaper
+                      : LuluTextColors.secondary,
+                ),
                 isSelected: provider.diaperType == 'dirty',
                 onTap: () => provider.setDiaperType('dirty'),
               ),
@@ -527,17 +532,19 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
 class _DiaperTypeButton extends StatelessWidget {
   final String type;
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final Widget? iconWidget;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _DiaperTypeButton({
     required this.type,
     required this.label,
-    required this.icon,
+    this.icon,
+    this.iconWidget,
     required this.isSelected,
     required this.onTap,
-  });
+  }) : assert(icon != null || iconWidget != null);
 
   @override
   Widget build(BuildContext context) {
@@ -562,13 +569,16 @@ class _DiaperTypeButton extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Icon(
-              icon,
-              size: 32,
-              color: isSelected
-                  ? LuluActivityColors.diaper
-                  : LuluTextColors.secondary,
-            ),
+            if (iconWidget != null)
+              SizedBox(width: 32, height: 32, child: iconWidget!)
+            else
+              Icon(
+                icon,
+                size: 32,
+                color: isSelected
+                    ? LuluActivityColors.diaper
+                    : LuluTextColors.secondary,
+              ),
             const SizedBox(height: LuluSpacing.sm),
             Text(
               label,

@@ -125,18 +125,29 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   /// RecordHistoryScreen이 Consumer로 rebuild되면
   /// DailyView도 rebuild됨. 오늘 날짜이고 HomeProvider의 활동 수가
   /// 로컬 캐시와 다르면 리로드.
+  ///
+  /// Sprint 21 HF #1: _reloadScheduled 플래그로 중복 리로드 방지
+  /// 삭제 시 연쇄 rebuild → SnackBar 무한 재생성 → 토스트 안 사라짐 문제 해결
+  bool _reloadScheduled = false;
+
   void _checkAndReloadIfStale(HomeProvider homeProvider) {
-    if (!_isToday(_selectedDate) || _isLoading) return;
+    if (!_isToday(_selectedDate) || _isLoading || _reloadScheduled) return;
 
     final currentLength = homeProvider.todayActivities.length;
-    if (currentLength != _lastActivitiesLength && _lastActivitiesLength > 0) {
+    // Sprint 21 HF #14: _lastActivitiesLength > 0 조건 제거
+    // QuickRecord/FAB 후 Records 탭에서도 갱신되도록
+    if (currentLength != _lastActivitiesLength && _initialLoadDone) {
+      _reloadScheduled = true;
+      _lastActivitiesLength = currentLength;
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        _reloadScheduled = false;
         if (mounted) {
           _loadActivitiesForDate();
         }
       });
+    } else {
+      _lastActivitiesLength = currentLength;
     }
-    _lastActivitiesLength = currentLength;
   }
 
   /// 선택된 날짜의 활동 로드 (Supabase에서)

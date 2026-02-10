@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// Lulu Design System - Icons
 ///
@@ -342,6 +343,22 @@ class LuluIcons {
   static const double sizeMD = 24;
   static const double sizeLG = 32;
   static const double sizeXL = 48;
+
+  // ========================================
+  // SVG Icons (Widget-based)
+  // ========================================
+
+  /// SVG poop icon for dirty diaper
+  static Widget poopIcon({double size = 24, Color? color}) {
+    return SvgPicture.asset(
+      'assets/icons/poop.svg',
+      width: size,
+      height: size,
+      colorFilter: color != null
+          ? ColorFilter.mode(color, BlendMode.srcIn)
+          : null,
+    );
+  }
 
   // ========================================
   // 헬퍼 메서드 (Helper Methods)

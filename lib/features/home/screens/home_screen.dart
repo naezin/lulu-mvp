@@ -361,6 +361,12 @@ class _HomeScreenState extends State<HomeScreen> {
       _ => throw ArgumentError('Unknown record type: $type'),
     };
 
+    // Sprint 21 HF U1: ScaffoldMessenger + l10n을 push 전에 캡처
+    // .then() 콜백에서 context가 무효화될 수 있으므로 미리 저장
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = S.of(context);
+    final navigator = Navigator.of(context);
+
     Navigator.push<ActivityModel>(
       context,
       MaterialPageRoute(builder: (_) => screen),
@@ -369,10 +375,9 @@ class _HomeScreenState extends State<HomeScreen> {
       if (savedActivity != null) {
         homeProvider.addActivity(savedActivity);
 
-        // Sprint 20 HF U1: 저장 확인 토스트 (2초) + "기록 보기" 액션
+        // Sprint 21 HF U1: 캡처된 messenger로 토스트 표시
         if (mounted) {
-          final l10n = S.of(context);
-          ScaffoldMessenger.of(context)
+          messenger
             ..clearSnackBars()
             ..showSnackBar(
               SnackBar(
@@ -389,7 +394,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: l10n?.viewRecord ?? 'View Records',
                   textColor: Colors.white,
                   onPressed: () {
-                    Navigator.of(context).push(
+                    navigator.push(
                       MaterialPageRoute(
                         builder: (_) => const RecordHistoryScreen(),
                       ),

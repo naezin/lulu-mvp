@@ -14,9 +14,9 @@ import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
 import '../../statistics/providers/statistics_data_provider.dart';
 import '../../statistics/providers/statistics_filter_provider.dart';
-import '../../statistics/models/insight_data.dart';
 import '../../statistics/models/weekly_statistics.dart';
 import '../../statistics/widgets/together_guide_dialog.dart';
+import '../../statistics/widgets/insight_card.dart';
 import '../models/daily_pattern.dart' show PatternFilter;
 import '../providers/pattern_data_provider.dart';
 import 'date_navigator.dart';
@@ -463,43 +463,9 @@ class _WeeklyViewState extends State<WeeklyView> {
   }
 
   /// 인사이트 카드
+  /// Sprint 21 HF #13: InsightCard 위젯 사용 (i18n 키 → 로컬라이즈)
   Widget _buildInsightCard() {
-    final insight = _dataProvider.insight!;
-    final color = switch (insight.type) {
-      InsightType.positive => LuluStatusColors.success,
-      InsightType.attention => LuluStatusColors.warning,
-      InsightType.neutral => LuluColors.lavenderMist,
-    };
-
-    return Container(
-      padding: const EdgeInsets.all(LuluSpacing.md),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(LuluRadius.sm),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            LuluIcons.tip,
-            color: color,
-            size: 24,
-          ),
-          const SizedBox(width: LuluSpacing.sm),
-          Expanded(
-            child: Text(
-              insight.message,
-              style: LuluTextStyles.bodyMedium.copyWith(
-                color: LuluTextColors.primary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return InsightCard(insight: _dataProvider.insight!);
   }
 
   /// 로딩 상태
