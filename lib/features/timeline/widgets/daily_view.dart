@@ -264,7 +264,9 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
       context: context,
     );
 
-    // 로컬 상태에서도 제거
+    // 로컬 상태에서도 제거 + _lastActivitiesLength 즉시 동기화
+    // (연쇄 rebuild → _checkAndReloadIfStale 재트리거 방지)
+    _lastActivitiesLength = homeProvider.todayActivities.length;
     setState(() {
       _dateActivities.removeWhere((a) => a.id == activity.id);
     });

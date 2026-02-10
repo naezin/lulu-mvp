@@ -180,11 +180,26 @@ class _MainNavigationState extends State<MainNavigation> {
           fullscreenDialog: true,
         ),
       ).then((result) {
-        // 기록 저장 후 홈 화면 새로고침
-        // FIX: Sprint 19 G-R1: toast removed, haptic instead
         if (result != null && mounted) {
           homeProvider.addActivity(result);
           HapticFeedback.mediumImpact();
+
+          final l10n = S.of(context);
+          AppToast.show(
+            SnackBar(
+              content: Row(
+                children: [
+                  const Icon(LuluIcons.checkCircle, color: Colors.white, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(l10n?.successRecordSaved ?? 'Record saved'),
+                  ),
+                ],
+              ),
+              duration: const Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
         }
       });
     }

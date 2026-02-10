@@ -350,14 +350,19 @@ class LuluIcons {
   // ========================================
 
   /// SVG poop icon for dirty diaper
+  /// Optical size correction: solid SVG appears visually heavier than
+  /// outlined Material Icons at the same px size. 3px padding compensates.
   static Widget poopIcon({double size = 24, Color? color}) {
-    return SvgPicture.asset(
-      'assets/icons/poop.svg',
-      width: size,
-      height: size,
-      colorFilter: color != null
-          ? ColorFilter.mode(color, BlendMode.srcIn)
-          : null,
+    return Padding(
+      padding: const EdgeInsets.all(3),
+      child: SvgPicture.asset(
+        'assets/icons/poop.svg',
+        width: size - 6,
+        height: size - 6,
+        colorFilter: color != null
+            ? ColorFilter.mode(color, BlendMode.srcIn)
+            : null,
+      ),
     );
   }
 
