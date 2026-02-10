@@ -1596,6 +1596,21 @@ class SKo extends S {
   String get settingsNotLoggedIn => '로그인되지 않았습니다';
 
   @override
+  String get sectionAccount => '계정';
+
+  @override
+  String get deleteAccountWarningData => '모든 기록, 아기 정보, 가족 데이터가 삭제됩니다';
+
+  @override
+  String get deleteAccountWarningAuth => '로그인 계정이 영구적으로 삭제됩니다';
+
+  @override
+  String get deleteAccountFailed => '계정 삭제에 실패했습니다. 다시 시도해주세요.';
+
+  @override
+  String get deleteAccountSuccess => '계정이 삭제되었습니다.';
+
+  @override
   String get cryIdleTitle => '아기가 울고 있나요?';
 
   @override

@@ -1623,6 +1623,24 @@ class SEn extends S {
   String get settingsNotLoggedIn => 'Not logged in';
 
   @override
+  String get sectionAccount => 'Account';
+
+  @override
+  String get deleteAccountWarningData =>
+      'All records, baby info, and family data will be deleted';
+
+  @override
+  String get deleteAccountWarningAuth =>
+      'Your login account will be permanently removed';
+
+  @override
+  String get deleteAccountFailed =>
+      'Account deletion failed. Please try again.';
+
+  @override
+  String get deleteAccountSuccess => 'Account deleted successfully.';
+
+  @override
   String get cryIdleTitle => 'Is your baby crying?';
 
   @override

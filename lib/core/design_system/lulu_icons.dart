@@ -236,6 +236,7 @@ class LuluIcons {
   static const IconData stop = Icons.stop_rounded;
   static const IconData helpOutline = Icons.help_outline_rounded;
   static const IconData exitToApp = Icons.exit_to_app_rounded;
+  static const IconData logout = Icons.logout_rounded;
   static const IconData compareArrows = Icons.compare_arrows_rounded;
   static const IconData swapHoriz = Icons.swap_horiz_rounded;
 

@@ -20,6 +20,7 @@ import '../providers/settings_provider.dart';
 import '../widgets/add_baby_dialog.dart';
 import '../widgets/delete_baby_dialog.dart';
 import 'import_screen.dart';
+import 'settings_account_section.dart';
 import 'settings_reset_section.dart';
 
 /// 설정 화면
@@ -96,6 +97,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: LuluSpacing.md),
                 _buildInfoTile(l10n.infoVersion, '2.2.2'),
                 _buildInfoTile(l10n.infoDeveloper, l10n.infoTeamName),
+
+                const SizedBox(height: LuluSpacing.xxxl),
+
+                // 계정 섹션
+                _buildSectionHeader(l10n.sectionAccount),
+                const SizedBox(height: LuluSpacing.md),
+                const SettingsAccountSection(),
 
                 const SizedBox(height: LuluSpacing.xxxl),
 

@@ -175,6 +175,23 @@ class AuthService {
   }
 
   // ========================================
+  // Account Deletion
+  // ========================================
+
+  /// Delete account via Supabase RPC (delete_own_account)
+  /// CASCADE constraints handle all related data cleanup.
+  Future<void> deleteAccount() async {
+    try {
+      debugPrint('[INFO] AuthService: Deleting account');
+      await SupabaseService.client.rpc('delete_own_account');
+      debugPrint('[OK] AuthService: Account deleted via RPC');
+    } catch (e) {
+      debugPrint('[ERROR] AuthService.deleteAccount: $e');
+      throw AuthException('Account deletion failed: $e');
+    }
+  }
+
+  // ========================================
   // Session Management
   // ========================================
 

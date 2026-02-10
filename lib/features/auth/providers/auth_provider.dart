@@ -222,6 +222,31 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// 계정 삭제
+  /// Supabase RPC로 auth.users 삭제 (CASCADE로 모든 데이터 삭제)
+  Future<bool> deleteAccount() async {
+    _setLoading(true);
+
+    try {
+      await _authService.deleteAccount();
+      _profile = null;
+      _status = AuthStatus.unauthenticated;
+      _errorMessage = null;
+      notifyListeners();
+      return true;
+    } on AuthException catch (e) {
+      _errorMessage = e.message;
+      debugPrint('[ERROR] AuthProvider.deleteAccount: ${e.message}');
+      return false;
+    } catch (e) {
+      _errorMessage = 'Account deletion failed';
+      debugPrint('[ERROR] AuthProvider.deleteAccount: $e');
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   /// 로그아웃
   Future<void> signOut() async {
     _setLoading(true);

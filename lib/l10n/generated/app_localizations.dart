@@ -3018,6 +3018,36 @@ abstract class S {
   /// **'로그인되지 않았습니다'**
   String get settingsNotLoggedIn;
 
+  /// 설정 화면 - 계정 섹션 헤더
+  ///
+  /// In ko, this message translates to:
+  /// **'계정'**
+  String get sectionAccount;
+
+  /// 계정 삭제 경고 - 데이터 삭제
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 기록, 아기 정보, 가족 데이터가 삭제됩니다'**
+  String get deleteAccountWarningData;
+
+  /// 계정 삭제 경고 - 인증 삭제
+  ///
+  /// In ko, this message translates to:
+  /// **'로그인 계정이 영구적으로 삭제됩니다'**
+  String get deleteAccountWarningAuth;
+
+  /// 계정 삭제 실패 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'계정 삭제에 실패했습니다. 다시 시도해주세요.'**
+  String get deleteAccountFailed;
+
+  /// 계정 삭제 성공 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'계정이 삭제되었습니다.'**
+  String get deleteAccountSuccess;
+
   /// 울음 분석 화면 - 대기 상태 제목
   ///
   /// In ko, this message translates to:
