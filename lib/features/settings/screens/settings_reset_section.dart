@@ -72,17 +72,11 @@ class SettingsResetSection extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(LuluRadius.md),
         ),
-        title: Row(
-          children: [
-            Icon(LuluIcons.statusWarn, color: LuluStatusColors.error),
-            const SizedBox(width: 8),
-            Text(
-              l10n.resetDataTitle,
-              style: LuluTextStyles.titleMedium.copyWith(
-                color: LuluTextColors.primary,
-              ),
-            ),
-          ],
+        title: Text(
+          l10n.resetDataTitle,
+          style: LuluTextStyles.titleMedium.copyWith(
+            color: LuluTextColors.primary,
+          ),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -98,15 +92,15 @@ class SettingsResetSection extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: LuluStatusColors.errorBg,
+                color: LuluColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(LuluRadius.xs),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildWarningItem(l10n.resetWarningRecords),
-                  _buildWarningItem(l10n.resetWarningBabies),
-                  _buildWarningItem(l10n.resetWarningIrreversible),
+                  _buildInfoItem(l10n.resetWarningRecords),
+                  _buildInfoItem(l10n.resetWarningBabies),
+                  _buildInfoItem(l10n.resetWarningIrreversible),
                 ],
               ),
             ),
@@ -144,21 +138,23 @@ class SettingsResetSection extends StatelessWidget {
     }
   }
 
-  Widget _buildWarningItem(String text) {
+  Widget _buildInfoItem(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
           Icon(
-            LuluIcons.removeCircleOutline,
+            LuluIcons.infoOutline,
             size: 16,
-            color: LuluStatusColors.error,
+            color: LuluTextColors.secondary,
           ),
           const SizedBox(width: 8),
-          Text(
-            text,
-            style: LuluTextStyles.bodySmall.copyWith(
-              color: LuluTextColors.primary,
+          Expanded(
+            child: Text(
+              text,
+              style: LuluTextStyles.bodySmall.copyWith(
+                color: LuluTextColors.secondary,
+              ),
             ),
           ),
         ],
