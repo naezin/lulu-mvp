@@ -2728,9 +2728,21 @@
       }
     }
   },
-  "sectionDangerZone": "위험 영역",
-  "@sectionDangerZone": {
-    "description": "설정 화면 - 위험 영역 섹션 제목"
+  "settingsDataManagement": "데이터 관리",
+  "@settingsDataManagement": {
+    "description": "설정 화면 - 데이터 관리 섹션 제목"
+  },
+  "settingsAccountDeletion": "계정 탈퇴",
+  "@settingsAccountDeletion": {
+    "description": "설정 화면 - 계정 탈퇴 섹션 제목"
+  },
+  "settingsResetDescription": "기록을 지우고 처음부터 시작해요",
+  "@settingsResetDescription": {
+    "description": "데이터 초기화 부제"
+  },
+  "settingsDeleteDescription": "계정과 모든 데이터가 영구적으로 삭제됩니다",
+  "@settingsDeleteDescription": {
+    "description": "계정 삭제 부제"
   },
   "statusPreterm": "조산아",
   "@statusPreterm": {

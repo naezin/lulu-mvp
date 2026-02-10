@@ -985,7 +985,10 @@
       }
     }
   },
-  "sectionDangerZone": "Danger Zone",
+  "settingsDataManagement": "Data Management",
+  "settingsAccountDeletion": "Account Deletion",
+  "settingsResetDescription": "Clear all records and start fresh",
+  "settingsDeleteDescription": "Your account and all data will be permanently deleted",
   "statusPreterm": "Preterm",
   "statusFullTerm": "Full Term",
   "addBabyMaxHint": "Up to 4 babies allowed",

@@ -21,43 +21,42 @@ class SettingsResetSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
     return Container(
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
-        border: Border.all(
-          color: LuluStatusColors.errorBorder,
-        ),
       ),
       child: ListTile(
         leading: Container(
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: LuluStatusColors.errorLight,
+            color: LuluColors.lavenderLight,
             borderRadius: BorderRadius.circular(LuluRadius.section),
           ),
-          child: Icon(
+          child: const Icon(
             LuluIcons.deleteForever,
-            color: LuluStatusColors.error,
+            color: LuluTextColors.secondary,
             size: 22,
           ),
         ),
         title: Text(
-          S.of(context)!.resetDataTitle,
+          l10n.resetDataTitle,
           style: LuluTextStyles.bodyLarge.copyWith(
-            color: LuluStatusColors.error,
+            color: LuluTextColors.primary,
           ),
         ),
         subtitle: Text(
-          S.of(context)!.resetDataHint,
+          l10n.settingsResetDescription,
           style: LuluTextStyles.caption.copyWith(
             color: LuluTextColors.secondary,
           ),
         ),
-        trailing: Icon(
+        trailing: const Icon(
           LuluIcons.chevronRight,
-          color: LuluStatusColors.errorStrong,
+          color: LuluTextColors.secondary,
         ),
         onTap: () => _showResetConfirmDialog(context),
       ),

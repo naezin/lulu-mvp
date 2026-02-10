@@ -1839,7 +1839,16 @@ class SKo extends S {
   }
 
   @override
-  String get sectionDangerZone => '위험 영역';
+  String get settingsDataManagement => '데이터 관리';
+
+  @override
+  String get settingsAccountDeletion => '계정 탈퇴';
+
+  @override
+  String get settingsResetDescription => '기록을 지우고 처음부터 시작해요';
+
+  @override
+  String get settingsDeleteDescription => '계정과 모든 데이터가 영구적으로 삭제됩니다';
 
   @override
   String get statusPreterm => '조산아';

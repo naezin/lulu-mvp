@@ -11,10 +11,10 @@ import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../auth/providers/auth_provider.dart';
 import '../../home/providers/home_provider.dart';
 
-/// Settings - Account Section (Logout + Delete Account)
+/// Settings - Account Section (Logout only)
 ///
-/// Sprint 21 Phase 5-1: App Store requirement for account deletion.
-/// Handles logout and account deletion with confirmation flow.
+/// Sprint 21 Phase 5-1: Logout tile.
+/// Account deletion is in SettingsDeleteAccountSection (bottom of settings).
 class SettingsAccountSection extends StatelessWidget {
   const SettingsAccountSection({super.key});
 
@@ -25,15 +25,7 @@ class SettingsAccountSection extends StatelessWidget {
         color: LuluColors.surfaceCard,
         borderRadius: BorderRadius.circular(LuluRadius.sm),
       ),
-      child: Column(
-        children: [
-          // Logout
-          _buildLogoutTile(context),
-          Divider(height: 1, color: LuluColors.glassBorder),
-          // Delete Account
-          _buildDeleteAccountTile(context),
-        ],
-      ),
+      child: _buildLogoutTile(context),
     );
   }
 
@@ -65,43 +57,6 @@ class SettingsAccountSection extends StatelessWidget {
         color: LuluTextColors.secondary,
       ),
       onTap: () => _showLogoutDialog(context),
-    );
-  }
-
-  Widget _buildDeleteAccountTile(BuildContext context) {
-    final l10n = S.of(context)!;
-
-    return ListTile(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: LuluStatusColors.errorLight,
-          borderRadius: BorderRadius.circular(LuluRadius.section),
-        ),
-        child: Icon(
-          LuluIcons.deleteForever,
-          color: LuluStatusColors.error,
-          size: 22,
-        ),
-      ),
-      title: Text(
-        l10n.settingsDeleteAccount,
-        style: LuluTextStyles.bodyLarge.copyWith(
-          color: LuluStatusColors.error,
-        ),
-      ),
-      subtitle: Text(
-        l10n.settingsDeleteAccountDesc,
-        style: LuluTextStyles.caption.copyWith(
-          color: LuluTextColors.secondary,
-        ),
-      ),
-      trailing: Icon(
-        LuluIcons.chevronRight,
-        color: LuluStatusColors.errorStrong,
-      ),
-      onTap: () => _showDeleteAccountDialog(context),
     );
   }
 
@@ -148,11 +103,62 @@ class SettingsAccountSection extends StatelessWidget {
       await context.read<AuthProvider>().signOut();
     }
   }
+}
+
+/// Settings - Delete Account Section (bottom of settings)
+///
+/// Sprint 21: Separated from account section for clear UX hierarchy.
+/// Red styling indicates destructive action.
+class SettingsDeleteAccountSection extends StatelessWidget {
+  const SettingsDeleteAccountSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = S.of(context)!;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: LuluColors.surfaceCard,
+        borderRadius: BorderRadius.circular(LuluRadius.sm),
+      ),
+      child: ListTile(
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: LuluStatusColors.errorLight,
+            borderRadius: BorderRadius.circular(LuluRadius.section),
+          ),
+          child: Icon(
+            LuluIcons.deleteForever,
+            color: LuluStatusColors.error,
+            size: 22,
+          ),
+        ),
+        title: Text(
+          l10n.settingsDeleteAccount,
+          style: LuluTextStyles.bodyLarge.copyWith(
+            color: LuluStatusColors.error,
+          ),
+        ),
+        subtitle: Text(
+          l10n.settingsDeleteDescription,
+          style: LuluTextStyles.caption.copyWith(
+            color: LuluTextColors.secondary,
+          ),
+        ),
+        trailing: Icon(
+          LuluIcons.chevronRight,
+          color: LuluStatusColors.errorStrong,
+        ),
+        onTap: () => _showDeleteAccountDialog(context),
+      ),
+    );
+  }
 
   Future<void> _showDeleteAccountDialog(BuildContext context) async {
     final l10n = S.of(context)!;
 
-    // First confirmation
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -262,7 +268,6 @@ class SettingsAccountSection extends StatelessWidget {
     final authProvider = context.read<AuthProvider>();
     final homeProvider = context.read<HomeProvider>();
 
-    // Show loading
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -274,31 +279,25 @@ class SettingsAccountSection extends StatelessWidget {
     );
 
     try {
-      // 1. Delete account via RPC (CASCADE handles all data)
       final success = await authProvider.deleteAccount();
 
       if (!success) {
-        // Close loading
         if (context.mounted) Navigator.pop(context);
         AppToast.showText(l10n.deleteAccountFailed);
         return;
       }
 
-      // 2. Clear local data
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
       debugPrint('[OK] Local data cleared after account deletion');
 
-      // 3. Reset provider
       homeProvider.reset();
 
-      // Close loading
       if (context.mounted) {
         Navigator.pop(context);
         AppToast.showText(l10n.deleteAccountSuccess);
       }
     } catch (e) {
-      // Close loading
       if (context.mounted) Navigator.pop(context);
       debugPrint('[ERROR] _executeAccountDeletion: $e');
       AppToast.showText(l10n.deleteAccountFailed);

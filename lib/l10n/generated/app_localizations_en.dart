@@ -1873,7 +1873,17 @@ class SEn extends S {
   }
 
   @override
-  String get sectionDangerZone => 'Danger Zone';
+  String get settingsDataManagement => 'Data Management';
+
+  @override
+  String get settingsAccountDeletion => 'Account Deletion';
+
+  @override
+  String get settingsResetDescription => 'Clear all records and start fresh';
+
+  @override
+  String get settingsDeleteDescription =>
+      'Your account and all data will be permanently deleted';
 
   @override
   String get statusPreterm => 'Preterm';

@@ -96,24 +96,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // 앱 정보 섹션
                 _buildSectionHeader(l10n.sectionAppInfo),
                 const SizedBox(height: LuluSpacing.md),
-                _buildInfoTile(l10n.infoVersion, '2.4.1'),
+                _buildInfoTile(l10n.infoVersion, '2.5.0'),
                 _buildInfoTile(l10n.infoDeveloper, l10n.infoTeamName),
                 const SizedBox(height: LuluSpacing.sm),
                 _buildLegalSection(),
 
                 const SizedBox(height: LuluSpacing.xxxl),
 
-                // 계정 섹션
+                // 계정 섹션 (로그아웃)
                 _buildSectionHeader(l10n.sectionAccount),
                 const SizedBox(height: LuluSpacing.md),
                 const SettingsAccountSection(),
 
                 const SizedBox(height: LuluSpacing.xxxl),
 
-                // 위험 영역 섹션
-                _buildSectionHeader(l10n.sectionDangerZone),
+                // 데이터 관리 섹션
+                _buildSectionHeader(l10n.settingsDataManagement),
                 const SizedBox(height: LuluSpacing.md),
                 const SettingsResetSection(),
+
+                const SizedBox(height: LuluSpacing.xxxl),
+
+                // 계정 탈퇴 섹션
+                _buildSectionHeader(l10n.settingsAccountDeletion),
+                const SizedBox(height: LuluSpacing.md),
+                const SettingsDeleteAccountSection(),
               ],
             ),
           );
