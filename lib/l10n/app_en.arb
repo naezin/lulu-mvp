@@ -552,6 +552,14 @@
       }
     }
   },
+  "dailyEmptyToday": "Start your first record today",
+  "@dailyEmptyToday": {
+    "description": "Daily view empty state - today"
+  },
+  "dailyEmptyPastDay": "No records for this day",
+  "@dailyEmptyPastDay": {
+    "description": "Daily view empty state - past day"
+  },
   "weeklyChartTitle": "Weekly Pattern",
   "weeklyChartEmptyTitle": "Not enough data\nto analyze patterns yet",
   "weeklyChartEmptyHint": "Patterns will appear after 3+ days of records",

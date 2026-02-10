@@ -1902,6 +1902,14 @@
       }
     }
   },
+  "dailyEmptyToday": "오늘 첫 기록을 남겨보세요",
+  "@dailyEmptyToday": {
+    "description": "일간 뷰 빈 상태 - 오늘"
+  },
+  "dailyEmptyPastDay": "이 날의 기록이 없어요",
+  "@dailyEmptyPastDay": {
+    "description": "일간 뷰 빈 상태 - 과거"
+  },
   "weeklyChartTitle": "주간 패턴",
   "@weeklyChartTitle": {
     "description": "WeeklyChartFull 제목"

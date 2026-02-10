@@ -65,9 +65,6 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
   /// 수정 D: HomeProvider 변경 감지용
   int _lastActivitiesLength = 0;
 
-  /// Sprint 19 수정 1: 전체 기록 존재 여부 (신규 유저 판별)
-  bool _hasAnyRecordsEver = true; // 기본 true로 설정 (깜빡임 방지)
-  bool _hasCheckedRecords = false;
 
   @override
   void initState() {
@@ -172,14 +169,6 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
       final startOfDay =
           DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
       final endOfDay = startOfDay.add(const Duration(days: 1));
-
-      // Sprint 19 수정 1: 전체 기록 존재 여부 체크 (최초 1회)
-      if (!_hasCheckedRecords) {
-        final hasAny = await activityRepo.hasAnyActivities(familyId);
-        _hasAnyRecordsEver = hasAny;
-        _hasCheckedRecords = true;
-        debugPrint('[DEBUG] [DailyView] hasAnyRecordsEver: $hasAny');
-      }
 
       final allActivities = await activityRepo.getActivitiesByDateRange(
         familyId,
@@ -315,13 +304,18 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
         final activities = _filterActivities(
             _dateActivities, data.selectedBabyId, _activeFilter);
 
+        // 빈 상태 판별: 아기별 필터링된 전체 활동 (유형 필터 무관)
+        final babyActivities = _filterActivitiesByBaby(
+            _dateActivities, data.selectedBabyId);
+        final isEmpty = babyActivities.isEmpty;
+
         return RefreshIndicator(
           onRefresh: _loadActivitiesForDate,
           color: LuluColors.lavenderMist,
           backgroundColor: LuluColors.deepBlue,
           child: CustomScrollView(
             slivers: [
-              // DateNavigator
+              // DateNavigator (항상 표시)
               SliverToBoxAdapter(
                 child: DateNavigator(
                   selectedDate: _selectedDate,
@@ -330,77 +324,72 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
                 ),
               ),
 
-              // TimelineFilterChips (활동 필터)
-              SliverToBoxAdapter(
-                child: TimelineFilterChips(
-                  activeFilter: _activeFilter,
-                  onFilterChanged: (filter) {
-                    setState(() => _activeFilter = filter);
-                  },
-                ),
-              ),
-
-              // Sprint 19: DailyGrid (2x2) - MiniTimeBar + ContextRibbon 대체
-              SliverToBoxAdapter(
-                child: Builder(
-                  builder: (context) {
-                    final filteredActivities = _filterActivitiesByBaby(
-                        _dateActivities, data.selectedBabyId);
-                    final timeline = _patternProvider.buildDayTimeline(
-                        _selectedDate, filteredActivities);
-                    // 수정 A 디버그: 데이터 흐름 확인
-                    debugPrint(
-                        '[DEBUG] [DailyView→DailyGrid] _dateActivities=${_dateActivities.length}, '
-                        'filtered=${filteredActivities.length}, '
-                        'babyId=${data.selectedBabyId}, '
-                        'timeline.durationBlocks=${timeline.durationBlocks.length}, '
-                        'timeline.instantMarkers=${timeline.instantMarkers.length}');
-                    return DailyGrid(
-                      key: ValueKey(
-                          'dailygrid_${_selectedDate.toIso8601String()}_${data.selectedBabyId}'),
-                      timeline: timeline,
-                      isToday: _isToday(_selectedDate),
-                    );
-                  },
-                ),
-              ),
-
-              // 활동 목록 또는 빈 상태
-              // Sprint 19 수정 1: 신규 유저만 "첫 기록" Empty State 표시
-              // 기존 유저는 오늘 기록 없어도 DailyGrid만 표시 (Empty State 없음)
-              if (activities.isEmpty && !_hasAnyRecordsEver)
+              // 빈 상태: DailyGrid + FilterChips 숨김 → 빈 상태 컴포넌트
+              if (isEmpty)
                 SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 300, // Empty State 고정 높이
-                    child: _buildNewUserEmptyState(context.read<HomeProvider>()),
+                  child: _buildDailyEmptyContent(),
+                )
+              else ...[
+                // TimelineFilterChips (활동 필터)
+                SliverToBoxAdapter(
+                  child: TimelineFilterChips(
+                    activeFilter: _activeFilter,
+                    onFilterChanged: (filter) {
+                      setState(() => _activeFilter = filter);
+                    },
                   ),
-                )
-              else if (activities.isEmpty)
-                // 기존 유저, 오늘 기록 없음 → 간단 안내 텍스트만
+                ),
+
+                // Sprint 19: DailyGrid (2x2) - MiniTimeBar + ContextRibbon 대체
                 SliverToBoxAdapter(
-                  child: _buildNoRecordsTodayHint(),
-                )
-              else
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final activity = activities[index];
-                      return ActivityListItem(
-                        activity: activity,
-                        onEdit: () => _onEditActivity(activity),
-                        onDelete: () => _onDeleteActivity(activity),
-                        showSwipeHint: _showSwipeHint && index == 0,
-                        onTap: () {
-                          // Sprint 20 HF U2: 스와이프 힌트 숨기기 + 카운트 증가
-                          _dismissSwipeHint();
-                          // 탭 시 수정 시트 열기
-                          _onEditActivity(activity);
-                        },
+                  child: Builder(
+                    builder: (context) {
+                      final filteredActivities = _filterActivitiesByBaby(
+                          _dateActivities, data.selectedBabyId);
+                      final timeline = _patternProvider.buildDayTimeline(
+                          _selectedDate, filteredActivities);
+                      debugPrint(
+                          '[DEBUG] [DailyView→DailyGrid] _dateActivities=${_dateActivities.length}, '
+                          'filtered=${filteredActivities.length}, '
+                          'babyId=${data.selectedBabyId}, '
+                          'timeline.durationBlocks=${timeline.durationBlocks.length}, '
+                          'timeline.instantMarkers=${timeline.instantMarkers.length}');
+                      return DailyGrid(
+                        key: ValueKey(
+                            'dailygrid_${_selectedDate.toIso8601String()}_${data.selectedBabyId}'),
+                        timeline: timeline,
+                        isToday: _isToday(_selectedDate),
                       );
                     },
-                    childCount: activities.length,
                   ),
                 ),
+
+                // 활동 목록
+                if (activities.isEmpty)
+                  // 유형 필터 적용 후 빈 상태 (전체 기록은 있으나 해당 유형 없음)
+                  SliverToBoxAdapter(
+                    child: _buildNoRecordsTodayHint(),
+                  )
+                else
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final activity = activities[index];
+                        return ActivityListItem(
+                          activity: activity,
+                          onEdit: () => _onEditActivity(activity),
+                          onDelete: () => _onDeleteActivity(activity),
+                          showSwipeHint: _showSwipeHint && index == 0,
+                          onTap: () {
+                            _dismissSwipeHint();
+                            _onEditActivity(activity);
+                          },
+                        );
+                      },
+                      childCount: activities.length,
+                    ),
+                  ),
+              ],
 
               // 하단 여백
               const SliverToBoxAdapter(
@@ -441,52 +430,48 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
     return filtered;
   }
 
-  /// 신규 유저용 Empty State (전체 기록 0건)
-  Widget _buildNewUserEmptyState(HomeProvider homeProvider) {
-    final l10n = S.of(context)!;
-    final babyName = homeProvider.selectedBaby?.name ?? l10n.babyDefault;
+  /// 빈 상태 컴포넌트 (주간 뷰와 동일 패턴)
+  Widget _buildDailyEmptyContent() {
+    final l10n = S.of(context);
+    final isToday = _isToday(_selectedDate);
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 원형 배경 + 메인 컬러
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: const Color(0x33B8A9E8), // LuluColors.lavenderMist 20% alpha
-              shape: BoxShape.circle,
+    return SizedBox(
+      height: 300,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: LuluColors.surfaceElevated,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                LuluIcons.editCalendar,
+                size: 40,
+                color: LuluColors.lavenderMist,
+              ),
             ),
-            child: Icon(
-              LuluIcons.editCalendar,
-              size: 40,
-              color: LuluColors.lavenderMist,
+            const SizedBox(height: LuluSpacing.xl),
+            Text(
+              isToday
+                  ? (l10n?.dailyEmptyToday ?? 'Start your first record today')
+                  : (l10n?.dailyEmptyPastDay ?? 'No records for this day'),
+              style: LuluTextStyles.titleMedium.copyWith(
+                color: LuluTextColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: LuluSpacing.xl),
-          Text(
-            l10n.timelineEmptyTodayTitle(babyName),
-            style: LuluTextStyles.titleMedium.copyWith(
-              color: LuluTextColors.primary,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: LuluSpacing.sm),
-          Text(
-            l10n.timelineEmptyTodayHint,
-            style: LuluTextStyles.bodyMedium.copyWith(
-              color: LuluTextColors.secondary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  /// 기존 유저용 간단 안내 (오늘 기록 없음)
+  /// 유형 필터 적용 후 해당 유형 기록 없음 안내
   Widget _buildNoRecordsTodayHint() {
     final l10n = S.of(context)!;
     final locale = Localizations.localeOf(context).languageCode;
