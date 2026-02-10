@@ -4481,11 +4481,23 @@ abstract class S {
   /// **'연결이 느려요. 다시 시도할까요?'**
   String get errorConnectionSlow;
 
-  /// 에러 - 데이터 로드 실패 (일반)
+  /// 에러 - 데이터 로드 실패
   ///
   /// In ko, this message translates to:
   /// **'데이터를 불러오지 못했어요'**
   String get errorDataLoadFailed;
+
+  /// 에러 - 예상치 못한 오류 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'예상치 못한 오류가 발생했어요.\n앱을 다시 시작해주세요.'**
+  String get errorUnexpectedDescription;
+
+  /// 에러 - 앱 다시 시작 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'앱 다시 시작'**
+  String get errorRestartApp;
 
   /// 백분위 - 측정 필요 (짧은)
   ///

@@ -2406,6 +2406,12 @@ class SKo extends S {
   String get errorDataLoadFailed => '데이터를 불러오지 못했어요';
 
   @override
+  String get errorUnexpectedDescription => '예상치 못한 오류가 발생했어요.\n앱을 다시 시작해주세요.';
+
+  @override
+  String get errorRestartApp => '앱 다시 시작';
+
+  @override
   String get percentileMeasureNeeded => '측정 필요';
 
   @override

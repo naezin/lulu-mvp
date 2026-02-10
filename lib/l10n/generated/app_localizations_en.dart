@@ -2455,6 +2455,13 @@ class SEn extends S {
   String get errorDataLoadFailed => 'Failed to load data';
 
   @override
+  String get errorUnexpectedDescription =>
+      'An unexpected error occurred.\nPlease restart the app.';
+
+  @override
+  String get errorRestartApp => 'Restart App';
+
+  @override
   String get percentileMeasureNeeded => 'Measurement needed';
 
   @override

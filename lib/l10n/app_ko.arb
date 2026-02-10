@@ -3560,7 +3560,15 @@
   },
   "errorDataLoadFailed": "데이터를 불러오지 못했어요",
   "@errorDataLoadFailed": {
-    "description": "에러 - 데이터 로드 실패 (일반)"
+    "description": "에러 - 데이터 로드 실패"
+  },
+  "errorUnexpectedDescription": "예상치 못한 오류가 발생했어요.\n앱을 다시 시작해주세요.",
+  "@errorUnexpectedDescription": {
+    "description": "에러 - 예상치 못한 오류 설명"
+  },
+  "errorRestartApp": "앱 다시 시작",
+  "@errorRestartApp": {
+    "description": "에러 - 앱 다시 시작 버튼"
   },
   "percentileMeasureNeeded": "측정 필요",
   "@percentileMeasureNeeded": {

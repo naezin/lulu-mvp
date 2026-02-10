@@ -1333,6 +1333,8 @@
   "errorNetworkCheck": "Please check your internet connection",
   "errorConnectionSlow": "Connection is slow. Try again?",
   "errorDataLoadFailed": "Failed to load data",
+  "errorUnexpectedDescription": "An unexpected error occurred.\nPlease restart the app.",
+  "errorRestartApp": "Restart App",
   "percentileMeasureNeeded": "Measurement needed",
   "percentileBelow3": "Below 3%",
   "percentileAbove97": "Above 97%",

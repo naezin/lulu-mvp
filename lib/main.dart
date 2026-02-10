@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -30,6 +32,7 @@ import 'features/cry_analysis/providers/cry_analysis_provider.dart';
 import 'app/navigation/main_navigation.dart';
 import 'data/models/models.dart';
 import 'l10n/generated/app_localizations.dart';
+import 'shared/widgets/error_fallback_screen.dart';
 
 /// Global SettingsProvider instance for async init
 late SettingsProvider _settingsProvider;
@@ -39,6 +42,28 @@ late AuthProvider _authProvider;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Sprint 21 Phase 5-3: Global error handlers
+
+  // 1. Flutter framework errors (widget build, layout, painting)
+  FlutterError.onError = (FlutterErrorDetails details) {
+    debugPrint('[ERR] FlutterError: ${details.exceptionAsString()}');
+    debugPrint('[ERR] Stack: ${details.stack}');
+    // Show error fallback instead of red screen in release
+    FlutterError.presentError(details);
+  };
+
+  // 2. Platform-level async errors (Dart isolate unhandled)
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    debugPrint('[ERR] PlatformError: $error');
+    debugPrint('[ERR] Stack: $stack');
+    return true; // Prevent app crash
+  };
+
+  // 3. Custom error widget (replaces red screen in release mode)
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return const ErrorFallbackScreen();
+  };
 
   // Status bar style
   SystemChrome.setSystemUIOverlayStyle(
