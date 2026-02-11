@@ -8,8 +8,8 @@ import '../../features/home/providers/sweet_spot_provider.dart'
 /// Output of SweetSpotCalculator, consumed by UI layer.
 /// [progress] is NOT stored — calculated in real-time via [calculateProgress].
 ///
-/// Medical disclaimer: Wake Window values are clinical consensus guidelines,
-/// not individual medical diagnostic criteria.
+/// Reference information: Wake Window values are parenting reference guidelines,
+/// not individual diagnostic criteria.
 /// Sources: Mindell(2016), Paruthi/AASM(2016), Taking Cara Babies, Huckleberry
 @immutable
 class SweetSpotResult {
@@ -107,7 +107,7 @@ class SweetSpotResult {
 
 /// Wake Window range (min/max in minutes)
 ///
-/// Medical disclaimer: Clinical consensus guidelines.
+/// Reference information: Parenting reference guidelines.
 /// Sources: Mindell(2016), AASM(2016), Taking Cara Babies, Huckleberry (MD reviewed)
 @immutable
 class WakeWindowRange {
@@ -150,24 +150,54 @@ class PersonalizedWakeWindow {
   final double? firstNapFactor;
   final double? lastNapFactor;
 
+  /// Last nap quality data for adjustment (Phase E)
+  final NapQualityFactor? lastNapQuality;
+
+  /// Observed standard deviation of wake windows (minutes)
+  final double? observedStdDev;
+
   const PersonalizedWakeWindow({
     required this.observedRange,
     required this.personalWeight,
     required this.observedDays,
     this.firstNapFactor,
     this.lastNapFactor,
+    this.lastNapQuality,
+    this.observedStdDev,
   });
 
-  /// Blending stage determination
+  /// Empirical Bayes blending weight
   ///
-  /// Stage 1 (< 3 days): 100% literature
-  /// Stage 2 (3~7 days): 70% literature + 30% observed
-  /// Stage 3 (7~14 days): 30% literature + 70% observed
-  /// Stage 4 (14+ days): 10% literature + 90% observed
-  static double calculateWeight(int days) {
-    if (days < 3) return 0.0;
-    if (days < 7) return 0.3;
-    if (days < 14) return 0.7;
-    return 0.9;
+  /// Combines sample density and consistency (stdDev) to determine
+  /// how much to trust observed data vs literature.
+  /// Returns 0.0 ~ 0.9 (never fully replaces literature).
+  static double calculateWeight({
+    required int samples,
+    required double stdDev,
+    required double baseRangeMid,
+    int learningConstant = 20,
+  }) {
+    if (samples <= 0 || baseRangeMid <= 0) return 0.0;
+    final densityWeight = samples / (samples + learningConstant);
+    final normalizedStdDev = (stdDev / baseRangeMid).clamp(0.0, 1.0);
+    final confidence = 1.0 - normalizedStdDev;
+    return (densityWeight * confidence).clamp(0.0, 0.9);
+  }
+}
+
+/// Nap quality adjustment factor
+///
+/// Short naps (< 30min) compress next wake window (baby still tired).
+/// Long naps (> 60min) extend next wake window (well rested).
+@immutable
+class NapQualityFactor {
+  final int lastNapDurationMinutes;
+
+  const NapQualityFactor({required this.lastNapDurationMinutes});
+
+  double get adjustmentFactor {
+    if (lastNapDurationMinutes < 30) return 0.85;
+    if (lastNapDurationMinutes > 60) return 1.10;
+    return 1.0;
   }
 }

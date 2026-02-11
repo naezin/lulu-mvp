@@ -436,11 +436,11 @@ void main() {
       );
 
       // 6mo base: 120-180min
-      // Safety: 50% of min (60) to 150% of max (270)
-      // Blended min = (120 * 0.1 + 10 * 0.9).round() = (12 + 9) = 21 → clamped to 60
-      // Blended max = (180 * 0.1 + 500 * 0.9).round() = (18 + 450) = 468 → clamped to 270
-      expect(result.wakeWindow.minMinutes, greaterThanOrEqualTo(60));
-      expect(result.wakeWindow.maxMinutes, lessThanOrEqualTo(270));
+      // Safety: 75% of min (90) to 125% of max (225)
+      // Blended min = (120 * 0.1 + 10 * 0.9).round() = (12 + 9) = 21 → clamped to 90
+      // Blended max = (180 * 0.1 + 500 * 0.9).round() = (18 + 450) = 468 → clamped to 225
+      expect(result.wakeWindow.minMinutes, greaterThanOrEqualTo(90));
+      expect(result.wakeWindow.maxMinutes, lessThanOrEqualTo(225));
     });
 
     // ============================================================
@@ -522,15 +522,72 @@ void main() {
   });
 
   group('PersonalizedWakeWindow', () {
-    test('calculateWeight returns correct stages', () {
-      expect(PersonalizedWakeWindow.calculateWeight(0), 0.0);
-      expect(PersonalizedWakeWindow.calculateWeight(2), 0.0);
-      expect(PersonalizedWakeWindow.calculateWeight(3), 0.3);
-      expect(PersonalizedWakeWindow.calculateWeight(6), 0.3);
-      expect(PersonalizedWakeWindow.calculateWeight(7), 0.7);
-      expect(PersonalizedWakeWindow.calculateWeight(13), 0.7);
-      expect(PersonalizedWakeWindow.calculateWeight(14), 0.9);
-      expect(PersonalizedWakeWindow.calculateWeight(30), 0.9);
+    test('calculateWeight Empirical Bayes: samples=5, stdDev=10, mid=90', () {
+      // densityWeight = 5 / (5 + 20) = 0.2
+      // normalizedStdDev = (10 / 90).clamp(0,1) ≈ 0.111
+      // confidence = 1 - 0.111 = 0.889
+      // result = (0.2 * 0.889).clamp(0, 0.9) ≈ 0.178
+      final w = PersonalizedWakeWindow.calculateWeight(
+        samples: 5,
+        stdDev: 10,
+        baseRangeMid: 90,
+      );
+      expect(w, closeTo(0.178, 0.01));
+    });
+  });
+
+  group('Regression period damping', () {
+    test('4mo correctedAge + personalized → weight * 0.8 damping', () {
+      final lastWake = baseTime;
+      final now = baseTime.add(const Duration(minutes: 10));
+
+      final personalized = PersonalizedWakeWindow(
+        observedRange: const WakeWindowRange(
+          minMinutes: 100,
+          maxMinutes: 160,
+        ),
+        personalWeight: 0.3,
+        observedDays: 5,
+      );
+
+      // 4mo: regression period → w = 0.3 * 0.8 = 0.24
+      // 4mo base: 75-120min (table entry 5.0: 90-135)
+      // Actually 4mo → safeAge=4.0 → entry (5.0): 90-135
+      // Blended min = (90 * 0.76 + 100 * 0.24).round() = (68.4 + 24).round() = 92
+      // Blended max = (135 * 0.76 + 160 * 0.24).round() = (102.6 + 38.4).round() = 141
+      // Middle nap (2 of 3): no nap correction
+      final result = calculator.calculate(
+        babyId: 'baby1',
+        correctedAgeMonths: 4,
+        lastWakeTime: lastWake,
+        now: now,
+        currentNapNumber: 2,
+        totalExpectedNaps: 3,
+        personalizedWindow: personalized,
+      );
+
+      // Without damping: w=0.3 → min=(90*0.7+100*0.3)=93, max=(135*0.7+160*0.3)=142.5≈143
+      // With damping: w=0.24 → min=(90*0.76+100*0.24)=92.4≈92, max=(135*0.76+160*0.24)=141
+      // The damped result should differ from undamped
+      expect(result.wakeWindow.minMinutes, 92);
+      expect(result.wakeWindow.maxMinutes, 141);
+    });
+  });
+
+  group('NapQualityFactor', () {
+    test('short nap (20min) → adjustmentFactor == 0.85', () {
+      const factor = NapQualityFactor(lastNapDurationMinutes: 20);
+      expect(factor.adjustmentFactor, 0.85);
+    });
+
+    test('normal nap (45min) → adjustmentFactor == 1.0', () {
+      const factor = NapQualityFactor(lastNapDurationMinutes: 45);
+      expect(factor.adjustmentFactor, 1.0);
+    });
+
+    test('long nap (90min) → adjustmentFactor == 1.10', () {
+      const factor = NapQualityFactor(lastNapDurationMinutes: 90);
+      expect(factor.adjustmentFactor, 1.10);
     });
   });
 

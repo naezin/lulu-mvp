@@ -7,9 +7,9 @@ import '../../features/home/providers/sweet_spot_provider.dart'
 /// Pure calculation logic extracted from SweetSpotProvider.
 /// DateTime.now() NEVER called internally — all times injected via parameters.
 ///
-/// Medical disclaimer:
-/// Wake Window values are multi-source clinical consensus guidelines.
-/// Not based on academic RCTs but clinical consensus + observational trends.
+/// Reference information:
+/// Wake Window values are multi-source parenting reference guidelines.
+/// Not based on academic RCTs but practitioner consensus + observational trends.
 /// Sources: Mindell(2016), Paruthi/AASM(2016), Taking Cara Babies,
 ///          Huckleberry(MD reviewed), Cleveland Clinic, Halo Sleep(AAP cited)
 class SweetSpotCalculator {
@@ -38,6 +38,21 @@ class SweetSpotCalculator {
     this.firstNapFactor = 0.9,
     this.lastNapFactor = 1.15,
   });
+
+  // ============================================================
+  // Sleep regression period damping
+  // ============================================================
+  //
+  // During regression months, personalization weight is reduced
+  // because sleep patterns become temporarily unstable.
+  // Sources: Mindell(2016), Taking Cara Babies
+
+  static const List<int> _regressionMonths = [4, 8, 12, 18];
+  static const double _regressionDamping = 0.80;
+
+  static bool isRegressionPeriod(int correctedAgeMonths) {
+    return _regressionMonths.contains(correctedAgeMonths);
+  }
 
   // ============================================================
   // 13-stage Wake Window table (literature consensus)
@@ -117,15 +132,21 @@ class SweetSpotCalculator {
 
     // Wake Window range: literature or personalized blending
     final baseRange = _getWakeWindowRange(correctedAgeMonths);
-    final effectiveRange =
-        _blendWithPersonalized(baseRange, personalizedWindow);
+    final effectiveRange = _blendWithPersonalized(
+        baseRange, personalizedWindow, correctedAgeMonths);
 
     // Nap order correction
-    final correctedRange = _applyNapCorrection(
+    final napCorrectedRange = _applyNapCorrection(
       effectiveRange,
       napNum,
       expectedNaps,
       personalizedWindow,
+    );
+
+    // Nap quality factor adjustment
+    final correctedRange = _applyNapQualityFactor(
+      napCorrectedRange,
+      personalizedWindow?.lastNapQuality,
     );
 
     // Sweet Spot time range
@@ -247,12 +268,18 @@ class SweetSpotCalculator {
   WakeWindowRange _blendWithPersonalized(
     WakeWindowRange baseRange,
     PersonalizedWakeWindow? personalized,
+    int correctedAgeMonths,
   ) {
     if (personalized == null || personalized.personalWeight <= 0) {
       return baseRange;
     }
 
-    final w = personalized.personalWeight.clamp(0.0, 1.0);
+    var w = personalized.personalWeight.clamp(0.0, 1.0);
+
+    // Regression period damping: reduce trust in observed data
+    if (isRegressionPeriod(correctedAgeMonths)) {
+      w *= _regressionDamping;
+    }
     final blendedMin = (baseRange.minMinutes * (1 - w) +
             personalized.observedRange.minMinutes * w)
         .round();
@@ -260,9 +287,9 @@ class SweetSpotCalculator {
             personalized.observedRange.maxMinutes * w)
         .round();
 
-    // Safety clamp: within 50%~150% of literature range
-    final lowerBound = (baseRange.minMinutes * 0.5).round();
-    final upperBound = (baseRange.maxMinutes * 1.5).round();
+    // Safety clamp: within 75%~125% of literature range
+    final lowerBound = (baseRange.minMinutes * 0.75).round();
+    final upperBound = (baseRange.maxMinutes * 1.25).round();
 
     final safeMin = blendedMin.clamp(lowerBound, upperBound);
     final safeMax = blendedMax.clamp(lowerBound, upperBound);
@@ -292,6 +319,18 @@ class SweetSpotCalculator {
       return base.applyFactor(lastFact);
     }
     return base; // Middle naps: no correction
+  }
+
+  /// Apply nap quality adjustment
+  ///
+  /// Short previous nap → compress wake window (baby still tired).
+  /// Long previous nap → extend wake window (well rested).
+  WakeWindowRange _applyNapQualityFactor(
+    WakeWindowRange base,
+    NapQualityFactor? napQuality,
+  ) {
+    if (napQuality == null) return base;
+    return base.applyFactor(napQuality.adjustmentFactor);
   }
 
   /// Determine state
