@@ -157,6 +157,10 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
   Widget build(BuildContext context) {
     final l10n = S.of(context)!;
 
+    debugPrint('[INFO] [SweetSpotCard] build: isSleeping=${widget.isSleeping}, '
+        'sleepStartTime=${widget.sleepStartTime}, '
+        'isEmpty=${widget.isEmpty}, state=${widget.state}');
+
     if (widget.isSleeping && widget.sleepStartTime != null) {
       return _buildSleepingCard(context);
     }
@@ -443,11 +447,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     final isAfterZone = widget.state == SweetSpotState.overtired;
     final isInZone = widget.state == SweetSpotState.optimal;
 
-    // Accent line color
-    final accentColor = isAfterZone
-        ? LuluColors.surfaceElevatedBorder
-        : _themeColor;
-
     // Golden band positions
     final bandStart = _calcBandStart();
     final bandEnd = _calcBandEnd();
@@ -459,108 +458,85 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(color: LuluColors.glassBorder),
       ),
-      child: Stack(
-        children: [
-          // Accent line (left 4dp)
-          Positioned(
-            left: 0,
-            top: 8,
-            bottom: 8,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 600),
-              curve: Curves.easeInOut,
-              width: 4,
-              decoration: BoxDecoration(
-                color: accentColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(4),
-                  bottomLeft: Radius.circular(4),
-                ),
-              ),
-            ),
-          ),
-          // Card content
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 16, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Row 1: Nap label + icon
+            Row(
               children: [
-                // Row 1: Nap label + icon
-                Row(
-                  children: [
-                    Icon(
-                      widget.isNightTime
-                          ? LuluIcons.moon
-                          : LuluIcons.sleep,
-                      size: 16,
-                      color: isAfterZone
-                          ? LuluTextColors.tertiary
-                          : _themeColor,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      _getNapLabel(l10n),
-                      style: LuluTextStyles.bodySmall.copyWith(
-                        color: LuluTextColors.secondary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
+                Icon(
+                  widget.isNightTime
+                      ? LuluIcons.moon
+                      : LuluIcons.sleep,
+                  size: 16,
+                  color: isAfterZone
+                      ? LuluTextColors.tertiary
+                      : _themeColor,
                 ),
-                const SizedBox(height: 4),
-
-                // Row 2: Time range or calibrating indicator
-                if (isCalibrating)
-                  _buildCalibratingTimeRow(l10n)
-                else
-                  _buildTimeRangeRow(l10n),
-
-                const SizedBox(height: 12),
-
-                // Row 3: Golden Band progress bar
-                GoldenBandBar(
-                  progress: currentProgress,
-                  bandStart: bandStart,
-                  bandEnd: bandEnd,
-                  themeColor: _themeColor,
-                  themeColorLight: _themeColorLight,
-                  themeColorStrong: _themeColorStrong,
-                  isCalibrating: isCalibrating,
-                  isInZone: isInZone,
-                  isAfterZone: isAfterZone,
-                ),
-
-                const SizedBox(height: 8),
-
-                // Row 4: State message (warm/plain)
+                const SizedBox(width: 6),
                 Text(
-                  _getStateMessage(l10n),
+                  _getNapLabel(l10n),
                   style: LuluTextStyles.bodySmall.copyWith(
-                    color: isAfterZone
-                        ? LuluTextColors.tertiary
-                        : LuluTextColors.secondary,
+                    color: LuluTextColors.secondary,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-
-                // Divider + Next nap hint
-                if (_shouldShowNextHint()) ...[
-                  const SizedBox(height: 8),
-                  Divider(
-                    height: 1,
-                    thickness: 0.5,
-                    color: LuluColors.glassBorder,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: _buildNextNapHint(l10n),
-                  ),
-                ] else
-                  const SizedBox(height: 12),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+
+            // Row 2: Time range or calibrating indicator
+            if (isCalibrating)
+              _buildCalibratingTimeRow(l10n)
+            else
+              _buildTimeRangeRow(l10n),
+
+            const SizedBox(height: 12),
+
+            // Row 3: Golden Band progress bar
+            GoldenBandBar(
+              progress: currentProgress,
+              bandStart: bandStart,
+              bandEnd: bandEnd,
+              themeColor: _themeColor,
+              themeColorLight: _themeColorLight,
+              themeColorStrong: _themeColorStrong,
+              isCalibrating: isCalibrating,
+              isInZone: isInZone,
+              isAfterZone: isAfterZone,
+            ),
+
+            const SizedBox(height: 8),
+
+            // Row 4: State message (warm/plain)
+            Text(
+              _getStateMessage(l10n),
+              style: LuluTextStyles.bodySmall.copyWith(
+                color: isAfterZone
+                    ? LuluTextColors.tertiary
+                    : LuluTextColors.secondary,
+              ),
+            ),
+
+            // Divider + Next nap hint
+            if (_shouldShowNextHint()) ...[
+              const SizedBox(height: 8),
+              Divider(
+                height: 1,
+                thickness: 0.5,
+                color: LuluColors.glassBorder,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: _buildNextNapHint(l10n),
+              ),
+            ] else
+              const SizedBox(height: 12),
+          ],
+        ),
       ),
     );
   }
@@ -644,23 +620,13 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         result.napNumber >= result.totalExpectedNaps;
 
     if (isLastNap) {
-      return Row(
-        children: [
-          Text(
-            widget.isWarmTone
-                ? l10n.sweetSpotCardNextNightWarm
-                : l10n.sweetSpotCardNextNightPlain,
-            style: LuluTextStyles.bodySmall.copyWith(
-              color: LuluTextColors.tertiary,
-            ),
-          ),
-          const Spacer(),
-          Icon(
-            LuluIcons.chevronRight,
-            size: 14,
-            color: LuluTextColors.tertiary,
-          ),
-        ],
+      return Text(
+        widget.isWarmTone
+            ? l10n.sweetSpotCardNextNightWarm
+            : l10n.sweetSpotCardNextNightPlain,
+        style: LuluTextStyles.bodySmall.copyWith(
+          color: LuluTextColors.tertiary,
+        ),
       );
     }
 
@@ -672,23 +638,13 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         Duration(minutes: result.wakeWindow.midMinutes),
       ));
 
-      return Row(
-        children: [
-          Text(
-            widget.isWarmTone
-                ? l10n.sweetSpotCardNextNapWarm(nextTime)
-                : l10n.sweetSpotCardNextNapPlain(nextTime),
-            style: LuluTextStyles.bodySmall.copyWith(
-              color: LuluTextColors.tertiary,
-            ),
-          ),
-          const Spacer(),
-          Icon(
-            LuluIcons.chevronRight,
-            size: 14,
-            color: LuluTextColors.tertiary,
-          ),
-        ],
+      return Text(
+        widget.isWarmTone
+            ? l10n.sweetSpotCardNextNapWarm(nextTime)
+            : l10n.sweetSpotCardNextNapPlain(nextTime),
+        style: LuluTextStyles.bodySmall.copyWith(
+          color: LuluTextColors.tertiary,
+        ),
       );
     }
 

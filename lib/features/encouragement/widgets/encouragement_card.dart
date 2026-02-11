@@ -5,6 +5,7 @@ import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
+import '../../../core/utils/korean_particle.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_model.dart';
 import '../../../data/models/badge_model.dart';
@@ -144,6 +145,13 @@ class _EncouragementCardState extends State<EncouragementCard> {
     final hours = message.params['hours'] ?? '0';
     final badge = message.params['badge'] ?? '';
 
+    // Compute Korean particle variants for baby name
+    final babyIwa = KoreanParticle.iWa(baby);
+    final babyIreul = KoreanParticle.iReul(baby);
+    final babyIdo = KoreanParticle.iDo(baby);
+    final babyIui = KoreanParticle.iUi(baby);
+    final babyIga = KoreanParticle.iGaName(baby);
+
     // Warm tone keys (default)
     switch (key) {
       // Dawn (warm)
@@ -152,45 +160,45 @@ class _EncouragementCardState extends State<EncouragementCard> {
       case 'encouragement_dawn_2':
         return l10n.encouragementDawnWarm2;
       case 'encouragement_dawn_3':
-        return l10n.encouragementDawnWarm3(baby);
+        return l10n.encouragementDawnWarm3(babyIwa);
       case 'encouragement_dawn_4':
         return l10n.encouragementDawnWarm4;
 
       // Morning (warm)
       case 'encouragement_morning_1':
-        return l10n.encouragementMorningWarm1(baby);
+        return l10n.encouragementMorningWarm1(babyIwa);
       case 'encouragement_morning_2':
-        return l10n.encouragementMorningWarm2(baby);
+        return l10n.encouragementMorningWarm2(babyIreul);
 
       // Afternoon (warm)
       case 'encouragement_afternoon_2':
         return l10n.encouragementAfternoonWarm2;
       case 'encouragement_afternoon_3':
-        return l10n.encouragementAfternoonWarm3(baby);
+        return l10n.encouragementAfternoonWarm3(babyIwa);
 
       // Evening (warm)
       case 'encouragement_evening_1':
-        return l10n.encouragementEveningWarm1(baby);
+        return l10n.encouragementEveningWarm1(babyIdo);
       case 'encouragement_evening_2':
         return l10n.encouragementEveningWarm2;
       case 'encouragement_evening_3':
-        return l10n.encouragementEveningWarm3(baby);
+        return l10n.encouragementEveningWarm3(babyIreul);
 
       // General (warm)
       case 'encouragement_general_1':
         return l10n.encouragementGeneralWarm1;
       case 'encouragement_general_2':
-        return l10n.encouragementGeneralWarm2(baby);
+        return l10n.encouragementGeneralWarm2(babyIui);
       case 'encouragement_general_3':
         return l10n.encouragementGeneralWarm3;
       case 'encouragement_general_4':
-        return l10n.encouragementGeneralWarm4(baby);
+        return l10n.encouragementGeneralWarm4(babyIreul);
 
       // Data-based
       case 'encouragement_data_badge':
         return l10n.encouragementDataBadgeWarm(badge);
       case 'encouragement_data_sleep':
-        return l10n.encouragementDataSleepWarm(baby, hours);
+        return l10n.encouragementDataSleepWarm(babyIga, hours);
       case 'encouragement_data_weekly':
         return l10n.encouragementDataWeeklyWarm(count);
 
