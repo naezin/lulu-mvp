@@ -67,11 +67,11 @@ class SweetSpotProvider extends ChangeNotifier {
   ///
   /// [lastSleepEndTime]: end time of the last sleep activity (null = unknown)
   /// [babyAgeInMonths]: effective age in months (corrected for preterm)
-  ///
-  /// Signature preserved for HomeProvider._notifySweetSpot() compatibility.
+  /// [completedSleepRecords]: today's completed sleep count (null = skip calibration)
   void recalculate({
     required DateTime? lastSleepEndTime,
     required int? babyAgeInMonths,
+    int? completedSleepRecords,
   }) {
     if (lastSleepEndTime == null || babyAgeInMonths == null) {
       if (_sweetSpotResult != null) {
@@ -88,6 +88,7 @@ class SweetSpotProvider extends ChangeNotifier {
       correctedAgeMonths: babyAgeInMonths,
       lastWakeTime: lastSleepEndTime,
       now: now,
+      completedSleepRecords: completedSleepRecords,
     );
 
     // Guard: only notify if state changed
@@ -114,8 +115,11 @@ class SweetSpotProvider extends ChangeNotifier {
 
 /// Sweet Spot state enum
 enum SweetSpotState {
-  /// Unknown
+  /// Unknown (no sleep records at all)
   unknown,
+
+  /// Calibrating (1~2 sleep records today, learning pattern)
+  calibrating,
 
   /// Still early (not tired yet)
   tooEarly,
@@ -135,6 +139,7 @@ extension SweetSpotStateExtension on SweetSpotState {
   String localizedLabel(S l10n) {
     return switch (this) {
       SweetSpotState.unknown => l10n.sweetSpotStateLabelUnknown,
+      SweetSpotState.calibrating => l10n.sweetSpotStateLabelCalibrating,
       SweetSpotState.tooEarly => l10n.sweetSpotStateLabelTooEarly,
       SweetSpotState.approaching => l10n.sweetSpotStateLabelApproaching,
       SweetSpotState.optimal => l10n.sweetSpotStateLabelOptimal,
@@ -145,6 +150,7 @@ extension SweetSpotStateExtension on SweetSpotState {
   IconData get icon {
     return switch (this) {
       SweetSpotState.unknown => LuluIcons.info,
+      SweetSpotState.calibrating => LuluIcons.sleep,
       SweetSpotState.tooEarly => LuluIcons.sun,
       SweetSpotState.approaching => LuluIcons.sleep,
       SweetSpotState.optimal => LuluIcons.moon,

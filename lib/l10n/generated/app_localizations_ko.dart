@@ -643,6 +643,20 @@ class SKo extends S {
   String get sweetSpotDisclaimer => '이 예측은 참고용이며, 아기마다 다를 수 있어요';
 
   @override
+  String get sweetSpotCalibrating => '아기의 수면 리듬을 알아가고 있어요';
+
+  @override
+  String sweetSpotCalibratingProgress(int current) {
+    return '$current일째 기록 중';
+  }
+
+  @override
+  String get sweetSpotCalibratingHint => '수면 기록이 쌓이면 더 정확한 예측을 보여드릴게요';
+
+  @override
+  String get sweetSpotStateLabelCalibrating => '학습 중';
+
+  @override
   String get sweetSpotNoSleepTitle => '오늘 수면 기록이 없어요';
 
   @override

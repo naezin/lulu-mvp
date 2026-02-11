@@ -50,6 +50,17 @@ class SweetSpotCalculator {
   static const List<int> _regressionMonths = [4, 8, 12, 18];
   static const double _regressionDamping = 0.80;
 
+  // ============================================================
+  // Calibration threshold
+  // ============================================================
+  //
+  // Minimum completed sleep records (today) before normal prediction.
+  // Below this count → calibrating state (still shows literature-based
+  // prediction, but UI indicates learning phase).
+  // Newborns sleep 4-5x/day, so threshold of 3 is achievable daily.
+
+  static const int _calibrationThreshold = 3;
+
   static bool isRegressionPeriod(int correctedAgeMonths) {
     return _regressionMonths.contains(correctedAgeMonths);
   }
@@ -111,12 +122,14 @@ class SweetSpotCalculator {
   /// Calculate Sweet Spot for current moment
   ///
   /// [now]: current time (injected, not DateTime.now() — testable)
+  /// [completedSleepRecords]: today's completed sleep count (null = skip calibration check, backward compat)
   /// [personalizedWindow]: Phase E personalization data (null = literature table)
   SweetSpotResult calculate({
     required String babyId,
     required int correctedAgeMonths,
     required DateTime? lastWakeTime,
     required DateTime now,
+    int? completedSleepRecords,
     int? currentNapNumber,
     int? totalExpectedNaps,
     PersonalizedWakeWindow? personalizedWindow,
@@ -124,6 +137,22 @@ class SweetSpotCalculator {
     // No sleep record → unknown
     if (lastWakeTime == null) {
       return _unknownResult(babyId, correctedAgeMonths, now);
+    }
+
+    // Calibrating: fewer than threshold completed sleep records today
+    // Still provides literature-based prediction (no blank screen)
+    if (completedSleepRecords != null &&
+        completedSleepRecords < _calibrationThreshold) {
+      return _calibratingResult(
+        babyId: babyId,
+        correctedAgeMonths: correctedAgeMonths,
+        lastWakeTime: lastWakeTime,
+        now: now,
+        completedSleepRecords: completedSleepRecords,
+        currentNapNumber: currentNapNumber,
+        totalExpectedNaps: totalExpectedNaps,
+        personalizedWindow: personalizedWindow,
+      );
     }
 
     final expectedNaps =
@@ -358,6 +387,8 @@ class SweetSpotCalculator {
     switch (state) {
       case SweetSpotState.unknown:
         return 'sweetSpotUnknown';
+      case SweetSpotState.calibrating:
+        return 'sweetSpotCalibrating';
       case SweetSpotState.tooEarly:
         return isNight
             ? 'sweetSpotTooEarlyNight'
@@ -392,6 +423,66 @@ class SweetSpotCalculator {
       isNightTime: now.hour >= 18 || now.hour < 6,
       calculatedAt: now,
       stateMessageKey: 'sweetSpotUnknown',
+    );
+  }
+
+  /// Helper: calibrating result (literature-based prediction with calibrating state)
+  ///
+  /// Provides the same calculation as normal mode, but marks state as
+  /// calibrating so UI can show learning progress.
+  /// This avoids blank screens while data is being collected.
+  SweetSpotResult _calibratingResult({
+    required String babyId,
+    required int correctedAgeMonths,
+    required DateTime lastWakeTime,
+    required DateTime now,
+    required int completedSleepRecords,
+    int? currentNapNumber,
+    int? totalExpectedNaps,
+    PersonalizedWakeWindow? personalizedWindow,
+  }) {
+    final expectedNaps =
+        totalExpectedNaps ?? getExpectedNapCount(correctedAgeMonths);
+    final napNum = currentNapNumber ?? 1;
+
+    // Literature-based calculation (same as normal path)
+    final baseRange = _getWakeWindowRange(correctedAgeMonths);
+    final effectiveRange = _blendWithPersonalized(
+        baseRange, personalizedWindow, correctedAgeMonths);
+    final napCorrectedRange = _applyNapCorrection(
+      effectiveRange,
+      napNum,
+      expectedNaps,
+      personalizedWindow,
+    );
+    final correctedRange = _applyNapQualityFactor(
+      napCorrectedRange,
+      personalizedWindow?.lastNapQuality,
+    );
+
+    final minSleepTime =
+        lastWakeTime.add(Duration(minutes: correctedRange.minMinutes));
+    final maxSleepTime =
+        lastWakeTime.add(Duration(minutes: correctedRange.maxMinutes));
+
+    final hour = now.hour;
+    final isNight = hour >= 18 || hour < 6;
+
+    return SweetSpotResult(
+      babyId: babyId,
+      correctedAgeMonths: correctedAgeMonths,
+      state: SweetSpotState.calibrating,
+      wakeWindow: correctedRange,
+      lastWakeTime: lastWakeTime,
+      minSleepTime: minSleepTime,
+      maxSleepTime: maxSleepTime,
+      napNumber: napNum,
+      totalExpectedNaps: expectedNaps,
+      isNightTime: isNight,
+      calculatedAt: now,
+      stateMessageKey: _getStateMessageKey(SweetSpotState.calibrating, isNight),
+      completedSleepRecords: completedSleepRecords,
+      calibrationTarget: _calibrationThreshold,
     );
   }
 

@@ -935,6 +935,27 @@
   "@sweetSpotDisclaimer": {
     "description": "Sweet Spot 면책 문구"
   },
+  "sweetSpotCalibrating": "아기의 수면 리듬을 알아가고 있어요",
+  "@sweetSpotCalibrating": {
+    "description": "Calibrating state: learning sleep pattern"
+  },
+  "sweetSpotCalibratingProgress": "{current}일째 기록 중",
+  "@sweetSpotCalibratingProgress": {
+    "description": "Calibrating progress indicator",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      }
+    }
+  },
+  "sweetSpotCalibratingHint": "수면 기록이 쌓이면 더 정확한 예측을 보여드릴게요",
+  "@sweetSpotCalibratingHint": {
+    "description": "Calibrating state hint message"
+  },
+  "sweetSpotStateLabelCalibrating": "학습 중",
+  "@sweetSpotStateLabelCalibrating": {
+    "description": "Sweet Spot State Label Calibrating"
+  },
   "sweetSpotNoSleepTitle": "오늘 수면 기록이 없어요",
   "@sweetSpotNoSleepTitle": {
     "description": "Sweet Spot 오늘 수면 기록 없을 때 제목"

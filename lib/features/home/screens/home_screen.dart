@@ -260,6 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
               isNightTime: sweetSpotProvider.isNightTime,
               hasOtherActivitiesOnly: homeProvider.hasAnyRecordsEver && !hasSleepRecord,
               isNewUser: !homeProvider.hasAnyRecordsEver,
+              completedSleepRecords: sweetSpotProvider.sweetSpotResult?.completedSleepRecords,
+              calibrationTarget: sweetSpotProvider.sweetSpotResult?.calibrationTarget,
             ),
 
             if (FeatureFlags.enableCryAnalysis) ...[

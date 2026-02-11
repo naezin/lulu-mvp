@@ -605,4 +605,107 @@ void main() {
       expect(SweetSpotCalculator.getExpectedNapCount(24), 1);
     });
   });
+
+  // ============================================================
+  // Calibrating state tests (Sprint 22 C-4)
+  // ============================================================
+  group('Calibrating state', () {
+    // Test #31: 0 records + null lastWakeTime → unknown (not calibrating)
+    test('31. 0 records + null lastWakeTime → unknown', () {
+      final result = calculator.calculate(
+        babyId: 'baby1',
+        correctedAgeMonths: 3,
+        lastWakeTime: null,
+        now: baseTime,
+        completedSleepRecords: 0,
+      );
+
+      expect(result.state, SweetSpotState.unknown);
+      expect(result.completedSleepRecords, isNull);
+      expect(result.calibrationTarget, isNull);
+    });
+
+    // Test #32: 1 record → calibrating, progress ≈ 0.33
+    test('32. 1 completed sleep record → calibrating, progress 1/3', () {
+      final lastWake = baseTime;
+      final now = baseTime.add(const Duration(minutes: 30));
+
+      final result = calculator.calculate(
+        babyId: 'baby1',
+        correctedAgeMonths: 3,
+        lastWakeTime: lastWake,
+        now: now,
+        completedSleepRecords: 1,
+      );
+
+      expect(result.state, SweetSpotState.calibrating);
+      expect(result.completedSleepRecords, 1);
+      expect(result.calibrationTarget, 3);
+      expect(result.calibrationProgress, closeTo(0.33, 0.01));
+      // Still provides literature-based prediction (no blank screen)
+      expect(result.wakeWindow.minMinutes, greaterThan(0));
+      expect(result.wakeWindow.maxMinutes, greaterThan(0));
+      expect(result.stateMessageKey, 'sweetSpotCalibrating');
+    });
+
+    // Test #33: 2 records → calibrating, progress ≈ 0.67
+    test('33. 2 completed sleep records → calibrating, progress 2/3', () {
+      final lastWake = baseTime;
+      final now = baseTime.add(const Duration(minutes: 30));
+
+      final result = calculator.calculate(
+        babyId: 'baby1',
+        correctedAgeMonths: 3,
+        lastWakeTime: lastWake,
+        now: now,
+        completedSleepRecords: 2,
+      );
+
+      expect(result.state, SweetSpotState.calibrating);
+      expect(result.completedSleepRecords, 2);
+      expect(result.calibrationTarget, 3);
+      expect(result.calibrationProgress, closeTo(0.67, 0.01));
+      // Literature-based prediction still provided
+      expect(result.lastWakeTime, lastWake);
+    });
+
+    // Test #34: 3 records → normal (not calibrating)
+    test('34. 3 completed sleep records → normal calculation', () {
+      final lastWake = baseTime;
+      final now = baseTime.add(const Duration(minutes: 30));
+
+      final result = calculator.calculate(
+        babyId: 'baby1',
+        correctedAgeMonths: 3,
+        lastWakeTime: lastWake,
+        now: now,
+        completedSleepRecords: 3,
+      );
+
+      expect(result.state, isNot(SweetSpotState.calibrating));
+      expect(result.completedSleepRecords, isNull);
+      expect(result.calibrationTarget, isNull);
+      // Normal state: tooEarly (30min awake, 3mo range 60-90min)
+      expect(result.state, SweetSpotState.tooEarly);
+    });
+
+    // Test #35: null completedSleepRecords → backward compat (no calibrating)
+    test('35. null completedSleepRecords → backward compat, normal calc', () {
+      final lastWake = baseTime;
+      final now = baseTime.add(const Duration(minutes: 30));
+
+      final result = calculator.calculate(
+        babyId: 'baby1',
+        correctedAgeMonths: 3,
+        lastWakeTime: lastWake,
+        now: now,
+        // completedSleepRecords not passed → null
+      );
+
+      expect(result.state, isNot(SweetSpotState.calibrating));
+      expect(result.completedSleepRecords, isNull);
+      // Normal calculation proceeds
+      expect(result.state, SweetSpotState.tooEarly);
+    });
+  });
 }

@@ -217,6 +217,27 @@
   "sweetSpotEmptyActionHint": "Tap a button below to start\nrecording feeding, sleep, or diaper",
   "sweetSpotEmptyHint": "We'll predict sleep times once you have some records",
   "sweetSpotDisclaimer": "This prediction is for reference only and may vary for each baby",
+  "sweetSpotCalibrating": "Learning your baby's sleep rhythm",
+  "@sweetSpotCalibrating": {
+    "description": "Calibrating state: learning sleep pattern"
+  },
+  "sweetSpotCalibratingProgress": "Day {current} of recording",
+  "@sweetSpotCalibratingProgress": {
+    "description": "Calibrating progress indicator",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      }
+    }
+  },
+  "sweetSpotCalibratingHint": "As more sleep data is collected, predictions will become more accurate",
+  "@sweetSpotCalibratingHint": {
+    "description": "Calibrating state hint message"
+  },
+  "sweetSpotStateLabelCalibrating": "Learning",
+  "@sweetSpotStateLabelCalibrating": {
+    "description": "Sweet Spot State Label Calibrating"
+  },
   "sweetSpotNoSleepTitle": "Record sleep to start predictions",
   "sweetSpotNoSleepHint": "Once you have sleep records, we'll predict the next sleep time",
   "sweetSpotRecordSleepButton": "Record Sleep",

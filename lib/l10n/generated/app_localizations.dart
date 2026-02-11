@@ -1273,6 +1273,30 @@ abstract class S {
   /// **'이 예측은 참고용이며, 아기마다 다를 수 있어요'**
   String get sweetSpotDisclaimer;
 
+  /// Calibrating state: learning sleep pattern
+  ///
+  /// In ko, this message translates to:
+  /// **'아기의 수면 리듬을 알아가고 있어요'**
+  String get sweetSpotCalibrating;
+
+  /// Calibrating progress indicator
+  ///
+  /// In ko, this message translates to:
+  /// **'{current}일째 기록 중'**
+  String sweetSpotCalibratingProgress(int current);
+
+  /// Calibrating state hint message
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 기록이 쌓이면 더 정확한 예측을 보여드릴게요'**
+  String get sweetSpotCalibratingHint;
+
+  /// Sweet Spot State Label Calibrating
+  ///
+  /// In ko, this message translates to:
+  /// **'학습 중'**
+  String get sweetSpotStateLabelCalibrating;
+
   /// Sweet Spot 오늘 수면 기록 없을 때 제목
   ///
   /// In ko, this message translates to:

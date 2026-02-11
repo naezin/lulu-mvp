@@ -651,6 +651,21 @@ class SEn extends S {
       'This prediction is for reference only and may vary for each baby';
 
   @override
+  String get sweetSpotCalibrating => 'Learning your baby\'s sleep rhythm';
+
+  @override
+  String sweetSpotCalibratingProgress(int current) {
+    return 'Day $current of recording';
+  }
+
+  @override
+  String get sweetSpotCalibratingHint =>
+      'As more sleep data is collected, predictions will become more accurate';
+
+  @override
+  String get sweetSpotStateLabelCalibrating => 'Learning';
+
+  @override
   String get sweetSpotNoSleepTitle => 'Record sleep to start predictions';
 
   @override

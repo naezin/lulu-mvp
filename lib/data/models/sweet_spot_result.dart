@@ -26,6 +26,12 @@ class SweetSpotResult {
   final DateTime calculatedAt;
   final String stateMessageKey;
 
+  /// Calibrating state: completed sleep records count (null if not calibrating)
+  final int? completedSleepRecords;
+
+  /// Calibrating state: target record count (default 3)
+  final int? calibrationTarget;
+
   const SweetSpotResult({
     required this.babyId,
     required this.correctedAgeMonths,
@@ -39,7 +45,16 @@ class SweetSpotResult {
     required this.isNightTime,
     required this.calculatedAt,
     required this.stateMessageKey,
+    this.completedSleepRecords,
+    this.calibrationTarget,
   });
+
+  /// Calibrating progress (0.0 ~ 1.0)
+  double get calibrationProgress {
+    if (completedSleepRecords == null || calibrationTarget == null) return 0.0;
+    if (calibrationTarget! <= 0) return 0.0;
+    return (completedSleepRecords! / calibrationTarget!).clamp(0.0, 1.0);
+  }
 
   /// Real-time progress calculation (UX Designer feedback)
   ///
@@ -87,6 +102,8 @@ class SweetSpotResult {
     bool? isNightTime,
     DateTime? calculatedAt,
     String? stateMessageKey,
+    int? completedSleepRecords,
+    int? calibrationTarget,
   }) {
     return SweetSpotResult(
       babyId: babyId ?? this.babyId,
@@ -101,6 +118,8 @@ class SweetSpotResult {
       isNightTime: isNightTime ?? this.isNightTime,
       calculatedAt: calculatedAt ?? this.calculatedAt,
       stateMessageKey: stateMessageKey ?? this.stateMessageKey,
+      completedSleepRecords: completedSleepRecords ?? this.completedSleepRecords,
+      calibrationTarget: calibrationTarget ?? this.calibrationTarget,
     );
   }
 }

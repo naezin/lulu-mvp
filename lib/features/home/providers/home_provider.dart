@@ -271,9 +271,15 @@ class HomeProvider extends ChangeNotifier {
     final lastSleepActivity = lastSleep;
     final baby = selectedBaby;
 
+    // Count today's completed sleep records for calibration
+    final completedSleepCount = filteredTodayActivities
+        .where((a) => a.type == ActivityType.sleep && a.endTime != null)
+        .length;
+
     _sweetSpotProvider?.recalculate(
       lastSleepEndTime: lastSleepActivity?.endTime ?? lastSleepActivity?.startTime,
       babyAgeInMonths: baby?.effectiveAgeInMonths,
+      completedSleepRecords: completedSleepCount,
     );
   }
 
