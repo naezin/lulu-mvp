@@ -1006,6 +1006,22 @@
   "@languageChangeMessage": {
     "description": "언어 변경 안내 메시지"
   },
+  "sectionTone": "메시지 톤",
+  "@sectionTone": {
+    "description": "Settings section - message tone"
+  },
+  "toneSettingTitle": "따뜻한 메시지",
+  "@toneSettingTitle": {
+    "description": "Tone setting toggle title"
+  },
+  "toneSettingSubtitleWarm": "격려와 응원이 담긴 메시지",
+  "@toneSettingSubtitleWarm": {
+    "description": "Tone setting subtitle when warm is on"
+  },
+  "toneSettingSubtitlePlain": "간결하고 담백한 메시지",
+  "@toneSettingSubtitlePlain": {
+    "description": "Tone setting subtitle when plain is on"
+  },
   "feedingContentBreastMilk": "모유",
   "@feedingContentBreastMilk": {
     "description": "수유 컨텐츠 타입 - 모유"

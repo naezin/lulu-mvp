@@ -691,6 +691,18 @@ class SKo extends S {
   String get languageChangeMessage => '앱이 선택한 언어로 표시됩니다.';
 
   @override
+  String get sectionTone => '메시지 톤';
+
+  @override
+  String get toneSettingTitle => '따뜻한 메시지';
+
+  @override
+  String get toneSettingSubtitleWarm => '격려와 응원이 담긴 메시지';
+
+  @override
+  String get toneSettingSubtitlePlain => '간결하고 담백한 메시지';
+
+  @override
   String get feedingContentBreastMilk => '모유';
 
   @override

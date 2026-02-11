@@ -703,6 +703,18 @@ class SEn extends S {
       'The app will be displayed in the selected language.';
 
   @override
+  String get sectionTone => 'Message Tone';
+
+  @override
+  String get toneSettingTitle => 'Warm Messages';
+
+  @override
+  String get toneSettingSubtitleWarm => 'Encouraging and supportive messages';
+
+  @override
+  String get toneSettingSubtitlePlain => 'Concise and straightforward messages';
+
+  @override
   String get feedingContentBreastMilk => 'Breast Milk';
 
   @override

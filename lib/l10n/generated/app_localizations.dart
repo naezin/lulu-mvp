@@ -1357,6 +1357,30 @@ abstract class S {
   /// **'앱이 선택한 언어로 표시됩니다.'**
   String get languageChangeMessage;
 
+  /// Settings section - message tone
+  ///
+  /// In ko, this message translates to:
+  /// **'메시지 톤'**
+  String get sectionTone;
+
+  /// Tone setting toggle title
+  ///
+  /// In ko, this message translates to:
+  /// **'따뜻한 메시지'**
+  String get toneSettingTitle;
+
+  /// Tone setting subtitle when warm is on
+  ///
+  /// In ko, this message translates to:
+  /// **'격려와 응원이 담긴 메시지'**
+  String get toneSettingSubtitleWarm;
+
+  /// Tone setting subtitle when plain is on
+  ///
+  /// In ko, this message translates to:
+  /// **'간결하고 담백한 메시지'**
+  String get toneSettingSubtitlePlain;
+
   /// 수유 컨텐츠 타입 - 모유
   ///
   /// In ko, this message translates to:

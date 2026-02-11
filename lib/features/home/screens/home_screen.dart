@@ -28,6 +28,7 @@ import '../../cry_analysis/screens/cry_analysis_screen.dart';
 import '../../badge/badge_provider.dart';
 import '../../badge/widgets/badge_collection_screen.dart';
 import '../../encouragement/widgets/encouragement_card.dart';
+import '../../settings/providers/settings_provider.dart';
 import '../../timeline/screens/record_history_screen.dart';
 
 /// 홈 화면 (시안 B-4 기반)
@@ -203,8 +204,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final selectedBaby = homeProvider.selectedBaby;
     final babyName = selectedBaby?.name;
 
-    return Consumer<OngoingSleepProvider>(
-      builder: (context, sleepProvider, _) {
+    return Consumer2<OngoingSleepProvider, SettingsProvider>(
+      builder: (context, sleepProvider, settingsProvider, _) {
         // 수면 중인지 확인 (선택된 아기의 수면)
         final isSleeping = sleepProvider.hasSleepInProgress &&
             sleepProvider.currentBabyId == homeProvider.selectedBabyId;
@@ -238,6 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
             EncouragementCard(
               baby: homeProvider.selectedBaby,
               todayActivities: const [],
+              isWarmTone: settingsProvider.isWarmTone,
             ),
 
             // 🆕 울음 분석 카드 (Feature Flag로 제어)
@@ -263,11 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // Sweet Spot Empty State: no sleep record today
     final hasSleepRecord = homeProvider.lastSleep != null;
 
-    return Consumer2<OngoingSleepProvider, SweetSpotProvider>(
-      builder: (context, sleepProvider, sweetSpotProvider, _) {
+    return Consumer3<OngoingSleepProvider, SweetSpotProvider, SettingsProvider>(
+      builder: (context, sleepProvider, sweetSpotProvider, settingsProvider, _) {
         // Check if selected baby is sleeping
         final isSleeping = sleepProvider.hasSleepInProgress &&
             sleepProvider.currentBabyId == homeProvider.selectedBabyId;
+        final isWarmTone = settingsProvider.isWarmTone;
 
         return Column(
           children: [
@@ -305,6 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? homeProvider.babies.indexWhere(
                       (b) => b.id == homeProvider.selectedBabyId)
                   : null,
+              isWarmTone: isWarmTone,
             ),
 
             // 3. Encouragement message (compact inline)
@@ -315,6 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   todayActivities: homeProvider.todayActivities,
                   recentBadges: badgeProvider.achievements,
                   hasPendingBadgePopup: badgeProvider.currentPopup != null,
+                  isWarmTone: isWarmTone,
                 );
               },
             ),
