@@ -3483,9 +3483,6 @@ class SEn extends S {
       'The first feeding... a moment full of love.';
 
   @override
-  String get badgeFirstFeedingHumor => 'Mission: First Feed complete!';
-
-  @override
   String get badgeFeeding10Title => '10 Feedings';
 
   @override
@@ -3493,9 +3490,6 @@ class SEn extends S {
 
   @override
   String get badgeFeeding10Warm => '10 feedings... every drop is love.';
-
-  @override
-  String get badgeFeeding10Humor => '10 feeds down! Keep going, champ!';
 
   @override
   String get badgeFeeding50Title => '50 Feedings';
@@ -3508,10 +3502,6 @@ class SEn extends S {
   String get badgeFeeding50Warm => '50 feedings... you are truly amazing.';
 
   @override
-  String get badgeFeeding50Humor =>
-      '50 feeds! Your baby appreciates every one!';
-
-  @override
   String get badgeMilk1LTitle => '1 Liter of Love';
 
   @override
@@ -3519,9 +3509,6 @@ class SEn extends S {
 
   @override
   String get badgeMilk1LWarm => '1 liter of love... every milliliter matters.';
-
-  @override
-  String get badgeMilk1LHumor => '1 liter! That\'s a lot of milk!';
 
   @override
   String get badgeNightFeedingTitle => 'Midnight Hero';
@@ -3534,9 +3521,6 @@ class SEn extends S {
   String get badgeNightFeedingWarm => 'Feeding at dawn... you\'re the bravest.';
 
   @override
-  String get badgeNightFeedingHumor => 'Who needs sleep anyway? Hero mode: ON!';
-
-  @override
   String get badgeFirstSleepTitle => 'First Sleep';
 
   @override
@@ -3546,9 +3530,6 @@ class SEn extends S {
   String get badgeFirstSleepWarm => 'Sweet dreams begin now...';
 
   @override
-  String get badgeFirstSleepHumor => 'Zzz... the first nap is in the books!';
-
-  @override
   String get badgeSleep10Title => '10 Sleeps';
 
   @override
@@ -3556,9 +3537,6 @@ class SEn extends S {
 
   @override
   String get badgeSleep10Warm => '10 peaceful sleeps... you\'re doing great.';
-
-  @override
-  String get badgeSleep10Humor => '10 naps tracked! Sleep expert in training!';
 
   @override
   String get badgeSleepThroughTitle => 'First Full Night';
@@ -3571,9 +3549,6 @@ class SEn extends S {
       'A full night\'s sleep... you both deserve this.';
 
   @override
-  String get badgeSleepThroughHumor => '7 hours straight! Is this real life?!';
-
-  @override
   String get badgeSleepRoutineTitle => 'Sleep Routine';
 
   @override
@@ -3582,9 +3557,6 @@ class SEn extends S {
   @override
   String get badgeSleepRoutineWarm =>
       '3 days of routine... building healthy habits.';
-
-  @override
-  String get badgeSleepRoutineHumor => '3-day streak! Consistency is key!';
 
   @override
   String get badgeSleepWeekTitle => 'Sleep Week Master';
@@ -3597,9 +3569,6 @@ class SEn extends S {
       'A whole week... your dedication is beautiful.';
 
   @override
-  String get badgeSleepWeekHumor => '7 days! You deserve a medal... oh wait!';
-
-  @override
   String get badgeFirstRecordTitle => 'Hello, Lulu!';
 
   @override
@@ -3607,9 +3576,6 @@ class SEn extends S {
 
   @override
   String get badgeFirstRecordWarm => 'The journey begins... welcome to Lulu.';
-
-  @override
-  String get badgeFirstRecordHumor => 'First record! And so it begins!';
 
   @override
   String get badge3DayStreakTitle => '3-Day Streak';
@@ -3621,9 +3587,6 @@ class SEn extends S {
   String get badge3DayStreakWarm => '3 days together... every moment matters.';
 
   @override
-  String get badge3DayStreakHumor => '3 days! You\'re on fire!';
-
-  @override
   String get badge7DayStreakTitle => '7-Day Champion';
 
   @override
@@ -3631,9 +3594,6 @@ class SEn extends S {
 
   @override
   String get badge7DayStreakWarm => 'A whole week... you\'re the best parent.';
-
-  @override
-  String get badge7DayStreakHumor => '7-day streak! Call the Guinness Book!';
 
   @override
   String get badgeDay7Title => 'First Week';
@@ -3646,10 +3606,6 @@ class SEn extends S {
       'One week together... every moment is a treasure.';
 
   @override
-  String get badgeDay7Humor =>
-      '7 days survived! Achievement unlocked: Survived Week 1!';
-
-  @override
   String get badgeDay100Title => '100 Days Together';
 
   @override
@@ -3660,10 +3616,6 @@ class SEn extends S {
       '100 days of love and growth... you\'ve done an amazing job.';
 
   @override
-  String get badgeDay100Humor =>
-      '100 days! That\'s like 2,400 diaper changes... give or take.';
-
-  @override
   String get badgeMonth1Title => 'One Month';
 
   @override
@@ -3672,9 +3624,6 @@ class SEn extends S {
   @override
   String get badgeMonth1Warm =>
       'A whole month... look how far you\'ve come together.';
-
-  @override
-  String get badgeMonth1Humor => '30 days in! You\'re basically a pro now!';
 
   @override
   String get badgeCorrectedTermTitle => 'Full Term Reached';
@@ -3688,10 +3637,6 @@ class SEn extends S {
       'The day we\'ve been waiting for... your little fighter made it to term.';
 
   @override
-  String get badgeCorrectedTermHumor =>
-      'Full term unlocked! Your baby\'s been leveling up this whole time!';
-
-  @override
   String get badgeMultiplesFirstRecordTitle => 'Multiples Journey Begins';
 
   @override
@@ -3701,10 +3646,6 @@ class SEn extends S {
   @override
   String get badgeMultiplesFirstRecordWarm =>
       'The adventure begins... twice the love, twice the joy.';
-
-  @override
-  String get badgeMultiplesFirstRecordHumor =>
-      'First record done! Only a million more to go with multiples!';
 
   @override
   String get badgeMultiplesAllFedTitle => 'Everyone Fed';
@@ -3717,10 +3658,6 @@ class SEn extends S {
       'Every little one was taken care of... you\'re doing great.';
 
   @override
-  String get badgeMultiplesAllFedHumor =>
-      'Fed them all in one day! Multitasking level: Expert!';
-
-  @override
   String get badgeMultiplesAllSleptTitle => 'Peaceful Night';
 
   @override
@@ -3730,10 +3667,6 @@ class SEn extends S {
   @override
   String get badgeMultiplesAllSleptWarm =>
       'Everyone sleeping... a rare and precious moment.';
-
-  @override
-  String get badgeMultiplesAllSleptHumor =>
-      'All babies asleep at once? Quick, take a selfie... or a nap!';
 
   @override
   String get badgeCategoryGrowth => 'Growth';
@@ -3770,5 +3703,127 @@ class SEn extends S {
   @override
   String badgeEarnedAt(String date) {
     return 'Earned $date';
+  }
+
+  @override
+  String get encouragementDawnWarm1 =>
+      'You\'re awake at this hour. That takes real dedication';
+
+  @override
+  String get encouragementDawnWarm2 =>
+      'The night may feel long. You\'re doing great';
+
+  @override
+  String encouragementDawnWarm3(String baby) {
+    return 'A quiet dawn with $baby. This time is precious';
+  }
+
+  @override
+  String get encouragementDawnWarm4 => 'Just a little more. Morning is coming';
+
+  @override
+  String get encouragementDawnPlain1 => 'Nighttime care recorded';
+
+  @override
+  String get encouragementDawnPlain2 => 'Nighttime activity logging';
+
+  @override
+  String encouragementDawnPlain3(String count) {
+    return 'Dawn records: $count';
+  }
+
+  @override
+  String encouragementMorningWarm1(String baby) {
+    return 'A new day begins with $baby';
+  }
+
+  @override
+  String encouragementMorningWarm2(String baby) {
+    return 'You\'re taking great care of $baby today too';
+  }
+
+  @override
+  String get encouragementMorningPlain1 => 'Morning records started';
+
+  @override
+  String encouragementMorningPlain2(String count) {
+    return 'Today\'s records: $count';
+  }
+
+  @override
+  String get encouragementMorningPlain3 => 'Previous night records available';
+
+  @override
+  String get encouragementAfternoonWarm2 =>
+      'Remember to take breaks for yourself too';
+
+  @override
+  String encouragementAfternoonWarm3(String baby) {
+    return 'An afternoon with $baby. Enjoy this time';
+  }
+
+  @override
+  String get encouragementAfternoonPlain1 => 'Afternoon records in progress';
+
+  @override
+  String encouragementAfternoonPlain2(String count) {
+    return 'Today\'s records: $count';
+  }
+
+  @override
+  String encouragementEveningWarm1(String baby) {
+    return 'Great job today. Both $baby and you did well';
+  }
+
+  @override
+  String get encouragementEveningWarm2 => 'Time to wind down. Get some rest';
+
+  @override
+  String encouragementEveningWarm3(String baby) {
+    return 'Every moment spent caring for $baby today matters';
+  }
+
+  @override
+  String encouragementEveningPlain1(String count) {
+    return 'Today\'s records: $count complete';
+  }
+
+  @override
+  String get encouragementEveningPlain2 => 'Daily activity summary available';
+
+  @override
+  String get encouragementEveningPlain3 => 'Records saved';
+
+  @override
+  String get encouragementGeneralWarm1 =>
+      'Every day, both baby and parent are growing';
+
+  @override
+  String encouragementGeneralWarm2(String baby) {
+    return 'Each day with $baby becomes a precious record';
+  }
+
+  @override
+  String get encouragementGeneralWarm3 =>
+      'It doesn\'t have to be perfect. You\'re doing enough';
+
+  @override
+  String encouragementGeneralWarm4(String baby) {
+    return 'Time spent for $baby is never wasted';
+  }
+
+  @override
+  String encouragementDataBadgeWarm(String badge) {
+    return 'Just earned [$badge]. Amazing';
+  }
+
+  @override
+  String encouragementDataSleepWarm(String baby, String hours) {
+    return '$baby slept $hours hours in a row last night';
+  }
+
+  @override
+  String encouragementDataWeeklyWarm(String count) {
+    return '$count records today. Great tracking';
   }
 }

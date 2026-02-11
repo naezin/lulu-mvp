@@ -3422,9 +3422,6 @@ class SKo extends S {
   String get badgeFirstFeedingWarm => '첫 수유... 사랑이 가득한 순간이에요.';
 
   @override
-  String get badgeFirstFeedingHumor => '미션: 첫 수유 완료!';
-
-  @override
   String get badgeFeeding10Title => '수유 10회';
 
   @override
@@ -3432,9 +3429,6 @@ class SKo extends S {
 
   @override
   String get badgeFeeding10Warm => '10번의 수유... 한 방울 한 방울이 사랑이에요.';
-
-  @override
-  String get badgeFeeding10Humor => '수유 10회 달성! 파이팅!';
 
   @override
   String get badgeFeeding50Title => '수유 50회';
@@ -3446,9 +3440,6 @@ class SKo extends S {
   String get badgeFeeding50Warm => '50번의 수유... 정말 멋진 부모예요.';
 
   @override
-  String get badgeFeeding50Humor => '50회! 아기가 감사해하고 있어요!';
-
-  @override
   String get badgeMilk1LTitle => '1리터의 사랑';
 
   @override
@@ -3456,9 +3447,6 @@ class SKo extends S {
 
   @override
   String get badgeMilk1LWarm => '1리터의 사랑... 한 밀리리터도 소중해요.';
-
-  @override
-  String get badgeMilk1LHumor => '1리터! 정말 많은 양이에요!';
 
   @override
   String get badgeNightFeedingTitle => '새벽의 영웅';
@@ -3470,9 +3458,6 @@ class SKo extends S {
   String get badgeNightFeedingWarm => '새벽에 수유하는 당신... 가장 용감한 부모예요.';
 
   @override
-  String get badgeNightFeedingHumor => '잠이 뭐예요? 히어로 모드 ON!';
-
-  @override
   String get badgeFirstSleepTitle => '첫 수면';
 
   @override
@@ -3480,9 +3465,6 @@ class SKo extends S {
 
   @override
   String get badgeFirstSleepWarm => '달콤한 꿈이 시작됐어요...';
-
-  @override
-  String get badgeFirstSleepHumor => 'Zzz... 첫 낮잠 기록 완료!';
 
   @override
   String get badgeSleep10Title => '수면 10회';
@@ -3494,9 +3476,6 @@ class SKo extends S {
   String get badgeSleep10Warm => '10번의 평화로운 수면... 잘하고 있어요.';
 
   @override
-  String get badgeSleep10Humor => '수면 10회! 수면 전문가 수련 중!';
-
-  @override
   String get badgeSleepThroughTitle => '첫 통잠';
 
   @override
@@ -3504,9 +3483,6 @@ class SKo extends S {
 
   @override
   String get badgeSleepThroughWarm => '밤새 푹 잤어요... 둘 다 이 순간을 받을 자격이 있어요.';
-
-  @override
-  String get badgeSleepThroughHumor => '7시간 연속! 이게 현실이에요?!';
 
   @override
   String get badgeSleepRoutineTitle => '수면 루틴';
@@ -3518,9 +3494,6 @@ class SKo extends S {
   String get badgeSleepRoutineWarm => '3일의 루틴... 건강한 습관을 만들고 있어요.';
 
   @override
-  String get badgeSleepRoutineHumor => '3일 연속! 꾸준함이 답이에요!';
-
-  @override
   String get badgeSleepWeekTitle => '수면 주간 마스터';
 
   @override
@@ -3528,9 +3501,6 @@ class SKo extends S {
 
   @override
   String get badgeSleepWeekWarm => '일주일 내내... 당신의 헌신이 아름다워요.';
-
-  @override
-  String get badgeSleepWeekHumor => '7일! 메달을 드려야... 아, 이미 드렸네요!';
 
   @override
   String get badgeFirstRecordTitle => '안녕, 루루!';
@@ -3542,9 +3512,6 @@ class SKo extends S {
   String get badgeFirstRecordWarm => '여정이 시작됐어요... 루루에 오신 걸 환영해요.';
 
   @override
-  String get badgeFirstRecordHumor => '첫 기록! 시작이 반이에요!';
-
-  @override
   String get badge3DayStreakTitle => '3일 연속';
 
   @override
@@ -3552,9 +3519,6 @@ class SKo extends S {
 
   @override
   String get badge3DayStreakWarm => '3일을 함께했어요... 모든 순간이 소중해요.';
-
-  @override
-  String get badge3DayStreakHumor => '3일! 불타오르고 있어요!';
 
   @override
   String get badge7DayStreakTitle => '7일 챔피언';
@@ -3566,9 +3530,6 @@ class SKo extends S {
   String get badge7DayStreakWarm => '일주일 내내... 최고의 부모예요.';
 
   @override
-  String get badge7DayStreakHumor => '7일 연속! 기네스북에 전화해야겠어요!';
-
-  @override
   String get badgeDay7Title => '첫 일주일';
 
   @override
@@ -3576,9 +3537,6 @@ class SKo extends S {
 
   @override
   String get badgeDay7Warm => '일주일을 함께했어요... 매 순간이 보물이에요.';
-
-  @override
-  String get badgeDay7Humor => '7일 생존 완료! 업적 해제: 첫 주 클리어!';
 
   @override
   String get badgeDay100Title => '100일 함께';
@@ -3590,9 +3548,6 @@ class SKo extends S {
   String get badgeDay100Warm => '100일간의 사랑과 성장... 정말 잘하고 계세요.';
 
   @override
-  String get badgeDay100Humor => '100일! 기저귀 약 2,400개... 대략적인 수치입니다.';
-
-  @override
   String get badgeMonth1Title => '한 달';
 
   @override
@@ -3600,9 +3555,6 @@ class SKo extends S {
 
   @override
   String get badgeMonth1Warm => '한 달... 함께 얼마나 멀리 왔는지 보세요.';
-
-  @override
-  String get badgeMonth1Humor => '30일 돌파! 이제 거의 프로급이에요!';
 
   @override
   String get badgeCorrectedTermTitle => '만삭 도달';
@@ -3614,9 +3566,6 @@ class SKo extends S {
   String get badgeCorrectedTermWarm => '기다리던 그 날... 우리 작은 전사가 만삭에 도달했어요.';
 
   @override
-  String get badgeCorrectedTermHumor => '만삭 달성! 아기가 계속 레벨업 중이었어요!';
-
-  @override
   String get badgeMultiplesFirstRecordTitle => '다태아 여정 시작';
 
   @override
@@ -3624,9 +3573,6 @@ class SKo extends S {
 
   @override
   String get badgeMultiplesFirstRecordWarm => '모험이 시작됐어요... 두 배의 사랑, 두 배의 기쁨.';
-
-  @override
-  String get badgeMultiplesFirstRecordHumor => '첫 기록 완료! 다태아라 백만 개 정도 더 남았어요!';
 
   @override
   String get badgeMultiplesAllFedTitle => '모두 먹었어요';
@@ -3638,9 +3584,6 @@ class SKo extends S {
   String get badgeMultiplesAllFedWarm => '모든 아기를 돌봤어요... 정말 잘하고 계세요.';
 
   @override
-  String get badgeMultiplesAllFedHumor => '하루에 전원 수유! 멀티태스킹 레벨: 전문가!';
-
-  @override
   String get badgeMultiplesAllSleptTitle => '평화로운 밤';
 
   @override
@@ -3648,9 +3591,6 @@ class SKo extends S {
 
   @override
   String get badgeMultiplesAllSleptWarm => '모두 잠들었어요... 드물고 소중한 순간이에요.';
-
-  @override
-  String get badgeMultiplesAllSleptHumor => '전원 동시 취침? 셀카 찍든지... 아니면 주무세요!';
 
   @override
   String get badgeCategoryGrowth => '성장';
@@ -3687,5 +3627,122 @@ class SKo extends S {
   @override
   String badgeEarnedAt(String date) {
     return '$date 획득';
+  }
+
+  @override
+  String get encouragementDawnWarm1 => '이 시간에도 깨어 있는 부모님, 정말 대단해요';
+
+  @override
+  String get encouragementDawnWarm2 => '밤이 길게 느껴질 수 있어요. 잘 해나가고 있어요';
+
+  @override
+  String encouragementDawnWarm3(String baby) {
+    return '$baby이와 함께하는 고요한 새벽, 소중한 시간이에요';
+  }
+
+  @override
+  String get encouragementDawnWarm4 => '조금만 더요. 아침이 오고 있어요';
+
+  @override
+  String get encouragementDawnPlain1 => '새벽 돌봄 기록됨';
+
+  @override
+  String get encouragementDawnPlain2 => '야간 활동 기록 중';
+
+  @override
+  String encouragementDawnPlain3(String count) {
+    return '새벽 $count회 기록';
+  }
+
+  @override
+  String encouragementMorningWarm1(String baby) {
+    return '$baby이와 함께 새로운 하루가 시작됐어요';
+  }
+
+  @override
+  String encouragementMorningWarm2(String baby) {
+    return '오늘도 $baby이를 잘 돌봐주고 있네요';
+  }
+
+  @override
+  String get encouragementMorningPlain1 => '오전 기록 시작';
+
+  @override
+  String encouragementMorningPlain2(String count) {
+    return '오늘 기록: $count건';
+  }
+
+  @override
+  String get encouragementMorningPlain3 => '전일 야간 기록 확인 가능';
+
+  @override
+  String get encouragementAfternoonWarm2 => '부모님도 틈틈이 쉬어가세요';
+
+  @override
+  String encouragementAfternoonWarm3(String baby) {
+    return '$baby이와 함께하는 오후, 좋은 시간이에요';
+  }
+
+  @override
+  String get encouragementAfternoonPlain1 => '오후 기록 진행 중';
+
+  @override
+  String encouragementAfternoonPlain2(String count) {
+    return '금일 기록 $count건';
+  }
+
+  @override
+  String encouragementEveningWarm1(String baby) {
+    return '오늘 하루도 수고했어요. $baby이도 부모님도 잘 해냈어요';
+  }
+
+  @override
+  String get encouragementEveningWarm2 => '하루를 마무리하는 시간이에요. 푹 쉬세요';
+
+  @override
+  String encouragementEveningWarm3(String baby) {
+    return '$baby이를 위해 쏟은 오늘 하루, 다 기억하고 있어요';
+  }
+
+  @override
+  String encouragementEveningPlain1(String count) {
+    return '금일 기록 $count건 완료';
+  }
+
+  @override
+  String get encouragementEveningPlain2 => '금일 활동 요약 가능';
+
+  @override
+  String get encouragementEveningPlain3 => '기록 저장 완료';
+
+  @override
+  String get encouragementGeneralWarm1 => '매일 조금씩, 아기도 부모도 성장하고 있어요';
+
+  @override
+  String encouragementGeneralWarm2(String baby) {
+    return '$baby이의 하루하루가 소중한 기록이 되고 있어요';
+  }
+
+  @override
+  String get encouragementGeneralWarm3 => '완벽하지 않아도 괜찮아요. 충분히 잘 하고 있어요';
+
+  @override
+  String encouragementGeneralWarm4(String baby) {
+    return '$baby이를 위한 시간, 하나도 헛되지 않아요';
+  }
+
+  @override
+  String encouragementDataBadgeWarm(String badge) {
+    return '방금 [$badge] 달성, 대단해요';
+  }
+
+  @override
+  String encouragementDataSleepWarm(String baby, String hours) {
+    return '어젯밤 $baby이가 $hours시간 연속으로 잤어요';
+  }
+
+  @override
+  String encouragementDataWeeklyWarm(String count) {
+    return '오늘 $count건, 꼼꼼히 기록하고 있네요';
   }
 }

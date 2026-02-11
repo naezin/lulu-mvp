@@ -27,6 +27,7 @@ import '../widgets/cry_analysis_card.dart';
 import '../../cry_analysis/screens/cry_analysis_screen.dart';
 import '../../badge/badge_provider.dart';
 import '../../badge/widgets/badge_collection_screen.dart';
+import '../../encouragement/widgets/encouragement_card.dart';
 import '../../timeline/screens/record_history_screen.dart';
 
 /// 홈 화면 (시안 B-4 기반)
@@ -245,6 +246,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // 🆕 HOTFIX: Empty State에서 LastActivityRow 제거 (불필요한 빈 정보)
 
+            // Encouragement message (compact inline)
+            EncouragementCard(
+              baby: homeProvider.selectedBaby,
+              todayActivities: const [],
+            ),
+
             // 🆕 울음 분석 카드 (Feature Flag로 제어)
             if (FeatureFlags.enableCryAnalysis) ...[
               const SizedBox(height: LuluSpacing.md),
@@ -304,6 +311,18 @@ class _HomeScreenState extends State<HomeScreen> {
               isNewUser: !homeProvider.hasAnyRecordsEver,
               completedSleepRecords: sweetSpotProvider.sweetSpotResult?.completedSleepRecords,
               calibrationTarget: sweetSpotProvider.sweetSpotResult?.calibrationTarget,
+            ),
+
+            // 3. Encouragement message (compact inline)
+            Consumer<BadgeProvider>(
+              builder: (context, badgeProvider, _) {
+                return EncouragementCard(
+                  baby: homeProvider.selectedBaby,
+                  todayActivities: homeProvider.todayActivities,
+                  recentBadges: badgeProvider.achievements,
+                  hasPendingBadgePopup: badgeProvider.currentPopup != null,
+                );
+              },
             ),
 
             if (FeatureFlags.enableCryAnalysis) ...[

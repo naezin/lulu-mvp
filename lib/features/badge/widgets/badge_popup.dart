@@ -413,7 +413,8 @@ class _BadgePopupState extends State<BadgePopup>
   /// Resolve i18n key dynamically.
   ///
   /// Since Dart ARB doesn't support dynamic key lookup natively,
-  /// we use a switch-based approach for the 13 badges.
+  /// we use a switch-based approach for 20 badges (Title/Desc/Warm only).
+  /// Humor tone removed in C-3+Badge (2-tone system: warm/plain).
   String? _resolveI18nKey(S l10n, String key) {
     switch (key) {
       // Common
@@ -429,8 +430,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeFirstFeedingDesc;
       case 'badgeFirstFeedingWarm':
         return l10n.badgeFirstFeedingWarm;
-      case 'badgeFirstFeedingHumor':
-        return l10n.badgeFirstFeedingHumor;
 
       // Feeding 10
       case 'badgeFeeding10Title':
@@ -439,8 +438,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeFeeding10Desc;
       case 'badgeFeeding10Warm':
         return l10n.badgeFeeding10Warm;
-      case 'badgeFeeding10Humor':
-        return l10n.badgeFeeding10Humor;
 
       // Feeding 50
       case 'badgeFeeding50Title':
@@ -449,8 +446,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeFeeding50Desc;
       case 'badgeFeeding50Warm':
         return l10n.badgeFeeding50Warm;
-      case 'badgeFeeding50Humor':
-        return l10n.badgeFeeding50Humor;
 
       // Milk 1L
       case 'badgeMilk1LTitle':
@@ -459,8 +454,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeMilk1LDesc;
       case 'badgeMilk1LWarm':
         return l10n.badgeMilk1LWarm;
-      case 'badgeMilk1LHumor':
-        return l10n.badgeMilk1LHumor;
 
       // Night Feeding
       case 'badgeNightFeedingTitle':
@@ -469,8 +462,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeNightFeedingDesc;
       case 'badgeNightFeedingWarm':
         return l10n.badgeNightFeedingWarm;
-      case 'badgeNightFeedingHumor':
-        return l10n.badgeNightFeedingHumor;
 
       // First Sleep
       case 'badgeFirstSleepTitle':
@@ -479,8 +470,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeFirstSleepDesc;
       case 'badgeFirstSleepWarm':
         return l10n.badgeFirstSleepWarm;
-      case 'badgeFirstSleepHumor':
-        return l10n.badgeFirstSleepHumor;
 
       // Sleep 10
       case 'badgeSleep10Title':
@@ -489,8 +478,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeSleep10Desc;
       case 'badgeSleep10Warm':
         return l10n.badgeSleep10Warm;
-      case 'badgeSleep10Humor':
-        return l10n.badgeSleep10Humor;
 
       // Sleep Through
       case 'badgeSleepThroughTitle':
@@ -499,8 +486,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeSleepThroughDesc;
       case 'badgeSleepThroughWarm':
         return l10n.badgeSleepThroughWarm;
-      case 'badgeSleepThroughHumor':
-        return l10n.badgeSleepThroughHumor;
 
       // Sleep Routine 3d
       case 'badgeSleepRoutineTitle':
@@ -509,8 +494,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeSleepRoutineDesc;
       case 'badgeSleepRoutineWarm':
         return l10n.badgeSleepRoutineWarm;
-      case 'badgeSleepRoutineHumor':
-        return l10n.badgeSleepRoutineHumor;
 
       // Sleep Week 7d
       case 'badgeSleepWeekTitle':
@@ -519,8 +502,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeSleepWeekDesc;
       case 'badgeSleepWeekWarm':
         return l10n.badgeSleepWeekWarm;
-      case 'badgeSleepWeekHumor':
-        return l10n.badgeSleepWeekHumor;
 
       // First Record
       case 'badgeFirstRecordTitle':
@@ -529,8 +510,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeFirstRecordDesc;
       case 'badgeFirstRecordWarm':
         return l10n.badgeFirstRecordWarm;
-      case 'badgeFirstRecordHumor':
-        return l10n.badgeFirstRecordHumor;
 
       // 3-Day Streak
       case 'badge3DayStreakTitle':
@@ -539,8 +518,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badge3DayStreakDesc;
       case 'badge3DayStreakWarm':
         return l10n.badge3DayStreakWarm;
-      case 'badge3DayStreakHumor':
-        return l10n.badge3DayStreakHumor;
 
       // 7-Day Streak
       case 'badge7DayStreakTitle':
@@ -549,8 +526,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badge7DayStreakDesc;
       case 'badge7DayStreakWarm':
         return l10n.badge7DayStreakWarm;
-      case 'badge7DayStreakHumor':
-        return l10n.badge7DayStreakHumor;
 
       // --- Badge-1: Growth / Time-based ---
 
@@ -561,8 +536,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeDay7Desc;
       case 'badgeDay7Warm':
         return l10n.badgeDay7Warm;
-      case 'badgeDay7Humor':
-        return l10n.badgeDay7Humor;
 
       // Day 100
       case 'badgeDay100Title':
@@ -571,8 +544,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeDay100Desc;
       case 'badgeDay100Warm':
         return l10n.badgeDay100Warm;
-      case 'badgeDay100Humor':
-        return l10n.badgeDay100Humor;
 
       // Month 1
       case 'badgeMonth1Title':
@@ -581,8 +552,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeMonth1Desc;
       case 'badgeMonth1Warm':
         return l10n.badgeMonth1Warm;
-      case 'badgeMonth1Humor':
-        return l10n.badgeMonth1Humor;
 
       // Corrected Term
       case 'badgeCorrectedTermTitle':
@@ -591,8 +560,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeCorrectedTermDesc;
       case 'badgeCorrectedTermWarm':
         return l10n.badgeCorrectedTermWarm;
-      case 'badgeCorrectedTermHumor':
-        return l10n.badgeCorrectedTermHumor;
 
       // --- Badge-1: Multiples ---
 
@@ -603,8 +570,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeMultiplesFirstRecordDesc;
       case 'badgeMultiplesFirstRecordWarm':
         return l10n.badgeMultiplesFirstRecordWarm;
-      case 'badgeMultiplesFirstRecordHumor':
-        return l10n.badgeMultiplesFirstRecordHumor;
 
       // Multiples All Fed
       case 'badgeMultiplesAllFedTitle':
@@ -613,8 +578,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeMultiplesAllFedDesc;
       case 'badgeMultiplesAllFedWarm':
         return l10n.badgeMultiplesAllFedWarm;
-      case 'badgeMultiplesAllFedHumor':
-        return l10n.badgeMultiplesAllFedHumor;
 
       // Multiples All Slept
       case 'badgeMultiplesAllSleptTitle':
@@ -623,8 +586,6 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badgeMultiplesAllSleptDesc;
       case 'badgeMultiplesAllSleptWarm':
         return l10n.badgeMultiplesAllSleptWarm;
-      case 'badgeMultiplesAllSleptHumor':
-        return l10n.badgeMultiplesAllSleptHumor;
 
       default:
         return null;

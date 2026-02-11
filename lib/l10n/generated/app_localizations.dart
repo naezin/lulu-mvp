@@ -6232,12 +6232,6 @@ abstract class S {
   /// **'첫 수유... 사랑이 가득한 순간이에요.'**
   String get badgeFirstFeedingWarm;
 
-  /// 배지 유머 톤: 첫 수유
-  ///
-  /// In ko, this message translates to:
-  /// **'미션: 첫 수유 완료!'**
-  String get badgeFirstFeedingHumor;
-
   /// 배지: 수유 10회
   ///
   /// In ko, this message translates to:
@@ -6255,12 +6249,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'10번의 수유... 한 방울 한 방울이 사랑이에요.'**
   String get badgeFeeding10Warm;
-
-  /// 배지 유머 톤: 수유 10회
-  ///
-  /// In ko, this message translates to:
-  /// **'수유 10회 달성! 파이팅!'**
-  String get badgeFeeding10Humor;
 
   /// 배지: 수유 50회
   ///
@@ -6280,12 +6268,6 @@ abstract class S {
   /// **'50번의 수유... 정말 멋진 부모예요.'**
   String get badgeFeeding50Warm;
 
-  /// 배지 유머 톤: 수유 50회
-  ///
-  /// In ko, this message translates to:
-  /// **'50회! 아기가 감사해하고 있어요!'**
-  String get badgeFeeding50Humor;
-
   /// 배지: 누적 1L 수유
   ///
   /// In ko, this message translates to:
@@ -6303,12 +6285,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'1리터의 사랑... 한 밀리리터도 소중해요.'**
   String get badgeMilk1LWarm;
-
-  /// 배지 유머 톤: 1L
-  ///
-  /// In ko, this message translates to:
-  /// **'1리터! 정말 많은 양이에요!'**
-  String get badgeMilk1LHumor;
 
   /// 배지: 새벽 수유
   ///
@@ -6328,12 +6304,6 @@ abstract class S {
   /// **'새벽에 수유하는 당신... 가장 용감한 부모예요.'**
   String get badgeNightFeedingWarm;
 
-  /// 배지 유머 톤: 새벽 수유
-  ///
-  /// In ko, this message translates to:
-  /// **'잠이 뭐예요? 히어로 모드 ON!'**
-  String get badgeNightFeedingHumor;
-
   /// 배지: 첫 수면 기록
   ///
   /// In ko, this message translates to:
@@ -6351,12 +6321,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'달콤한 꿈이 시작됐어요...'**
   String get badgeFirstSleepWarm;
-
-  /// 배지 유머 톤: 첫 수면
-  ///
-  /// In ko, this message translates to:
-  /// **'Zzz... 첫 낮잠 기록 완료!'**
-  String get badgeFirstSleepHumor;
 
   /// 배지: 수면 10회
   ///
@@ -6376,12 +6340,6 @@ abstract class S {
   /// **'10번의 평화로운 수면... 잘하고 있어요.'**
   String get badgeSleep10Warm;
 
-  /// 배지 유머 톤: 수면 10회
-  ///
-  /// In ko, this message translates to:
-  /// **'수면 10회! 수면 전문가 수련 중!'**
-  String get badgeSleep10Humor;
-
   /// 배지: 첫 통잠
   ///
   /// In ko, this message translates to:
@@ -6399,12 +6357,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'밤새 푹 잤어요... 둘 다 이 순간을 받을 자격이 있어요.'**
   String get badgeSleepThroughWarm;
-
-  /// 배지 유머 톤: 통잠
-  ///
-  /// In ko, this message translates to:
-  /// **'7시간 연속! 이게 현실이에요?!'**
-  String get badgeSleepThroughHumor;
 
   /// 배지: 3일 연속 수면
   ///
@@ -6424,12 +6376,6 @@ abstract class S {
   /// **'3일의 루틴... 건강한 습관을 만들고 있어요.'**
   String get badgeSleepRoutineWarm;
 
-  /// 배지 유머 톤: 수면 루틴
-  ///
-  /// In ko, this message translates to:
-  /// **'3일 연속! 꾸준함이 답이에요!'**
-  String get badgeSleepRoutineHumor;
-
   /// 배지: 7일 연속 수면
   ///
   /// In ko, this message translates to:
@@ -6447,12 +6393,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'일주일 내내... 당신의 헌신이 아름다워요.'**
   String get badgeSleepWeekWarm;
-
-  /// 배지 유머 톤: 수면 주간
-  ///
-  /// In ko, this message translates to:
-  /// **'7일! 메달을 드려야... 아, 이미 드렸네요!'**
-  String get badgeSleepWeekHumor;
 
   /// 배지: 첫 기록
   ///
@@ -6472,12 +6412,6 @@ abstract class S {
   /// **'여정이 시작됐어요... 루루에 오신 걸 환영해요.'**
   String get badgeFirstRecordWarm;
 
-  /// 배지 유머 톤: 첫 기록
-  ///
-  /// In ko, this message translates to:
-  /// **'첫 기록! 시작이 반이에요!'**
-  String get badgeFirstRecordHumor;
-
   /// 배지: 3일 연속 기록
   ///
   /// In ko, this message translates to:
@@ -6495,12 +6429,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'3일을 함께했어요... 모든 순간이 소중해요.'**
   String get badge3DayStreakWarm;
-
-  /// 배지 유머 톤: 3일 연속
-  ///
-  /// In ko, this message translates to:
-  /// **'3일! 불타오르고 있어요!'**
-  String get badge3DayStreakHumor;
 
   /// 배지: 7일 연속 기록
   ///
@@ -6520,12 +6448,6 @@ abstract class S {
   /// **'일주일 내내... 최고의 부모예요.'**
   String get badge7DayStreakWarm;
 
-  /// 배지 유머 톤: 7일 연속
-  ///
-  /// In ko, this message translates to:
-  /// **'7일 연속! 기네스북에 전화해야겠어요!'**
-  String get badge7DayStreakHumor;
-
   /// 배지: 출생 7일
   ///
   /// In ko, this message translates to:
@@ -6543,12 +6465,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'일주일을 함께했어요... 매 순간이 보물이에요.'**
   String get badgeDay7Warm;
-
-  /// 배지 유머 톤: 7일
-  ///
-  /// In ko, this message translates to:
-  /// **'7일 생존 완료! 업적 해제: 첫 주 클리어!'**
-  String get badgeDay7Humor;
 
   /// 배지: 출생 100일
   ///
@@ -6568,12 +6484,6 @@ abstract class S {
   /// **'100일간의 사랑과 성장... 정말 잘하고 계세요.'**
   String get badgeDay100Warm;
 
-  /// 배지 유머 톤: 100일
-  ///
-  /// In ko, this message translates to:
-  /// **'100일! 기저귀 약 2,400개... 대략적인 수치입니다.'**
-  String get badgeDay100Humor;
-
   /// 배지: 출생 1개월
   ///
   /// In ko, this message translates to:
@@ -6591,12 +6501,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'한 달... 함께 얼마나 멀리 왔는지 보세요.'**
   String get badgeMonth1Warm;
-
-  /// 배지 유머 톤: 1개월
-  ///
-  /// In ko, this message translates to:
-  /// **'30일 돌파! 이제 거의 프로급이에요!'**
-  String get badgeMonth1Humor;
 
   /// 배지: 조산아 교정연령 만삭
   ///
@@ -6616,12 +6520,6 @@ abstract class S {
   /// **'기다리던 그 날... 우리 작은 전사가 만삭에 도달했어요.'**
   String get badgeCorrectedTermWarm;
 
-  /// 배지 유머 톤: 교정만삭
-  ///
-  /// In ko, this message translates to:
-  /// **'만삭 달성! 아기가 계속 레벨업 중이었어요!'**
-  String get badgeCorrectedTermHumor;
-
   /// 배지: 다태아 첫 기록
   ///
   /// In ko, this message translates to:
@@ -6639,12 +6537,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'모험이 시작됐어요... 두 배의 사랑, 두 배의 기쁨.'**
   String get badgeMultiplesFirstRecordWarm;
-
-  /// 배지 유머 톤: 다태아 첫 기록
-  ///
-  /// In ko, this message translates to:
-  /// **'첫 기록 완료! 다태아라 백만 개 정도 더 남았어요!'**
-  String get badgeMultiplesFirstRecordHumor;
 
   /// 배지: 같은 날 모든 아기 수유
   ///
@@ -6664,12 +6556,6 @@ abstract class S {
   /// **'모든 아기를 돌봤어요... 정말 잘하고 계세요.'**
   String get badgeMultiplesAllFedWarm;
 
-  /// 배지 유머 톤: 전원 수유
-  ///
-  /// In ko, this message translates to:
-  /// **'하루에 전원 수유! 멀티태스킹 레벨: 전문가!'**
-  String get badgeMultiplesAllFedHumor;
-
   /// 배지: 같은 날 모든 아기 수면
   ///
   /// In ko, this message translates to:
@@ -6687,12 +6573,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'모두 잠들었어요... 드물고 소중한 순간이에요.'**
   String get badgeMultiplesAllSleptWarm;
-
-  /// 배지 유머 톤: 전원 수면
-  ///
-  /// In ko, this message translates to:
-  /// **'전원 동시 취침? 셀카 찍든지... 아니면 주무세요!'**
-  String get badgeMultiplesAllSleptHumor;
 
   /// 배지 카테고리: 성장
   ///
@@ -6759,6 +6639,180 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'{date} 획득'**
   String badgeEarnedAt(String date);
+
+  /// 새벽 격려 1
+  ///
+  /// In ko, this message translates to:
+  /// **'이 시간에도 깨어 있는 부모님, 정말 대단해요'**
+  String get encouragementDawnWarm1;
+
+  /// 새벽 격려 2
+  ///
+  /// In ko, this message translates to:
+  /// **'밤이 길게 느껴질 수 있어요. 잘 해나가고 있어요'**
+  String get encouragementDawnWarm2;
+
+  /// 새벽 격려 3
+  ///
+  /// In ko, this message translates to:
+  /// **'{baby}이와 함께하는 고요한 새벽, 소중한 시간이에요'**
+  String encouragementDawnWarm3(String baby);
+
+  /// 새벽 격려 4
+  ///
+  /// In ko, this message translates to:
+  /// **'조금만 더요. 아침이 오고 있어요'**
+  String get encouragementDawnWarm4;
+
+  /// 새벽 plain 1
+  ///
+  /// In ko, this message translates to:
+  /// **'새벽 돌봄 기록됨'**
+  String get encouragementDawnPlain1;
+
+  /// 새벽 plain 2
+  ///
+  /// In ko, this message translates to:
+  /// **'야간 활동 기록 중'**
+  String get encouragementDawnPlain2;
+
+  /// 새벽 plain 3
+  ///
+  /// In ko, this message translates to:
+  /// **'새벽 {count}회 기록'**
+  String encouragementDawnPlain3(String count);
+
+  /// 아침 격려 1
+  ///
+  /// In ko, this message translates to:
+  /// **'{baby}이와 함께 새로운 하루가 시작됐어요'**
+  String encouragementMorningWarm1(String baby);
+
+  /// 아침 격려 2
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘도 {baby}이를 잘 돌봐주고 있네요'**
+  String encouragementMorningWarm2(String baby);
+
+  /// 아침 plain 1
+  ///
+  /// In ko, this message translates to:
+  /// **'오전 기록 시작'**
+  String get encouragementMorningPlain1;
+
+  /// 아침 plain 2
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 기록: {count}건'**
+  String encouragementMorningPlain2(String count);
+
+  /// 아침 plain 3
+  ///
+  /// In ko, this message translates to:
+  /// **'전일 야간 기록 확인 가능'**
+  String get encouragementMorningPlain3;
+
+  /// 오후 격려 2
+  ///
+  /// In ko, this message translates to:
+  /// **'부모님도 틈틈이 쉬어가세요'**
+  String get encouragementAfternoonWarm2;
+
+  /// 오후 격려 3
+  ///
+  /// In ko, this message translates to:
+  /// **'{baby}이와 함께하는 오후, 좋은 시간이에요'**
+  String encouragementAfternoonWarm3(String baby);
+
+  /// 오후 plain 1
+  ///
+  /// In ko, this message translates to:
+  /// **'오후 기록 진행 중'**
+  String get encouragementAfternoonPlain1;
+
+  /// 오후 plain 2
+  ///
+  /// In ko, this message translates to:
+  /// **'금일 기록 {count}건'**
+  String encouragementAfternoonPlain2(String count);
+
+  /// 저녁 격려 1
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 하루도 수고했어요. {baby}이도 부모님도 잘 해냈어요'**
+  String encouragementEveningWarm1(String baby);
+
+  /// 저녁 격려 2
+  ///
+  /// In ko, this message translates to:
+  /// **'하루를 마무리하는 시간이에요. 푹 쉬세요'**
+  String get encouragementEveningWarm2;
+
+  /// 저녁 격려 3
+  ///
+  /// In ko, this message translates to:
+  /// **'{baby}이를 위해 쏟은 오늘 하루, 다 기억하고 있어요'**
+  String encouragementEveningWarm3(String baby);
+
+  /// 저녁 plain 1
+  ///
+  /// In ko, this message translates to:
+  /// **'금일 기록 {count}건 완료'**
+  String encouragementEveningPlain1(String count);
+
+  /// 저녁 plain 2
+  ///
+  /// In ko, this message translates to:
+  /// **'금일 활동 요약 가능'**
+  String get encouragementEveningPlain2;
+
+  /// 저녁 plain 3
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 저장 완료'**
+  String get encouragementEveningPlain3;
+
+  /// 일반 격려 1
+  ///
+  /// In ko, this message translates to:
+  /// **'매일 조금씩, 아기도 부모도 성장하고 있어요'**
+  String get encouragementGeneralWarm1;
+
+  /// 일반 격려 2
+  ///
+  /// In ko, this message translates to:
+  /// **'{baby}이의 하루하루가 소중한 기록이 되고 있어요'**
+  String encouragementGeneralWarm2(String baby);
+
+  /// 일반 격려 3
+  ///
+  /// In ko, this message translates to:
+  /// **'완벽하지 않아도 괜찮아요. 충분히 잘 하고 있어요'**
+  String get encouragementGeneralWarm3;
+
+  /// 일반 격려 4
+  ///
+  /// In ko, this message translates to:
+  /// **'{baby}이를 위한 시간, 하나도 헛되지 않아요'**
+  String encouragementGeneralWarm4(String baby);
+
+  /// 데이터 기반: 뱃지 달성
+  ///
+  /// In ko, this message translates to:
+  /// **'방금 [{badge}] 달성, 대단해요'**
+  String encouragementDataBadgeWarm(String badge);
+
+  /// 데이터 기반: 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'어젯밤 {baby}이가 {hours}시간 연속으로 잤어요'**
+  String encouragementDataSleepWarm(String baby, String hours);
+
+  /// 데이터 기반: 주간 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 {count}건, 꼼꼼히 기록하고 있네요'**
+  String encouragementDataWeeklyWarm(String count);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

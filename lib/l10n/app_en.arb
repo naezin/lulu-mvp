@@ -2530,8 +2530,6 @@
   "@badgeFirstFeedingDesc": {"description": "Badge desc: first feeding"},
   "badgeFirstFeedingWarm": "The first feeding... a moment full of love.",
   "@badgeFirstFeedingWarm": {"description": "Badge warm tone: first feeding"},
-  "badgeFirstFeedingHumor": "Mission: First Feed complete!",
-  "@badgeFirstFeedingHumor": {"description": "Badge humor tone: first feeding"},
 
   "badgeFeeding10Title": "10 Feedings",
   "@badgeFeeding10Title": {"description": "Badge title: 10 feedings"},
@@ -2539,8 +2537,6 @@
   "@badgeFeeding10Desc": {"description": "Badge desc: 10 feedings"},
   "badgeFeeding10Warm": "10 feedings... every drop is love.",
   "@badgeFeeding10Warm": {"description": "Badge warm: 10 feedings"},
-  "badgeFeeding10Humor": "10 feeds down! Keep going, champ!",
-  "@badgeFeeding10Humor": {"description": "Badge humor: 10 feedings"},
 
   "badgeFeeding50Title": "50 Feedings",
   "@badgeFeeding50Title": {"description": "Badge title: 50 feedings"},
@@ -2548,8 +2544,6 @@
   "@badgeFeeding50Desc": {"description": "Badge desc: 50 feedings"},
   "badgeFeeding50Warm": "50 feedings... you are truly amazing.",
   "@badgeFeeding50Warm": {"description": "Badge warm: 50 feedings"},
-  "badgeFeeding50Humor": "50 feeds! Your baby appreciates every one!",
-  "@badgeFeeding50Humor": {"description": "Badge humor: 50 feedings"},
 
   "badgeMilk1LTitle": "1 Liter of Love",
   "@badgeMilk1LTitle": {"description": "Badge title: cumulative 1L milk"},
@@ -2557,8 +2551,6 @@
   "@badgeMilk1LDesc": {"description": "Badge desc: 1L milk"},
   "badgeMilk1LWarm": "1 liter of love... every milliliter matters.",
   "@badgeMilk1LWarm": {"description": "Badge warm: 1L milk"},
-  "badgeMilk1LHumor": "1 liter! That's a lot of milk!",
-  "@badgeMilk1LHumor": {"description": "Badge humor: 1L milk"},
 
   "badgeNightFeedingTitle": "Midnight Hero",
   "@badgeNightFeedingTitle": {"description": "Badge title: night feeding"},
@@ -2566,8 +2558,6 @@
   "@badgeNightFeedingDesc": {"description": "Badge desc: night feeding"},
   "badgeNightFeedingWarm": "Feeding at dawn... you're the bravest.",
   "@badgeNightFeedingWarm": {"description": "Badge warm: night feeding"},
-  "badgeNightFeedingHumor": "Who needs sleep anyway? Hero mode: ON!",
-  "@badgeNightFeedingHumor": {"description": "Badge humor: night feeding"},
 
   "badgeFirstSleepTitle": "First Sleep",
   "@badgeFirstSleepTitle": {"description": "Badge title: first sleep record"},
@@ -2575,8 +2565,6 @@
   "@badgeFirstSleepDesc": {"description": "Badge desc: first sleep"},
   "badgeFirstSleepWarm": "Sweet dreams begin now...",
   "@badgeFirstSleepWarm": {"description": "Badge warm: first sleep"},
-  "badgeFirstSleepHumor": "Zzz... the first nap is in the books!",
-  "@badgeFirstSleepHumor": {"description": "Badge humor: first sleep"},
 
   "badgeSleep10Title": "10 Sleeps",
   "@badgeSleep10Title": {"description": "Badge title: 10 sleep records"},
@@ -2584,8 +2572,6 @@
   "@badgeSleep10Desc": {"description": "Badge desc: 10 sleeps"},
   "badgeSleep10Warm": "10 peaceful sleeps... you're doing great.",
   "@badgeSleep10Warm": {"description": "Badge warm: 10 sleeps"},
-  "badgeSleep10Humor": "10 naps tracked! Sleep expert in training!",
-  "@badgeSleep10Humor": {"description": "Badge humor: 10 sleeps"},
 
   "badgeSleepThroughTitle": "First Full Night",
   "@badgeSleepThroughTitle": {"description": "Badge title: first sleep through night"},
@@ -2593,8 +2579,6 @@
   "@badgeSleepThroughDesc": {"description": "Badge desc: sleep through"},
   "badgeSleepThroughWarm": "A full night's sleep... you both deserve this.",
   "@badgeSleepThroughWarm": {"description": "Badge warm: sleep through"},
-  "badgeSleepThroughHumor": "7 hours straight! Is this real life?!",
-  "@badgeSleepThroughHumor": {"description": "Badge humor: sleep through"},
 
   "badgeSleepRoutineTitle": "Sleep Routine",
   "@badgeSleepRoutineTitle": {"description": "Badge title: 3-day sleep streak"},
@@ -2602,8 +2586,6 @@
   "@badgeSleepRoutineDesc": {"description": "Badge desc: sleep routine"},
   "badgeSleepRoutineWarm": "3 days of routine... building healthy habits.",
   "@badgeSleepRoutineWarm": {"description": "Badge warm: sleep routine"},
-  "badgeSleepRoutineHumor": "3-day streak! Consistency is key!",
-  "@badgeSleepRoutineHumor": {"description": "Badge humor: sleep routine"},
 
   "badgeSleepWeekTitle": "Sleep Week Master",
   "@badgeSleepWeekTitle": {"description": "Badge title: 7-day sleep streak"},
@@ -2611,8 +2593,6 @@
   "@badgeSleepWeekDesc": {"description": "Badge desc: sleep week"},
   "badgeSleepWeekWarm": "A whole week... your dedication is beautiful.",
   "@badgeSleepWeekWarm": {"description": "Badge warm: sleep week"},
-  "badgeSleepWeekHumor": "7 days! You deserve a medal... oh wait!",
-  "@badgeSleepWeekHumor": {"description": "Badge humor: sleep week"},
 
   "badgeFirstRecordTitle": "Hello, Lulu!",
   "@badgeFirstRecordTitle": {"description": "Badge title: very first record"},
@@ -2620,8 +2600,6 @@
   "@badgeFirstRecordDesc": {"description": "Badge desc: first record"},
   "badgeFirstRecordWarm": "The journey begins... welcome to Lulu.",
   "@badgeFirstRecordWarm": {"description": "Badge warm: first record"},
-  "badgeFirstRecordHumor": "First record! And so it begins!",
-  "@badgeFirstRecordHumor": {"description": "Badge humor: first record"},
 
   "badge3DayStreakTitle": "3-Day Streak",
   "@badge3DayStreakTitle": {"description": "Badge title: 3 consecutive recording days"},
@@ -2629,8 +2607,6 @@
   "@badge3DayStreakDesc": {"description": "Badge desc: 3-day streak"},
   "badge3DayStreakWarm": "3 days together... every moment matters.",
   "@badge3DayStreakWarm": {"description": "Badge warm: 3-day streak"},
-  "badge3DayStreakHumor": "3 days! You're on fire!",
-  "@badge3DayStreakHumor": {"description": "Badge humor: 3-day streak"},
 
   "badge7DayStreakTitle": "7-Day Champion",
   "@badge7DayStreakTitle": {"description": "Badge title: 7 consecutive recording days"},
@@ -2638,8 +2614,6 @@
   "@badge7DayStreakDesc": {"description": "Badge desc: 7-day streak"},
   "badge7DayStreakWarm": "A whole week... you're the best parent.",
   "@badge7DayStreakWarm": {"description": "Badge warm: 7-day streak"},
-  "badge7DayStreakHumor": "7-day streak! Call the Guinness Book!",
-  "@badge7DayStreakHumor": {"description": "Badge humor: 7-day streak"},
 
   "badgeDay7Title": "First Week",
   "@badgeDay7Title": {"description": "Badge title: baby 7 days old"},
@@ -2647,8 +2621,6 @@
   "@badgeDay7Desc": {"description": "Badge desc: 7 days"},
   "badgeDay7Warm": "One week together... every moment is a treasure.",
   "@badgeDay7Warm": {"description": "Badge warm: 7 days"},
-  "badgeDay7Humor": "7 days survived! Achievement unlocked: Survived Week 1!",
-  "@badgeDay7Humor": {"description": "Badge humor: 7 days"},
 
   "badgeDay100Title": "100 Days Together",
   "@badgeDay100Title": {"description": "Badge title: baby 100 days old"},
@@ -2656,8 +2628,6 @@
   "@badgeDay100Desc": {"description": "Badge desc: 100 days"},
   "badgeDay100Warm": "100 days of love and growth... you've done an amazing job.",
   "@badgeDay100Warm": {"description": "Badge warm: 100 days"},
-  "badgeDay100Humor": "100 days! That's like 2,400 diaper changes... give or take.",
-  "@badgeDay100Humor": {"description": "Badge humor: 100 days"},
 
   "badgeMonth1Title": "One Month",
   "@badgeMonth1Title": {"description": "Badge title: baby 1 month old"},
@@ -2665,8 +2635,6 @@
   "@badgeMonth1Desc": {"description": "Badge desc: 1 month"},
   "badgeMonth1Warm": "A whole month... look how far you've come together.",
   "@badgeMonth1Warm": {"description": "Badge warm: 1 month"},
-  "badgeMonth1Humor": "30 days in! You're basically a pro now!",
-  "@badgeMonth1Humor": {"description": "Badge humor: 1 month"},
 
   "badgeCorrectedTermTitle": "Full Term Reached",
   "@badgeCorrectedTermTitle": {"description": "Badge title: preemie reached corrected term"},
@@ -2674,8 +2642,6 @@
   "@badgeCorrectedTermDesc": {"description": "Badge desc: corrected term"},
   "badgeCorrectedTermWarm": "The day we've been waiting for... your little fighter made it to term.",
   "@badgeCorrectedTermWarm": {"description": "Badge warm: corrected term"},
-  "badgeCorrectedTermHumor": "Full term unlocked! Your baby's been leveling up this whole time!",
-  "@badgeCorrectedTermHumor": {"description": "Badge humor: corrected term"},
 
   "badgeMultiplesFirstRecordTitle": "Multiples Journey Begins",
   "@badgeMultiplesFirstRecordTitle": {"description": "Badge title: first record in multiples family"},
@@ -2683,8 +2649,6 @@
   "@badgeMultiplesFirstRecordDesc": {"description": "Badge desc: multiples first record"},
   "badgeMultiplesFirstRecordWarm": "The adventure begins... twice the love, twice the joy.",
   "@badgeMultiplesFirstRecordWarm": {"description": "Badge warm: multiples first record"},
-  "badgeMultiplesFirstRecordHumor": "First record done! Only a million more to go with multiples!",
-  "@badgeMultiplesFirstRecordHumor": {"description": "Badge humor: multiples first record"},
 
   "badgeMultiplesAllFedTitle": "Everyone Fed",
   "@badgeMultiplesAllFedTitle": {"description": "Badge title: all babies fed same day"},
@@ -2692,8 +2656,6 @@
   "@badgeMultiplesAllFedDesc": {"description": "Badge desc: all babies fed"},
   "badgeMultiplesAllFedWarm": "Every little one was taken care of... you're doing great.",
   "@badgeMultiplesAllFedWarm": {"description": "Badge warm: all babies fed"},
-  "badgeMultiplesAllFedHumor": "Fed them all in one day! Multitasking level: Expert!",
-  "@badgeMultiplesAllFedHumor": {"description": "Badge humor: all babies fed"},
 
   "badgeMultiplesAllSleptTitle": "Peaceful Night",
   "@badgeMultiplesAllSleptTitle": {"description": "Badge title: all babies slept same day"},
@@ -2701,8 +2663,6 @@
   "@badgeMultiplesAllSleptDesc": {"description": "Badge desc: all babies slept"},
   "badgeMultiplesAllSleptWarm": "Everyone sleeping... a rare and precious moment.",
   "@badgeMultiplesAllSleptWarm": {"description": "Badge warm: all babies slept"},
-  "badgeMultiplesAllSleptHumor": "All babies asleep at once? Quick, take a selfie... or a nap!",
-  "@badgeMultiplesAllSleptHumor": {"description": "Badge humor: all babies slept"},
 
   "badgeCategoryGrowth": "Growth",
   "@badgeCategoryGrowth": {"description": "Badge category name: growth"},
@@ -2726,5 +2686,69 @@
   "badgeLocked": "Keep going to unlock!",
   "@badgeLocked": {"description": "Locked badge message"},
   "badgeEarnedAt": "Earned {date}",
-  "@badgeEarnedAt": {"description": "Badge earned date", "placeholders": {"date": {"type": "String"}}}
+  "@badgeEarnedAt": {"description": "Badge earned date", "placeholders": {"date": {"type": "String"}}},
+
+  "encouragementDawnWarm1": "You're awake at this hour. That takes real dedication",
+  "@encouragementDawnWarm1": {"description":"Dawn encouragement 1"},
+  "encouragementDawnWarm2": "The night may feel long. You're doing great",
+  "@encouragementDawnWarm2": {"description":"Dawn encouragement 2"},
+  "encouragementDawnWarm3": "A quiet dawn with {baby}. This time is precious",
+  "@encouragementDawnWarm3": {"description":"Dawn encouragement 3", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementDawnWarm4": "Just a little more. Morning is coming",
+  "@encouragementDawnWarm4": {"description":"Dawn encouragement 4"},
+  "encouragementDawnPlain1": "Nighttime care recorded",
+  "@encouragementDawnPlain1": {"description":"Dawn plain 1"},
+  "encouragementDawnPlain2": "Nighttime activity logging",
+  "@encouragementDawnPlain2": {"description":"Dawn plain 2"},
+  "encouragementDawnPlain3": "Dawn records: {count}",
+  "@encouragementDawnPlain3": {"description":"Dawn plain 3", "placeholders": {"count": {"type": "String"}}},
+
+  "encouragementMorningWarm1": "A new day begins with {baby}",
+  "@encouragementMorningWarm1": {"description":"Morning encouragement 1", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementMorningWarm2": "You're taking great care of {baby} today too",
+  "@encouragementMorningWarm2": {"description":"Morning encouragement 2", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementMorningPlain1": "Morning records started",
+  "@encouragementMorningPlain1": {"description":"Morning plain 1"},
+  "encouragementMorningPlain2": "Today's records: {count}",
+  "@encouragementMorningPlain2": {"description":"Morning plain 2", "placeholders": {"count": {"type": "String"}}},
+  "encouragementMorningPlain3": "Previous night records available",
+  "@encouragementMorningPlain3": {"description":"Morning plain 3"},
+
+  "encouragementAfternoonWarm2": "Remember to take breaks for yourself too",
+  "@encouragementAfternoonWarm2": {"description":"Afternoon encouragement 2"},
+  "encouragementAfternoonWarm3": "An afternoon with {baby}. Enjoy this time",
+  "@encouragementAfternoonWarm3": {"description":"Afternoon encouragement 3", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementAfternoonPlain1": "Afternoon records in progress",
+  "@encouragementAfternoonPlain1": {"description":"Afternoon plain 1"},
+  "encouragementAfternoonPlain2": "Today's records: {count}",
+  "@encouragementAfternoonPlain2": {"description":"Afternoon plain 2", "placeholders": {"count": {"type": "String"}}},
+
+  "encouragementEveningWarm1": "Great job today. Both {baby} and you did well",
+  "@encouragementEveningWarm1": {"description":"Evening encouragement 1", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementEveningWarm2": "Time to wind down. Get some rest",
+  "@encouragementEveningWarm2": {"description":"Evening encouragement 2"},
+  "encouragementEveningWarm3": "Every moment spent caring for {baby} today matters",
+  "@encouragementEveningWarm3": {"description":"Evening encouragement 3", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementEveningPlain1": "Today's records: {count} complete",
+  "@encouragementEveningPlain1": {"description":"Evening plain 1", "placeholders": {"count": {"type": "String"}}},
+  "encouragementEveningPlain2": "Daily activity summary available",
+  "@encouragementEveningPlain2": {"description":"Evening plain 2"},
+  "encouragementEveningPlain3": "Records saved",
+  "@encouragementEveningPlain3": {"description":"Evening plain 3"},
+
+  "encouragementGeneralWarm1": "Every day, both baby and parent are growing",
+  "@encouragementGeneralWarm1": {"description":"General encouragement 1"},
+  "encouragementGeneralWarm2": "Each day with {baby} becomes a precious record",
+  "@encouragementGeneralWarm2": {"description":"General encouragement 2", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementGeneralWarm3": "It doesn't have to be perfect. You're doing enough",
+  "@encouragementGeneralWarm3": {"description":"General encouragement 3"},
+  "encouragementGeneralWarm4": "Time spent for {baby} is never wasted",
+  "@encouragementGeneralWarm4": {"description":"General encouragement 4", "placeholders": {"baby": {"type": "String"}}},
+
+  "encouragementDataBadgeWarm": "Just earned [{badge}]. Amazing",
+  "@encouragementDataBadgeWarm": {"description":"Data: badge earned", "placeholders": {"badge": {"type": "String"}}},
+  "encouragementDataSleepWarm": "{baby} slept {hours} hours in a row last night",
+  "@encouragementDataSleepWarm": {"description":"Data: sleep", "placeholders": {"baby": {"type": "String"}, "hours": {"type": "String"}}},
+  "encouragementDataWeeklyWarm": "{count} records today. Great tracking",
+  "@encouragementDataWeeklyWarm": {"description":"Data: weekly records", "placeholders": {"count": {"type": "String"}}}
 }
