@@ -189,6 +189,7 @@ class _WeeklyViewState extends State<WeeklyView> {
   }
 
   /// DateNavigator에서 호출: 주간 변경
+  /// HF-6: 현재 주는 오늘까지만, 과거 주는 7일 풀
   Future<void> _onWeekChanged(DateTime newWeekStart) async {
     final homeProvider = context.read<HomeProvider>();
     final family = homeProvider.family;
@@ -196,8 +197,11 @@ class _WeeklyViewState extends State<WeeklyView> {
 
     if (family == null || selectedBaby == null) return;
 
-    // 요약카드 + 차트 데이터 동시 갱신
-    final weekEnd = newWeekStart.add(const Duration(days: 6));
+    // HF-6: 현재 주이면 end=오늘, 과거 주이면 end=일요일
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final weekSunday = newWeekStart.add(const Duration(days: 6));
+    final weekEnd = weekSunday.isAfter(today) ? today : weekSunday;
     final weekDateRange = DateRange(start: newWeekStart, end: weekEnd);
 
     await Future.wait([

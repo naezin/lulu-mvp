@@ -269,11 +269,17 @@ class StatisticsDataProvider extends ChangeNotifier {
       lastWeekActivities,
       dateRange,
     );
+    final playStats = _calculatePlayStatistics(
+      activities,
+      lastWeekActivities,
+      dateRange,
+    );
 
     return WeeklyStatistics(
       sleep: sleepStats,
       feeding: feedingStats,
       diaper: diaperStats,
+      play: playStats,
       startDate: dateRange.start,
       endDate: dateRange.end,
     );
@@ -465,6 +471,48 @@ class StatisticsDataProvider extends ChangeNotifier {
       wetRatio: totalCount > 0 ? wetCount / totalCount : 0,
       dirtyRatio: totalCount > 0 ? dirtyCount / totalCount : 0,
       bothRatio: totalCount > 0 ? bothCount / totalCount : 0,
+    );
+  }
+
+  /// HF-7: 놀이 통계 계산
+  PlayStatistics _calculatePlayStatistics(
+    List<ActivityModel> activities,
+    List<ActivityModel> lastWeekActivities,
+    DateRange dateRange,
+  ) {
+    final playActivities = activities
+        .where((a) => a.type == ActivityType.play)
+        .toList();
+    final lastWeekPlay = lastWeekActivities
+        .where((a) => a.type == ActivityType.play)
+        .toList();
+
+    // 요일별 놀이 시간 (월~일, 분 단위)
+    final dailyMinutes = List.filled(7, 0);
+
+    for (final activity in playActivities) {
+      final dayIndex = (activity.startTime.weekday - 1) % 7;
+      // duration_minutes from data, or durationMinutes computed from start/end
+      final duration = activity.durationMinutes ?? 0;
+      dailyMinutes[dayIndex] += duration;
+    }
+
+    final totalMinutes = dailyMinutes.fold(0, (sum, m) => sum + m);
+    final dayCount = dateRange.dayCount > 0 ? dateRange.dayCount : 1;
+    final dailyAverage = totalMinutes / dayCount.toDouble();
+
+    // 지난 주 평균
+    int lastWeekTotal = 0;
+    for (final activity in lastWeekPlay) {
+      lastWeekTotal += activity.durationMinutes ?? 0;
+    }
+    final lastWeekDailyAverage = lastWeekTotal / 7.0;
+    final changeMinutes = (dailyAverage - lastWeekDailyAverage).round();
+
+    return PlayStatistics(
+      dailyAverageMinutes: dailyAverage,
+      changeMinutes: changeMinutes,
+      dailyMinutes: dailyMinutes,
     );
   }
 }
