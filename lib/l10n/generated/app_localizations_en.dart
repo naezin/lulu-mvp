@@ -3634,4 +3634,141 @@ class SEn extends S {
 
   @override
   String get badge7DayStreakHumor => '7-day streak! Call the Guinness Book!';
+
+  @override
+  String get badgeDay7Title => 'First Week';
+
+  @override
+  String get badgeDay7Desc => 'Your baby is already 7 days old!';
+
+  @override
+  String get badgeDay7Warm =>
+      'One week together... every moment is a treasure.';
+
+  @override
+  String get badgeDay7Humor =>
+      '7 days survived! Achievement unlocked: Survived Week 1!';
+
+  @override
+  String get badgeDay100Title => '100 Days Together';
+
+  @override
+  String get badgeDay100Desc => 'An incredible 100 days with your baby!';
+
+  @override
+  String get badgeDay100Warm =>
+      '100 days of love and growth... you\'ve done an amazing job.';
+
+  @override
+  String get badgeDay100Humor =>
+      '100 days! That\'s like 2,400 diaper changes... give or take.';
+
+  @override
+  String get badgeMonth1Title => 'One Month';
+
+  @override
+  String get badgeMonth1Desc => 'Your baby is one month old!';
+
+  @override
+  String get badgeMonth1Warm =>
+      'A whole month... look how far you\'ve come together.';
+
+  @override
+  String get badgeMonth1Humor => '30 days in! You\'re basically a pro now!';
+
+  @override
+  String get badgeCorrectedTermTitle => 'Full Term Reached';
+
+  @override
+  String get badgeCorrectedTermDesc =>
+      'Your baby has reached full term corrected age!';
+
+  @override
+  String get badgeCorrectedTermWarm =>
+      'The day we\'ve been waiting for... your little fighter made it to term.';
+
+  @override
+  String get badgeCorrectedTermHumor =>
+      'Full term unlocked! Your baby\'s been leveling up this whole time!';
+
+  @override
+  String get badgeMultiplesFirstRecordTitle => 'Multiples Journey Begins';
+
+  @override
+  String get badgeMultiplesFirstRecordDesc =>
+      'First record for your multiples family!';
+
+  @override
+  String get badgeMultiplesFirstRecordWarm =>
+      'The adventure begins... twice the love, twice the joy.';
+
+  @override
+  String get badgeMultiplesFirstRecordHumor =>
+      'First record done! Only a million more to go with multiples!';
+
+  @override
+  String get badgeMultiplesAllFedTitle => 'Everyone Fed';
+
+  @override
+  String get badgeMultiplesAllFedDesc => 'All babies fed on the same day!';
+
+  @override
+  String get badgeMultiplesAllFedWarm =>
+      'Every little one was taken care of... you\'re doing great.';
+
+  @override
+  String get badgeMultiplesAllFedHumor =>
+      'Fed them all in one day! Multitasking level: Expert!';
+
+  @override
+  String get badgeMultiplesAllSleptTitle => 'Peaceful Night';
+
+  @override
+  String get badgeMultiplesAllSleptDesc =>
+      'All babies had sleep records on the same day!';
+
+  @override
+  String get badgeMultiplesAllSleptWarm =>
+      'Everyone sleeping... a rare and precious moment.';
+
+  @override
+  String get badgeMultiplesAllSleptHumor =>
+      'All babies asleep at once? Quick, take a selfie... or a nap!';
+
+  @override
+  String get badgeCategoryGrowth => 'Growth';
+
+  @override
+  String get badgeCategoryPreemie => 'Preemie';
+
+  @override
+  String get badgeCategoryMultiples => 'Multiples';
+
+  @override
+  String get badgeCategoryFeeding => 'Feeding';
+
+  @override
+  String get badgeCategorySleep => 'Sleep';
+
+  @override
+  String get badgeCategoryParenting => 'Parenting';
+
+  @override
+  String get badgeCollectionTitle => 'Badge Collection';
+
+  @override
+  String badgeCollectionProgress(int count, int total) {
+    return '$count of $total badges earned';
+  }
+
+  @override
+  String get badgeCollectionEmpty => 'No badges earned yet. Keep going!';
+
+  @override
+  String get badgeLocked => 'Keep going to unlock!';
+
+  @override
+  String badgeEarnedAt(String date) {
+    return 'Earned $date';
+  }
 }

@@ -3567,4 +3567,125 @@ class SKo extends S {
 
   @override
   String get badge7DayStreakHumor => '7일 연속! 기네스북에 전화해야겠어요!';
+
+  @override
+  String get badgeDay7Title => '첫 일주일';
+
+  @override
+  String get badgeDay7Desc => '우리 아기가 벌써 7일이 됐어요!';
+
+  @override
+  String get badgeDay7Warm => '일주일을 함께했어요... 매 순간이 보물이에요.';
+
+  @override
+  String get badgeDay7Humor => '7일 생존 완료! 업적 해제: 첫 주 클리어!';
+
+  @override
+  String get badgeDay100Title => '100일 함께';
+
+  @override
+  String get badgeDay100Desc => '아기와 함께한 놀라운 100일!';
+
+  @override
+  String get badgeDay100Warm => '100일간의 사랑과 성장... 정말 잘하고 계세요.';
+
+  @override
+  String get badgeDay100Humor => '100일! 기저귀 약 2,400개... 대략적인 수치입니다.';
+
+  @override
+  String get badgeMonth1Title => '한 달';
+
+  @override
+  String get badgeMonth1Desc => '우리 아기가 한 달이 됐어요!';
+
+  @override
+  String get badgeMonth1Warm => '한 달... 함께 얼마나 멀리 왔는지 보세요.';
+
+  @override
+  String get badgeMonth1Humor => '30일 돌파! 이제 거의 프로급이에요!';
+
+  @override
+  String get badgeCorrectedTermTitle => '만삭 도달';
+
+  @override
+  String get badgeCorrectedTermDesc => '우리 아기가 교정연령 만삭에 도달했어요!';
+
+  @override
+  String get badgeCorrectedTermWarm => '기다리던 그 날... 우리 작은 전사가 만삭에 도달했어요.';
+
+  @override
+  String get badgeCorrectedTermHumor => '만삭 달성! 아기가 계속 레벨업 중이었어요!';
+
+  @override
+  String get badgeMultiplesFirstRecordTitle => '다태아 여정 시작';
+
+  @override
+  String get badgeMultiplesFirstRecordDesc => '다태아 가족의 첫 기록!';
+
+  @override
+  String get badgeMultiplesFirstRecordWarm => '모험이 시작됐어요... 두 배의 사랑, 두 배의 기쁨.';
+
+  @override
+  String get badgeMultiplesFirstRecordHumor => '첫 기록 완료! 다태아라 백만 개 정도 더 남았어요!';
+
+  @override
+  String get badgeMultiplesAllFedTitle => '모두 먹었어요';
+
+  @override
+  String get badgeMultiplesAllFedDesc => '같은 날 모든 아기에게 수유 완료!';
+
+  @override
+  String get badgeMultiplesAllFedWarm => '모든 아기를 돌봤어요... 정말 잘하고 계세요.';
+
+  @override
+  String get badgeMultiplesAllFedHumor => '하루에 전원 수유! 멀티태스킹 레벨: 전문가!';
+
+  @override
+  String get badgeMultiplesAllSleptTitle => '평화로운 밤';
+
+  @override
+  String get badgeMultiplesAllSleptDesc => '같은 날 모든 아기의 수면 기록 완료!';
+
+  @override
+  String get badgeMultiplesAllSleptWarm => '모두 잠들었어요... 드물고 소중한 순간이에요.';
+
+  @override
+  String get badgeMultiplesAllSleptHumor => '전원 동시 취침? 셀카 찍든지... 아니면 주무세요!';
+
+  @override
+  String get badgeCategoryGrowth => '성장';
+
+  @override
+  String get badgeCategoryPreemie => '조산아';
+
+  @override
+  String get badgeCategoryMultiples => '다태아';
+
+  @override
+  String get badgeCategoryFeeding => '수유';
+
+  @override
+  String get badgeCategorySleep => '수면';
+
+  @override
+  String get badgeCategoryParenting => '육아';
+
+  @override
+  String get badgeCollectionTitle => '배지 컬렉션';
+
+  @override
+  String badgeCollectionProgress(int count, int total) {
+    return '전체 $total개 중 $count개 획득';
+  }
+
+  @override
+  String get badgeCollectionEmpty => '아직 획득한 배지가 없어요. 계속 화이팅!';
+
+  @override
+  String get badgeLocked => '계속 기록하면 열 수 있어요!';
+
+  @override
+  String badgeEarnedAt(String date) {
+    return '$date 획득';
+  }
 }

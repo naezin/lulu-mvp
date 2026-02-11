@@ -25,6 +25,8 @@ import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../widgets/cry_analysis_card.dart';
 import '../../cry_analysis/screens/cry_analysis_screen.dart';
+import '../../badge/badge_provider.dart';
+import '../../badge/widgets/badge_collection_screen.dart';
 import '../../timeline/screens/record_history_screen.dart';
 
 /// 홈 화면 (시안 B-4 기반)
@@ -77,6 +79,46 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   centerTitle: true,
                   actions: [
+                    // Badge collection icon
+                    Consumer<BadgeProvider>(
+                      builder: (context, badgeProvider, _) {
+                        final hasUnseen = badgeProvider.hasUnseenBadges;
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const BadgeCollectionScreen(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Icon(
+                                  LuluIcons.trophy,
+                                  color: LuluTextColors.secondary,
+                                ),
+                                if (hasUnseen)
+                                  Positioned(
+                                    right: -2,
+                                    top: -2,
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: LuluColors.champagneGold,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(right: LuluSpacing.lg),
                       child: Icon(

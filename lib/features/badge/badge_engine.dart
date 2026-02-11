@@ -1,4 +1,5 @@
 import '../../data/models/activity_model.dart';
+import '../../data/models/baby_model.dart';
 import '../../data/models/baby_type.dart';
 import '../../data/models/badge_model.dart';
 import '../../data/models/feeding_type.dart';
@@ -18,7 +19,9 @@ class BadgeEngine {
   const BadgeEngine._();
 
   // ============================================================
-  // 13 Badge Definitions (static registry)
+  // 20 Badge Definitions (static registry)
+  // Badge-0: 13 (feeding 5 + sleep 5 + parenting 3)
+  // Badge-1: 7 (growth 3 + preemie 1 + multiples 3)
   // ============================================================
 
   static const List<BadgeDefinition> allBadges = [
@@ -143,6 +146,75 @@ class BadgeEngine {
       tier: BadgeTier.warm,
       perBaby: false,
       sortOrder: 13,
+    ),
+
+    // --- Growth / Time-based (3) --- Badge-1
+    BadgeDefinition(
+      key: 'day_7',
+      titleKey: 'badgeDay7Title',
+      descriptionKey: 'badgeDay7Desc',
+      category: BadgeCategory.growth,
+      tier: BadgeTier.warm,
+      perBaby: true,
+      sortOrder: 14,
+    ),
+    BadgeDefinition(
+      key: 'day_100',
+      titleKey: 'badgeDay100Title',
+      descriptionKey: 'badgeDay100Desc',
+      category: BadgeCategory.growth,
+      tier: BadgeTier.tearful,
+      perBaby: true,
+      sortOrder: 15,
+    ),
+    BadgeDefinition(
+      key: 'month_1',
+      titleKey: 'badgeMonth1Title',
+      descriptionKey: 'badgeMonth1Desc',
+      category: BadgeCategory.growth,
+      tier: BadgeTier.warm,
+      perBaby: true,
+      sortOrder: 16,
+    ),
+
+    // --- Preemie (1) --- Badge-1
+    BadgeDefinition(
+      key: 'corrected_term',
+      titleKey: 'badgeCorrectedTermTitle',
+      descriptionKey: 'badgeCorrectedTermDesc',
+      category: BadgeCategory.preemie,
+      tier: BadgeTier.tearful,
+      perBaby: true,
+      sortOrder: 17,
+    ),
+
+    // --- Multiples (3) --- Badge-1
+    BadgeDefinition(
+      key: 'multiples_first_record',
+      titleKey: 'badgeMultiplesFirstRecordTitle',
+      descriptionKey: 'badgeMultiplesFirstRecordDesc',
+      category: BadgeCategory.multiples,
+      tier: BadgeTier.warm,
+      perBaby: false,
+      sortOrder: 18,
+    ),
+    BadgeDefinition(
+      key: 'multiples_all_fed',
+      titleKey: 'badgeMultiplesAllFedTitle',
+      descriptionKey: 'badgeMultiplesAllFedDesc',
+      category: BadgeCategory.multiples,
+      tier: BadgeTier.normal,
+      perBaby: false,
+      sortOrder: 19,
+    ),
+    BadgeDefinition(
+      key: 'multiples_all_slept',
+      titleKey: 'badgeMultiplesAllSleptTitle',
+      descriptionKey: 'badgeMultiplesAllSleptDesc',
+      category: BadgeCategory.multiples,
+      tier: BadgeTier.warm,
+      perBaby: false,
+      sortOrder: 20,
     ),
   ];
 
@@ -568,6 +640,241 @@ class BadgeEngine {
         definition: allBadges.firstWhere((b) => b.key == key),
         babyId: null,
       ));
+    }
+  }
+
+  // ============================================================
+  // Time-based + Multiples checks (Badge-1)
+  // ============================================================
+
+  /// Check time-based (growth/preemie) and multiples badges.
+  ///
+  /// These depend on baby metadata (birthDate, gestationalWeeks, etc.)
+  /// rather than activity events. Called during init and periodically.
+  static List<BadgeUnlockCandidate> checkTimeAndMultiples({
+    required List<BabyModel> babies,
+    required List<ActivityModel> allActivities,
+    required Set<String> existingBadgeKeys,
+  }) {
+    final List<BadgeUnlockCandidate> candidates = [];
+
+    // --- Time-based badges (per-baby) ---
+    for (final baby in babies) {
+      _checkDay7(baby, existingBadgeKeys, candidates);
+      _checkDay100(baby, existingBadgeKeys, candidates);
+      _checkMonth1(baby, existingBadgeKeys, candidates);
+      _checkCorrectedTerm(baby, existingBadgeKeys, candidates);
+    }
+
+    // --- Multiples badges (family-level, requires 2+ babies) ---
+    if (babies.length >= 2) {
+      _checkMultiplesFirstRecord(
+        babies, allActivities, existingBadgeKeys, candidates,
+      );
+      _checkMultiplesAllFed(
+        babies, allActivities, existingBadgeKeys, candidates,
+      );
+      _checkMultiplesAllSlept(
+        babies, allActivities, existingBadgeKeys, candidates,
+      );
+    }
+
+    return candidates;
+  }
+
+  // ============================================================
+  // Time-based conditions (Badge-1)
+  // ============================================================
+
+  /// day_7: Baby is 7+ days old
+  static void _checkDay7(
+    BabyModel baby,
+    Set<String> existingKeys,
+    List<BadgeUnlockCandidate> candidates,
+  ) {
+    final key = _badgeKeyWithBaby('day_7', baby.id);
+    if (existingKeys.contains(key)) return;
+
+    final daysSinceBirth = DateTime.now().difference(baby.birthDate).inDays;
+    if (daysSinceBirth >= 7) {
+      candidates.add(BadgeUnlockCandidate(
+        definition: allBadges.firstWhere((b) => b.key == 'day_7'),
+        babyId: baby.id,
+      ));
+    }
+  }
+
+  /// day_100: Baby is 100+ days old
+  static void _checkDay100(
+    BabyModel baby,
+    Set<String> existingKeys,
+    List<BadgeUnlockCandidate> candidates,
+  ) {
+    final key = _badgeKeyWithBaby('day_100', baby.id);
+    if (existingKeys.contains(key)) return;
+
+    final daysSinceBirth = DateTime.now().difference(baby.birthDate).inDays;
+    if (daysSinceBirth >= 100) {
+      candidates.add(BadgeUnlockCandidate(
+        definition: allBadges.firstWhere((b) => b.key == 'day_100'),
+        babyId: baby.id,
+      ));
+    }
+  }
+
+  /// month_1: Baby is 30+ days old
+  static void _checkMonth1(
+    BabyModel baby,
+    Set<String> existingKeys,
+    List<BadgeUnlockCandidate> candidates,
+  ) {
+    final key = _badgeKeyWithBaby('month_1', baby.id);
+    if (existingKeys.contains(key)) return;
+
+    final daysSinceBirth = DateTime.now().difference(baby.birthDate).inDays;
+    if (daysSinceBirth >= 30) {
+      candidates.add(BadgeUnlockCandidate(
+        definition: allBadges.firstWhere((b) => b.key == 'month_1'),
+        babyId: baby.id,
+      ));
+    }
+  }
+
+  /// corrected_term: Preterm baby reached corrected term (40 weeks GA)
+  /// Only for preterm babies (gestationalWeeksAtBirth < 37)
+  static void _checkCorrectedTerm(
+    BabyModel baby,
+    Set<String> existingKeys,
+    List<BadgeUnlockCandidate> candidates,
+  ) {
+    final key = _badgeKeyWithBaby('corrected_term', baby.id);
+    if (existingKeys.contains(key)) return;
+
+    // Only for preterm babies
+    if (!baby.isPreterm) return;
+    final ga = baby.gestationalWeeksAtBirth;
+    if (ga == null) return;
+
+    // Calculate corrected age in weeks
+    // Term = 40 weeks GA. Days needed = (40 - GA) * 7
+    final daysSinceBirth = DateTime.now().difference(baby.birthDate).inDays;
+    final daysNeededForTerm = (40 - ga) * 7;
+
+    if (daysSinceBirth >= daysNeededForTerm) {
+      candidates.add(BadgeUnlockCandidate(
+        definition: allBadges.firstWhere((b) => b.key == 'corrected_term'),
+        babyId: baby.id,
+      ));
+    }
+  }
+
+  // ============================================================
+  // Multiples conditions (Badge-1)
+  // ============================================================
+
+  /// multiples_first_record: First activity recorded in a multiples family
+  static void _checkMultiplesFirstRecord(
+    List<BabyModel> babies,
+    List<ActivityModel> allActivities,
+    Set<String> existingKeys,
+    List<BadgeUnlockCandidate> candidates,
+  ) {
+    const key = 'multiples_first_record';
+    if (existingKeys.contains(key)) return;
+
+    // Check if any baby is a multiple birth type
+    final hasMultiples = babies.any((b) => b.isMultipleBirth);
+    if (!hasMultiples && babies.length < 2) return;
+
+    if (allActivities.isNotEmpty) {
+      candidates.add(BadgeUnlockCandidate(
+        definition: allBadges.firstWhere((b) => b.key == key),
+        babyId: null, // family-level
+      ));
+    }
+  }
+
+  /// multiples_all_fed: All babies fed on the same day
+  static void _checkMultiplesAllFed(
+    List<BabyModel> babies,
+    List<ActivityModel> allActivities,
+    Set<String> existingKeys,
+    List<BadgeUnlockCandidate> candidates,
+  ) {
+    const key = 'multiples_all_fed';
+    if (existingKeys.contains(key)) return;
+
+    final babyIds = babies.map((b) => b.id).toSet();
+    if (babyIds.length < 2) return;
+
+    // Get all feeding activities
+    final feedings = allActivities
+        .where((a) => a.type == ActivityType.feeding)
+        .toList();
+
+    // Group feedings by sleep day (4AM boundary)
+    final Map<DateTime, Set<String>> feedingsByDay = {};
+    for (final f in feedings) {
+      final day = _toSleepDay(f.startTime.toLocal());
+      feedingsByDay.putIfAbsent(day, () => {});
+      for (final bid in f.babyIds) {
+        if (babyIds.contains(bid)) {
+          feedingsByDay[day]!.add(bid);
+        }
+      }
+    }
+
+    // Check if any day has all babies fed
+    for (final entry in feedingsByDay.entries) {
+      if (entry.value.length >= babyIds.length) {
+        candidates.add(BadgeUnlockCandidate(
+          definition: allBadges.firstWhere((b) => b.key == key),
+          babyId: null, // family-level
+        ));
+        return;
+      }
+    }
+  }
+
+  /// multiples_all_slept: All babies have sleep records on the same day
+  static void _checkMultiplesAllSlept(
+    List<BabyModel> babies,
+    List<ActivityModel> allActivities,
+    Set<String> existingKeys,
+    List<BadgeUnlockCandidate> candidates,
+  ) {
+    const key = 'multiples_all_slept';
+    if (existingKeys.contains(key)) return;
+
+    final babyIds = babies.map((b) => b.id).toSet();
+    if (babyIds.length < 2) return;
+
+    // Get all completed sleep activities
+    final sleeps = allActivities
+        .where((a) => a.type == ActivityType.sleep && a.endTime != null)
+        .toList();
+
+    // Group sleeps by sleep day (4AM boundary)
+    final Map<DateTime, Set<String>> sleepsByDay = {};
+    for (final s in sleeps) {
+      final day = _toSleepDay(s.startTime.toLocal());
+      sleepsByDay.putIfAbsent(day, () => {});
+      for (final bid in s.babyIds) {
+        if (babyIds.contains(bid)) {
+          sleepsByDay[day]!.add(bid);
+        }
+      }
+    }
+
+    // Check if any day has all babies sleeping
+    for (final entry in sleepsByDay.entries) {
+      if (entry.value.length >= babyIds.length) {
+        candidates.add(BadgeUnlockCandidate(
+          definition: allBadges.firstWhere((b) => b.key == key),
+          babyId: null, // family-level
+        ));
+        return;
+      }
     }
   }
 

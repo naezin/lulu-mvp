@@ -381,6 +381,12 @@ class _BadgePopupState extends State<BadgePopup>
         return LuluIcons.sleep;
       case BadgeCategory.parenting:
         return LuluIcons.trophy;
+      case BadgeCategory.growth:
+        return LuluIcons.growth;
+      case BadgeCategory.preemie:
+        return LuluIcons.health;
+      case BadgeCategory.multiples:
+        return LuluIcons.baby;
     }
   }
 
@@ -545,6 +551,80 @@ class _BadgePopupState extends State<BadgePopup>
         return l10n.badge7DayStreakWarm;
       case 'badge7DayStreakHumor':
         return l10n.badge7DayStreakHumor;
+
+      // --- Badge-1: Growth / Time-based ---
+
+      // Day 7
+      case 'badgeDay7Title':
+        return l10n.badgeDay7Title;
+      case 'badgeDay7Desc':
+        return l10n.badgeDay7Desc;
+      case 'badgeDay7Warm':
+        return l10n.badgeDay7Warm;
+      case 'badgeDay7Humor':
+        return l10n.badgeDay7Humor;
+
+      // Day 100
+      case 'badgeDay100Title':
+        return l10n.badgeDay100Title;
+      case 'badgeDay100Desc':
+        return l10n.badgeDay100Desc;
+      case 'badgeDay100Warm':
+        return l10n.badgeDay100Warm;
+      case 'badgeDay100Humor':
+        return l10n.badgeDay100Humor;
+
+      // Month 1
+      case 'badgeMonth1Title':
+        return l10n.badgeMonth1Title;
+      case 'badgeMonth1Desc':
+        return l10n.badgeMonth1Desc;
+      case 'badgeMonth1Warm':
+        return l10n.badgeMonth1Warm;
+      case 'badgeMonth1Humor':
+        return l10n.badgeMonth1Humor;
+
+      // Corrected Term
+      case 'badgeCorrectedTermTitle':
+        return l10n.badgeCorrectedTermTitle;
+      case 'badgeCorrectedTermDesc':
+        return l10n.badgeCorrectedTermDesc;
+      case 'badgeCorrectedTermWarm':
+        return l10n.badgeCorrectedTermWarm;
+      case 'badgeCorrectedTermHumor':
+        return l10n.badgeCorrectedTermHumor;
+
+      // --- Badge-1: Multiples ---
+
+      // Multiples First Record
+      case 'badgeMultiplesFirstRecordTitle':
+        return l10n.badgeMultiplesFirstRecordTitle;
+      case 'badgeMultiplesFirstRecordDesc':
+        return l10n.badgeMultiplesFirstRecordDesc;
+      case 'badgeMultiplesFirstRecordWarm':
+        return l10n.badgeMultiplesFirstRecordWarm;
+      case 'badgeMultiplesFirstRecordHumor':
+        return l10n.badgeMultiplesFirstRecordHumor;
+
+      // Multiples All Fed
+      case 'badgeMultiplesAllFedTitle':
+        return l10n.badgeMultiplesAllFedTitle;
+      case 'badgeMultiplesAllFedDesc':
+        return l10n.badgeMultiplesAllFedDesc;
+      case 'badgeMultiplesAllFedWarm':
+        return l10n.badgeMultiplesAllFedWarm;
+      case 'badgeMultiplesAllFedHumor':
+        return l10n.badgeMultiplesAllFedHumor;
+
+      // Multiples All Slept
+      case 'badgeMultiplesAllSleptTitle':
+        return l10n.badgeMultiplesAllSleptTitle;
+      case 'badgeMultiplesAllSleptDesc':
+        return l10n.badgeMultiplesAllSleptDesc;
+      case 'badgeMultiplesAllSleptWarm':
+        return l10n.badgeMultiplesAllSleptWarm;
+      case 'badgeMultiplesAllSleptHumor':
+        return l10n.badgeMultiplesAllSleptHumor;
 
       default:
         return null;

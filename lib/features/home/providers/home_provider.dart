@@ -331,6 +331,7 @@ class HomeProvider extends ChangeNotifier {
   /// Load today's activities (called after family is set)
   ///
   /// Sprint 19: Also checks hasAnyRecordsEver
+  /// Badge-1: Also initializes BadgeProvider with all activities + babies
   Future<void> loadTodayActivities() async {
     if (_family == null) {
       debugPrint('[WARN] [HomeProvider] Cannot load activities: family not set');
@@ -341,18 +342,28 @@ class HomeProvider extends ChangeNotifier {
       final activityRepo = ActivityRepository();
 
       // Sprint 19: Check total records existence in parallel
+      // Badge-1: Also load all activities for badge engine
       final results = await Future.wait([
         activityRepo.getTodayActivities(_family!.id),
         activityRepo.hasAnyActivities(_family!.id),
+        activityRepo.getActivitiesByFamilyId(_family!.id, limit: 10000),
       ]);
 
       final activities = results[0] as List<ActivityModel>;
       final hasAny = results[1] as bool;
+      final allActivities = results[2] as List<ActivityModel>;
 
       _todayActivities = activities;
       _hasAnyRecordsEver = hasAny;
       _invalidateCache();
       _notifySweetSpot();
+
+      // Badge-1: Initialize badge system with all activities + babies
+      _badgeProvider?.init(
+        familyId: _family!.id,
+        activities: allActivities,
+        babies: _babies,
+      );
 
       debugPrint('[OK] [HomeProvider] Today activities loaded: ${activities.length}, hasAnyRecordsEver: $hasAny');
       notifyListeners();

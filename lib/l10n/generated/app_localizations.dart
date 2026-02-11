@@ -6525,6 +6525,240 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'7일 연속! 기네스북에 전화해야겠어요!'**
   String get badge7DayStreakHumor;
+
+  /// 배지: 출생 7일
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 일주일'**
+  String get badgeDay7Title;
+
+  /// 배지 설명: 7일
+  ///
+  /// In ko, this message translates to:
+  /// **'우리 아기가 벌써 7일이 됐어요!'**
+  String get badgeDay7Desc;
+
+  /// 배지 따뜻한 톤: 7일
+  ///
+  /// In ko, this message translates to:
+  /// **'일주일을 함께했어요... 매 순간이 보물이에요.'**
+  String get badgeDay7Warm;
+
+  /// 배지 유머 톤: 7일
+  ///
+  /// In ko, this message translates to:
+  /// **'7일 생존 완료! 업적 해제: 첫 주 클리어!'**
+  String get badgeDay7Humor;
+
+  /// 배지: 출생 100일
+  ///
+  /// In ko, this message translates to:
+  /// **'100일 함께'**
+  String get badgeDay100Title;
+
+  /// 배지 설명: 100일
+  ///
+  /// In ko, this message translates to:
+  /// **'아기와 함께한 놀라운 100일!'**
+  String get badgeDay100Desc;
+
+  /// 배지 따뜻한 톤: 100일
+  ///
+  /// In ko, this message translates to:
+  /// **'100일간의 사랑과 성장... 정말 잘하고 계세요.'**
+  String get badgeDay100Warm;
+
+  /// 배지 유머 톤: 100일
+  ///
+  /// In ko, this message translates to:
+  /// **'100일! 기저귀 약 2,400개... 대략적인 수치입니다.'**
+  String get badgeDay100Humor;
+
+  /// 배지: 출생 1개월
+  ///
+  /// In ko, this message translates to:
+  /// **'한 달'**
+  String get badgeMonth1Title;
+
+  /// 배지 설명: 1개월
+  ///
+  /// In ko, this message translates to:
+  /// **'우리 아기가 한 달이 됐어요!'**
+  String get badgeMonth1Desc;
+
+  /// 배지 따뜻한 톤: 1개월
+  ///
+  /// In ko, this message translates to:
+  /// **'한 달... 함께 얼마나 멀리 왔는지 보세요.'**
+  String get badgeMonth1Warm;
+
+  /// 배지 유머 톤: 1개월
+  ///
+  /// In ko, this message translates to:
+  /// **'30일 돌파! 이제 거의 프로급이에요!'**
+  String get badgeMonth1Humor;
+
+  /// 배지: 조산아 교정연령 만삭
+  ///
+  /// In ko, this message translates to:
+  /// **'만삭 도달'**
+  String get badgeCorrectedTermTitle;
+
+  /// 배지 설명: 교정만삭
+  ///
+  /// In ko, this message translates to:
+  /// **'우리 아기가 교정연령 만삭에 도달했어요!'**
+  String get badgeCorrectedTermDesc;
+
+  /// 배지 따뜻한 톤: 교정만삭
+  ///
+  /// In ko, this message translates to:
+  /// **'기다리던 그 날... 우리 작은 전사가 만삭에 도달했어요.'**
+  String get badgeCorrectedTermWarm;
+
+  /// 배지 유머 톤: 교정만삭
+  ///
+  /// In ko, this message translates to:
+  /// **'만삭 달성! 아기가 계속 레벨업 중이었어요!'**
+  String get badgeCorrectedTermHumor;
+
+  /// 배지: 다태아 첫 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'다태아 여정 시작'**
+  String get badgeMultiplesFirstRecordTitle;
+
+  /// 배지 설명: 다태아 첫 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'다태아 가족의 첫 기록!'**
+  String get badgeMultiplesFirstRecordDesc;
+
+  /// 배지 따뜻한 톤: 다태아 첫 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'모험이 시작됐어요... 두 배의 사랑, 두 배의 기쁨.'**
+  String get badgeMultiplesFirstRecordWarm;
+
+  /// 배지 유머 톤: 다태아 첫 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 기록 완료! 다태아라 백만 개 정도 더 남았어요!'**
+  String get badgeMultiplesFirstRecordHumor;
+
+  /// 배지: 같은 날 모든 아기 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'모두 먹었어요'**
+  String get badgeMultiplesAllFedTitle;
+
+  /// 배지 설명: 전원 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'같은 날 모든 아기에게 수유 완료!'**
+  String get badgeMultiplesAllFedDesc;
+
+  /// 배지 따뜻한 톤: 전원 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 아기를 돌봤어요... 정말 잘하고 계세요.'**
+  String get badgeMultiplesAllFedWarm;
+
+  /// 배지 유머 톤: 전원 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'하루에 전원 수유! 멀티태스킹 레벨: 전문가!'**
+  String get badgeMultiplesAllFedHumor;
+
+  /// 배지: 같은 날 모든 아기 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'평화로운 밤'**
+  String get badgeMultiplesAllSleptTitle;
+
+  /// 배지 설명: 전원 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'같은 날 모든 아기의 수면 기록 완료!'**
+  String get badgeMultiplesAllSleptDesc;
+
+  /// 배지 따뜻한 톤: 전원 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'모두 잠들었어요... 드물고 소중한 순간이에요.'**
+  String get badgeMultiplesAllSleptWarm;
+
+  /// 배지 유머 톤: 전원 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'전원 동시 취침? 셀카 찍든지... 아니면 주무세요!'**
+  String get badgeMultiplesAllSleptHumor;
+
+  /// 배지 카테고리: 성장
+  ///
+  /// In ko, this message translates to:
+  /// **'성장'**
+  String get badgeCategoryGrowth;
+
+  /// 배지 카테고리: 조산아
+  ///
+  /// In ko, this message translates to:
+  /// **'조산아'**
+  String get badgeCategoryPreemie;
+
+  /// 배지 카테고리: 다태아
+  ///
+  /// In ko, this message translates to:
+  /// **'다태아'**
+  String get badgeCategoryMultiples;
+
+  /// 배지 카테고리: 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get badgeCategoryFeeding;
+
+  /// 배지 카테고리: 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'수면'**
+  String get badgeCategorySleep;
+
+  /// 배지 카테고리: 육아
+  ///
+  /// In ko, this message translates to:
+  /// **'육아'**
+  String get badgeCategoryParenting;
+
+  /// 배지 컬렉션 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'배지 컬렉션'**
+  String get badgeCollectionTitle;
+
+  /// 배지 진행률
+  ///
+  /// In ko, this message translates to:
+  /// **'전체 {total}개 중 {count}개 획득'**
+  String badgeCollectionProgress(int count, int total);
+
+  /// 배지 없음 상태
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 획득한 배지가 없어요. 계속 화이팅!'**
+  String get badgeCollectionEmpty;
+
+  /// 잠긴 배지 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'계속 기록하면 열 수 있어요!'**
+  String get badgeLocked;
+
+  /// 배지 획득 날짜
+  ///
+  /// In ko, this message translates to:
+  /// **'{date} 획득'**
+  String badgeEarnedAt(String date);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

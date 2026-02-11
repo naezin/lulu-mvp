@@ -63,8 +63,8 @@ void main() {
   }
 
   group('BadgeEngine - Badge Definitions', () {
-    test('#1 allBadges has 13 definitions', () {
-      expect(BadgeEngine.allBadges.length, 13);
+    test('#1 allBadges has 20 definitions', () {
+      expect(BadgeEngine.allBadges.length, 20);
     });
 
     test('#2 getDefinition returns correct badge', () {

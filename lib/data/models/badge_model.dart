@@ -30,7 +30,10 @@ enum BadgeTier {
 enum BadgeCategory {
   feeding('feeding'),
   sleep('sleep'),
-  parenting('parenting');
+  parenting('parenting'),
+  growth('growth'),
+  preemie('preemie'),
+  multiples('multiples');
 
   final String value;
   const BadgeCategory(this.value);
