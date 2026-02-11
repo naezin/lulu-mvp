@@ -204,6 +204,28 @@ class ActivityRepository {
     }
   }
 
+  /// 특정 아기의 진행 중 수면 조회 (end_time IS NULL + type=sleep)
+  /// HF-5: BabyTime import 등 외부 경로로 생성된 활성 수면 감지
+  Future<ActivityModel?> getActiveSleepForBaby(String babyId) async {
+    try {
+      final response = await SupabaseService.activities
+          .select()
+          .contains('baby_ids', [babyId])
+          .eq('type', 'sleep')
+          .isFilter('end_time', null)
+          .order('start_time', ascending: false)
+          .limit(1)
+          .maybeSingle();
+
+      if (response == null) return null;
+      debugPrint('[OK] [ActivityRepository] Found active sleep for baby: $babyId');
+      return _mapToActivityModel(response);
+    } catch (e) {
+      debugPrint('[ERR] [ActivityRepository] Error getting active sleep: $e');
+      return null;
+    }
+  }
+
   /// 진행 중인 활동 조회
   Future<List<ActivityModel>> getOngoingActivities(String familyId) async {
     try {

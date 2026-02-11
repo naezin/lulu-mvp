@@ -46,9 +46,29 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  /// Track last checked baby ID to avoid redundant DB calls
+  String? _lastCheckedBabyId;
+
   @override
   void initState() {
     super.initState();
+    // HF-5: Check DB for active sleep on first build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkDbSleep();
+    });
+  }
+
+  /// HF-5: Check DB for active sleep (BabyTime import detection)
+  void _checkDbSleep() {
+    final homeProvider = context.read<HomeProvider>();
+    final sleepProvider = context.read<OngoingSleepProvider>();
+    final selectedBabyId = homeProvider.selectedBabyId;
+    final familyId = homeProvider.family?.id;
+
+    if (selectedBabyId != null && familyId != null) {
+      sleepProvider.checkDbForActiveSleep(selectedBabyId, familyId);
+      _lastCheckedBabyId = selectedBabyId;
+    }
   }
 
   @override
@@ -58,6 +78,17 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Consumer<HomeProvider>(
           builder: (context, homeProvider, child) {
+            // HF-5: Check DB for active sleep when baby changes
+            final currentBabyId = homeProvider.selectedBabyId;
+            if (currentBabyId != null && currentBabyId != _lastCheckedBabyId) {
+              _lastCheckedBabyId = currentBabyId;
+              final familyId = homeProvider.family?.id;
+              if (familyId != null) {
+                // fire-and-forget: async DB check
+                context.read<OngoingSleepProvider>()
+                    .checkDbForActiveSleep(currentBabyId, familyId);
+              }
+            }
             return CustomScrollView(
               slivers: [
                 // App Bar (C-1 + HF-3: badge icon → leading)

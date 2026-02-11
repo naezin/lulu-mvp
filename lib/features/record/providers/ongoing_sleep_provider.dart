@@ -25,6 +25,10 @@ class OngoingSleepProvider extends ChangeNotifier {
   Timer? _timer;
   OngoingSleepRecord? _ongoingSleep;
 
+  /// DB-sourced ongoing sleep: true if current ongoing sleep was found from DB
+  /// (not started via FAB). Affects endSleep() behavior.
+  bool _isDbSourced = false;
+
   /// 진행 중인 수면 기록
   OngoingSleepRecord? get ongoingSleep => _ongoingSleep;
 
@@ -67,8 +71,9 @@ class OngoingSleepProvider extends ChangeNotifier {
       if (jsonString != null && jsonString.isNotEmpty) {
         final json = jsonDecode(jsonString) as Map<String, dynamic>;
         _ongoingSleep = OngoingSleepRecord.fromJson(json);
+        _isDbSourced = false;
         _startTimer();
-        debugPrint('[OK] [OngoingSleepProvider] Restored ongoing sleep: ${_ongoingSleep?.babyId}');
+        debugPrint('[OK] [OngoingSleepProvider] Restored ongoing sleep from SharedPrefs: ${_ongoingSleep?.babyId}');
       }
     } catch (e) {
       debugPrint('[ERR] [OngoingSleepProvider] Init error: $e');
@@ -76,6 +81,44 @@ class OngoingSleepProvider extends ChangeNotifier {
       _ongoingSleep = null;
     }
     notifyListeners();
+  }
+
+  /// HF-5: DB에서 활성 수면 조회 (BabyTime import 등 외부 경로 감지)
+  /// baby 선택 시 + 홈 화면 진입 시 호출
+  Future<void> checkDbForActiveSleep(String babyId, String familyId) async {
+    // SharedPrefs에서 이미 해당 아기의 수면이 진행 중이면 DB 조회 불필요
+    if (_ongoingSleep != null && _ongoingSleep!.babyId == babyId && !_isDbSourced) {
+      return;
+    }
+
+    try {
+      final activeSleep = await _activityRepository.getActiveSleepForBaby(babyId);
+
+      if (activeSleep != null) {
+        // DB에 활성 수면 발견 — OngoingSleepRecord로 변환
+        final sleepType = activeSleep.data?['sleep_type'] as String? ?? 'nap';
+        _ongoingSleep = OngoingSleepRecord(
+          id: activeSleep.id,
+          babyId: babyId,
+          familyId: activeSleep.familyId,
+          sleepType: sleepType,
+          startTime: activeSleep.startTime,
+        );
+        _isDbSourced = true;
+        _startTimer();
+        debugPrint('[OK] [OngoingSleepProvider] Found active sleep from DB: '
+            'id=${activeSleep.id}, startTime=${activeSleep.startTime}');
+      } else if (_isDbSourced && _ongoingSleep?.babyId == babyId) {
+        // DB-sourced sleep was cleared (ended externally)
+        _ongoingSleep = null;
+        _isDbSourced = false;
+        _stopTimer();
+        debugPrint('[INFO] [OngoingSleepProvider] DB active sleep cleared for baby: $babyId');
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint('[ERR] [OngoingSleepProvider] checkDbForActiveSleep error: $e');
+    }
   }
 
   /// 수면 시작
@@ -102,6 +145,7 @@ class OngoingSleepProvider extends ChangeNotifier {
       sleepType: sleepType,
       startTime: startTime ?? DateTime.now(),
     );
+    _isDbSourced = false;
 
     await _saveToLocal();
     _startTimer();
@@ -111,6 +155,8 @@ class OngoingSleepProvider extends ChangeNotifier {
   }
 
   /// 수면 종료 및 저장
+  /// HF-5: DB-sourced sleep → finishActivity (UPDATE end_time)
+  ///        FAB-started sleep → createActivity (INSERT new record)
   Future<ActivityModel?> endSleep() async {
     if (_ongoingSleep == null) {
       debugPrint('[WARN] [OngoingSleepProvider] No ongoing sleep to end');
@@ -119,28 +165,38 @@ class OngoingSleepProvider extends ChangeNotifier {
 
     try {
       final endTime = DateTime.now();
+      ActivityModel savedActivity;
 
-      // ActivityModel 생성 및 저장
-      final activity = ActivityModel(
-        id: _ongoingSleep!.id,
-        familyId: _ongoingSleep!.familyId,
-        babyIds: [_ongoingSleep!.babyId],
-        type: ActivityType.sleep,
-        startTime: _ongoingSleep!.startTime,
-        endTime: endTime,
-        data: {'sleep_type': _ongoingSleep!.sleepType},
-        createdAt: _ongoingSleep!.startTime,
-      );
-
-      final savedActivity = await _activityRepository.createActivity(activity);
+      if (_isDbSourced) {
+        // DB-sourced: UPDATE existing record with end_time
+        savedActivity = await _activityRepository.finishActivity(
+          _ongoingSleep!.id,
+          endTime,
+        );
+        debugPrint('[OK] [OngoingSleepProvider] DB-sourced sleep finished: ${savedActivity.id}');
+      } else {
+        // FAB-started: INSERT new record
+        final activity = ActivityModel(
+          id: _ongoingSleep!.id,
+          familyId: _ongoingSleep!.familyId,
+          babyIds: [_ongoingSleep!.babyId],
+          type: ActivityType.sleep,
+          startTime: _ongoingSleep!.startTime,
+          endTime: endTime,
+          data: {'sleep_type': _ongoingSleep!.sleepType},
+          createdAt: _ongoingSleep!.startTime,
+        );
+        savedActivity = await _activityRepository.createActivity(activity);
+        debugPrint('[OK] [OngoingSleepProvider] FAB sleep ended and saved: ${savedActivity.id}');
+      }
 
       // 로컬 상태 초기화
       _ongoingSleep = null;
+      _isDbSourced = false;
       _stopTimer();
       await _clearLocal();
       notifyListeners();
 
-      debugPrint('[OK] [OngoingSleepProvider] Sleep ended and saved to Supabase: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
       debugPrint('[ERR] [OngoingSleepProvider] Error ending sleep: $e');
@@ -188,6 +244,7 @@ class OngoingSleepProvider extends ChangeNotifier {
     if (_ongoingSleep == null) return;
 
     _ongoingSleep = null;
+    _isDbSourced = false;
     _stopTimer();
     await _clearLocal();
     notifyListeners();
