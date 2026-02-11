@@ -3402,4 +3402,169 @@ class SKo extends S {
   String growthMetricChartTitle(String metric) {
     return '$metric 성장 차트';
   }
+
+  @override
+  String get badgeUnlocked => '배지 획득!';
+
+  @override
+  String get badgeDismiss => '확인';
+
+  @override
+  String get badgeShare => '공유';
+
+  @override
+  String get badgeFirstFeedingTitle => '첫 수유';
+
+  @override
+  String get badgeFirstFeedingDesc => '첫 수유를 기록했어요!';
+
+  @override
+  String get badgeFirstFeedingWarm => '첫 수유... 사랑이 가득한 순간이에요.';
+
+  @override
+  String get badgeFirstFeedingHumor => '미션: 첫 수유 완료!';
+
+  @override
+  String get badgeFeeding10Title => '수유 10회';
+
+  @override
+  String get badgeFeeding10Desc => '수유를 10회 기록했어요!';
+
+  @override
+  String get badgeFeeding10Warm => '10번의 수유... 한 방울 한 방울이 사랑이에요.';
+
+  @override
+  String get badgeFeeding10Humor => '수유 10회 달성! 파이팅!';
+
+  @override
+  String get badgeFeeding50Title => '수유 50회';
+
+  @override
+  String get badgeFeeding50Desc => '수유 50회 기록! 정말 대단해요.';
+
+  @override
+  String get badgeFeeding50Warm => '50번의 수유... 정말 멋진 부모예요.';
+
+  @override
+  String get badgeFeeding50Humor => '50회! 아기가 감사해하고 있어요!';
+
+  @override
+  String get badgeMilk1LTitle => '1리터의 사랑';
+
+  @override
+  String get badgeMilk1LDesc => '총 수유량이 1리터에 도달했어요!';
+
+  @override
+  String get badgeMilk1LWarm => '1리터의 사랑... 한 밀리리터도 소중해요.';
+
+  @override
+  String get badgeMilk1LHumor => '1리터! 정말 많은 양이에요!';
+
+  @override
+  String get badgeNightFeedingTitle => '새벽의 영웅';
+
+  @override
+  String get badgeNightFeedingDesc => '자정~새벽 5시 사이에 첫 수유를 기록했어요.';
+
+  @override
+  String get badgeNightFeedingWarm => '새벽에 수유하는 당신... 가장 용감한 부모예요.';
+
+  @override
+  String get badgeNightFeedingHumor => '잠이 뭐예요? 히어로 모드 ON!';
+
+  @override
+  String get badgeFirstSleepTitle => '첫 수면';
+
+  @override
+  String get badgeFirstSleepDesc => '아기의 첫 수면을 기록했어요!';
+
+  @override
+  String get badgeFirstSleepWarm => '달콤한 꿈이 시작됐어요...';
+
+  @override
+  String get badgeFirstSleepHumor => 'Zzz... 첫 낮잠 기록 완료!';
+
+  @override
+  String get badgeSleep10Title => '수면 10회';
+
+  @override
+  String get badgeSleep10Desc => '수면 기록 10회! 잘 기록하고 있어요!';
+
+  @override
+  String get badgeSleep10Warm => '10번의 평화로운 수면... 잘하고 있어요.';
+
+  @override
+  String get badgeSleep10Humor => '수면 10회! 수면 전문가 수련 중!';
+
+  @override
+  String get badgeSleepThroughTitle => '첫 통잠';
+
+  @override
+  String get badgeSleepThroughDesc => '아기가 7시간 이상 통잠을 잤어요!';
+
+  @override
+  String get badgeSleepThroughWarm => '밤새 푹 잤어요... 둘 다 이 순간을 받을 자격이 있어요.';
+
+  @override
+  String get badgeSleepThroughHumor => '7시간 연속! 이게 현실이에요?!';
+
+  @override
+  String get badgeSleepRoutineTitle => '수면 루틴';
+
+  @override
+  String get badgeSleepRoutineDesc => '3일 연속 수면 기록!';
+
+  @override
+  String get badgeSleepRoutineWarm => '3일의 루틴... 건강한 습관을 만들고 있어요.';
+
+  @override
+  String get badgeSleepRoutineHumor => '3일 연속! 꾸준함이 답이에요!';
+
+  @override
+  String get badgeSleepWeekTitle => '수면 주간 마스터';
+
+  @override
+  String get badgeSleepWeekDesc => '7일 연속 수면 기록!';
+
+  @override
+  String get badgeSleepWeekWarm => '일주일 내내... 당신의 헌신이 아름다워요.';
+
+  @override
+  String get badgeSleepWeekHumor => '7일! 메달을 드려야... 아, 이미 드렸네요!';
+
+  @override
+  String get badgeFirstRecordTitle => '안녕, 루루!';
+
+  @override
+  String get badgeFirstRecordDesc => '첫 번째 기록을 저장했어요!';
+
+  @override
+  String get badgeFirstRecordWarm => '여정이 시작됐어요... 루루에 오신 걸 환영해요.';
+
+  @override
+  String get badgeFirstRecordHumor => '첫 기록! 시작이 반이에요!';
+
+  @override
+  String get badge3DayStreakTitle => '3일 연속';
+
+  @override
+  String get badge3DayStreakDesc => '3일 연속 기록! 좋은 습관이에요!';
+
+  @override
+  String get badge3DayStreakWarm => '3일을 함께했어요... 모든 순간이 소중해요.';
+
+  @override
+  String get badge3DayStreakHumor => '3일! 불타오르고 있어요!';
+
+  @override
+  String get badge7DayStreakTitle => '7일 챔피언';
+
+  @override
+  String get badge7DayStreakDesc => '7일 연속 기록! 놀라운 꾸준함!';
+
+  @override
+  String get badge7DayStreakWarm => '일주일 내내... 최고의 부모예요.';
+
+  @override
+  String get badge7DayStreakHumor => '7일 연속! 기네스북에 전화해야겠어요!';
 }

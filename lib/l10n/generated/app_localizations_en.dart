@@ -3462,4 +3462,176 @@ class SEn extends S {
   String growthMetricChartTitle(String metric) {
     return '$metric Growth Chart';
   }
+
+  @override
+  String get badgeUnlocked => 'Badge Unlocked!';
+
+  @override
+  String get badgeDismiss => 'OK';
+
+  @override
+  String get badgeShare => 'Share';
+
+  @override
+  String get badgeFirstFeedingTitle => 'First Feeding';
+
+  @override
+  String get badgeFirstFeedingDesc => 'You recorded your first feeding!';
+
+  @override
+  String get badgeFirstFeedingWarm =>
+      'The first feeding... a moment full of love.';
+
+  @override
+  String get badgeFirstFeedingHumor => 'Mission: First Feed complete!';
+
+  @override
+  String get badgeFeeding10Title => '10 Feedings';
+
+  @override
+  String get badgeFeeding10Desc => 'You have recorded 10 feedings!';
+
+  @override
+  String get badgeFeeding10Warm => '10 feedings... every drop is love.';
+
+  @override
+  String get badgeFeeding10Humor => '10 feeds down! Keep going, champ!';
+
+  @override
+  String get badgeFeeding50Title => '50 Feedings';
+
+  @override
+  String get badgeFeeding50Desc =>
+      '50 feedings recorded! Incredible dedication.';
+
+  @override
+  String get badgeFeeding50Warm => '50 feedings... you are truly amazing.';
+
+  @override
+  String get badgeFeeding50Humor =>
+      '50 feeds! Your baby appreciates every one!';
+
+  @override
+  String get badgeMilk1LTitle => '1 Liter of Love';
+
+  @override
+  String get badgeMilk1LDesc => 'Total milk intake reached 1 liter!';
+
+  @override
+  String get badgeMilk1LWarm => '1 liter of love... every milliliter matters.';
+
+  @override
+  String get badgeMilk1LHumor => '1 liter! That\'s a lot of milk!';
+
+  @override
+  String get badgeNightFeedingTitle => 'Midnight Hero';
+
+  @override
+  String get badgeNightFeedingDesc =>
+      'First feeding between midnight and 5 AM.';
+
+  @override
+  String get badgeNightFeedingWarm => 'Feeding at dawn... you\'re the bravest.';
+
+  @override
+  String get badgeNightFeedingHumor => 'Who needs sleep anyway? Hero mode: ON!';
+
+  @override
+  String get badgeFirstSleepTitle => 'First Sleep';
+
+  @override
+  String get badgeFirstSleepDesc => 'You recorded your baby\'s first sleep!';
+
+  @override
+  String get badgeFirstSleepWarm => 'Sweet dreams begin now...';
+
+  @override
+  String get badgeFirstSleepHumor => 'Zzz... the first nap is in the books!';
+
+  @override
+  String get badgeSleep10Title => '10 Sleeps';
+
+  @override
+  String get badgeSleep10Desc => '10 sleep records! Great tracking!';
+
+  @override
+  String get badgeSleep10Warm => '10 peaceful sleeps... you\'re doing great.';
+
+  @override
+  String get badgeSleep10Humor => '10 naps tracked! Sleep expert in training!';
+
+  @override
+  String get badgeSleepThroughTitle => 'First Full Night';
+
+  @override
+  String get badgeSleepThroughDesc => 'Baby slept 7+ hours through the night!';
+
+  @override
+  String get badgeSleepThroughWarm =>
+      'A full night\'s sleep... you both deserve this.';
+
+  @override
+  String get badgeSleepThroughHumor => '7 hours straight! Is this real life?!';
+
+  @override
+  String get badgeSleepRoutineTitle => 'Sleep Routine';
+
+  @override
+  String get badgeSleepRoutineDesc => '3 consecutive days with sleep records!';
+
+  @override
+  String get badgeSleepRoutineWarm =>
+      '3 days of routine... building healthy habits.';
+
+  @override
+  String get badgeSleepRoutineHumor => '3-day streak! Consistency is key!';
+
+  @override
+  String get badgeSleepWeekTitle => 'Sleep Week Master';
+
+  @override
+  String get badgeSleepWeekDesc => '7 consecutive days with sleep records!';
+
+  @override
+  String get badgeSleepWeekWarm =>
+      'A whole week... your dedication is beautiful.';
+
+  @override
+  String get badgeSleepWeekHumor => '7 days! You deserve a medal... oh wait!';
+
+  @override
+  String get badgeFirstRecordTitle => 'Hello, Lulu!';
+
+  @override
+  String get badgeFirstRecordDesc => 'You saved your very first record!';
+
+  @override
+  String get badgeFirstRecordWarm => 'The journey begins... welcome to Lulu.';
+
+  @override
+  String get badgeFirstRecordHumor => 'First record! And so it begins!';
+
+  @override
+  String get badge3DayStreakTitle => '3-Day Streak';
+
+  @override
+  String get badge3DayStreakDesc => '3 days of recording! Great habit!';
+
+  @override
+  String get badge3DayStreakWarm => '3 days together... every moment matters.';
+
+  @override
+  String get badge3DayStreakHumor => '3 days! You\'re on fire!';
+
+  @override
+  String get badge7DayStreakTitle => '7-Day Champion';
+
+  @override
+  String get badge7DayStreakDesc => '7 days of recording! Amazing commitment!';
+
+  @override
+  String get badge7DayStreakWarm => 'A whole week... you\'re the best parent.';
+
+  @override
+  String get badge7DayStreakHumor => '7-day streak! Call the Guinness Book!';
 }

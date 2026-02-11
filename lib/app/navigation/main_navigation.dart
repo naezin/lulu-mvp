@@ -8,6 +8,8 @@ import '../../core/utils/app_toast.dart';
 import '../../shared/widgets/expandable_fab.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/home/providers/home_provider.dart';
+import '../../features/badge/badge_provider.dart';
+import '../../features/badge/widgets/badge_popup.dart';
 import '../../features/timeline/screens/record_history_screen.dart';
 import '../../features/growth/screens/growth_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
@@ -57,17 +59,33 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: LuluColors.midnightNavy,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
-      floatingActionButton: LabeledFab(
-        onRecord: _handleRecord,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: _buildBottomBar(),
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: LuluColors.midnightNavy,
+          body: IndexedStack(
+            index: _currentIndex,
+            children: _screens,
+          ),
+          floatingActionButton: LabeledFab(
+            onRecord: _handleRecord,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: _buildBottomBar(),
+        ),
+        // Badge popup overlay
+        Consumer<BadgeProvider>(
+          builder: (context, badgeProvider, _) {
+            final popup = badgeProvider.currentPopup;
+            if (popup == null) return const SizedBox.shrink();
+
+            return BadgePopup(
+              candidate: popup,
+              onDismiss: () => badgeProvider.dismissPopup(),
+            );
+          },
+        ),
+      ],
     );
   }
 

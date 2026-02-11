@@ -6195,6 +6195,336 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'{metric} 성장 차트'**
   String growthMetricChartTitle(String metric);
+
+  /// 배지 팝업 헤더
+  ///
+  /// In ko, this message translates to:
+  /// **'배지 획득!'**
+  String get badgeUnlocked;
+
+  /// 배지 팝업 닫기 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'확인'**
+  String get badgeDismiss;
+
+  /// 배지 팝업 공유 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'공유'**
+  String get badgeShare;
+
+  /// 배지: 첫 수유 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 수유'**
+  String get badgeFirstFeedingTitle;
+
+  /// 배지 설명: 첫 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 수유를 기록했어요!'**
+  String get badgeFirstFeedingDesc;
+
+  /// 배지 따뜻한 톤: 첫 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 수유... 사랑이 가득한 순간이에요.'**
+  String get badgeFirstFeedingWarm;
+
+  /// 배지 유머 톤: 첫 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'미션: 첫 수유 완료!'**
+  String get badgeFirstFeedingHumor;
+
+  /// 배지: 수유 10회
+  ///
+  /// In ko, this message translates to:
+  /// **'수유 10회'**
+  String get badgeFeeding10Title;
+
+  /// 배지 설명: 수유 10회
+  ///
+  /// In ko, this message translates to:
+  /// **'수유를 10회 기록했어요!'**
+  String get badgeFeeding10Desc;
+
+  /// 배지 따뜻한 톤: 수유 10회
+  ///
+  /// In ko, this message translates to:
+  /// **'10번의 수유... 한 방울 한 방울이 사랑이에요.'**
+  String get badgeFeeding10Warm;
+
+  /// 배지 유머 톤: 수유 10회
+  ///
+  /// In ko, this message translates to:
+  /// **'수유 10회 달성! 파이팅!'**
+  String get badgeFeeding10Humor;
+
+  /// 배지: 수유 50회
+  ///
+  /// In ko, this message translates to:
+  /// **'수유 50회'**
+  String get badgeFeeding50Title;
+
+  /// 배지 설명: 수유 50회
+  ///
+  /// In ko, this message translates to:
+  /// **'수유 50회 기록! 정말 대단해요.'**
+  String get badgeFeeding50Desc;
+
+  /// 배지 따뜻한 톤: 수유 50회
+  ///
+  /// In ko, this message translates to:
+  /// **'50번의 수유... 정말 멋진 부모예요.'**
+  String get badgeFeeding50Warm;
+
+  /// 배지 유머 톤: 수유 50회
+  ///
+  /// In ko, this message translates to:
+  /// **'50회! 아기가 감사해하고 있어요!'**
+  String get badgeFeeding50Humor;
+
+  /// 배지: 누적 1L 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'1리터의 사랑'**
+  String get badgeMilk1LTitle;
+
+  /// 배지 설명: 1L 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'총 수유량이 1리터에 도달했어요!'**
+  String get badgeMilk1LDesc;
+
+  /// 배지 따뜻한 톤: 1L
+  ///
+  /// In ko, this message translates to:
+  /// **'1리터의 사랑... 한 밀리리터도 소중해요.'**
+  String get badgeMilk1LWarm;
+
+  /// 배지 유머 톤: 1L
+  ///
+  /// In ko, this message translates to:
+  /// **'1리터! 정말 많은 양이에요!'**
+  String get badgeMilk1LHumor;
+
+  /// 배지: 새벽 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'새벽의 영웅'**
+  String get badgeNightFeedingTitle;
+
+  /// 배지 설명: 새벽 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'자정~새벽 5시 사이에 첫 수유를 기록했어요.'**
+  String get badgeNightFeedingDesc;
+
+  /// 배지 따뜻한 톤: 새벽 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'새벽에 수유하는 당신... 가장 용감한 부모예요.'**
+  String get badgeNightFeedingWarm;
+
+  /// 배지 유머 톤: 새벽 수유
+  ///
+  /// In ko, this message translates to:
+  /// **'잠이 뭐예요? 히어로 모드 ON!'**
+  String get badgeNightFeedingHumor;
+
+  /// 배지: 첫 수면 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 수면'**
+  String get badgeFirstSleepTitle;
+
+  /// 배지 설명: 첫 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'아기의 첫 수면을 기록했어요!'**
+  String get badgeFirstSleepDesc;
+
+  /// 배지 따뜻한 톤: 첫 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'달콤한 꿈이 시작됐어요...'**
+  String get badgeFirstSleepWarm;
+
+  /// 배지 유머 톤: 첫 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'Zzz... 첫 낮잠 기록 완료!'**
+  String get badgeFirstSleepHumor;
+
+  /// 배지: 수면 10회
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 10회'**
+  String get badgeSleep10Title;
+
+  /// 배지 설명: 수면 10회
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 기록 10회! 잘 기록하고 있어요!'**
+  String get badgeSleep10Desc;
+
+  /// 배지 따뜻한 톤: 수면 10회
+  ///
+  /// In ko, this message translates to:
+  /// **'10번의 평화로운 수면... 잘하고 있어요.'**
+  String get badgeSleep10Warm;
+
+  /// 배지 유머 톤: 수면 10회
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 10회! 수면 전문가 수련 중!'**
+  String get badgeSleep10Humor;
+
+  /// 배지: 첫 통잠
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 통잠'**
+  String get badgeSleepThroughTitle;
+
+  /// 배지 설명: 통잠
+  ///
+  /// In ko, this message translates to:
+  /// **'아기가 7시간 이상 통잠을 잤어요!'**
+  String get badgeSleepThroughDesc;
+
+  /// 배지 따뜻한 톤: 통잠
+  ///
+  /// In ko, this message translates to:
+  /// **'밤새 푹 잤어요... 둘 다 이 순간을 받을 자격이 있어요.'**
+  String get badgeSleepThroughWarm;
+
+  /// 배지 유머 톤: 통잠
+  ///
+  /// In ko, this message translates to:
+  /// **'7시간 연속! 이게 현실이에요?!'**
+  String get badgeSleepThroughHumor;
+
+  /// 배지: 3일 연속 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 루틴'**
+  String get badgeSleepRoutineTitle;
+
+  /// 배지 설명: 수면 루틴
+  ///
+  /// In ko, this message translates to:
+  /// **'3일 연속 수면 기록!'**
+  String get badgeSleepRoutineDesc;
+
+  /// 배지 따뜻한 톤: 수면 루틴
+  ///
+  /// In ko, this message translates to:
+  /// **'3일의 루틴... 건강한 습관을 만들고 있어요.'**
+  String get badgeSleepRoutineWarm;
+
+  /// 배지 유머 톤: 수면 루틴
+  ///
+  /// In ko, this message translates to:
+  /// **'3일 연속! 꾸준함이 답이에요!'**
+  String get badgeSleepRoutineHumor;
+
+  /// 배지: 7일 연속 수면
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 주간 마스터'**
+  String get badgeSleepWeekTitle;
+
+  /// 배지 설명: 수면 주간
+  ///
+  /// In ko, this message translates to:
+  /// **'7일 연속 수면 기록!'**
+  String get badgeSleepWeekDesc;
+
+  /// 배지 따뜻한 톤: 수면 주간
+  ///
+  /// In ko, this message translates to:
+  /// **'일주일 내내... 당신의 헌신이 아름다워요.'**
+  String get badgeSleepWeekWarm;
+
+  /// 배지 유머 톤: 수면 주간
+  ///
+  /// In ko, this message translates to:
+  /// **'7일! 메달을 드려야... 아, 이미 드렸네요!'**
+  String get badgeSleepWeekHumor;
+
+  /// 배지: 첫 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'안녕, 루루!'**
+  String get badgeFirstRecordTitle;
+
+  /// 배지 설명: 첫 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 번째 기록을 저장했어요!'**
+  String get badgeFirstRecordDesc;
+
+  /// 배지 따뜻한 톤: 첫 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'여정이 시작됐어요... 루루에 오신 걸 환영해요.'**
+  String get badgeFirstRecordWarm;
+
+  /// 배지 유머 톤: 첫 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 기록! 시작이 반이에요!'**
+  String get badgeFirstRecordHumor;
+
+  /// 배지: 3일 연속 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'3일 연속'**
+  String get badge3DayStreakTitle;
+
+  /// 배지 설명: 3일 연속
+  ///
+  /// In ko, this message translates to:
+  /// **'3일 연속 기록! 좋은 습관이에요!'**
+  String get badge3DayStreakDesc;
+
+  /// 배지 따뜻한 톤: 3일 연속
+  ///
+  /// In ko, this message translates to:
+  /// **'3일을 함께했어요... 모든 순간이 소중해요.'**
+  String get badge3DayStreakWarm;
+
+  /// 배지 유머 톤: 3일 연속
+  ///
+  /// In ko, this message translates to:
+  /// **'3일! 불타오르고 있어요!'**
+  String get badge3DayStreakHumor;
+
+  /// 배지: 7일 연속 기록
+  ///
+  /// In ko, this message translates to:
+  /// **'7일 챔피언'**
+  String get badge7DayStreakTitle;
+
+  /// 배지 설명: 7일 연속
+  ///
+  /// In ko, this message translates to:
+  /// **'7일 연속 기록! 놀라운 꾸준함!'**
+  String get badge7DayStreakDesc;
+
+  /// 배지 따뜻한 톤: 7일 연속
+  ///
+  /// In ko, this message translates to:
+  /// **'일주일 내내... 최고의 부모예요.'**
+  String get badge7DayStreakWarm;
+
+  /// 배지 유머 톤: 7일 연속
+  ///
+  /// In ko, this message translates to:
+  /// **'7일 연속! 기네스북에 전화해야겠어요!'**
+  String get badge7DayStreakHumor;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

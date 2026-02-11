@@ -3,6 +3,7 @@ import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../../data/repositories/baby_repository.dart';
 import '../../../data/repositories/family_repository.dart';
+import '../../badge/badge_provider.dart';
 import 'sweet_spot_provider.dart';
 
 /// Home screen state management Provider
@@ -20,10 +21,16 @@ class HomeProvider extends ChangeNotifier {
   // ========================================
 
   SweetSpotProvider? _sweetSpotProvider;
+  BadgeProvider? _badgeProvider;
 
   /// Set SweetSpotProvider reference for single-direction notification
   void setSweetSpotProvider(SweetSpotProvider provider) {
     _sweetSpotProvider = provider;
+  }
+
+  /// Set BadgeProvider reference for badge check after activity save
+  void setBadgeProvider(BadgeProvider provider) {
+    _badgeProvider = provider;
   }
 
   // ========================================
@@ -242,6 +249,7 @@ class HomeProvider extends ChangeNotifier {
     _todayActivities = [..._todayActivities, activity];
     _invalidateCache();
     _notifySweetSpot();
+    _notifyBadge(activity);
     debugPrint('[OK] [HomeProvider] Activity added: ${activity.type}, babyIds: ${activity.babyIds}');
     notifyListeners();
   }
@@ -281,6 +289,11 @@ class HomeProvider extends ChangeNotifier {
       babyAgeInMonths: baby?.effectiveAgeInMonths,
       completedSleepRecords: completedSleepCount,
     );
+  }
+
+  /// Notify BadgeProvider to check for new badge unlocks
+  void _notifyBadge(ActivityModel activity) {
+    _badgeProvider?.onActivitySaved(activity);
   }
 
   /// Refresh data from Supabase
