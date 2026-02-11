@@ -6823,8 +6823,8 @@ abstract class S {
   /// 새벽 격려 3
   ///
   /// In ko, this message translates to:
-  /// **'{baby}이와 함께하는 고요한 새벽, 소중한 시간이에요'**
-  String encouragementDawnWarm3(String baby);
+  /// **'{babyIwa} 함께하는 고요한 새벽, 소중한 시간이에요'**
+  String encouragementDawnWarm3(String babyIwa);
 
   /// 새벽 격려 4
   ///
@@ -6853,14 +6853,14 @@ abstract class S {
   /// 아침 격려 1
   ///
   /// In ko, this message translates to:
-  /// **'{baby}이와 함께 새로운 하루가 시작됐어요'**
-  String encouragementMorningWarm1(String baby);
+  /// **'{babyIwa} 함께 새로운 하루가 시작됐어요'**
+  String encouragementMorningWarm1(String babyIwa);
 
   /// 아침 격려 2
   ///
   /// In ko, this message translates to:
-  /// **'오늘도 {baby}이를 잘 돌봐주고 있네요'**
-  String encouragementMorningWarm2(String baby);
+  /// **'오늘도 {babyIreul} 잘 돌봐주고 있네요'**
+  String encouragementMorningWarm2(String babyIreul);
 
   /// 아침 plain 1
   ///
@@ -6889,8 +6889,8 @@ abstract class S {
   /// 오후 격려 3
   ///
   /// In ko, this message translates to:
-  /// **'{baby}이와 함께하는 오후, 좋은 시간이에요'**
-  String encouragementAfternoonWarm3(String baby);
+  /// **'{babyIwa} 함께하는 오후, 좋은 시간이에요'**
+  String encouragementAfternoonWarm3(String babyIwa);
 
   /// 오후 plain 1
   ///
@@ -6907,8 +6907,8 @@ abstract class S {
   /// 저녁 격려 1
   ///
   /// In ko, this message translates to:
-  /// **'오늘 하루도 수고했어요. {baby}이도 부모님도 잘 해냈어요'**
-  String encouragementEveningWarm1(String baby);
+  /// **'오늘 하루도 수고했어요. {babyIdo} 부모님도 잘 해냈어요'**
+  String encouragementEveningWarm1(String babyIdo);
 
   /// 저녁 격려 2
   ///
@@ -6919,8 +6919,8 @@ abstract class S {
   /// 저녁 격려 3
   ///
   /// In ko, this message translates to:
-  /// **'{baby}이를 위해 쏟은 오늘 하루, 다 기억하고 있어요'**
-  String encouragementEveningWarm3(String baby);
+  /// **'{babyIreul} 위해 쏟은 오늘 하루, 다 기억하고 있어요'**
+  String encouragementEveningWarm3(String babyIreul);
 
   /// 저녁 plain 1
   ///
@@ -6949,8 +6949,8 @@ abstract class S {
   /// 일반 격려 2
   ///
   /// In ko, this message translates to:
-  /// **'{baby}이의 하루하루가 소중한 기록이 되고 있어요'**
-  String encouragementGeneralWarm2(String baby);
+  /// **'{babyIui} 하루하루가 소중한 기록이 되고 있어요'**
+  String encouragementGeneralWarm2(String babyIui);
 
   /// 일반 격려 3
   ///
@@ -6961,8 +6961,8 @@ abstract class S {
   /// 일반 격려 4
   ///
   /// In ko, this message translates to:
-  /// **'{baby}이를 위한 시간, 하나도 헛되지 않아요'**
-  String encouragementGeneralWarm4(String baby);
+  /// **'{babyIreul} 위한 시간, 하나도 헛되지 않아요'**
+  String encouragementGeneralWarm4(String babyIreul);
 
   /// 데이터 기반: 뱃지 달성
   ///
@@ -6973,8 +6973,8 @@ abstract class S {
   /// 데이터 기반: 수면
   ///
   /// In ko, this message translates to:
-  /// **'어젯밤 {baby}이가 {hours}시간 연속으로 잤어요'**
-  String encouragementDataSleepWarm(String baby, String hours);
+  /// **'어젯밤 {babyIga} {hours}시간 연속으로 잤어요'**
+  String encouragementDataSleepWarm(String babyIga, String hours);
 
   /// 데이터 기반: 주간 기록
   ///

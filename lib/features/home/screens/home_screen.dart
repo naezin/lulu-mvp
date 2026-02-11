@@ -60,13 +60,51 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, homeProvider, child) {
             return CustomScrollView(
               slivers: [
-                // App Bar (C-1: cleaned up — menu/settings icons removed)
+                // App Bar (C-1 + HF-3: badge icon → leading)
                 SliverAppBar(
                   backgroundColor: LuluColors.midnightNavy,
                   floating: true,
                   elevation: 0,
-                  leading: const SizedBox.shrink(),
-                  leadingWidth: 0,
+                  leading: Consumer<BadgeProvider>(
+                    builder: (context, badgeProvider, _) {
+                      final hasUnseen = badgeProvider.hasUnseenBadges;
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const BadgeCollectionScreen(),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: LuluSpacing.md),
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            alignment: Alignment.center,
+                            children: [
+                              Icon(
+                                LuluIcons.trophy,
+                                color: LuluTextColors.secondary,
+                              ),
+                              if (hasUnseen)
+                                Positioned(
+                                  right: 8,
+                                  top: 12,
+                                  child: Container(
+                                    width: 8,
+                                    height: 8,
+                                    decoration: const BoxDecoration(
+                                      color: LuluColors.champagneGold,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                   title: Text(
                     S.of(context)!.appTitle,
                     style: LuluTextStyles.titleLarge.copyWith(
@@ -75,48 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   centerTitle: true,
-                  actions: [
-                    // Badge collection icon with unseen indicator
-                    Consumer<BadgeProvider>(
-                      builder: (context, badgeProvider, _) {
-                        final hasUnseen = badgeProvider.hasUnseenBadges;
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const BadgeCollectionScreen(),
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: LuluSpacing.lg),
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Icon(
-                                  LuluIcons.trophy,
-                                  color: LuluTextColors.secondary,
-                                ),
-                                if (hasUnseen)
-                                  Positioned(
-                                    right: -2,
-                                    top: -2,
-                                    child: Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: LuluColors.champagneGold,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
                 ),
 
                 // Content
@@ -210,6 +206,11 @@ class _HomeScreenState extends State<HomeScreen> {
         final isSleeping = sleepProvider.hasSleepInProgress &&
             sleepProvider.currentBabyId == homeProvider.selectedBabyId;
 
+        debugPrint('[INFO] [HomeScreen-Empty] isSleeping=$isSleeping, '
+            'hasSleepInProgress=${sleepProvider.hasSleepInProgress}, '
+            'sleepBabyId=${sleepProvider.currentBabyId}, '
+            'selectedBabyId=${homeProvider.selectedBabyId}');
+
         return Column(
           children: [
             // 🆕 통합 SweetSpotCard (빈 상태 + 3종 버튼 / 수면 중 상태)
@@ -271,6 +272,11 @@ class _HomeScreenState extends State<HomeScreen> {
         final isSleeping = sleepProvider.hasSleepInProgress &&
             sleepProvider.currentBabyId == homeProvider.selectedBabyId;
         final isWarmTone = settingsProvider.isWarmTone;
+
+        debugPrint('[INFO] [HomeScreen] isSleeping=$isSleeping, '
+            'hasSleepInProgress=${sleepProvider.hasSleepInProgress}, '
+            'sleepBabyId=${sleepProvider.currentBabyId}, '
+            'selectedBabyId=${homeProvider.selectedBabyId}');
 
         return Column(
           children: [

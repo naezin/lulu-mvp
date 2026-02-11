@@ -3807,8 +3807,8 @@ class SEn extends S {
       'The night may feel long. You\'re doing great';
 
   @override
-  String encouragementDawnWarm3(String baby) {
-    return 'A quiet dawn with $baby. This time is precious';
+  String encouragementDawnWarm3(String babyIwa) {
+    return 'A quiet dawn with $babyIwa. This time is precious';
   }
 
   @override
@@ -3826,13 +3826,13 @@ class SEn extends S {
   }
 
   @override
-  String encouragementMorningWarm1(String baby) {
-    return 'A new day begins with $baby';
+  String encouragementMorningWarm1(String babyIwa) {
+    return 'A new day begins with $babyIwa';
   }
 
   @override
-  String encouragementMorningWarm2(String baby) {
-    return 'You\'re taking great care of $baby today too';
+  String encouragementMorningWarm2(String babyIreul) {
+    return 'You\'re taking great care of $babyIreul today too';
   }
 
   @override
@@ -3851,8 +3851,8 @@ class SEn extends S {
       'Remember to take breaks for yourself too';
 
   @override
-  String encouragementAfternoonWarm3(String baby) {
-    return 'An afternoon with $baby. Enjoy this time';
+  String encouragementAfternoonWarm3(String babyIwa) {
+    return 'An afternoon with $babyIwa. Enjoy this time';
   }
 
   @override
@@ -3864,16 +3864,16 @@ class SEn extends S {
   }
 
   @override
-  String encouragementEveningWarm1(String baby) {
-    return 'Great job today. Both $baby and you did well';
+  String encouragementEveningWarm1(String babyIdo) {
+    return 'Great job today. Both $babyIdo and you did well';
   }
 
   @override
   String get encouragementEveningWarm2 => 'Time to wind down. Get some rest';
 
   @override
-  String encouragementEveningWarm3(String baby) {
-    return 'Every moment spent caring for $baby today matters';
+  String encouragementEveningWarm3(String babyIreul) {
+    return 'Every moment spent caring for $babyIreul today matters';
   }
 
   @override
@@ -3892,8 +3892,8 @@ class SEn extends S {
       'Every day, both baby and parent are growing';
 
   @override
-  String encouragementGeneralWarm2(String baby) {
-    return 'Each day with $baby becomes a precious record';
+  String encouragementGeneralWarm2(String babyIui) {
+    return 'Each day with $babyIui becomes a precious record';
   }
 
   @override
@@ -3901,8 +3901,8 @@ class SEn extends S {
       'It doesn\'t have to be perfect. You\'re doing enough';
 
   @override
-  String encouragementGeneralWarm4(String baby) {
-    return 'Time spent for $baby is never wasted';
+  String encouragementGeneralWarm4(String babyIreul) {
+    return 'Time spent for $babyIreul is never wasted';
   }
 
   @override
@@ -3911,8 +3911,8 @@ class SEn extends S {
   }
 
   @override
-  String encouragementDataSleepWarm(String baby, String hours) {
-    return '$baby slept $hours hours in a row last night';
+  String encouragementDataSleepWarm(String babyIga, String hours) {
+    return '$babyIga slept $hours hours in a row last night';
   }
 
   @override

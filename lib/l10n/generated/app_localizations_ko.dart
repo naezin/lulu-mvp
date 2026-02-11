@@ -3728,8 +3728,8 @@ class SKo extends S {
   String get encouragementDawnWarm2 => '밤이 길게 느껴질 수 있어요. 잘 해나가고 있어요';
 
   @override
-  String encouragementDawnWarm3(String baby) {
-    return '$baby이와 함께하는 고요한 새벽, 소중한 시간이에요';
+  String encouragementDawnWarm3(String babyIwa) {
+    return '$babyIwa 함께하는 고요한 새벽, 소중한 시간이에요';
   }
 
   @override
@@ -3747,13 +3747,13 @@ class SKo extends S {
   }
 
   @override
-  String encouragementMorningWarm1(String baby) {
-    return '$baby이와 함께 새로운 하루가 시작됐어요';
+  String encouragementMorningWarm1(String babyIwa) {
+    return '$babyIwa 함께 새로운 하루가 시작됐어요';
   }
 
   @override
-  String encouragementMorningWarm2(String baby) {
-    return '오늘도 $baby이를 잘 돌봐주고 있네요';
+  String encouragementMorningWarm2(String babyIreul) {
+    return '오늘도 $babyIreul 잘 돌봐주고 있네요';
   }
 
   @override
@@ -3771,8 +3771,8 @@ class SKo extends S {
   String get encouragementAfternoonWarm2 => '부모님도 틈틈이 쉬어가세요';
 
   @override
-  String encouragementAfternoonWarm3(String baby) {
-    return '$baby이와 함께하는 오후, 좋은 시간이에요';
+  String encouragementAfternoonWarm3(String babyIwa) {
+    return '$babyIwa 함께하는 오후, 좋은 시간이에요';
   }
 
   @override
@@ -3784,16 +3784,16 @@ class SKo extends S {
   }
 
   @override
-  String encouragementEveningWarm1(String baby) {
-    return '오늘 하루도 수고했어요. $baby이도 부모님도 잘 해냈어요';
+  String encouragementEveningWarm1(String babyIdo) {
+    return '오늘 하루도 수고했어요. $babyIdo 부모님도 잘 해냈어요';
   }
 
   @override
   String get encouragementEveningWarm2 => '하루를 마무리하는 시간이에요. 푹 쉬세요';
 
   @override
-  String encouragementEveningWarm3(String baby) {
-    return '$baby이를 위해 쏟은 오늘 하루, 다 기억하고 있어요';
+  String encouragementEveningWarm3(String babyIreul) {
+    return '$babyIreul 위해 쏟은 오늘 하루, 다 기억하고 있어요';
   }
 
   @override
@@ -3811,16 +3811,16 @@ class SKo extends S {
   String get encouragementGeneralWarm1 => '매일 조금씩, 아기도 부모도 성장하고 있어요';
 
   @override
-  String encouragementGeneralWarm2(String baby) {
-    return '$baby이의 하루하루가 소중한 기록이 되고 있어요';
+  String encouragementGeneralWarm2(String babyIui) {
+    return '$babyIui 하루하루가 소중한 기록이 되고 있어요';
   }
 
   @override
   String get encouragementGeneralWarm3 => '완벽하지 않아도 괜찮아요. 충분히 잘 하고 있어요';
 
   @override
-  String encouragementGeneralWarm4(String baby) {
-    return '$baby이를 위한 시간, 하나도 헛되지 않아요';
+  String encouragementGeneralWarm4(String babyIreul) {
+    return '$babyIreul 위한 시간, 하나도 헛되지 않아요';
   }
 
   @override
@@ -3829,8 +3829,8 @@ class SKo extends S {
   }
 
   @override
-  String encouragementDataSleepWarm(String baby, String hours) {
-    return '어젯밤 $baby이가 $hours시간 연속으로 잤어요';
+  String encouragementDataSleepWarm(String babyIga, String hours) {
+    return '어젯밤 $babyIga $hours시간 연속으로 잤어요';
   }
 
   @override
