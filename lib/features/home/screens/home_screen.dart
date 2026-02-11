@@ -281,6 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: LuluSpacing.lg),
 
             // 2. Sweet Spot card (ongoing sleep + prediction)
+            // C-5: pass result + baby index for golden band rendering
             SweetSpotCard(
               state: sweetSpotProvider.sweetSpotState,
               isEmpty: !isSleeping && !homeProvider.hasAnyRecordsEver,
@@ -299,6 +300,11 @@ class _HomeScreenState extends State<HomeScreen> {
               isNewUser: !homeProvider.hasAnyRecordsEver,
               completedSleepRecords: sweetSpotProvider.sweetSpotResult?.completedSleepRecords,
               calibrationTarget: sweetSpotProvider.sweetSpotResult?.calibrationTarget,
+              sweetSpotResult: sweetSpotProvider.sweetSpotResult,
+              babyIndex: homeProvider.babies.length > 1
+                  ? homeProvider.babies.indexWhere(
+                      (b) => b.id == homeProvider.selectedBabyId)
+                  : null,
             ),
 
             // 3. Encouragement message (compact inline)
