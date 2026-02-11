@@ -157,10 +157,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
   Widget build(BuildContext context) {
     final l10n = S.of(context)!;
 
-    debugPrint('[INFO] [SweetSpotCard] build: isSleeping=${widget.isSleeping}, '
-        'sleepStartTime=${widget.sleepStartTime}, '
-        'isEmpty=${widget.isEmpty}, state=${widget.state}');
-
     if (widget.isSleeping && widget.sleepStartTime != null) {
       return _buildSleepingCard(context);
     }

@@ -237,11 +237,6 @@ class _HomeScreenState extends State<HomeScreen> {
         final isSleeping = sleepProvider.hasSleepInProgress &&
             sleepProvider.currentBabyId == homeProvider.selectedBabyId;
 
-        debugPrint('[INFO] [HomeScreen-Empty] isSleeping=$isSleeping, '
-            'hasSleepInProgress=${sleepProvider.hasSleepInProgress}, '
-            'sleepBabyId=${sleepProvider.currentBabyId}, '
-            'selectedBabyId=${homeProvider.selectedBabyId}');
-
         return Column(
           children: [
             // 🆕 통합 SweetSpotCard (빈 상태 + 3종 버튼 / 수면 중 상태)
@@ -303,11 +298,6 @@ class _HomeScreenState extends State<HomeScreen> {
         final isSleeping = sleepProvider.hasSleepInProgress &&
             sleepProvider.currentBabyId == homeProvider.selectedBabyId;
         final isWarmTone = settingsProvider.isWarmTone;
-
-        debugPrint('[INFO] [HomeScreen] isSleeping=$isSleeping, '
-            'hasSleepInProgress=${sleepProvider.hasSleepInProgress}, '
-            'sleepBabyId=${sleepProvider.currentBabyId}, '
-            'selectedBabyId=${homeProvider.selectedBabyId}');
 
         return Column(
           children: [
