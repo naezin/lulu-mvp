@@ -103,7 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // 앱 정보 섹션
                 _buildSectionHeader(l10n.sectionAppInfo),
                 const SizedBox(height: LuluSpacing.md),
-                _buildInfoTile(l10n.infoVersion, '2.6.1'),
+                _buildInfoTile(l10n.infoVersion, '2.6.2'),
                 _buildInfoTile(l10n.infoDeveloper, l10n.infoTeamName),
                 const SizedBox(height: LuluSpacing.sm),
                 _buildLegalSection(),
