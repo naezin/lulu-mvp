@@ -105,6 +105,13 @@ class LuluIcons {
   static const IconData celebration = Icons.celebration_rounded;
 
   // ========================================
+  // Badge / Achievement
+  // ========================================
+
+  static const IconData trophy = Icons.emoji_events_rounded;
+  static const IconData badge = Icons.workspace_premium_rounded;
+
+  // ========================================
   // 성장 관련 (Growth)
   // ========================================
 

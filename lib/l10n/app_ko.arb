@@ -873,6 +873,34 @@
   "@sweetSpotOvertired": {
     "description": "Sweet Spot - 졸린 시간 지남 (확률적 표현)"
   },
+  "sweetSpotTooEarlyDay": "아직 활동 시간이에요. 놀아주세요!",
+  "@sweetSpotTooEarlyDay": {
+    "description": "Sweet Spot v2 - 아직 이른 시간, 낮"
+  },
+  "sweetSpotTooEarlyNight": "아직 활동 시간이에요",
+  "@sweetSpotTooEarlyNight": {
+    "description": "Sweet Spot v2 - 아직 이른 시간, 밤"
+  },
+  "sweetSpotApproachingDay": "슬슬 졸려할 수 있어요",
+  "@sweetSpotApproachingDay": {
+    "description": "Sweet Spot v2 - 접근 중, 낮"
+  },
+  "sweetSpotApproachingNight": "슬슬 잠잘 시간이 다가와요",
+  "@sweetSpotApproachingNight": {
+    "description": "Sweet Spot v2 - 접근 중, 밤"
+  },
+  "sweetSpotOptimalDay": "지금이 낮잠 재우기 좋은 시간이에요",
+  "@sweetSpotOptimalDay": {
+    "description": "Sweet Spot v2 - 최적, 낮"
+  },
+  "sweetSpotOptimalNight": "지금이 재우기 좋은 시간이에요",
+  "@sweetSpotOptimalNight": {
+    "description": "Sweet Spot v2 - 최적, 밤"
+  },
+  "sweetSpotOvertiredMessage": "많이 피곤할 수 있어요. 바로 재워주세요",
+  "@sweetSpotOvertiredMessage": {
+    "description": "Sweet Spot v2 - 과피로 메시지"
+  },
   "sweetSpotEmptyTitle": "수면 기록이 필요해요",
   "@sweetSpotEmptyTitle": {
     "description": "Sweet Spot Empty State 제목"
@@ -906,6 +934,27 @@
   "sweetSpotDisclaimer": "이 예측은 참고용이며, 아기마다 다를 수 있어요",
   "@sweetSpotDisclaimer": {
     "description": "Sweet Spot 면책 문구"
+  },
+  "sweetSpotCalibrating": "아기의 수면 리듬을 알아가고 있어요",
+  "@sweetSpotCalibrating": {
+    "description": "Calibrating state: learning sleep pattern"
+  },
+  "sweetSpotCalibratingProgress": "{current}일째 기록 중",
+  "@sweetSpotCalibratingProgress": {
+    "description": "Calibrating progress indicator",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      }
+    }
+  },
+  "sweetSpotCalibratingHint": "수면 기록이 쌓이면 더 정확한 예측을 보여드릴게요",
+  "@sweetSpotCalibratingHint": {
+    "description": "Calibrating state hint message"
+  },
+  "sweetSpotStateLabelCalibrating": "학습 중",
+  "@sweetSpotStateLabelCalibrating": {
+    "description": "Sweet Spot State Label Calibrating"
   },
   "sweetSpotNoSleepTitle": "오늘 수면 기록이 없어요",
   "@sweetSpotNoSleepTitle": {
@@ -5013,5 +5062,240 @@
   "dateFormatMonthDay": "M월 d일 (E)",
   "@dateFormatMonthDay": {"description":"월일 날짜 포맷"},
   "growthMetricChartTitle": "{metric} 성장 차트",
-  "@growthMetricChartTitle": {"description":"성장 차트 제목","placeholders":{"metric":{"type":"String","example":"체중"}}}
+  "@growthMetricChartTitle": {"description":"성장 차트 제목","placeholders":{"metric":{"type":"String","example":"체중"}}},
+
+  "badgeUnlocked": "배지 획득!",
+  "@badgeUnlocked": {"description":"배지 팝업 헤더"},
+  "badgeDismiss": "확인",
+  "@badgeDismiss": {"description":"배지 팝업 닫기 버튼"},
+  "badgeShare": "공유",
+  "@badgeShare": {"description":"배지 팝업 공유 버튼"},
+
+  "badgeFirstFeedingTitle": "첫 수유",
+  "@badgeFirstFeedingTitle": {"description":"배지: 첫 수유 기록"},
+  "badgeFirstFeedingDesc": "첫 수유를 기록했어요!",
+  "@badgeFirstFeedingDesc": {"description":"배지 설명: 첫 수유"},
+  "badgeFirstFeedingWarm": "첫 수유... 사랑이 가득한 순간이에요.",
+  "@badgeFirstFeedingWarm": {"description":"배지 따뜻한 톤: 첫 수유"},
+
+  "badgeFeeding10Title": "수유 10회",
+  "@badgeFeeding10Title": {"description":"배지: 수유 10회"},
+  "badgeFeeding10Desc": "수유를 10회 기록했어요!",
+  "@badgeFeeding10Desc": {"description":"배지 설명: 수유 10회"},
+  "badgeFeeding10Warm": "10번의 수유... 한 방울 한 방울이 사랑이에요.",
+  "@badgeFeeding10Warm": {"description":"배지 따뜻한 톤: 수유 10회"},
+
+  "badgeFeeding50Title": "수유 50회",
+  "@badgeFeeding50Title": {"description":"배지: 수유 50회"},
+  "badgeFeeding50Desc": "수유 50회 기록! 정말 대단해요.",
+  "@badgeFeeding50Desc": {"description":"배지 설명: 수유 50회"},
+  "badgeFeeding50Warm": "50번의 수유... 정말 멋진 부모예요.",
+  "@badgeFeeding50Warm": {"description":"배지 따뜻한 톤: 수유 50회"},
+
+  "badgeMilk1LTitle": "1리터의 사랑",
+  "@badgeMilk1LTitle": {"description":"배지: 누적 1L 수유"},
+  "badgeMilk1LDesc": "총 수유량이 1리터에 도달했어요!",
+  "@badgeMilk1LDesc": {"description":"배지 설명: 1L 수유"},
+  "badgeMilk1LWarm": "1리터의 사랑... 한 밀리리터도 소중해요.",
+  "@badgeMilk1LWarm": {"description":"배지 따뜻한 톤: 1L"},
+
+  "badgeNightFeedingTitle": "새벽의 영웅",
+  "@badgeNightFeedingTitle": {"description":"배지: 새벽 수유"},
+  "badgeNightFeedingDesc": "자정~새벽 5시 사이에 첫 수유를 기록했어요.",
+  "@badgeNightFeedingDesc": {"description":"배지 설명: 새벽 수유"},
+  "badgeNightFeedingWarm": "새벽에 수유하는 당신... 가장 용감한 부모예요.",
+  "@badgeNightFeedingWarm": {"description":"배지 따뜻한 톤: 새벽 수유"},
+
+  "badgeFirstSleepTitle": "첫 수면",
+  "@badgeFirstSleepTitle": {"description":"배지: 첫 수면 기록"},
+  "badgeFirstSleepDesc": "아기의 첫 수면을 기록했어요!",
+  "@badgeFirstSleepDesc": {"description":"배지 설명: 첫 수면"},
+  "badgeFirstSleepWarm": "달콤한 꿈이 시작됐어요...",
+  "@badgeFirstSleepWarm": {"description":"배지 따뜻한 톤: 첫 수면"},
+
+  "badgeSleep10Title": "수면 10회",
+  "@badgeSleep10Title": {"description":"배지: 수면 10회"},
+  "badgeSleep10Desc": "수면 기록 10회! 잘 기록하고 있어요!",
+  "@badgeSleep10Desc": {"description":"배지 설명: 수면 10회"},
+  "badgeSleep10Warm": "10번의 평화로운 수면... 잘하고 있어요.",
+  "@badgeSleep10Warm": {"description":"배지 따뜻한 톤: 수면 10회"},
+
+  "badgeSleepThroughTitle": "첫 통잠",
+  "@badgeSleepThroughTitle": {"description":"배지: 첫 통잠"},
+  "badgeSleepThroughDesc": "아기가 7시간 이상 통잠을 잤어요!",
+  "@badgeSleepThroughDesc": {"description":"배지 설명: 통잠"},
+  "badgeSleepThroughWarm": "밤새 푹 잤어요... 둘 다 이 순간을 받을 자격이 있어요.",
+  "@badgeSleepThroughWarm": {"description":"배지 따뜻한 톤: 통잠"},
+
+  "badgeSleepRoutineTitle": "수면 루틴",
+  "@badgeSleepRoutineTitle": {"description":"배지: 3일 연속 수면"},
+  "badgeSleepRoutineDesc": "3일 연속 수면 기록!",
+  "@badgeSleepRoutineDesc": {"description":"배지 설명: 수면 루틴"},
+  "badgeSleepRoutineWarm": "3일의 루틴... 건강한 습관을 만들고 있어요.",
+  "@badgeSleepRoutineWarm": {"description":"배지 따뜻한 톤: 수면 루틴"},
+
+  "badgeSleepWeekTitle": "수면 주간 마스터",
+  "@badgeSleepWeekTitle": {"description":"배지: 7일 연속 수면"},
+  "badgeSleepWeekDesc": "7일 연속 수면 기록!",
+  "@badgeSleepWeekDesc": {"description":"배지 설명: 수면 주간"},
+  "badgeSleepWeekWarm": "일주일 내내... 당신의 헌신이 아름다워요.",
+  "@badgeSleepWeekWarm": {"description":"배지 따뜻한 톤: 수면 주간"},
+
+  "badgeFirstRecordTitle": "안녕, 루루!",
+  "@badgeFirstRecordTitle": {"description":"배지: 첫 기록"},
+  "badgeFirstRecordDesc": "첫 번째 기록을 저장했어요!",
+  "@badgeFirstRecordDesc": {"description":"배지 설명: 첫 기록"},
+  "badgeFirstRecordWarm": "여정이 시작됐어요... 루루에 오신 걸 환영해요.",
+  "@badgeFirstRecordWarm": {"description":"배지 따뜻한 톤: 첫 기록"},
+
+  "badge3DayStreakTitle": "3일 연속",
+  "@badge3DayStreakTitle": {"description":"배지: 3일 연속 기록"},
+  "badge3DayStreakDesc": "3일 연속 기록! 좋은 습관이에요!",
+  "@badge3DayStreakDesc": {"description":"배지 설명: 3일 연속"},
+  "badge3DayStreakWarm": "3일을 함께했어요... 모든 순간이 소중해요.",
+  "@badge3DayStreakWarm": {"description":"배지 따뜻한 톤: 3일 연속"},
+
+  "badge7DayStreakTitle": "7일 챔피언",
+  "@badge7DayStreakTitle": {"description":"배지: 7일 연속 기록"},
+  "badge7DayStreakDesc": "7일 연속 기록! 놀라운 꾸준함!",
+  "@badge7DayStreakDesc": {"description":"배지 설명: 7일 연속"},
+  "badge7DayStreakWarm": "일주일 내내... 최고의 부모예요.",
+  "@badge7DayStreakWarm": {"description":"배지 따뜻한 톤: 7일 연속"},
+
+  "badgeDay7Title": "첫 일주일",
+  "@badgeDay7Title": {"description":"배지: 출생 7일"},
+  "badgeDay7Desc": "우리 아기가 벌써 7일이 됐어요!",
+  "@badgeDay7Desc": {"description":"배지 설명: 7일"},
+  "badgeDay7Warm": "일주일을 함께했어요... 매 순간이 보물이에요.",
+  "@badgeDay7Warm": {"description":"배지 따뜻한 톤: 7일"},
+
+  "badgeDay100Title": "100일 함께",
+  "@badgeDay100Title": {"description":"배지: 출생 100일"},
+  "badgeDay100Desc": "아기와 함께한 놀라운 100일!",
+  "@badgeDay100Desc": {"description":"배지 설명: 100일"},
+  "badgeDay100Warm": "100일간의 사랑과 성장... 정말 잘하고 계세요.",
+  "@badgeDay100Warm": {"description":"배지 따뜻한 톤: 100일"},
+
+  "badgeMonth1Title": "한 달",
+  "@badgeMonth1Title": {"description":"배지: 출생 1개월"},
+  "badgeMonth1Desc": "우리 아기가 한 달이 됐어요!",
+  "@badgeMonth1Desc": {"description":"배지 설명: 1개월"},
+  "badgeMonth1Warm": "한 달... 함께 얼마나 멀리 왔는지 보세요.",
+  "@badgeMonth1Warm": {"description":"배지 따뜻한 톤: 1개월"},
+
+  "badgeCorrectedTermTitle": "만삭 도달",
+  "@badgeCorrectedTermTitle": {"description":"배지: 조산아 교정연령 만삭"},
+  "badgeCorrectedTermDesc": "우리 아기가 교정연령 만삭에 도달했어요!",
+  "@badgeCorrectedTermDesc": {"description":"배지 설명: 교정만삭"},
+  "badgeCorrectedTermWarm": "기다리던 그 날... 우리 작은 전사가 만삭에 도달했어요.",
+  "@badgeCorrectedTermWarm": {"description":"배지 따뜻한 톤: 교정만삭"},
+
+  "badgeMultiplesFirstRecordTitle": "다태아 여정 시작",
+  "@badgeMultiplesFirstRecordTitle": {"description":"배지: 다태아 첫 기록"},
+  "badgeMultiplesFirstRecordDesc": "다태아 가족의 첫 기록!",
+  "@badgeMultiplesFirstRecordDesc": {"description":"배지 설명: 다태아 첫 기록"},
+  "badgeMultiplesFirstRecordWarm": "모험이 시작됐어요... 두 배의 사랑, 두 배의 기쁨.",
+  "@badgeMultiplesFirstRecordWarm": {"description":"배지 따뜻한 톤: 다태아 첫 기록"},
+
+  "badgeMultiplesAllFedTitle": "모두 먹었어요",
+  "@badgeMultiplesAllFedTitle": {"description":"배지: 같은 날 모든 아기 수유"},
+  "badgeMultiplesAllFedDesc": "같은 날 모든 아기에게 수유 완료!",
+  "@badgeMultiplesAllFedDesc": {"description":"배지 설명: 전원 수유"},
+  "badgeMultiplesAllFedWarm": "모든 아기를 돌봤어요... 정말 잘하고 계세요.",
+  "@badgeMultiplesAllFedWarm": {"description":"배지 따뜻한 톤: 전원 수유"},
+
+  "badgeMultiplesAllSleptTitle": "평화로운 밤",
+  "@badgeMultiplesAllSleptTitle": {"description":"배지: 같은 날 모든 아기 수면"},
+  "badgeMultiplesAllSleptDesc": "같은 날 모든 아기의 수면 기록 완료!",
+  "@badgeMultiplesAllSleptDesc": {"description":"배지 설명: 전원 수면"},
+  "badgeMultiplesAllSleptWarm": "모두 잠들었어요... 드물고 소중한 순간이에요.",
+  "@badgeMultiplesAllSleptWarm": {"description":"배지 따뜻한 톤: 전원 수면"},
+
+  "badgeCategoryGrowth": "성장",
+  "@badgeCategoryGrowth": {"description":"배지 카테고리: 성장"},
+  "badgeCategoryPreemie": "조산아",
+  "@badgeCategoryPreemie": {"description":"배지 카테고리: 조산아"},
+  "badgeCategoryMultiples": "다태아",
+  "@badgeCategoryMultiples": {"description":"배지 카테고리: 다태아"},
+  "badgeCategoryFeeding": "수유",
+  "@badgeCategoryFeeding": {"description":"배지 카테고리: 수유"},
+  "badgeCategorySleep": "수면",
+  "@badgeCategorySleep": {"description":"배지 카테고리: 수면"},
+  "badgeCategoryParenting": "육아",
+  "@badgeCategoryParenting": {"description":"배지 카테고리: 육아"},
+
+  "badgeCollectionTitle": "배지 컬렉션",
+  "@badgeCollectionTitle": {"description":"배지 컬렉션 화면 제목"},
+  "badgeCollectionProgress": "전체 {total}개 중 {count}개 획득",
+  "@badgeCollectionProgress": {"description":"배지 진행률", "placeholders": {"count": {"type": "int"}, "total": {"type": "int"}}},
+  "badgeCollectionEmpty": "아직 획득한 배지가 없어요. 계속 화이팅!",
+  "@badgeCollectionEmpty": {"description":"배지 없음 상태"},
+  "badgeLocked": "계속 기록하면 열 수 있어요!",
+  "@badgeLocked": {"description":"잠긴 배지 메시지"},
+  "badgeEarnedAt": "{date} 획득",
+  "@badgeEarnedAt": {"description":"배지 획득 날짜", "placeholders": {"date": {"type": "String"}}},
+
+  "encouragementDawnWarm1": "이 시간에도 깨어 있는 부모님, 정말 대단해요",
+  "@encouragementDawnWarm1": {"description":"새벽 격려 1"},
+  "encouragementDawnWarm2": "밤이 길게 느껴질 수 있어요. 잘 해나가고 있어요",
+  "@encouragementDawnWarm2": {"description":"새벽 격려 2"},
+  "encouragementDawnWarm3": "{baby}이와 함께하는 고요한 새벽, 소중한 시간이에요",
+  "@encouragementDawnWarm3": {"description":"새벽 격려 3", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementDawnWarm4": "조금만 더요. 아침이 오고 있어요",
+  "@encouragementDawnWarm4": {"description":"새벽 격려 4"},
+  "encouragementDawnPlain1": "새벽 돌봄 기록됨",
+  "@encouragementDawnPlain1": {"description":"새벽 plain 1"},
+  "encouragementDawnPlain2": "야간 활동 기록 중",
+  "@encouragementDawnPlain2": {"description":"새벽 plain 2"},
+  "encouragementDawnPlain3": "새벽 {count}회 기록",
+  "@encouragementDawnPlain3": {"description":"새벽 plain 3", "placeholders": {"count": {"type": "String"}}},
+
+  "encouragementMorningWarm1": "{baby}이와 함께 새로운 하루가 시작됐어요",
+  "@encouragementMorningWarm1": {"description":"아침 격려 1", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementMorningWarm2": "오늘도 {baby}이를 잘 돌봐주고 있네요",
+  "@encouragementMorningWarm2": {"description":"아침 격려 2", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementMorningPlain1": "오전 기록 시작",
+  "@encouragementMorningPlain1": {"description":"아침 plain 1"},
+  "encouragementMorningPlain2": "오늘 기록: {count}건",
+  "@encouragementMorningPlain2": {"description":"아침 plain 2", "placeholders": {"count": {"type": "String"}}},
+  "encouragementMorningPlain3": "전일 야간 기록 확인 가능",
+  "@encouragementMorningPlain3": {"description":"아침 plain 3"},
+
+  "encouragementAfternoonWarm2": "부모님도 틈틈이 쉬어가세요",
+  "@encouragementAfternoonWarm2": {"description":"오후 격려 2"},
+  "encouragementAfternoonWarm3": "{baby}이와 함께하는 오후, 좋은 시간이에요",
+  "@encouragementAfternoonWarm3": {"description":"오후 격려 3", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementAfternoonPlain1": "오후 기록 진행 중",
+  "@encouragementAfternoonPlain1": {"description":"오후 plain 1"},
+  "encouragementAfternoonPlain2": "금일 기록 {count}건",
+  "@encouragementAfternoonPlain2": {"description":"오후 plain 2", "placeholders": {"count": {"type": "String"}}},
+
+  "encouragementEveningWarm1": "오늘 하루도 수고했어요. {baby}이도 부모님도 잘 해냈어요",
+  "@encouragementEveningWarm1": {"description":"저녁 격려 1", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementEveningWarm2": "하루를 마무리하는 시간이에요. 푹 쉬세요",
+  "@encouragementEveningWarm2": {"description":"저녁 격려 2"},
+  "encouragementEveningWarm3": "{baby}이를 위해 쏟은 오늘 하루, 다 기억하고 있어요",
+  "@encouragementEveningWarm3": {"description":"저녁 격려 3", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementEveningPlain1": "금일 기록 {count}건 완료",
+  "@encouragementEveningPlain1": {"description":"저녁 plain 1", "placeholders": {"count": {"type": "String"}}},
+  "encouragementEveningPlain2": "금일 활동 요약 가능",
+  "@encouragementEveningPlain2": {"description":"저녁 plain 2"},
+  "encouragementEveningPlain3": "기록 저장 완료",
+  "@encouragementEveningPlain3": {"description":"저녁 plain 3"},
+
+  "encouragementGeneralWarm1": "매일 조금씩, 아기도 부모도 성장하고 있어요",
+  "@encouragementGeneralWarm1": {"description":"일반 격려 1"},
+  "encouragementGeneralWarm2": "{baby}이의 하루하루가 소중한 기록이 되고 있어요",
+  "@encouragementGeneralWarm2": {"description":"일반 격려 2", "placeholders": {"baby": {"type": "String"}}},
+  "encouragementGeneralWarm3": "완벽하지 않아도 괜찮아요. 충분히 잘 하고 있어요",
+  "@encouragementGeneralWarm3": {"description":"일반 격려 3"},
+  "encouragementGeneralWarm4": "{baby}이를 위한 시간, 하나도 헛되지 않아요",
+  "@encouragementGeneralWarm4": {"description":"일반 격려 4", "placeholders": {"baby": {"type": "String"}}},
+
+  "encouragementDataBadgeWarm": "방금 [{badge}] 달성, 대단해요",
+  "@encouragementDataBadgeWarm": {"description":"데이터 기반: 뱃지 달성", "placeholders": {"badge": {"type": "String"}}},
+  "encouragementDataSleepWarm": "어젯밤 {baby}이가 {hours}시간 연속으로 잤어요",
+  "@encouragementDataSleepWarm": {"description":"데이터 기반: 수면", "placeholders": {"baby": {"type": "String"}, "hours": {"type": "String"}}},
+  "encouragementDataWeeklyWarm": "오늘 {count}건, 꼼꼼히 기록하고 있네요",
+  "@encouragementDataWeeklyWarm": {"description":"데이터 기반: 주간 기록", "placeholders": {"count": {"type": "String"}}}
 }

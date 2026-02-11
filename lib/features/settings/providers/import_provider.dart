@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import '../../../core/services/import_service.dart';
 import '../../../core/services/family_sync_service.dart';
 import '../../../core/services/parsers/parsed_activity.dart';
+import '../../../data/repositories/activity_repository.dart';
+import '../../badge/badge_provider.dart';
 
 /// Import 상태
 enum ImportState {
@@ -119,9 +121,13 @@ class ImportProvider extends ChangeNotifier {
   }
 
   /// 가져오기 실행
+  ///
+  /// [badgeProvider]: optional — if provided, triggers silent badge bulk check
+  /// after import completes (Phase 7.5: Import badge integration).
   Future<bool> startImport({
     required String babyId,
     required String familyId,
+    BadgeProvider? badgeProvider,
   }) async {
     if (_preview == null) return false;
 
@@ -159,10 +165,41 @@ class ImportProvider extends ChangeNotifier {
 
       _state = ImportState.complete;
       notifyListeners();
+
+      // Phase 7.5: Silent badge bulk check after import
+      if (badgeProvider != null && _result != null && _result!.successCount > 0) {
+        await _triggerBadgeBulkCheck(
+          badgeProvider: badgeProvider,
+          familyId: actualFamilyId,
+          babyId: babyId,
+        );
+      }
+
       return true;
     } catch (e) {
       _setError('Import failed: $e');
       return false;
+    }
+  }
+
+  /// Phase 7.5: Load imported activities and trigger silent badge check.
+  Future<void> _triggerBadgeBulkCheck({
+    required BadgeProvider badgeProvider,
+    required String familyId,
+    required String babyId,
+  }) async {
+    try {
+      debugPrint('[INFO] [ImportProvider] Triggering badge bulk check...');
+      final activityRepo = ActivityRepository();
+      final allActivities = await activityRepo.getActivitiesByFamilyId(
+        familyId,
+        limit: 10000,
+      );
+      await badgeProvider.onBulkImport(allActivities);
+      debugPrint('[OK] [ImportProvider] Badge bulk check completed');
+    } catch (e) {
+      debugPrint('[WARN] [ImportProvider] Badge bulk check failed: $e');
+      // Non-fatal — import itself succeeded
     }
   }
 

@@ -75,6 +75,13 @@ class SweetSpotCard extends StatefulWidget {
   /// true면 "첫 기록을 시작해보세요" 표시, false면 "오늘 수면 기록이 없어요" 표시
   final bool isNewUser;
 
+  // 🆕 Sprint 22 C-4: Calibrating state props
+  /// Today's completed sleep record count (for calibration progress)
+  final int? completedSleepRecords;
+
+  /// Calibration target count (default 3)
+  final int? calibrationTarget;
+
   const SweetSpotCard({
     super.key,
     required this.state,
@@ -95,6 +102,8 @@ class SweetSpotCard extends StatefulWidget {
     this.isNightTime = false,
     this.hasOtherActivitiesOnly = false,
     this.isNewUser = true, // 기본값 true (하위 호환)
+    this.completedSleepRecords,
+    this.calibrationTarget,
   });
 
   @override
@@ -455,6 +464,11 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       return _buildNoSleepGuideCard(context, l10n);
     }
 
+    // 🆕 Sprint 22 C-4: Calibrating state
+    if (widget.state == SweetSpotState.calibrating) {
+      return _buildCalibratingCard(context, l10n);
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -519,6 +533,118 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
               fontSize: 11,
               color: LuluTextColors.tertiary,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 🆕 Sprint 22 C-4: Calibrating state card
+  ///
+  /// Shows learning progress with literature-based prediction.
+  /// Warm, encouraging tone (not "data insufficient").
+  Widget _buildCalibratingCard(BuildContext context, S l10n) {
+    final completed = widget.completedSleepRecords ?? 0;
+    final target = widget.calibrationTarget ?? 3;
+    final calibrationProgress =
+        target > 0 ? (completed / target).clamp(0.0, 1.0) : 0.0;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: LuluColors.surfaceCard,
+        borderRadius: BorderRadius.circular(LuluRadius.md),
+        border: Border.all(color: LuluColors.glassBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header: icon + learning label
+          Row(
+            children: [
+              Icon(
+                LuluIcons.sleep,
+                size: 20,
+                color: LuluSweetSpotColors.icon,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                l10n.sweetSpotStateLabelCalibrating,
+                style: LuluTextStyles.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: LuluTextColors.secondary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Title: warm learning message
+          Text(
+            l10n.sweetSpotCalibrating,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: LuluSweetSpotColors.text,
+            ),
+          ),
+          const SizedBox(height: LuluSpacing.sm),
+
+          // Calibration progress bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(LuluRadius.indicator),
+            child: LinearProgressIndicator(
+              value: calibrationProgress,
+              minHeight: 6,
+              backgroundColor: LuluColors.surfaceElevated,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                LuluActivityColors.sleep,
+              ),
+            ),
+          ),
+          const SizedBox(height: LuluSpacing.xs),
+
+          // Progress text: "Day X of recording"
+          Text(
+            l10n.sweetSpotCalibratingProgress(completed),
+            style: LuluTextStyles.bodySmall.copyWith(
+              color: LuluTextColors.secondary,
+            ),
+          ),
+          const SizedBox(height: LuluSpacing.sm),
+
+          // Literature-based prediction (still shown)
+          if (widget.recommendedTime != null) ...[
+            Text(
+              _getTimeText(l10n),
+              style: TextStyle(
+                fontSize: 14,
+                color: LuluTextColors.secondary,
+              ),
+            ),
+            const SizedBox(height: LuluSpacing.sm),
+          ],
+
+          // Hint message
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                LuluIcons.tip,
+                size: 14,
+                color: LuluColors.champagneGold,
+              ),
+              const SizedBox(width: 4),
+              Flexible(
+                child: Text(
+                  l10n.sweetSpotCalibratingHint,
+                  style: LuluTextStyles.caption.copyWith(
+                    color: LuluTextColors.tertiary,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -616,7 +742,8 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     return !widget.isEmpty &&
         !widget.isSleeping &&
         widget.progress != null &&
-        widget.state != SweetSpotState.unknown;
+        widget.state != SweetSpotState.unknown &&
+        widget.state != SweetSpotState.calibrating;
   }
 
   /// 프로그레스 바 위젯
@@ -684,6 +811,8 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     switch (widget.state) {
       case SweetSpotState.unknown:
         return l10n.sweetSpotUnknown;
+      case SweetSpotState.calibrating:
+        return l10n.sweetSpotCalibrating;
       case SweetSpotState.tooEarly:
         return l10n.sweetSpotTooEarly;
       case SweetSpotState.approaching:

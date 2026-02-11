@@ -25,6 +25,9 @@ import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../widgets/cry_analysis_card.dart';
 import '../../cry_analysis/screens/cry_analysis_screen.dart';
+import '../../badge/badge_provider.dart';
+import '../../badge/widgets/badge_collection_screen.dart';
+import '../../encouragement/widgets/encouragement_card.dart';
 import '../../timeline/screens/record_history_screen.dart';
 
 /// 홈 화면 (시안 B-4 기반)
@@ -77,6 +80,46 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   centerTitle: true,
                   actions: [
+                    // Badge collection icon
+                    Consumer<BadgeProvider>(
+                      builder: (context, badgeProvider, _) {
+                        final hasUnseen = badgeProvider.hasUnseenBadges;
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const BadgeCollectionScreen(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Icon(
+                                  LuluIcons.trophy,
+                                  color: LuluTextColors.secondary,
+                                ),
+                                if (hasUnseen)
+                                  Positioned(
+                                    right: -2,
+                                    top: -2,
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: LuluColors.champagneGold,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(right: LuluSpacing.lg),
                       child: Icon(
@@ -203,6 +246,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // 🆕 HOTFIX: Empty State에서 LastActivityRow 제거 (불필요한 빈 정보)
 
+            // Encouragement message (compact inline)
+            EncouragementCard(
+              baby: homeProvider.selectedBaby,
+              todayActivities: const [],
+            ),
+
             // 🆕 울음 분석 카드 (Feature Flag로 제어)
             if (FeatureFlags.enableCryAnalysis) ...[
               const SizedBox(height: LuluSpacing.md),
@@ -260,6 +309,20 @@ class _HomeScreenState extends State<HomeScreen> {
               isNightTime: sweetSpotProvider.isNightTime,
               hasOtherActivitiesOnly: homeProvider.hasAnyRecordsEver && !hasSleepRecord,
               isNewUser: !homeProvider.hasAnyRecordsEver,
+              completedSleepRecords: sweetSpotProvider.sweetSpotResult?.completedSleepRecords,
+              calibrationTarget: sweetSpotProvider.sweetSpotResult?.calibrationTarget,
+            ),
+
+            // 3. Encouragement message (compact inline)
+            Consumer<BadgeProvider>(
+              builder: (context, badgeProvider, _) {
+                return EncouragementCard(
+                  baby: homeProvider.selectedBaby,
+                  todayActivities: homeProvider.todayActivities,
+                  recentBadges: badgeProvider.achievements,
+                  hasPendingBadgePopup: badgeProvider.currentPopup != null,
+                );
+              },
             ),
 
             if (FeatureFlags.enableCryAnalysis) ...[

@@ -29,6 +29,7 @@ import 'features/record/providers/health_record_provider.dart';
 import 'features/record/providers/ongoing_sleep_provider.dart';
 import 'features/settings/providers/settings_provider.dart';
 import 'features/cry_analysis/providers/cry_analysis_provider.dart';
+import 'features/badge/badge_provider.dart';
 import 'app/navigation/main_navigation.dart';
 import 'data/models/models.dart';
 import 'l10n/generated/app_localizations.dart';
@@ -123,9 +124,11 @@ class LuluApp extends StatelessWidget {
         // Auth Provider (pre-initialized)
         ChangeNotifierProvider.value(value: _authProvider),
         ChangeNotifierProvider(create: (_) => SweetSpotProvider()),
+        ChangeNotifierProvider(create: (_) => BadgeProvider()),
         ChangeNotifierProvider(create: (context) {
           final homeProvider = HomeProvider();
           homeProvider.setSweetSpotProvider(context.read<SweetSpotProvider>());
+          homeProvider.setBadgeProvider(context.read<BadgeProvider>());
           return homeProvider;
         }),
         ChangeNotifierProvider(create: (_) => FeedingRecordProvider()),

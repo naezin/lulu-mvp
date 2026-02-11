@@ -1,37 +1,55 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/lulu_icons.dart';
+import '../../../core/utils/sweet_spot_calculator.dart';
+import '../../../data/models/sweet_spot_result.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 
 /// Sweet Spot calculation Provider
 ///
 /// Sprint 21 Phase 2-3: Extracted from HomeProvider
-/// - Calculates optimal sleep timing based on last wake time
-/// - Age-based recommended awake time (corrected age for preterm)
+/// Sprint 22 Phase C-0: Internal logic delegated to SweetSpotCalculator
+///
+/// - State management wrapper for SweetSpotCalculator
 /// - Single-direction data flow: HomeProvider → SweetSpotProvider.recalculate()
+/// - All getter signatures preserved for UI compatibility
 class SweetSpotProvider extends ChangeNotifier {
+  // ========================================
+  // Calculator engine
+  // ========================================
+
+  final SweetSpotCalculator _calculator = const SweetSpotCalculator();
+
   // ========================================
   // State
   // ========================================
 
-  /// Sweet Spot state
-  SweetSpotState _sweetSpotState = SweetSpotState.unknown;
-  SweetSpotState get sweetSpotState => _sweetSpotState;
+  /// Calculation result (full range data)
+  SweetSpotResult? _sweetSpotResult;
+  SweetSpotResult? get sweetSpotResult => _sweetSpotResult;
 
-  /// Minutes until Sweet Spot
-  int _minutesUntilSweetSpot = 0;
-  int get minutesUntilSweetSpot => _minutesUntilSweetSpot;
+  /// Sweet Spot state (getter compat — delegates to result)
+  SweetSpotState get sweetSpotState =>
+      _sweetSpotResult?.state ?? SweetSpotState.unknown;
 
-  /// Recommended sleep time
-  DateTime? _recommendedSleepTime;
-  DateTime? get recommendedSleepTime => _recommendedSleepTime;
+  /// Minutes until Sweet Spot (getter compat — delegates to result mid)
+  int get minutesUntilSweetSpot {
+    if (_sweetSpotResult == null) return 0;
+    return _sweetSpotResult!.minutesUntilMid(DateTime.now());
+  }
 
-  /// Sweet Spot progress (0.0 ~ 1.2)
-  double _sweetSpotProgress = 0.0;
-  double get sweetSpotProgress => _sweetSpotProgress;
+  /// Recommended sleep time (getter compat — maps to min sleep time)
+  DateTime? get recommendedSleepTime => _sweetSpotResult?.minSleepTime;
 
-  /// Night time flag (18:00-05:59)
+  /// Sweet Spot progress (0.0 ~ 1.2) (getter compat — real-time)
+  double get sweetSpotProgress {
+    if (_sweetSpotResult == null) return 0.0;
+    return _sweetSpotResult!.calculateProgress(DateTime.now());
+  }
+
+  /// Night time flag (18:00-05:59) (getter compat — delegates to result)
   bool get isNightTime {
+    if (_sweetSpotResult != null) return _sweetSpotResult!.isNightTime;
     final hour = DateTime.now().hour;
     return hour >= 18 || hour < 6;
   }
@@ -49,86 +67,59 @@ class SweetSpotProvider extends ChangeNotifier {
   ///
   /// [lastSleepEndTime]: end time of the last sleep activity (null = unknown)
   /// [babyAgeInMonths]: effective age in months (corrected for preterm)
+  /// [completedSleepRecords]: today's completed sleep count (null = skip calibration)
   void recalculate({
     required DateTime? lastSleepEndTime,
     required int? babyAgeInMonths,
+    int? completedSleepRecords,
   }) {
     if (lastSleepEndTime == null || babyAgeInMonths == null) {
-      if (_sweetSpotState != SweetSpotState.unknown) {
-        _sweetSpotState = SweetSpotState.unknown;
-        _minutesUntilSweetSpot = 0;
-        _recommendedSleepTime = null;
-        _sweetSpotProgress = 0.0;
+      if (_sweetSpotResult != null) {
+        _sweetSpotResult = null;
         notifyListeners();
       }
       return;
     }
 
-    final recommendedAwakeTime = _getRecommendedAwakeTime(babyAgeInMonths);
-    final elapsedMinutes = DateTime.now().difference(lastSleepEndTime).inMinutes;
+    final now = DateTime.now();
 
-    final newMinutes = recommendedAwakeTime - elapsedMinutes;
-    final newRecommendedTime = lastSleepEndTime.add(
-      Duration(minutes: recommendedAwakeTime),
+    final result = _calculator.calculate(
+      babyId: '',
+      correctedAgeMonths: babyAgeInMonths,
+      lastWakeTime: lastSleepEndTime,
+      now: now,
+      completedSleepRecords: completedSleepRecords,
     );
-    final newProgress = (elapsedMinutes / recommendedAwakeTime).clamp(0.0, 1.2);
 
-    // Determine state
-    final SweetSpotState newState;
-    if (newMinutes > 30) {
-      newState = SweetSpotState.tooEarly;
-    } else if (newMinutes > 0) {
-      newState = SweetSpotState.approaching;
-    } else if (newMinutes > -15) {
-      newState = SweetSpotState.optimal;
-    } else {
-      newState = SweetSpotState.overtired;
-    }
+    // Guard: only notify if state changed
+    final oldState = _sweetSpotResult?.state;
+    final oldMinutes = _sweetSpotResult?.minutesUntilMid(now);
+    final newMinutes = result.minutesUntilMid(now);
 
-    // Guard: only notify if changed
-    if (_sweetSpotState == newState &&
-        _minutesUntilSweetSpot == newMinutes &&
-        _recommendedSleepTime == newRecommendedTime) {
+    if (oldState == result.state && oldMinutes == newMinutes) {
+      // Update result silently (for progress changes)
+      _sweetSpotResult = result;
       return;
     }
 
-    _sweetSpotState = newState;
-    _minutesUntilSweetSpot = newMinutes;
-    _recommendedSleepTime = newRecommendedTime;
-    _sweetSpotProgress = newProgress;
+    _sweetSpotResult = result;
     notifyListeners();
   }
 
   /// Reset all state
   void reset() {
-    _sweetSpotState = SweetSpotState.unknown;
-    _minutesUntilSweetSpot = 0;
-    _recommendedSleepTime = null;
-    _sweetSpotProgress = 0.0;
+    _sweetSpotResult = null;
     notifyListeners();
-  }
-
-  // ========================================
-  // Age-based recommended awake time
-  // ========================================
-
-  /// Recommended awake time in minutes by age
-  int _getRecommendedAwakeTime(int ageInMonths) {
-    if (ageInMonths < 1) return 45; // Newborn: 45min
-    if (ageInMonths < 2) return 60; // 1 month: 1h
-    if (ageInMonths < 3) return 75; // 2 months: 1h 15m
-    if (ageInMonths < 4) return 90; // 3 months: 1h 30m
-    if (ageInMonths < 6) return 120; // 4-5 months: 2h
-    if (ageInMonths < 9) return 150; // 6-8 months: 2h 30m
-    if (ageInMonths < 12) return 180; // 9-11 months: 3h
-    return 210; // 12+ months: 3h 30m
   }
 }
 
 /// Sweet Spot state enum
 enum SweetSpotState {
-  /// Unknown
+  /// Unknown (no sleep records at all)
   unknown,
+
+  /// Calibrating (1~2 sleep records today, learning pattern)
+  calibrating,
 
   /// Still early (not tired yet)
   tooEarly,
@@ -148,6 +139,7 @@ extension SweetSpotStateExtension on SweetSpotState {
   String localizedLabel(S l10n) {
     return switch (this) {
       SweetSpotState.unknown => l10n.sweetSpotStateLabelUnknown,
+      SweetSpotState.calibrating => l10n.sweetSpotStateLabelCalibrating,
       SweetSpotState.tooEarly => l10n.sweetSpotStateLabelTooEarly,
       SweetSpotState.approaching => l10n.sweetSpotStateLabelApproaching,
       SweetSpotState.optimal => l10n.sweetSpotStateLabelOptimal,
@@ -158,6 +150,7 @@ extension SweetSpotStateExtension on SweetSpotState {
   IconData get icon {
     return switch (this) {
       SweetSpotState.unknown => LuluIcons.info,
+      SweetSpotState.calibrating => LuluIcons.sleep,
       SweetSpotState.tooEarly => LuluIcons.sun,
       SweetSpotState.approaching => LuluIcons.sleep,
       SweetSpotState.optimal => LuluIcons.moon,

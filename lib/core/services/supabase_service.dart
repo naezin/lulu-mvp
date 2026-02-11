@@ -80,4 +80,7 @@ class SupabaseService {
 
   /// activities 테이블
   static SupabaseQueryBuilder get activities => client.from('activities');
+
+  /// badges 테이블
+  static SupabaseQueryBuilder get badges => client.from('badges');
 }
