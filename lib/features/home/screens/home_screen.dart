@@ -59,20 +59,15 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, homeProvider, child) {
             return CustomScrollView(
               slivers: [
-                // App Bar
+                // App Bar (C-1: cleaned up — menu/settings icons removed)
                 SliverAppBar(
                   backgroundColor: LuluColors.midnightNavy,
                   floating: true,
                   elevation: 0,
-                  leading: Padding(
-                    padding: const EdgeInsets.only(left: LuluSpacing.lg),
-                    child: Icon(
-                      LuluIcons.menuIcon,
-                      color: LuluTextColors.secondary,
-                    ),
-                  ),
+                  leading: const SizedBox.shrink(),
+                  leadingWidth: 0,
                   title: Text(
-                    'Lulu',
+                    S.of(context)!.appTitle,
                     style: LuluTextStyles.titleLarge.copyWith(
                       color: LuluColors.champagneGold,
                       fontWeight: FontWeight.bold,
@@ -80,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   centerTitle: true,
                   actions: [
-                    // Badge collection icon
+                    // Badge collection icon with unseen indicator
                     Consumer<BadgeProvider>(
                       builder: (context, badgeProvider, _) {
                         final hasUnseen = badgeProvider.hasUnseenBadges;
@@ -93,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 4),
+                            padding: const EdgeInsets.only(right: LuluSpacing.lg),
                             child: Stack(
                               clipBehavior: Clip.none,
                               children: [
@@ -108,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Container(
                                       width: 8,
                                       height: 8,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: LuluColors.champagneGold,
                                         shape: BoxShape.circle,
                                       ),
@@ -119,13 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: LuluSpacing.lg),
-                      child: Icon(
-                        LuluIcons.settingsOutlined,
-                        color: LuluTextColors.secondary,
-                      ),
                     ),
                   ],
                 ),
