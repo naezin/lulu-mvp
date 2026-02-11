@@ -93,10 +93,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                 const SizedBox(height: LuluSpacing.xxxl),
 
+                // 메시지 톤 섹션
+                _buildSectionHeader(l10n.sectionTone),
+                const SizedBox(height: LuluSpacing.md),
+                _buildToneSection(),
+
+                const SizedBox(height: LuluSpacing.xxxl),
+
                 // 앱 정보 섹션
                 _buildSectionHeader(l10n.sectionAppInfo),
                 const SizedBox(height: LuluSpacing.md),
-                _buildInfoTile(l10n.infoVersion, '2.5.0'),
+                _buildInfoTile(l10n.infoVersion, '2.6.0'),
                 _buildInfoTile(l10n.infoDeveloper, l10n.infoTeamName),
                 const SizedBox(height: LuluSpacing.sm),
                 _buildLegalSection(),
@@ -429,6 +436,61 @@ class _SettingsScreenState extends State<SettingsScreen> {
               color: LuluTextColors.secondary,
             ),
             onTap: () => _showLanguageDialog(settingsProvider),
+          ),
+        );
+      },
+    );
+  }
+
+  // ========================================
+  // 메시지 톤 섹션
+  // ========================================
+
+  Widget _buildToneSection() {
+    return Consumer<SettingsProvider>(
+      builder: (context, settingsProvider, _) {
+        final l10n = S.of(context)!;
+
+        return Container(
+          decoration: BoxDecoration(
+            color: LuluColors.surfaceCard,
+            borderRadius: BorderRadius.circular(LuluRadius.sm),
+          ),
+          child: ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: LuluColors.lavenderLight,
+                borderRadius: BorderRadius.circular(LuluRadius.section),
+              ),
+              child: Icon(
+                settingsProvider.isWarmTone
+                    ? LuluIcons.sentimentHappy
+                    : LuluIcons.sentimentNeutral,
+                color: LuluColors.lavenderMist,
+                size: 22,
+              ),
+            ),
+            title: Text(
+              l10n.toneSettingTitle,
+              style: LuluTextStyles.bodyLarge.copyWith(
+                color: LuluTextColors.primary,
+              ),
+            ),
+            subtitle: Text(
+              settingsProvider.isWarmTone
+                  ? l10n.toneSettingSubtitleWarm
+                  : l10n.toneSettingSubtitlePlain,
+              style: LuluTextStyles.caption.copyWith(
+                color: LuluTextColors.secondary,
+              ),
+            ),
+            trailing: Switch.adaptive(
+              value: settingsProvider.isWarmTone,
+              onChanged: (value) => settingsProvider.setWarmTone(value),
+              activeColor: LuluColors.lavenderMist,
+            ),
           ),
         );
       },

@@ -1006,6 +1006,22 @@
   "@languageChangeMessage": {
     "description": "언어 변경 안내 메시지"
   },
+  "sectionTone": "메시지 톤",
+  "@sectionTone": {
+    "description": "Settings section - message tone"
+  },
+  "toneSettingTitle": "따뜻한 메시지",
+  "@toneSettingTitle": {
+    "description": "Tone setting toggle title"
+  },
+  "toneSettingSubtitleWarm": "격려와 응원이 담긴 메시지",
+  "@toneSettingSubtitleWarm": {
+    "description": "Tone setting subtitle when warm is on"
+  },
+  "toneSettingSubtitlePlain": "간결하고 담백한 메시지",
+  "@toneSettingSubtitlePlain": {
+    "description": "Tone setting subtitle when plain is on"
+  },
   "feedingContentBreastMilk": "모유",
   "@feedingContentBreastMilk": {
     "description": "수유 컨텐츠 타입 - 모유"
@@ -4054,6 +4070,126 @@
   "sweetSpotStateLabelOvertired": "과로 상태",
   "@sweetSpotStateLabelOvertired": {
     "description": "Sweet Spot 상태 라벨 - 과로 상태"
+  },
+  "sweetSpotCardNapLabel1": "첫 번째 낮잠",
+  "@sweetSpotCardNapLabel1": {
+    "description": "C-5 Sweet Spot card - nap order label 1"
+  },
+  "sweetSpotCardNapLabel2": "두 번째 낮잠",
+  "@sweetSpotCardNapLabel2": {
+    "description": "C-5 Sweet Spot card - nap order label 2"
+  },
+  "sweetSpotCardNapLabel3": "세 번째 낮잠",
+  "@sweetSpotCardNapLabel3": {
+    "description": "C-5 Sweet Spot card - nap order label 3"
+  },
+  "sweetSpotCardNapLabel4": "네 번째 낮잠",
+  "@sweetSpotCardNapLabel4": {
+    "description": "C-5 Sweet Spot card - nap order label 4"
+  },
+  "sweetSpotCardBeforeRelaxedWarm": "아직 놀아도 괜찮아요",
+  "@sweetSpotCardBeforeRelaxedWarm": {
+    "description": "C-5 Sweet Spot card - before zone relaxed (warm tone)"
+  },
+  "sweetSpotCardBeforeRelaxedPlain": "적정 구간 전",
+  "@sweetSpotCardBeforeRelaxedPlain": {
+    "description": "C-5 Sweet Spot card - before zone relaxed (plain tone)"
+  },
+  "sweetSpotCardBeforeSoonWarm": "슬슬 졸릴 수 있어요",
+  "@sweetSpotCardBeforeSoonWarm": {
+    "description": "C-5 Sweet Spot card - before zone soon (warm tone)"
+  },
+  "sweetSpotCardBeforeSoonPlain": "적정 구간 임박",
+  "@sweetSpotCardBeforeSoonPlain": {
+    "description": "C-5 Sweet Spot card - before zone soon (plain tone)"
+  },
+  "sweetSpotCardInZoneWarm": "지금이 편안한 시간이에요",
+  "@sweetSpotCardInZoneWarm": {
+    "description": "C-5 Sweet Spot card - in zone (warm tone)"
+  },
+  "sweetSpotCardInZonePlain": "적정 구간",
+  "@sweetSpotCardInZonePlain": {
+    "description": "C-5 Sweet Spot card - in zone (plain tone)"
+  },
+  "sweetSpotCardAfterZoneWarm": "아기 신호를 봐주세요",
+  "@sweetSpotCardAfterZoneWarm": {
+    "description": "C-5 Sweet Spot card - after zone (warm tone)"
+  },
+  "sweetSpotCardAfterZonePlain": "신호 관찰 권장",
+  "@sweetSpotCardAfterZonePlain": {
+    "description": "C-5 Sweet Spot card - after zone (plain tone)"
+  },
+  "sweetSpotCardCalibratingWarm": "패턴을 파악하고 있어요 ({day}일째)",
+  "@sweetSpotCardCalibratingWarm": {
+    "description": "C-5 Sweet Spot card - calibrating (warm tone)",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "sweetSpotCardCalibratingPlain": "학습 중 · {day}/3일",
+  "@sweetSpotCardCalibratingPlain": {
+    "description": "C-5 Sweet Spot card - calibrating (plain tone)",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "sweetSpotCardNextNapWarm": "다음 낮잠 · {time}",
+  "@sweetSpotCardNextNapWarm": {
+    "description": "C-5 Sweet Spot card - next nap hint (warm tone)",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "오후 1시경"
+      }
+    }
+  },
+  "sweetSpotCardNextNapPlain": "다음: {time}",
+  "@sweetSpotCardNextNapPlain": {
+    "description": "C-5 Sweet Spot card - next nap hint (plain tone)",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "오후 1시경"
+      }
+    }
+  },
+  "sweetSpotCardNextNightWarm": "다음은 밤잠이에요",
+  "@sweetSpotCardNextNightWarm": {
+    "description": "C-5 Sweet Spot card - next is night sleep (warm tone)"
+  },
+  "sweetSpotCardNextNightPlain": "다음: 밤잠",
+  "@sweetSpotCardNextNightPlain": {
+    "description": "C-5 Sweet Spot card - next is night sleep (plain tone)"
+  },
+  "sweetSpotCardRangeWideMsgWarm": "이 시기는 범위가 넉넉해요",
+  "@sweetSpotCardRangeWideMsgWarm": {
+    "description": "C-5 Sweet Spot card - wide range message (warm tone)"
+  },
+  "sweetSpotCardRangeWideMsgPlain": "적정 구간 넓음",
+  "@sweetSpotCardRangeWideMsgPlain": {
+    "description": "C-5 Sweet Spot card - wide range message (plain tone)"
+  },
+  "sweetSpotCardNoDataWarm": "기록이 쌓이면 알려드릴게요",
+  "@sweetSpotCardNoDataWarm": {
+    "description": "C-5 Sweet Spot card - no data (warm tone)"
+  },
+  "sweetSpotCardNoDataPlain": "데이터 수집 중",
+  "@sweetSpotCardNoDataPlain": {
+    "description": "C-5 Sweet Spot card - no data (plain tone)"
+  },
+  "sweetSpotCardNightWarm": "밤잠 준비 시간이에요",
+  "@sweetSpotCardNightWarm": {
+    "description": "C-5 Sweet Spot card - night sleep (warm tone)"
+  },
+  "sweetSpotCardNightPlain": "밤잠 적정 구간",
+  "@sweetSpotCardNightPlain": {
+    "description": "C-5 Sweet Spot card - night sleep (plain tone)"
   },
   "growthAddMeasurement": "측정 기록 추가",
   "@growthAddMeasurement": {

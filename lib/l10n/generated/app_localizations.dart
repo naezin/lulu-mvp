@@ -1357,6 +1357,30 @@ abstract class S {
   /// **'앱이 선택한 언어로 표시됩니다.'**
   String get languageChangeMessage;
 
+  /// Settings section - message tone
+  ///
+  /// In ko, this message translates to:
+  /// **'메시지 톤'**
+  String get sectionTone;
+
+  /// Tone setting toggle title
+  ///
+  /// In ko, this message translates to:
+  /// **'따뜻한 메시지'**
+  String get toneSettingTitle;
+
+  /// Tone setting subtitle when warm is on
+  ///
+  /// In ko, this message translates to:
+  /// **'격려와 응원이 담긴 메시지'**
+  String get toneSettingSubtitleWarm;
+
+  /// Tone setting subtitle when plain is on
+  ///
+  /// In ko, this message translates to:
+  /// **'간결하고 담백한 메시지'**
+  String get toneSettingSubtitlePlain;
+
   /// 수유 컨텐츠 타입 - 모유
   ///
   /// In ko, this message translates to:
@@ -5074,6 +5098,150 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'과로 상태'**
   String get sweetSpotStateLabelOvertired;
+
+  /// C-5 Sweet Spot card - nap order label 1
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 번째 낮잠'**
+  String get sweetSpotCardNapLabel1;
+
+  /// C-5 Sweet Spot card - nap order label 2
+  ///
+  /// In ko, this message translates to:
+  /// **'두 번째 낮잠'**
+  String get sweetSpotCardNapLabel2;
+
+  /// C-5 Sweet Spot card - nap order label 3
+  ///
+  /// In ko, this message translates to:
+  /// **'세 번째 낮잠'**
+  String get sweetSpotCardNapLabel3;
+
+  /// C-5 Sweet Spot card - nap order label 4
+  ///
+  /// In ko, this message translates to:
+  /// **'네 번째 낮잠'**
+  String get sweetSpotCardNapLabel4;
+
+  /// C-5 Sweet Spot card - before zone relaxed (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 놀아도 괜찮아요'**
+  String get sweetSpotCardBeforeRelaxedWarm;
+
+  /// C-5 Sweet Spot card - before zone relaxed (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'적정 구간 전'**
+  String get sweetSpotCardBeforeRelaxedPlain;
+
+  /// C-5 Sweet Spot card - before zone soon (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'슬슬 졸릴 수 있어요'**
+  String get sweetSpotCardBeforeSoonWarm;
+
+  /// C-5 Sweet Spot card - before zone soon (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'적정 구간 임박'**
+  String get sweetSpotCardBeforeSoonPlain;
+
+  /// C-5 Sweet Spot card - in zone (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'지금이 편안한 시간이에요'**
+  String get sweetSpotCardInZoneWarm;
+
+  /// C-5 Sweet Spot card - in zone (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'적정 구간'**
+  String get sweetSpotCardInZonePlain;
+
+  /// C-5 Sweet Spot card - after zone (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 신호를 봐주세요'**
+  String get sweetSpotCardAfterZoneWarm;
+
+  /// C-5 Sweet Spot card - after zone (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'신호 관찰 권장'**
+  String get sweetSpotCardAfterZonePlain;
+
+  /// C-5 Sweet Spot card - calibrating (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'패턴을 파악하고 있어요 ({day}일째)'**
+  String sweetSpotCardCalibratingWarm(int day);
+
+  /// C-5 Sweet Spot card - calibrating (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'학습 중 · {day}/3일'**
+  String sweetSpotCardCalibratingPlain(int day);
+
+  /// C-5 Sweet Spot card - next nap hint (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'다음 낮잠 · {time}'**
+  String sweetSpotCardNextNapWarm(String time);
+
+  /// C-5 Sweet Spot card - next nap hint (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'다음: {time}'**
+  String sweetSpotCardNextNapPlain(String time);
+
+  /// C-5 Sweet Spot card - next is night sleep (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'다음은 밤잠이에요'**
+  String get sweetSpotCardNextNightWarm;
+
+  /// C-5 Sweet Spot card - next is night sleep (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'다음: 밤잠'**
+  String get sweetSpotCardNextNightPlain;
+
+  /// C-5 Sweet Spot card - wide range message (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'이 시기는 범위가 넉넉해요'**
+  String get sweetSpotCardRangeWideMsgWarm;
+
+  /// C-5 Sweet Spot card - wide range message (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'적정 구간 넓음'**
+  String get sweetSpotCardRangeWideMsgPlain;
+
+  /// C-5 Sweet Spot card - no data (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'기록이 쌓이면 알려드릴게요'**
+  String get sweetSpotCardNoDataWarm;
+
+  /// C-5 Sweet Spot card - no data (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'데이터 수집 중'**
+  String get sweetSpotCardNoDataPlain;
+
+  /// C-5 Sweet Spot card - night sleep (warm tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'밤잠 준비 시간이에요'**
+  String get sweetSpotCardNightWarm;
+
+  /// C-5 Sweet Spot card - night sleep (plain tone)
+  ///
+  /// In ko, this message translates to:
+  /// **'밤잠 적정 구간'**
+  String get sweetSpotCardNightPlain;
 
   /// 성장 화면 - 측정 기록 추가 버튼
   ///

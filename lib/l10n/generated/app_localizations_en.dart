@@ -703,6 +703,18 @@ class SEn extends S {
       'The app will be displayed in the selected language.';
 
   @override
+  String get sectionTone => 'Message Tone';
+
+  @override
+  String get toneSettingTitle => 'Warm Messages';
+
+  @override
+  String get toneSettingSubtitleWarm => 'Encouraging and supportive messages';
+
+  @override
+  String get toneSettingSubtitlePlain => 'Concise and straightforward messages';
+
+  @override
   String get feedingContentBreastMilk => 'Breast Milk';
 
   @override
@@ -2786,6 +2798,87 @@ class SEn extends S {
 
   @override
   String get sweetSpotStateLabelOvertired => 'Overtired';
+
+  @override
+  String get sweetSpotCardNapLabel1 => '1st nap';
+
+  @override
+  String get sweetSpotCardNapLabel2 => '2nd nap';
+
+  @override
+  String get sweetSpotCardNapLabel3 => '3rd nap';
+
+  @override
+  String get sweetSpotCardNapLabel4 => '4th nap';
+
+  @override
+  String get sweetSpotCardBeforeRelaxedWarm => 'Still time to play';
+
+  @override
+  String get sweetSpotCardBeforeRelaxedPlain => 'Before optimal zone';
+
+  @override
+  String get sweetSpotCardBeforeSoonWarm => 'May get sleepy soon';
+
+  @override
+  String get sweetSpotCardBeforeSoonPlain => 'Approaching optimal zone';
+
+  @override
+  String get sweetSpotCardInZoneWarm => 'Now is a comfortable time';
+
+  @override
+  String get sweetSpotCardInZonePlain => 'Optimal zone';
+
+  @override
+  String get sweetSpotCardAfterZoneWarm => 'Watch for baby\'s cues';
+
+  @override
+  String get sweetSpotCardAfterZonePlain => 'Observe cues';
+
+  @override
+  String sweetSpotCardCalibratingWarm(int day) {
+    return 'Learning patterns (day $day)';
+  }
+
+  @override
+  String sweetSpotCardCalibratingPlain(int day) {
+    return 'Learning · $day/3 days';
+  }
+
+  @override
+  String sweetSpotCardNextNapWarm(String time) {
+    return 'Next nap · around $time';
+  }
+
+  @override
+  String sweetSpotCardNextNapPlain(String time) {
+    return 'Next: $time';
+  }
+
+  @override
+  String get sweetSpotCardNextNightWarm => 'Next is bedtime';
+
+  @override
+  String get sweetSpotCardNextNightPlain => 'Next: bedtime';
+
+  @override
+  String get sweetSpotCardRangeWideMsgWarm => 'Wide range at this age';
+
+  @override
+  String get sweetSpotCardRangeWideMsgPlain => 'Wide optimal zone';
+
+  @override
+  String get sweetSpotCardNoDataWarm =>
+      'We\'ll let you know as records build up';
+
+  @override
+  String get sweetSpotCardNoDataPlain => 'Collecting data';
+
+  @override
+  String get sweetSpotCardNightWarm => 'Time to prepare for bedtime';
+
+  @override
+  String get sweetSpotCardNightPlain => 'Bedtime zone';
 
   @override
   String get growthAddMeasurement => 'Add Measurement';

@@ -25,6 +25,7 @@ class EncouragementCard extends StatefulWidget {
   final List<ActivityModel> todayActivities;
   final List<BadgeAchievement> recentBadges;
   final bool hasPendingBadgePopup;
+  final bool isWarmTone;
 
   const EncouragementCard({
     super.key,
@@ -32,6 +33,7 @@ class EncouragementCard extends StatefulWidget {
     required this.todayActivities,
     this.recentBadges = const [],
     this.hasPendingBadgePopup = false,
+    this.isWarmTone = true,
   });
 
   @override
@@ -81,7 +83,7 @@ class _EncouragementCardState extends State<EncouragementCard> {
       todayActivities: widget.todayActivities,
       recentBadges: widget.recentBadges,
       hasPendingBadgePopup: widget.hasPendingBadgePopup,
-      tone: 'warm', // TODO: read from settings (Badge-2)
+      tone: widget.isWarmTone ? 'warm' : 'plain',
       now: DateTime.now(),
       lastShownMessageKey: _lastShownKey,
     );

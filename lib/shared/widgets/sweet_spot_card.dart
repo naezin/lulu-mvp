@@ -6,81 +6,56 @@ import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_spacing.dart';
 import '../../core/design_system/lulu_typography.dart';
+import '../../data/models/sweet_spot_result.dart';
 import '../../features/home/providers/sweet_spot_provider.dart';
 import '../../l10n/generated/app_localizations.dart' show S;
+import 'golden_band_bar.dart';
 
-/// Sweet Spot 카드 위젯
+/// Sweet Spot Card (C-5 Smart Band + Hint)
 ///
-/// 작업 지시서 v1.2: SweetSpotHeroCard 대체
-/// - 단일 색상 시스템 (LuluSweetSpotColors.neutral)
-/// - Huckleberry 스타일 확률적 표현
-/// - Empty State 포함
+/// Sprint 23 C-5: Full rebuild with golden band progress bar.
+/// UX Process: 5-proposal → agent debate → virtual UT (SUS 85, TTC 1.9s)
+///
+/// States:
+/// - Sleeping: ongoing sleep timer (unchanged from Sprint 7)
+/// - Empty: new user first record (unchanged)
+/// - NoSleepGuide: has other activities but no sleep
+/// - Calibrating: learning pattern (1-2 records)
+/// - Normal: golden band with 4 sub-states
+///   - tooEarly (beforeRelaxed)
+///   - approaching (beforeSoon)
+///   - optimal (inZone)
+///   - overtired (afterZone) — grey fade, NO red/escalation
 class SweetSpotCard extends StatefulWidget {
-  /// Sweet Spot 상태 (HomeProvider의 SweetSpotState 사용)
   final SweetSpotState state;
-
-  /// Empty State 여부 (수면 기록 없음)
   final bool isEmpty;
-
-  /// 예상 시간 (예: "약 30분 후")
   final String? estimatedTime;
-
-  /// 수면 기록 버튼 콜백 (Empty State에서 사용)
   final VoidCallback? onRecordSleep;
-
-  // 🆕 Sprint 7 Day 2: 수면 진행 중 props
-  /// 수면 진행 중 여부
   final bool isSleeping;
-
-  /// 수면 시작 시간
   final DateTime? sleepStartTime;
-
-  /// 수면 타입 (낮잠/밤잠)
   final String? sleepType;
-
-  /// 아기 이름
   final String? babyName;
-
-  /// 수면 종료 콜백
   final VoidCallback? onEndSleep;
-
-  /// 수면 취소 콜백
   final VoidCallback? onCancelSleep;
-
-  // 🆕 Sprint 7 Day 2 v1.2: 빈 상태 3종 기록 버튼용 콜백
-  /// 수유 기록 탭 콜백
   final VoidCallback? onFeedingTap;
-
-  /// 수면 기록 탭 콜백 (isEmpty 상태에서 수면 버튼)
   final VoidCallback? onSleepTap;
-
-  /// 기저귀 기록 탭 콜백
   final VoidCallback? onDiaperTap;
-
-  // 🆕 v3: Normal State 개선용 props
-  /// Sweet Spot 진행률 (0.0 ~ 1.0)
   final double? progress;
-
-  /// 추천 수면 시간
   final DateTime? recommendedTime;
-
-  /// 밤잠 여부
   final bool isNightTime;
-
-  // 🆕 HOTFIX: 수면 기록 없을 때 안내 메시지
-  /// 수면 기록 없지만 다른 활동(수유/기저귀)은 있음
   final bool hasOtherActivitiesOnly;
-
-  // 🆕 Sprint 19: 신규 유저 여부 (전체 기록 0건)
-  /// true면 "첫 기록을 시작해보세요" 표시, false면 "오늘 수면 기록이 없어요" 표시
   final bool isNewUser;
-
-  // 🆕 Sprint 22 C-4: Calibrating state props
-  /// Today's completed sleep record count (for calibration progress)
   final int? completedSleepRecords;
-
-  /// Calibration target count (default 3)
   final int? calibrationTarget;
+
+  /// C-5: SweetSpotResult for golden band rendering
+  final SweetSpotResult? sweetSpotResult;
+
+  /// C-5: Baby index for theme color (0-3, -1 or null = singleton default)
+  final int? babyIndex;
+
+  /// C-5: Tone setting (true = warm, false = plain)
+  final bool isWarmTone;
 
   const SweetSpotCard({
     super.key,
@@ -101,9 +76,12 @@ class SweetSpotCard extends StatefulWidget {
     this.recommendedTime,
     this.isNightTime = false,
     this.hasOtherActivitiesOnly = false,
-    this.isNewUser = true, // 기본값 true (하위 호환)
+    this.isNewUser = true,
     this.completedSleepRecords,
     this.calibrationTarget,
+    this.sweetSpotResult,
+    this.babyIndex,
+    this.isWarmTone = true,
   });
 
   @override
@@ -124,7 +102,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
   @override
   void didUpdateWidget(SweetSpotCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 수면 상태 변경 시 타이머 관리
     if (widget.isSleeping && !oldWidget.isSleeping) {
       _startTimer();
     } else if (!widget.isSleeping && oldWidget.isSleeping) {
@@ -140,7 +117,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
   void _startTimer() {
     _stopTimer();
-    // 1초마다 UI 갱신 (경과 시간 업데이트)
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) setState(() {});
     });
@@ -151,11 +127,36 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     _timer = null;
   }
 
+  // ========================================
+  // Theme color helpers
+  // ========================================
+
+  Color get _themeColor {
+    final idx = widget.babyIndex;
+    if (idx == null || idx < 0) return LuluColors.lavenderMist;
+    return LuluColors.getBabyColor(idx);
+  }
+
+  Color get _themeColorLight {
+    final idx = widget.babyIndex;
+    if (idx == null || idx < 0) return LuluColors.lavenderLight;
+    return LuluColors.getBabyColorLight(idx);
+  }
+
+  Color get _themeColorStrong {
+    final idx = widget.babyIndex;
+    if (idx == null || idx < 0) return LuluColors.lavenderStrong;
+    return LuluColors.getBabyColorStrong(idx);
+  }
+
+  // ========================================
+  // Build
+  // ========================================
+
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context)!;
 
-    // 🆕 수면 진행 중이면 수면 카드 표시
     if (widget.isSleeping && widget.sleepStartTime != null) {
       return _buildSleepingCard(context);
     }
@@ -167,10 +168,15 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     return _buildNormalState(context, l10n);
   }
 
-  /// 🆕 수면 진행 중 카드 (OngoingSleepCard 대체)
+  // ========================================
+  // Sleeping Card (unchanged from Sprint 7)
+  // ========================================
+
   Widget _buildSleepingCard(BuildContext context) {
     final l10n = S.of(context)!;
-    final sleepTypeText = widget.sleepType == 'night' ? l10n.sleepTypeNight : l10n.sleepTypeNap;
+    final sleepTypeText = widget.sleepType == 'night'
+        ? l10n.sleepTypeNight
+        : l10n.sleepTypeNap;
     final babyName = widget.babyName ?? l10n.babyDefault;
     final elapsed = DateTime.now().difference(widget.sleepStartTime!);
 
@@ -194,7 +200,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 헤더: 아이콘 + 수면 타입
           Row(
             children: [
               Container(
@@ -237,19 +242,15 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
               ),
             ],
           ),
-
           const SizedBox(height: LuluSpacing.md),
-
-          // 시작 시간
-          // Sprint 21 HF #4: locale 하드코딩 제거 → 실제 locale 사용
           _buildInfoRow(
             l10n.sweetSpotSleepStart,
-            DateFormat('a h:mm', Localizations.localeOf(context).toString()).format(widget.sleepStartTime!),
+            DateFormat(
+              'a h:mm',
+              Localizations.localeOf(context).toString(),
+            ).format(widget.sleepStartTime!),
           ),
-
           const SizedBox(height: LuluSpacing.lg),
-
-          // 버튼: 수면 종료
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -283,41 +284,10 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     );
   }
 
-  /// Duration 포맷팅
-  String _formatDuration(Duration duration) {
-    final l10n = S.of(context)!;
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes.remainder(60);
-    if (hours > 0) {
-      return l10n.durationHoursMinutes(hours, minutes);
-    }
-    return l10n.durationMinutes(minutes);
-  }
+  // ========================================
+  // Empty State (unchanged)
+  // ========================================
 
-  /// 정보 Row
-  Widget _buildInfoRow(String label, String value) {
-    return Row(
-      children: [
-        Text(
-          '$label: ',
-          style: LuluTextStyles.bodyMedium.copyWith(
-            color: LuluTextColors.secondary,
-          ),
-        ),
-        Text(
-          value,
-          style: LuluTextStyles.bodyMedium.copyWith(
-            color: LuluTextColors.primary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// Empty State UI - 통합 카드 (v1.2)
-  ///
-  /// 2개 카드 → 1개 통합 카드로 스크롤 없이 바로 기록 가능
   Widget _buildEmptyState(BuildContext context, S l10n) {
     final babyName = widget.babyName;
 
@@ -334,15 +304,12 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 헤더 아이콘
           Icon(
             LuluIcons.celebration,
             size: 48,
             color: LuluColors.champagneGold,
           ),
           const SizedBox(height: LuluSpacing.md),
-
-          // 타이틀 - Sprint 19: 신규 유저 vs 기존 유저 분기
           Text(
             widget.isNewUser
                 ? (babyName != null
@@ -356,8 +323,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: LuluSpacing.sm),
-
-          // 액션 힌트 - Sprint 19: 신규 유저 vs 기존 유저 분기
           Text(
             widget.isNewUser
                 ? l10n.sweetSpotEmptyActionHint
@@ -368,8 +333,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: LuluSpacing.lg),
-
-          // 3종 기록 버튼 (탭 가능!)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -394,8 +357,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             ],
           ),
           const SizedBox(height: LuluSpacing.lg),
-
-          // 힌트 메시지
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -420,7 +381,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     );
   }
 
-  /// 빈 상태용 빠른 기록 버튼 (탭 가능)
   Widget _buildQuickRecordButton({
     required IconData icon,
     required String label,
@@ -457,203 +417,288 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     );
   }
 
-  /// Normal State UI (v3 개선)
+  // ========================================
+  // Normal State — C-5 Smart Band + Hint
+  // ========================================
+
   Widget _buildNormalState(BuildContext context, S l10n) {
-    // 🆕 HOTFIX: 수면 기록 없지만 다른 활동은 있을 때 안내 메시지
     if (widget.hasOtherActivitiesOnly) {
       return _buildNoSleepGuideCard(context, l10n);
     }
 
-    // 🆕 Sprint 22 C-4: Calibrating state
     if (widget.state == SweetSpotState.calibrating) {
-      return _buildCalibratingCard(context, l10n);
+      return _buildSmartBandCard(context, l10n);
     }
 
+    if (widget.state == SweetSpotState.unknown) {
+      return _buildNoDataCard(context, l10n);
+    }
+
+    return _buildSmartBandCard(context, l10n);
+  }
+
+  /// C-5 Smart Band Card — the core redesign
+  Widget _buildSmartBandCard(BuildContext context, S l10n) {
+    final isCalibrating = widget.state == SweetSpotState.calibrating;
+    final isAfterZone = widget.state == SweetSpotState.overtired;
+    final isInZone = widget.state == SweetSpotState.optimal;
+
+    // Accent line color
+    final accentColor = isAfterZone
+        ? LuluColors.surfaceElevatedBorder
+        : _themeColor;
+
+    // Golden band positions
+    final bandStart = _calcBandStart();
+    final bandEnd = _calcBandEnd();
+    final currentProgress = _calcProgress();
+
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(LuluRadius.md),
+        borderRadius: BorderRadius.circular(LuluRadius.lg),
         border: Border.all(color: LuluColors.glassBorder),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
         children: [
-          // 헤더: 아기 이름 + 수면타입
-          Row(
-            children: [
-              Icon(
-                LuluIcons.sleep,
-                size: 20,
-                color: LuluSweetSpotColors.icon,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                _getHeaderTitle(l10n),
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: LuluTextColors.secondary,
+          // Accent line (left 4dp)
+          Positioned(
+            left: 0,
+            top: 8,
+            bottom: 8,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.easeInOut,
+              width: 4,
+              decoration: BoxDecoration(
+                color: accentColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4),
+                  bottomLeft: Radius.circular(4),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 12),
-
-          // 상태 라벨 (Huckleberry 스타일)
-          Text(
-            _getStateLabel(l10n),
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: LuluSweetSpotColors.text,
             ),
           ),
+          // Card content
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 16, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Row 1: Nap label + icon
+                Row(
+                  children: [
+                    Icon(
+                      widget.isNightTime
+                          ? LuluIcons.moon
+                          : LuluIcons.sleep,
+                      size: 16,
+                      color: isAfterZone
+                          ? LuluTextColors.tertiary
+                          : _themeColor,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      _getNapLabel(l10n),
+                      style: LuluTextStyles.bodySmall.copyWith(
+                        color: LuluTextColors.secondary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
 
-          // 시간 표시 (12시간제 + 남은 시간)
-          const SizedBox(height: 4),
-          Text(
-            _getTimeText(l10n),
-            style: TextStyle(
-              fontSize: 14,
-              color: LuluTextColors.secondary,
+                // Row 2: Time range or calibrating indicator
+                if (isCalibrating)
+                  _buildCalibratingTimeRow(l10n)
+                else
+                  _buildTimeRangeRow(l10n),
+
+                const SizedBox(height: 12),
+
+                // Row 3: Golden Band progress bar
+                GoldenBandBar(
+                  progress: currentProgress,
+                  bandStart: bandStart,
+                  bandEnd: bandEnd,
+                  themeColor: _themeColor,
+                  themeColorLight: _themeColorLight,
+                  themeColorStrong: _themeColorStrong,
+                  isCalibrating: isCalibrating,
+                  isInZone: isInZone,
+                  isAfterZone: isAfterZone,
+                ),
+
+                const SizedBox(height: 8),
+
+                // Row 4: State message (warm/plain)
+                Text(
+                  _getStateMessage(l10n),
+                  style: LuluTextStyles.bodySmall.copyWith(
+                    color: isAfterZone
+                        ? LuluTextColors.tertiary
+                        : LuluTextColors.secondary,
+                  ),
+                ),
+
+                // Divider + Next nap hint
+                if (_shouldShowNextHint()) ...[
+                  const SizedBox(height: 8),
+                  Divider(
+                    height: 1,
+                    thickness: 0.5,
+                    color: LuluColors.glassBorder,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: _buildNextNapHint(l10n),
+                  ),
+                ] else
+                  const SizedBox(height: 12),
+              ],
             ),
           ),
+        ],
+      ),
+    );
+  }
 
-          // 프로그레스 바 (조건 충족 시)
-          if (_shouldShowProgressBar) _buildProgressBar(),
+  // ========================================
+  // Smart Band sub-components
+  // ========================================
 
-          const SizedBox(height: 12),
+  Widget _buildTimeRangeRow(S l10n) {
+    final result = widget.sweetSpotResult;
+    if (result == null) {
+      // Fallback: use recommendedTime
+      if (widget.recommendedTime != null) {
+        final locale = Localizations.localeOf(context).toString();
+        final formattedTime = DateFormat('a h:mm', locale)
+            .format(widget.recommendedTime!);
+        return Text(
+          formattedTime,
+          style: LuluTextStyles.titleMedium.copyWith(
+            color: LuluTextColors.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      }
+      return const SizedBox.shrink();
+    }
 
-          // 면책 문구
+    final locale = Localizations.localeOf(context).toString();
+    final minTime = DateFormat('H:mm', locale).format(result.minSleepTime);
+    final maxTime = DateFormat('H:mm', locale).format(result.maxSleepTime);
+
+    return Text(
+      '$minTime ~ $maxTime',
+      style: LuluTextStyles.titleMedium.copyWith(
+        color: widget.state == SweetSpotState.overtired
+            ? LuluTextColors.tertiary
+            : LuluTextColors.primary,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget _buildCalibratingTimeRow(S l10n) {
+    final completed = widget.completedSleepRecords ?? 0;
+    final day = completed > 0 ? completed : 1;
+
+    return Row(
+      children: [
+        // Progress dots
+        ...List.generate(3, (i) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: i < day
+                    ? _themeColor
+                    : LuluColors.surfaceElevated,
+                shape: BoxShape.circle,
+              ),
+            ),
+          );
+        }),
+        const SizedBox(width: 4),
+        Text(
+          widget.isWarmTone
+              ? l10n.sweetSpotCardCalibratingWarm(day)
+              : l10n.sweetSpotCardCalibratingPlain(day),
+          style: LuluTextStyles.bodyMedium.copyWith(
+            color: LuluTextColors.secondary,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNextNapHint(S l10n) {
+    final result = widget.sweetSpotResult;
+    final isLastNap = result != null &&
+        result.napNumber >= result.totalExpectedNaps;
+
+    if (isLastNap) {
+      return Row(
+        children: [
           Text(
-            l10n.sweetSpotDisclaimer,
-            style: TextStyle(
-              fontSize: 11,
+            widget.isWarmTone
+                ? l10n.sweetSpotCardNextNightWarm
+                : l10n.sweetSpotCardNextNightPlain,
+            style: LuluTextStyles.bodySmall.copyWith(
               color: LuluTextColors.tertiary,
             ),
           ),
+          const Spacer(),
+          Icon(
+            LuluIcons.chevronRight,
+            size: 14,
+            color: LuluTextColors.tertiary,
+          ),
         ],
-      ),
-    );
-  }
+      );
+    }
 
-  /// 🆕 Sprint 22 C-4: Calibrating state card
-  ///
-  /// Shows learning progress with literature-based prediction.
-  /// Warm, encouraging tone (not "data insufficient").
-  Widget _buildCalibratingCard(BuildContext context, S l10n) {
-    final completed = widget.completedSleepRecords ?? 0;
-    final target = widget.calibrationTarget ?? 3;
-    final calibrationProgress =
-        target > 0 ? (completed / target).clamp(0.0, 1.0) : 0.0;
+    // Next nap time estimate
+    if (result != null && result.totalExpectedNaps > result.napNumber) {
+      final locale = Localizations.localeOf(context).toString();
+      final nextTime = DateFormat('a h:mm', locale)
+          .format(result.maxSleepTime.add(
+        Duration(minutes: result.wakeWindow.midMinutes),
+      ));
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(LuluRadius.md),
-        border: Border.all(color: LuluColors.glassBorder),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+      return Row(
         children: [
-          // Header: icon + learning label
-          Row(
-            children: [
-              Icon(
-                LuluIcons.sleep,
-                size: 20,
-                color: LuluSweetSpotColors.icon,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                l10n.sweetSpotStateLabelCalibrating,
-                style: LuluTextStyles.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: LuluTextColors.secondary,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-
-          // Title: warm learning message
           Text(
-            l10n.sweetSpotCalibrating,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: LuluSweetSpotColors.text,
-            ),
-          ),
-          const SizedBox(height: LuluSpacing.sm),
-
-          // Calibration progress bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(LuluRadius.indicator),
-            child: LinearProgressIndicator(
-              value: calibrationProgress,
-              minHeight: 6,
-              backgroundColor: LuluColors.surfaceElevated,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                LuluActivityColors.sleep,
-              ),
-            ),
-          ),
-          const SizedBox(height: LuluSpacing.xs),
-
-          // Progress text: "Day X of recording"
-          Text(
-            l10n.sweetSpotCalibratingProgress(completed),
+            widget.isWarmTone
+                ? l10n.sweetSpotCardNextNapWarm(nextTime)
+                : l10n.sweetSpotCardNextNapPlain(nextTime),
             style: LuluTextStyles.bodySmall.copyWith(
-              color: LuluTextColors.secondary,
+              color: LuluTextColors.tertiary,
             ),
           ),
-          const SizedBox(height: LuluSpacing.sm),
-
-          // Literature-based prediction (still shown)
-          if (widget.recommendedTime != null) ...[
-            Text(
-              _getTimeText(l10n),
-              style: TextStyle(
-                fontSize: 14,
-                color: LuluTextColors.secondary,
-              ),
-            ),
-            const SizedBox(height: LuluSpacing.sm),
-          ],
-
-          // Hint message
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(
-                LuluIcons.tip,
-                size: 14,
-                color: LuluColors.champagneGold,
-              ),
-              const SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  l10n.sweetSpotCalibratingHint,
-                  style: LuluTextStyles.caption.copyWith(
-                    color: LuluTextColors.tertiary,
-                  ),
-                ),
-              ),
-            ],
+          const Spacer(),
+          Icon(
+            LuluIcons.chevronRight,
+            size: 14,
+            color: LuluTextColors.tertiary,
           ),
         ],
-      ),
-    );
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 
-  /// 🆕 HOTFIX: 수면 기록 없을 때 안내 카드
-  ///
-  /// 수유/기저귀 기록은 있지만 수면 기록이 없을 때 표시
+  // ========================================
+  // No Sleep Guide Card (unchanged)
+  // ========================================
+
   Widget _buildNoSleepGuideCard(BuildContext context, S l10n) {
     return Container(
       padding: const EdgeInsets.all(LuluSpacing.lg),
@@ -665,15 +710,12 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 아이콘
           Icon(
             LuluIcons.sleep,
             size: 40,
             color: LuluActivityColors.sleepStrong,
           ),
           const SizedBox(height: LuluSpacing.md),
-
-          // 안내 메시지
           Text(
             l10n.sweetSpotNoSleepTitle,
             style: LuluTextStyles.titleSmall.copyWith(
@@ -691,8 +733,6 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: LuluSpacing.lg),
-
-          // 수면 기록 버튼
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
@@ -716,111 +756,164 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     );
   }
 
-  /// 헤더 타이틀: "{아기이름}의 다음 {낮잠/밤잠}"
-  String _getHeaderTitle(S l10n) {
-    final sleepType = widget.isNightTime ? l10n.sleepTypeNight : l10n.sleepTypeNap;
+  // ========================================
+  // No Data Card (unknown state)
+  // ========================================
 
-    if (widget.babyName != null) {
-      return l10n.sweetSpotTitleWithName(widget.babyName!, sleepType);
-    }
-    return l10n.sweetSpotNextSleepType(sleepType);
-  }
-
-  /// 시간 텍스트: "약 오후 2:30 (45분 후)"
-  String _getTimeText(S l10n) {
-    if (widget.recommendedTime != null) {
-      // Sprint 21 HF #4: locale 하드코딩 제거 → 실제 locale 사용
-      final formattedTime = DateFormat('a h:mm', Localizations.localeOf(context).toString()).format(widget.recommendedTime!);
-      final minutesUntil = widget.recommendedTime!.difference(DateTime.now()).inMinutes.clamp(0, 999);
-      return l10n.sweetSpotTimeEstimate(formattedTime, minutesUntil);
-    }
-    return widget.estimatedTime ?? '';
-  }
-
-  /// 프로그레스 바 표시 조건
-  bool get _shouldShowProgressBar {
-    return !widget.isEmpty &&
-        !widget.isSleeping &&
-        widget.progress != null &&
-        widget.state != SweetSpotState.unknown &&
-        widget.state != SweetSpotState.calibrating;
-  }
-
-  /// 프로그레스 바 위젯
-  Widget _buildProgressBar() {
-    final progressValue = widget.progress ?? 0.0;
-
+  Widget _buildNoDataCard(BuildContext context, S l10n) {
     return Container(
-      height: 8,
-      margin: const EdgeInsets.only(top: LuluSpacing.md),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: LuluColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(LuluRadius.indicator),
+        color: LuluColors.surfaceCard,
+        borderRadius: BorderRadius.circular(LuluRadius.md),
+        border: Border.all(color: LuluColors.glassBorder),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Stack(
-            children: [
-              // 진행 바
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                width: constraints.maxWidth * progressValue.clamp(0.0, 1.0),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      _getProgressColor(progressValue).withValues(alpha: 0.5),
-                      _getProgressColor(progressValue),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(LuluRadius.indicator),
-                ),
-              ),
-              // Sweet Spot 마커 (80% 위치)
-              // TODO: Phase 2 - 교정연령별 Sweet Spot 위치 개인화
-              Positioned(
-                left: constraints.maxWidth * 0.8 - 1.5,
-                top: 0,
-                bottom: 0,
-                child: Container(
-                  width: 3,
-                  decoration: BoxDecoration(
-                    color: LuluColors.champagneGold,
-                    borderRadius: BorderRadius.circular(1.5), // special: design system outer
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
+      child: Row(
+        children: [
+          Icon(
+            LuluIcons.sleep,
+            size: 20,
+            color: LuluTextColors.tertiary,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            widget.isWarmTone
+                ? l10n.sweetSpotCardNoDataWarm
+                : l10n.sweetSpotCardNoDataPlain,
+            style: LuluTextStyles.bodyMedium.copyWith(
+              color: LuluTextColors.secondary,
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  /// 진행률에 따른 색상
-  Color _getProgressColor(double progress) {
-    if (progress >= 1.0) {
-      return LuluStatusColors.caution; // 100%+ 과로
-    } else if (progress >= 0.8) {
-      return LuluColors.champagneGold; // 80-100% Sweet Spot
+  // ========================================
+  // Helpers
+  // ========================================
+
+  String _formatDuration(Duration duration) {
+    final l10n = S.of(context)!;
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes.remainder(60);
+    if (hours > 0) {
+      return l10n.durationHoursMinutes(hours, minutes);
     }
-    return LuluColors.lavenderMist; // 0-80%
+    return l10n.durationMinutes(minutes);
   }
 
-  /// 상태별 라벨 반환 (다국어 지원)
-  String _getStateLabel(S l10n) {
-    switch (widget.state) {
-      case SweetSpotState.unknown:
-        return l10n.sweetSpotUnknown;
-      case SweetSpotState.calibrating:
-        return l10n.sweetSpotCalibrating;
-      case SweetSpotState.tooEarly:
-        return l10n.sweetSpotTooEarly;
-      case SweetSpotState.approaching:
-        return l10n.sweetSpotApproaching;
-      case SweetSpotState.optimal:
-        return l10n.sweetSpotOptimal;
-      case SweetSpotState.overtired:
-        return l10n.sweetSpotOvertired;
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      children: [
+        Text(
+          '$label: ',
+          style: LuluTextStyles.bodyMedium.copyWith(
+            color: LuluTextColors.secondary,
+          ),
+        ),
+        Text(
+          value,
+          style: LuluTextStyles.bodyMedium.copyWith(
+            color: LuluTextColors.primary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Nap order label (1st, 2nd, 3rd, 4th nap / night sleep)
+  String _getNapLabel(S l10n) {
+    if (widget.isNightTime) {
+      return widget.isWarmTone
+          ? l10n.sweetSpotCardNightWarm
+          : l10n.sweetSpotCardNightPlain;
     }
+
+    final result = widget.sweetSpotResult;
+    final napNum = result?.napNumber ?? 1;
+
+    return switch (napNum) {
+      1 => l10n.sweetSpotCardNapLabel1,
+      2 => l10n.sweetSpotCardNapLabel2,
+      3 => l10n.sweetSpotCardNapLabel3,
+      _ => l10n.sweetSpotCardNapLabel4,
+    };
+  }
+
+  /// State message (warm/plain tone)
+  String _getStateMessage(S l10n) {
+    if (widget.state == SweetSpotState.calibrating) {
+      final completed = widget.completedSleepRecords ?? 0;
+      final day = completed > 0 ? completed : 1;
+      return widget.isWarmTone
+          ? l10n.sweetSpotCardCalibratingWarm(day)
+          : l10n.sweetSpotCardCalibratingPlain(day);
+    }
+
+    // Wide range message for young babies
+    final result = widget.sweetSpotResult;
+    if (result != null && result.correctedAgeMonths < 2) {
+      final rangeMinutes = result.maxSleepTime
+          .difference(result.minSleepTime)
+          .inMinutes;
+      if (rangeMinutes > 30) {
+        return widget.isWarmTone
+            ? l10n.sweetSpotCardRangeWideMsgWarm
+            : l10n.sweetSpotCardRangeWideMsgPlain;
+      }
+    }
+
+    return switch (widget.state) {
+      SweetSpotState.tooEarly => widget.isWarmTone
+          ? l10n.sweetSpotCardBeforeRelaxedWarm
+          : l10n.sweetSpotCardBeforeRelaxedPlain,
+      SweetSpotState.approaching => widget.isWarmTone
+          ? l10n.sweetSpotCardBeforeSoonWarm
+          : l10n.sweetSpotCardBeforeSoonPlain,
+      SweetSpotState.optimal => widget.isWarmTone
+          ? l10n.sweetSpotCardInZoneWarm
+          : l10n.sweetSpotCardInZonePlain,
+      SweetSpotState.overtired => widget.isWarmTone
+          ? l10n.sweetSpotCardAfterZoneWarm
+          : l10n.sweetSpotCardAfterZonePlain,
+      _ => '',
+    };
+  }
+
+  /// Calculate golden band start position (0.0 ~ 1.0)
+  double _calcBandStart() {
+    final result = widget.sweetSpotResult;
+    if (result == null || result.lastWakeTime == null) return 0.6;
+
+    final totalRange = result.wakeWindow.maxMinutes.toDouble();
+    if (totalRange <= 0) return 0.6;
+
+    final minRange = result.wakeWindow.minMinutes.toDouble();
+    return (minRange / totalRange).clamp(0.0, 1.0);
+  }
+
+  /// Calculate golden band end position (0.0 ~ 1.0)
+  double _calcBandEnd() {
+    return 1.0; // Band always ends at the max of wake window
+  }
+
+  /// Calculate current progress (0.0 ~ 1.2)
+  double _calcProgress() {
+    final result = widget.sweetSpotResult;
+    if (result != null) {
+      return result.calculateProgress(DateTime.now());
+    }
+    return widget.progress ?? 0.0;
+  }
+
+  /// Whether to show next nap hint
+  bool _shouldShowNextHint() {
+    if (widget.state == SweetSpotState.calibrating) return false;
+    if (widget.state == SweetSpotState.unknown) return false;
+    final result = widget.sweetSpotResult;
+    if (result == null) return false;
+    return true;
   }
 }
