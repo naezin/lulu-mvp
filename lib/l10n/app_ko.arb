@@ -873,6 +873,34 @@
   "@sweetSpotOvertired": {
     "description": "Sweet Spot - 졸린 시간 지남 (확률적 표현)"
   },
+  "sweetSpotTooEarlyDay": "아직 활동 시간이에요. 놀아주세요!",
+  "@sweetSpotTooEarlyDay": {
+    "description": "Sweet Spot v2 - 아직 이른 시간, 낮"
+  },
+  "sweetSpotTooEarlyNight": "아직 활동 시간이에요",
+  "@sweetSpotTooEarlyNight": {
+    "description": "Sweet Spot v2 - 아직 이른 시간, 밤"
+  },
+  "sweetSpotApproachingDay": "슬슬 졸려할 수 있어요",
+  "@sweetSpotApproachingDay": {
+    "description": "Sweet Spot v2 - 접근 중, 낮"
+  },
+  "sweetSpotApproachingNight": "슬슬 잠잘 시간이 다가와요",
+  "@sweetSpotApproachingNight": {
+    "description": "Sweet Spot v2 - 접근 중, 밤"
+  },
+  "sweetSpotOptimalDay": "지금이 낮잠 재우기 좋은 시간이에요",
+  "@sweetSpotOptimalDay": {
+    "description": "Sweet Spot v2 - 최적, 낮"
+  },
+  "sweetSpotOptimalNight": "지금이 재우기 좋은 시간이에요",
+  "@sweetSpotOptimalNight": {
+    "description": "Sweet Spot v2 - 최적, 밤"
+  },
+  "sweetSpotOvertiredMessage": "많이 피곤할 수 있어요. 바로 재워주세요",
+  "@sweetSpotOvertiredMessage": {
+    "description": "Sweet Spot v2 - 과피로 메시지"
+  },
   "sweetSpotEmptyTitle": "수면 기록이 필요해요",
   "@sweetSpotEmptyTitle": {
     "description": "Sweet Spot Empty State 제목"

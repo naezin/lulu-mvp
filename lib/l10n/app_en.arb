@@ -182,6 +182,34 @@
   "sweetSpotApproaching": "May get sleepy soon",
   "sweetSpotOptimal": "Good time to put down",
   "sweetSpotOvertired": "May have passed sleepy window",
+  "sweetSpotTooEarlyDay": "Still has playtime. Enjoy!",
+  "@sweetSpotTooEarlyDay": {
+    "description": "Sweet Spot v2 - too early, daytime"
+  },
+  "sweetSpotTooEarlyNight": "Still has awake time",
+  "@sweetSpotTooEarlyNight": {
+    "description": "Sweet Spot v2 - too early, nighttime"
+  },
+  "sweetSpotApproachingDay": "May get sleepy soon",
+  "@sweetSpotApproachingDay": {
+    "description": "Sweet Spot v2 - approaching, daytime"
+  },
+  "sweetSpotApproachingNight": "Bedtime is getting closer",
+  "@sweetSpotApproachingNight": {
+    "description": "Sweet Spot v2 - approaching, nighttime"
+  },
+  "sweetSpotOptimalDay": "Good time for a nap now",
+  "@sweetSpotOptimalDay": {
+    "description": "Sweet Spot v2 - optimal, daytime"
+  },
+  "sweetSpotOptimalNight": "Good time to put down now",
+  "@sweetSpotOptimalNight": {
+    "description": "Sweet Spot v2 - optimal, nighttime"
+  },
+  "sweetSpotOvertiredMessage": "May be overtired. Try putting down right away",
+  "@sweetSpotOvertiredMessage": {
+    "description": "Sweet Spot v2 - overtired message"
+  },
   "sweetSpotEmptyTitle": "Need sleep records",
   "sweetSpotEmptyTitleWithName": "Start {babyName}'s first record",
   "sweetSpotEmptyTitleDefault": "Start your first record",

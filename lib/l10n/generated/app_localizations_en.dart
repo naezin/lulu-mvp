@@ -602,6 +602,28 @@ class SEn extends S {
   String get sweetSpotOvertired => 'May have passed sleepy window';
 
   @override
+  String get sweetSpotTooEarlyDay => 'Still has playtime. Enjoy!';
+
+  @override
+  String get sweetSpotTooEarlyNight => 'Still has awake time';
+
+  @override
+  String get sweetSpotApproachingDay => 'May get sleepy soon';
+
+  @override
+  String get sweetSpotApproachingNight => 'Bedtime is getting closer';
+
+  @override
+  String get sweetSpotOptimalDay => 'Good time for a nap now';
+
+  @override
+  String get sweetSpotOptimalNight => 'Good time to put down now';
+
+  @override
+  String get sweetSpotOvertiredMessage =>
+      'May be overtired. Try putting down right away';
+
+  @override
   String get sweetSpotEmptyTitle => 'Need sleep records';
 
   @override
@@ -1328,6 +1350,12 @@ class SEn extends S {
   String dailyViewNoRecordsDate(String date) {
     return 'No records on $date';
   }
+
+  @override
+  String get dailyEmptyToday => 'Start your first record today';
+
+  @override
+  String get dailyEmptyPastDay => 'No records for this day';
 
   @override
   String get weeklyChartTitle => 'Weekly Pattern';

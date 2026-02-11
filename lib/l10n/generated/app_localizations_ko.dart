@@ -599,6 +599,27 @@ class SKo extends S {
   String get sweetSpotOvertired => '졸린 시간이 지났을 수 있어요';
 
   @override
+  String get sweetSpotTooEarlyDay => '아직 활동 시간이에요. 놀아주세요!';
+
+  @override
+  String get sweetSpotTooEarlyNight => '아직 활동 시간이에요';
+
+  @override
+  String get sweetSpotApproachingDay => '슬슬 졸려할 수 있어요';
+
+  @override
+  String get sweetSpotApproachingNight => '슬슬 잠잘 시간이 다가와요';
+
+  @override
+  String get sweetSpotOptimalDay => '지금이 낮잠 재우기 좋은 시간이에요';
+
+  @override
+  String get sweetSpotOptimalNight => '지금이 재우기 좋은 시간이에요';
+
+  @override
+  String get sweetSpotOvertiredMessage => '많이 피곤할 수 있어요. 바로 재워주세요';
+
+  @override
   String get sweetSpotEmptyTitle => '수면 기록이 필요해요';
 
   @override
@@ -1308,6 +1329,12 @@ class SKo extends S {
   String dailyViewNoRecordsDate(String date) {
     return '$date에는 기록이 없어요';
   }
+
+  @override
+  String get dailyEmptyToday => '오늘 첫 기록을 남겨보세요';
+
+  @override
+  String get dailyEmptyPastDay => '이 날의 기록이 없어요';
 
   @override
   String get weeklyChartTitle => '주간 패턴';

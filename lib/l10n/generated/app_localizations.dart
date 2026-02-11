@@ -1189,6 +1189,48 @@ abstract class S {
   /// **'졸린 시간이 지났을 수 있어요'**
   String get sweetSpotOvertired;
 
+  /// Sweet Spot v2 - 아직 이른 시간, 낮
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 활동 시간이에요. 놀아주세요!'**
+  String get sweetSpotTooEarlyDay;
+
+  /// Sweet Spot v2 - 아직 이른 시간, 밤
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 활동 시간이에요'**
+  String get sweetSpotTooEarlyNight;
+
+  /// Sweet Spot v2 - 접근 중, 낮
+  ///
+  /// In ko, this message translates to:
+  /// **'슬슬 졸려할 수 있어요'**
+  String get sweetSpotApproachingDay;
+
+  /// Sweet Spot v2 - 접근 중, 밤
+  ///
+  /// In ko, this message translates to:
+  /// **'슬슬 잠잘 시간이 다가와요'**
+  String get sweetSpotApproachingNight;
+
+  /// Sweet Spot v2 - 최적, 낮
+  ///
+  /// In ko, this message translates to:
+  /// **'지금이 낮잠 재우기 좋은 시간이에요'**
+  String get sweetSpotOptimalDay;
+
+  /// Sweet Spot v2 - 최적, 밤
+  ///
+  /// In ko, this message translates to:
+  /// **'지금이 재우기 좋은 시간이에요'**
+  String get sweetSpotOptimalNight;
+
+  /// Sweet Spot v2 - 과피로 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'많이 피곤할 수 있어요. 바로 재워주세요'**
+  String get sweetSpotOvertiredMessage;
+
   /// Sweet Spot Empty State 제목
   ///
   /// In ko, this message translates to:
@@ -2514,6 +2556,18 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'{date}에는 기록이 없어요'**
   String dailyViewNoRecordsDate(String date);
+
+  /// 일간 뷰 빈 상태 - 오늘
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 첫 기록을 남겨보세요'**
+  String get dailyEmptyToday;
+
+  /// 일간 뷰 빈 상태 - 과거
+  ///
+  /// In ko, this message translates to:
+  /// **'이 날의 기록이 없어요'**
+  String get dailyEmptyPastDay;
 
   /// WeeklyChartFull 제목
   ///
