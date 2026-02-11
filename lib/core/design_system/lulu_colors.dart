@@ -106,6 +106,82 @@ class LuluColors {
   }
 
   // ========================================
+  // Sprint 23 C-5: Baby Color Alpha Variants
+  // ========================================
+  // Sweet Spot 카드 골든 밴드/accent line 용
+
+  // --- Baby 1 (Sky Blue #7EB8DA) ---
+  /// baby1 15% — 밴드 배경
+  static const Color baby1Light = Color(0x267EB8DA);
+  /// baby1 30% — 밴드 경계
+  static const Color baby1Border = Color(0x4D7EB8DA);
+  /// baby1 80% — 강한 밴드
+  static const Color baby1Strong = Color(0xCC7EB8DA);
+
+  // --- Baby 2 (Pink #E8B4CB) ---
+  /// baby2 15% — 밴드 배경
+  static const Color baby2Light = Color(0x26E8B4CB);
+  /// baby2 30% — 밴드 경계
+  static const Color baby2Border = Color(0x4DE8B4CB);
+  /// baby2 80% — 강한 밴드
+  static const Color baby2Strong = Color(0xCCE8B4CB);
+
+  // --- Baby 3 (Mint #A8D5BA) ---
+  /// baby3 15% — 밴드 배경
+  static const Color baby3Light = Color(0x26A8D5BA);
+  /// baby3 30% — 밴드 경계
+  static const Color baby3Border = Color(0x4DA8D5BA);
+  /// baby3 80% — 강한 밴드
+  static const Color baby3Strong = Color(0xCCA8D5BA);
+
+  // --- Baby 4 (Apricot #F5D6A8) ---
+  /// baby4 15% — 밴드 배경
+  static const Color baby4Light = Color(0x26F5D6A8);
+  /// baby4 30% — 밴드 경계
+  static const Color baby4Border = Color(0x4DF5D6A8);
+  /// baby4 80% — 강한 밴드
+  static const Color baby4Strong = Color(0xCCF5D6A8);
+
+  /// 아기별 Light (15%) 토큰 리스트
+  static const List<Color> babyColorsLight = [
+    baby1Light, baby2Light, baby3Light, baby4Light,
+  ];
+
+  /// 아기별 Border (30%) 토큰 리스트
+  static const List<Color> babyColorsBorder = [
+    baby1Border, baby2Border, baby3Border, baby4Border,
+  ];
+
+  /// 아기별 Strong (80%) 토큰 리스트
+  static const List<Color> babyColorsStrong = [
+    baby1Strong, baby2Strong, baby3Strong, baby4Strong,
+  ];
+
+  /// 인덱스로 아기 Light 색상 가져오기 (15%)
+  static Color getBabyColorLight(int index) {
+    if (index < 0 || index >= babyColorsLight.length) {
+      return lavenderLight;
+    }
+    return babyColorsLight[index];
+  }
+
+  /// 인덱스로 아기 Border 색상 가져오기 (30%)
+  static Color getBabyColorBorder(int index) {
+    if (index < 0 || index >= babyColorsBorder.length) {
+      return lavenderBorder;
+    }
+    return babyColorsBorder[index];
+  }
+
+  /// 인덱스로 아기 Strong 색상 가져오기 (80%)
+  static Color getBabyColorStrong(int index) {
+    if (index < 0 || index >= babyColorsStrong.length) {
+      return lavenderStrong;
+    }
+    return babyColorsStrong[index];
+  }
+
+  // ========================================
   // Sprint 19: 차트 솔리드 컬러
   // ========================================
 

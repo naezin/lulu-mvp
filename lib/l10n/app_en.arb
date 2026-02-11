@@ -1608,6 +1608,114 @@
   "sweetSpotStateLabelApproaching": "Sleep time soon",
   "sweetSpotStateLabelOptimal": "Optimal now!",
   "sweetSpotStateLabelOvertired": "Overtired",
+  "sweetSpotCardNapLabel1": "1st nap",
+  "sweetSpotCardNapLabel2": "2nd nap",
+  "sweetSpotCardNapLabel3": "3rd nap",
+  "sweetSpotCardNapLabel4": "4th nap",
+  "sweetSpotCardBeforeRelaxedWarm": "Still time to play",
+  "@sweetSpotCardBeforeRelaxedWarm": {
+    "description": "C-5 Sweet Spot card - before zone relaxed (warm tone)"
+  },
+  "sweetSpotCardBeforeRelaxedPlain": "Before optimal zone",
+  "@sweetSpotCardBeforeRelaxedPlain": {
+    "description": "C-5 Sweet Spot card - before zone relaxed (plain tone)"
+  },
+  "sweetSpotCardBeforeSoonWarm": "May get sleepy soon",
+  "@sweetSpotCardBeforeSoonWarm": {
+    "description": "C-5 Sweet Spot card - before zone soon (warm tone)"
+  },
+  "sweetSpotCardBeforeSoonPlain": "Approaching optimal zone",
+  "@sweetSpotCardBeforeSoonPlain": {
+    "description": "C-5 Sweet Spot card - before zone soon (plain tone)"
+  },
+  "sweetSpotCardInZoneWarm": "Now is a comfortable time",
+  "@sweetSpotCardInZoneWarm": {
+    "description": "C-5 Sweet Spot card - in zone (warm tone)"
+  },
+  "sweetSpotCardInZonePlain": "Optimal zone",
+  "@sweetSpotCardInZonePlain": {
+    "description": "C-5 Sweet Spot card - in zone (plain tone)"
+  },
+  "sweetSpotCardAfterZoneWarm": "Watch for baby's cues",
+  "@sweetSpotCardAfterZoneWarm": {
+    "description": "C-5 Sweet Spot card - after zone (warm tone)"
+  },
+  "sweetSpotCardAfterZonePlain": "Observe cues",
+  "@sweetSpotCardAfterZonePlain": {
+    "description": "C-5 Sweet Spot card - after zone (plain tone)"
+  },
+  "sweetSpotCardCalibratingWarm": "Learning patterns (day {day})",
+  "@sweetSpotCardCalibratingWarm": {
+    "description": "C-5 Sweet Spot card - calibrating (warm tone)",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "sweetSpotCardCalibratingPlain": "Learning · {day}/3 days",
+  "@sweetSpotCardCalibratingPlain": {
+    "description": "C-5 Sweet Spot card - calibrating (plain tone)",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "sweetSpotCardNextNapWarm": "Next nap · around {time}",
+  "@sweetSpotCardNextNapWarm": {
+    "description": "C-5 Sweet Spot card - next nap hint (warm tone)",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "1:00 PM"
+      }
+    }
+  },
+  "sweetSpotCardNextNapPlain": "Next: {time}",
+  "@sweetSpotCardNextNapPlain": {
+    "description": "C-5 Sweet Spot card - next nap hint (plain tone)",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "1:00 PM"
+      }
+    }
+  },
+  "sweetSpotCardNextNightWarm": "Next is bedtime",
+  "@sweetSpotCardNextNightWarm": {
+    "description": "C-5 Sweet Spot card - next is night sleep (warm tone)"
+  },
+  "sweetSpotCardNextNightPlain": "Next: bedtime",
+  "@sweetSpotCardNextNightPlain": {
+    "description": "C-5 Sweet Spot card - next is night sleep (plain tone)"
+  },
+  "sweetSpotCardRangeWideMsgWarm": "Wide range at this age",
+  "@sweetSpotCardRangeWideMsgWarm": {
+    "description": "C-5 Sweet Spot card - wide range message (warm tone)"
+  },
+  "sweetSpotCardRangeWideMsgPlain": "Wide optimal zone",
+  "@sweetSpotCardRangeWideMsgPlain": {
+    "description": "C-5 Sweet Spot card - wide range message (plain tone)"
+  },
+  "sweetSpotCardNoDataWarm": "We'll let you know as records build up",
+  "@sweetSpotCardNoDataWarm": {
+    "description": "C-5 Sweet Spot card - no data (warm tone)"
+  },
+  "sweetSpotCardNoDataPlain": "Collecting data",
+  "@sweetSpotCardNoDataPlain": {
+    "description": "C-5 Sweet Spot card - no data (plain tone)"
+  },
+  "sweetSpotCardNightWarm": "Time to prepare for bedtime",
+  "@sweetSpotCardNightWarm": {
+    "description": "C-5 Sweet Spot card - night sleep (warm tone)"
+  },
+  "sweetSpotCardNightPlain": "Bedtime zone",
+  "@sweetSpotCardNightPlain": {
+    "description": "C-5 Sweet Spot card - night sleep (plain tone)"
+  },
   "growthAddMeasurement": "Add Measurement",
   "growthErrorUnknown": "Unknown error",
   "growthRecordToday": "Today",

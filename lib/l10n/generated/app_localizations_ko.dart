@@ -2734,6 +2734,86 @@ class SKo extends S {
   String get sweetSpotStateLabelOvertired => '과로 상태';
 
   @override
+  String get sweetSpotCardNapLabel1 => '첫 번째 낮잠';
+
+  @override
+  String get sweetSpotCardNapLabel2 => '두 번째 낮잠';
+
+  @override
+  String get sweetSpotCardNapLabel3 => '세 번째 낮잠';
+
+  @override
+  String get sweetSpotCardNapLabel4 => '네 번째 낮잠';
+
+  @override
+  String get sweetSpotCardBeforeRelaxedWarm => '아직 놀아도 괜찮아요';
+
+  @override
+  String get sweetSpotCardBeforeRelaxedPlain => '적정 구간 전';
+
+  @override
+  String get sweetSpotCardBeforeSoonWarm => '슬슬 졸릴 수 있어요';
+
+  @override
+  String get sweetSpotCardBeforeSoonPlain => '적정 구간 임박';
+
+  @override
+  String get sweetSpotCardInZoneWarm => '지금이 편안한 시간이에요';
+
+  @override
+  String get sweetSpotCardInZonePlain => '적정 구간';
+
+  @override
+  String get sweetSpotCardAfterZoneWarm => '아기 신호를 봐주세요';
+
+  @override
+  String get sweetSpotCardAfterZonePlain => '신호 관찰 권장';
+
+  @override
+  String sweetSpotCardCalibratingWarm(int day) {
+    return '패턴을 파악하고 있어요 ($day일째)';
+  }
+
+  @override
+  String sweetSpotCardCalibratingPlain(int day) {
+    return '학습 중 · $day/3일';
+  }
+
+  @override
+  String sweetSpotCardNextNapWarm(String time) {
+    return '다음 낮잠 · $time';
+  }
+
+  @override
+  String sweetSpotCardNextNapPlain(String time) {
+    return '다음: $time';
+  }
+
+  @override
+  String get sweetSpotCardNextNightWarm => '다음은 밤잠이에요';
+
+  @override
+  String get sweetSpotCardNextNightPlain => '다음: 밤잠';
+
+  @override
+  String get sweetSpotCardRangeWideMsgWarm => '이 시기는 범위가 넉넉해요';
+
+  @override
+  String get sweetSpotCardRangeWideMsgPlain => '적정 구간 넓음';
+
+  @override
+  String get sweetSpotCardNoDataWarm => '기록이 쌓이면 알려드릴게요';
+
+  @override
+  String get sweetSpotCardNoDataPlain => '데이터 수집 중';
+
+  @override
+  String get sweetSpotCardNightWarm => '밤잠 준비 시간이에요';
+
+  @override
+  String get sweetSpotCardNightPlain => '밤잠 적정 구간';
+
+  @override
   String get growthAddMeasurement => '측정 기록 추가';
 
   @override
