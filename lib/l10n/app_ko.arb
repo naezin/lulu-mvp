@@ -5441,7 +5441,7 @@
   "@wakeWindowElapsed": {"description":"깨시 경과 시간 (시간+분)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
   "wakeWindowElapsedMinutes": "{minutes}분",
   "@wakeWindowElapsedMinutes": {"description":"깨시 경과 시간 (분만)", "placeholders": {"minutes": {"type": "int"}}},
-  "wakeWindowReferenceRange": "비슷한 월령 참고: {min}~{max}분",
+  "wakeWindowReferenceRange": "비슷한 월령 깨시: {min}~{max}분",
   "@wakeWindowReferenceRange": {"description":"교정연령 기준 참고 범위", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
   "wakeWindowPersonalizedRange": "이 아기 기준: {min}~{max}분",
   "@wakeWindowPersonalizedRange": {"description":"개인화된 깨시 참고 범위", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
@@ -5462,8 +5462,8 @@
   "@wakeWindowCardElapsed": {"description":"Sweet Spot 카드 깨시 경과 (분)", "placeholders": {"minutes": {"type": "int"}}},
   "wakeWindowCardElapsedHours": "깨시 {hours}시간 {minutes}분",
   "@wakeWindowCardElapsedHours": {"description":"Sweet Spot 카드 깨시 경과 (시간+분)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
-  "wakeWindowCardRef": "참고: {min}~{max}분",
+  "wakeWindowCardRef": "비슷한 월령 깨시: {min}~{max}분",
   "@wakeWindowCardRef": {"description":"Sweet Spot 카드 깨시 참고 범위 (간결)", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
-  "wakeWindowCardRefHours": "참고: {minH}시간{minM}분~{maxH}시간{maxM}분",
+  "wakeWindowCardRefHours": "비슷한 월령 깨시: {minH}시간{minM}분~{maxH}시간{maxM}분",
   "@wakeWindowCardRefHours": {"description":"Sweet Spot 카드 깨시 참고 범위 (시간 단위)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}}
 }

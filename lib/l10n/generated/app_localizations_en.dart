@@ -3935,7 +3935,7 @@ class SEn extends S {
 
   @override
   String wakeWindowReferenceRange(int min, int max) {
-    return 'Similar age ref: $min-${max}min';
+    return 'Typical awake time: $min-${max}min';
   }
 
   @override
@@ -3977,11 +3977,11 @@ class SEn extends S {
 
   @override
   String wakeWindowCardRef(int min, int max) {
-    return 'Ref: $min-${max}min';
+    return 'Typical awake time: $min-${max}min';
   }
 
   @override
   String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM) {
-    return 'Ref: ${minH}h${minM}m-${maxH}h${maxM}m';
+    return 'Typical awake time: ${minH}h${minM}m-${maxH}h${maxM}m';
   }
 }

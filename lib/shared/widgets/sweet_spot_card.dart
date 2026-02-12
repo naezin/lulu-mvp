@@ -705,6 +705,19 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
   Widget _buildNextNapHint(S l10n) {
     final result = widget.sweetSpotResult;
+
+    // If engine determined night time, show night label (not "next nap")
+    if (widget.isNightTime || (result != null && result.isNightTime)) {
+      return Text(
+        widget.isWarmTone
+            ? l10n.sweetSpotCardNextNightWarm
+            : l10n.sweetSpotCardNextNightPlain,
+        style: LuluTextStyles.bodySmall.copyWith(
+          color: LuluTextColors.tertiary,
+        ),
+      );
+    }
+
     final isLastNap = result != null &&
         result.napNumber >= result.totalExpectedNaps;
 

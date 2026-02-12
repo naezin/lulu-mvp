@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/utils/sleep_classifier.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../../data/repositories/baby_repository.dart';
@@ -280,14 +281,24 @@ class HomeProvider extends ChangeNotifier {
     final baby = selectedBaby;
 
     // Count today's completed sleep records for calibration
-    final completedSleepCount = filteredTodayActivities
+    final completedSleeps = filteredTodayActivities
         .where((a) => a.type == ActivityType.sleep && a.endTime != null)
-        .length;
+        .toList();
+    final completedSleepCount = completedSleeps.length;
+
+    // Count today's completed naps (not night sleep) for napNumber
+    // napNumber = completed naps + 1 (the upcoming nap)
+    final completedNapCount = completedSleeps.where((a) {
+      final sleepType = SleepClassifier.effectiveSleepType(a);
+      return sleepType == 'nap';
+    }).length;
+    final currentNapNumber = completedNapCount + 1;
 
     _sweetSpotProvider?.recalculate(
       lastSleepEndTime: lastSleepActivity?.endTime ?? lastSleepActivity?.startTime,
       babyAgeInMonths: baby?.effectiveAgeInMonths,
       completedSleepRecords: completedSleepCount,
+      currentNapNumber: currentNapNumber,
     );
   }
 

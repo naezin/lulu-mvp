@@ -2870,7 +2870,7 @@
   "@wakeWindowElapsed": {"description":"Wake elapsed time (hours+minutes)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
   "wakeWindowElapsedMinutes": "{minutes}m",
   "@wakeWindowElapsedMinutes": {"description":"Wake elapsed time (minutes only)", "placeholders": {"minutes": {"type": "int"}}},
-  "wakeWindowReferenceRange": "Similar age ref: {min}-{max}min",
+  "wakeWindowReferenceRange": "Typical awake time: {min}-{max}min",
   "@wakeWindowReferenceRange": {"description":"Age-based reference range", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
   "wakeWindowPersonalizedRange": "Your baby: {min}-{max}min",
   "@wakeWindowPersonalizedRange": {"description":"Personalized wake window range", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
@@ -2891,8 +2891,8 @@
   "@wakeWindowCardElapsed": {"description":"Sweet Spot card wake elapsed (minutes)", "placeholders": {"minutes": {"type": "int"}}},
   "wakeWindowCardElapsedHours": "Awake {hours}h {minutes}m",
   "@wakeWindowCardElapsedHours": {"description":"Sweet Spot card wake elapsed (hours+minutes)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
-  "wakeWindowCardRef": "Ref: {min}-{max}min",
+  "wakeWindowCardRef": "Typical awake time: {min}-{max}min",
   "@wakeWindowCardRef": {"description":"Sweet Spot card wake reference range (compact)", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
-  "wakeWindowCardRefHours": "Ref: {minH}h{minM}m-{maxH}h{maxM}m",
+  "wakeWindowCardRefHours": "Typical awake time: {minH}h{minM}m-{maxH}h{maxM}m",
   "@wakeWindowCardRefHours": {"description":"Sweet Spot card wake reference range (hours)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}}
 }

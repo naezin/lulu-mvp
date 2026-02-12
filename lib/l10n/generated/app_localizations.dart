@@ -7003,7 +7003,7 @@ abstract class S {
   /// 교정연령 기준 참고 범위
   ///
   /// In ko, this message translates to:
-  /// **'비슷한 월령 참고: {min}~{max}분'**
+  /// **'비슷한 월령 깨시: {min}~{max}분'**
   String wakeWindowReferenceRange(int min, int max);
 
   /// 개인화된 깨시 참고 범위
@@ -7063,13 +7063,13 @@ abstract class S {
   /// Sweet Spot 카드 깨시 참고 범위 (간결)
   ///
   /// In ko, this message translates to:
-  /// **'참고: {min}~{max}분'**
+  /// **'비슷한 월령 깨시: {min}~{max}분'**
   String wakeWindowCardRef(int min, int max);
 
   /// Sweet Spot 카드 깨시 참고 범위 (시간 단위)
   ///
   /// In ko, this message translates to:
-  /// **'참고: {minH}시간{minM}분~{maxH}시간{maxM}분'**
+  /// **'비슷한 월령 깨시: {minH}시간{minM}분~{maxH}시간{maxM}분'**
   String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM);
 }
 

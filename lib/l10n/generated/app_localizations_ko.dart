@@ -3853,7 +3853,7 @@ class SKo extends S {
 
   @override
   String wakeWindowReferenceRange(int min, int max) {
-    return '비슷한 월령 참고: $min~$max분';
+    return '비슷한 월령 깨시: $min~$max분';
   }
 
   @override
@@ -3895,11 +3895,11 @@ class SKo extends S {
 
   @override
   String wakeWindowCardRef(int min, int max) {
-    return '참고: $min~$max분';
+    return '비슷한 월령 깨시: $min~$max분';
   }
 
   @override
   String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM) {
-    return '참고: $minH시간$minM분~$maxH시간$maxM분';
+    return '비슷한 월령 깨시: $minH시간$minM분~$maxH시간$maxM분';
   }
 }
