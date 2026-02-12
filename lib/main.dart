@@ -14,7 +14,6 @@ import 'core/services/openai_service.dart';
 import 'core/services/onboarding_data_service.dart';
 import 'core/services/deep_link_service.dart';
 import 'core/services/family_sync_service.dart';
-import 'core/services/migration_service.dart';
 import 'features/family/providers/family_provider.dart';
 import 'features/auth/auth.dart';
 import 'core/theme/app_theme.dart';
@@ -395,9 +394,6 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
         await homeProvider.loadTodayActivities();
         _providerInitialized = true;
 
-        // sleep_type NULL 마이그레이션 (일회성, NULL 0건이면 즉시 리턴)
-        _runSleepTypeMigration(family.id);
-
         // 로컬에도 저장 (다음 오프라인 시작용)
         await OnboardingDataService.instance.saveOnboardingData(
           family: family,
@@ -410,24 +406,6 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
       debugPrint('[ERROR] _loadExistingFamilyData: $e');
       return false;
     }
-  }
-
-  /// sleep_type NULL 레코드 일괄 마이그레이션 (비동기, fire-and-forget)
-  void _runSleepTypeMigration(String familyId) {
-    final migrationService = MigrationService(
-      Supabase.instance.client,
-    );
-    migrationService.needsSleepTypeMigration(familyId).then((needsMigration) {
-      if (!needsMigration) return;
-      debugPrint('[INFO] [Main] Starting sleep_type migration...');
-      migrationService.migrateSleepTypes(familyId).then((result) {
-        debugPrint('[OK] [Main] Sleep type migration: $result');
-        // 마이그레이션 완료 후 홈 데이터 리로드
-        if (mounted && result.migratedCount > 0) {
-          context.read<HomeProvider>().loadTodayActivities();
-        }
-      });
-    });
   }
 
   void _onOnboardingComplete(FamilyModel family, List<BabyModel> babies) {

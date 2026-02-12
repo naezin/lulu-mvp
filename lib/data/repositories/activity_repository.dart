@@ -327,52 +327,6 @@ class ActivityRepository {
     }
   }
 
-  /// sleep_type이 NULL인 수면 레코드 조회 (마이그레이션용)
-  Future<List<ActivityModel>> getSleepActivitiesWithNullType(
-    String familyId,
-  ) async {
-    try {
-      // data->>'sleep_type' IS NULL인 수면 기록 조회
-      // Supabase PostgREST: data->>sleep_type.is.null 필터
-      final response = await SupabaseService.activities
-          .select()
-          .eq('family_id', familyId)
-          .eq('type', 'sleep')
-          .or('data->>sleep_type.is.null,data->>sleep_type.eq.');
-
-      return (response as List)
-          .map((data) => _mapToActivityModel(data))
-          .toList();
-    } catch (e) {
-      debugPrint('[ERR] [ActivityRepository] Error getting null sleep_type: $e');
-      return [];
-    }
-  }
-
-  /// 수면 기록의 data.sleep_type만 업데이트 (마이그레이션용)
-  Future<void> updateSleepType(String activityId, String sleepType) async {
-    try {
-      // 기존 data를 읽어서 sleep_type만 추가
-      final existing = await SupabaseService.activities
-          .select('data')
-          .eq('id', activityId)
-          .single();
-
-      final currentData =
-          (existing['data'] as Map<String, dynamic>?) ?? <String, dynamic>{};
-      final updatedData = <String, dynamic>{
-        ...currentData,
-        'sleep_type': sleepType,
-      };
-
-      await SupabaseService.activities
-          .update({'data': updatedData})
-          .eq('id', activityId);
-    } catch (e) {
-      debugPrint('[ERR] [ActivityRepository] Error updating sleep_type: $e');
-    }
-  }
-
   // ========================================
   // Private Helpers
   // ========================================
