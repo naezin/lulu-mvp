@@ -206,13 +206,19 @@ class ActivityRepository {
 
   /// 특정 아기의 진행 중 수면 조회 (end_time IS NULL + type=sleep)
   /// HF-5: BabyTime import 등 외부 경로로 생성된 활성 수면 감지
+  /// HF-ghost: 24h 가드 추가 — 24시간 이상 경과한 유령 수면 무시
   Future<ActivityModel?> getActiveSleepForBaby(String babyId) async {
     try {
+      final cutoff = DateTime.now()
+          .subtract(const Duration(hours: 24))
+          .toUtc()
+          .toIso8601String();
       final response = await SupabaseService.activities
           .select()
           .contains('baby_ids', [babyId])
           .eq('type', 'sleep')
           .isFilter('end_time', null)
+          .gte('start_time', cutoff)
           .order('start_time', ascending: false)
           .limit(1)
           .maybeSingle();
