@@ -1,7 +1,7 @@
 name: lulu_mvp_f
 description: "LULU App ver2 (MVP-F) - 다태아 중심 AI 육아 플랫폼"
 publish_to: 'none'
-version: 2.7.0+43
+version: 2.7.1+44
 
 environment:
   sdk: ^3.10.7
