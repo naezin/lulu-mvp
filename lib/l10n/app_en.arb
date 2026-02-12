@@ -2885,5 +2885,14 @@
   "wakeWindowSegmentAvg": "Avg {minutes}m · {count} segments",
   "@wakeWindowSegmentAvg": {"description":"Wake segment average + count", "placeholders": {"minutes": {"type": "int"}, "count": {"type": "int"}}},
   "wakeWindowSegmentCount": "{count} segments",
-  "@wakeWindowSegmentCount": {"description":"Wake segment count", "placeholders": {"count": {"type": "int"}}}
+  "@wakeWindowSegmentCount": {"description":"Wake segment count", "placeholders": {"count": {"type": "int"}}},
+
+  "wakeWindowCardElapsed": "Awake {minutes}m",
+  "@wakeWindowCardElapsed": {"description":"Sweet Spot card wake elapsed (minutes)", "placeholders": {"minutes": {"type": "int"}}},
+  "wakeWindowCardElapsedHours": "Awake {hours}h {minutes}m",
+  "@wakeWindowCardElapsedHours": {"description":"Sweet Spot card wake elapsed (hours+minutes)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
+  "wakeWindowCardRef": "Ref: {min}-{max}min",
+  "@wakeWindowCardRef": {"description":"Sweet Spot card wake reference range (compact)", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
+  "wakeWindowCardRefHours": "Ref: {minH}h{minM}m-{maxH}h{maxM}m",
+  "@wakeWindowCardRefHours": {"description":"Sweet Spot card wake reference range (hours)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}}
 }

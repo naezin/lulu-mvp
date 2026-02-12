@@ -3882,4 +3882,24 @@ class SKo extends S {
   String wakeWindowSegmentCount(int count) {
     return '$count구간';
   }
+
+  @override
+  String wakeWindowCardElapsed(int minutes) {
+    return '깨시 $minutes분';
+  }
+
+  @override
+  String wakeWindowCardElapsedHours(int hours, int minutes) {
+    return '깨시 $hours시간 $minutes분';
+  }
+
+  @override
+  String wakeWindowCardRef(int min, int max) {
+    return '참고: $min~$max분';
+  }
+
+  @override
+  String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM) {
+    return '참고: $minH시간$minM분~$maxH시간$maxM분';
+  }
 }

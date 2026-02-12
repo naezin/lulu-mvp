@@ -7047,6 +7047,30 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'{count}구간'**
   String wakeWindowSegmentCount(int count);
+
+  /// Sweet Spot 카드 깨시 경과 (분)
+  ///
+  /// In ko, this message translates to:
+  /// **'깨시 {minutes}분'**
+  String wakeWindowCardElapsed(int minutes);
+
+  /// Sweet Spot 카드 깨시 경과 (시간+분)
+  ///
+  /// In ko, this message translates to:
+  /// **'깨시 {hours}시간 {minutes}분'**
+  String wakeWindowCardElapsedHours(int hours, int minutes);
+
+  /// Sweet Spot 카드 깨시 참고 범위 (간결)
+  ///
+  /// In ko, this message translates to:
+  /// **'참고: {min}~{max}분'**
+  String wakeWindowCardRef(int min, int max);
+
+  /// Sweet Spot 카드 깨시 참고 범위 (시간 단위)
+  ///
+  /// In ko, this message translates to:
+  /// **'참고: {minH}시간{minM}분~{maxH}시간{maxM}분'**
+  String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

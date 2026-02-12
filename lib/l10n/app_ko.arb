@@ -5456,5 +5456,14 @@
   "wakeWindowSegmentAvg": "평균 {minutes}분 · {count}구간",
   "@wakeWindowSegmentAvg": {"description":"깨시 구간 평균 + 횟수", "placeholders": {"minutes": {"type": "int"}, "count": {"type": "int"}}},
   "wakeWindowSegmentCount": "{count}구간",
-  "@wakeWindowSegmentCount": {"description":"깨시 구간 수", "placeholders": {"count": {"type": "int"}}}
+  "@wakeWindowSegmentCount": {"description":"깨시 구간 수", "placeholders": {"count": {"type": "int"}}},
+
+  "wakeWindowCardElapsed": "깨시 {minutes}분",
+  "@wakeWindowCardElapsed": {"description":"Sweet Spot 카드 깨시 경과 (분)", "placeholders": {"minutes": {"type": "int"}}},
+  "wakeWindowCardElapsedHours": "깨시 {hours}시간 {minutes}분",
+  "@wakeWindowCardElapsedHours": {"description":"Sweet Spot 카드 깨시 경과 (시간+분)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
+  "wakeWindowCardRef": "참고: {min}~{max}분",
+  "@wakeWindowCardRef": {"description":"Sweet Spot 카드 깨시 참고 범위 (간결)", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
+  "wakeWindowCardRefHours": "참고: {minH}시간{minM}분~{maxH}시간{maxM}분",
+  "@wakeWindowCardRefHours": {"description":"Sweet Spot 카드 깨시 참고 범위 (시간 단위)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}}
 }

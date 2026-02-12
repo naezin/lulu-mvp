@@ -3964,4 +3964,24 @@ class SEn extends S {
   String wakeWindowSegmentCount(int count) {
     return '$count segments';
   }
+
+  @override
+  String wakeWindowCardElapsed(int minutes) {
+    return 'Awake ${minutes}m';
+  }
+
+  @override
+  String wakeWindowCardElapsedHours(int hours, int minutes) {
+    return 'Awake ${hours}h ${minutes}m';
+  }
+
+  @override
+  String wakeWindowCardRef(int min, int max) {
+    return 'Ref: $min-${max}min';
+  }
+
+  @override
+  String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM) {
+    return 'Ref: ${minH}h${minM}m-${maxH}h${maxM}m';
+  }
 }
