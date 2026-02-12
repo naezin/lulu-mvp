@@ -442,6 +442,9 @@ class LuluActivityColors {
   /// 건강 - Soft Red
   static const Color health = Color(0xFFE57373);
 
+  /// 깨시 - Warm Amber
+  static const Color wakeWindow = Color(0xFFE8B86D);
+
   // ========================================
   // Background Colors (10% opacity)
   // ========================================
@@ -726,6 +729,9 @@ class LuluPatternColors {
 
   /// 기저귀
   static const Color diaper = Color(0xFF6FCF97); // mintGreen
+
+  /// 깨시 (Wake Window) - warm amber
+  static const Color wakeWindow = Color(0xFFE8B86D);
 
   /// 빈 시간 (깨어있음)
   static const Color empty = Colors.transparent;
