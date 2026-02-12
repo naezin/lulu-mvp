@@ -3837,4 +3837,49 @@ class SKo extends S {
   String encouragementDataWeeklyWarm(String count) {
     return '오늘 $count건, 꼼꼼히 기록하고 있네요';
   }
+
+  @override
+  String get wakeWindowLabel => '깨시';
+
+  @override
+  String wakeWindowElapsed(int hours, int minutes) {
+    return '$hours시간 $minutes분';
+  }
+
+  @override
+  String wakeWindowElapsedMinutes(int minutes) {
+    return '$minutes분';
+  }
+
+  @override
+  String wakeWindowReferenceRange(int min, int max) {
+    return '비슷한 월령 참고: $min~$max분';
+  }
+
+  @override
+  String wakeWindowPersonalizedRange(int min, int max) {
+    return '이 아기 기준: $min~$max분';
+  }
+
+  @override
+  String get wakeWindowBeforeRange => '아직 여유 있어요';
+
+  @override
+  String get wakeWindowInRange => '슬슬 졸릴 수 있어요';
+
+  @override
+  String get wakeWindowAfterRange => '아기 신호를 봐주세요';
+
+  @override
+  String get wakeWindowSleeping => '수면 중';
+
+  @override
+  String wakeWindowSegmentAvg(int minutes, int count) {
+    return '평균 $minutes분 · $count구간';
+  }
+
+  @override
+  String wakeWindowSegmentCount(int count) {
+    return '$count구간';
+  }
 }

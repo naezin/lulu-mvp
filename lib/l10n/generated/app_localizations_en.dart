@@ -3919,4 +3919,49 @@ class SEn extends S {
   String encouragementDataWeeklyWarm(String count) {
     return '$count records today. Great tracking';
   }
+
+  @override
+  String get wakeWindowLabel => 'Awake Time';
+
+  @override
+  String wakeWindowElapsed(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
+  String wakeWindowElapsedMinutes(int minutes) {
+    return '${minutes}m';
+  }
+
+  @override
+  String wakeWindowReferenceRange(int min, int max) {
+    return 'Similar age ref: $min-${max}min';
+  }
+
+  @override
+  String wakeWindowPersonalizedRange(int min, int max) {
+    return 'Your baby: $min-${max}min';
+  }
+
+  @override
+  String get wakeWindowBeforeRange => 'Still has energy';
+
+  @override
+  String get wakeWindowInRange => 'May be getting sleepy';
+
+  @override
+  String get wakeWindowAfterRange => 'Watch for sleep cues';
+
+  @override
+  String get wakeWindowSleeping => 'Sleeping';
+
+  @override
+  String wakeWindowSegmentAvg(int minutes, int count) {
+    return 'Avg ${minutes}m · $count segments';
+  }
+
+  @override
+  String wakeWindowSegmentCount(int count) {
+    return '$count segments';
+  }
 }
