@@ -372,5 +372,131 @@ void main() {
         expect(SleepClassifier.isColdStart(mixedRecords), isTrue);
       });
     });
+
+    group('effectiveSleepType', () {
+      test('returns existing sleep_type when present', () {
+        final activity = _makeSleep(
+          DateTime(2026, 2, 12, 10, 0),
+          DateTime(2026, 2, 12, 11, 0),
+          data: {'sleep_type': 'night'},
+        );
+        expect(SleepClassifier.effectiveSleepType(activity), 'night');
+      });
+
+      test('classifies as nap when sleep_type is NULL and daytime', () {
+        final activity = _makeSleep(
+          DateTime(2026, 2, 12, 14, 0),
+          DateTime(2026, 2, 12, 15, 0),
+        );
+        // No data → cold start → 14:00 = nap
+        expect(SleepClassifier.effectiveSleepType(activity), 'nap');
+      });
+
+      test('classifies as night when sleep_type is NULL and nighttime', () {
+        final activity = _makeSleep(
+          DateTime(2026, 2, 12, 22, 0),
+          DateTime(2026, 2, 13, 6, 0),
+        );
+        // No data → cold start → 22:00 = night
+        expect(SleepClassifier.effectiveSleepType(activity), 'night');
+      });
+
+      test('classifies as nap when sleep_type is empty string', () {
+        final activity = _makeSleep(
+          DateTime(2026, 2, 12, 14, 0),
+          DateTime(2026, 2, 12, 15, 0),
+          data: {'sleep_type': ''},
+        );
+        // Empty string → treated as missing → cold start → 14:00 = nap
+        expect(SleepClassifier.effectiveSleepType(activity), 'nap');
+      });
+
+      test('uses recentSleepRecords for pattern-based fallback', () {
+        final recentRecords = List.generate(7, (i) {
+          final day = DateTime(2026, 2, 5 + i);
+          return _makeSleep(
+            DateTime(day.year, day.month, day.day, 20, 0),
+            DateTime(day.year, day.month, day.day + 1, 5, 0),
+          );
+        });
+
+        final activity = _makeSleep(
+          DateTime(2026, 2, 12, 18, 30),
+          DateTime(2026, 2, 12, 19, 0),
+        );
+        // Pattern anchor ~20:00, 18:30 is within range → night
+        final result = SleepClassifier.effectiveSleepType(
+          activity,
+          recentSleepRecords: recentRecords,
+        );
+        expect(result, 'night');
+      });
+    });
+
+    group('applyFallbackSleepTypes', () {
+      test('adds sleep_type to records missing it', () {
+        final activities = [
+          _makeSleep(
+            DateTime(2026, 2, 12, 14, 0),
+            DateTime(2026, 2, 12, 15, 0),
+          ),
+          _makeSleep(
+            DateTime(2026, 2, 12, 22, 0),
+            DateTime(2026, 2, 13, 6, 0),
+          ),
+        ];
+
+        final result = SleepClassifier.applyFallbackSleepTypes(activities);
+        expect(result[0].data?['sleep_type'], 'nap');
+        expect(result[1].data?['sleep_type'], 'night');
+      });
+
+      test('preserves existing sleep_type', () {
+        final activities = [
+          _makeSleep(
+            DateTime(2026, 2, 12, 14, 0),
+            DateTime(2026, 2, 12, 15, 0),
+            data: {'sleep_type': 'night'}, // Override: daytime but marked night
+          ),
+        ];
+
+        final result = SleepClassifier.applyFallbackSleepTypes(activities);
+        expect(result[0].data?['sleep_type'], 'night'); // Preserved
+      });
+
+      test('skips non-sleep activities', () {
+        final feeding = ActivityModel(
+          id: 'f1',
+          familyId: 'fam1',
+          babyIds: ['baby1'],
+          type: ActivityType.feeding,
+          startTime: DateTime(2026, 2, 12, 10, 0),
+          createdAt: DateTime(2026, 2, 12),
+          data: {'feeding_type': 'breast'},
+        );
+
+        final result = SleepClassifier.applyFallbackSleepTypes([feeding]);
+        expect(result[0].data?['sleep_type'], isNull);
+        expect(result[0].data?['feeding_type'], 'breast');
+      });
+    });
   });
+}
+
+/// Helper to create a sleep ActivityModel for testing
+ActivityModel _makeSleep(
+  DateTime start,
+  DateTime end, {
+  Map<String, dynamic>? data,
+}) {
+  return ActivityModel(
+    id: 'sleep_${start.millisecondsSinceEpoch}',
+    familyId: 'fam1',
+    babyIds: ['baby1'],
+    type: ActivityType.sleep,
+    startTime: start,
+    endTime: end,
+    createdAt: start,
+    data: data,
+  );
 }

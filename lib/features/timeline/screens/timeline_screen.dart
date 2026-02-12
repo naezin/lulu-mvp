@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
 import '../../../core/design_system/lulu_typography.dart';
 import '../../../core/design_system/lulu_spacing.dart';
+import '../../../core/utils/sleep_classifier.dart';
 import '../../../data/models/models.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../home/providers/home_provider.dart';
@@ -417,7 +418,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
 
     return switch (activity.type) {
       ActivityType.feeding => _getFeedingTitle(data),
-      ActivityType.sleep => _getSleepTitle(data),
+      ActivityType.sleep => _getSleepTitle(activity),
       ActivityType.diaper => l10n.diaperChange,
       ActivityType.play => l10n.activityPlay,
       ActivityType.health => l10n.activityTypeHealth,
@@ -438,11 +439,10 @@ class _TimelineScreenState extends State<TimelineScreen> {
     };
   }
 
-  String _getSleepTitle(Map<String, dynamic>? data) {
+  String _getSleepTitle(ActivityModel activity) {
     final l10n = S.of(context)!;
-    if (data == null) return l10n.activityTypeSleep;
-
-    final sleepType = data['sleep_type'] as String? ?? '';
+    // C-0.4 fallback: classify if sleep_type is NULL (legacy records)
+    final sleepType = SleepClassifier.effectiveSleepType(activity);
     return switch (sleepType) {
       'nap' => l10n.sleepTypeNap,
       'night' => l10n.sleepTypeNight,

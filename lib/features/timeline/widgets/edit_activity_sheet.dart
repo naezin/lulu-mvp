@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../../../l10n/generated/app_localizations.dart' show S;
 
+import '../../../core/utils/sleep_classifier.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
@@ -61,6 +62,11 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
     _startTime = widget.activity.startTime;
     _endTime = widget.activity.endTime;
     _data = Map<String, dynamic>.from(widget.activity.data ?? {});
+    // C-0.4 fallback: ensure sleep_type exists for legacy records
+    if (widget.activity.type == ActivityType.sleep &&
+        !_data.containsKey('sleep_type')) {
+      _data['sleep_type'] = SleepClassifier.effectiveSleepType(widget.activity);
+    }
     _notesController.text = widget.activity.notes ?? '';
   }
 

@@ -238,6 +238,62 @@ class SleepClassifier {
     return anchor == null;
   }
 
+  /// Read-time fallback: return existing sleep_type or classify if NULL
+  ///
+  /// For legacy records that have no sleep_type in their data map,
+  /// this classifies using the full SleepClassifier algorithm.
+  /// If [recentSleepRecords] is provided, uses pattern-based classification.
+  /// Otherwise falls back to cold start (21:00~06:00).
+  ///
+  /// DB data is never modified — classification happens at read-time only.
+  static String effectiveSleepType(
+    ActivityModel activity, {
+    List<ActivityModel> recentSleepRecords = const [],
+  }) {
+    // If sleep_type already exists in data, use it
+    final existing = activity.data?['sleep_type'] as String?;
+    if (existing != null && existing.isNotEmpty) {
+      return existing;
+    }
+
+    // Fallback: classify based on pattern or cold start
+    return classify(
+      startTime: activity.startTime,
+      endTime: activity.endTime,
+      recentSleepRecords: recentSleepRecords,
+    );
+  }
+
+  /// Batch fallback: apply effectiveSleepType to a list of sleep activities
+  ///
+  /// Uses the same recentSleepRecords for all activities in the batch,
+  /// avoiding redundant pattern extraction.
+  static List<ActivityModel> applyFallbackSleepTypes(
+    List<ActivityModel> activities, {
+    List<ActivityModel> recentSleepRecords = const [],
+  }) {
+    return activities.map((activity) {
+      if (activity.type != ActivityType.sleep) return activity;
+
+      final existing = activity.data?['sleep_type'] as String?;
+      if (existing != null && existing.isNotEmpty) return activity;
+
+      // Classify and create new activity with sleep_type in data
+      final classified = classify(
+        startTime: activity.startTime,
+        endTime: activity.endTime,
+        recentSleepRecords: recentSleepRecords,
+      );
+
+      final updatedData = <String, dynamic>{
+        ...?activity.data,
+        'sleep_type': classified,
+      };
+
+      return activity.copyWith(data: updatedData);
+    }).toList();
+  }
+
   /// Get the current night anchor hour for debugging/display
   ///
   /// Returns null if in cold start mode.
