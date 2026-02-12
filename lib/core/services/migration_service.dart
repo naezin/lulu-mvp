@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../data/models/feeding_type.dart';
+import '../utils/sleep_classifier.dart';
+import '../../data/models/activity_model.dart';
+import '../../data/models/baby_type.dart';
 
 /// 데이터 마이그레이션 서비스
 ///
@@ -163,6 +167,140 @@ class MigrationService {
         rolledBackCount: 0,
         errorCount: 1,
         errors: ['Rollback failed: $e'],
+      );
+    }
+  }
+
+  /// sleep_type NULL 마이그레이션 필요 여부
+  Future<bool> needsSleepTypeMigration(String familyId) async {
+    try {
+      final result = await _supabase
+          .from('activities')
+          .select('id')
+          .eq('family_id', familyId)
+          .eq('type', 'sleep')
+          .or('data->>sleep_type.is.null,data->>sleep_type.eq.')
+          .limit(1);
+
+      return (result as List).isNotEmpty;
+    } catch (e) {
+      debugPrint('[WARN] [MigrationService] needsSleepTypeMigration check failed: $e');
+      return false;
+    }
+  }
+
+  /// sleep_type NULL → SleepClassifier 일괄 분류
+  ///
+  /// 일회성 마이그레이션: NULL이 0건이면 즉시 리턴.
+  /// 패턴 기반 분류를 위해 최근 30일 수면 기록을 참조.
+  Future<MigrationResult> migrateSleepTypes(String familyId) async {
+    int migratedCount = 0;
+    int errorCount = 0;
+    final errors = <String>[];
+    final migratedIds = <String>[];
+
+    try {
+      // 1. sleep_type이 NULL이거나 빈 문자열인 수면 기록 조회
+      final result = await _supabase
+          .from('activities')
+          .select()
+          .eq('family_id', familyId)
+          .eq('type', 'sleep')
+          .or('data->>sleep_type.is.null,data->>sleep_type.eq.');
+
+      final nullRecords = result as List;
+      if (nullRecords.isEmpty) {
+        debugPrint('[OK] [MigrationService] No NULL sleep_type records');
+        return const MigrationResult(
+          success: true,
+          migratedCount: 0,
+          errorCount: 0,
+          errors: [],
+          migratedIds: [],
+        );
+      }
+
+      debugPrint('[INFO] [MigrationService] Found ${nullRecords.length} NULL sleep_type records');
+
+      // 2. 최근 30일 수면 기록 조회 (패턴 추출용)
+      final thirtyDaysAgo = DateTime.now()
+          .subtract(const Duration(days: 30))
+          .toUtc()
+          .toIso8601String();
+      final recentResult = await _supabase
+          .from('activities')
+          .select()
+          .eq('family_id', familyId)
+          .eq('type', 'sleep')
+          .gte('start_time', thirtyDaysAgo)
+          .order('start_time', ascending: false);
+
+      final recentSleepRecords = (recentResult as List)
+          .map((data) => ActivityModel(
+                id: data['id'] as String,
+                familyId: data['family_id'] as String,
+                babyIds: List<String>.from(data['baby_ids'] as List),
+                type: ActivityType.sleep,
+                startTime: DateTime.parse(data['start_time'] as String).toLocal(),
+                endTime: data['end_time'] != null
+                    ? DateTime.parse(data['end_time'] as String).toLocal()
+                    : null,
+                data: data['data'] as Map<String, dynamic>?,
+                createdAt: DateTime.parse(data['created_at'] as String).toLocal(),
+              ))
+          .toList();
+
+      // 3. 각 NULL 레코드에 SleepClassifier 적용
+      for (final record in nullRecords) {
+        try {
+          final startTime =
+              DateTime.parse(record['start_time'] as String).toLocal();
+          final endTimeStr = record['end_time'] as String?;
+          final endTime = endTimeStr != null
+              ? DateTime.parse(endTimeStr).toLocal()
+              : null;
+
+          final classified = SleepClassifier.classify(
+            startTime: startTime,
+            endTime: endTime,
+            recentSleepRecords: recentSleepRecords,
+          );
+
+          final currentData = Map<String, dynamic>.from(
+              (record['data'] as Map<String, dynamic>?) ?? {});
+          currentData['sleep_type'] = classified;
+
+          await _supabase
+              .from('activities')
+              .update({'data': currentData})
+              .eq('id', record['id']);
+
+          migratedCount++;
+          migratedIds.add(record['id'] as String);
+        } catch (e) {
+          errorCount++;
+          errors.add('Activity ${record['id']}: $e');
+        }
+      }
+
+      debugPrint(
+          '[OK] [MigrationService] Sleep type migration: $migratedCount migrated, $errorCount errors');
+
+      return MigrationResult(
+        success: errorCount == 0,
+        migratedCount: migratedCount,
+        errorCount: errorCount,
+        errors: errors,
+        migratedIds: migratedIds,
+      );
+    } catch (e) {
+      debugPrint('[ERR] [MigrationService] Sleep type migration failed: $e');
+      return MigrationResult(
+        success: false,
+        migratedCount: 0,
+        errorCount: 1,
+        errors: ['Sleep type migration failed: $e'],
+        migratedIds: [],
       );
     }
   }

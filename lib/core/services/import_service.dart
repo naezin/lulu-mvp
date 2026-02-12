@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 
 import '../../data/repositories/activity_repository.dart';
 import '../../data/models/activity_model.dart';
+import '../../data/models/baby_type.dart';
+import '../utils/sleep_classifier.dart';
 import 'parsers/babytime_parser.dart';
 import 'parsers/huckleberry_parser.dart';
 import 'parsers/parsed_activity.dart';
@@ -120,10 +122,28 @@ class ImportService {
           }
 
           // ActivityModel로 변환
-          final activity = parsed.toActivityModel(
+          var activity = parsed.toActivityModel(
             babyId: babyId,
             familyId: familyId,
           );
+
+          // sleep_type 자동 분류 (import 시 NULL 방지)
+          if (activity.type == ActivityType.sleep) {
+            final existingSleepType =
+                activity.data?['sleep_type'] as String?;
+            if (existingSleepType == null || existingSleepType.isEmpty) {
+              final classified = SleepClassifier.classify(
+                startTime: activity.startTime,
+                endTime: activity.endTime,
+                recentSleepRecords: const [],
+              );
+              final updatedData = <String, dynamic>{
+                ...?activity.data,
+                'sleep_type': classified,
+              };
+              activity = activity.copyWith(data: updatedData);
+            }
+          }
 
           // 저장
           await _activityRepository.createActivity(activity);

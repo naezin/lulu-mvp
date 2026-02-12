@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/utils/sleep_classifier.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/activity_repository.dart';
@@ -497,8 +496,14 @@ class PatternDataProvider extends ChangeNotifier {
       // subType 결정 (수면: night/nap, 놀이: play_type 등)
       String? subType;
       if (type == 'sleep') {
-        // C-0.4 fallback: classify if sleep_type is NULL (legacy records)
-        subType = SleepClassifier.effectiveSleepType(activity);
+        // DB sleep_type 사용, NULL이면 시간대 기반 판별 (차트용)
+        final dbSleepType = activity.data?['sleep_type'] as String?;
+        if (dbSleepType != null && dbSleepType.isNotEmpty) {
+          subType = dbSleepType;
+        } else {
+          final hour = activity.startTime.toLocal().hour;
+          subType = SleepTimeConfig.isNightTime(hour) ? 'night' : 'nap';
+        }
       } else if (type == 'play') {
         subType = activity.data?['play_type'] as String? ??
             activity.data?['playType'] as String?;
