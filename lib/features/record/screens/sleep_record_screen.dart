@@ -149,10 +149,8 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
 
                       const SizedBox(height: LuluSpacing.xxl),
 
-                      // 수면 타입 선택 (밤잠/낮잠)
-                      _buildSleepTypeSelector(provider),
-
-                      const SizedBox(height: LuluSpacing.xxl),
+                      // C-0.4: Sleep type selector removed
+                      // Auto-classified by SleepClassifier on save
 
                       // 모드에 따른 UI
                       if (_isSleepNow)
@@ -210,14 +208,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     setState(() => _isQuickSaving = true);
 
     try {
-      // 마지막 기록의 데이터를 복사
-      final lastData = widget.lastSleepRecord!.data;
-      if (lastData == null) return;
-
-      final sleepType = lastData['sleep_type'] as String? ?? 'nap';
-      provider.setSleepType(sleepType);
-
-      // 지금 재우기 모드로 저장 (현재 시간)
+      // C-0.4: No manual sleepType copy — auto-classified on save
       provider.setSleepStartTime(DateTime.now());
       provider.setSleepEndTime(null);
 
@@ -412,43 +403,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
     );
   }
 
-  Widget _buildSleepTypeSelector(SleepRecordProvider provider) {
-    final l10n = S.of(context)!;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.sleepTypeLabel,
-          style: LuluTextStyles.bodyLarge.copyWith(
-            color: LuluTextColors.primary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: LuluSpacing.md),
-        Row(
-          children: [
-            Expanded(
-              child: _SleepTypeButton(
-                label: l10n.sleepTypeNap,
-                icon: LuluIcons.sun,
-                isSelected: provider.sleepType == 'nap',
-                onTap: () => provider.setSleepType('nap'),
-              ),
-            ),
-            const SizedBox(width: LuluSpacing.sm),
-            Expanded(
-              child: _SleepTypeButton(
-                label: l10n.sleepTypeNight,
-                icon: LuluIcons.moon,
-                isSelected: provider.sleepType == 'night',
-                onTap: () => provider.setSleepType('night'),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+  // C-0.4: _buildSleepTypeSelector removed — auto-classified by SleepClassifier
 
   Widget _buildSleepNowSection(SleepRecordProvider provider) {
     return Column(
@@ -780,8 +735,14 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         orElse: () => widget.babies.first,
       );
 
+      // C-0.4: Auto-classify sleep type before starting
+      final classifiedType = await provider.classifySleepType(
+        startTime: provider.sleepStartTime,
+      );
+
       // Sprint 20 HF #9-B: 같은 아기 수면 진행 중이면 확인 다이얼로그
       if (ongoingSleepProvider.hasSleepInProgress) {
+        if (!mounted) return;
         final confirmed = await _showSleepInProgressDialog(ongoingSleepProvider);
         if (confirmed != true || !mounted) return;
 
@@ -789,7 +750,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         await ongoingSleepProvider.endAndStartSleep(
           babyId: selectedBaby.id,
           familyId: widget.familyId,
-          sleepType: provider.sleepType,
+          sleepType: classifiedType,
           babyName: selectedBaby.name,
           startTime: provider.sleepStartTime,
         );
@@ -797,7 +758,7 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
         await ongoingSleepProvider.startSleep(
           babyId: selectedBaby.id,
           familyId: widget.familyId,
-          sleepType: provider.sleepType,
+          sleepType: classifiedType,
           babyName: selectedBaby.name,
           startTime: provider.sleepStartTime,
         );
@@ -947,5 +908,6 @@ class _SleepRecordScreenState extends State<SleepRecordScreen> {
   }
 }
 
-// Private widgets (_ModeButton, _IntegratedTimeButton, _SleepTypeButton)
+// Private widgets (_ModeButton, _IntegratedTimeButton)
+// C-0.4: _SleepTypeButton removed
 // → sleep_record_widgets.dart (part file)
