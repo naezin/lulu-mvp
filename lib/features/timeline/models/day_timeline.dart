@@ -147,6 +147,47 @@ class DayTimeline {
   /// 데이터가 있는지 확인
   bool get hasData => allBlocks.isNotEmpty || durationBlocks.isNotEmpty || instantMarkers.isNotEmpty;
 
+  // ============================================================
+  // Wake Window (깨시) segment calculation — C-0.6
+  // ============================================================
+
+  /// Wake segments: gaps between consecutive sleep blocks
+  ///
+  /// Returns list of Duration representing each awake period.
+  /// Filters: skip negative/zero gaps (overlapping records),
+  ///          skip 10h+ gaps (overnight = not meaningful wake segment)
+  List<Duration> get wakeSegments {
+    final sleepBlocks = durationBlocks
+        .where((b) => b.type == 'sleep')
+        .toList()
+      ..sort((a, b) => a.startTime.compareTo(b.startTime));
+
+    if (sleepBlocks.length < 2) return [];
+
+    final segments = <Duration>[];
+    for (int i = 0; i < sleepBlocks.length - 1; i++) {
+      final wakeStart = sleepBlocks[i].endTime;
+      final wakeEnd = sleepBlocks[i + 1].startTime;
+      final duration = wakeEnd.difference(wakeStart);
+
+      if (duration.inMinutes > 0 && duration.inHours < 10) {
+        segments.add(duration);
+      }
+    }
+    return segments;
+  }
+
+  /// Average wake segment duration in minutes (null if no segments)
+  double? get wakeSegmentAverageMinutes {
+    final segs = wakeSegments;
+    if (segs.isEmpty) return null;
+    final totalMinutes = segs.fold(0, (sum, d) => sum + d.inMinutes);
+    return totalMinutes / segs.length;
+  }
+
+  /// Number of wake segments
+  int get wakeSegmentCount => wakeSegments.length;
+
   DayTimeline copyWith({
     DateTime? date,
     List<DurationBlock>? allBlocks,
@@ -192,6 +233,11 @@ class WeeklySummary {
   /// 놀이 트렌드
   final double playTrend;
 
+  /// 평균 깨시 구간 (분) — C-0.6
+  final double avgWakeSegmentMinutes;
+  /// 깨시 구간 트렌드
+  final double wakeSegmentTrend;
+
   const WeeklySummary({
     required this.avgSleepHours,
     this.sleepTrend = 0,
@@ -203,6 +249,8 @@ class WeeklySummary {
     this.diaperTrend = 0,
     required this.avgPlayMinutes,
     this.playTrend = 0,
+    this.avgWakeSegmentMinutes = 0,
+    this.wakeSegmentTrend = 0,
   });
 
   /// 빈 요약
@@ -218,6 +266,8 @@ class WeeklySummary {
       diaperTrend: 0,
       avgPlayMinutes: 0,
       playTrend: 0,
+      avgWakeSegmentMinutes: 0,
+      wakeSegmentTrend: 0,
     );
   }
 
@@ -232,6 +282,8 @@ class WeeklySummary {
     double? diaperTrend,
     double? avgPlayMinutes,
     double? playTrend,
+    double? avgWakeSegmentMinutes,
+    double? wakeSegmentTrend,
   }) {
     return WeeklySummary(
       avgSleepHours: avgSleepHours ?? this.avgSleepHours,
@@ -244,6 +296,8 @@ class WeeklySummary {
       diaperTrend: diaperTrend ?? this.diaperTrend,
       avgPlayMinutes: avgPlayMinutes ?? this.avgPlayMinutes,
       playTrend: playTrend ?? this.playTrend,
+      avgWakeSegmentMinutes: avgWakeSegmentMinutes ?? this.avgWakeSegmentMinutes,
+      wakeSegmentTrend: wakeSegmentTrend ?? this.wakeSegmentTrend,
     );
   }
 }

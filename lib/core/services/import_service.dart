@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 
 import '../../data/repositories/activity_repository.dart';
 import '../../data/models/activity_model.dart';
+import '../../data/models/baby_type.dart';
+import '../../features/timeline/models/daily_pattern.dart';
 import 'parsers/babytime_parser.dart';
 import 'parsers/huckleberry_parser.dart';
 import 'parsers/parsed_activity.dart';
@@ -120,10 +122,27 @@ class ImportService {
           }
 
           // ActivityModel로 변환
-          final activity = parsed.toActivityModel(
+          var activity = parsed.toActivityModel(
             babyId: babyId,
             familyId: familyId,
           );
+
+          // sleep_type 자동 분류 (import 시 NULL 방지)
+          // import/레거시 데이터는 시간 기반 분류 (18~06=night, 그 외=nap)
+          if (activity.type == ActivityType.sleep) {
+            final existingSleepType =
+                activity.data?['sleep_type'] as String?;
+            if (existingSleepType == null || existingSleepType.isEmpty) {
+              final hour = activity.startTime.toLocal().hour;
+              final sleepType =
+                  SleepTimeConfig.isNightTime(hour) ? 'night' : 'nap';
+              final updatedData = <String, dynamic>{
+                ...?activity.data,
+                'sleep_type': sleepType,
+              };
+              activity = activity.copyWith(data: updatedData);
+            }
+          }
 
           // 저장
           await _activityRepository.createActivity(activity);

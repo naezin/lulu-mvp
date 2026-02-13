@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/utils/sleep_classifier.dart';
 import '../../../data/models/models.dart';
 import 'record_base_provider.dart';
 
@@ -88,6 +89,7 @@ class SleepRecordProvider extends RecordBaseProvider {
   // ========================================
 
   /// Save sleep record
+  /// C-0.4: Auto-classify sleep type (nap/night) before save
   /// Sprint 20 HF #9-C: Overlap check for past sleep records
   Future<ActivityModel?> saveSleep() async {
     if (!validateBeforeSave()) return null;
@@ -98,6 +100,9 @@ class SleepRecordProvider extends RecordBaseProvider {
     notifyListeners();
 
     try {
+      // C-0.4: Auto-classify sleep type using recent patterns
+      await _autoClassifySleepType();
+
       // Sprint 20 HF #9-C: Overlap check (past records with both start/end)
       if (_sleepEndTime != null && selectedBabyIds.isNotEmpty) {
         try {
@@ -153,6 +158,91 @@ class SleepRecordProvider extends RecordBaseProvider {
     } finally {
       setLoading(false);
       notifyListeners();
+    }
+  }
+
+  // ========================================
+  // C-0.4: Auto classification
+  // ========================================
+
+  /// Auto-classify sleep type using SleepClassifier
+  ///
+  /// Fetches recent sleep records and runs pattern-based classification.
+  /// Falls back to cold start (21:00~06:00) if insufficient data.
+  /// Sets _sleepType internally — no UI interaction needed.
+  Future<void> _autoClassifySleepType() async {
+    if (familyId == null || selectedBabyIds.isEmpty) return;
+
+    try {
+      final recentRecords = await activityRepository.getActivitiesByDateRange(
+        familyId!,
+        startDate: DateTime.now().subtract(
+          Duration(days: SleepClassifier.lookbackDays + 1),
+        ),
+        endDate: DateTime.now(),
+        babyId: selectedBabyIds.first,
+        type: ActivityType.sleep,
+      );
+
+      _sleepType = SleepClassifier.classify(
+        startTime: _sleepStartTime,
+        endTime: _sleepEndTime,
+        recentSleepRecords: recentRecords,
+      );
+
+      debugPrint('[OK] [SleepRecordProvider] Auto-classified sleep type: '
+          '$_sleepType (records: ${recentRecords.length})');
+    } catch (e) {
+      // Fallback to cold start on error
+      _sleepType = SleepClassifier.classify(
+        startTime: _sleepStartTime,
+        endTime: _sleepEndTime,
+        recentSleepRecords: const [],
+      );
+      debugPrint('[WARN] [SleepRecordProvider] Auto-classify failed, '
+          'using cold start: $_sleepType ($e)');
+    }
+  }
+
+  /// Public method for "sleep now" mode — classify before startSleep call
+  ///
+  /// Called from sleep_record_screen._handleSave() to get classified type
+  /// before passing to OngoingSleepProvider.startSleep().
+  Future<String> classifySleepType({
+    required DateTime startTime,
+  }) async {
+    if (familyId == null || selectedBabyIds.isEmpty) {
+      return SleepClassifier.classify(
+        startTime: startTime,
+        recentSleepRecords: const [],
+      );
+    }
+
+    try {
+      final recentRecords = await activityRepository.getActivitiesByDateRange(
+        familyId!,
+        startDate: DateTime.now().subtract(
+          Duration(days: SleepClassifier.lookbackDays + 1),
+        ),
+        endDate: DateTime.now(),
+        babyId: selectedBabyIds.first,
+        type: ActivityType.sleep,
+      );
+
+      final classified = SleepClassifier.classify(
+        startTime: startTime,
+        recentSleepRecords: recentRecords,
+      );
+
+      debugPrint('[OK] [SleepRecordProvider] classifySleepType: '
+          '$classified (records: ${recentRecords.length})');
+      return classified;
+    } catch (e) {
+      debugPrint('[WARN] [SleepRecordProvider] classifySleepType failed: $e');
+      return SleepClassifier.classify(
+        startTime: startTime,
+        recentSleepRecords: const [],
+      );
     }
   }
 

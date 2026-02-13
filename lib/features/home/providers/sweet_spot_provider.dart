@@ -72,6 +72,7 @@ class SweetSpotProvider extends ChangeNotifier {
     required DateTime? lastSleepEndTime,
     required int? babyAgeInMonths,
     int? completedSleepRecords,
+    int? currentNapNumber,
   }) {
     if (lastSleepEndTime == null || babyAgeInMonths == null) {
       if (_sweetSpotResult != null) {
@@ -89,6 +90,7 @@ class SweetSpotProvider extends ChangeNotifier {
       lastWakeTime: lastSleepEndTime,
       now: now,
       completedSleepRecords: completedSleepRecords,
+      currentNapNumber: currentNapNumber,
     );
 
     // Guard: only notify if state changed

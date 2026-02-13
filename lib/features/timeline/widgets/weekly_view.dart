@@ -178,6 +178,29 @@ class _WeeklyViewState extends State<WeeklyView> {
         stats.diaper.dailyAverageCount == 0;
   }
 
+  /// 주간 깨시 구간 평균 계산 (C-0.6)
+  ///
+  /// weekTimelines에서 각 날의 wakeSegmentAverageMinutes를 모아
+  /// 데이터 있는 날만 평균 산출.
+  double _calculateWakeSegmentAvg() {
+    final timelines = _patternProvider.weekTimelines;
+    if (timelines.isEmpty) return 0;
+
+    double totalMinutes = 0;
+    int daysWithData = 0;
+
+    for (final timeline in timelines) {
+      final avg = timeline.wakeSegmentAverageMinutes;
+      if (avg != null) {
+        totalMinutes += avg;
+        daysWithData++;
+      }
+    }
+
+    if (daysWithData == 0) return 0;
+    return totalMinutes / daysWithData;
+  }
+
   /// 현재 주인지 확인
   bool _isCurrentWeek() {
     final weekStart = _patternProvider.weekStartDate;
@@ -360,10 +383,10 @@ class _WeeklyViewState extends State<WeeklyView> {
                   correctedAgeDays: correctedAgeDays,
                 ),
                 StatSummaryCard(
-                  type: StatType.play,
-                  value: stats.play?.dailyAverageMinutes ?? 0,
+                  type: StatType.wakeWindow,
+                  value: _calculateWakeSegmentAvg(),
                   unit: 'min',
-                  change: stats.play?.changeMinutes.toDouble() ?? 0,
+                  change: 0,
                   correctedAgeDays: correctedAgeDays,
                 ),
               ],

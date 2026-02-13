@@ -15,6 +15,7 @@ class LuluIcons {
   static const IconData diaper = Icons.baby_changing_station_rounded;
   static const IconData play = Icons.toys_rounded;
   static const IconData health = Icons.favorite_rounded;
+  static const IconData wakeWindow = Icons.wb_sunny_rounded;
 
   // ========================================
   // 네비게이션 (Navigation)

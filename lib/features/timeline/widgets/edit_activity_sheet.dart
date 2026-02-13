@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../../../l10n/generated/app_localizations.dart' show S;
 
+import '../../../core/utils/sleep_classifier.dart';
 import '../../../core/design_system/lulu_colors.dart';
 import '../../../core/design_system/lulu_radius.dart';
 import '../../../core/design_system/lulu_icons.dart';
@@ -61,6 +62,11 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
     _startTime = widget.activity.startTime;
     _endTime = widget.activity.endTime;
     _data = Map<String, dynamic>.from(widget.activity.data ?? {});
+    // C-0.4 fallback: ensure sleep_type exists for legacy records
+    if (widget.activity.type == ActivityType.sleep &&
+        !_data.containsKey('sleep_type')) {
+      _data['sleep_type'] = SleepClassifier.effectiveSleepType(widget.activity);
+    }
     _notesController.text = widget.activity.notes ?? '';
   }
 
@@ -269,7 +275,7 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       case ActivityType.feeding:
         return _buildFeedingSection();
       case ActivityType.sleep:
-        return const SizedBox.shrink(); // 수면은 시간만
+        return _buildSleepSection();
       case ActivityType.diaper:
         return _buildDiaperSection();
       case ActivityType.play:
@@ -277,6 +283,33 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       case ActivityType.health:
         return _buildHealthSection();
     }
+  }
+
+  /// C-0.4: Sleep type toggle (nap/night) for manual override
+  Widget _buildSleepSection() {
+    final l10n = S.of(context)!;
+    final sleepType = _data['sleep_type'] as String? ?? 'nap';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.sleepTypeLabel,
+          style: LuluTextStyles.labelLarge.copyWith(
+            color: LuluTextColors.primary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: LuluSpacing.md),
+        _buildChipSelector(
+          label: l10n.sleepTypeLabel,
+          options: const ['nap', 'night'],
+          displayLabels: [l10n.sleepTypeNap, l10n.sleepTypeNight],
+          selectedValue: sleepType,
+          onChanged: (value) => setState(() => _data['sleep_type'] = value),
+        ),
+      ],
+    );
   }
 
   Widget _buildFeedingSection() {

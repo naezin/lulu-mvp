@@ -14,6 +14,7 @@ enum StatType {
   feeding,
   diaper,
   play,
+  wakeWindow,
 }
 
 /// 통계 요약 카드
@@ -190,7 +191,7 @@ class StatSummaryCard extends StatelessWidget {
           ),
           const SizedBox(width: 2),
           Text(
-            l10n?.vsPrev ?? 'vs prev',
+            l10n?.summaryNoChange ?? 'Same as last week',
             style: LuluTextStyles.caption.copyWith(
               color: LuluTextColors.tertiary,
             ),
@@ -247,6 +248,7 @@ class StatSummaryCard extends StatelessWidget {
         // 회 단위
         return '$sign${absChange.toStringAsFixed(0)}';
       case StatType.play:
+      case StatType.wakeWindow:
         // 분 단위
         return '$sign${absChange.toStringAsFixed(0)}m';
     }
@@ -299,6 +301,7 @@ class StatSummaryCard extends StatelessWidget {
       StatType.feeding => LuluActivityColors.feeding,
       StatType.diaper => LuluActivityColors.diaper,
       StatType.play => LuluActivityColors.play,
+      StatType.wakeWindow => LuluActivityColors.wakeWindow,
     };
   }
 
@@ -309,6 +312,7 @@ class StatSummaryCard extends StatelessWidget {
       StatType.feeding => LuluIcons.feedingSolid,
       StatType.diaper => LuluIcons.diaper,
       StatType.play => LuluIcons.play,
+      StatType.wakeWindow => LuluIcons.wakeWindow,
     };
   }
 
@@ -321,6 +325,7 @@ class StatSummaryCard extends StatelessWidget {
       StatType.feeding => '$prefix ${l10n?.statsFeeding ?? 'Feeding'}',
       StatType.diaper => '$prefix ${l10n?.statsDiaper ?? 'Diaper'}',
       StatType.play => '$prefix ${l10n?.activityTypePlay ?? 'Play'}',
+      StatType.wakeWindow => '$prefix ${l10n?.wakeWindowLabel ?? 'Awake Time'}',
     };
   }
 
@@ -342,6 +347,7 @@ class StatSummaryCard extends StatelessWidget {
           timesPerDay: value,
         ),
       StatType.play => null, // 놀이는 권장 범위 없음
+      StatType.wakeWindow => null, // 깨시는 참고 범위 별도 표시
     };
   }
 }

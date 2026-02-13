@@ -5,6 +5,7 @@ import '../../core/design_system/lulu_colors.dart';
 import '../../core/design_system/lulu_icons.dart';
 import '../../core/design_system/lulu_typography.dart';
 import '../../core/utils/app_toast.dart';
+import '../../core/utils/sleep_classifier.dart';
 import '../../shared/widgets/expandable_fab.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/home/providers/home_provider.dart';
@@ -272,7 +273,8 @@ class _MainNavigationState extends State<MainNavigation> {
 
   String _buildSleepSummary(
       ActivityModel activity, Map<String, dynamic>? data, S? l10n) {
-    final sleepType = data?['sleep_type'] as String? ?? 'nap';
+    // C-0.4 fallback: classify if sleep_type is NULL (legacy records)
+    final sleepType = SleepClassifier.effectiveSleepType(activity);
     final minutes = activity.durationMinutes;
 
     if (minutes != null && minutes > 0) {

@@ -3,7 +3,8 @@ part of 'sleep_record_screen.dart';
 /// Sleep Record - Private Widget Components
 ///
 /// Extracted from sleep_record_screen.dart for file size management.
-/// Contains _ModeButton, _IntegratedTimeButton, _SleepTypeButton.
+/// Contains _ModeButton, _IntegratedTimeButton.
+/// C-0.4: _SleepTypeButton removed (auto-classified by SleepClassifier).
 
 class _ModeButton extends StatelessWidget {
   final String label;
@@ -120,59 +121,4 @@ class _IntegratedTimeButton extends StatelessWidget {
   }
 }
 
-class _SleepTypeButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _SleepTypeButton({
-    required this.label,
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? LuluActivityColors.sleepBg
-              : LuluColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(LuluRadius.sm),
-          border: Border.all(
-            color: isSelected
-                ? LuluActivityColors.sleep
-                : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isSelected
-                  ? LuluActivityColors.sleep
-                  : LuluTextColors.secondary,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: LuluTextStyles.labelMedium.copyWith(
-                color: isSelected
-                    ? LuluActivityColors.sleep
-                    : LuluTextColors.secondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// C-0.4: _SleepTypeButton removed — sleep type auto-classified by SleepClassifier

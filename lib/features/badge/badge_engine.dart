@@ -1,3 +1,4 @@
+import '../../core/utils/sleep_classifier.dart';
 import '../../data/models/activity_model.dart';
 import '../../data/models/baby_model.dart';
 import '../../data/models/baby_type.dart';
@@ -541,7 +542,8 @@ class BadgeEngine {
     if (activity.endTime == null) return; // must be completed
 
     // Must be night sleep (Deep Dive #2)
-    final sleepType = activity.data?['sleep_type'] as String?;
+    // C-0.4 fallback: classify if sleep_type is NULL (legacy records)
+    final sleepType = SleepClassifier.effectiveSleepType(activity);
     if (sleepType != 'night') return;
 
     // Duration >= 7 hours (420 minutes)

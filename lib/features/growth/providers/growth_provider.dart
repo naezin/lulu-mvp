@@ -160,11 +160,21 @@ class GrowthProvider extends ChangeNotifier {
       // TODO: 실제 데이터 로드 구현 (SharedPreferences + Firebase)
       await Future.delayed(const Duration(milliseconds: 300));
 
-      // 저장된 데이터가 없으면 empty 상태 (하드코딩 테스트 데이터 제거)
-      // _measurements는 addMeasurement()로만 추가됨
-
+      // Birth weight auto-seed: generate birth measurement from onboarding data
+      // when no measurements exist yet (Sprint 25: deduplicate when DB load is implemented)
       if (_measurements.isEmpty) {
-        _state = GrowthScreenState.empty;
+        final baby = selectedBaby;
+        if (baby != null && baby.birthWeightGrams != null) {
+          final birthMeasurement = GrowthMeasurementModel.create(
+            babyId: baby.id,
+            measuredAt: baby.birthDate,
+            weightKg: baby.birthWeightGrams! / 1000.0,
+          );
+          _measurements = [birthMeasurement];
+          _state = GrowthScreenState.loaded;
+        } else {
+          _state = GrowthScreenState.empty;
+        }
       } else {
         _state = GrowthScreenState.loaded;
       }

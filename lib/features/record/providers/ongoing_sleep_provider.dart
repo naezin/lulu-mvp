@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../core/utils/sleep_classifier.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/activity_repository.dart';
@@ -96,7 +97,8 @@ class OngoingSleepProvider extends ChangeNotifier {
 
       if (activeSleep != null) {
         // DB에 활성 수면 발견 — OngoingSleepRecord로 변환
-        final sleepType = activeSleep.data?['sleep_type'] as String? ?? 'nap';
+        // C-0.4 fallback: classify if sleep_type is NULL (legacy records)
+        final sleepType = SleepClassifier.effectiveSleepType(activeSleep);
         _ongoingSleep = OngoingSleepRecord(
           id: activeSleep.id,
           babyId: babyId,

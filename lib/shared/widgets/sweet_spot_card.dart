@@ -490,6 +490,9 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
             else
               _buildTimeRangeRow(l10n),
 
+            // Row 2.5: Wake elapsed + reference range (C-5.1)
+            if (!isCalibrating) _buildWakeElapsedRow(l10n),
+
             const SizedBox(height: 12),
 
             // Row 3: Golden Band progress bar
@@ -577,7 +580,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
   Widget _buildCalibratingTimeRow(S l10n) {
     final completed = widget.completedSleepRecords ?? 0;
-    final day = completed > 0 ? completed : 1;
+    final count = completed > 0 ? completed : 1;
 
     return Row(
       children: [
@@ -589,7 +592,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
               width: 8,
               height: 8,
               decoration: BoxDecoration(
-                color: i < day
+                color: i < count
                     ? _themeColor
                     : LuluColors.surfaceElevated,
                 shape: BoxShape.circle,
@@ -600,8 +603,8 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         const SizedBox(width: 4),
         Text(
           widget.isWarmTone
-              ? l10n.sweetSpotCardCalibratingWarm(day)
-              : l10n.sweetSpotCardCalibratingPlain(day),
+              ? l10n.sweetSpotCardCalibratingWarm(count)
+              : l10n.sweetSpotCardCalibratingPlain(count),
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -610,8 +613,111 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     );
   }
 
+  /// C-5.1: Wake elapsed time + reference range row
+  ///
+  /// Displayed between time range and golden band bar.
+  /// Shows: "깨시 47분" (colored by position) + "참고: 60~90분" (tertiary)
+  /// Hidden when sleeping or when no result available.
+  Widget _buildWakeElapsedRow(S l10n) {
+    final result = widget.sweetSpotResult;
+    if (result == null) return const SizedBox.shrink();
+
+    final now = DateTime.now();
+    final elapsed = result.wakeElapsedMinutes(now);
+    if (elapsed == null) return const SizedBox.shrink();
+
+    final position = result.wakePosition(now);
+    if (position == WakeWindowPosition.sleeping) {
+      return const SizedBox.shrink();
+    }
+
+    final elapsedText = _formatWakeElapsed(elapsed, l10n);
+    final elapsedColor = _wakePositionColor(position);
+    final refText = _formatWakeRefRange(result, l10n);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            LuluIcons.wakeWindow,
+            size: 14,
+            color: elapsedColor,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            elapsedText,
+            style: LuluTextStyles.bodySmall.copyWith(
+              color: elapsedColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          if (refText != null) ...[
+            const SizedBox(width: 8),
+            Text(
+              refText,
+              style: LuluTextStyles.caption.copyWith(
+                color: LuluTextColors.tertiary,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Format wake elapsed minutes to localized string
+  String _formatWakeElapsed(int minutes, S l10n) {
+    if (minutes >= 60) {
+      return l10n.wakeWindowCardElapsedHours(minutes ~/ 60, minutes % 60);
+    }
+    return l10n.wakeWindowCardElapsed(minutes);
+  }
+
+  /// Format reference range to compact localized string
+  String? _formatWakeRefRange(SweetSpotResult result, S l10n) {
+    final minMin = result.wakeRangeMinMinutes;
+    final maxMin = result.wakeRangeMaxMinutes;
+    if (minMin <= 0 && maxMin <= 0) return null;
+
+    if (maxMin >= 60) {
+      return l10n.wakeWindowCardRefHours(
+        minMin ~/ 60, minMin % 60,
+        maxMin ~/ 60, maxMin % 60,
+      );
+    }
+    return l10n.wakeWindowCardRef(minMin, maxMin);
+  }
+
+  /// Map wake position to display color
+  ///
+  /// Neutral coloring — NO red for afterRange (medical ethics).
+  /// afterRange uses tertiary grey, matching overtired band fade.
+  Color _wakePositionColor(WakeWindowPosition position) {
+    return switch (position) {
+      WakeWindowPosition.sleeping => LuluTextColors.tertiary,
+      WakeWindowPosition.beforeRange => LuluTextColors.secondary,
+      WakeWindowPosition.inRange => _themeColor,
+      WakeWindowPosition.afterRange => LuluTextColors.tertiary,
+    };
+  }
+
   Widget _buildNextNapHint(S l10n) {
     final result = widget.sweetSpotResult;
+
+    // If engine determined night time, show night label (not "next nap")
+    if (widget.isNightTime || (result != null && result.isNightTime)) {
+      return Text(
+        widget.isWarmTone
+            ? l10n.sweetSpotCardNextNightWarm
+            : l10n.sweetSpotCardNextNightPlain,
+        style: LuluTextStyles.bodySmall.copyWith(
+          color: LuluTextColors.tertiary,
+        ),
+      );
+    }
+
     final isLastNap = result != null &&
         result.napNumber >= result.totalExpectedNaps;
 
@@ -798,10 +904,10 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
   String _getStateMessage(S l10n) {
     if (widget.state == SweetSpotState.calibrating) {
       final completed = widget.completedSleepRecords ?? 0;
-      final day = completed > 0 ? completed : 1;
+      final count = completed > 0 ? completed : 1;
       return widget.isWarmTone
-          ? l10n.sweetSpotCardCalibratingWarm(day)
-          : l10n.sweetSpotCardCalibratingPlain(day);
+          ? l10n.sweetSpotCardCalibratingWarm(count)
+          : l10n.sweetSpotCardCalibratingPlain(count);
     }
 
     // Wide range message for young babies

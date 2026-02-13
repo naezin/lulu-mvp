@@ -12,11 +12,12 @@ import '../models/day_timeline.dart';
 /// 일간 요약 그리드 (2x2)
 ///
 /// Sprint 19 v4: MiniTimeBar + DailySummaryBanner 대체
+/// Sprint 24 C-0.6: 놀이 → 깨시(Wake Window) 교체
 /// 카드 디자인 패턴: 배경 10%, 보더 30%, 아이콘 배경 20%
 /// - 수면: 총 시간 + 경과 시간
 /// - 수유: 횟수 + 경과 시간
 /// - 기저귀: 횟수 + 경과 시간
-/// - 놀이: 총 시간
+/// - 깨시: 구간 평균 + 구간 수
 class DailyGrid extends StatefulWidget {
   final DayTimeline timeline;
   final bool isToday;
@@ -107,15 +108,15 @@ class _DailyGridState extends State<DailyGrid> {
                 ? _formatElapsed(widget.timeline.lastActivityTime('diaper'))
                 : null,
           ),
-          // 놀이
+          // 깨시 (C-0.6: 놀이 → 깨시 교체)
           _buildCell(
             context: context,
-            icon: LuluIcons.play,
-            color: LuluActivityColors.play,
-            title: l10n?.dailyGridPlay ?? 'Play',
-            value: _formatDurationValue(widget.timeline.totalDuration('play')),
-            unit: _formatDurationUnit(widget.timeline.totalDuration('play')),
-            sub: null, // 놀이는 경과 시간 표시 안 함
+            icon: LuluIcons.wakeWindow,
+            color: LuluActivityColors.wakeWindow,
+            title: l10n?.wakeWindowLabel ?? 'Awake Time',
+            value: _formatWakeSegmentValue(widget.timeline),
+            unit: _formatWakeSegmentUnit(widget.timeline),
+            sub: _formatWakeSegmentSub(widget.timeline, l10n),
           ),
         ],
       ),
@@ -238,6 +239,36 @@ class _DailyGridState extends State<DailyGrid> {
     final l10n = S.of(context);
     if (d.inHours > 0) return l10n?.dailyGridUnitHours ?? 'h';
     return l10n?.dailyGridUnitMinutes ?? 'm';
+  }
+
+  /// 깨시 구간 평균 값 (숫자 부분)
+  String _formatWakeSegmentValue(DayTimeline timeline) {
+    final avg = timeline.wakeSegmentAverageMinutes;
+    if (avg == null) return '-';
+    final minutes = avg.round();
+    if (minutes >= 60) {
+      final h = minutes ~/ 60;
+      final m = minutes % 60;
+      final decimal = (m * 10 ~/ 60);
+      return '$h.$decimal';
+    }
+    return '$minutes';
+  }
+
+  /// 깨시 구간 평균 단위
+  String? _formatWakeSegmentUnit(DayTimeline timeline) {
+    final avg = timeline.wakeSegmentAverageMinutes;
+    if (avg == null) return null;
+    final l10n = S.of(context);
+    if (avg.round() >= 60) return l10n?.dailyGridUnitHours ?? 'h';
+    return l10n?.dailyGridUnitMinutes ?? 'm';
+  }
+
+  /// 깨시 구간 서브 텍스트 ("3구간")
+  String? _formatWakeSegmentSub(DayTimeline timeline, S? l10n) {
+    final count = timeline.wakeSegmentCount;
+    if (count == 0) return null;
+    return l10n?.wakeWindowSegmentCount(count) ?? '$count segments';
   }
 
   /// 경과 시간 포맷팅

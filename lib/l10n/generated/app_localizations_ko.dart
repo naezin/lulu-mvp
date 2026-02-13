@@ -1293,6 +1293,9 @@ class SKo extends S {
   String get vsPrev => 'vs 전주';
 
   @override
+  String get summaryNoChange => '전주와 동일';
+
+  @override
   String get dailyGridSleep => '수면';
 
   @override
@@ -2783,12 +2786,12 @@ class SKo extends S {
 
   @override
   String sweetSpotCardCalibratingWarm(int day) {
-    return '패턴을 파악하고 있어요 ($day일째)';
+    return '패턴을 파악하고 있어요 (수면 $day건 완료)';
   }
 
   @override
   String sweetSpotCardCalibratingPlain(int day) {
-    return '학습 중 · $day/3일';
+    return '학습 중 · $day/3건';
   }
 
   @override
@@ -3836,5 +3839,70 @@ class SKo extends S {
   @override
   String encouragementDataWeeklyWarm(String count) {
     return '오늘 $count건, 꼼꼼히 기록하고 있네요';
+  }
+
+  @override
+  String get wakeWindowLabel => '깨시';
+
+  @override
+  String wakeWindowElapsed(int hours, int minutes) {
+    return '$hours시간 $minutes분';
+  }
+
+  @override
+  String wakeWindowElapsedMinutes(int minutes) {
+    return '$minutes분';
+  }
+
+  @override
+  String wakeWindowReferenceRange(int min, int max) {
+    return '비슷한 월령 깨시: $min~$max분';
+  }
+
+  @override
+  String wakeWindowPersonalizedRange(int min, int max) {
+    return '이 아기 기준: $min~$max분';
+  }
+
+  @override
+  String get wakeWindowBeforeRange => '아직 여유 있어요';
+
+  @override
+  String get wakeWindowInRange => '슬슬 졸릴 수 있어요';
+
+  @override
+  String get wakeWindowAfterRange => '아기 신호를 봐주세요';
+
+  @override
+  String get wakeWindowSleeping => '수면 중';
+
+  @override
+  String wakeWindowSegmentAvg(int minutes, int count) {
+    return '평균 $minutes분 · $count구간';
+  }
+
+  @override
+  String wakeWindowSegmentCount(int count) {
+    return '$count구간';
+  }
+
+  @override
+  String wakeWindowCardElapsed(int minutes) {
+    return '깨시 $minutes분';
+  }
+
+  @override
+  String wakeWindowCardElapsedHours(int hours, int minutes) {
+    return '깨시 $hours시간 $minutes분';
+  }
+
+  @override
+  String wakeWindowCardRef(int min, int max) {
+    return '비슷한 월령 깨시: $min~$max분';
+  }
+
+  @override
+  String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM) {
+    return '비슷한 월령 깨시: $minH시간$minM분~$maxH시간$maxM분';
   }
 }

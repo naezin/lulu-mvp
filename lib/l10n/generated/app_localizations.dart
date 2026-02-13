@@ -2497,6 +2497,12 @@ abstract class S {
   /// **'vs 전주'**
   String get vsPrev;
 
+  /// 전주 대비 변화 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'전주와 동일'**
+  String get summaryNoChange;
+
   /// DailyGrid 수면 레이블
   ///
   /// In ko, this message translates to:
@@ -5174,13 +5180,13 @@ abstract class S {
   /// C-5 Sweet Spot card - calibrating (warm tone)
   ///
   /// In ko, this message translates to:
-  /// **'패턴을 파악하고 있어요 ({day}일째)'**
+  /// **'패턴을 파악하고 있어요 (수면 {day}건 완료)'**
   String sweetSpotCardCalibratingWarm(int day);
 
   /// C-5 Sweet Spot card - calibrating (plain tone)
   ///
   /// In ko, this message translates to:
-  /// **'학습 중 · {day}/3일'**
+  /// **'학습 중 · {day}/3건'**
   String sweetSpotCardCalibratingPlain(int day);
 
   /// C-5 Sweet Spot card - next nap hint (warm tone)
@@ -6981,6 +6987,96 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'오늘 {count}건, 꼼꼼히 기록하고 있네요'**
   String encouragementDataWeeklyWarm(String count);
+
+  /// 깨시 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'깨시'**
+  String get wakeWindowLabel;
+
+  /// 깨시 경과 시간 (시간+분)
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}시간 {minutes}분'**
+  String wakeWindowElapsed(int hours, int minutes);
+
+  /// 깨시 경과 시간 (분만)
+  ///
+  /// In ko, this message translates to:
+  /// **'{minutes}분'**
+  String wakeWindowElapsedMinutes(int minutes);
+
+  /// 교정연령 기준 참고 범위
+  ///
+  /// In ko, this message translates to:
+  /// **'비슷한 월령 깨시: {min}~{max}분'**
+  String wakeWindowReferenceRange(int min, int max);
+
+  /// 개인화된 깨시 참고 범위
+  ///
+  /// In ko, this message translates to:
+  /// **'이 아기 기준: {min}~{max}분'**
+  String wakeWindowPersonalizedRange(int min, int max);
+
+  /// 깨시 참고 범위 이전
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 여유 있어요'**
+  String get wakeWindowBeforeRange;
+
+  /// 깨시 참고 범위 안
+  ///
+  /// In ko, this message translates to:
+  /// **'슬슬 졸릴 수 있어요'**
+  String get wakeWindowInRange;
+
+  /// 깨시 참고 범위 이후
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 신호를 봐주세요'**
+  String get wakeWindowAfterRange;
+
+  /// 수면 중 상태
+  ///
+  /// In ko, this message translates to:
+  /// **'수면 중'**
+  String get wakeWindowSleeping;
+
+  /// 깨시 구간 평균 + 횟수
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 {minutes}분 · {count}구간'**
+  String wakeWindowSegmentAvg(int minutes, int count);
+
+  /// 깨시 구간 수
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}구간'**
+  String wakeWindowSegmentCount(int count);
+
+  /// Sweet Spot 카드 깨시 경과 (분)
+  ///
+  /// In ko, this message translates to:
+  /// **'깨시 {minutes}분'**
+  String wakeWindowCardElapsed(int minutes);
+
+  /// Sweet Spot 카드 깨시 경과 (시간+분)
+  ///
+  /// In ko, this message translates to:
+  /// **'깨시 {hours}시간 {minutes}분'**
+  String wakeWindowCardElapsedHours(int hours, int minutes);
+
+  /// Sweet Spot 카드 깨시 참고 범위 (간결)
+  ///
+  /// In ko, this message translates to:
+  /// **'비슷한 월령 깨시: {min}~{max}분'**
+  String wakeWindowCardRef(int min, int max);
+
+  /// Sweet Spot 카드 깨시 참고 범위 (시간 단위)
+  ///
+  /// In ko, this message translates to:
+  /// **'비슷한 월령 깨시: {minH}시간{minM}분~{maxH}시간{maxM}분'**
+  String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

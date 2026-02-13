@@ -496,11 +496,14 @@ class PatternDataProvider extends ChangeNotifier {
       // subType 결정 (수면: night/nap, 놀이: play_type 등)
       String? subType;
       if (type == 'sleep') {
-        // DB에서 sleep_type 읽기 (snake_case 또는 camelCase)
-        subType = activity.data?['sleep_type'] as String? ??
-            activity.data?['sleepType'] as String?;
-        // 없으면 시간 기준 판별
-        subType ??= SleepTimeConfig.isNightTime(localStart.hour) ? 'night' : 'nap';
+        // DB sleep_type 사용, NULL이면 시간대 기반 판별 (차트용)
+        final dbSleepType = activity.data?['sleep_type'] as String?;
+        if (dbSleepType != null && dbSleepType.isNotEmpty) {
+          subType = dbSleepType;
+        } else {
+          final hour = activity.startTime.toLocal().hour;
+          subType = SleepTimeConfig.isNightTime(hour) ? 'night' : 'nap';
+        }
       } else if (type == 'play') {
         subType = activity.data?['play_type'] as String? ??
             activity.data?['playType'] as String?;

@@ -1315,6 +1315,9 @@ class SEn extends S {
   String get vsPrev => 'vs prev';
 
   @override
+  String get summaryNoChange => 'Same as last week';
+
+  @override
   String get dailyGridSleep => 'Sleep';
 
   @override
@@ -2837,12 +2840,12 @@ class SEn extends S {
 
   @override
   String sweetSpotCardCalibratingWarm(int day) {
-    return 'Learning patterns (day $day)';
+    return 'Learning patterns ($day sleeps done)';
   }
 
   @override
   String sweetSpotCardCalibratingPlain(int day) {
-    return 'Learning · $day/3 days';
+    return 'Learning · $day/3 sleeps';
   }
 
   @override
@@ -3918,5 +3921,70 @@ class SEn extends S {
   @override
   String encouragementDataWeeklyWarm(String count) {
     return '$count records today. Great tracking';
+  }
+
+  @override
+  String get wakeWindowLabel => 'Awake Time';
+
+  @override
+  String wakeWindowElapsed(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
+  String wakeWindowElapsedMinutes(int minutes) {
+    return '${minutes}m';
+  }
+
+  @override
+  String wakeWindowReferenceRange(int min, int max) {
+    return 'Typical awake time: $min-${max}min';
+  }
+
+  @override
+  String wakeWindowPersonalizedRange(int min, int max) {
+    return 'Your baby: $min-${max}min';
+  }
+
+  @override
+  String get wakeWindowBeforeRange => 'Still has energy';
+
+  @override
+  String get wakeWindowInRange => 'May be getting sleepy';
+
+  @override
+  String get wakeWindowAfterRange => 'Watch for sleep cues';
+
+  @override
+  String get wakeWindowSleeping => 'Sleeping';
+
+  @override
+  String wakeWindowSegmentAvg(int minutes, int count) {
+    return 'Avg ${minutes}m · $count segments';
+  }
+
+  @override
+  String wakeWindowSegmentCount(int count) {
+    return '$count segments';
+  }
+
+  @override
+  String wakeWindowCardElapsed(int minutes) {
+    return 'Awake ${minutes}m';
+  }
+
+  @override
+  String wakeWindowCardElapsedHours(int hours, int minutes) {
+    return 'Awake ${hours}h ${minutes}m';
+  }
+
+  @override
+  String wakeWindowCardRef(int min, int max) {
+    return 'Typical awake time: $min-${max}min';
+  }
+
+  @override
+  String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM) {
+    return 'Typical awake time: ${minH}h${minM}m-${maxH}h${maxM}m';
   }
 }

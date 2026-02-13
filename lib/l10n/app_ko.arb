@@ -1861,6 +1861,10 @@
   "@vsPrev": {
     "description": "전주 대비"
   },
+  "summaryNoChange": "전주와 동일",
+  "@summaryNoChange": {
+    "description": "전주 대비 변화 없음"
+  },
   "dailyGridSleep": "수면",
   "@dailyGridSleep": {
     "description": "DailyGrid 수면 레이블"
@@ -4119,7 +4123,7 @@
   "@sweetSpotCardAfterZonePlain": {
     "description": "C-5 Sweet Spot card - after zone (plain tone)"
   },
-  "sweetSpotCardCalibratingWarm": "패턴을 파악하고 있어요 ({day}일째)",
+  "sweetSpotCardCalibratingWarm": "패턴을 파악하고 있어요 (수면 {day}건 완료)",
   "@sweetSpotCardCalibratingWarm": {
     "description": "C-5 Sweet Spot card - calibrating (warm tone)",
     "placeholders": {
@@ -4129,7 +4133,7 @@
       }
     }
   },
-  "sweetSpotCardCalibratingPlain": "학습 중 · {day}/3일",
+  "sweetSpotCardCalibratingPlain": "학습 중 · {day}/3건",
   "@sweetSpotCardCalibratingPlain": {
     "description": "C-5 Sweet Spot card - calibrating (plain tone)",
     "placeholders": {
@@ -5433,5 +5437,37 @@
   "encouragementDataSleepWarm": "어젯밤 {babyIga} {hours}시간 연속으로 잤어요",
   "@encouragementDataSleepWarm": {"description":"데이터 기반: 수면", "placeholders": {"babyIga": {"type": "String"}, "hours": {"type": "String"}}},
   "encouragementDataWeeklyWarm": "오늘 {count}건, 꼼꼼히 기록하고 있네요",
-  "@encouragementDataWeeklyWarm": {"description":"데이터 기반: 주간 기록", "placeholders": {"count": {"type": "String"}}}
+  "@encouragementDataWeeklyWarm": {"description":"데이터 기반: 주간 기록", "placeholders": {"count": {"type": "String"}}},
+
+  "wakeWindowLabel": "깨시",
+  "@wakeWindowLabel": {"description":"깨시 라벨"},
+  "wakeWindowElapsed": "{hours}시간 {minutes}분",
+  "@wakeWindowElapsed": {"description":"깨시 경과 시간 (시간+분)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
+  "wakeWindowElapsedMinutes": "{minutes}분",
+  "@wakeWindowElapsedMinutes": {"description":"깨시 경과 시간 (분만)", "placeholders": {"minutes": {"type": "int"}}},
+  "wakeWindowReferenceRange": "비슷한 월령 깨시: {min}~{max}분",
+  "@wakeWindowReferenceRange": {"description":"교정연령 기준 참고 범위", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
+  "wakeWindowPersonalizedRange": "이 아기 기준: {min}~{max}분",
+  "@wakeWindowPersonalizedRange": {"description":"개인화된 깨시 참고 범위", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
+  "wakeWindowBeforeRange": "아직 여유 있어요",
+  "@wakeWindowBeforeRange": {"description":"깨시 참고 범위 이전"},
+  "wakeWindowInRange": "슬슬 졸릴 수 있어요",
+  "@wakeWindowInRange": {"description":"깨시 참고 범위 안"},
+  "wakeWindowAfterRange": "아기 신호를 봐주세요",
+  "@wakeWindowAfterRange": {"description":"깨시 참고 범위 이후"},
+  "wakeWindowSleeping": "수면 중",
+  "@wakeWindowSleeping": {"description":"수면 중 상태"},
+  "wakeWindowSegmentAvg": "평균 {minutes}분 · {count}구간",
+  "@wakeWindowSegmentAvg": {"description":"깨시 구간 평균 + 횟수", "placeholders": {"minutes": {"type": "int"}, "count": {"type": "int"}}},
+  "wakeWindowSegmentCount": "{count}구간",
+  "@wakeWindowSegmentCount": {"description":"깨시 구간 수", "placeholders": {"count": {"type": "int"}}},
+
+  "wakeWindowCardElapsed": "깨시 {minutes}분",
+  "@wakeWindowCardElapsed": {"description":"Sweet Spot 카드 깨시 경과 (분)", "placeholders": {"minutes": {"type": "int"}}},
+  "wakeWindowCardElapsedHours": "깨시 {hours}시간 {minutes}분",
+  "@wakeWindowCardElapsedHours": {"description":"Sweet Spot 카드 깨시 경과 (시간+분)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
+  "wakeWindowCardRef": "비슷한 월령 깨시: {min}~{max}분",
+  "@wakeWindowCardRef": {"description":"Sweet Spot 카드 깨시 참고 범위 (간결)", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
+  "wakeWindowCardRefHours": "비슷한 월령 깨시: {minH}시간{minM}분~{maxH}시간{maxM}분",
+  "@wakeWindowCardRefHours": {"description":"Sweet Spot 카드 깨시 참고 범위 (시간 단위)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}}
 }

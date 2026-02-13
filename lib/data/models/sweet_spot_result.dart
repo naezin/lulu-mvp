@@ -89,6 +89,52 @@ class SweetSpotResult {
     return midSleepTime.difference(now).inMinutes;
   }
 
+  // ============================================================
+  // Wake Window (깨시) convenience methods — C-0.5
+  // ============================================================
+  //
+  // Real-time methods using caller-provided [now] (same pattern as
+  // calculateProgress). These expose wake window data that was already
+  // computed internally, enabling UI layers (card, grid, statistics)
+  // to display awake time without re-deriving from raw data.
+
+  /// Current wake elapsed time in minutes (real-time)
+  ///
+  /// Returns null when sleeping (no lastWakeTime) or in unknown state.
+  /// UI: "깨시 47분" / "Awake 47min"
+  int? wakeElapsedMinutes(DateTime now) {
+    if (lastWakeTime == null) return null;
+    final elapsed = now.difference(lastWakeTime!).inMinutes;
+    return elapsed < 0 ? 0 : elapsed;
+  }
+
+  /// Wake window position relative to reference range (real-time)
+  ///
+  /// Objective position indicator — NOT a judgment.
+  /// Naming intentionally neutral: beforeRange/inRange/afterRange.
+  /// Medical ethics: no "tooShort", "optimal", "overtired" naming.
+  WakeWindowPosition wakePosition(DateTime now) {
+    final elapsed = wakeElapsedMinutes(now);
+    if (elapsed == null) return WakeWindowPosition.sleeping;
+    if (wakeWindow.minMinutes <= 0 && wakeWindow.maxMinutes <= 0) {
+      return WakeWindowPosition.sleeping;
+    }
+    if (elapsed < wakeWindow.minMinutes) return WakeWindowPosition.beforeRange;
+    if (elapsed <= wakeWindow.maxMinutes) return WakeWindowPosition.inRange;
+    return WakeWindowPosition.afterRange;
+  }
+
+  /// Wake window reference range min (minutes)
+  ///
+  /// Convenience getter — delegates to wakeWindow.minMinutes.
+  /// Already includes nap order correction + personalization blending.
+  int get wakeRangeMinMinutes => wakeWindow.minMinutes;
+
+  /// Wake window reference range max (minutes)
+  ///
+  /// Convenience getter — delegates to wakeWindow.maxMinutes.
+  int get wakeRangeMaxMinutes => wakeWindow.maxMinutes;
+
   SweetSpotResult copyWith({
     String? babyId,
     int? correctedAgeMonths,
@@ -202,6 +248,31 @@ class PersonalizedWakeWindow {
     final confidence = 1.0 - normalizedStdDev;
     return (densityWeight * confidence).clamp(0.0, 0.9);
   }
+}
+
+/// Wake Window position relative to reference range
+///
+/// Objective position indicator — NOT a medical judgment.
+/// Naming intentionally neutral per Medical Ethics review:
+///   - sleeping: baby is asleep, wake window N/A
+///   - beforeRange: elapsed time < reference range min
+///   - inRange: elapsed time within reference range
+///   - afterRange: elapsed time > reference range max
+///
+/// UI maps these to colors and messages, but the enum itself
+/// carries no connotation of "good" or "bad".
+enum WakeWindowPosition {
+  /// Baby is sleeping — wake window not applicable
+  sleeping,
+
+  /// Before reference range (still has energy)
+  beforeRange,
+
+  /// Within reference range (may be getting sleepy)
+  inRange,
+
+  /// After reference range (watch for sleep cues)
+  afterRange,
 }
 
 /// Nap quality adjustment factor

@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:intl/intl.dart';
 
+import '../utils/sleep_classifier.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/activity_repository.dart';
 import '../../l10n/generated/app_localizations.dart' show S;
@@ -229,7 +230,7 @@ class ExportService {
 
     return switch (activity.type) {
       ActivityType.feeding => _getFeedingDetail(data, l10n),
-      ActivityType.sleep => _getSleepDetail(data, l10n),
+      ActivityType.sleep => _getSleepDetail(activity, l10n),
       ActivityType.diaper => _getDiaperDetail(data, l10n),
       _ => '',
     };
@@ -262,10 +263,9 @@ class ExportService {
     return typeLabel;
   }
 
-  String _getSleepDetail(Map<String, dynamic>? data, S l10n) {
-    if (data == null) return '';
-
-    final type = data['sleep_type'] as String? ?? '';
+  String _getSleepDetail(ActivityModel activity, S l10n) {
+    // C-0.4 fallback: classify if sleep_type is NULL (legacy records)
+    final type = SleepClassifier.effectiveSleepType(activity);
     return switch (type) {
       'nap' => l10n.sleepTypeNap,
       'night' => l10n.sleepTypeNight,

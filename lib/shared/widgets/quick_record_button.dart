@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/utils/sleep_classifier.dart';
 import '../../core/design_system/lulu_colors.dart';
 import '../../core/design_system/lulu_radius.dart';
 import '../../core/design_system/lulu_shadows.dart';
@@ -384,7 +385,10 @@ class _QuickRecordButtonState extends State<QuickRecordButton>
         return typeStr;
 
       case ActivityType.sleep:
-        final sleepType = data['sleep_type'] as String?;
+        // C-0.4 fallback: classify if sleep_type is NULL (legacy records)
+        final sleepType = widget.lastRecord != null
+            ? SleepClassifier.effectiveSleepType(widget.lastRecord!)
+            : (data['sleep_type'] as String? ?? 'nap');
         return sleepType == 'nap' ? l10n.sleepTypeNap : l10n.sleepTypeNight;
 
       case ActivityType.diaper:

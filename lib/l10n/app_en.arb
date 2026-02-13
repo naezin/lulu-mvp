@@ -543,6 +543,7 @@
     }
   },
   "vsPrev": "vs prev",
+  "summaryNoChange": "Same as last week",
   "dailyGridSleep": "Sleep",
   "dailyGridFeeding": "Feeding",
   "dailyGridDiaper": "Diaper",
@@ -1648,7 +1649,7 @@
   "@sweetSpotCardAfterZonePlain": {
     "description": "C-5 Sweet Spot card - after zone (plain tone)"
   },
-  "sweetSpotCardCalibratingWarm": "Learning patterns (day {day})",
+  "sweetSpotCardCalibratingWarm": "Learning patterns ({day} sleeps done)",
   "@sweetSpotCardCalibratingWarm": {
     "description": "C-5 Sweet Spot card - calibrating (warm tone)",
     "placeholders": {
@@ -1658,7 +1659,7 @@
       }
     }
   },
-  "sweetSpotCardCalibratingPlain": "Learning · {day}/3 days",
+  "sweetSpotCardCalibratingPlain": "Learning · {day}/3 sleeps",
   "@sweetSpotCardCalibratingPlain": {
     "description": "C-5 Sweet Spot card - calibrating (plain tone)",
     "placeholders": {
@@ -2862,5 +2863,37 @@
   "encouragementDataSleepWarm": "{babyIga} slept {hours} hours in a row last night",
   "@encouragementDataSleepWarm": {"description":"Data: sleep", "placeholders": {"babyIga": {"type": "String"}, "hours": {"type": "String"}}},
   "encouragementDataWeeklyWarm": "{count} records today. Great tracking",
-  "@encouragementDataWeeklyWarm": {"description":"Data: weekly records", "placeholders": {"count": {"type": "String"}}}
+  "@encouragementDataWeeklyWarm": {"description":"Data: weekly records", "placeholders": {"count": {"type": "String"}}},
+
+  "wakeWindowLabel": "Awake Time",
+  "@wakeWindowLabel": {"description":"Wake window label"},
+  "wakeWindowElapsed": "{hours}h {minutes}m",
+  "@wakeWindowElapsed": {"description":"Wake elapsed time (hours+minutes)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
+  "wakeWindowElapsedMinutes": "{minutes}m",
+  "@wakeWindowElapsedMinutes": {"description":"Wake elapsed time (minutes only)", "placeholders": {"minutes": {"type": "int"}}},
+  "wakeWindowReferenceRange": "Typical awake time: {min}-{max}min",
+  "@wakeWindowReferenceRange": {"description":"Age-based reference range", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
+  "wakeWindowPersonalizedRange": "Your baby: {min}-{max}min",
+  "@wakeWindowPersonalizedRange": {"description":"Personalized wake window range", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
+  "wakeWindowBeforeRange": "Still has energy",
+  "@wakeWindowBeforeRange": {"description":"Before reference range"},
+  "wakeWindowInRange": "May be getting sleepy",
+  "@wakeWindowInRange": {"description":"Within reference range"},
+  "wakeWindowAfterRange": "Watch for sleep cues",
+  "@wakeWindowAfterRange": {"description":"After reference range"},
+  "wakeWindowSleeping": "Sleeping",
+  "@wakeWindowSleeping": {"description":"Sleeping state"},
+  "wakeWindowSegmentAvg": "Avg {minutes}m · {count} segments",
+  "@wakeWindowSegmentAvg": {"description":"Wake segment average + count", "placeholders": {"minutes": {"type": "int"}, "count": {"type": "int"}}},
+  "wakeWindowSegmentCount": "{count} segments",
+  "@wakeWindowSegmentCount": {"description":"Wake segment count", "placeholders": {"count": {"type": "int"}}},
+
+  "wakeWindowCardElapsed": "Awake {minutes}m",
+  "@wakeWindowCardElapsed": {"description":"Sweet Spot card wake elapsed (minutes)", "placeholders": {"minutes": {"type": "int"}}},
+  "wakeWindowCardElapsedHours": "Awake {hours}h {minutes}m",
+  "@wakeWindowCardElapsedHours": {"description":"Sweet Spot card wake elapsed (hours+minutes)", "placeholders": {"hours": {"type": "int"}, "minutes": {"type": "int"}}},
+  "wakeWindowCardRef": "Typical awake time: {min}-{max}min",
+  "@wakeWindowCardRef": {"description":"Sweet Spot card wake reference range (compact)", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
+  "wakeWindowCardRefHours": "Typical awake time: {minH}h{minM}m-{maxH}h{maxM}m",
+  "@wakeWindowCardRefHours": {"description":"Sweet Spot card wake reference range (hours)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}}
 }
