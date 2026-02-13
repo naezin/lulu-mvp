@@ -1,45 +1,77 @@
+import 'package:flutter/material.dart';
+
 import '../../data/models/activity_model.dart';
 import '../../data/models/baby_type.dart';
 
-/// SleepClassifier - C-0.4: Pattern-based sleep type auto classification
+/// SleepClassifier v2 — Density-based sleep type auto classification
 ///
-/// Determines nap vs night sleep based on the baby's own sleep pattern.
-/// Uses weighted median of longest sleep start times from recent days.
+/// Determines nap vs night sleep based on the baby's own sleep pattern
+/// using 24-hour sleep density histogram (clustering approach).
+///
+/// v2 key improvement over v1:
+/// - v1: "longest sleep per day = night anchor" -> split night contamination
+/// - v2: "densest sleep time zone = night window" -> split night chunks
+///   naturally merge into the same density cluster
 ///
 /// Design principles:
 /// - Zero additional user input required
 /// - Baby pattern-first, not fixed time zones
 /// - Editable: classification result can be overridden in edit sheet
 /// - Silent operation: no UI interruption
+/// - Per-baby independent classification (multiple births)
 ///
-/// Algorithm:
-/// 1. Collect longest sleep per day from recent history (7 days)
-/// 2. Extract start hours as "night anchors"
-/// 3. Compute weighted median (recent days weigh more)
-/// 4. Night range = anchor +/- 2 hours
-/// 5. If startTime falls in night range -> 'night', else 'nap'
+/// Algorithm (pattern mode, 3+ days of data):
+/// 1. Build 24h histogram: 48 bins (30-min each), weighted by recency
+/// 2. Find peak bin (highest sleep density)
+/// 3. Expand from peak: continuous bins above threshold (peak * 0.3)
+/// 4. Result = NightWindow (startBin..endBin), handles midnight wrap
+/// 5. Classify: startTime in NightWindow -> 'night', else -> 'nap'
+///    Exception: nightWindow start + duration < 30min -> 'nap'
 ///
-/// Cold start: if < 3 days of data, fallback to 21:00~06:00 fixed range.
+/// Cold start (0-2 days of data): fixed 21:00~06:00 range.
+/// Rationale: with minimal data, fixed range is safer than duration-based
+/// (avoids misclassifying long daytime naps as night sleep).
 class SleepClassifier {
-  /// Minimum days of data required for pattern-based classification
+  // ============================================================
+  // Constants
+  // ============================================================
+
+  /// Minimum days of completed sleep data for pattern-based classification
   static const int minDaysForPattern = 3;
 
-  /// Number of recent days to analyze
-  static const int lookbackDays = 7;
+  /// Number of recent days to analyze for histogram
+  static const int lookbackDays = 14;
 
-  /// Night range radius in hours (anchor +/- this value)
-  static const int nightRangeHours = 2;
+  /// Number of 30-minute bins in 24 hours
+  static const int _binCount = 48;
+
+  /// Night window expansion threshold (fraction of peak density)
+  /// Bins with density >= peak * this value are included in night window
+  static const double _expansionThreshold = 0.3;
+
+  /// Minimum sleep duration (minutes) to count as night within window
+  /// Prevents micro-sleeps (< 30min) from being classified as night
+  static const int _minNightDurationMinutes = 30;
+
+  /// Maximum gap bins allowed within night window expansion
+  /// Allows up to 4 empty bins (2 hours) to bridge split night chunks
+  /// e.g., 20:00-01:00 wake 01:00-03:00 sleep 03:00-06:00
+  /// The 2h gap between chunks must be bridged for correct classification
+  static const int _maxGapBins = 4;
 
   /// Cold start night range: 21:00 ~ 06:00
   static const int coldStartNightBegin = 21;
   static const int coldStartNightEnd = 6;
+
+  // ============================================================
+  // Public API (signatures unchanged from v1)
+  // ============================================================
 
   /// Classify sleep type based on baby's recent sleep pattern
   ///
   /// [startTime] - when the sleep starts (required)
   /// [endTime] - when the sleep ends (null for "sleep now" mode)
   /// [recentSleepRecords] - completed sleep records from recent days
-  ///   (should contain at least [lookbackDays] worth of data)
   /// [now] - current time (for testing, defaults to DateTime.now())
   ///
   /// Returns 'nap' or 'night'
@@ -59,168 +91,16 @@ class SleepClassifier {
       return duration > 0;
     }).toList();
 
-    // Extract night anchor from pattern
-    final anchor = _extractNightAnchor(completedSleeps, currentTime);
+    // Build night window from pattern
+    final nightWindow = _buildNightWindow(completedSleeps, currentTime);
 
-    if (anchor == null) {
-      // Cold start: use fixed range
+    if (nightWindow == null) {
+      // Cold start: insufficient data -> fixed range
       return _classifyColdStart(startTime);
     }
 
-    // Pattern-based classification
-    return _classifyWithAnchor(startTime, anchor);
-  }
-
-  /// Extract night anchor hour from recent sleep history
-  ///
-  /// Finds the longest sleep per day, takes their start hours,
-  /// and computes a weighted median (recent days weigh more).
-  ///
-  /// Returns null if insufficient data (< [minDaysForPattern] days).
-  static double? _extractNightAnchor(
-    List<ActivityModel> completedSleeps,
-    DateTime now,
-  ) {
-    final cutoff = now.subtract(Duration(days: lookbackDays));
-
-    // Group sleeps by local date
-    final Map<String, List<ActivityModel>> sleepsByDate = {};
-    for (final sleep in completedSleeps) {
-      final localStart = sleep.startTime.toLocal();
-      if (localStart.isBefore(cutoff)) continue;
-
-      final dateKey =
-          '${localStart.year}-${localStart.month}-${localStart.day}';
-      sleepsByDate.putIfAbsent(dateKey, () => []);
-      sleepsByDate[dateKey]!.add(sleep);
-    }
-
-    if (sleepsByDate.length < minDaysForPattern) {
-      return null;
-    }
-
-    // Find longest sleep per day -> extract start hour
-    final List<_WeightedHour> anchors = [];
-    final sortedDates = sleepsByDate.keys.toList()..sort();
-
-    for (int i = 0; i < sortedDates.length; i++) {
-      final daySleeps = sleepsByDate[sortedDates[i]]!;
-
-      // Find longest sleep of the day
-      ActivityModel? longest;
-      int maxDuration = 0;
-      for (final sleep in daySleeps) {
-        final duration = sleep.endTime!.difference(sleep.startTime).inMinutes;
-        if (duration > maxDuration) {
-          maxDuration = duration;
-          longest = sleep;
-        }
-      }
-
-      if (longest != null && maxDuration >= 60) {
-        // Only consider sleeps >= 1 hour as potential night sleep
-        final startHour = longest.startTime.toLocal().hour +
-            longest.startTime.toLocal().minute / 60.0;
-        // Weight: more recent days get higher weight
-        // Day 0 (oldest) = weight 1, most recent = weight N
-        final weight = (i + 1).toDouble();
-        anchors.add(_WeightedHour(hour: startHour, weight: weight));
-      }
-    }
-
-    if (anchors.length < minDaysForPattern) {
-      return null;
-    }
-
-    return _weightedMedian(anchors);
-  }
-
-  /// Compute weighted median of hours
-  ///
-  /// Handles circular hours (23:00 and 01:00 should be close).
-  /// Normalizes hours to -12..+12 range relative to midnight before median.
-  static double _weightedMedian(List<_WeightedHour> items) {
-    if (items.isEmpty) return 21.0;
-
-    // Normalize hours relative to midnight for circular handling
-    // Convert to range: -6..+18 (so 21:00 = -3, 23:00 = -1, 01:00 = +1)
-    final normalized = items.map((item) {
-      final h = item.hour > 12 ? item.hour - 24 : item.hour;
-      return _WeightedHour(hour: h, weight: item.weight);
-    }).toList();
-
-    // Sort by normalized hour
-    normalized.sort((a, b) => a.hour.compareTo(b.hour));
-
-    // Find weighted median
-    final totalWeight =
-        normalized.fold<double>(0, (sum, item) => sum + item.weight);
-    final halfWeight = totalWeight / 2;
-
-    double cumulative = 0;
-    for (final item in normalized) {
-      cumulative += item.weight;
-      if (cumulative >= halfWeight) {
-        // Convert back to 0..24 range
-        final result = item.hour < 0 ? item.hour + 24 : item.hour;
-        return result;
-      }
-    }
-
-    // Fallback (shouldn't reach here)
-    final lastHour = normalized.last.hour;
-    return lastHour < 0 ? lastHour + 24 : lastHour;
-  }
-
-  /// Classify using pattern-derived night anchor
-  ///
-  /// Night range: [anchor - nightRangeHours, anchor + nightRangeHours]
-  /// with circular wrapping at 24h boundary.
-  static String _classifyWithAnchor(DateTime startTime, double anchor) {
-    final localHour =
-        startTime.toLocal().hour + startTime.toLocal().minute / 60.0;
-
-    final rangeStart = anchor - nightRangeHours;
-    final rangeEnd = anchor + nightRangeHours;
-
-    if (_isHourInRange(localHour, rangeStart, rangeEnd)) {
-      return 'night';
-    }
-    return 'nap';
-  }
-
-  /// Check if hour falls within circular range
-  static bool _isHourInRange(double hour, double rangeStart, double rangeEnd) {
-    // Normalize to 0..24
-    final normalizedHour = _normalizeHour(hour);
-    final normalizedStart = _normalizeHour(rangeStart);
-    final normalizedEnd = _normalizeHour(rangeEnd);
-
-    if (normalizedStart <= normalizedEnd) {
-      // Normal range (e.g., 19:00 ~ 23:00)
-      return normalizedHour >= normalizedStart &&
-          normalizedHour <= normalizedEnd;
-    } else {
-      // Wrapping range (e.g., 23:00 ~ 03:00)
-      return normalizedHour >= normalizedStart ||
-          normalizedHour <= normalizedEnd;
-    }
-  }
-
-  /// Normalize hour to 0..24 range
-  static double _normalizeHour(double hour) {
-    double result = hour % 24;
-    if (result < 0) result += 24;
-    return result;
-  }
-
-  /// Cold start classification: fixed range 21:00 ~ 06:00
-  static String _classifyColdStart(DateTime startTime) {
-    final hour = startTime.toLocal().hour;
-    if (hour >= coldStartNightBegin || hour < coldStartNightEnd) {
-      return 'night';
-    }
-    return 'nap';
+    // Pattern-based classification using density cluster
+    return _classifyWithWindow(startTime, endTime, nightWindow);
   }
 
   /// Check if classifier is in cold start mode
@@ -234,8 +114,7 @@ class SleepClassifier {
       return a.endTime!.difference(a.startTime).inMinutes > 0;
     }).toList();
 
-    final anchor = _extractNightAnchor(completedSleeps, now);
-    return anchor == null;
+    return _buildNightWindow(completedSleeps, now) == null;
   }
 
   /// Read-time fallback: return existing sleep_type or classify if NULL
@@ -294,11 +173,15 @@ class SleepClassifier {
     }).toList();
   }
 
-  /// Get the current night anchor hour for debugging/display
+  /// Get the current night window for debugging/display
   ///
   /// Returns null if in cold start mode.
-  static double? getNightAnchor(List<ActivityModel> recentSleepRecords) {
-    final now = DateTime.now();
+  /// Returns NightWindow with startBin and endBin (0-47, 30-min bins).
+  static NightWindow? getNightWindow(
+    List<ActivityModel> recentSleepRecords, {
+    DateTime? now,
+  }) {
+    final currentTime = now ?? DateTime.now();
 
     final completedSleeps = recentSleepRecords.where((a) {
       if (a.type != ActivityType.sleep) return false;
@@ -306,14 +189,253 @@ class SleepClassifier {
       return a.endTime!.difference(a.startTime).inMinutes > 0;
     }).toList();
 
-    return _extractNightAnchor(completedSleeps, now);
+    return _buildNightWindow(completedSleeps, currentTime);
+  }
+
+  // ============================================================
+  // v2 Core: Density-based night window construction
+  // ============================================================
+
+  /// Build night window from sleep density histogram
+  ///
+  /// Returns null if insufficient data (< [minDaysForPattern] unique days).
+  static NightWindow? _buildNightWindow(
+    List<ActivityModel> completedSleeps,
+    DateTime now,
+  ) {
+    final cutoff = now.subtract(const Duration(days: lookbackDays));
+
+    // Count unique days with sleep data
+    final uniqueDays = <String>{};
+    final recentSleeps = <ActivityModel>[];
+
+    for (final sleep in completedSleeps) {
+      final localStart = sleep.startTime.toLocal();
+      if (localStart.isBefore(cutoff)) continue;
+
+      recentSleeps.add(sleep);
+      final dateKey = '${localStart.year}-${localStart.month}-${localStart.day}';
+      uniqueDays.add(dateKey);
+    }
+
+    if (uniqueDays.length < minDaysForPattern) {
+      return null;
+    }
+
+    // Step 1: Build 24h histogram (48 bins × 30 min)
+    final histogram = List<double>.filled(_binCount, 0.0);
+
+    for (final sleep in recentSleeps) {
+      final daysAgo = now.difference(sleep.startTime).inDays;
+      // Recency weight: last 7 days = 1.0, 8-14 days = 0.5
+      final weight = daysAgo <= 7 ? 1.0 : 0.5;
+
+      _addSleepToBins(histogram, sleep.startTime.toLocal(),
+          sleep.endTime!.toLocal(), weight);
+    }
+
+    // Step 2: Find peak bin
+    double maxDensity = 0;
+    int peakBin = 0;
+    for (int i = 0; i < _binCount; i++) {
+      if (histogram[i] > maxDensity) {
+        maxDensity = histogram[i];
+        peakBin = i;
+      }
+    }
+
+    if (maxDensity == 0) return null;
+
+    // Step 3: Expand from peak (circular, with gap tolerance)
+    // Gap tolerance allows bridging empty bins (e.g., split night wake gaps)
+    // up to _maxGapBins consecutive empty bins are allowed IF a dense bin
+    // exists beyond the gap.
+    final threshold = maxDensity * _expansionThreshold;
+
+    // Expand left from peak
+    int startBin = peakBin;
+    int gapCount = 0;
+    for (int i = 1; i < _binCount; i++) {
+      final candidate = (peakBin - i + _binCount) % _binCount;
+      if (histogram[candidate] >= threshold) {
+        startBin = candidate;
+        gapCount = 0; // Reset gap counter
+      } else {
+        gapCount++;
+        if (gapCount > _maxGapBins) break;
+        // In the middle of a gap: lookahead to see if density resumes
+        // within remaining gap budget
+        bool resumesAhead = false;
+        for (int look = 1; look <= _maxGapBins - gapCount + 1; look++) {
+          final ahead = (candidate - look + _binCount) % _binCount;
+          if (histogram[ahead] >= threshold) {
+            resumesAhead = true;
+            break;
+          }
+        }
+        if (!resumesAhead) break;
+      }
+    }
+
+    // Expand right from peak
+    int endBin = peakBin;
+    gapCount = 0;
+    for (int i = 1; i < _binCount; i++) {
+      final candidate = (peakBin + i) % _binCount;
+      if (histogram[candidate] >= threshold) {
+        endBin = candidate;
+        gapCount = 0;
+      } else {
+        gapCount++;
+        if (gapCount > _maxGapBins) break;
+        // In the middle of a gap: lookahead to see if density resumes
+        bool resumesAhead = false;
+        for (int look = 1; look <= _maxGapBins - gapCount + 1; look++) {
+          final ahead = (candidate + look) % _binCount;
+          if (histogram[ahead] >= threshold) {
+            resumesAhead = true;
+            break;
+          }
+        }
+        if (!resumesAhead) break;
+      }
+    }
+
+    return NightWindow(startBin: startBin, endBin: endBin);
+  }
+
+  /// Distribute sleep duration across histogram bins
+  ///
+  /// Each bin that the sleep overlaps gets [weight] added.
+  /// Handles midnight crossing naturally via modular arithmetic.
+  static void _addSleepToBins(
+    List<double> histogram,
+    DateTime localStart,
+    DateTime localEnd,
+    double weight,
+  ) {
+    int currentBin = _timeToBin(localStart);
+    final endBin = _timeToBin(localEnd);
+
+    // Safety: max 48 iterations (24 hours)
+    int safety = 0;
+    while (safety < _binCount) {
+      histogram[currentBin] += weight;
+      if (currentBin == endBin) break;
+      currentBin = (currentBin + 1) % _binCount;
+      safety++;
+    }
+  }
+
+  /// Convert DateTime to bin index (0-47)
+  static int _timeToBin(DateTime time) {
+    return (time.hour * 2) + (time.minute >= 30 ? 1 : 0);
+  }
+
+  // ============================================================
+  // Classification logic
+  // ============================================================
+
+  /// Classify using density-derived night window
+  static String _classifyWithWindow(
+    DateTime startTime,
+    DateTime? endTime,
+    NightWindow window,
+  ) {
+    final startBin = _timeToBin(startTime.toLocal());
+
+    if (!window.contains(startBin)) {
+      return 'nap';
+    }
+
+    // Start is within night window
+    if (endTime != null) {
+      final durationMinutes = endTime.difference(startTime).inMinutes;
+      // Very short sleep in night window = micro-nap, not night
+      if (durationMinutes < _minNightDurationMinutes) {
+        return 'nap';
+      }
+      return 'night';
+    }
+
+    // "Sleep now" mode: start in night window -> assume night
+    return 'night';
+  }
+
+  /// Cold start classification: fixed range 21:00 ~ 06:00
+  ///
+  /// Used when < 3 days of sleep data available.
+  /// Fixed range is safer than duration-based for cold start because
+  /// it avoids misclassifying long daytime naps as night sleep.
+  static String _classifyColdStart(DateTime startTime) {
+    final hour = startTime.toLocal().hour;
+    if (hour >= coldStartNightBegin || hour < coldStartNightEnd) {
+      return 'night';
+    }
+    return 'nap';
   }
 }
 
-/// Internal: hour with weight for weighted median calculation
-class _WeightedHour {
-  final double hour;
-  final double weight;
+/// Night window: the time zone where night sleep is concentrated
+///
+/// Represented as bin range (0-47, each bin = 30 minutes).
+/// Handles midnight wrapping: if startBin > endBin, the window
+/// wraps around midnight (e.g., startBin=40 [20:00] to endBin=12 [06:00]).
+@immutable
+class NightWindow {
+  /// Start bin of night window (0-47)
+  final int startBin;
 
-  const _WeightedHour({required this.hour, required this.weight});
+  /// End bin of night window (0-47)
+  final int endBin;
+
+  const NightWindow({required this.startBin, required this.endBin});
+
+  /// Check if a bin falls within this night window (circular)
+  bool contains(int bin) {
+    if (startBin <= endBin) {
+      // No midnight wrap (e.g., 14:00 ~ 18:00)
+      return bin >= startBin && bin <= endBin;
+    } else {
+      // Midnight wrap (e.g., 20:00 ~ 06:00)
+      return bin >= startBin || bin <= endBin;
+    }
+  }
+
+  /// Start hour (approximate, for display/debug)
+  double get startHour => startBin * 0.5;
+
+  /// End hour (approximate, for display/debug)
+  double get endHour => (endBin + 1) * 0.5;
+
+  /// Number of bins in this window
+  int get binCount {
+    if (startBin <= endBin) {
+      return endBin - startBin + 1;
+    } else {
+      return (_binCount - startBin) + endBin + 1;
+    }
+  }
+
+  static const int _binCount = 48;
+
+  @override
+  String toString() {
+    final startH = (startBin ~/ 2).toString().padLeft(2, '0');
+    final startM = (startBin % 2 == 0) ? '00' : '30';
+    final endH = (endBin ~/ 2).toString().padLeft(2, '0');
+    final endM = (endBin % 2 == 0) ? '00' : '30';
+    return 'NightWindow($startH:$startM ~ $endH:$endM)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is NightWindow &&
+        other.startBin == startBin &&
+        other.endBin == endBin;
+  }
+
+  @override
+  int get hashCode => Object.hash(startBin, endBin);
 }
