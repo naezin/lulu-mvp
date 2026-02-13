@@ -580,7 +580,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
   Widget _buildCalibratingTimeRow(S l10n) {
     final completed = widget.completedSleepRecords ?? 0;
-    final day = completed > 0 ? completed : 1;
+    final count = completed > 0 ? completed : 1;
 
     return Row(
       children: [
@@ -592,7 +592,7 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
               width: 8,
               height: 8,
               decoration: BoxDecoration(
-                color: i < day
+                color: i < count
                     ? _themeColor
                     : LuluColors.surfaceElevated,
                 shape: BoxShape.circle,
@@ -603,8 +603,8 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
         const SizedBox(width: 4),
         Text(
           widget.isWarmTone
-              ? l10n.sweetSpotCardCalibratingWarm(day)
-              : l10n.sweetSpotCardCalibratingPlain(day),
+              ? l10n.sweetSpotCardCalibratingWarm(count)
+              : l10n.sweetSpotCardCalibratingPlain(count),
           style: LuluTextStyles.bodyMedium.copyWith(
             color: LuluTextColors.secondary,
           ),
@@ -904,10 +904,10 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
   String _getStateMessage(S l10n) {
     if (widget.state == SweetSpotState.calibrating) {
       final completed = widget.completedSleepRecords ?? 0;
-      final day = completed > 0 ? completed : 1;
+      final count = completed > 0 ? completed : 1;
       return widget.isWarmTone
-          ? l10n.sweetSpotCardCalibratingWarm(day)
-          : l10n.sweetSpotCardCalibratingPlain(day);
+          ? l10n.sweetSpotCardCalibratingWarm(count)
+          : l10n.sweetSpotCardCalibratingPlain(count);
     }
 
     // Wide range message for young babies

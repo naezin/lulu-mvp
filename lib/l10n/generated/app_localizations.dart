@@ -5180,13 +5180,13 @@ abstract class S {
   /// C-5 Sweet Spot card - calibrating (warm tone)
   ///
   /// In ko, this message translates to:
-  /// **'패턴을 파악하고 있어요 ({day}일째)'**
+  /// **'패턴을 파악하고 있어요 (수면 {day}건 완료)'**
   String sweetSpotCardCalibratingWarm(int day);
 
   /// C-5 Sweet Spot card - calibrating (plain tone)
   ///
   /// In ko, this message translates to:
-  /// **'학습 중 · {day}/3일'**
+  /// **'학습 중 · {day}/3건'**
   String sweetSpotCardCalibratingPlain(int day);
 
   /// C-5 Sweet Spot card - next nap hint (warm tone)

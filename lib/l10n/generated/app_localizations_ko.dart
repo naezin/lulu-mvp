@@ -2786,12 +2786,12 @@ class SKo extends S {
 
   @override
   String sweetSpotCardCalibratingWarm(int day) {
-    return '패턴을 파악하고 있어요 ($day일째)';
+    return '패턴을 파악하고 있어요 (수면 $day건 완료)';
   }
 
   @override
   String sweetSpotCardCalibratingPlain(int day) {
-    return '학습 중 · $day/3일';
+    return '학습 중 · $day/3건';
   }
 
   @override
