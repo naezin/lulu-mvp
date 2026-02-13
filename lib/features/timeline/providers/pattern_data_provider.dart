@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/utils/sleep_classifier.dart';
 import '../../../data/models/activity_model.dart';
 import '../../../data/models/baby_type.dart';
 import '../../../data/repositories/activity_repository.dart';
@@ -86,10 +87,15 @@ class PatternDataProvider extends ChangeNotifier {
           .where((a) => a.babyIds.contains(babyId))
           .toList();
 
+      // A-2: SleepClassifier v2 연동 - 수면 기록 추출
+      final sleepRecords = babyActivities
+          .where((a) => a.type == ActivityType.sleep)
+          .toList();
+
       // WeeklyPattern 생성 (레거시 48-slot)
       final days = List.generate(7, (i) {
         final date = targetWeekStart.add(Duration(days: i));
-        return _buildDailyPattern(date, babyActivities);
+        return _buildDailyPattern(date, babyActivities, sleepRecords);
       });
 
       _weeklyPattern = WeeklyPattern(
@@ -101,7 +107,7 @@ class PatternDataProvider extends ChangeNotifier {
       // Sprint 19 v5: DayTimeline 생성 (세로 스택 렌더링용)
       _weekTimelines = List.generate(7, (i) {
         final date = targetWeekStart.add(Duration(days: i));
-        return _buildDayTimeline(date, babyActivities);
+        return _buildDayTimeline(date, babyActivities, sleepRecords);
       });
 
       _weekStartDate = targetWeekStart;
@@ -224,10 +230,15 @@ class PatternDataProvider extends ChangeNotifier {
         .where((a) => a.babyIds.contains(babyId))
         .toList();
 
+    // A-2: SleepClassifier v2 연동 - 수면 기록 추출
+    final sleepRecords = babyActivities
+        .where((a) => a.type == ActivityType.sleep)
+        .toList();
+
     // DayTimeline 생성
     return List.generate(7, (i) {
       final date = targetWeekStart.add(Duration(days: i));
-      return _buildDayTimeline(date, babyActivities);
+      return _buildDayTimeline(date, babyActivities, sleepRecords);
     });
   }
 
@@ -251,12 +262,21 @@ class PatternDataProvider extends ChangeNotifier {
         .where((a) => a.babyIds.contains(babyId))
         .toList();
 
-    return _buildDayTimeline(date, babyActivities);
+    // A-2: SleepClassifier v2 연동 - 수면 기록 추출
+    final sleepRecords = babyActivities
+        .where((a) => a.type == ActivityType.sleep)
+        .toList();
+
+    return _buildDayTimeline(date, babyActivities, sleepRecords);
   }
 
   /// Sprint 19 v5: 단일 날짜 DayTimeline 빌드 (동기 - 활동 리스트 전달)
   DayTimeline buildDayTimeline(DateTime date, List<ActivityModel> activities) {
-    return _buildDayTimeline(date, activities);
+    // A-2: 수면 기록 추출 (활동 리스트에서)
+    final sleepRecords = activities
+        .where((a) => a.type == ActivityType.sleep)
+        .toList();
+    return _buildDayTimeline(date, activities, sleepRecords);
   }
 
   /// 다태아 함께보기 토글
@@ -335,10 +355,15 @@ class PatternDataProvider extends ChangeNotifier {
             .where((a) => a.babyIds.contains(babyId))
             .toList();
 
+        // A-2: SleepClassifier v2 연동 - 수면 기록 추출
+        final sleepRecords = babyActivities
+            .where((a) => a.type == ActivityType.sleep)
+            .toList();
+
         // WeeklyPattern 생성
         final days = List.generate(7, (j) {
           final date = targetWeekStart.add(Duration(days: j));
-          return _buildDailyPattern(date, babyActivities);
+          return _buildDailyPattern(date, babyActivities, sleepRecords);
         });
 
         final pattern = WeeklyPattern(
@@ -367,7 +392,12 @@ class PatternDataProvider extends ChangeNotifier {
   /// ActivityModel 리스트에서 DailyPattern 생성
   /// v4.1: 오버레이 지원 - 수면은 메인 활동, 나머지는 오버레이
   /// FIX-E: UTC -> Local 변환 추가
-  DailyPattern _buildDailyPattern(DateTime date, List<ActivityModel> activities) {
+  /// A-2: SleepClassifier v2 연동 — DB sleep_type 우선, fallback은 v2
+  DailyPattern _buildDailyPattern(
+    DateTime date,
+    List<ActivityModel> activities,
+    List<ActivityModel> sleepRecords,
+  ) {
     // 해당 날짜의 활동만 필터링 (로컬 시간 기준)
     final dayStart = DateTime(date.year, date.month, date.day);
     final dayEnd = dayStart.add(const Duration(days: 1));
@@ -401,7 +431,10 @@ class PatternDataProvider extends ChangeNotifier {
         final actEnd = (activity.endTime ?? activity.startTime.add(const Duration(hours: 1))).toLocal();
 
         if (actStart.isBefore(slotEnd) && actEnd.isAfter(slotStart)) {
-          final patternType = _mapActivityType(activity.type, slotIndex ~/ 2);
+          final patternType = _mapActivityType(
+            activity,
+            sleepRecords,
+          );
 
           // 수면은 주요 활동으로
           if (patternType == PatternActivityType.nightSleep ||
@@ -430,11 +463,27 @@ class PatternDataProvider extends ChangeNotifier {
   }
 
   /// ActivityType을 PatternActivityType으로 변환
-  PatternActivityType _mapActivityType(ActivityType type, int hour) {
-    switch (type) {
+  /// A-2: SleepClassifier v2 연동 — sleep은 DB값 우선, v2 classify fallback
+  PatternActivityType _mapActivityType(
+    ActivityModel activity,
+    List<ActivityModel> sleepRecords,
+  ) {
+    switch (activity.type) {
       case ActivityType.sleep:
-        // 밤잠/낮잠 판별에 SleepTimeConfig 사용
-        return SleepTimeConfig.isNightTime(hour)
+        // Direction A: DB sleep_type 우선
+        final dbSleepType = activity.data?['sleep_type'] as String?;
+        if (dbSleepType != null && dbSleepType.isNotEmpty) {
+          return dbSleepType == 'night'
+              ? PatternActivityType.nightSleep
+              : PatternActivityType.daySleep;
+        }
+        // Fallback: SleepClassifier v2 density-based classification
+        final classified = SleepClassifier.classify(
+          startTime: activity.startTime,
+          endTime: activity.endTime,
+          recentSleepRecords: sleepRecords,
+        );
+        return classified == 'night'
             ? PatternActivityType.nightSleep
             : PatternActivityType.daySleep;
       case ActivityType.feeding:
@@ -442,9 +491,9 @@ class PatternDataProvider extends ChangeNotifier {
       case ActivityType.diaper:
         return PatternActivityType.diaper;
       case ActivityType.play:
-        return PatternActivityType.play; // v4.1: play 매핑
+        return PatternActivityType.play;
       case ActivityType.health:
-        return PatternActivityType.health; // v4.1: health 매핑
+        return PatternActivityType.health;
     }
   }
 
@@ -460,7 +509,12 @@ class PatternDataProvider extends ChangeNotifier {
   ///
   /// 모든 활동 → allBlocks에 추가 (세로 스택 렌더링용)
   /// Duration/Instant 구분 없이 전부 DurationBlock으로 변환
-  DayTimeline _buildDayTimeline(DateTime date, List<ActivityModel> activities) {
+  /// A-2: sleepRecords 추가 — SleepClassifier v2 fallback용
+  DayTimeline _buildDayTimeline(
+    DateTime date,
+    List<ActivityModel> activities,
+    List<ActivityModel> sleepRecords,
+  ) {
     final dayStart = DateTime(date.year, date.month, date.day);
     final dayEnd = dayStart.add(const Duration(days: 1));
 
@@ -496,13 +550,16 @@ class PatternDataProvider extends ChangeNotifier {
       // subType 결정 (수면: night/nap, 놀이: play_type 등)
       String? subType;
       if (type == 'sleep') {
-        // DB sleep_type 사용, NULL이면 시간대 기반 판별 (차트용)
+        // A-2: DB sleep_type 우선, fallback은 SleepClassifier v2
         final dbSleepType = activity.data?['sleep_type'] as String?;
         if (dbSleepType != null && dbSleepType.isNotEmpty) {
           subType = dbSleepType;
         } else {
-          final hour = activity.startTime.toLocal().hour;
-          subType = SleepTimeConfig.isNightTime(hour) ? 'night' : 'nap';
+          subType = SleepClassifier.classify(
+            startTime: activity.startTime,
+            endTime: activity.endTime,
+            recentSleepRecords: sleepRecords,
+          );
         }
       } else if (type == 'play') {
         subType = activity.data?['play_type'] as String? ??
