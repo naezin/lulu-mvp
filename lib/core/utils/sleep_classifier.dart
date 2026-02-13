@@ -96,7 +96,7 @@ class SleepClassifier {
 
     if (nightWindow == null) {
       // Cold start: insufficient data -> fixed range
-      return _classifyColdStart(startTime);
+      return _classifyColdStart(startTime, endTime);
     }
 
     // Pattern-based classification using density cluster
@@ -246,6 +246,30 @@ class SleepClassifier {
 
     if (maxDensity == 0) return null;
 
+    // Step 2.5: Uniformity check — if sleep is evenly spread across 24h,
+    // there is no meaningful night cluster. Fall back to cold start.
+    // Newborns often sleep uniformly → histogram fills nearly all bins →
+    // peak expansion covers ~24h → every sleep classified as 'night'.
+    //
+    // Detection: if more than 75% of bins (36/48) are occupied,
+    // the sleep is spread too uniformly for meaningful clustering.
+    // Normal patterns (night 8h + nap 1.5h) occupy ~19/48 bins (~40%).
+    // Newborn uniform sleep occupies 40-48/48 bins (83-100%).
+    final nonZeroBins = histogram.where((v) => v > 0).length;
+    if (nonZeroBins > (_binCount * 0.75).round()) {
+      // Additional check: peak/mean ratio to confirm uniformity.
+      // Even with many bins occupied, a clear peak (>2x mean) = real pattern.
+      final totalDensity = histogram.fold<double>(0.0, (sum, v) => sum + v);
+      final mean = totalDensity / nonZeroBins;
+      final peakToMean = maxDensity / mean;
+      if (peakToMean < 2.0) {
+        debugPrint('[INFO] [SleepClassifier] Uniform sleep pattern detected '
+            '(nonZeroBins=$nonZeroBins/$_binCount, peak/mean=$peakToMean). '
+            'Falling back to cold start.');
+        return null;
+      }
+    }
+
     // Step 3: Expand from peak (circular, with gap tolerance)
     // Gap tolerance allows bridging empty bins (e.g., split night wake gaps)
     // up to _maxGapBins consecutive empty bins are allowed IF a dense bin
@@ -345,6 +369,19 @@ class SleepClassifier {
     final startBin = _timeToBin(startTime.toLocal());
 
     if (!window.contains(startBin)) {
+      // Start outside night window — check midnight-crossing
+      // Same logic as cold start: if sleep crosses midnight and > 3h, it's night
+      if (endTime != null) {
+        final localStart = startTime.toLocal();
+        final localEnd = endTime.toLocal();
+        final durationMinutes = endTime.difference(startTime).inMinutes;
+        final crossesMidnight = localEnd.day != localStart.day ||
+            localEnd.isBefore(localStart);
+
+        if (crossesMidnight && durationMinutes > 180) {
+          return 'night';
+        }
+      }
       return 'nap';
     }
 
@@ -363,15 +400,39 @@ class SleepClassifier {
   }
 
   /// Cold start classification: fixed range 21:00 ~ 06:00
+  /// with midnight-crossing detection for endTime-aware reclassification.
   ///
   /// Used when < 3 days of sleep data available.
   /// Fixed range is safer than duration-based for cold start because
   /// it avoids misclassifying long daytime naps as night sleep.
-  static String _classifyColdStart(DateTime startTime) {
-    final hour = startTime.toLocal().hour;
+  ///
+  /// Midnight-crossing: if startTime is before 21:00 but the sleep
+  /// crosses midnight AND lasts > 3 hours, it's classified as 'night'.
+  /// This handles the "sleep now" reclassification at end time:
+  /// e.g., 20:25 start -> 02:16 end = 5h51m crossing midnight -> 'night'.
+  /// Short evening sleeps (20:00 -> 21:30 = 1h30m) remain 'nap'.
+  static String _classifyColdStart(DateTime startTime, [DateTime? endTime]) {
+    final localStart = startTime.toLocal();
+    final hour = localStart.hour;
+
+    // Standard cold start range check
     if (hour >= coldStartNightBegin || hour < coldStartNightEnd) {
       return 'night';
     }
+
+    // Midnight-crossing detection: startTime outside night range
+    // but sleep crosses midnight with significant duration (> 3h)
+    if (endTime != null) {
+      final localEnd = endTime.toLocal();
+      final durationMinutes = endTime.difference(startTime).inMinutes;
+      final crossesMidnight = localEnd.day != localStart.day ||
+          localEnd.isBefore(localStart);
+
+      if (crossesMidnight && durationMinutes > 180) {
+        return 'night';
+      }
+    }
+
     return 'nap';
   }
 }

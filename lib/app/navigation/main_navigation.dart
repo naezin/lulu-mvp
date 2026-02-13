@@ -29,6 +29,15 @@ import '../../l10n/generated/app_localizations.dart' show S;
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
 
+  /// Static key for tab switching from anywhere (e.g., ImportScreen → Home)
+  static final GlobalKey<_MainNavigationState> navigationKey =
+      GlobalKey<_MainNavigationState>();
+
+  /// Switch to Home tab (index 0) from anywhere
+  static void switchToHome() {
+    navigationKey.currentState?._onTabTapped(0);
+  }
+
   @override
   State<MainNavigation> createState() => _MainNavigationState();
 }

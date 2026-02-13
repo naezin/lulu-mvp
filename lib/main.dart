@@ -395,10 +395,15 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
         _providerInitialized = true;
 
         // 로컬에도 저장 (다음 오프라인 시작용)
-        await OnboardingDataService.instance.saveOnboardingData(
+        // family is already from Supabase, so syncedFamily == family
+        final syncedFamily = await OnboardingDataService.instance.saveOnboardingData(
           family: family,
           babies: babies,
         );
+        // Update HomeProvider if familyId changed (defensive)
+        if (syncedFamily.id != family.id) {
+          homeProvider.setFamily(syncedFamily, babies);
+        }
       }
 
       return true;
@@ -408,19 +413,37 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
     }
   }
 
-  void _onOnboardingComplete(FamilyModel family, List<BabyModel> babies) {
-    // PA-01: HomeProvider에 데이터 즉시 설정
+  void _onOnboardingComplete(FamilyModel family, List<BabyModel> babies) async {
+    // RLS Fix: After saveOnboardingData(), Supabase familyId may differ from
+    // local family.id. Instead of using the passed family/babies objects
+    // (which may have stale local UUIDs), reload everything from Supabase.
+    // This ensures family, babies, and familyId all match Supabase truth.
     final homeProvider = context.read<HomeProvider>();
-    homeProvider.setFamily(family, babies);
-    // FIX-C: 오늘 활동 로드 추가
-    homeProvider.loadTodayActivities();
+
+    // Try loading from Supabase (definitive source of truth)
+    final service = OnboardingDataService.instance;
+    final supabaseFamily = await service.loadFamily();
+    final supabaseBabies = await service.loadBabies();
+
+    if (supabaseFamily != null && supabaseBabies.isNotEmpty) {
+      homeProvider.setFamily(supabaseFamily, supabaseBabies);
+      debugPrint('[OK] [OnboardingWrapper] Loaded from Supabase: '
+          'family=${supabaseFamily.id}, babies=${supabaseBabies.length}');
+    } else {
+      // Fallback: use passed objects (should not happen normally)
+      homeProvider.setFamily(family, babies);
+      debugPrint('[WARN] [OnboardingWrapper] Supabase load failed, using local');
+    }
+
+    await homeProvider.loadTodayActivities();
     _providerInitialized = true;
 
     // 상태 기반 전환 (Navigator.pushReplacement 대신)
-    // 이렇게 하면 Provider 컨텍스트가 유지됨
-    setState(() {
-      _hasCompletedOnboarding = true;
-    });
+    if (mounted) {
+      setState(() {
+        _hasCompletedOnboarding = true;
+      });
+    }
 
     debugPrint('[OK] [OnboardingWrapper] Onboarding complete - switching to MainNavigation');
   }
@@ -442,7 +465,7 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
     // 온보딩 완료된 경우 - MainNavigation 표시
     // Provider는 _checkOnboardingStatus에서 이미 설정됨
     if (_hasCompletedOnboarding && _providerInitialized) {
-      return const MainNavigation();
+      return MainNavigation(key: MainNavigation.navigationKey);
     }
 
     // 온보딩 미완료 - OnboardingScreen 표시

@@ -234,13 +234,14 @@ class _CompletionScreenState extends State<CompletionScreen>
         debugPrint('[OK] [Onboarding] Baby created: ${baby.name}');
       }
 
-      // SharedPreferences에 데이터 저장
+      // SharedPreferences + Supabase에 데이터 저장
+      // prefs에 Supabase familyId가 저장됨 (로컬 UUID 대신)
       await OnboardingDataService.instance.saveOnboardingData(
         family: result.family,
         babies: result.babies,
       );
 
-      // 콜백 호출 (데이터 포함)
+      // 콜백에서 Supabase 재로드 수행 (메모리 전체 갱신)
       if (widget.onCompleteWithData != null) {
         widget.onCompleteWithData!(result.family, result.babies);
       } else {

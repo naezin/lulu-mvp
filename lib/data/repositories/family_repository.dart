@@ -99,17 +99,20 @@ class FamilyRepository {
       final familyId = response['id'] as String;
       debugPrint('[OK] [FamilyRepository] Family created: $familyId');
 
-      // 2. family_members에 owner로 INSERT (RLS 필수)
+      // 2. family_members에 owner로 등록 (RLS 필수)
+      // upsert 사용: DB 트리거(on_family_created)가 먼저 INSERT한 경우에도 안전
       try {
-        await SupabaseService.client.from('family_members').insert({
-          'family_id': familyId,
-          'user_id': userId,
-          'role': 'owner',
-        });
-        debugPrint('[OK] [FamilyRepository] Family member (owner) created');
+        await SupabaseService.client.from('family_members').upsert(
+          {
+            'family_id': familyId,
+            'user_id': userId,
+            'role': 'owner',
+          },
+          onConflict: 'family_id,user_id',
+        );
+        debugPrint('[OK] [FamilyRepository] Family member (owner) ensured');
       } catch (e) {
-        debugPrint('[WARN] [FamilyRepository] family_members insert failed: $e');
-        // DB 트리거가 INSERT 시 자동 생성하지만, 실패 로그는 남김
+        debugPrint('[ERR] [FamilyRepository] family_members upsert failed: $e');
       }
 
       return FamilyModel(

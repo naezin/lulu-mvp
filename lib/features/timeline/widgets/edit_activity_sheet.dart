@@ -756,6 +756,25 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
     });
 
     try {
+      // HF-2b: Reclassify sleep_type when time is changed for sleep activities
+      if (widget.activity.type == ActivityType.sleep) {
+        final timeChanged = _startTime != widget.activity.startTime ||
+            _endTime != widget.activity.endTime;
+        final userManuallyToggled =
+            _data['sleep_type'] != (widget.activity.data?['sleep_type'] as String?);
+
+        // Only auto-reclassify if time changed AND user didn't manually toggle
+        if (timeChanged && !userManuallyToggled) {
+          final reclassified = SleepClassifier.classify(
+            startTime: _startTime,
+            endTime: _endTime,
+            recentSleepRecords: const [],
+          );
+          _data['sleep_type'] = reclassified;
+          debugPrint('[INFO] [EditActivitySheet] Sleep reclassified on time change: $reclassified');
+        }
+      }
+
       final updatedActivity = widget.activity.copyWith(
         startTime: _startTime,
         endTime: _endTime,

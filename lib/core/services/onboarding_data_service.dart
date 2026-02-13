@@ -24,29 +24,46 @@ class OnboardingDataService {
 
   /// 온보딩 완료 데이터 저장
   /// Supabase + SharedPreferences 동시 저장
-  Future<void> saveOnboardingData({
+  /// Returns the synchronized FamilyModel with Supabase-generated familyId.
+  /// Callers MUST use the returned family for HomeProvider.setFamily()
+  /// to ensure in-memory familyId matches Supabase.
+  Future<FamilyModel> saveOnboardingData({
     required FamilyModel family,
     required List<BabyModel> babies,
   }) async {
     try {
       // 1. Supabase에 저장 (인증된 경우에만)
+      // _saveToSupabase returns the Supabase-generated familyId,
+      // which may differ from the local family.id (UUID mismatch fix).
+      String effectiveFamilyId = family.id;
       final userId = SupabaseService.currentUserId;
       if (userId != null) {
-        await _saveToSupabase(family: family, babies: babies, userId: userId);
+        final supabaseFamilyId = await _saveToSupabase(
+          family: family,
+          babies: babies,
+          userId: userId,
+        );
+        if (supabaseFamilyId != null) {
+          effectiveFamilyId = supabaseFamilyId;
+        }
       } else {
         debugPrint('[WARN] [OnboardingDataService] No authenticated user, skipping Supabase save');
       }
 
-      // 2. SharedPreferences에 로컬 저장 (백업)
+      // 2. Synchronize family object with Supabase familyId
+      final synchronizedFamily = effectiveFamilyId != family.id
+          ? family.copyWith(id: effectiveFamilyId)
+          : family;
+
+      // 3. SharedPreferences에 로컬 저장 (백업)
       final prefs = await SharedPreferences.getInstance();
 
-      // FamilyModel 저장 (JSON)
-      final familyJson = jsonEncode(family.toJson());
+      final familyJson = jsonEncode(synchronizedFamily.toJson());
       await prefs.setString(_keyFamily, familyJson);
 
-      // IMPORTANT: family_id도 별도 저장 (FamilySyncService와 호환성)
-      await prefs.setString('family_id', family.id);
-      debugPrint('[INFO] [OnboardingDataService] Saved family_id: ${family.id}');
+      // IMPORTANT: Supabase familyId 사용 (로컬 UUID가 아닌 DB 실제 ID)
+      await prefs.setString('family_id', effectiveFamilyId);
+      debugPrint('[INFO] [OnboardingDataService] Saved family_id: $effectiveFamilyId');
 
       // BabyModel 리스트 저장
       final babiesJson = jsonEncode(babies.map((b) => b.toJson()).toList());
@@ -55,7 +72,10 @@ class OnboardingDataService {
       // 완료 플래그 저장
       await prefs.setBool(_keyCompleted, true);
 
-      debugPrint('[OK] [OnboardingDataService] Data saved: family=${family.id}, babies=${babies.length}');
+      debugPrint('[OK] [OnboardingDataService] Data saved: family=${synchronizedFamily.id}, babies=${babies.length}');
+
+      // Return synchronized family so callers can update in-memory state
+      return synchronizedFamily;
     } catch (e) {
       debugPrint('[ERR] [OnboardingDataService] Save error: $e');
       rethrow;
@@ -63,7 +83,8 @@ class OnboardingDataService {
   }
 
   /// Supabase에 family/babies 데이터 저장
-  Future<void> _saveToSupabase({
+  /// Returns the Supabase-generated familyId (may differ from local family.id)
+  Future<String?> _saveToSupabase({
     required FamilyModel family,
     required List<BabyModel> babies,
     required String userId,
@@ -81,7 +102,7 @@ class OnboardingDataService {
         familyId = existingFamily.id;
         debugPrint('[INFO] [OnboardingDataService] Using existing family: $familyId');
       } else {
-        // 새 family 생성
+        // 새 family 생성 (family_members INSERT 포함)
         final createdFamily = await familyRepo.createFamily();
         familyId = createdFamily.id;
         debugPrint('[OK] [OnboardingDataService] Created family in Supabase: $familyId');
@@ -106,10 +127,13 @@ class OnboardingDataService {
       await babyRepo.createBabies(updatedBabies);
       debugPrint('[OK] [OnboardingDataService] Created ${babies.length} babies in Supabase');
 
+      // Return the Supabase familyId so caller can sync local storage
+      return familyId;
     } catch (e) {
       debugPrint('[ERR] [OnboardingDataService] Supabase save error: $e');
       // Supabase 저장 실패해도 로컬 저장은 계속 진행
       // rethrow 하지 않음
+      return null;
     }
   }
 

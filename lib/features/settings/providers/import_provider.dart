@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../core/services/import_service.dart';
-import '../../../core/services/family_sync_service.dart';
 import '../../../core/services/parsers/parsed_activity.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../badge/badge_provider.dart';
@@ -141,16 +140,12 @@ class ImportProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // IMPORTANT: Ensure Family exists in Supabase before import!
-      debugPrint('[INFO] [ImportProvider] Ensuring family exists before import...');
-      debugPrint('[INFO] [ImportProvider] Original familyId from screen: $familyId');
-
-      final syncedFamilyId = await FamilySyncService.instance.ensureFamilyExists();
-      debugPrint('[INFO] [ImportProvider] Synced familyId from FamilySyncService: $syncedFamilyId');
-
-      // 동기화된 familyId 사용 (없으면 전달받은 familyId 사용)
-      final actualFamilyId = syncedFamilyId ?? familyId;
-      debugPrint('[INFO] [ImportProvider] Final familyId to use: $actualFamilyId');
+      // HF-1a Fix: Use familyId from HomeProvider directly.
+      // Previously called FamilySyncService.ensureFamilyExists() which
+      // could return a different familyId, causing data to be saved
+      // under a family that HomeProvider doesn't query.
+      final actualFamilyId = familyId;
+      debugPrint('[INFO] [ImportProvider] Using familyId from HomeProvider: $actualFamilyId');
 
       if (actualFamilyId.isEmpty) {
         _setError('No family info found. Please complete onboarding.');

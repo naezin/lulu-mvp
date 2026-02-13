@@ -159,6 +159,9 @@ class OngoingSleepProvider extends ChangeNotifier {
   /// 수면 종료 및 저장
   /// HF-5: DB-sourced sleep → finishActivity (UPDATE end_time)
   ///        FAB-started sleep → createActivity (INSERT new record)
+  /// HF-2b: Reclassify sleep_type at end time with endTime for
+  ///         midnight-crossing detection (startTime-only classification
+  ///         misses 20:xx→02:xx overnight sleeps)
   Future<ActivityModel?> endSleep() async {
     if (_ongoingSleep == null) {
       debugPrint('[WARN] [OngoingSleepProvider] No ongoing sleep to end');
@@ -167,6 +170,20 @@ class OngoingSleepProvider extends ChangeNotifier {
 
     try {
       final endTime = DateTime.now();
+
+      // HF-2b: Reclassify with endTime for midnight-crossing detection
+      final reclassifiedType = await _reclassifySleepType(
+        startTime: _ongoingSleep!.startTime,
+        endTime: endTime,
+        babyId: _ongoingSleep!.babyId,
+        familyId: _ongoingSleep!.familyId,
+      );
+
+      if (reclassifiedType != _ongoingSleep!.sleepType) {
+        debugPrint('[INFO] [OngoingSleepProvider] Sleep reclassified at end: '
+            '${_ongoingSleep!.sleepType} -> $reclassifiedType');
+      }
+
       ActivityModel savedActivity;
 
       if (_isDbSourced) {
@@ -175,9 +192,14 @@ class OngoingSleepProvider extends ChangeNotifier {
           _ongoingSleep!.id,
           endTime,
         );
+        // B2: Also update sleep_type if reclassified
+        await _activityRepository.updateSleepType(
+          _ongoingSleep!.id,
+          reclassifiedType,
+        );
         debugPrint('[OK] [OngoingSleepProvider] DB-sourced sleep finished: ${savedActivity.id}');
       } else {
-        // FAB-started: INSERT new record
+        // FAB-started: INSERT new record with reclassified type
         final activity = ActivityModel(
           id: _ongoingSleep!.id,
           familyId: _ongoingSleep!.familyId,
@@ -185,7 +207,7 @@ class OngoingSleepProvider extends ChangeNotifier {
           type: ActivityType.sleep,
           startTime: _ongoingSleep!.startTime,
           endTime: endTime,
-          data: {'sleep_type': _ongoingSleep!.sleepType},
+          data: {'sleep_type': reclassifiedType},
           createdAt: _ongoingSleep!.startTime,
         );
         savedActivity = await _activityRepository.createActivity(activity);
@@ -266,6 +288,41 @@ class OngoingSleepProvider extends ChangeNotifier {
   void _stopTimer() {
     _timer?.cancel();
     _timer = null;
+  }
+
+  /// HF-2b: Reclassify sleep type at end time with endTime
+  /// Fetches recent sleep records for pattern-based classification.
+  /// Falls back to cold start (with midnight-crossing) on error.
+  Future<String> _reclassifySleepType({
+    required DateTime startTime,
+    required DateTime endTime,
+    required String babyId,
+    required String familyId,
+  }) async {
+    try {
+      final recentRecords = await _activityRepository.getActivitiesByDateRange(
+        familyId,
+        startDate: DateTime.now().subtract(
+          Duration(days: SleepClassifier.lookbackDays + 1),
+        ),
+        endDate: DateTime.now(),
+        babyId: babyId,
+        type: ActivityType.sleep,
+      );
+
+      return SleepClassifier.classify(
+        startTime: startTime,
+        endTime: endTime,
+        recentSleepRecords: recentRecords,
+      );
+    } catch (e) {
+      debugPrint('[WARN] [OngoingSleepProvider] Reclassify failed, using cold start: $e');
+      return SleepClassifier.classify(
+        startTime: startTime,
+        endTime: endTime,
+        recentSleepRecords: const [],
+      );
+    }
   }
 
   /// 로컬 저장소에 저장

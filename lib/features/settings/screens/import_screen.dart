@@ -7,6 +7,7 @@ import '../../../core/design_system/lulu_radius.dart';
 import '../../../l10n/generated/app_localizations.dart' show S;
 import '../../../data/models/baby_model.dart';
 import '../../home/providers/home_provider.dart';
+import '../../../app/navigation/main_navigation.dart';
 import '../providers/import_provider.dart';
 
 part 'import_widgets.dart';
@@ -571,9 +572,12 @@ class _ImportScreenState extends State<ImportScreen> {
                 final homeProvider = context.read<HomeProvider>();
                 await homeProvider.loadTodayActivities();
 
-                // 홈 화면으로 돌아가기
+                // HF-1b Fix: Navigate to home (not settings)
+                // pop() closes ImportScreen → returns to MainNavigation
+                // switchToHome() changes IndexedStack index to 0 (Home tab)
                 if (context.mounted) {
                   Navigator.of(context).pop();
+                  MainNavigation.switchToHome();
                 }
               },
               style: ElevatedButton.styleFrom(

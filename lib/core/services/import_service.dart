@@ -84,7 +84,13 @@ class ImportService {
     int skipCount = 0;
     final List<String> errors = [];
 
-    final total = preview.activities.length;
+    // HF-2 v3: Sort by startTime ascending (past→future)
+    // Sleep classification requires chronological order so each record
+    // is judged by its own temporal context (not future data).
+    final sortedActivities = List<ParsedActivity>.of(preview.activities)
+      ..sort((a, b) => a.startTime.compareTo(b.startTime));
+
+    final total = sortedActivities.length;
     final batchSize = 100;
 
     // 중복 체크용 기존 활동 조회 (가족 전체)
@@ -107,7 +113,7 @@ class ImportService {
     // 배치 처리
     for (int i = 0; i < total; i += batchSize) {
       final end = (i + batchSize > total) ? total : i + batchSize;
-      final batch = preview.activities.sublist(i, end);
+      final batch = sortedActivities.sublist(i, end);
 
       for (final parsed in batch) {
         try {
@@ -136,7 +142,9 @@ class ImportService {
             familyId: familyId,
           );
 
-          // HF-2: sleep_type via SleepClassifier v2 + camelCase cleanup
+          // HF-2 v3: sleep_type via SleepClassifier v2
+          // now=activity.startTime ensures each record is classified
+          // using only past data (same as real-time recording behavior)
           if (activity.type == ActivityType.sleep) {
             final existingSleepType =
                 activity.data?['sleep_type'] as String?;
@@ -145,12 +153,12 @@ class ImportService {
                 startTime: activity.startTime,
                 endTime: activity.endTime,
                 recentSleepRecords: sleepRecords,
+                now: activity.startTime,
               );
               final cleanedData = <String, dynamic>{
                 ...?activity.data,
                 'sleep_type': sleepType,
               };
-              // HF-2 Fix ③: Remove camelCase sleepType to prevent dual-key
               cleanedData.remove('sleepType');
               activity = activity.copyWith(data: cleanedData);
             }
