@@ -1,8 +1,8 @@
 # LULU MVP-F Handoff
 
-**Version**: 9.0
-**Updated**: 2026-02-10
-**Sprint**: 20 Hotfix (완료)
+**Version**: 16.0
+**Updated**: 2026-02-13
+**Sprint**: 24 Complete (main)
 
 ---
 
@@ -10,126 +10,87 @@
 
 | 항목 | 값 |
 |------|-----|
-| Branch | `sprint-20-hotfix` |
-| App Version | `2.4.1+31` |
+| Branch | `main` |
+| App Version | `2.7.6+49` |
 | Build | iOS 정상 (`flutter analyze` 에러 0개) |
-| TestFlight | 배포 완료 (2026-02-10) |
-| Delivery UUID | `ca669fc8-6dfa-4188-873e-68ecd908cb97` |
-| Base Commit (Sprint 19) | `a2f1ca2` |
-| Latest Commit | `3947e82` (CLAUDE.md TestFlight credentials) |
-
-### Sprint 20 Hotfix 커밋 이력
-
-| 순서 | Hash | 내용 |
-|------|------|------|
-| 1 | `42a50fe` | Group A |
-| 2 | `687c4de` | Group B |
-| 3 | `7955e8e` | Group C |
-| 4 | `377b6e9` | Group D |
-| 5 | `a72223b` | Group E |
-| 6 | `1cc4ddb` | Version bump v2.4.1+31 |
-| 7 | `3947e82` | CLAUDE.md TestFlight credentials |
+| TestFlight | 업로드 성공 (2026-02-13) |
+| Delivery UUID | `72d190fd-6e6d-4124-b63d-2d63592af960` |
+| Merge Commit | `ab79416` (sprint-24 → main) |
+| 이전 TestFlight | `2.7.5+48` |
+| 안전 기준선 | `ab79416` (Sprint 24 merge) |
 
 ---
 
-## 2026-02-10 세션 기록
+## Sprint 24 완료 내역
 
-### 이번 세션에서 한 것
+### 주요 변경사항
 
-1. **Sprint 20 Hotfix Group C/D/E 커밋** (A/B는 이전 세션에서 완료)
-   - Group C: `statistics_data_provider.dart` 이모지 수정
-   - Group D: 4개 파일 이모지 + 한글 하드코딩 수정
-     - `invite_service.dart`, `home_screen.dart`, `ongoing_sleep_provider.dart`, `record_provider.dart`
-   - Group E: 정상 커밋
-
-2. **버전 범프**: `2.4.0+30` -> `2.4.1+31`
-
-3. **IPA 빌드 + TestFlight 업로드 성공**
-
-4. **CLAUDE.md v7.3 업데이트**
-   - "프로젝트 상수" 테이블 추가 (반복 참조 값 집중)
-   - "운영 매뉴얼" 섹션 추가 (복붙용 명령어)
-   - Sprint 이력 업데이트
-   - 문서 체계 강화 (handoff.md 필수 업데이트 규칙)
-
-### 이번 세션에서 발생한 이슈
-
-1. **TestFlight Issuer ID 오타 사고** (재발)
-   - `69a6de96` (틀림) vs `69a6de8c` (맞음)
-   - 원인: CLAUDE.md에 인증 정보가 없어서 기억에 의존
-   - 대응: CLAUDE.md에 영구 기록 완료
-
-2. **Pre-commit Gate 이모지 차단** (Group C, D)
-   - debugPrint 안의 이모지 (`[OK]`/`[ERR]`/`[WARN]`/`[INFO]` 태그로 교체)
-   - 한글 하드코딩 (`home_screen.dart` - 영문 debugPrint로 교체)
+1. **C-0.4 SleepClassifier**: Pattern-based sleep type auto-classification (25 unit tests)
+   - **동결됨**: split-night 오분류 근본 원인 발견 → Sprint 25 재설계
+   - 임시: DB sleep_type + SleepTimeConfig.isNightTime fallback 사용
+2. **C-0.6**: 놀이 그리드 → 깨시 그리드 교체
+3. **C-5.1**: Sweet Spot 카드에 깨시 경과 + 참고 범위 추가
+4. **sleep_type NULL 제거**: import/migration 소스에서 sleep_type 필수화
+5. **napNumber 수정**: SleepClassifier → DB sleep_type 기반으로 전환
+6. **HF-A**: 출생체중 → 성장 차트 첫 포인트 자동 생성 (메모리 전용)
+7. **HF-B**: delta=0 → "전주와 동일" 표시
+8. **HF-D**: calibrating 라벨 "일째" → "수면 N건 완료"
 
 ---
 
 ## 다음 세션에서 할 것
 
-### 즉시 필요
+### Sprint 25 (계획)
 
-- [ ] `sprint-20-hotfix` -> `main` 머지 (사용자 승인 후)
-- [ ] 베타 테스터 피드백 수집
+- [ ] SleepClassifier 재설계 (sleep day grouping + anchor 알고리즘)
+- [ ] WakeWindowStatistics → WeeklyStatistics 추가 (HF-C 해결)
+- [ ] Growth DB 로드 구현 + 출생 측정 중복 방지
+- [ ] Calibrating "앱 사용 N일" 기반 변경 (이슈 B)
+- [ ] C-2: 노티피케이션 센터 UI
+- [ ] C-6: 알림 인프라 (flutter_local_notifications)
+- [ ] C-7: Sweet Spot 알림 체인
 
 ### 대기 중
 
-- [ ] Sprint 21: 홈 화면 UX (노티센터/격려/알림)
-- [ ] Family Sharing 기능 테스트 (초대 코드 생성/수락)
-- [ ] 기록 히스토리/패턴 차트 사용성 테스트
-
-### 출시 전 필수
-
-- [ ] QA 테스트 완료
-- [ ] 앱스토어 심사 제출
+- [ ] DB에 잔존하는 end_time=NULL 수면 레코드 정리
+- [ ] 베타 테스터 피드백 수집
+- [ ] Family Sharing 기능 테스트
 
 ---
 
 ## 주의사항 (다음 세션 참고)
 
-1. **TestFlight 업로드 시**: CLAUDE.md "운영 매뉴얼" 섹션의 명령어를 그대로 복붙. Issuer ID를 절대 기억으로 입력하지 말 것.
+1. **SleepClassifier 동결**: `sleep_classifier.dart` 수정 금지 (Sprint 25까지). 근본 원인: calendar date grouping으로 split-night 2nd chunk가 anchor를 2 AM으로 편향시킴.
 
-2. **커밋 시 Pre-commit hook**: Gate 1(한글), Gate 2(이모지)에 주의. debugPrint 안의 한글/이모지도 차단됨.
+2. **Growth auto-seed 메모리 전용**: `growth_provider.dart`의 birthWeight auto-seed는 앱 재시작마다 재생성됨. Sprint 25 DB 구현 시 중복 방지 필수.
 
-3. **브랜치**: 현재 `sprint-20-hotfix`. `main`에 직접 커밋 금지.
+3. **weekly_view.dart L389**: wakeWindow `change: 0` 하드코딩. Sprint 25 WakeWindowStatistics 추가 시 교체.
 
 4. **해결 완료 코드 (건드리지 말 것)**:
    - `weekly_chart_full.dart`의 `_WeeklyGridPainter` 구조
    - `_navigateWeek`의 async/await 구조
-   - `goToPreviousWeek`/`goToNextWeek`의 await
-   - 1행 1줄 덮어그리기 렌더링 방식
+   - `golden_band_bar.dart`의 `_GoldenBandPainter` 구조
+   - `home_provider.dart` L291-299의 napNumber 로직
+
+5. **미커밋 문서**: `CLAUDE.md`, `handoff.md`, `docs/work_instruction_template_v2.1.md`
 
 ---
 
-## DB 스키마 (Sprint 17 이후 변경 없음)
+## DB 스키마 (Sprint 24 기준, 변경 없음)
 
 ### 테이블
 
 - **profiles** - 사용자 프로필
 - **families** - 가족 정보 (user_id, created_by)
 - **babies** - 아기 정보
-- **activities** - 활동 기록
+- **activities** - 활동 기록 (sleep_type 필드: 'night'/'nap')
 - **family_members** - 가족 멤버 관계 (UNIQUE: family_id + user_id)
 - **family_invites** - 초대 코드 (6자리, 7일 유효)
+- **badges** - 뱃지 달성 기록
 
-### RLS 정책 (12개)
+### RLS 정책 (16개)
 
-activities(4) + babies(4) + families(4) -- 모두 `is_family_member_or_legacy()` 기반
-
-### 함수 (7개)
-
-`is_family_member`, `is_family_owner`, `is_family_member_or_legacy`, `get_invite_info`, `accept_invite`, `transfer_ownership`, `leave_family`
-
----
-
-## 데이터 흐름 (v7.1 이후 변경 없음)
-
-```
-앱 시작 -> 로그인 체크 -> OnboardingWrapper
-  -> family_members에서 family_id 확인
-  -> 있으면 HomeScreen / 없으면 OnboardingScreen
-기록 저장 -> RecordProvider -> ActivityRepository -> Supabase (RLS 검증)
-```
+activities(4) + babies(4) + families(4) + badges(4) -- 모두 `is_family_member_or_legacy()` 기반
 
 ---
 

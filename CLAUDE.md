@@ -2,10 +2,45 @@
 
 > **Version**: 7.4 (v7.3 + Confidence Score + Scope Declaration + Learned Corrections)
 > **Updated**: 2026-02-10
-> **App**: v2.4.1+31 | **Branch**: `sprint-20-hotfix`
-> **Sprint**: 20 Hotfix 완료, TestFlight 배포 완료
+> **App**: v2.4.1+31 | **Commit**: Sprint 22 Badge-0 진행 중
+> **Branch**: `sprint-22` (작업) → `main` (보호)
+> **Sprint**: 22 Badge System
 > **Target Release**: 2026.02 베타 → 2026.03 정식
 > **Bundle ID**: com.lululabs.lulu
+
+---
+
+## v7.4 변경 사항
+
+### v7.3 대비 추가
+
+| 항목 | 설명 | 목적 |
+|------|------|------|
+| **Confidence Score** | 보고 시 확신도 8/10 형식 명시 | "추론 vs 확인" 구분 |
+| **Scope Declaration** | 수정 / 제외 / 나중에 | Sprint 18 사고 재발 방지 |
+| **Learned Corrections** | LC-1~5 교훈 구조화 | 반복 실수 방지 |
+
+### Sprint 19.5 코드 위생 완료 (8 Phase)
+- 하드코딩 한글 1,017건 → 0건 (100% i18n)
+- Icons. 직접 사용 403건 → 0건 (100% LuluIcons)
+- withOpacity 40건 → 0건 (솔리드 컬러)
+- LuluRadius 99%, LuluShadows 100% 채택
+- Pre-commit hook 6/6 게이트
+- Supabase UI층 직접 호출 0건 (Repository 격리)
+- 800줄+ 대형 파일 5개 분할
+- ARB ko-en 키 차이 0건
+
+### Sprint 20 Hotfix 완료
+- 그룹 A~E 완료, TestFlight v2.4.1+31 배포 완료
+
+### 디자인 시스템
+- 아이콘 스타일 168개 전체 `_rounded` 통일 (outlined 혼재 제거)
+- 대변 아이콘 교체 예정: `sanitizer_rounded` → 커스텀 SVG
+
+### UX 결정사항
+- 수면 중복: 같은 아기 새 수면 시 확인 다이얼로그 (자동 종료 아님)
+- 저장 후 토스트: "저장됨  기록 보기 >" (2초, SnackBarAction)
+- 스와이프 힌트: 3회만 표시 + Edit/Delete 아이콘만 (텍스트 제거)
 
 ---
 
@@ -336,7 +371,7 @@ enum ActivityType { sleep, feeding, diaper, play, health }
 
 ---
 
-## Icons 매핑
+## Icons 매핑 (활동 5종 + 성장 3종)
 
 | 용도 | LuluIcons | 실제 Icon | 색상 |
 |------|-----------|-----------|------|
@@ -350,6 +385,7 @@ enum ActivityType { sleep, feeding, diaper, play, health }
 | 두위 | - | `Icons.psychology_rounded` | secondary |
 
 **반드시 `LuluIcons.xxx`로 참조. `Icons.xxx` 직접 사용 금지 (lulu_icons.dart 내부 제외).**
+전체 아이콘 목록은 위 "디자인 시스템 > Icons 매핑 (v7.3 업데이트)" 참조.
 
 ---
 
@@ -365,6 +401,119 @@ enum ActivityType { sleep, feeding, diaper, play, health }
 | 건강 | `LuluActivityColors.health` | `#E57373` | 레드 |
 
 **`withOpacity()` / `withValues(alpha:)` 로 색상 만들기 금지. 솔리드 컬러를 LuluColors에 정의해서 사용.**
+
+---
+
+## 디자인 시스템 (v7.3 업데이트)
+
+### 컴포넌트 레이어
+
+| 컴포넌트 | 클래스 | 용도 | 채택률 |
+|----------|--------|------|--------|
+| 색상 | `LuluColors` | 기본 색상 + 솔리드 토큰 26개 | 100% |
+| 활동 색상 | `LuluActivityColors` | 5종 활동별 색상 | 100% |
+| 패턴 색상 | `LuluPatternColors` | 차트/패턴 전용 | 100% |
+| 텍스트 | `LuluTextStyles` | 타이포그래피 | 100% |
+| 간격 | `LuluSpacing` | 4px 그리드 기반 | — |
+| 모서리 | `LuluRadius` | BorderRadius 토큰 | 99% |
+| 그림자 | `LuluShadows` | BoxShadow 토큰 | 100% |
+| 아이콘 | `LuluIcons` | Material Icons 래퍼 (168개, 전체 rounded) | 100% |
+
+### 아이콘 스타일 규칙
+
+**전체 168개 아이콘 `_rounded` 통일** (v7.3 확정)
+- `_outlined` (non-rounded) 스타일 금지
+- 신규 아이콘 추가 시 반드시 `_rounded` 사용
+- 커스텀 SVG 아이콘: `assets/icons/` 디렉토리 + `SvgPicture.asset` 사용
+
+### Icons 매핑 (v7.3 업데이트)
+
+| 용도 | LuluIcons | 실제 Icon | 색상 |
+|------|-----------|-----------|------|
+| 수면 | `LuluIcons.sleep` | `Icons.bedtime_rounded` | `LuluActivityColors.sleep` |
+| 수유 | `LuluIcons.feeding` | `Icons.local_drink_rounded` | `LuluActivityColors.feeding` |
+| 기저귀 | `LuluIcons.diaper` | `Icons.baby_changing_station_rounded` | `LuluActivityColors.diaper` |
+| 놀이 | `LuluIcons.play` | `Icons.toys_rounded` | `LuluActivityColors.play` |
+| 건강 | `LuluIcons.health` | `Icons.favorite_rounded` | `LuluActivityColors.health` |
+| 대변 | `LuluIcons.poop` | 커스텀 SVG (`assets/icons/poop.svg`) | `LuluActivityColors.diaper` |
+| 트로피 | `LuluIcons.trophy` | `Icons.emoji_events_rounded` | — |
+| 뱃지 | `LuluIcons.badge` | `Icons.workspace_premium_rounded` | — |
+
+---
+
+## 수면 중복 처리 규칙 (v7.3 신설)
+
+| 시나리오 | 동작 |
+|----------|------|
+| 수면 진행 중 + 다른 활동 (수유/기저귀/놀이) | 허용 (수면 계속) |
+| 수면 진행 중 + 새 수면 "지금 재우기" (같은 아기) | **확인 다이얼로그** ("이전 수면 종료 + 새로 시작" / "취소") |
+| 수면 진행 중 + 과거 수면 추가 (같은 아기, 겹침) | 허용 + **경고 토스트** (차단 아님) |
+| 수면 진행 중 + 다른 아기 수면 | 허용 (충돌 아님) |
+
+**근거**: 실수로 탭 시 수면 기록 복구 불가. 조산아 부모에게 수면 기록은 의료 보고용 → 데이터 안전 > 3초 Rule
+
+---
+
+## 저장 토스트 규칙 (v7.3 신설)
+
+```
+FAB/QuickRecord 저장 완료
+  → 홈 유지
+  → "저장됨    기록 보기 >" SnackBar (2초)
+  → "기록 보기" 탭 → Records Daily 이동
+  → 무시 → 2초 후 자동 사라짐
+  → 새 기록 저장 시 → 이전 SnackBar 즉시 교체
+```
+
+---
+
+## 스와이프 액션 규칙 (v7.3 신설)
+
+- 힌트 ("Swipe to edit/delete"): **최초 3회만 표시** (SharedPreferences 카운터)
+- Edit/Delete 버튼: **아이콘만** (텍스트 제거 — 줄바꿈 방지)
+
+---
+
+## Provider 아키텍처 (v7.3 업데이트)
+
+### 전역 등록 (main.dart MultiProvider)
+
+```
+1. AuthProvider
+2. HomeProvider
+3. RecordProvider
+4. OngoingSleepProvider
+5. SettingsProvider
+6. CryAnalysisProvider
+7. FamilyProvider
+8. BadgeProvider (Sprint 22 추가)
+```
+
+### 화면 로컬 생성 (전역 등록 불가)
+
+```
+PatternDataProvider — Daily/Weekly에서 다른 상태로 사용 (단일 인스턴스 불가)
+StatisticsDataProvider — 주간 날짜범위/필터 상태 종속
+GrowthProvider — 성장 화면 lifecycle 종속
+```
+
+**상태 동기화 패턴**: `context.watch<HomeProvider>()` + `_previousBabyId` 추적으로 baby 변경 감지 → 리로드
+
+---
+
+## Supabase 레이어 격리 (v7.3 신설)
+
+### 계층 구조
+
+```
+Screen/Widget → Provider → Repository → Supabase
+                          → SupabaseService (auth 읽기 전용)
+```
+
+### 규칙
+- **Provider/Screen/Widget에서 `Supabase.instance.client` 직접 호출 금지** → Repository 경유
+- **auth 읽기**: `SupabaseService.currentUserId`, `SupabaseService.currentUser`
+- **서비스 레이어 예외**: `invite_service.dart`, `supabase_service.dart`, `main.dart` 등은 Supabase 직접 호출 허용 (인프라/서비스 레이어)
 
 ---
 
@@ -559,28 +708,28 @@ lib/
 
 ## 코딩 컨벤션
 
-### 절대 규칙 (위반 시 커밋 차단)
+### 절대 규칙 7개 (v7.3 업데이트, 위반 시 커밋 차단)
 
 ```
-1. ❌ 이모지 금지      → ✅ Material Icons + LuluIcons만
+1. ❌ 이모지 금지      → ✅ LuluIcons만 (debugPrint 내부도 영문 태그 사용)
 2. ❌ 하드코딩 한글 금지 → ✅ ARB/AppLocalizations 경유 (i18n 필수)
 3. ❌ print문 금지      → ✅ debugPrint 사용
-4. ❌ 빈 catch 금지
-5. ❌ withOpacity 금지  → ✅ 솔리드 컬러 정의
+4. ❌ 빈 catch 금지     → ✅ 에러 처리 또는 로깅
+5. ❌ withOpacity 금지  → ✅ withValues(alpha:) 또는 솔리드 컬러 (LuluColors에 정의)
 6. ❌ BabySelector 금지 → ✅ BabyTabBar 사용
 7. ❌ Icons.xxx 직접 사용 금지 → ✅ LuluIcons.xxx (lulu_icons.dart 내부 제외)
 ```
 
-### Pre-commit Hook (자동 강제)
+### Pre-commit Hook (6/6 게이트)
 
 ```bash
-# .git/hooks/pre-commit 에 설치됨
-# 커밋 시 자동 검사:
-# - GATE 1: 하드코딩 한글 → 차단
-# - GATE 2: 이모지 → 차단
-# - GATE 3: Icons. 직접 사용 → 경고
-# - GATE 4: flutter analyze 에러 → 차단
-# - GATE 5: print문 → 차단
+# .git/hooks/pre-commit
+# GATE 1: 하드코딩 한글 → 차단
+# GATE 2: 이모지 → 차단
+# GATE 3: Icons. 직접 사용 → 차단 (오탐 방지: [^a-zA-Z]Icons\. + grep -v LuluIcons)
+# GATE 4: flutter analyze 에러 → 차단
+# GATE 5: print문 → 차단
+# GATE 6: withOpacity → 차단
 ```
 
 **`--no-verify`로 우회 절대 금지.**
@@ -589,34 +738,83 @@ lib/
 
 ## Confidence Score (v7.4 신설)
 
-모든 보고(Phase 완료, 버그 수정, 상태 확인)에 Confidence Score를 포함한다.
+> **Sprint 18 롤백 교훈**: "수정했습니다"라는 보고만으로는 실제 확인 여부를 판단할 수 없었음
 
-형식: N/10 [근거]
+### 규칙
+
+모든 보고(Phase 완료, 버그 수정, 상태 확인)에 **Confidence Score**를 포함한다.
+
+**형식**: `N/10 [근거]`
 
 | 점수 | 의미 | 근거 예시 |
 |------|------|-----------|
-| 10/10 | 실행 확인 완료 | [시뮬레이터 실행 + 스크린샷] |
-| 9/10 | 코드 실행 확인 | [flutter run 성공 + 해당 화면 진입] |
-| 8/10 | 코드 확인 완료 | [파일 열어서 변경 확인 + analyze 통과] |
-| 7/10 | 코드 리뷰 기반 | [코드 읽었으나 실행 미확인] |
-| 6/10 | 패턴 기반 추론 | [유사 코드 패턴 확인, 해당 파일 미확인] |
-| 5/10 이하 | 추측 | [코드 미확인, 구조 기반 추론] |
+| **10/10** | 실행 확인 완료 | `[시뮬레이터 실행 + 스크린샷]` |
+| **9/10** | 코드 실행 확인 | `[flutter run 성공 + 해당 화면 진입]` |
+| **8/10** | 코드 확인 완료 | `[파일 열어서 변경 확인 + analyze 통과]` |
+| **7/10** | 코드 리뷰 기반 | `[코드 읽었으나 실행 미확인]` |
+| **6/10** | 패턴 기반 추론 | `[유사 코드 패턴 확인, 해당 파일 미확인]` |
+| **5/10 이하** | 추측 | `[코드 미확인, 구조 기반 추론]` |
 
-승인 기준:
-- TestFlight 배포 전: 9/10 이상
-- Phase 완료 보고: 8/10 이상
-- 분석/제안: 6/10 이상
+### 사용 예시
+
+```
+## FIX-01: SnackBar dismiss 버그
+- 상태: 수정 완료
+- Confidence: 9/10 [flutter run 성공 + 홈에서 기록 저장 후 SnackBar 동작 확인]
+
+## FIX-02: Provider 동기화
+- 상태: 수정 완료
+- Confidence: 7/10 [코드 변경 확인했으나 다태아 전환 시나리오 미실행]
+```
+
+### 승인 기준
+
+| 작업 유형 | 최소 Confidence | 비고 |
+|----------|----------------|------|
+| TestFlight 배포 전 | **9/10 이상** | 실행 확인 필수 |
+| Phase 완료 보고 | **8/10 이상** | 코드 확인 필수 |
+| 분석/제안 | **6/10 이상** | 추론 허용, 명시 필수 |
 
 ---
 
 ## Scope Declaration (v7.4 신설)
 
-모든 작업지시서 및 Round 수정 보고 시 Scope Declaration을 포함한다.
+> **Sprint 18 사고**: 28개 파일 동시 변경 중 범위가 불명확하여 의도치 않은 파일까지 수정됨
 
-형식:
-- 수정 대상: 파일 경로 + 라인 범위
-- 제외 (건드리지 않음): 파일 경로 + 이유
-- 나중에 (발견했지만 지금 안 함): 이슈 설명 + 처리 시점
+### 규칙
+
+모든 작업지시서 및 Round 수정 보고 시 **Scope Declaration**을 포함한다.
+
+**형식**:
+
+```
+## Scope Declaration
+
+수정 대상:
+- lib/features/home/widgets/sweet_spot_card.dart (L45~72)
+- lib/l10n/app_ko.arb (키 2개 추가)
+
+제외 (건드리지 않음):
+- lib/features/home/home_screen.dart -- 이미 정상 동작
+- lib/features/records/ -- 이번 작업 범위 밖
+
+나중에 (발견했지만 지금 안 함):
+- sleep_record_card.dart L88: deprecated API 사용 -> Sprint 21에서 처리
+```
+
+### 필수 포함 항목
+
+| 카테고리 | 내용 | 목적 |
+|----------|------|------|
+| **수정** | 파일 경로 + 라인 범위 (가능 시) | 변경 범위 명확화 |
+| **제외** | 건드리지 않는 파일/모듈 + 이유 | 의도치 않은 수정 방지 |
+| **나중에** | 발견한 이슈 + 처리 시점 | 기술 부채 추적 |
+
+### 적용 시점
+
+- 작업지시서 작성 시: 작성자가 Scope 선언
+- 딥다이브 분석 보고 시: 실제 코드 확인 후 Scope 갱신
+- Phase/Group 완료 보고 시: 최종 Scope 확인
 
 ---
 
@@ -1045,6 +1243,7 @@ xcrun altool --upload-app --type ios \
 | **19** | **차트 재설계 (재작업)** | ✅ |
 | **20-HF** | **Hotfix 14건 (5그룹 A-E) + TestFlight v2.4.1+31** | ✅ |
 | 21 | 홈 화면 UX (노티센터/격려/알림) | 대기 |
+| **22** | **Badge System (C-1~C-4 + Badge-0)** | 진행 중 |
 
 ### 2026-02-06 롤백 기록
 
@@ -1106,6 +1305,7 @@ xcrun altool --upload-app --type ios \
 | **CHANGELOG.md** | 변경 이력 | 매 배포 | TestFlight 업로드 후 |
 | **Quality_Gate_System.md** | Pre-commit hook 설치/상세 | 필요 시 | Gate 규칙 변경 시 |
 | **Chart_Postmortem.md** | 차트 사고 회고 + Claude Code 교육 | 참고용 | - |
+| **work_instruction_template_v2.1.md** | 작업지시서 표준 서두 4블록 (전체 예시 포함) | 거의 안 바뀜 | 프로세스 변경 시 |
 
 ### handoff.md 필수 기록 항목 (세션 종료 시)
 
@@ -1130,10 +1330,39 @@ xcrun altool --upload-app --type ios \
 
 ## Learned Corrections (v7.4 신설)
 
-| ID | 교훈 | 날짜 | 규칙 |
-|----|------|------|------|
-| LC-1 | 코드 존재 =/= 코드 작동 | 2026-02-06 | 모든 수정은 실행 기반 검증 필수. Confidence 8/10 이상만 완료 보고 가능. |
-| LC-2 | 롤백 안전선 부재 | 2026-02-06 | main 보호, feature branch에서만 작업, 안전 기준선 커밋 항상 명시. |
-| LC-3 | 차트 오판 - 코드 문제 vs 데이터 문제 | 2026-02-07 | 차트/통계 이상 시 데이터 먼저 확인 (MCP 쿼리) -> 코드 수정은 그 다음. |
-| LC-4 | Supabase 쿼리 미대조 | 2026-02-08 | Supabase 쿼리 작성/수정 시 반드시 MCP로 실제 스키마 대조. |
-| LC-5 | UTC 누락 | 2026-02-07 | 시간 관련 코드 수정 시 항상 UTC<->Local 변환 확인. .toLocal() 필수 체크. |
+> 실제 사고/실수에서 추출한 교훈. 새 실수 발생 시 LC-N으로 계속 누적.
+
+### LC-1: 코드 존재 =/= 코드 작동 (2026-02-06)
+
+**사건**: Sprint 18에서 28개 파일 동시 변경 후 "수정 완료" 보고했으나, 실기기에서 빌드 실패.
+**원인**: 코드 리뷰만으로 "작동한다"고 판단. 실행 확인 없이 보고.
+**규칙**: 모든 수정은 **실행 기반 검증** 필수. "읽었다" =/= "확인했다".
+**적용**: Confidence Score 8/10 이상만 완료 보고 가능.
+
+### LC-2: 롤백 안전선 부재 (2026-02-06)
+
+**사건**: Sprint 18 롤백 시 돌아갈 기준점이 불명확하여 복구에 시간 소요.
+**원인**: main 브랜치에 직접 커밋 + 안전 커밋 미지정.
+**규칙**: main 보호, feature branch에서만 작업, 안전 기준선 커밋 항상 명시.
+**적용**: handoff.md에 안전 기준선 섹션 필수.
+
+### LC-3: 차트 오판 — 코드 문제 vs 데이터 문제 (2026-02-07)
+
+**사건**: 주간 차트에서 수면 데이터가 과다 표시. 코드 버그로 판단하고 코드를 수정했으나, 실제 원인은 UTC<->Local 변환 누락.
+**원인**: 증상 → 코드 수정으로 바로 진행. 데이터 레이어 검증 생략.
+**규칙**: 차트/통계 이상 시 **데이터 먼저 확인** (MCP 쿼리) → 코드 수정은 그 다음.
+**적용**: Supabase 검증 게이트 트리거 조건에 "차트/통계 데이터 이상 의심" 포함.
+
+### LC-4: Supabase 쿼리 미대조 (2026-02-08)
+
+**사건**: 코드에서 Supabase 쿼리 작성 시 실제 DB 스키마와 컬럼명이 다른 채로 커밋.
+**원인**: 코드에 적힌 컬럼명을 그대로 신뢰. DB에서 실제 확인 안 함.
+**규칙**: Supabase 쿼리 작성/수정 시 반드시 **MCP로 실제 스키마 대조**.
+**적용**: 작업지시서에 Supabase 게이트 블록 필수 삽입.
+
+### LC-5: UTC 누락 — 시간 관련 버그의 근본 원인 (2026-02-07)
+
+**사건**: 활동 기록의 시간이 9시간 차이로 표시됨 (KST<->UTC).
+**원인**: Supabase는 UTC 저장, Flutter UI는 Local 시간 표시. 변환 로직이 일부 경로에서 누락.
+**규칙**: 시간 관련 코드 수정 시 **항상 UTC<->Local 변환 확인**.
+**적용**: 차트, 통계, 기록 목록 등 시간 표시하는 모든 위젯에서 `.toLocal()` 확인.
