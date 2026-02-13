@@ -398,6 +398,7 @@ class _ImportScreenState extends State<ImportScreen> {
                   ? () => provider.startImport(
                         babyId: _selectedBabyId!,
                         familyId: familyId,
+                        homeProvider: context.read<HomeProvider>(),
                       )
                   : null,
               style: ElevatedButton.styleFrom(

@@ -213,12 +213,12 @@ class HuckleberryParser {
     }
   }
 
-  /// 수면 데이터 파싱
+  /// 수면 데이터 파싱 — HF-2 Fix ③: sleepType removed
+  /// Parser no longer sets sleepType (camelCase) to prevent dual-key in DB.
+  /// import_service.dart classifies via SleepClassifier v2 and sets
+  /// data['sleep_type'] (snake_case) as the single source of truth.
   void _parseSleepData(Map<String, dynamic> data, DateTime time) {
-    // 시간대로 낮잠/밤잠 구분
-    // 19:00 ~ 07:00 = 밤잠, 그 외 = 낮잠
-    final hour = time.hour;
-    data['sleepType'] = (hour >= 19 || hour < 7) ? 'night' : 'nap';
+    // No-op: sleep type classification moved to import_service.dart
   }
 
   /// 기저귀 데이터 파싱

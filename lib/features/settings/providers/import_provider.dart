@@ -8,6 +8,7 @@ import '../../../core/services/family_sync_service.dart';
 import '../../../core/services/parsers/parsed_activity.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../badge/badge_provider.dart';
+import '../../home/providers/home_provider.dart';
 
 /// Import 상태
 enum ImportState {
@@ -124,10 +125,13 @@ class ImportProvider extends ChangeNotifier {
   ///
   /// [badgeProvider]: optional — if provided, triggers silent badge bulk check
   /// after import completes (Phase 7.5: Import badge integration).
+  /// [homeProvider]: optional — HF-1 fix: reload activities after import
+  /// so home/chart screens update without app restart.
   Future<bool> startImport({
     required String babyId,
     required String familyId,
     BadgeProvider? badgeProvider,
+    HomeProvider? homeProvider,
   }) async {
     if (_preview == null) return false;
 
@@ -165,6 +169,18 @@ class ImportProvider extends ChangeNotifier {
 
       _state = ImportState.complete;
       notifyListeners();
+
+      // HF-1 Fix: Reload HomeProvider after import
+      // Ensures home screen and chart data update without app restart
+      if (homeProvider != null && _result != null && _result!.successCount > 0) {
+        try {
+          await homeProvider.loadTodayActivities();
+          debugPrint('[OK] [ImportProvider] HomeProvider reloaded after import');
+        } catch (e) {
+          debugPrint('[WARN] [ImportProvider] HomeProvider reload failed: $e');
+          // Non-fatal — import itself succeeded
+        }
+      }
 
       // Phase 7.5: Silent badge bulk check after import
       if (badgeProvider != null && _result != null && _result!.successCount > 0) {

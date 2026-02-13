@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/activity_repository.dart';
 import '../../data/models/activity_model.dart';
@@ -135,7 +136,7 @@ class ImportService {
             familyId: familyId,
           );
 
-          // A-2a: sleep_type via SleepClassifier v2 (replaces SleepTimeConfig)
+          // HF-2: sleep_type via SleepClassifier v2 + camelCase cleanup
           if (activity.type == ActivityType.sleep) {
             final existingSleepType =
                 activity.data?['sleep_type'] as String?;
@@ -145,11 +146,13 @@ class ImportService {
                 endTime: activity.endTime,
                 recentSleepRecords: sleepRecords,
               );
-              final updatedData = <String, dynamic>{
+              final cleanedData = <String, dynamic>{
                 ...?activity.data,
                 'sleep_type': sleepType,
               };
-              activity = activity.copyWith(data: updatedData);
+              // HF-2 Fix ③: Remove camelCase sleepType to prevent dual-key
+              cleanedData.remove('sleepType');
+              activity = activity.copyWith(data: cleanedData);
             }
             // Accumulate for subsequent classifications
             sleepRecords.add(activity);
@@ -176,6 +179,19 @@ class ImportService {
 
     debugPrint(
         '[OK] [ImportService] Import complete: $successCount success, $skipCount skipped');
+
+    // HF-2 Fix ①: Set v2 migration flag after import
+    // Import already classifies via SleepClassifier v2 — prevent
+    // _reclassifySleepTypesOnce from re-running and overwriting correct values
+    if (successCount > 0) {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('sleep_v2_reclassified', true);
+        debugPrint('[OK] [ImportService] sleep_v2_reclassified flag set');
+      } catch (e) {
+        debugPrint('[WARN] [ImportService] Failed to set migration flag: $e');
+      }
+    }
 
     return ImportResult(
       successCount: successCount,

@@ -420,8 +420,10 @@ class HomeProvider extends ChangeNotifier {
       debugPrint('[OK] [HomeProvider] Today activities loaded: ${activities.length}, hasAnyRecordsEver: $hasAny');
       notifyListeners();
 
-      // A-2c: 1-time v2 reclassification (fire-and-forget, non-blocking)
-      _reclassifySleepTypesOnce(activityRepo, allActivities);
+      // HF-2 Fix ①: await migration to ensure DB is consistent before UI reads
+      // Previously fire-and-forget — could overwrite correct import values
+      // while UI displayed stale data
+      await _reclassifySleepTypesOnce(activityRepo, allActivities);
     } catch (e) {
       debugPrint('[ERR] [HomeProvider] Error loading activities: $e');
       _errorMessage = 'Failed to load activity data';

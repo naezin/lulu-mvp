@@ -178,10 +178,10 @@ class BabytimeParser {
       }
     }
 
-    // 5. Determine sleep type (nap/night)
-    if (activityType == 'sleep') {
-      data['sleepType'] = ImportStrings.getSleepType(recordType);
-    }
+    // 5. Sleep type — removed (HF-2 Fix ③)
+    // Parser no longer sets sleepType (camelCase) to prevent dual-key in DB.
+    // import_service.dart classifies via SleepClassifier v2 and sets
+    // data['sleep_type'] (snake_case) as the single source of truth.
 
     // 6. Determine play type
     if (activityType == 'play') {
