@@ -286,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// 정상 상태 콘텐츠 (활동 기록 있음)
   ///
   /// Sprint 7 Day 2: OngoingSleepCard → SweetSpotCard 통합
-  /// 1. LastActivityRow (수면/수유/기저귀 시간)
+  /// 1. LastActivityRow (수유/기저귀 시간) — B-2: sleep removed
   /// 2. SweetSpotCard (수면 중 상태 + Sweet Spot 예측)
   Widget _buildNormalContent(BuildContext context, HomeProvider homeProvider) {
     // Sweet Spot Empty State: no sleep record today
@@ -301,9 +301,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Column(
           children: [
-            // 1. Last activity Row (sleep/feeding/diaper)
+            // 1. Last activity Row (feeding/diaper)
+            // B-2: sleep removed — SweetSpotCard handles sleep info
             LastActivityRow(
-              lastSleep: homeProvider.lastSleepTime,
               lastFeeding: homeProvider.lastFeedingTime,
               lastDiaper: homeProvider.lastDiaperTime,
             ),

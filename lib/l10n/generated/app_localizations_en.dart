@@ -3987,4 +3987,18 @@ class SEn extends S {
   String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM) {
     return 'Typical awake time: ${minH}h${minM}m-${maxH}h${maxM}m';
   }
+
+  @override
+  String get lastActivityFeeding => 'Feeding';
+
+  @override
+  String get lastActivityDiaper => 'Diaper';
+
+  @override
+  String timeAgoHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}m ago';
+  }
+
+  @override
+  String get lastActivityNoRecord => '-';
 }

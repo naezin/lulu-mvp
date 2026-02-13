@@ -2895,5 +2895,20 @@
   "wakeWindowCardRef": "Typical awake time: {min}-{max}min",
   "@wakeWindowCardRef": {"description":"Sweet Spot card wake reference range (compact)", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
   "wakeWindowCardRefHours": "Typical awake time: {minH}h{minM}m-{maxH}h{maxM}m",
-  "@wakeWindowCardRefHours": {"description":"Sweet Spot card wake reference range (hours)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}}
+  "@wakeWindowCardRefHours": {"description":"Sweet Spot card wake reference range (hours)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}},
+
+  "lastActivityFeeding": "Feeding",
+  "@lastActivityFeeding": {"description": "LastActivityRow - feeding label"},
+  "lastActivityDiaper": "Diaper",
+  "@lastActivityDiaper": {"description": "LastActivityRow - diaper label"},
+  "timeAgoHoursMinutes": "{hours}h {minutes}m ago",
+  "@timeAgoHoursMinutes": {
+    "description": "Time ago - N hours M minutes ago",
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"},
+      "minutes": {"type": "int", "example": "3"}
+    }
+  },
+  "lastActivityNoRecord": "-",
+  "@lastActivityNoRecord": {"description": "LastActivityRow - no record"}
 }

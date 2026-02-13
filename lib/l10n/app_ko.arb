@@ -5469,5 +5469,20 @@
   "wakeWindowCardRef": "비슷한 월령 깨시: {min}~{max}분",
   "@wakeWindowCardRef": {"description":"Sweet Spot 카드 깨시 참고 범위 (간결)", "placeholders": {"min": {"type": "int"}, "max": {"type": "int"}}},
   "wakeWindowCardRefHours": "비슷한 월령 깨시: {minH}시간{minM}분~{maxH}시간{maxM}분",
-  "@wakeWindowCardRefHours": {"description":"Sweet Spot 카드 깨시 참고 범위 (시간 단위)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}}
+  "@wakeWindowCardRefHours": {"description":"Sweet Spot 카드 깨시 참고 범위 (시간 단위)", "placeholders": {"minH": {"type": "int"}, "minM": {"type": "int"}, "maxH": {"type": "int"}, "maxM": {"type": "int"}}},
+
+  "lastActivityFeeding": "수유",
+  "@lastActivityFeeding": {"description": "LastActivityRow - 수유 라벨"},
+  "lastActivityDiaper": "기저귀",
+  "@lastActivityDiaper": {"description": "LastActivityRow - 기저귀 라벨"},
+  "timeAgoHoursMinutes": "{hours}시간 {minutes}분 전",
+  "@timeAgoHoursMinutes": {
+    "description": "경과 시간 - N시간 M분 전",
+    "placeholders": {
+      "hours": {"type": "int", "example": "2"},
+      "minutes": {"type": "int", "example": "3"}
+    }
+  },
+  "lastActivityNoRecord": "-",
+  "@lastActivityNoRecord": {"description": "LastActivityRow - 기록 없음"}
 }

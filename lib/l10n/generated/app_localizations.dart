@@ -7077,6 +7077,30 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'비슷한 월령 깨시: {minH}시간{minM}분~{maxH}시간{maxM}분'**
   String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM);
+
+  /// LastActivityRow - 수유 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'수유'**
+  String get lastActivityFeeding;
+
+  /// LastActivityRow - 기저귀 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'기저귀'**
+  String get lastActivityDiaper;
+
+  /// 경과 시간 - N시간 M분 전
+  ///
+  /// In ko, this message translates to:
+  /// **'{hours}시간 {minutes}분 전'**
+  String timeAgoHoursMinutes(int hours, int minutes);
+
+  /// LastActivityRow - 기록 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'-'**
+  String get lastActivityNoRecord;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

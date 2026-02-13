@@ -3905,4 +3905,18 @@ class SKo extends S {
   String wakeWindowCardRefHours(int minH, int minM, int maxH, int maxM) {
     return '비슷한 월령 깨시: $minH시간$minM분~$maxH시간$maxM분';
   }
+
+  @override
+  String get lastActivityFeeding => '수유';
+
+  @override
+  String get lastActivityDiaper => '기저귀';
+
+  @override
+  String timeAgoHoursMinutes(int hours, int minutes) {
+    return '$hours시간 $minutes분 전';
+  }
+
+  @override
+  String get lastActivityNoRecord => '-';
 }
