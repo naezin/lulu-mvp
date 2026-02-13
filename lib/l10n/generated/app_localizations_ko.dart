@@ -3919,4 +3919,12 @@ class SKo extends S {
 
   @override
   String get lastActivityNoRecord => '-';
+
+  @override
+  String get sweetSpotOverdueRecordNudge => '잠잤다면 기록해주세요';
+
+  @override
+  String sweetSpotWakeElapsedWithRef(String elapsed, String range) {
+    return '깬 지 $elapsed ($range)';
+  }
 }

@@ -2910,5 +2910,16 @@
     }
   },
   "lastActivityNoRecord": "-",
-  "@lastActivityNoRecord": {"description": "LastActivityRow - no record"}
+  "@lastActivityNoRecord": {"description": "LastActivityRow - no record"},
+
+  "sweetSpotOverdueRecordNudge": "Slept? Tap to record",
+  "@sweetSpotOverdueRecordNudge": {"description": "C-5.2 Living Breath - overdue record nudge message"},
+  "sweetSpotWakeElapsedWithRef": "Awake {elapsed} ({range})",
+  "@sweetSpotWakeElapsedWithRef": {
+    "description": "C-5.2 Living Breath - wake elapsed + reference range combined",
+    "placeholders": {
+      "elapsed": {"type": "String", "example": "47min"},
+      "range": {"type": "String", "example": "60-90min"}
+    }
+  }
 }

@@ -4001,4 +4001,12 @@ class SEn extends S {
 
   @override
   String get lastActivityNoRecord => '-';
+
+  @override
+  String get sweetSpotOverdueRecordNudge => 'Slept? Tap to record';
+
+  @override
+  String sweetSpotWakeElapsedWithRef(String elapsed, String range) {
+    return 'Awake $elapsed ($range)';
+  }
 }

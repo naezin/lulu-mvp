@@ -5484,5 +5484,16 @@
     }
   },
   "lastActivityNoRecord": "-",
-  "@lastActivityNoRecord": {"description": "LastActivityRow - 기록 없음"}
+  "@lastActivityNoRecord": {"description": "LastActivityRow - 기록 없음"},
+
+  "sweetSpotOverdueRecordNudge": "잠잤다면 기록해주세요",
+  "@sweetSpotOverdueRecordNudge": {"description": "C-5.2 Living Breath - 구간 후 기록 유도 메시지"},
+  "sweetSpotWakeElapsedWithRef": "깬 지 {elapsed} ({range})",
+  "@sweetSpotWakeElapsedWithRef": {
+    "description": "C-5.2 Living Breath - 깨시 경과 + 참고 범위 결합",
+    "placeholders": {
+      "elapsed": {"type": "String", "example": "47분"},
+      "range": {"type": "String", "example": "60~90분"}
+    }
+  }
 }

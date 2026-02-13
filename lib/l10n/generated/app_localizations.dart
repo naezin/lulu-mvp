@@ -7101,6 +7101,18 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'-'**
   String get lastActivityNoRecord;
+
+  /// C-5.2 Living Breath - 구간 후 기록 유도 메시지
+  ///
+  /// In ko, this message translates to:
+  /// **'잠잤다면 기록해주세요'**
+  String get sweetSpotOverdueRecordNudge;
+
+  /// C-5.2 Living Breath - 깨시 경과 + 참고 범위 결합
+  ///
+  /// In ko, this message translates to:
+  /// **'깬 지 {elapsed} ({range})'**
+  String sweetSpotWakeElapsedWithRef(String elapsed, String range);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

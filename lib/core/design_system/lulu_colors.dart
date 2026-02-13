@@ -637,25 +637,64 @@ class LuluStatusColors {
   static const Color infoBorder = Color(0x4D7BB8E8);
 }
 
-/// Sweet Spot Colors (단일 색상 시스템)
+/// Sweet Spot Colors — Living Breath card tokens
 ///
-/// 작업 지시서 v1.2: 모든 Sweet Spot 상태에서 동일한 색상 사용
-/// 판단/경고 색상 제거 → Lavender Mist 단일 색상
+/// C-5.2: State-based gradient + pulse system.
+/// All opacity values are pre-baked as solids (withValues/withOpacity prohibited).
+/// Pulse animation interpolates between base and peak tokens in widget layer.
 class LuluSweetSpotColors {
-  /// 모든 상태에서 사용하는 단일 색상 (Lavender Mist)
-  static const Color neutral = LuluColors.lavenderMist;
+  // ─── Lavender (Early / Overdue reset) ───
+  static const Color lavenderAccent = Color(0xFF9B8EC4);
+  static const Color lavenderBg06 = Color(0x0F9B8EC4);
+  static const Color lavenderBg09 = Color(0x179B8EC4);
+  static const Color lavenderGlow03 = Color(0x089B8EC4);
+  static const Color lavenderBorder = Color(0x389B8EC4);
+  static const Color lavenderBarFill = Color(0x339B8EC4);
 
-  /// 배경색 (10% opacity)
-  static Color get neutralBg => neutral.withValues(alpha: 0.1);
+  // ─── Amber (Approaching) ───
+  static const Color amberAccent = Color(0xFFD4A056);
+  static const Color amberBg06 = Color(0x0FD4A056);
+  static const Color amberBg09 = Color(0x17D4A056);
+  static const Color amberGlow03 = Color(0x08D4A056);
+  static const Color amberBorder = Color(0x47D4A056);
+  static const Color amberBarFill = Color(0x33D4A056);
 
-  /// 아이콘 색상 (동일)
-  static const Color icon = LuluColors.lavenderMist;
+  // ─── Gold (Sweet Spot / Optimal) ───
+  static const Color goldAccent = Color(0xFFE8C87A);
+  static const Color goldBg10 = Color(0x19E8C87A);
+  static const Color goldBg15 = Color(0x26E8C87A);
+  static const Color goldGlow07 = Color(0x12E8C87A);
+  static const Color goldBorder30 = Color(0x4DE8C87A);
+  static const Color goldBorder42 = Color(0x6BE8C87A);
+  static const Color goldBarFill = Color(0x40E8C87A);
+  static const Color goldText = Color(0xFFE8C87A);
+  static const Color goldGlow06 = Color(0x0FE8C87A);
+  static const Color goldMarkerGlow = Color(0x99E8C87A);
+  static const Color goldBandPeak = Color(0x66E8C87A);
+  static const Color goldBandBase = Color(0x40E8C87A);
 
-  /// 텍스트 색상 (primary text)
-  static const Color text = LuluTextColors.primary;
+  // ─── Night (Bedtime) ───
+  static const Color nightBlue = Color(0xFF7B8BD4);
+  static const Color nightBg06 = Color(0x0F465090);
+  static const Color nightBg09 = Color(0x17465090);
+  static const Color nightGlow03 = Color(0x08465090);
+  static const Color nightBorder = Color(0x40465090);
+  static const Color nightBarFill = Color(0x33465090);
 
-  /// 서브텍스트 색상 (secondary text)
-  static const Color subtext = LuluTextColors.secondary;
+  // ─── Calibrating ───
+  static const Color calibratingBg04 = Color(0x0AE8E6F0);
+  static const Color calibratingBg06 = Color(0x0FE8E6F0);
+  static const Color calibratingBorder = Color(0x19E8E6F0);
+
+  // ─── Overdue transition ───
+  static const Color overdueBg07 = Color(0x129B8EC4);
+
+  // ─── Message opacity tokens (Sweet Spot pulse) ───
+  static const Color goldMsgBase = Color(0xD9E8C87A);
+  static const Color goldMsgPeak = Color(0xFFE8C87A);
+
+  // ─── Legacy compat (neutral = lavender) ───
+  static const Color neutral = Color(0xFF9B8EC4);
 }
 
 /// Cry Analysis Colors (울음 분석 컬러)
