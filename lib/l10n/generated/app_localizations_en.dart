@@ -1315,6 +1315,9 @@ class SEn extends S {
   String get vsPrev => 'vs prev';
 
   @override
+  String get summaryNoChange => 'Same as last week';
+
+  @override
   String get dailyGridSleep => 'Sleep';
 
   @override

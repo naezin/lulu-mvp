@@ -191,7 +191,7 @@ class StatSummaryCard extends StatelessWidget {
           ),
           const SizedBox(width: 2),
           Text(
-            l10n?.vsPrev ?? 'vs prev',
+            l10n?.summaryNoChange ?? 'Same as last week',
             style: LuluTextStyles.caption.copyWith(
               color: LuluTextColors.tertiary,
             ),

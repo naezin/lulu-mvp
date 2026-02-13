@@ -543,6 +543,7 @@
     }
   },
   "vsPrev": "vs prev",
+  "summaryNoChange": "Same as last week",
   "dailyGridSleep": "Sleep",
   "dailyGridFeeding": "Feeding",
   "dailyGridDiaper": "Diaper",

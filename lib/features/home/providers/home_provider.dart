@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/utils/sleep_classifier.dart';
+import '../../../features/timeline/models/daily_pattern.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../../data/repositories/baby_repository.dart';
@@ -288,9 +288,14 @@ class HomeProvider extends ChangeNotifier {
 
     // Count today's completed naps (not night sleep) for napNumber
     // napNumber = completed naps + 1 (the upcoming nap)
+    // DB sleep_type priority, fallback to SleepTimeConfig.isNightTime
     final completedNapCount = completedSleeps.where((a) {
-      final sleepType = SleepClassifier.effectiveSleepType(a);
-      return sleepType == 'nap';
+      final dbSleepType = a.data?['sleep_type'] as String?;
+      if (dbSleepType != null && dbSleepType.isNotEmpty) {
+        return dbSleepType == 'nap';
+      }
+      final hour = a.startTime.toLocal().hour;
+      return !SleepTimeConfig.isNightTime(hour);
     }).length;
     final currentNapNumber = completedNapCount + 1;
 

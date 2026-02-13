@@ -2497,6 +2497,12 @@ abstract class S {
   /// **'vs 전주'**
   String get vsPrev;
 
+  /// 전주 대비 변화 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'전주와 동일'**
+  String get summaryNoChange;
+
   /// DailyGrid 수면 레이블
   ///
   /// In ko, this message translates to:

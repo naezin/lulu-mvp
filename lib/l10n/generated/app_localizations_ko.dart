@@ -1293,6 +1293,9 @@ class SKo extends S {
   String get vsPrev => 'vs 전주';
 
   @override
+  String get summaryNoChange => '전주와 동일';
+
+  @override
   String get dailyGridSleep => '수면';
 
   @override

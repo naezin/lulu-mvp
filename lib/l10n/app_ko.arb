@@ -1861,6 +1861,10 @@
   "@vsPrev": {
     "description": "전주 대비"
   },
+  "summaryNoChange": "전주와 동일",
+  "@summaryNoChange": {
+    "description": "전주 대비 변화 없음"
+  },
   "dailyGridSleep": "수면",
   "@dailyGridSleep": {
     "description": "DailyGrid 수면 레이블"
