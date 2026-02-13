@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' show sin, pi;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../core/design_system/lulu_colors.dart';
@@ -11,21 +12,22 @@ import '../../features/home/providers/sweet_spot_provider.dart';
 import '../../l10n/generated/app_localizations.dart' show S;
 import 'golden_band_bar.dart';
 
-/// Sweet Spot Card (C-5 Smart Band + Hint)
+/// Sweet Spot Card — C-5.2 Living Breath
 ///
-/// Sprint 23 C-5: Full rebuild with golden band progress bar.
-/// UX Process: 5-proposal → agent debate → virtual UT (SUS 85, TTC 1.9s)
+/// Sprint 26 C-5.2: State-based gradient + breathing pulse system.
+/// UX Process: 5-proposal → agent debate → P1+P5 combine → virtual UT (SUS 90, TTC 0.46s)
 ///
 /// States:
-/// - Sleeping: ongoing sleep timer (unchanged from Sprint 7)
+/// - Sleeping: ongoing sleep timer (unchanged)
 /// - Empty: new user first record (unchanged)
-/// - NoSleepGuide: has other activities but no sleep
-/// - Calibrating: learning pattern (1-2 records)
-/// - Normal: golden band with 4 sub-states
-///   - tooEarly (beforeRelaxed)
-///   - approaching (beforeSoon)
-///   - optimal (inZone)
-///   - overtired (afterZone) — grey fade, NO red/escalation
+/// - NoSleepGuide: has other activities but no sleep (unchanged)
+/// - Calibrating: stripe + slow pulse
+/// - Living Breath (normal): state-based gradient + pulse
+///   - tooEarly: lavender, 4s pulse
+///   - approaching: amber, 3s pulse
+///   - optimal: gold, 2s pulse + glow
+///   - overtired: lavender reset, 4s pulse
+///   - night: nightBlue, 3.5s pulse
 class SweetSpotCard extends StatefulWidget {
   final SweetSpotState state;
   final bool isEmpty;
@@ -88,30 +90,50 @@ class SweetSpotCard extends StatefulWidget {
   State<SweetSpotCard> createState() => _SweetSpotCardState();
 }
 
-class _SweetSpotCardState extends State<SweetSpotCard> {
+class _SweetSpotCardState extends State<SweetSpotCard>
+    with SingleTickerProviderStateMixin {
   Timer? _timer;
+  late AnimationController _breathController;
 
   @override
   void initState() {
     super.initState();
+    _breathController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: _getPulseMs()),
+    );
     if (widget.isSleeping) {
       _startTimer();
+    } else {
+      _breathController.repeat(reverse: true);
     }
   }
 
   @override
   void didUpdateWidget(SweetSpotCard oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // Timer: sleeping elapsed display
     if (widget.isSleeping && !oldWidget.isSleeping) {
       _startTimer();
+      _breathController.stop();
     } else if (!widget.isSleeping && oldWidget.isSleeping) {
       _stopTimer();
+      _breathController.repeat(reverse: true);
+    }
+    // Pulse: update duration if state changed
+    final newPulseMs = _getPulseMs();
+    if (_breathController.duration?.inMilliseconds != newPulseMs) {
+      _breathController.duration = Duration(milliseconds: newPulseMs);
+      if (!widget.isSleeping) {
+        _breathController.repeat(reverse: true);
+      }
     }
   }
 
   @override
   void dispose() {
     _stopTimer();
+    _breathController.dispose();
     super.dispose();
   }
 
@@ -125,6 +147,28 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
   void _stopTimer() {
     _timer?.cancel();
     _timer = null;
+  }
+
+  /// Pulse period in milliseconds per state
+  /// Night overrides underlying state (3500ms regardless of tooEarly/approaching/etc.)
+  int _getPulseMs() {
+    final isNight = widget.isNightTime ||
+        (widget.sweetSpotResult?.isNightTime ?? false);
+    if (isNight) return 3500;
+    return switch (widget.state) {
+      SweetSpotState.tooEarly => 4000,
+      SweetSpotState.approaching => 3000,
+      SweetSpotState.optimal => 2000,
+      SweetSpotState.overtired => 4000,
+      SweetSpotState.calibrating => 5000,
+      _ => 4000,
+    };
+  }
+
+  /// Breath value 0.0 ~ 1.0 (sine curve via AnimationController)
+  double get _breath {
+    final t = _breathController.value;
+    return (sin(t * pi) + 1) / 2;
   }
 
   // ========================================
@@ -437,126 +481,282 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
     return _buildSmartBandCard(context, l10n);
   }
 
-  /// C-5 Smart Band Card — the core redesign
+  /// C-5.2 Living Breath Card — state-based gradient + breathing pulse
   Widget _buildSmartBandCard(BuildContext context, S l10n) {
     final isCalibrating = widget.state == SweetSpotState.calibrating;
     final isAfterZone = widget.state == SweetSpotState.overtired;
     final isInZone = widget.state == SweetSpotState.optimal;
+    final isNight = widget.isNightTime ||
+        (widget.sweetSpotResult?.isNightTime ?? false);
 
     // Golden band positions
     final bandStart = _calcBandStart();
     final bandEnd = _calcBandEnd();
     final currentProgress = _calcProgress();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: LuluColors.surfaceCard,
-        borderRadius: BorderRadius.circular(LuluRadius.lg),
-        border: Border.all(color: LuluColors.glassBorder),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Row 1: Nap label + icon
-            Row(
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _breathController,
+        builder: (context, child) {
+          final breath = _breath;
+          final bgColors = _breathBgColors(breath, isNight);
+          final borderColor = _breathBorderColor(breath, isNight);
+          final boxShadows = _breathBoxShadow(breath, isInZone);
+          final timeColor = _breathTimeColor(isInZone, isAfterZone);
+          final msgColor = _breathMsgColor(breath, isInZone, isAfterZone);
+
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: bgColors,
+              ),
+              borderRadius: BorderRadius.circular(LuluRadius.lg),
+              border: Border.all(color: borderColor, width: 1),
+              boxShadow: boxShadows,
+            ),
+            child: Stack(
               children: [
-                Icon(
-                  widget.isNightTime
-                      ? LuluIcons.moon
-                      : LuluIcons.sleep,
-                  size: 16,
-                  color: isAfterZone
-                      ? LuluTextColors.tertiary
-                      : _themeColor,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  _getNapLabel(l10n),
-                  style: LuluTextStyles.bodySmall.copyWith(
-                    color: LuluTextColors.secondary,
-                    fontWeight: FontWeight.w500,
+                // Radial glow overlay (optimal only)
+                if (isInZone && !isAfterZone)
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(LuluRadius.lg),
+                        gradient: RadialGradient(
+                          center: Alignment.center,
+                          radius: 0.8,
+                          colors: [
+                            Color.lerp(
+                              LuluSweetSpotColors.goldGlow06,
+                              LuluSweetSpotColors.goldGlow07,
+                              breath,
+                            )!,
+                            const Color(0x00000000),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                // Content
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Row 1: Nap label + icon
+                      Row(
+                        children: [
+                          Icon(
+                            isNight ? LuluIcons.moon : LuluIcons.sleep,
+                            size: 16,
+                            color: isAfterZone
+                                ? LuluTextColors.tertiary
+                                : _breathIconColor(isInZone, isNight),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            _getNapLabel(l10n),
+                            style: LuluTextStyles.bodySmall.copyWith(
+                              color: LuluTextColors.secondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Row 2: Hero time range (28px)
+                      if (isCalibrating)
+                        _buildCalibratingTimeRow(l10n)
+                      else
+                        _buildHeroTimeRange(l10n, timeColor),
+
+                      // Row 2.5: Wake elapsed + ref range
+                      if (!isCalibrating) _buildWakeElapsedRow(l10n),
+
+                      const SizedBox(height: 8),
+
+                      // Row 3: State message
+                      Text(
+                        _getStateMessage(l10n),
+                        style: LuluTextStyles.bodyMedium.copyWith(
+                          color: msgColor,
+                          fontWeight: isInZone ? FontWeight.w500 : FontWeight.w400,
+                        ),
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      // Row 4: Golden Band progress bar
+                      GoldenBandBar(
+                        progress: currentProgress,
+                        bandStart: bandStart,
+                        bandEnd: bandEnd,
+                        themeColor: _themeColor,
+                        themeColorLight: _themeColorLight,
+                        themeColorStrong: _themeColorStrong,
+                        isCalibrating: isCalibrating,
+                        isInZone: isInZone,
+                        isAfterZone: isAfterZone,
+                      ),
+
+                      // Divider + Next nap hint
+                      if (_shouldShowNextHint()) ...[
+                        const SizedBox(height: 14),
+                        Container(
+                          height: 1,
+                          color: LuluSweetSpotColors.calibratingBorder,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: _buildNextNapHint(l10n),
+                        ),
+                      ] else
+                        const SizedBox(height: 16),
+                    ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 4),
-
-            // Row 2: Time range or calibrating indicator
-            if (isCalibrating)
-              _buildCalibratingTimeRow(l10n)
-            else
-              _buildTimeRangeRow(l10n),
-
-            // Row 2.5: Wake elapsed + reference range (C-5.1)
-            if (!isCalibrating) _buildWakeElapsedRow(l10n),
-
-            const SizedBox(height: 12),
-
-            // Row 3: Golden Band progress bar
-            GoldenBandBar(
-              progress: currentProgress,
-              bandStart: bandStart,
-              bandEnd: bandEnd,
-              themeColor: _themeColor,
-              themeColorLight: _themeColorLight,
-              themeColorStrong: _themeColorStrong,
-              isCalibrating: isCalibrating,
-              isInZone: isInZone,
-              isAfterZone: isAfterZone,
-            ),
-
-            const SizedBox(height: 8),
-
-            // Row 4: State message (warm/plain)
-            Text(
-              _getStateMessage(l10n),
-              style: LuluTextStyles.bodySmall.copyWith(
-                color: isAfterZone
-                    ? LuluTextColors.tertiary
-                    : LuluTextColors.secondary,
-              ),
-            ),
-
-            // Divider + Next nap hint
-            if (_shouldShowNextHint()) ...[
-              const SizedBox(height: 8),
-              Divider(
-                height: 1,
-                thickness: 0.5,
-                color: LuluColors.glassBorder,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: _buildNextNapHint(l10n),
-              ),
-            ] else
-              const SizedBox(height: 12),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 
   // ========================================
-  // Smart Band sub-components
+  // Living Breath color helpers
   // ========================================
 
-  Widget _buildTimeRangeRow(S l10n) {
+  /// Background gradient colors (pulse-interpolated)
+  List<Color> _breathBgColors(double breath, bool isNight) {
+    if (widget.state == SweetSpotState.calibrating) {
+      return [
+        Color.lerp(
+          LuluSweetSpotColors.calibratingBg04,
+          LuluSweetSpotColors.calibratingBg06,
+          breath,
+        )!,
+        LuluSweetSpotColors.calibratingBg04,
+      ];
+    }
+    if (isNight) {
+      return [
+        Color.lerp(
+          LuluSweetSpotColors.nightBg06,
+          LuluSweetSpotColors.nightBg09,
+          breath,
+        )!,
+        LuluSweetSpotColors.nightBg06,
+      ];
+    }
+    return switch (widget.state) {
+      SweetSpotState.tooEarly || SweetSpotState.overtired => [
+          Color.lerp(
+            LuluSweetSpotColors.lavenderBg06,
+            LuluSweetSpotColors.lavenderBg09,
+            breath,
+          )!,
+          LuluSweetSpotColors.lavenderBg06,
+        ],
+      SweetSpotState.approaching => [
+          Color.lerp(
+            LuluSweetSpotColors.amberBg06,
+            LuluSweetSpotColors.amberBg09,
+            breath,
+          )!,
+          LuluSweetSpotColors.amberBg06,
+        ],
+      SweetSpotState.optimal => [
+          Color.lerp(
+            LuluSweetSpotColors.goldBg10,
+            LuluSweetSpotColors.goldBg15,
+            breath,
+          )!,
+          LuluSweetSpotColors.goldBg10,
+        ],
+      _ => [LuluSweetSpotColors.lavenderBg06, LuluSweetSpotColors.lavenderBg06],
+    };
+  }
+
+  /// Border color (pulse-interpolated for optimal only)
+  Color _breathBorderColor(double breath, bool isNight) {
+    if (widget.state == SweetSpotState.calibrating) {
+      return LuluSweetSpotColors.calibratingBorder;
+    }
+    if (isNight) return LuluSweetSpotColors.nightBorder;
+    return switch (widget.state) {
+      SweetSpotState.tooEarly || SweetSpotState.overtired =>
+        LuluSweetSpotColors.lavenderBorder,
+      SweetSpotState.approaching => LuluSweetSpotColors.amberBorder,
+      SweetSpotState.optimal => Color.lerp(
+          LuluSweetSpotColors.goldBorder30,
+          LuluSweetSpotColors.goldBorder42,
+          breath,
+        )!,
+      _ => LuluSweetSpotColors.lavenderBorder,
+    };
+  }
+
+  /// Box shadow (optimal glow only)
+  List<BoxShadow> _breathBoxShadow(double breath, bool isInZone) {
+    if (!isInZone) return const [];
+    return [
+      BoxShadow(
+        color: LuluSweetSpotColors.goldGlow06,
+        blurRadius: 30 + breath * 20,
+        spreadRadius: 0,
+      ),
+    ];
+  }
+
+  /// Hero time color
+  Color _breathTimeColor(bool isInZone, bool isAfterZone) {
+    if (isAfterZone) return LuluTextColors.tertiary;
+    if (isInZone) return LuluSweetSpotColors.goldText;
+    return LuluTextColors.primary;
+  }
+
+  /// State message color (pulse for optimal)
+  Color _breathMsgColor(double breath, bool isInZone, bool isAfterZone) {
+    if (isAfterZone) return LuluTextColors.tertiary;
+    if (isInZone) {
+      return Color.lerp(
+        LuluSweetSpotColors.goldMsgBase,
+        LuluSweetSpotColors.goldMsgPeak,
+        breath,
+      )!;
+    }
+    return LuluTextColors.secondary;
+  }
+
+  /// Icon color by state
+  Color _breathIconColor(bool isInZone, bool isNight) {
+    if (isNight) return LuluSweetSpotColors.nightBlue;
+    if (isInZone) return LuluSweetSpotColors.goldAccent;
+    if (widget.state == SweetSpotState.approaching) {
+      return LuluSweetSpotColors.amberAccent;
+    }
+    return LuluSweetSpotColors.lavenderAccent;
+  }
+
+  /// Hero time range with 28px bold styling
+  Widget _buildHeroTimeRange(S l10n, Color timeColor) {
     final result = widget.sweetSpotResult;
     if (result == null) {
-      // Fallback: use recommendedTime
       if (widget.recommendedTime != null) {
         final locale = Localizations.localeOf(context).toString();
         final formattedTime = DateFormat('a h:mm', locale)
             .format(widget.recommendedTime!);
         return Text(
           formattedTime,
-          style: LuluTextStyles.titleMedium.copyWith(
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
             color: LuluTextColors.primary,
-            fontWeight: FontWeight.bold,
           ),
         );
       }
@@ -569,14 +769,17 @@ class _SweetSpotCardState extends State<SweetSpotCard> {
 
     return Text(
       '$minTime ~ $maxTime',
-      style: LuluTextStyles.titleMedium.copyWith(
-        color: widget.state == SweetSpotState.overtired
-            ? LuluTextColors.tertiary
-            : LuluTextColors.primary,
-        fontWeight: FontWeight.bold,
+      style: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.w700,
+        color: timeColor,
       ),
     );
   }
+
+  // ========================================
+  // Smart Band sub-components
+  // ========================================
 
   Widget _buildCalibratingTimeRow(S l10n) {
     final completed = widget.completedSleepRecords ?? 0;
