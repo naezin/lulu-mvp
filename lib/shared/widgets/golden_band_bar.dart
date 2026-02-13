@@ -43,6 +43,10 @@ class GoldenBandBar extends StatelessWidget {
   /// Whether past the zone (grey out)
   final bool isAfterZone;
 
+  /// C-5.2 Living Breath: breathing pulse value (0.0 ~ 1.0)
+  /// Used for marker glow + band opacity animation in optimal state.
+  final double breath;
+
   const GoldenBandBar({
     super.key,
     required this.progress,
@@ -54,6 +58,7 @@ class GoldenBandBar extends StatelessWidget {
     this.isCalibrating = false,
     this.isInZone = false,
     this.isAfterZone = false,
+    this.breath = 0.0,
   });
 
   @override
@@ -72,6 +77,7 @@ class GoldenBandBar extends StatelessWidget {
           isCalibrating: isCalibrating,
           isInZone: isInZone,
           isAfterZone: isAfterZone,
+          breath: breath,
         ),
       ),
     );
@@ -88,6 +94,7 @@ class _GoldenBandPainter extends CustomPainter {
   final bool isCalibrating;
   final bool isInZone;
   final bool isAfterZone;
+  final double breath;
 
   static const double _barHeight = 12.0;
   static const double _barRadius = 6.0;
@@ -105,6 +112,7 @@ class _GoldenBandPainter extends CustomPainter {
     required this.isCalibrating,
     required this.isInZone,
     required this.isAfterZone,
+    required this.breath,
   });
 
   @override
@@ -149,11 +157,18 @@ class _GoldenBandPainter extends CustomPainter {
     );
     canvas.drawRRect(bandRect, bandPaint);
 
-    // Glow effect when in zone
+    // Glow effect when in zone (breath-synced)
     if (isInZone && !isAfterZone) {
+      // C-5.2: Band glow intensity follows breath pulse
+      final glowSigma = 4.0 + breath * 4.0;
+      final glowColor = Color.lerp(
+        LuluSweetSpotColors.goldBandBase,
+        LuluSweetSpotColors.goldBandPeak,
+        breath,
+      )!;
       final glowPaint = Paint()
-        ..color = themeColorLight
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+        ..color = glowColor
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, glowSigma);
       canvas.drawRRect(bandRect, glowPaint);
       // Re-draw band on top of glow
       canvas.drawRRect(bandRect, bandPaint);
@@ -206,8 +221,30 @@ class _GoldenBandPainter extends CustomPainter {
       markerBorderPaint,
     );
 
-    // Inner dot when in zone
+    // Inner dot + breath glow when in zone
     if (isInZone && !isAfterZone) {
+      // C-5.2: Marker glow radius follows breath pulse (6 ~ 14px)
+      final markerGlowSigma = 6.0 + breath * 8.0;
+      final markerGlowPaint = Paint()
+        ..color = LuluSweetSpotColors.goldMarkerGlow
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, markerGlowSigma);
+      canvas.drawCircle(
+        Offset(markerX, markerCenterY),
+        _markerRadius + 2,
+        markerGlowPaint,
+      );
+      // Re-draw marker fill + border on top of glow
+      canvas.drawCircle(
+        Offset(markerX, markerCenterY),
+        _markerRadius,
+        markerFillPaint,
+      );
+      canvas.drawCircle(
+        Offset(markerX, markerCenterY),
+        _markerRadius - _markerBorderWidth / 2,
+        markerBorderPaint,
+      );
+      // Inner dot
       final dotPaint = Paint()..color = themeColor;
       canvas.drawCircle(
         Offset(markerX, markerCenterY),
@@ -258,6 +295,7 @@ class _GoldenBandPainter extends CustomPainter {
         themeColor != oldDelegate.themeColor ||
         isCalibrating != oldDelegate.isCalibrating ||
         isInZone != oldDelegate.isInZone ||
-        isAfterZone != oldDelegate.isAfterZone;
+        isAfterZone != oldDelegate.isAfterZone ||
+        breath != oldDelegate.breath;
   }
 }

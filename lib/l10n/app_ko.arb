@@ -5488,6 +5488,14 @@
 
   "sweetSpotOverdueRecordNudge": "잠잤다면 기록해주세요",
   "@sweetSpotOverdueRecordNudge": {"description": "C-5.2 Living Breath - 구간 후 기록 유도 메시지"},
+  "sweetSpotOverdueNextNapWarm": "다음 낮잠은 이쯤이에요",
+  "@sweetSpotOverdueNextNapWarm": {"description": "C-5.2 Phase 3 - 구간 후 다음 낮잠 전환 메시지 (warm)"},
+  "sweetSpotOverdueNextNapPlain": "다음 낮잠 예측",
+  "@sweetSpotOverdueNextNapPlain": {"description": "C-5.2 Phase 3 - 구간 후 다음 낮잠 전환 메시지 (plain)"},
+  "sweetSpotOverdueCueWatchWarm": "다음 낮잠은 아기 신호를 봐주세요",
+  "@sweetSpotOverdueCueWatchWarm": {"description": "C-5.2 Phase 3 - 다음 낮잠 예측 불가 시 메시지 (warm)"},
+  "sweetSpotOverdueCueWatchPlain": "아기 신호 관찰",
+  "@sweetSpotOverdueCueWatchPlain": {"description": "C-5.2 Phase 3 - 다음 낮잠 예측 불가 시 메시지 (plain)"},
   "sweetSpotWakeElapsedWithRef": "깬 지 {elapsed} ({range})",
   "@sweetSpotWakeElapsedWithRef": {
     "description": "C-5.2 Living Breath - 깨시 경과 + 참고 범위 결합",

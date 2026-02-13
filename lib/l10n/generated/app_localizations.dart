@@ -7108,6 +7108,30 @@ abstract class S {
   /// **'잠잤다면 기록해주세요'**
   String get sweetSpotOverdueRecordNudge;
 
+  /// C-5.2 Phase 3 - 구간 후 다음 낮잠 전환 메시지 (warm)
+  ///
+  /// In ko, this message translates to:
+  /// **'다음 낮잠은 이쯤이에요'**
+  String get sweetSpotOverdueNextNapWarm;
+
+  /// C-5.2 Phase 3 - 구간 후 다음 낮잠 전환 메시지 (plain)
+  ///
+  /// In ko, this message translates to:
+  /// **'다음 낮잠 예측'**
+  String get sweetSpotOverdueNextNapPlain;
+
+  /// C-5.2 Phase 3 - 다음 낮잠 예측 불가 시 메시지 (warm)
+  ///
+  /// In ko, this message translates to:
+  /// **'다음 낮잠은 아기 신호를 봐주세요'**
+  String get sweetSpotOverdueCueWatchWarm;
+
+  /// C-5.2 Phase 3 - 다음 낮잠 예측 불가 시 메시지 (plain)
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 신호 관찰'**
+  String get sweetSpotOverdueCueWatchPlain;
+
   /// C-5.2 Living Breath - 깨시 경과 + 참고 범위 결합
   ///
   /// In ko, this message translates to:

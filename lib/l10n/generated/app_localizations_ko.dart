@@ -3924,6 +3924,18 @@ class SKo extends S {
   String get sweetSpotOverdueRecordNudge => '잠잤다면 기록해주세요';
 
   @override
+  String get sweetSpotOverdueNextNapWarm => '다음 낮잠은 이쯤이에요';
+
+  @override
+  String get sweetSpotOverdueNextNapPlain => '다음 낮잠 예측';
+
+  @override
+  String get sweetSpotOverdueCueWatchWarm => '다음 낮잠은 아기 신호를 봐주세요';
+
+  @override
+  String get sweetSpotOverdueCueWatchPlain => '아기 신호 관찰';
+
+  @override
   String sweetSpotWakeElapsedWithRef(String elapsed, String range) {
     return '깬 지 $elapsed ($range)';
   }

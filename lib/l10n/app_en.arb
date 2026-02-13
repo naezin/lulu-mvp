@@ -2914,6 +2914,14 @@
 
   "sweetSpotOverdueRecordNudge": "Slept? Tap to record",
   "@sweetSpotOverdueRecordNudge": {"description": "C-5.2 Living Breath - overdue record nudge message"},
+  "sweetSpotOverdueNextNapWarm": "Next nap is around this time",
+  "@sweetSpotOverdueNextNapWarm": {"description": "C-5.2 Phase 3 - overdue next nap transition message (warm)"},
+  "sweetSpotOverdueNextNapPlain": "Next nap prediction",
+  "@sweetSpotOverdueNextNapPlain": {"description": "C-5.2 Phase 3 - overdue next nap transition message (plain)"},
+  "sweetSpotOverdueCueWatchWarm": "Watch for baby's cues for next nap",
+  "@sweetSpotOverdueCueWatchWarm": {"description": "C-5.2 Phase 3 - next nap unpredictable message (warm)"},
+  "sweetSpotOverdueCueWatchPlain": "Watch for cues",
+  "@sweetSpotOverdueCueWatchPlain": {"description": "C-5.2 Phase 3 - next nap unpredictable message (plain)"},
   "sweetSpotWakeElapsedWithRef": "Awake {elapsed} ({range})",
   "@sweetSpotWakeElapsedWithRef": {
     "description": "C-5.2 Living Breath - wake elapsed + reference range combined",

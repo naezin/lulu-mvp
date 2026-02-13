@@ -4006,6 +4006,19 @@ class SEn extends S {
   String get sweetSpotOverdueRecordNudge => 'Slept? Tap to record';
 
   @override
+  String get sweetSpotOverdueNextNapWarm => 'Next nap is around this time';
+
+  @override
+  String get sweetSpotOverdueNextNapPlain => 'Next nap prediction';
+
+  @override
+  String get sweetSpotOverdueCueWatchWarm =>
+      'Watch for baby\'s cues for next nap';
+
+  @override
+  String get sweetSpotOverdueCueWatchPlain => 'Watch for cues';
+
+  @override
   String sweetSpotWakeElapsedWithRef(String elapsed, String range) {
     return 'Awake $elapsed ($range)';
   }

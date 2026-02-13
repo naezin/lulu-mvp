@@ -484,7 +484,9 @@ class _SweetSpotCardState extends State<SweetSpotCard>
   /// C-5.2 Living Breath Card — state-based gradient + breathing pulse
   Widget _buildSmartBandCard(BuildContext context, S l10n) {
     final isCalibrating = widget.state == SweetSpotState.calibrating;
-    final isAfterZone = widget.state == SweetSpotState.overtired;
+    // C-5.2 Phase 3: When transitioned to next nap, card resets to "fresh" look
+    final isTransitioned = _isOverdueTransitioned();
+    final isAfterZone = widget.state == SweetSpotState.overtired && !isTransitioned;
     final isInZone = widget.state == SweetSpotState.optimal;
     final isNight = widget.isNightTime ||
         (widget.sweetSpotResult?.isNightTime ?? false);
@@ -591,17 +593,19 @@ class _SweetSpotCardState extends State<SweetSpotCard>
                       const SizedBox(height: 18),
 
                       // Row 4: Golden Band progress bar
-                      GoldenBandBar(
-                        progress: currentProgress,
-                        bandStart: bandStart,
-                        bandEnd: bandEnd,
-                        themeColor: _themeColor,
-                        themeColorLight: _themeColorLight,
-                        themeColorStrong: _themeColorStrong,
-                        isCalibrating: isCalibrating,
-                        isInZone: isInZone,
-                        isAfterZone: isAfterZone,
-                      ),
+                      if (!_isOverdueTransitioned())
+                        GoldenBandBar(
+                          progress: _clampedProgress(currentProgress),
+                          bandStart: bandStart,
+                          bandEnd: bandEnd,
+                          themeColor: _themeColor,
+                          themeColorLight: _themeColorLight,
+                          themeColorStrong: _themeColorStrong,
+                          isCalibrating: isCalibrating,
+                          isInZone: isInZone,
+                          isAfterZone: isAfterZone && !_isOverdueTransitioned(),
+                          breath: breath,
+                        ),
 
                       // Divider + Next nap hint
                       if (_shouldShowNextHint()) ...[
@@ -746,6 +750,27 @@ class _SweetSpotCardState extends State<SweetSpotCard>
   /// Hero time range with 28px bold styling
   Widget _buildHeroTimeRange(S l10n, Color timeColor) {
     final result = widget.sweetSpotResult;
+
+    // C-5.2 Phase 3: Stage B — show next nap time range
+    if (_isOverdueTransitioned()) {
+      final nextRange = _nextNapTimeRange();
+      if (nextRange != null) {
+        final locale = Localizations.localeOf(context).toString();
+        final minTime = DateFormat('H:mm', locale).format(nextRange.min);
+        final maxTime = DateFormat('H:mm', locale).format(nextRange.max);
+        return Text(
+          '$minTime ~ $maxTime',
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            color: LuluTextColors.primary,
+          ),
+        );
+      }
+      // Next nap unpredictable — hide time
+      return const SizedBox.shrink();
+    }
+
     if (result == null) {
       if (widget.recommendedTime != null) {
         final locale = Localizations.localeOf(context).toString();
@@ -1093,7 +1118,11 @@ class _SweetSpotCardState extends State<SweetSpotCard>
     }
 
     final result = widget.sweetSpotResult;
-    final napNum = result?.napNumber ?? 1;
+
+    // C-5.2 Phase 3: Stage B — show next nap number
+    final napNum = _isOverdueTransitioned()
+        ? _nextNapNumber()
+        : (result?.napNumber ?? 1);
 
     return switch (napNum) {
       1 => l10n.sweetSpotCardNapLabel1,
@@ -1126,6 +1155,31 @@ class _SweetSpotCardState extends State<SweetSpotCard>
       }
     }
 
+    // C-5.2 Phase 3: Overdue transition messages
+    if (widget.state == SweetSpotState.overtired) {
+      if (_isOverdueTransitioned()) {
+        // Stage B: Auto-transitioned to next nap
+        final nextRange = _nextNapTimeRange();
+        if (nextRange != null) {
+          return widget.isWarmTone
+              ? l10n.sweetSpotOverdueNextNapWarm
+              : l10n.sweetSpotOverdueNextNapPlain;
+        }
+        // Next nap unpredictable (last nap or night)
+        return widget.isWarmTone
+            ? l10n.sweetSpotOverdueCueWatchWarm
+            : l10n.sweetSpotOverdueCueWatchPlain;
+      }
+      if (_isOverdueStageA()) {
+        // Stage A: Record nudge
+        return l10n.sweetSpotOverdueRecordNudge;
+      }
+      // Default overtired message (before zone end)
+      return widget.isWarmTone
+          ? l10n.sweetSpotCardAfterZoneWarm
+          : l10n.sweetSpotCardAfterZonePlain;
+    }
+
     return switch (widget.state) {
       SweetSpotState.tooEarly => widget.isWarmTone
           ? l10n.sweetSpotCardBeforeRelaxedWarm
@@ -1136,9 +1190,6 @@ class _SweetSpotCardState extends State<SweetSpotCard>
       SweetSpotState.optimal => widget.isWarmTone
           ? l10n.sweetSpotCardInZoneWarm
           : l10n.sweetSpotCardInZonePlain,
-      SweetSpotState.overtired => widget.isWarmTone
-          ? l10n.sweetSpotCardAfterZoneWarm
-          : l10n.sweetSpotCardAfterZonePlain,
       _ => '',
     };
   }
@@ -1173,8 +1224,75 @@ class _SweetSpotCardState extends State<SweetSpotCard>
   bool _shouldShowNextHint() {
     if (widget.state == SweetSpotState.calibrating) return false;
     if (widget.state == SweetSpotState.unknown) return false;
+    // Hide hint when transitioned to next nap (card already shows next nap info)
+    if (_isOverdueTransitioned()) return false;
     final result = widget.sweetSpotResult;
     if (result == null) return false;
     return true;
+  }
+
+  // ========================================
+  // C-5.2 Phase 3: Overdue → Next Nap Transition
+  // ========================================
+
+  /// Minutes past Sweet Spot zone end (maxSleepTime)
+  /// Returns null if not in overtired state or no result.
+  int? _minutesPastZoneEnd() {
+    if (widget.state != SweetSpotState.overtired) return null;
+    final result = widget.sweetSpotResult;
+    if (result == null) return null;
+    final now = DateTime.now();
+    final minutesPast = now.difference(result.maxSleepTime).inMinutes;
+    return minutesPast > 0 ? minutesPast : null;
+  }
+
+  /// Stage A: Sweet Spot ended but < 15 min → show record nudge
+  bool _isOverdueStageA() {
+    final minutesPast = _minutesPastZoneEnd();
+    if (minutesPast == null) return false;
+    return minutesPast < 15;
+  }
+
+  /// Stage B: 15+ min past Sweet Spot → auto-transition to next nap
+  bool _isOverdueTransitioned() {
+    final minutesPast = _minutesPastZoneEnd();
+    if (minutesPast == null) return false;
+    return minutesPast >= 15;
+  }
+
+  /// Clamp progress to 1.0 max when in overdue stage A (no overflow)
+  double _clampedProgress(double rawProgress) {
+    if (_isOverdueStageA()) return rawProgress.clamp(0.0, 1.0);
+    return rawProgress;
+  }
+
+  /// Next nap predicted time range (for Stage B display)
+  /// Uses maxSleepTime + midMinutes to estimate next nap start.
+  /// Returns (minTime, maxTime) or null if not predictable.
+  ({DateTime min, DateTime max})? _nextNapTimeRange() {
+    final result = widget.sweetSpotResult;
+    if (result == null) return null;
+    // Cannot predict if this is the last nap or night
+    if (result.napNumber >= result.totalExpectedNaps) return null;
+    if (result.isNightTime) return null;
+
+    final nextWakeEstimate = result.maxSleepTime.add(
+      Duration(minutes: result.wakeWindow.midMinutes),
+    );
+    // Next nap's sweet spot: nextWake + next wake window range
+    final nextMin = nextWakeEstimate.add(
+      Duration(minutes: result.wakeWindow.minMinutes),
+    );
+    final nextMax = nextWakeEstimate.add(
+      Duration(minutes: result.wakeWindow.maxMinutes),
+    );
+    return (min: nextMin, max: nextMax);
+  }
+
+  /// Next nap number (current + 1)
+  int _nextNapNumber() {
+    final result = widget.sweetSpotResult;
+    if (result == null) return 2;
+    return result.napNumber + 1;
   }
 }
