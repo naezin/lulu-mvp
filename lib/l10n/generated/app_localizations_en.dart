@@ -2840,12 +2840,12 @@ class SEn extends S {
 
   @override
   String sweetSpotCardCalibratingWarm(int day) {
-    return 'Learning patterns ($day sleeps done)';
+    return 'Learning patterns ($day days of data)';
   }
 
   @override
   String sweetSpotCardCalibratingPlain(int day) {
-    return 'Learning · $day/3 sleeps';
+    return 'Learning · $day/3 days';
   }
 
   @override

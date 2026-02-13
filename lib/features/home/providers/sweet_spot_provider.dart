@@ -67,7 +67,7 @@ class SweetSpotProvider extends ChangeNotifier {
   ///
   /// [lastSleepEndTime]: end time of the last sleep activity (null = unknown)
   /// [babyAgeInMonths]: effective age in months (corrected for preterm)
-  /// [completedSleepRecords]: today's completed sleep count (null = skip calibration)
+  /// [completedSleepRecords]: unique days with sleep data in last 14d (A-4 cumulative, null = skip calibration)
   void recalculate({
     required DateTime? lastSleepEndTime,
     required int? babyAgeInMonths,
@@ -120,7 +120,7 @@ enum SweetSpotState {
   /// Unknown (no sleep records at all)
   unknown,
 
-  /// Calibrating (1~2 sleep records today, learning pattern)
+  /// Calibrating (< 3 unique days with sleep data, learning pattern)
   calibrating,
 
   /// Still early (not tired yet)

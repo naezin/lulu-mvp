@@ -1649,9 +1649,9 @@
   "@sweetSpotCardAfterZonePlain": {
     "description": "C-5 Sweet Spot card - after zone (plain tone)"
   },
-  "sweetSpotCardCalibratingWarm": "Learning patterns ({day} sleeps done)",
+  "sweetSpotCardCalibratingWarm": "Learning patterns ({day} days of data)",
   "@sweetSpotCardCalibratingWarm": {
-    "description": "C-5 Sweet Spot card - calibrating (warm tone)",
+    "description": "A-4: calibrating (warm tone) — cumulative days with sleep data",
     "placeholders": {
       "day": {
         "type": "int",
@@ -1659,9 +1659,9 @@
       }
     }
   },
-  "sweetSpotCardCalibratingPlain": "Learning · {day}/3 sleeps",
+  "sweetSpotCardCalibratingPlain": "Learning · {day}/3 days",
   "@sweetSpotCardCalibratingPlain": {
-    "description": "C-5 Sweet Spot card - calibrating (plain tone)",
+    "description": "A-4: calibrating (plain tone) — cumulative days with sleep data",
     "placeholders": {
       "day": {
         "type": "int",

@@ -18,6 +18,7 @@ import '../../statistics/models/weekly_statistics.dart';
 import '../../statistics/widgets/together_guide_dialog.dart';
 import '../../statistics/widgets/insight_card.dart';
 import '../models/daily_pattern.dart' show PatternFilter;
+import '../models/day_timeline.dart';
 import '../providers/pattern_data_provider.dart';
 import 'date_navigator.dart';
 import 'stat_summary_card.dart';
@@ -45,6 +46,9 @@ class _WeeklyViewState extends State<WeeklyView> {
   late PatternDataProvider _patternProvider;
   bool _isLoading = true;
   String? _errorMessage;
+
+  /// A-3: Previous week wake segment average (for delta calculation)
+  double? _prevWeekWakeAvg;
 
   /// Sprint 20 HF #8: 이전 babyId 추적 (변경 감지용)
   String? _previousBabyId;
@@ -139,6 +143,20 @@ class _WeeklyViewState extends State<WeeklyView> {
               return;
             },
           );
+          // A-3: Load previous week timelines for wake window delta
+          try {
+            final prevWeekStart = _patternProvider.weekStartDate
+                .subtract(const Duration(days: 7));
+            final prevTimelines = await _patternProvider.getWeekTimelines(
+              familyId: family.id,
+              babyId: selectedBaby.id,
+              weekStart: prevWeekStart,
+            );
+            _prevWeekWakeAvg = _calculateWakeAvgFromTimelines(prevTimelines);
+          } catch (e) {
+            debugPrint('[WARN] [WeeklyView] Previous week load error: $e');
+            _prevWeekWakeAvg = null;
+          }
         } catch (patternError) {
           debugPrint('[WARN] [WeeklyView] Pattern load error: $patternError');
           // 패턴 로드 실패해도 통계는 계속 표시
@@ -199,6 +217,35 @@ class _WeeklyViewState extends State<WeeklyView> {
 
     if (daysWithData == 0) return 0;
     return totalMinutes / daysWithData;
+  }
+
+  /// A-3: Static helper — calculate wake avg from any timeline list
+  static double? _calculateWakeAvgFromTimelines(List<DayTimeline> timelines) {
+    if (timelines.isEmpty) return null;
+
+    double totalMinutes = 0;
+    int daysWithData = 0;
+
+    for (final timeline in timelines) {
+      final avg = timeline.wakeSegmentAverageMinutes;
+      if (avg != null) {
+        totalMinutes += avg;
+        daysWithData++;
+      }
+    }
+
+    if (daysWithData == 0) return null;
+    return totalMinutes / daysWithData;
+  }
+
+  /// A-3: Wake window week-over-week delta (minutes)
+  /// Returns 0 if either week has no data.
+  double _calculateWakeWindowDelta() {
+    final currentAvg = _calculateWakeSegmentAvg();
+    if (currentAvg == 0 || _prevWeekWakeAvg == null || _prevWeekWakeAvg == 0) {
+      return 0;
+    }
+    return currentAvg - _prevWeekWakeAvg!;
   }
 
   /// 현재 주인지 확인
@@ -386,7 +433,7 @@ class _WeeklyViewState extends State<WeeklyView> {
                   type: StatType.wakeWindow,
                   value: _calculateWakeSegmentAvg(),
                   unit: 'min',
-                  change: 0,
+                  change: _calculateWakeWindowDelta(),
                   correctedAgeDays: correctedAgeDays,
                 ),
               ],

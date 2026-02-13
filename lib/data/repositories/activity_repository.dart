@@ -233,12 +233,19 @@ class ActivityRepository {
   }
 
   /// 진행 중인 활동 조회
+  /// A-5: 24h guard — 24시간 이상 경과한 유령 활동 무시
+  /// (same pattern as getActiveSleepForBaby HF-ghost)
   Future<List<ActivityModel>> getOngoingActivities(String familyId) async {
     try {
+      final cutoff = DateTime.now()
+          .subtract(const Duration(hours: 24))
+          .toUtc()
+          .toIso8601String();
       final response = await SupabaseService.activities
           .select()
           .eq('family_id', familyId)
           .isFilter('end_time', null)
+          .gte('start_time', cutoff)
           .order('start_time', ascending: false);
 
       return (response as List).map((data) => _mapToActivityModel(data)).toList();

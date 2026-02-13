@@ -64,6 +64,9 @@ class HomeProvider extends ChangeNotifier {
   /// Today's activities (all - internal)
   List<ActivityModel> _todayActivities = [];
 
+  /// All activities (for cumulative calibration — A-4)
+  List<ActivityModel> _allActivities = [];
+
   /// Today's activities (all - external access, backward compatibility)
   List<ActivityModel> get todayActivities => List.unmodifiable(_todayActivities);
 
@@ -280,15 +283,16 @@ class HomeProvider extends ChangeNotifier {
     final lastSleepActivity = lastSleep;
     final baby = selectedBaby;
 
-    // Count today's completed sleep records for calibration
-    final completedSleeps = filteredTodayActivities
-        .where((a) => a.type == ActivityType.sleep && a.endTime != null)
-        .toList();
-    final completedSleepCount = completedSleeps.length;
+    // A-4: Cumulative calibration — count unique days with sleep data
+    // in the last 14 days for selected baby (not today's count which resets daily)
+    final calibrationDays = _countCalibrationDays(baby?.id);
 
     // Count today's completed naps (not night sleep) for napNumber
     // napNumber = completed naps + 1 (the upcoming nap)
     // DB sleep_type priority, fallback to SleepTimeConfig.isNightTime
+    final completedSleeps = filteredTodayActivities
+        .where((a) => a.type == ActivityType.sleep && a.endTime != null)
+        .toList();
     final completedNapCount = completedSleeps.where((a) {
       final dbSleepType = a.data?['sleep_type'] as String?;
       if (dbSleepType != null && dbSleepType.isNotEmpty) {
@@ -302,9 +306,32 @@ class HomeProvider extends ChangeNotifier {
     _sweetSpotProvider?.recalculate(
       lastSleepEndTime: lastSleepActivity?.endTime ?? lastSleepActivity?.startTime,
       babyAgeInMonths: baby?.effectiveAgeInMonths,
-      completedSleepRecords: completedSleepCount,
+      completedSleepRecords: calibrationDays,
       currentNapNumber: currentNapNumber,
     );
+  }
+
+  /// A-4: Count unique days with completed sleep records in last 14 days
+  /// for the given baby. Returns 0 if no baby or no data.
+  int _countCalibrationDays(String? babyId) {
+    if (babyId == null) return 0;
+
+    final cutoff = DateTime.now().subtract(const Duration(days: 14));
+    final uniqueDays = <String>{};
+
+    for (final activity in _allActivities) {
+      if (activity.type != ActivityType.sleep) continue;
+      if (activity.endTime == null) continue;
+      if (!activity.babyIds.contains(babyId)) continue;
+      if (activity.startTime.isBefore(cutoff)) continue;
+
+      final localDate = activity.startTime.toLocal();
+      final dayKey =
+          '${localDate.year}-${localDate.month}-${localDate.day}';
+      uniqueDays.add(dayKey);
+    }
+
+    return uniqueDays.length;
   }
 
   /// Notify BadgeProvider to check for new badge unlocks
@@ -370,6 +397,7 @@ class HomeProvider extends ChangeNotifier {
       final allActivities = results[2] as List<ActivityModel>;
 
       _todayActivities = activities;
+      _allActivities = allActivities;
       _hasAnyRecordsEver = hasAny;
       _invalidateCache();
       _notifySweetSpot();
@@ -396,6 +424,7 @@ class HomeProvider extends ChangeNotifier {
     _babies = [];
     _selectedBabyId = null;
     _todayActivities = [];
+    _allActivities = [];
     _isLoading = false;
     _errorMessage = null;
     _hasAnyRecordsEver = true;

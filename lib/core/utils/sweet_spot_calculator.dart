@@ -51,13 +51,16 @@ class SweetSpotCalculator {
   static const double _regressionDamping = 0.80;
 
   // ============================================================
-  // Calibration threshold
+  // Calibration threshold (A-4: cumulative-based)
   // ============================================================
   //
-  // Minimum completed sleep records (today) before normal prediction.
-  // Below this count → calibrating state (still shows literature-based
-  // prediction, but UI indicates learning phase).
-  // Newborns sleep 4-5x/day, so threshold of 3 is achievable daily.
+  // Minimum unique days with completed sleep records (last 14 days)
+  // before normal prediction. Below this → calibrating state (still
+  // shows literature-based prediction, but UI indicates learning phase).
+  //
+  // A-4 change: Was "3 records today" (reset daily) → now "3 unique
+  // days with sleep data" (cumulative, never resets to 0 if data exists).
+  // This prevents "calibrating" display after data import or next day.
 
   static const int _calibrationThreshold = 3;
 
@@ -122,7 +125,7 @@ class SweetSpotCalculator {
   /// Calculate Sweet Spot for current moment
   ///
   /// [now]: current time (injected, not DateTime.now() — testable)
-  /// [completedSleepRecords]: today's completed sleep count (null = skip calibration check, backward compat)
+  /// [completedSleepRecords]: unique days with sleep data in last 14d (A-4 cumulative, null = skip calibration)
   /// [personalizedWindow]: Phase E personalization data (null = literature table)
   SweetSpotResult calculate({
     required String babyId,

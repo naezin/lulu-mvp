@@ -4123,9 +4123,9 @@
   "@sweetSpotCardAfterZonePlain": {
     "description": "C-5 Sweet Spot card - after zone (plain tone)"
   },
-  "sweetSpotCardCalibratingWarm": "패턴을 파악하고 있어요 (수면 {day}건 완료)",
+  "sweetSpotCardCalibratingWarm": "패턴을 파악하고 있어요 ({day}일째 학습 중)",
   "@sweetSpotCardCalibratingWarm": {
-    "description": "C-5 Sweet Spot card - calibrating (warm tone)",
+    "description": "A-4: calibrating (warm tone) — cumulative days with sleep data",
     "placeholders": {
       "day": {
         "type": "int",
@@ -4133,9 +4133,9 @@
       }
     }
   },
-  "sweetSpotCardCalibratingPlain": "학습 중 · {day}/3건",
+  "sweetSpotCardCalibratingPlain": "학습 중 · {day}/3일",
   "@sweetSpotCardCalibratingPlain": {
-    "description": "C-5 Sweet Spot card - calibrating (plain tone)",
+    "description": "A-4: calibrating (plain tone) — cumulative days with sleep data",
     "placeholders": {
       "day": {
         "type": "int",

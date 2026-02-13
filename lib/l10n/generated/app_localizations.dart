@@ -5177,16 +5177,16 @@ abstract class S {
   /// **'신호 관찰 권장'**
   String get sweetSpotCardAfterZonePlain;
 
-  /// C-5 Sweet Spot card - calibrating (warm tone)
+  /// A-4: calibrating (warm tone) — cumulative days with sleep data
   ///
   /// In ko, this message translates to:
-  /// **'패턴을 파악하고 있어요 (수면 {day}건 완료)'**
+  /// **'패턴을 파악하고 있어요 ({day}일째 학습 중)'**
   String sweetSpotCardCalibratingWarm(int day);
 
-  /// C-5 Sweet Spot card - calibrating (plain tone)
+  /// A-4: calibrating (plain tone) — cumulative days with sleep data
   ///
   /// In ko, this message translates to:
-  /// **'학습 중 · {day}/3건'**
+  /// **'학습 중 · {day}/3일'**
   String sweetSpotCardCalibratingPlain(int day);
 
   /// C-5 Sweet Spot card - next nap hint (warm tone)

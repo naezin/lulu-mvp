@@ -157,27 +157,36 @@ class GrowthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // TODO: 실제 데이터 로드 구현 (SharedPreferences + Firebase)
+      // TODO: Replace with DB load when measurements table is created
+      // When implementing: fetch DB data FIRST, then check for birth seed
       await Future.delayed(const Duration(milliseconds: 300));
 
-      // Birth weight auto-seed: generate birth measurement from onboarding data
-      // when no measurements exist yet (Sprint 25: deduplicate when DB load is implemented)
-      if (_measurements.isEmpty) {
-        final baby = selectedBaby;
-        if (baby != null && baby.birthWeightGrams != null) {
+      // A-6: Birth weight auto-seed with date-based dedup
+      // Check if birth date measurement already exists (prevents duplicates
+      // when DB load is implemented — DB may already contain birth measurement)
+      final baby = selectedBaby;
+      if (baby != null && baby.birthWeightGrams != null) {
+        final hasBirthMeasurement = _measurements.any(
+          (m) =>
+              m.babyId == baby.id &&
+              m.measuredAt.year == baby.birthDate.year &&
+              m.measuredAt.month == baby.birthDate.month &&
+              m.measuredAt.day == baby.birthDate.day,
+        );
+
+        if (!hasBirthMeasurement) {
           final birthMeasurement = GrowthMeasurementModel.create(
             babyId: baby.id,
             measuredAt: baby.birthDate,
             weightKg: baby.birthWeightGrams! / 1000.0,
           );
-          _measurements = [birthMeasurement];
-          _state = GrowthScreenState.loaded;
-        } else {
-          _state = GrowthScreenState.empty;
+          _measurements = [..._measurements, birthMeasurement];
         }
-      } else {
-        _state = GrowthScreenState.loaded;
       }
+
+      _state = _measurements.isEmpty
+          ? GrowthScreenState.empty
+          : GrowthScreenState.loaded;
       _retryCount = 0;
     } catch (e) {
       _retryCount++;
