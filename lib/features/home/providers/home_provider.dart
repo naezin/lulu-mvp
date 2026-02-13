@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../features/timeline/models/daily_pattern.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/utils/sleep_classifier.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../../data/repositories/baby_repository.dart';
@@ -289,17 +290,24 @@ class HomeProvider extends ChangeNotifier {
 
     // Count today's completed naps (not night sleep) for napNumber
     // napNumber = completed naps + 1 (the upcoming nap)
-    // DB sleep_type priority, fallback to SleepTimeConfig.isNightTime
+    // A-2b: DB sleep_type priority, fallback to SleepClassifier v2
     final completedSleeps = filteredTodayActivities
         .where((a) => a.type == ActivityType.sleep && a.endTime != null)
+        .toList();
+    final allSleepRecords = _allActivities
+        .where((a) => a.type == ActivityType.sleep)
         .toList();
     final completedNapCount = completedSleeps.where((a) {
       final dbSleepType = a.data?['sleep_type'] as String?;
       if (dbSleepType != null && dbSleepType.isNotEmpty) {
         return dbSleepType == 'nap';
       }
-      final hour = a.startTime.toLocal().hour;
-      return !SleepTimeConfig.isNightTime(hour);
+      final classified = SleepClassifier.classify(
+        startTime: a.startTime,
+        endTime: a.endTime,
+        recentSleepRecords: allSleepRecords,
+      );
+      return classified == 'nap';
     }).length;
     final currentNapNumber = completedNapCount + 1;
 
@@ -411,10 +419,64 @@ class HomeProvider extends ChangeNotifier {
 
       debugPrint('[OK] [HomeProvider] Today activities loaded: ${activities.length}, hasAnyRecordsEver: $hasAny');
       notifyListeners();
+
+      // A-2c: 1-time v2 reclassification (fire-and-forget, non-blocking)
+      _reclassifySleepTypesOnce(activityRepo, allActivities);
     } catch (e) {
       debugPrint('[ERR] [HomeProvider] Error loading activities: $e');
       _errorMessage = 'Failed to load activity data';
       notifyListeners();
+    }
+  }
+
+  // ========================================
+  // A-2c: One-time SleepClassifier v2 reclassification
+  // ========================================
+
+  static const String _v2ReclassifiedKey = 'sleep_v2_reclassified';
+
+  /// Reclassify all existing sleep records using SleepClassifier v2.
+  /// Runs once per install, fire-and-forget (non-blocking).
+  /// Updates DB sleep_type for every sleep record (overwrite old
+  /// SleepTimeConfig-based values with v2 density-based classification).
+  Future<void> _reclassifySleepTypesOnce(
+    ActivityRepository activityRepo,
+    List<ActivityModel> allActivities,
+  ) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool(_v2ReclassifiedKey) == true) return;
+
+      final sleepActivities = allActivities
+          .where((a) => a.type == ActivityType.sleep)
+          .toList();
+
+      if (sleepActivities.isEmpty) {
+        await prefs.setBool(_v2ReclassifiedKey, true);
+        return;
+      }
+
+      debugPrint('[INFO] [HomeProvider] A-2c: Reclassifying ${sleepActivities.length} sleep records with v2');
+
+      int updated = 0;
+      for (final activity in sleepActivities) {
+        final newType = SleepClassifier.classify(
+          startTime: activity.startTime,
+          endTime: activity.endTime,
+          recentSleepRecords: sleepActivities,
+        );
+        final currentType = activity.data?['sleep_type'] as String?;
+        if (currentType != newType) {
+          await activityRepo.updateSleepType(activity.id, newType);
+          updated++;
+        }
+      }
+
+      await prefs.setBool(_v2ReclassifiedKey, true);
+      debugPrint('[OK] [HomeProvider] A-2c: Reclassification complete. $updated/${sleepActivities.length} records changed');
+    } catch (e) {
+      debugPrint('[WARN] [HomeProvider] A-2c: Reclassification error (non-fatal): $e');
+      // Non-fatal: will retry next app launch
     }
   }
 

@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../../data/repositories/activity_repository.dart';
 import '../../data/models/activity_model.dart';
 import '../../data/models/baby_type.dart';
-import '../../features/timeline/models/daily_pattern.dart';
+import '../utils/sleep_classifier.dart';
 import 'parsers/babytime_parser.dart';
 import 'parsers/huckleberry_parser.dart';
 import 'parsers/parsed_activity.dart';
@@ -95,6 +95,14 @@ class ImportService {
     debugPrint('[INFO] [ImportService] Existing activities in family: ${existingActivities.length}');
     debugPrint('[INFO] [ImportService] Existing keys count: ${existingKeys.length}');
 
+    // A-2a: Collect sleep records for SleepClassifier v2
+    // Start with existing DB sleep records, accumulate as we import
+    final sleepRecords = existingActivities
+        .where((a) =>
+            a.type == ActivityType.sleep &&
+            a.babyIds.contains(babyId))
+        .toList();
+
     // 배치 처리
     for (int i = 0; i < total; i += batchSize) {
       final end = (i + batchSize > total) ? total : i + batchSize;
@@ -127,21 +135,24 @@ class ImportService {
             familyId: familyId,
           );
 
-          // sleep_type 자동 분류 (import 시 NULL 방지)
-          // import/레거시 데이터는 시간 기반 분류 (18~06=night, 그 외=nap)
+          // A-2a: sleep_type via SleepClassifier v2 (replaces SleepTimeConfig)
           if (activity.type == ActivityType.sleep) {
             final existingSleepType =
                 activity.data?['sleep_type'] as String?;
             if (existingSleepType == null || existingSleepType.isEmpty) {
-              final hour = activity.startTime.toLocal().hour;
-              final sleepType =
-                  SleepTimeConfig.isNightTime(hour) ? 'night' : 'nap';
+              final sleepType = SleepClassifier.classify(
+                startTime: activity.startTime,
+                endTime: activity.endTime,
+                recentSleepRecords: sleepRecords,
+              );
               final updatedData = <String, dynamic>{
                 ...?activity.data,
                 'sleep_type': sleepType,
               };
               activity = activity.copyWith(data: updatedData);
             }
+            // Accumulate for subsequent classifications
+            sleepRecords.add(activity);
           }
 
           // 저장

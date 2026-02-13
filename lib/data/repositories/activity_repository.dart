@@ -255,6 +255,34 @@ class ActivityRepository {
     }
   }
 
+  /// A-2c: Update sleep_type in activity's data JSONB column
+  /// Used for 1-time v2 reclassification migration
+  Future<void> updateSleepType(String activityId, String sleepType) async {
+    try {
+      // Fetch current data first to preserve other fields
+      final current = await SupabaseService.activities
+          .select('data')
+          .eq('id', activityId)
+          .single();
+
+      final existingData =
+          (current['data'] as Map<String, dynamic>?) ?? <String, dynamic>{};
+      final updatedData = <String, dynamic>{
+        ...existingData,
+        'sleep_type': sleepType,
+      };
+
+      await SupabaseService.activities
+          .update({'data': updatedData})
+          .eq('id', activityId);
+
+      debugPrint('[OK] [ActivityRepository] sleep_type updated: $activityId -> $sleepType');
+    } catch (e) {
+      debugPrint('[ERR] [ActivityRepository] Error updating sleep_type: $e');
+      rethrow;
+    }
+  }
+
   /// Sprint 19: 전체 기록 존재 여부 확인 (신규 유저 판별)
   Future<bool> hasAnyActivities(String familyId) async {
     try {
