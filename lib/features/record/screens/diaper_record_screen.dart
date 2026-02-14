@@ -514,11 +514,10 @@ class _DiaperRecordScreenState extends State<DiaperRecordScreen> {
       return l10n?.errorSelectBaby ?? 'Please select a baby';
     } else if (errorKey == 'errorNoFamily') {
       return l10n?.errorNoFamily ?? 'No family information';
-    } else if (errorKey.startsWith('errorSaveFailed:')) {
-      final detail = errorKey.substring('errorSaveFailed:'.length);
-      return l10n?.errorSaveFailed(detail) ?? 'Save failed: $detail';
+    } else if (errorKey == 'SAVE_FAILED') {
+      return l10n?.errorSaveFailed(l10n?.errorUnknown ?? '') ?? 'Save failed';
     }
-    return errorKey;
+    return l10n?.errorUnknown ?? errorKey;
   }
 
   Future<void> _handleSave(DiaperRecordProvider provider) async {

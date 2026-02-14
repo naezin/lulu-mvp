@@ -247,8 +247,8 @@ class FeedingRecordProvider extends RecordBaseProvider {
           '[OK] [FeedingRecordProvider] Feeding saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      setError('errorSaveFailed:$e');
       debugPrint('[ERR] [FeedingRecordProvider] Error saving feeding: $e');
+      setError('SAVE_FAILED');
       return null;
     } finally {
       setLoading(false);
@@ -387,9 +387,8 @@ class FeedingRecordProvider extends RecordBaseProvider {
 
       return saved.id;
     } catch (e) {
-      setError('errorSaveFailed:$e');
-      debugPrint(
-          '[ERROR] [FeedingRecordProvider] Error quick save feeding: $e');
+      debugPrint('[ERR] [FeedingRecordProvider] Error quick save feeding: $e');
+      setError('SAVE_FAILED');
       notifyListeners();
       return null;
     }

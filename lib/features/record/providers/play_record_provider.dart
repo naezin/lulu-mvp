@@ -87,8 +87,8 @@ class PlayRecordProvider extends RecordBaseProvider {
           '[OK] [PlayRecordProvider] Play saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      setError('errorSaveFailed:$e');
       debugPrint('[ERR] [PlayRecordProvider] Error saving play: $e');
+      setError('SAVE_FAILED');
       return null;
     } finally {
       setLoading(false);

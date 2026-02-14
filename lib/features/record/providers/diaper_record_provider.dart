@@ -89,9 +89,8 @@ class DiaperRecordProvider extends RecordBaseProvider {
           '[OK] [DiaperRecordProvider] Diaper saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      setError('errorSaveFailed:$e');
-      debugPrint(
-          '[ERR] [DiaperRecordProvider] Error saving diaper: $e');
+      debugPrint('[ERR] [DiaperRecordProvider] Error saving diaper: $e');
+      setError('SAVE_FAILED');
       return null;
     } finally {
       setLoading(false);

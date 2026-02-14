@@ -152,8 +152,8 @@ class SleepRecordProvider extends RecordBaseProvider {
           '[OK] [SleepRecordProvider] Sleep saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      setError('errorSaveFailed:$e');
       debugPrint('[ERR] [SleepRecordProvider] Error saving sleep: $e');
+      setError('SAVE_FAILED');
       return null;
     } finally {
       setLoading(false);

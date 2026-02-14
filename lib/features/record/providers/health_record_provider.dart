@@ -145,9 +145,8 @@ class HealthRecordProvider extends RecordBaseProvider {
           '[OK] [HealthRecordProvider] Health saved: ${savedActivity.id}');
       return savedActivity;
     } catch (e) {
-      setError('errorSaveFailed:$e');
-      debugPrint(
-          '[ERR] [HealthRecordProvider] Error saving health: $e');
+      debugPrint('[ERR] [HealthRecordProvider] Error saving health: $e');
+      setError('SAVE_FAILED');
       return null;
     } finally {
       setLoading(false);
