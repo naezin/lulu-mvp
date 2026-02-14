@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../../data/models/activity_model.dart';
+import '../../data/models/baby_type.dart';
 import '../../data/repositories/activity_repository.dart';
 import '../../features/home/providers/home_provider.dart';
+import '../../features/record/providers/ongoing_sleep_provider.dart';
 import '../../l10n/generated/app_localizations.dart' show S;
 import '../../core/design_system/lulu_colors.dart';
 import '../../core/design_system/lulu_typography.dart';
@@ -68,10 +71,23 @@ mixin UndoDeleteMixin<T extends StatefulWidget> on State<T> {
 
     if (confirmed != true) return false;
 
+    // FIX-1: Capture sleepProvider before async gap
+    final sleepProvider = activity.type == ActivityType.sleep
+        ? context.read<OngoingSleepProvider>()
+        : null;
+
     // 3. Delete (DB + local state)
     try {
       await _activityRepository.deleteActivity(activity.id);
       homeProvider.removeActivity(activity.id);
+
+      // FIX-1: If deleted activity is the ongoing sleep, clear OngoingSleepProvider
+      if (sleepProvider != null &&
+          sleepProvider.ongoingSleep?.id == activity.id) {
+        await sleepProvider.cancelSleep();
+        debugPrint('[OK] [UndoDeleteMixin] Cleared ongoing sleep after delete: ${activity.id}');
+      }
+
       HapticFeedback.mediumImpact();
     } catch (e) {
       debugPrint('[ERR] [UndoDeleteMixin] Delete failed: $e');

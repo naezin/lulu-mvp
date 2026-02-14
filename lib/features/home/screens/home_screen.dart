@@ -45,20 +45,63 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   /// Track last checked baby ID to avoid redundant DB calls
   String? _lastCheckedBabyId;
 
   @override
   void initState() {
     super.initState();
+    // FIX-3: Register lifecycle observer for foreground resume refresh
+    WidgetsBinding.instance.addObserver(this);
     // HF-5: Check DB for active sleep on first build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkDbSleep();
     });
   }
 
+  @override
+  void dispose() {
+    // FIX-3: Unregister lifecycle observer
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// FIX-3: Refresh state when app returns to foreground
+  ///
+  /// Ensures Provider state (SweetSpot, OngoingSleep) stays fresh after
+  /// background → foreground transitions. Without this, stale data from
+  /// the last active session persists indefinitely.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _onForegroundResume();
+    }
+  }
+
+  /// FIX-3: Foreground resume handler
+  ///
+  /// 1. Reload today's activities (triggers _notifySweetSpot automatically)
+  /// 2. Re-check DB for active sleep (clears stale OngoingSleepProvider state)
+  void _onForegroundResume() {
+    final homeProvider = context.read<HomeProvider>();
+    final sleepProvider = context.read<OngoingSleepProvider>();
+    final selectedBabyId = homeProvider.selectedBabyId;
+    final familyId = homeProvider.family?.id;
+
+    // Refresh HomeProvider → SweetSpotProvider chain
+    homeProvider.loadTodayActivities();
+
+    // Re-check DB for active sleep (FIX-4 ensures SharedPrefs cleanup)
+    if (selectedBabyId != null && familyId != null) {
+      sleepProvider.checkDbForActiveSleep(selectedBabyId, familyId);
+    }
+
+    debugPrint('[OK] [HomeScreen] Foreground resume: refreshed providers');
+  }
+
   /// HF-5: Check DB for active sleep (BabyTime import detection)
+  /// FIX-2: Ensures checkDbForActiveSleep runs after OngoingSleepProvider.init() completes
   void _checkDbSleep() {
     final homeProvider = context.read<HomeProvider>();
     final sleepProvider = context.read<OngoingSleepProvider>();

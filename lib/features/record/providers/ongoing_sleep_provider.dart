@@ -85,13 +85,12 @@ class OngoingSleepProvider extends ChangeNotifier {
   }
 
   /// HF-5: DB에서 활성 수면 조회 (BabyTime import 등 외부 경로 감지)
-  /// baby 선택 시 + 홈 화면 진입 시 호출
+  /// baby 선택 시 + 홈 화면 진입 시 + 포그라운드 복귀 시 호출
+  ///
+  /// FIX-4: DB에 active sleep 없으면 SharedPrefs도 정리하여 stale 상태 방지.
+  /// 이전: _isDbSourced인 경우만 정리 → SharedPrefs 기반 stale 상태 잔존.
+  /// 이후: DB에 없으면 무조건 정리 (DB = single source of truth).
   Future<void> checkDbForActiveSleep(String babyId, String familyId) async {
-    // SharedPrefs에서 이미 해당 아기의 수면이 진행 중이면 DB 조회 불필요
-    if (_ongoingSleep != null && _ongoingSleep!.babyId == babyId && !_isDbSourced) {
-      return;
-    }
-
     try {
       final activeSleep = await _activityRepository.getActiveSleepForBaby(babyId);
 
@@ -110,12 +109,14 @@ class OngoingSleepProvider extends ChangeNotifier {
         _startTimer();
         debugPrint('[OK] [OngoingSleepProvider] Found active sleep from DB: '
             'id=${activeSleep.id}, startTime=${activeSleep.startTime}');
-      } else if (_isDbSourced && _ongoingSleep?.babyId == babyId) {
-        // DB-sourced sleep was cleared (ended externally)
+      } else if (_ongoingSleep != null && _ongoingSleep!.babyId == babyId) {
+        // FIX-4: DB has no active sleep for this baby — clear all local state
+        // Covers both DB-sourced and SharedPrefs-sourced stale records
         _ongoingSleep = null;
         _isDbSourced = false;
         _stopTimer();
-        debugPrint('[INFO] [OngoingSleepProvider] DB active sleep cleared for baby: $babyId');
+        await _clearLocal();
+        debugPrint('[INFO] [OngoingSleepProvider] No active sleep in DB for baby: $babyId — cleared local state');
       }
       notifyListeners();
     } catch (e) {
