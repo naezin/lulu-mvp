@@ -79,8 +79,8 @@ class FamilyProvider extends ChangeNotifier {
       debugPrint(
           '[OK] [FamilyProvider] Loaded family: ${_members.length} members, ${_pendingInvites.length} pending invites, legacyOwner=$_legacyOwnerId');
     } catch (e) {
-      _error = e.toString();
       debugPrint('[ERR] [FamilyProvider] Load error: $e');
+      _error = 'FAMILY_LOAD_FAILED';
     } finally {
       _isLoading = false;
       notifyListeners();

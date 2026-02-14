@@ -375,7 +375,8 @@ class OnboardingProvider extends ChangeNotifier {
       return (family: family, babies: babyModels);
     } catch (e) {
       _isLoading = false;
-      _errorMessage = 'Failed to complete onboarding: $e';
+      debugPrint('[ERR] [OnboardingProvider] Complete onboarding failed: $e');
+      _errorMessage = 'ONBOARDING_FAILED';
       notifyListeners();
       rethrow;
     }

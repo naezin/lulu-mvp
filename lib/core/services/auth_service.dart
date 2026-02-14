@@ -72,7 +72,8 @@ class AuthService {
       if (e.code == AuthorizationErrorCode.canceled) {
         throw AuthException('User canceled sign in.');
       }
-      throw AuthException('Apple sign in failed: ${e.message}');
+      debugPrint('[ERR] [AuthService] Apple sign in error: ${e.message}');
+      throw AuthException('Apple sign in failed.');
     } on AuthException {
       rethrow;
     } catch (e) {
@@ -186,8 +187,8 @@ class AuthService {
       await SupabaseService.client.rpc('delete_own_account');
       debugPrint('[OK] AuthService: Account deleted via RPC');
     } catch (e) {
-      debugPrint('[ERROR] AuthService.deleteAccount: $e');
-      throw AuthException('Account deletion failed: $e');
+      debugPrint('[ERR] [AuthService] Account deletion failed: $e');
+      throw AuthException('Account deletion failed.');
     }
   }
 

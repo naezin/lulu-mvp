@@ -371,8 +371,8 @@ class HomeProvider extends ChangeNotifier {
 
       _notifySweetSpot();
     } catch (e) {
-      _errorMessage = 'Failed to load data: $e';
       debugPrint('[ERR] [HomeProvider] Refresh error: $e');
+      _errorMessage = 'LOAD_FAILED';
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -523,8 +523,8 @@ class HomeProvider extends ChangeNotifier {
 
       debugPrint('[OK] [HomeProvider] Family data reloaded for: $newFamilyId');
     } catch (e) {
-      _errorMessage = 'Failed to load family data: $e';
       debugPrint('[ERR] [HomeProvider] Family change error: $e');
+      _errorMessage = 'FAMILY_LOAD_FAILED';
     } finally {
       _isLoading = false;
       notifyListeners();
