@@ -539,7 +539,7 @@ class _ImportScreenState extends State<ImportScreen> {
                     count: result.skipCount,
                   ),
                 ],
-                // 에러 메시지 표시 (디버깅용)
+                // FIX-I2: User-friendly error message (no raw exception/URL)
                 if (result.errors.isNotEmpty) ...[
                   const SizedBox(height: 16),
                   Container(
@@ -549,7 +549,7 @@ class _ImportScreenState extends State<ImportScreen> {
                       borderRadius: BorderRadius.circular(LuluRadius.xs),
                     ),
                     child: Text(
-                      l10n.importErrorPrefix(result.errors.first),
+                      l10n.importPartialFailure(result.errors.length),
                       style: const TextStyle(
                         fontSize: 12,
                         color: LuluStatusColors.error,
@@ -630,9 +630,9 @@ class _ImportScreenState extends State<ImportScreen> {
 
           const SizedBox(height: 24),
 
-          // 에러 메시지
+          // FIX-I3: Map error codes to localized messages (no raw exception/URL)
           Text(
-            provider.errorMessage ?? l10n.errorUnknown,
+            _localizedErrorMessage(provider.errorMessage, l10n),
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
@@ -662,6 +662,21 @@ class _ImportScreenState extends State<ImportScreen> {
         ],
       ),
     );
+  }
+
+  /// FIX-I3: Map internal error codes to user-friendly localized messages
+  ///
+  /// Internal codes from ImportProvider: IMPORT_FAILED, FILE_SELECT_FAILED,
+  /// ANALYZE_FAILED. ImportException messages pass through as-is (already
+  /// user-friendly like "No records found" or "Unsupported file format").
+  String _localizedErrorMessage(String? errorCode, S l10n) {
+    return switch (errorCode) {
+      'IMPORT_FAILED' => l10n.importFailed(l10n.errorUnknown),
+      'FILE_SELECT_FAILED' => l10n.importCannotSelectFile(l10n.errorUnknown),
+      'ANALYZE_FAILED' => l10n.importFailed(l10n.errorUnknown),
+      null => l10n.errorUnknown,
+      _ => errorCode, // ImportException user-friendly messages pass through
+    };
   }
 }
 

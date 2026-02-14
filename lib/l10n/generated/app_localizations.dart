@@ -5297,6 +5297,12 @@ abstract class S {
   /// **'에러: {error}'**
   String importErrorPrefix(String error);
 
+  /// Import - partial failure message (user-friendly, no raw exception)
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}건 저장 실패 — 다시 가져오기하면 자동으로 복구됩니다'**
+  String importPartialFailure(int count);
+
   /// 알 수 없는 오류 메시지
   ///
   /// In ko, this message translates to:

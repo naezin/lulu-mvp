@@ -2859,6 +2859,11 @@ class SKo extends S {
   }
 
   @override
+  String importPartialFailure(int count) {
+    return '$count건 저장 실패 — 다시 가져오기하면 자동으로 복구됩니다';
+  }
+
+  @override
   String get errorUnknown => '알 수 없는 오류가 발생했습니다.';
 
   @override

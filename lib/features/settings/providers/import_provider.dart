@@ -97,7 +97,8 @@ class ImportProvider extends ChangeNotifier {
 
       return false;
     } catch (e) {
-      _setError('Failed to select file: $e');
+      debugPrint('[ERR] [ImportProvider] File select failed: $e');
+      _setError('FILE_SELECT_FAILED');
       return false;
     }
   }
@@ -114,7 +115,13 @@ class ImportProvider extends ChangeNotifier {
       _preview = await _importService.analyzeFile(_selectedFile!);
       _state = ImportState.preview;
     } catch (e) {
-      _setError(e.toString());
+      debugPrint('[ERR] [ImportProvider] Analyze failed: $e');
+      // ImportException has user-friendly message; others get generic code
+      if (e is ImportException) {
+        _setError(e.message);
+      } else {
+        _setError('ANALYZE_FAILED');
+      }
     }
 
     notifyListeners();
@@ -188,7 +195,9 @@ class ImportProvider extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      _setError('Import failed: $e');
+      // FIX-I3: Raw exception to debugPrint only, generic message to UI
+      debugPrint('[ERR] [ImportProvider] Import failed: $e');
+      _setError('IMPORT_FAILED');
       return false;
     }
   }

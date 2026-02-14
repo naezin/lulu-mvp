@@ -1754,6 +1754,15 @@
       }
     }
   },
+  "importPartialFailure": "{count} record(s) failed — re-import to recover automatically",
+  "@importPartialFailure": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "1"
+      }
+    }
+  },
   "errorUnknown": "An unknown error occurred.",
   "feedingTimeLabel": "Feeding Time",
   "notesPlaceholder": "Record any special notes",

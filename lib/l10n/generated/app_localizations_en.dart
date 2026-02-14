@@ -2914,6 +2914,11 @@ class SEn extends S {
   }
 
   @override
+  String importPartialFailure(int count) {
+    return '$count record(s) failed — re-import to recover automatically';
+  }
+
+  @override
   String get errorUnknown => 'An unknown error occurred.';
 
   @override

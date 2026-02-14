@@ -166,15 +166,16 @@ class ImportService {
             sleepRecords.add(activity);
           }
 
-          // 저장
-          await _activityRepository.createActivity(activity);
+          // FIX-I1: Save with retry (max 2 retries, 1s delay)
+          await _createActivityWithRetry(activity);
           successCount++;
 
           // 중복 방지를 위해 키 추가
           existingKeys.add(key);
         } catch (e) {
-          debugPrint('[ERROR] [ImportService] Save error: $e');
-          errors.add('Failed to save record: ${parsed.startTime} - $e');
+          // FIX-I2/I3: Raw exception to debugPrint only, NOT to user-facing errors list
+          debugPrint('[ERR] [ImportService] Save failed after retries: $e');
+          errors.add(parsed.startTime.toIso8601String());
           skipCount++;
         }
       }
@@ -206,6 +207,31 @@ class ImportService {
       skipCount: skipCount,
       errors: errors,
     );
+  }
+
+  /// FIX-I1: Create activity with automatic retry on network failure
+  ///
+  /// Retries up to [maxRetries] times with [retryDelay] between attempts.
+  /// Handles transient network errors (socket disconnect, timeout).
+  /// Rethrows after all retries exhausted.
+  Future<void> _createActivityWithRetry(
+    ActivityModel activity, {
+    int maxRetries = 2,
+    Duration retryDelay = const Duration(seconds: 1),
+  }) async {
+    for (int attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        await _activityRepository.createActivity(activity);
+        return;
+      } catch (e) {
+        if (attempt < maxRetries) {
+          debugPrint('[WARN] [ImportService] Save attempt ${attempt + 1} failed, retrying in ${retryDelay.inSeconds}s: $e');
+          await Future<void>.delayed(retryDelay);
+        } else {
+          rethrow;
+        }
+      }
+    }
   }
 
   /// 기존 활동 조회 (중복 체크용) - 가족 전체 기록 조회
