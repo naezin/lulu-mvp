@@ -410,7 +410,8 @@ class _AddBabyDialogState extends State<AddBabyDialog> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.showText(S.of(context)!.errorAddFailed(e.toString()));
+        debugPrint('[ERR] [AddBabyDialog] Add baby failed: $e');
+        AppToast.showText(S.of(context)!.errorAddFailed(S.of(context)!.errorUnknown));
       }
     } finally {
       if (mounted) {

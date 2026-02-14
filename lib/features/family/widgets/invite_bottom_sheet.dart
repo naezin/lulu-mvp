@@ -49,9 +49,10 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
         _isLoading = false;
       });
     } catch (e) {
+      debugPrint('[ERR] [InviteBottomSheet] Create invite failed: $e');
       setState(() => _isLoading = false);
       if (mounted) {
-        AppToast.showText(e.toString());
+        AppToast.showText(S.of(context)?.errorOccurred ?? 'Something went wrong');
       }
     }
   }
@@ -226,8 +227,9 @@ class _InviteBottomSheetState extends State<InviteBottomSheet> {
         AppToast.showText(S.of(context)!.inviteEmailSent);
       }
     } catch (e) {
+      debugPrint('[ERR] [InviteBottomSheet] Send email invite failed: $e');
       if (mounted) {
-        AppToast.showText(e.toString());
+        AppToast.showText(S.of(context)?.errorOccurred ?? 'Something went wrong');
       }
     } finally {
       if (mounted) {

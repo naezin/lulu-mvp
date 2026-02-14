@@ -235,8 +235,9 @@ class _TransferOwnerScreenState extends State<TransferOwnerScreen> {
         navigator.pop();
       }
     } catch (e) {
+      debugPrint('[ERR] [TransferOwnerScreen] Transfer failed: $e');
       if (mounted) {
-        AppToast.showText(e.toString());
+        AppToast.showText(S.of(context)?.errorOccurred ?? 'Something went wrong');
       }
     } finally {
       if (mounted) {

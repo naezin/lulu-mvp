@@ -333,8 +333,9 @@ class _JoinFamilyScreenState extends State<JoinFamilyScreen> {
         navigator.pushNamedAndRemoveUntil('/home', (r) => false);
       }
     } catch (e) {
+      debugPrint('[ERR] [JoinFamilyScreen] Join failed: $e');
       setState(() {
-        _error = e.toString();
+        _error = S.of(context)?.errorOccurred ?? 'Something went wrong';
         _isLoading = false;
       });
     }

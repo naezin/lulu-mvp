@@ -206,11 +206,11 @@ class SettingsResetSection extends StatelessWidget {
         Navigator.pop(context);
       }
 
-      debugPrint('[ERROR] _resetAllData: $e');
+      debugPrint('[ERR] [SettingsResetSection] Reset all data failed: $e');
 
       if (context.mounted) {
         _showSnackBar(
-            context, S.of(context)!.errorResetFailed(e.toString()));
+            context, S.of(context)!.errorResetFailed(S.of(context)!.errorUnknown));
       }
     }
   }

@@ -153,7 +153,8 @@ class _DeleteBabyDialogState extends State<DeleteBabyDialog> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.showText(S.of(context)!.errorDeleteFailed(e.toString()));
+        debugPrint('[ERR] [DeleteBabyDialog] Delete failed: $e');
+        AppToast.showText(S.of(context)!.errorDeleteFailed(S.of(context)!.errorUnknown));
         setState(() => _isDeleting = false);
       }
     }

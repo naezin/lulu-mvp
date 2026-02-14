@@ -272,7 +272,8 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.showText(e.toString());
+        debugPrint('[ERR] [BabyMappingScreen] Operation failed: $e');
+        AppToast.showText(S.of(context)?.errorOccurred ?? 'Something went wrong');
       }
     } finally {
       if (mounted) {
@@ -316,7 +317,8 @@ class _BabyMappingScreenState extends State<BabyMappingScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.showText(e.toString());
+        debugPrint('[ERR] [BabyMappingScreen] Operation failed: $e');
+        AppToast.showText(S.of(context)?.errorOccurred ?? 'Something went wrong');
       }
     } finally {
       if (mounted) {

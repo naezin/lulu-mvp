@@ -822,7 +822,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _showSnackBar(l10n.errorNoRecords);
       }
     } catch (e) {
-      _showSnackBar(l10n.errorExportFailed(e.toString()));
+      debugPrint('[ERR] [SettingsScreen] Export failed: $e');
+      _showSnackBar(l10n.errorExportFailed(l10n.errorUnknown));
     } finally {
       if (mounted) {
         setState(() => _isExporting = false);
@@ -891,7 +892,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             }
           } catch (e) {
             if (mounted) {
-              _showSnackBar(S.of(context)!.errorDeleteFailed(e.toString()));
+              debugPrint('[ERR] [SettingsScreen] Delete baby failed: $e');
+              _showSnackBar(S.of(context)!.errorDeleteFailed(S.of(context)!.errorUnknown));
             }
           }
         },
