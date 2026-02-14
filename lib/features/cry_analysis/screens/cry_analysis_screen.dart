@@ -547,7 +547,7 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
           ),
           const SizedBox(height: LuluSpacing.md),
           Text(
-            provider.errorMessage ?? S.of(context)!.cryErrorUnknown,
+            _localizeCryError(provider.errorMessage, S.of(context)!),
             style: LuluTextStyles.bodyMedium.copyWith(
               color: LuluTextColors.primary,
             ),
@@ -689,5 +689,16 @@ class _CryAnalysisScreenState extends State<CryAnalysisScreen>
         // 분석 중에는 아무것도 안 함
         break;
     }
+  }
+
+  /// Map internal error codes to user-friendly localized messages
+  String _localizeCryError(String? errorCode, S l10n) {
+    return switch (errorCode) {
+      'CRY_RECORDING_FAILED' => l10n.cryErrorUnknown,
+      'CRY_ANALYSIS_FAILED' => l10n.cryErrorUnknown,
+      'daily_limit_exceeded' => l10n.cryErrorUnknown,
+      null => l10n.cryErrorUnknown,
+      _ => l10n.cryErrorUnknown,
+    };
   }
 }

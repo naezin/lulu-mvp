@@ -250,8 +250,9 @@ class _CompletionScreenState extends State<CompletionScreen>
     } catch (e) {
       if (!context.mounted) return;
 
+      debugPrint('[ERR] [CompletionScreen] Onboarding completion failed: $e');
       final errorL10n = S.of(context);
-      AppToast.showText(errorL10n?.onboardingCompletionError('$e') ?? '');
+      AppToast.showText(errorL10n?.onboardingCompletionError(errorL10n.errorUnknown) ?? '');
     }
   }
 }

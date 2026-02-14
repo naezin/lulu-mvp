@@ -130,7 +130,8 @@ class CryAnalysisProvider extends ChangeNotifier {
 
       return null; // 녹음 중에는 결과 없음
     } catch (e) {
-      _handleError('Recording start failed: $e');
+      debugPrint('[ERR] [CryAnalysisProvider] Recording start failed: $e');
+      _handleError('CRY_RECORDING_FAILED');
       return null;
     }
   }
@@ -198,7 +199,8 @@ class CryAnalysisProvider extends ChangeNotifier {
 
       return result;
     } catch (e) {
-      _handleError('Analysis failed: $e');
+      debugPrint('[ERR] [CryAnalysisProvider] Analysis failed: $e');
+      _handleError('CRY_ANALYSIS_FAILED');
       return null;
     }
   }
