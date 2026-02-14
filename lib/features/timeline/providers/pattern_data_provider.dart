@@ -118,8 +118,8 @@ class PatternDataProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      debugPrint('[PatternDataProvider] loadWeeklyPattern error: $e');
-      _errorMessage = e.toString();
+      debugPrint('[ERR] [PatternDataProvider] loadWeeklyPattern error: $e');
+      _errorMessage = 'DATA_LOAD_FAILED';
       _isLoading = false;
       notifyListeners();
     }
@@ -382,8 +382,8 @@ class PatternDataProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      debugPrint('[PatternDataProvider] loadMultiplePatterns error: $e');
-      _errorMessage = e.toString();
+      debugPrint('[ERR] [PatternDataProvider] loadMultiplePatterns error: $e');
+      _errorMessage = 'DATA_LOAD_FAILED';
       _isLoading = false;
       notifyListeners();
     }

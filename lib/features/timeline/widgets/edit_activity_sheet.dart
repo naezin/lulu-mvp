@@ -790,7 +790,8 @@ class _EditActivitySheetState extends State<EditActivitySheet> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = S.of(context)!.errorSaveFailed(e.toString());
+        debugPrint('[ERR] [EditActivitySheet] Save failed: $e');
+        _errorMessage = S.of(context)!.errorSaveFailed(S.of(context)!.errorUnknown);
         _isLoading = false;
       });
     }

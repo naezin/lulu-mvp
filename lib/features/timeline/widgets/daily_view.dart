@@ -186,10 +186,10 @@ class _DailyViewState extends State<DailyView> with UndoDeleteMixin {
         });
       }
     } catch (e) {
-      debugPrint('[ERROR] [DailyView] Error loading activities: $e');
+      debugPrint('[ERR] [DailyView] Error loading activities: $e');
       if (mounted) {
         setState(() {
-          _errorMessage = e.toString();
+          _errorMessage = S.of(context)?.dataLoadFailed ?? 'Failed to load data';
           _isLoading = false;
         });
       }
